@@ -1,7 +1,19 @@
+# server/computer files
 *.log
+.DS_Store
+.svn
+.cvs
+*.bak
+*.swp
+*.pyc
+Thumbs.db
 .htaccess
+
+# generated
 sitemap.xml
 sitemap.xml.gz
+
+# wordpress specific
 wp-config.php
 wp-content/advanced-cache.php
 wp-content/backup-db/
@@ -12,7 +24,10 @@ wp-content/upgrade/
 wp-content/uploads/
 wp-content/wp-cache-config.php
 wp-content/plugins/hello.php
+wp-content/themes/twenty*
+*.sql
 
+# wordpress core
 /readme.html
 /license.txt
 
