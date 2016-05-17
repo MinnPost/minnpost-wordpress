@@ -6,7 +6,10 @@
  * Author: Giuseppe Mazzapica
  * Author URI: https://github.com/Giuseppe-Mazzapica
  * License: MIT
- * Version: 0.1.0
+ * Version: 0.1.1
+ * Modified by Jonathan Stegall
+ * Changes:
+ ** Support size attribute if it is supplied to the thumbnail methods
  *
  */
  
@@ -87,8 +90,15 @@ function save( $pid, $post ) {
     }
   }
 }
-function markup( $html, $post_id ) {
-  $url =  get_post_meta( $post_id, '_thumbnail_ext_url', TRUE );
+function markup( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
+  $size = '_' . $size;
+
+  // this should load _thumbnail_ext_url unless we have a size suffix that has a match in the database
+  // otherwise, it will load that matching item
+  // ex: <?php the_post_thumbnail( 'thumbnail'); would load the row _thumbnail_ext_url_thumbnail
+
+  $url = ( get_post_meta( $post_id, '_thumbnail_ext_url' . $size, TRUE ) ? get_post_meta( $post_id, '_thumbnail_ext_url' . $size, TRUE ) : get_post_meta( $post_id, '_thumbnail_ext_url', TRUE ) );
+
   if ( empty( $url ) || ! is_image( $url ) ) {
     return $html;
   }
