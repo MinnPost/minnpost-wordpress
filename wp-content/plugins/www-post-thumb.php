@@ -97,9 +97,10 @@ function markup( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
   // otherwise, it will load that matching item
   // ex: <?php the_post_thumbnail( 'thumbnail'); would load the row _thumbnail_ext_url_thumbnail
 
+  $exists = get_post_meta( $post_id, '_thumbnail_ext_url', TRUE );
   $url = ( get_post_meta( $post_id, '_thumbnail_ext_url' . $size, TRUE ) ? get_post_meta( $post_id, '_thumbnail_ext_url' . $size, TRUE ) : get_post_meta( $post_id, '_thumbnail_ext_url', TRUE ) );
 
-  if ( empty( $url ) || ! is_image( $url ) ) {
+  if ( empty( $url ) || ! is_image( $url ) || empty( $exists ) ) {
     return $html;
   }
   $alt = get_post_field( 'post_title', $post_id ) . ' ' .  __( 'thumbnail', 'www-post-thumb' );
