@@ -1,75 +1,60 @@
 <?php
+/*
+Plugin Name: Permalink Without Parent Category
+Description: This allows posts that use %category% in the permalink pattern to only show the child category, not the parent.
+Version: 0.0.1
+Author: Jonathan Stegall
+Author URI: http://code.minnpost.com
+License: GPL2+
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: permalink-without-parent-category
+*/
 
-/**
- * The plugin bootstrap file
- *
- * This file is read by WordPress to generate the plugin information in the plugin
- * admin area. This file also includes all of the dependencies used by the plugin,
- * registers the activation and deactivation functions, and defines a function
- * that starts the plugin.
- *
- * @link              http://example.com
- * @since             0.0.1
- * @package           Permalink_Without_Parent_Category
- *
- * @wordpress-plugin
- * Plugin Name:       Permalink Without Parent Category
- * Plugin URI:        http://example.com/plugin-name-uri/
- * Description:       This allows posts that use %category% in the permalink pattern to only show the child category, not the parent.
- * Version:           0.0.1
- * Author:            Jonathan Stegall
- * Author URI:        http://jonathan stegall.com/
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       permalink-without-parent-category
- * Domain Path:       /languages
- */
+// Start up the plugin
+class Permalink_Without_Parent_Category {
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+	/**
+	* @var string
+	*/
+	private $version;
+
+	/**
+	 * This is our constructor
+	 *
+	 * @return void
+	 */
+	public function __construct() {
+
+		$this->version = '0.0.1';
+		$this->post_filter();
+
+	}
+
+	public function post_filter() {
+		add_filter( 'post_link', array( $this, 'remove_parent_cats_from_link' ), 10, 3 );
+	}
+
+	public function remove_parent_cats_from_link( $permalink, $post = '', $leavename = '' ) {
+		if ( $post !== '' ) {
+			$cats = get_the_category( $post->ID );
+			if ( $cats ) {
+				// Make sure we use the same start cat as the permalink generator
+				usort( $cats, '_usort_terms_by_ID' ); // order by ID
+				$category = $cats[0]->slug;
+				if ( $parent = $cats[0]->parent ) {
+					// If there are parent categories, collect them and replace them in the link
+					$parentcats = get_category_parents( $parent, false, '/', true );
+					// str_replace() is not the best solution if you can have duplicates:
+					// myexamplesite.com/luxemburg/luxemburg/ will be stripped down to myexamplesite.com/
+					// But if you don't expect that, it should work
+					$permalink = str_replace( $parentcats, '', $permalink );
+				}
+			}
+			return $permalink;
+		}
+	}
+
+/// end class
 }
-
-/**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-permalink-without-parent-category-activator.php
- */
-function activate_Permalink_Without_Parent_Category() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-permalink-without-parent-category-activator.php';
-	Permalink_Without_Parent_Category_Activator::activate();
-}
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-permalink-without-parent-category-deactivator.php
- */
-function deactivate_Permalink_Without_Parent_Category() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-permalink-without-parent-category-deactivator.php';
-	Permalink_Without_Parent_Category_Deactivator::deactivate();
-}
-
-register_activation_hook( __FILE__, 'activate_Permalink_Without_Parent_Category' );
-register_deactivation_hook( __FILE__, 'deactivate_Permalink_Without_Parent_Category' );
-
-/**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
- */
-require plugin_dir_path( __FILE__ ) . 'includes/class-permalink-without-parent-category.php';
-
-/**
- * Begins execution of the plugin.
- *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
- * @since    1.0.0
- */
-function run_Permalink_Without_Parent_Category() {
-
-	$plugin = new Permalink_Without_Parent_Category();
-	$plugin->run();
-
-}
-run_Permalink_Without_Parent_Category();
+// Instantiate our class
+$Permalink_Without_Parent_Category = new Permalink_Without_Parent_Category();
