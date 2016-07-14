@@ -2,8 +2,8 @@
 Contributors: whiteshadow
 Tags: posts, formatting, javascript, html, css, code, disable
 Requires at least: 2.8
-Tested up to: 4.5
-Stable tag: 1.4.16
+Tested up to: 4.6-beta2
+Stable tag: 1.5
 
 Lets you use raw HTML or any other code in your posts. You can also disable smart quotes and other automatic formatting on a per-post basis.
 
@@ -42,6 +42,14 @@ In this case, the tags will prevent WordPress from inserting paragraph breaks be
 
 To avoid problems, only edit posts that contain your custom code in Text/HTML mode. If you'd like to be able to also use the Visual editor, [get the Pro version](http://rawhtmlpro.com/?utm_source=wordpress.org&utm_medium=readme_link&utm_campaign=RawHTML%20free). It will make the code betwen [raw] tags appear as a read-only placeholder when viewed in Visual mode, ensuring WordPress doesn't change it.
 
+**Combining shortcodes**
+
+By default, shortcodes that are inside [raw] tags will not work. They will just show up as plain text. To enable shortcodes, add the `shortcodes=1` attribute to the tag:
+
+`[raw shortcodes=1]This [shortcode] will be run.[/raw]
+
+[raw]This [shortcode] won't work.[/raw]`
+
 **Notes**
 
 Some features of Raw HTML will only work for users who have the "unfiltered_html" capability. In a normal WordPress install that includes the Editor and Administrator roles. In a Multisite install, only the Super Admin has this capability by default.
@@ -71,6 +79,11 @@ Open to the post editor and click the "Screen Options" button in the top-right p
 
 
 == Changelog ==
+
+= 1.5 = 
+* Added a way to run shortcodes inside [raw] tags. To enable shortcodes, add the `shortcodes=1` attribute to the tag. Example: `[raw shortcodes=1]some code ... [my-shortcode] ... other code[/raw]`.
+* Fixed a conflict with Events Calendar Pro (+ Community Events add-on). This should also fix conflicts with other plugins that remove default post filters like `wpautop`.
+* Tested with WP 4.6-beta2.
 
 = 1.4.16 = 
 * Tested with WP 4.5.

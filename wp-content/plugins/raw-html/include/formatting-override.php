@@ -40,30 +40,46 @@ function maybe_convert_smilies($content){
 
 // Disable default filters and add our conditional filters
 function rawhtml_add_conditional_filters(){
-	$filters = array(
+	static $filters_added = false;
+	static $filters = array(
 		'the_content' => array(
-			'wpautop',
-			'wptexturize',
-			'convert_chars',
-			'convert_smilies',
+			'wpautop' => 10,
+			'wptexturize' => 10,
+			'convert_chars' => 10,
+			'convert_smilies' => 20,
 		),
 		'the_excerpt' => array(
-			'wpautop',
-			'wptexturize',
-			'convert_chars',
-			'convert_smilies',
+			'wpautop' => 10,
+			'wptexturize' => 10,
+			'convert_chars' => 10,
+			'convert_smilies' => 20,
 		),
 	);
-	
+
+	// Set up the callbacks when one of the target filters is called for the first time.
+	// This way there's less of a chance that Raw HTML will accidentally apply a filter
+	// that another plugin has removed (e.g. via "remove_filter('the_content', 'wpautop')").
+	if ( $filters_added || !isset($filters[current_filter()]) ) {
+		return;
+	}
+
 	foreach ( $filters as $tag => $functions ){
-		foreach ( $functions as $func ){
-			if ( remove_filter($tag, $func) ){
-				add_filter( $tag, 'maybe_'.$func, 9 );
+		foreach ( $functions as $func => $priority ){
+			if ( remove_filter($tag, $func, $priority) ){
+				add_filter( $tag, 'maybe_'.$func, $priority - 1 );
 			};
 		}
 	}
+
+	$filters_added = true;
 }
-add_action('init', 'rawhtml_add_conditional_filters');
+
+// Performance optimization: Start watching for content filters only after everything has
+// been loaded and parsed. Running on every hook before that would be a waste.
+function rawhtml_add_filter_initializer() {
+	add_action('all', 'rawhtml_add_conditional_filters');
+}
+add_action('parse_query', 'rawhtml_add_filter_initializer', 1000, 0);
 
 // Add a custom meta box for per-post settings 
 add_action('admin_menu', 'rawhtml_add_custom_box');

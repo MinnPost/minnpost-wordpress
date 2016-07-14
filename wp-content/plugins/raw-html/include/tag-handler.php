@@ -3,8 +3,9 @@
 /**********************************************
 	Filter inline blocks of raw HTML
 ***********************************************/
-global $wsh_raw_parts;
+global $wsh_raw_parts, $wsh_raw_run_shortcodes;
 $wsh_raw_parts = array();
+$wsh_raw_run_shortcodes = array();
 
 /**
  * Extract content surrounded by [raw] or other supported tags 
@@ -17,18 +18,24 @@ $wsh_raw_parts = array();
  * @return string Filtered content.
  */
 function wsh_extract_exclusions($text, $keep_tags = false){
-	global $wsh_raw_parts, $wp_current_filter;
-	//Note to self: The regexp version was much shorter, but it had problems with big posts.
-	
-	$tags = array(array('<!--start_raw-->', '<!--end_raw-->'), array('[raw]', '[/raw]'), array('<!--raw-->', '<!--/raw-->'));
+	global $wsh_raw_parts, $wsh_raw_run_shortcodes, $wp_current_filter;
+
+	$shortcode_flag = '(?:\s+shortcodes\s*=\s*[\'"]?(?P<shortcodes>1|0)[\'"]?\s*)?';
+	$tags = array(
+		array('@<!--start_raw-->@i', '<!--end_raw-->'),
+		array('@\[raw' . $shortcode_flag . '\]@i', '[/raw]'),
+		array('@<!--raw' . $shortcode_flag . '-->@i', '<!--/raw-->')
+	);
 
 	foreach ($tags as $tag_pair){
-		list($start_tag, $end_tag) = $tag_pair;
+		list($start_regex, $end_tag) = $tag_pair;
 		
 		//Find the start tag
-		$start = stripos($text, $start_tag, 0);
-		while($start !== false){
-			$content_start = $start + strlen($start_tag);
+		$offset = 0;
+
+		while( preg_match($start_regex, $text, $matches, PREG_OFFSET_CAPTURE, $offset) === 1 ) {
+			$start = $matches[0][1];
+			$content_start = $start + strlen($matches[0][0]);
 			
 			//find the end tag
 			$fin = stripos($text, $end_tag, $content_start);
@@ -45,21 +52,24 @@ function wsh_extract_exclusions($text, $keep_tags = false){
 			} else {
 				//Store the content and replace it with a marker
 				if ( $keep_tags ){
-					$wsh_raw_parts[]=$start_tag.$content.$end_tag;
+					$wsh_raw_parts[]=$matches[0][0].$content.$end_tag;
 				} else {
 					$wsh_raw_parts[]=$content;
-				}				
-				$replacement = "!RAWBLOCK".(count($wsh_raw_parts)-1)."!";
+				}
+				$index = count($wsh_raw_parts) - 1;
+				$replacement = "!RAWBLOCK" . $index . "!";
+
+				$wsh_raw_run_shortcodes[$index] = isset($matches['shortcodes']) && (intval($matches['shortcodes'][0]) == 1);
 			}
 			$text = substr_replace($text, $replacement, $start, 
 				$fin+strlen($end_tag)-$start
 			);
 
+			//Continue searching after the marker.
+			$offset = $start + strlen($replacement);
+
 			//Have we reached the end of the string yet?
-			if ($start + strlen($replacement) > strlen($text)) break;
-			
-			//Find the next start tag
-			$start = stripos($text, $start_tag, $start + strlen($replacement));
+			if ($offset >= strlen($text)) break;
 		}
 	}
 	return $text;
@@ -89,16 +99,26 @@ function wsh_insert_exclusions($text, $placeholder_callback = 'wsh_insertion_cal
 function wsh_get_block_from_matches($matches) {
 	global $wsh_raw_parts;
 
-	if ( isset($matches['index']) ) {
-		$index = $matches['index'];
-	} else if ( isset($matches[2]) ) {
-		$index = $matches[2];
-	} else {
+	$index = wsh_get_index_from_matches($matches);
+	if ( $index === null ) {
 		return '{Invalid RAW block}';
 	}
 
-	$index = intval($index);
 	return $wsh_raw_parts[$index];
+}
+
+/**
+ * @param array $matches
+ * @return int|null
+ */
+function wsh_get_index_from_matches($matches) {
+	$index = null;
+	if ( isset($matches['index']) ) {
+		$index = intval($matches['index']);
+	} else if ( isset($matches[2]) ) {
+		$index = intval($matches[2]);
+	}
+	return $index;
 }
 
 /**
@@ -112,6 +132,14 @@ function wsh_insertion_callback($matches){
 	$openingParagraph = isset($matches[1]) ? $matches[1] : '';
 	$closingParagraph = isset($matches[3]) ? $matches[3] : '';
 	$code = wsh_get_block_from_matches($matches);
+
+	//Optionally execute shortcodes inside [raw]...[/raw] tags.
+	global $wsh_raw_run_shortcodes;
+	$index = wsh_get_index_from_matches($matches);
+	$run_shortcodes = ($index !== null) && !empty($wsh_raw_run_shortcodes[$index]);
+	if ( $run_shortcodes ) {
+		$code = do_shortcode($code);
+	}
 
 	//If the [raw] block is wrapped in its own paragraph, strip the <p>...</p> tags. If there's
 	//only one of <p>|</p> tag present, keep it - it's probably part of a larger paragraph.
