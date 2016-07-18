@@ -34,7 +34,9 @@ class Deserialize_Metadata {
 		$this->config = array();
 
 		$this->config();
-		$this->activate( $this->version );
+		$this->activate();
+		
+		register_deactivation_hook(__FILE__, array( $this, 'deactivate' ) );
 
 	}
 
@@ -50,6 +52,7 @@ class Deserialize_Metadata {
 				'wp_imported_field' => '_wp_imported_metadata',
 				'post_type' => 'any',
 				'post_status' => 'any',
+				'posts_per_page' => 1000,
 				'maps' => array(
 					'alt' => array(
 						'wp_table' => 'wp_postmeta',
@@ -89,8 +92,22 @@ class Deserialize_Metadata {
 	 *
 	 * @return void
 	 */
-	private function activate( $version ) {
-		register_activation_hook( __FILE__, array( $this, 'get_posts_with_serialized_metadata' ) );
+	public function activate() {
+		//register_activation_hook( __FILE__, array( $this, 'get_posts_with_serialized_metadata' ) );
+		if (! wp_next_scheduled ( 'start_serialized_event' ) ) {
+			wp_schedule_event( time(), 'hourly', 'start_serialized_event' );
+	    }
+	    add_action( 'start_serialized_event', array( $this, 'get_posts_with_serialized_metadata') );
+	}
+
+	/**
+	 * Deactivate function
+	 * This stops the regular repetition of the task
+	 *
+	 * @return void
+	 */
+	public function deactivate() {
+		wp_clear_scheduled_hook( 'start_serialized_event' );
 	}
 
 	/**
@@ -103,9 +120,10 @@ class Deserialize_Metadata {
 		foreach ( $this->config as $config ) {
 			$key = $config['wp_imported_field'];
 			$maps = $config['maps'];
-			$args = array( 'post_type' => $config['post_type'], 'post_status' => $config['post_status'], 'meta_query' => array( array( 'key' => $key ) ) );
+			$args = array( 'post_type' => $config['post_type'], 'post_status' => $config['post_status'], 'posts_per_page' => $config['posts_per_page'], 'meta_query' => array( array( 'key' => $key ) ) );
 			$query = new WP_Query( $args );
 			if ( $query->have_posts() ) {
+				error_log('There are ' . $query->post_count . ' posts with imported metadata.');
 				while ( $query->have_posts() ) {
 					$query->the_post();
 					$post_id = $query->post->ID;
@@ -124,7 +142,7 @@ class Deserialize_Metadata {
 	 *
 	 * @return void
 	 */
-	private function create_fields( $post_id, $metadata, $maps ) {
+	public function create_fields( $post_id, $metadata, $maps ) {
 		foreach ( $metadata as $key => $value ) {
 			if ( array_key_exists( $key, $maps ) ) {
 				//error_log('create a row on the ' . $maps[$key]['wp_table'] . ' field in the ' . $maps[$key]['wp_column'] . ' column with the value ' . $value);
@@ -146,7 +164,7 @@ class Deserialize_Metadata {
 	 *
 	 * @return void
 	 */
-	private function delete_combined_field( $post_id, $key ) {
+	public function delete_combined_field( $post_id, $key ) {
 		delete_post_meta( $post_id, $key );
 	}
 
