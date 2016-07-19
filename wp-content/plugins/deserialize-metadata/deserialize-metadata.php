@@ -146,9 +146,9 @@ class Deserialize_Metadata {
 		foreach ( $metadata as $key => $value ) {
 			if ( array_key_exists( $key, $maps ) ) {
 				//error_log('create a row on the ' . $maps[$key]['wp_table'] . ' field in the ' . $maps[$key]['wp_column'] . ' column with the value ' . $value);
-				if ( $maps[$key]['wp_table'] === 'wp_postmeta' ) {
+				if ( $maps[$key]['wp_table'] === 'wp_postmeta' && $value != '' && $value != NULL ) {
 					add_post_meta( $post_id, $maps[$key]['wp_column'], $value, $maps[$key]['unique'] );
-				} else if ( $maps[$key]['wp_table'] === 'wp_posts' && $value != '' ) {
+				} else if ( $maps[$key]['wp_table'] === 'wp_posts' && $value != '' && $value != NULL ) {
 					$post = array(
 						'ID' => $post_id,
 						$maps[$key]['wp_column'] => $value
