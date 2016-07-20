@@ -54,143 +54,149 @@ class Deserialize_Metadata {
 //    	add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts_and_styles' ) );
     }
 
+    /**
+    * Default display for <input> fields
+    *
+    * @param array $args
+    */
     public function create_admin_menu() {
     	add_options_page( 'Deserialize Metadata', 'Deserialize Metadata', 'manage_options', 'deserialize-metadata', array( &$this, 'show_admin_page' ) );
 	}
 
+	/**
+    * Display the admin settings page
+    *
+    * @return void
+    */
 	public function show_admin_page() {
-		echo '<div class="wrap">';
-			echo '<h1>' . get_admin_page_title() . '</h1>';
-			echo '<form method="post" action="options.php">';
-                echo settings_fields( 'deserialize-metadata' ) . do_settings_sections( 'deserialize-metadata' );
-                $deserialize_maps = get_option( 'deserialize_metadata_maps', '' );
-/*
-'maps' => array(
-	'alt' => array(
-		'wp_table' => 'wp_postmeta',
-		'wp_column' => '_wp_attachment_image_alt',
-		'unique' => true
-	),
-	'description' => array(
-		'wp_table' => 'wp_posts',
-		'wp_column' => 'post_content',
-		'unique' => true
-	),
-	'title' => array(
-		'wp_table' => 'wp_posts',
-		'wp_column' => 'post_title',
-		'unique' => true
-	),
-),
-*/
+		?>
+		<div class="wrap">
+			<h1><?php _e( get_admin_page_title() , 'deserialize-metadata'); ?></h1>
+			<div id="main">
+				<form method="post" action="options.php">
+					<?php settings_fields( 'deserialize-metadata' )  . do_settings_sections( 'deserialize-metadata' ); ?>
+					<?php $deserialize_maps = get_option( 'deserialize_metadata_maps', '' ) ?>
 
+					<table class="wp-list-table widefat striped fields">
+		                <thead>
+		                    <tr>
+		                        <th class="column-map_key">Map Key</th>
+		                        <th class="column-wp_table">WordPress Table</th>
+		                        <th class="column-wp_column">WordPress Column</th>
+		                        <th class="column-unique">Unique?</th>
+		                        <th class="column-actions">Actions</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                	<?php
+		                	if ( isset( $deserialize_maps ) && $deserialize_maps !== '' ) {
+								foreach ( $deserialize_maps as $key => $value ) { ?>
+									<tr class="repeating">
+										<td class="column-map_key">
+											<input name="deserialize_metadata_maps[<?php echo $key; ?>][map_key]" type="text" value="<?php echo $value['map_key']; ?>" />
+										</td>
+										<td class="column-wp_table">
+											<input name="deserialize_metadata_maps[<?php echo $key; ?>][wp_table]" type="text" value="<?php echo $value['wp_table']; ?>" />
+										</td>
+										<td class="column-wp_column">
+											<input name="deserialize_metadata_maps[<?php echo $key; ?>][wp_column]" type="text" value="<?php echo $value['wp_column']; ?>" />
+										</td>
+										<td class="column-unique">
+											<?php
+											if ( isset( $value['unique'] ) && $value['unique'] === '1' ) {
+												$checked = ' checked';
+											} else {
+												$checked = '';
+											}
+											?>
+											<input name="deserialize_metadata_maps[<?php echo $key; ?>][unique]" type="checkbox" value="1" <?php echo $checked; ?> />
+										</td>
+										<td class="column-actions">
+											<a href="#" class="delete-this"><?php _e( 'Delete', 'deserialize-metadata' ); ?></a>
+										</td>
+									</tr>
+		                		<?php
+		                		}
+		                	} else { ?>
+								<tr class="repeating">
+									<td class="column-map_key">
+										<input name="deserialize_metadata_maps[0][map_key]" type="text" value="" />
+									</td>
+									<td class="column-wp_table">
+										<input name="deserialize_metadata_maps[0][wp_table]" type="text" value="" />
+									</td>
+									<td class="column-wp_column">
+										<input name="deserialize_metadata_maps[0][wp_column]" type="text" value="" />
+									</td>
+									<td class="column-unique">
+										<input type="checkbox" name="deserialize_metadata_maps[0][unique]" value="1" />
+									</td>
+									<td>&nbsp;</td>
+								</tr>
+		                	<?php
+		                	}
+		                	?>
+		                	<tr>
+		                		<td colspan="4">
+		                			<p><a href="#" class="repeat"><?php _e( 'Add Another Map', 'deserialze-metadata' ); ?></a></p>
+		                		</td>
+		                </tbody>
+	                </table>
 
-                ?>
+	                <?php submit_button( 'Save settings' ); ?>
 
-                <table class="wp-list-table widefat striped fields">
-	                <thead>
-	                    <tr>
-	                        <th class="column-map_key">Map Key</th>
-	                        <th class="column-wp_table">WordPress Table</th>
-	                        <th class="column-wp_column">WordPress Column</th>
-	                        <th class="column-is_unique">Unique?</th>
-	                    </tr>
-	                </thead>
-	                <tbody>
-	                    <?php
-	                    if ( isset( $deserialize_maps ) && $deserialize_maps !== '' ) {
-	                        foreach ( $deserialize_maps as $key => $value ) {
-	                    ?>
-	                    <tr>
-	                        <td class="column-map_key">
-	                        	<input name="map_key" id="map_key" type="text" value="<?php echo $value['map_key']; ?>" />
-	                        </td>
-	                        <td class="column-wordpress_table">
-	                        	<input name="wordpress_table" id="wordpress_table" type="text" value="<?php echo $value['wordpress_table']; ?>" />
-	                        </td>
-	                        <td class="column-wp_column">
-	                        	<input name="wp_column" id="wp_column" type="text" value="<?php echo $value['wp_column']; ?>" />
-	                        </td>
-	                        <td class="column-is_unique">
-	                            <?php
-	                            if ( isset( $value['is_unique'] ) && $value['is_unique'] === '1' ) {
-	                                $checked = ' checked';
-	                            } else {
-	                                $checked = '';
-	                            }
-	                            ?>
-	                            <input type="checkbox" name="is_unique[<?php echo $key; ?>]" id="is_unique-<?php echo $key; ?>" value="1" <?php echo $checked; ?> />
-	                        </td>
-	                    </tr>
-	                    <?php
-	                        }   
-	                    } else {
-	                    ?>
-	                    <tr>
-	                        <td class="column-map_key">
-	                        	<input name="map_key[0]" id="map_key-0" type="text" value="" />
-	                        </td>
-	                        <td class="column-wordpress_table">
-	                        	<input name="wordpress_table[0]" id="wordpress_table-0" type="text" value="" />
-	                        </td>
-	                        <td class="column-wp_column">
-	                        	<input name="wp_column[0]" id="wp_column-0" type="text" value="" />
-	                        </td>
-	                        <td class="column-is_unique">
-	                            <input type="checkbox" name="is_unique[0]" id="is_unique-0" value="1" />
-	                        </td>
-	                    </tr>
-	                    <?php
-	                    }
-	                    ?>
-	                </tbody>
-	            </table>
+				</form>
 
-	            <?php
-                if ( isset( $deserialize_maps ) && $deserialize_maps !== NULL ) {
-                    $add_button_label = 'Add another map';
-                } else {
-                    $add_button_label = 'Add map';
-                }
-                ?>
-                <p><button type="button" id="add-map" class="button button-secondary"><?php echo $add_button_label; ?></button></p>
+				<script>
+				// Add a new repeating section
+				var attrs = ['id', 'name'];
+				function resetAttributeNames(section) { 
+					var tags = section.find('input'), idx = section.index();
+					tags.each(function() {
+						var $this = jQuery(this);
+						jQuery.each(attrs, function(i, attr) {
+							var attr_val = $this.attr(attr);
+							if (attr_val) {
+								$this.attr(attr, attr_val.replace(/\[(\d+)\]/g, '['+(idx)+']'));
+								$this.attr(attr, attr_val.replace(/\[(\d+)\]/g, '['+(idx)+']'));
+							}
+						});
+					});
+				}
+								                   
+				jQuery('.repeat').click(function(e){
+					e.preventDefault();
+					var lastRepeatingGroup = jQuery('.repeating').last();
+					var cloned = lastRepeatingGroup.clone(true);
+					cloned.insertAfter(lastRepeatingGroup);
+					cloned.find('input').val('');
+					cloned.find('select').val('');
+					cloned.find('input:radio').attr('checked', false);
+					resetAttributeNames(cloned);
+				});
 
-	           <?php
+				jQuery('.delete-this').click(function(e){
+					e.preventDefault(); 
+					jQuery(this).parent().parent('tr').remove();
+				});
 
-                submit_button( 'Save settings' );
-            echo '</form>';
-		echo '</div>';
+				</script>
+
+			</div>
+		</div>
+		<?php
 	}
 
+	/**
+    * Register items for the settings api
+    * @return void
+    *
+    */
 	public function admin_settings_form() {
 		$page = 'deserialize-metadata';
 		$section = 'deserialize-metadata';
 		$input_callback = array( &$this, 'display_input_field' );
 		add_settings_section( $page, null, null, $page );
-
-
-/*'wp_imported_field' => '_wp_imported_metadata',
-'post_type' => 'any',
-'post_status' => 'any',
-'posts_per_page' => 1000,
-'maps' => array(
-	'alt' => array(
-		'wp_table' => 'wp_postmeta',
-		'wp_column' => '_wp_attachment_image_alt',
-		'unique' => true
-	),
-	'description' => array(
-		'wp_table' => 'wp_posts',
-		'wp_column' => 'post_content',
-		'unique' => true
-	),
-	'title' => array(
-		'wp_table' => 'wp_posts',
-		'wp_column' => 'post_title',
-		'unique' => true
-	),
-),
-*/
 
 		$settings = array(
             'wp_imported_field' => array(
@@ -255,6 +261,7 @@ class Deserialize_Metadata {
             add_settings_field( $id, $title, $callback, $page, $section, $args );
             register_setting( $section, $id );
         }
+        register_setting( $section, 'deserialize_metadata_maps' );
 
 	}
 
@@ -281,37 +288,34 @@ class Deserialize_Metadata {
     }
 
 	/**
-	 * Create an action on plugin init so we can gather some config items for this plugin
+	 * Create an action on plugin init so we can gather some config items for this plugin from the wp settings
+	 * this sets the $this->config variable
 	 *
 	 * @return void
 	 */
 	private function config() {
-		//add_action( 'init', array( $this, 'get_config_data' ) );
+
+		$maps = get_option( 'deserialize_metadata_maps', '' );
+		$config_maps = array();
+		foreach ( $maps as $key => $map ) {
+			$key = $map['map_key'];
+			$config_maps["$key"] = array(
+				'wp_table' => $map['wp_table'],
+				'wp_column' => $map['wp_column'],
+				'unique' => $map['unique']
+			);
+		}
+
 		$this->config = array(
 			0 => array(
 				'wp_imported_field' => get_option( 'deserialize_metadata_wp_imported_field', '' ),
 				'post_type' => get_option( 'deserialize_metadata_post_type', '' ),
 				'post_status' => get_option( 'deserialize_metadata_post_status', '' ),
 				'posts_per_page' => get_option( 'deserialize_metadata_posts_per_page', '' ),
-				'maps' => array(
-					'alt' => array(
-						'wp_table' => 'wp_postmeta',
-						'wp_column' => '_wp_attachment_image_alt',
-						'unique' => true
-					),
-					'description' => array(
-						'wp_table' => 'wp_posts',
-						'wp_column' => 'post_content',
-						'unique' => true
-					),
-					'title' => array(
-						'wp_table' => 'wp_posts',
-						'wp_column' => 'post_title',
-						'unique' => true
-					),
-				),
+				'maps' => $config_maps
 			),
 		);
+
 	}
 
 	/**
