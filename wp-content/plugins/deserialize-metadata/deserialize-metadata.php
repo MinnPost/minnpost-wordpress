@@ -64,6 +64,7 @@ class Deserialize_Metadata {
     			$this->schedule();
     		}
 		}, 10, 3);
+		add_filter( 'plugin_action_links', array( &$this, 'plugin_action_links' ), 10, 5 );
     }
 
     /**
@@ -73,6 +74,19 @@ class Deserialize_Metadata {
     */
     public function create_admin_menu() {
     	add_options_page( 'Deserialize Metadata', 'Deserialize Metadata', 'manage_options', 'deserialize-metadata', array( &$this, 'show_admin_page' ) );
+
+	/**
+    * Display a Settings link on the main Plugins page
+    *
+    * @return array $links
+    */
+	public function plugin_action_links( $links, $file ) {
+		if ( $file == plugin_basename( __FILE__ ) ) {
+			$settings = '<a href="' . get_admin_url() . 'options-general.php?page=deserialize-metadata">' . __('Settings', 'deserialize-metadata' ) . '</a>';
+			// make the 'Settings' link appear first
+			array_unshift( $links, $settings );
+		}
+		return $links;
 	}
 
 	/**
