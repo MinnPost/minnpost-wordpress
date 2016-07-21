@@ -36,7 +36,7 @@ class Deserialize_Metadata {
 		$this->load_admin();
 
 		$this->config();
-		$this->activate();
+		$this->schedule();
 
 		register_deactivation_hook(__FILE__, array( $this, 'deactivate' ) );
 
@@ -331,12 +331,12 @@ class Deserialize_Metadata {
 	}
 
 	/**
-	 * Activate function
+	 * Scheule function
 	 * This registers the method to get the WordPress data that needs to be unserialized
 	 *
 	 * @return void
 	 */
-	public function activate() {
+	public function schedule() {
 		if (! wp_next_scheduled ( 'start_serialized_event' ) ) {
 			wp_schedule_event( time(), 'hourly', 'start_serialized_event' );
 	    }
