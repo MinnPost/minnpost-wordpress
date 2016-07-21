@@ -51,7 +51,13 @@ class Deserialize_Metadata {
     private function load_admin() {
     	add_action( 'admin_menu', array( &$this, 'create_admin_menu' ) );
     	add_action( 'admin_init', array( &$this, 'admin_settings_form' ) );
-//    	add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts_and_styles' ) );
+    	add_action( 'updated_option', function( $option_name, $old_value, $value ) {
+    		if ( $option_name === 'deserialize_metadata_schedule' && $old_value !== $value ) {
+    			// delete the old schedule and create the new one - this means user changed how often it should run
+    			$this->deactivate();
+    			$this->schedule();
+    		}
+		}, 10, 3);
     }
 
     /**
@@ -196,6 +202,7 @@ class Deserialize_Metadata {
 		$page = 'deserialize-metadata';
 		$section = 'deserialize-metadata';
 		$input_callback = array( &$this, 'display_input_field' );
+		$select_callback = array( &$this, 'display_select' );
 		add_settings_section( $page, null, null, $page );
 
 		$settings = array(
@@ -238,6 +245,16 @@ class Deserialize_Metadata {
                 'args' => array(
                     'type' => 'text',
                     'desc' => 'Maximum posts the query should load',
+                ),
+            ),
+            'schedule' => array(
+                'title' => 'Schedule',
+                'callback' => $select_callback,
+                'page' => $page,
+                'section' => $section,
+                'args' => array(
+                    'desc' => 'How often the plugin should find and process data',
+                    'items' => array( 'hourly', 'twicedaily', 'daily' ) // values from https://codex.wordpress.org/Function_Reference/wp_schedule_event
                 ),
             ),
         );
@@ -287,6 +304,30 @@ class Deserialize_Metadata {
         }
     }
 
+    /**
+    * Display for <select>
+    *
+    * @param array $args
+    */
+    public function display_select( $args ) {
+        $name = $args['name'];
+        $id = $args['label_for'];
+        $desc = $args['desc'];
+        $current_value = get_option( $name );
+        echo '<select name="' . $name . '" id="' . $id . '"><option value="">Choose an option</option>';
+        foreach ( $args['items'] as $item ) {
+            $selected = '';
+            if ( $current_value === $item ) {
+                $selected = 'selected';
+            }
+            echo '<option value="' . $item . '"  ' . $selected . '>' . $item . '</option>';
+        }
+        echo '</select>';
+        if ( $desc != '' ) {
+            echo '<p class="description">' . $desc . '</p>';
+        }
+    }
+
 	/**
 	 * Create an action on plugin init so we can gather some config items for this plugin from the wp settings
 	 * this sets the $this->config variable
@@ -312,6 +353,7 @@ class Deserialize_Metadata {
 				'post_type' => get_option( 'deserialize_metadata_post_type', '' ),
 				'post_status' => get_option( 'deserialize_metadata_post_status', '' ),
 				'posts_per_page' => get_option( 'deserialize_metadata_posts_per_page', '' ),
+				'schedule' => get_option( 'deserialize_metadata_schedule', '' ),
 				'maps' => $config_maps
 			),
 		);
@@ -338,7 +380,7 @@ class Deserialize_Metadata {
 	 */
 	public function schedule() {
 		if (! wp_next_scheduled ( 'start_serialized_event' ) ) {
-			wp_schedule_event( time(), 'hourly', 'start_serialized_event' );
+			wp_schedule_event( time(), $this->config['schedule'], 'start_serialized_event' );
 	    }
 	    add_action( 'start_serialized_event', array( $this, 'get_posts_with_serialized_metadata') );
 	}
