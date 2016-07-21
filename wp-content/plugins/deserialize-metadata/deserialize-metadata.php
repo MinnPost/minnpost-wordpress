@@ -37,14 +37,17 @@ class Deserialize_Metadata {
 
 		$this->version = '0.0.1';
 		$this->config = array();
-		$this->wp_tables = array( 'wp_posts', 'wp_postmeta' );
+		$this->wp_tables = array(
+			'wp_posts' => 'wp_posts',
+			'wp_postmeta' => 'wp_postmeta'
+		);
 
 		$this->load_admin();
 
 		$this->config();
 		$this->schedule();
 
-		register_deactivation_hook(__FILE__, array( $this, 'deactivate' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
 	}
 
@@ -73,7 +76,8 @@ class Deserialize_Metadata {
     * @param array $args
     */
     public function create_admin_menu() {
-    	add_options_page( 'Deserialize Metadata', 'Deserialize Metadata', 'manage_options', 'deserialize-metadata', array( &$this, 'show_admin_page' ) );
+    	add_options_page( __( 'Deserialize Metadata', 'deserialize-metadata' ), __( 'Deserialize Metadata', 'deserialize-metadata' ), 'manage_options', 'deserialize-metadata', array( &$this, 'show_admin_page' ) );
+	}
 
 	/**
     * Display a Settings link on the main Plugins page
@@ -97,20 +101,22 @@ class Deserialize_Metadata {
 	public function show_admin_page() {
 		?>
 		<div class="wrap">
-			<h1><?php _e( get_admin_page_title() , 'deserialize-metadata'); ?></h1>
+			<h1><?php _e( get_admin_page_title() , 'deserialize-metadata' ); ?></h1>
 			<div id="main">
 				<form method="post" action="options.php">
-					<?php settings_fields( 'deserialize-metadata' )  . do_settings_sections( 'deserialize-metadata' ); ?>
-					<?php $deserialize_maps = get_option( 'deserialize_metadata_maps', '' ) ?>
+					<?php
+					settings_fields( 'deserialize-metadata' )  . do_settings_sections( 'deserialize-metadata' );
+					$deserialize_maps = get_option( 'deserialize_metadata_maps', '' );
+					?>
 
 					<table class="wp-list-table widefat striped fields">
 		                <thead>
 		                    <tr>
-		                        <th class="column-map_key">Map Key</th>
-		                        <th class="column-wp_table">WordPress Table</th>
-		                        <th class="column-wp_column">WordPress Column</th>
-		                        <th class="column-unique">Unique?</th>
-		                        <th class="column-actions">Actions</th>
+		                        <th class="column-map_key"><?php _e( 'Map Key', 'deserialize-metadata' ); ?></th>
+		                        <th class="column-wp_table"><?php _e( 'WordPress Table', 'deserialize-metadata' ); ?></th>
+		                        <th class="column-wp_column"><?php _e( 'WordPress Column', 'deserialize-metadata' ); ?></th>
+		                        <th class="column-unique"><?php _e( 'Unique?', 'deserialize-metadata' ); ?></th>
+		                        <th class="column-actions"><?php _e( 'Actions', 'deserialize-metadata' ); ?></th>
 		                    </tr>
 		                </thead>
 		                <tbody>
@@ -123,16 +129,16 @@ class Deserialize_Metadata {
 										</td>
 										<td class="column-wp_table">
 											<select name="deserialize_metadata_maps[<?php echo $key; ?>][wp_table]">
-												<option value="">Choose table</option>
+												<option value=""><?php _e( 'Choose table', 'deserialize-metadata' ); ?></option>
 												<?php
-												foreach ( $this->wp_tables as $table ) {
-													if ( $value['wp_table'] === $table ) {
+												foreach ( $this->wp_tables as $wp_key => $wp_value ) {
+													if ( $value['wp_table'] === $wp_key ) {
 														$selected = ' selected';
 													} else {
 														$selected = '';
 													}
 												?>
-													<option value="<?php echo $table; ?>"<?php echo $selected; ?>><?php echo $table; ?></option>
+													<option value="<?php echo $wp_key; ?>"<?php echo $selected; ?>><?php echo $wp_value; ?></option>
 												<?php } ?>
 											</select>
 										</td>
@@ -162,11 +168,11 @@ class Deserialize_Metadata {
 									</td>
 									<td class="column-wp_table">
 										<select name="deserialize_metadata_maps[0][wp_table]">
-											<option value="">Choose table</option>
+											<option value=""><?php _e( 'Choose table', 'deserialize-metadata' ); ?></option>
 											<?php
-											foreach ( $this->wp_tables as $table ) {
+											foreach ( $this->wp_tables as $key => $value ) {
 											?>
-												<option value="<?php echo $table; ?>"><?php echo $table; ?></option>
+												<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
 											<?php } ?>
 										</select>
 									</td>
@@ -188,7 +194,7 @@ class Deserialize_Metadata {
 		                </tbody>
 	                </table>
 
-	                <?php submit_button( 'Save settings' ); ?>
+	                <?php submit_button( __( 'Save settings', 'deserialize-metadata' ) ); ?>
 
 				</form>
 
@@ -246,54 +252,58 @@ class Deserialize_Metadata {
 
 		$settings = array(
             'wp_imported_field' => array(
-                'title' => 'Imported Field',
+                'title' => __( 'Imported Field', 'deserialize-metadata' ),
                 'callback' => $input_callback,
                 'page' => $page,
                 'section' => $section,
                 'args' => array(
                     'type' => 'text',
-                    'desc' => 'The name of the imported field in the database',
+                    'desc' => __( 'The name of the imported field in the database', 'deserialize-metadata' ),
                 ),
                 
             ),
             'post_type' => array(
-                'title' => 'Post Type',
+                'title' => __( 'Post Type', 'deserialize-metadata' ),
                 'callback' => $input_callback,
                 'page' => $page,
                 'section' => $section,
                 'args' => array(
                     'type' => 'text',
-                    'desc' => 'What type of post uses this metadata?',
+                    'desc' => __( 'What type of post uses this metadata?', 'deserialize-metadata' ),
                 ),
             ),
             'post_status' => array(
-                'title' => 'Post Status',
+                'title' => __( 'Post Status', 'deserialize-metadata' ),
                 'callback' => $input_callback,
                 'page' => $page,
                 'section' => $section,
                 'args' => array(
                     'type' => 'text',
-                    'desc' => 'Post statuses to match',
+                    'desc' => __( 'Post statuses to match', 'deserialize-metadata' ),
                 ),
             ),
             'posts_per_page' => array(
-                'title' => 'Posts Per Page',
+                'title' => __( 'Posts Per Page' , 'deserialize-metadata' ),
                 'callback' => $input_callback,
                 'page' => $page,
                 'section' => $section,
                 'args' => array(
                     'type' => 'text',
-                    'desc' => 'Maximum posts the query should load',
+                    'desc' => __( 'Maximum posts the query should load', 'deserialize-metadata' ),
                 ),
             ),
             'schedule' => array(
-                'title' => 'Schedule',
+                'title' => __( 'Schedule', 'deserialize-metadata' ),
                 'callback' => $select_callback,
                 'page' => $page,
                 'section' => $section,
                 'args' => array(
-                    'desc' => 'How often the plugin should find and process data',
-                    'items' => array( 'hourly', 'twicedaily', 'daily' ) // values from https://codex.wordpress.org/Function_Reference/wp_schedule_event
+                    'desc' => __( 'How often the plugin should find and process data', 'deserialize-metadata' ),
+                    'items' => array(
+                    	'hourly' => __( 'Hourly', 'deserialize-metadata' ),
+                    	'twicedaily' => __( 'Twice Daily', 'deserialize-metadata' ),
+                    	'daily' => __( 'Daily', 'deserialize-metadata' )
+                    ) // values from https://codex.wordpress.org/Function_Reference/wp_schedule_event
                 ),
             ),
         );
@@ -339,7 +349,7 @@ class Deserialize_Metadata {
                 echo '<p class="description">' . $desc . '</p>';
             }
         } else {
-            echo '<p><code>Defined in wp-config.php</code></p>';
+            echo '<p><code>' . __( 'Defined in wp-config.php', 'deserialize-metadata' ) . '</code></p>';
         }
     }
 
@@ -353,13 +363,13 @@ class Deserialize_Metadata {
         $id = $args['label_for'];
         $desc = $args['desc'];
         $current_value = get_option( $name );
-        echo '<select name="' . $name . '" id="' . $id . '"><option value="">Choose an option</option>';
-        foreach ( $args['items'] as $item ) {
+        echo '<select name="' . $name . '" id="' . $id . '"><option value="">' . __( 'Choose an option', 'deserialize-metadata' ) . '</option>';
+        foreach ( $args['items'] as $key => $value ) {
             $selected = '';
-            if ( $current_value === $item ) {
+            if ( $current_value === $key ) {
                 $selected = 'selected';
             }
-            echo '<option value="' . $item . '"  ' . $selected . '>' . $item . '</option>';
+            echo '<option value="' . $key . '"  ' . $selected . '>' . $value . '</option>';
         }
         echo '</select>';
         if ( $desc != '' ) {
