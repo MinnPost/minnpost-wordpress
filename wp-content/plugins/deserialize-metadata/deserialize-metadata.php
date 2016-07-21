@@ -24,6 +24,11 @@ class Deserialize_Metadata {
 	private $config;
 
 	/**
+	* @var array
+	*/
+	private $wp_tables;
+
+	/**
 	 * This is our constructor
 	 *
 	 * @return void
@@ -32,6 +37,7 @@ class Deserialize_Metadata {
 
 		$this->version = '0.0.1';
 		$this->config = array();
+		$this->wp_tables = array( 'wp_posts', 'wp_postmeta' );
 
 		$this->load_admin();
 
@@ -102,7 +108,19 @@ class Deserialize_Metadata {
 											<input name="deserialize_metadata_maps[<?php echo $key; ?>][map_key]" type="text" value="<?php echo $value['map_key']; ?>" />
 										</td>
 										<td class="column-wp_table">
-											<input name="deserialize_metadata_maps[<?php echo $key; ?>][wp_table]" type="text" value="<?php echo $value['wp_table']; ?>" />
+											<select name="deserialize_metadata_maps[<?php echo $key; ?>][wp_table]">
+												<option value="">Choose table</option>
+												<?php
+												foreach ( $this->wp_tables as $table ) {
+													if ( $value['wp_table'] === $table ) {
+														$selected = ' selected';
+													} else {
+														$selected = '';
+													}
+												?>
+													<option value="<?php echo $table; ?>"<?php echo $selected; ?>><?php echo $table; ?></option>
+												<?php } ?>
+											</select>
 										</td>
 										<td class="column-wp_column">
 											<input name="deserialize_metadata_maps[<?php echo $key; ?>][wp_column]" type="text" value="<?php echo $value['wp_column']; ?>" />
@@ -129,7 +147,14 @@ class Deserialize_Metadata {
 										<input name="deserialize_metadata_maps[0][map_key]" type="text" value="" />
 									</td>
 									<td class="column-wp_table">
-										<input name="deserialize_metadata_maps[0][wp_table]" type="text" value="" />
+										<select name="deserialize_metadata_maps[0][wp_table]">
+											<option value="">Choose table</option>
+											<?php
+											foreach ( $this->wp_tables as $table ) {
+											?>
+												<option value="<?php echo $table; ?>"><?php echo $table; ?></option>
+											<?php } ?>
+										</select>
 									</td>
 									<td class="column-wp_column">
 										<input name="deserialize_metadata_maps[0][wp_column]" type="text" value="" />
