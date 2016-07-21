@@ -372,6 +372,8 @@ class Deserialize_Metadata {
 			);
 		}
 
+		// this would theoretically allow us to support multiple imported, serialized fields if it became necessary
+		// and the ui could support it
 		$this->config = array(
 			0 => array(
 				'wp_imported_field' => get_option( 'deserialize_metadata_wp_imported_field', '' ),
@@ -430,7 +432,16 @@ class Deserialize_Metadata {
 		foreach ( $this->config as $config ) {
 			$key = $config['wp_imported_field'];
 			$maps = $config['maps'];
-			$args = array( 'post_type' => $config['post_type'], 'post_status' => $config['post_status'], 'posts_per_page' => $config['posts_per_page'], 'meta_query' => array( array( 'key' => $key ) ) );
+			$args = array(
+				'post_type' => $config['post_type'],
+				'post_status' => $config['post_status'],
+				'posts_per_page' => $config['posts_per_page'],
+				'meta_query' => array( 
+					array( 
+						'key' => $key
+					)
+				)
+			);
 			$query = new WP_Query( $args );
 			if ( $query->have_posts() ) {
 				error_log('There are ' . $query->post_count . ' posts with imported metadata.');
@@ -455,7 +466,6 @@ class Deserialize_Metadata {
 	public function create_fields( $post_id, $metadata, $maps ) {
 		foreach ( $metadata as $key => $value ) {
 			if ( array_key_exists( $key, $maps ) ) {
-				//error_log('create a row on the ' . $maps[$key]['wp_table'] . ' field in the ' . $maps[$key]['wp_column'] . ' column with the value ' . $value);
 				if ( $maps[$key]['wp_table'] === 'wp_postmeta' && $value != '' && $value != NULL ) {
 					add_post_meta( $post_id, $maps[$key]['wp_column'], $value, $maps[$key]['unique'] );
 				} else if ( $maps[$key]['wp_table'] === 'wp_posts' && $value != '' && $value != NULL ) {
