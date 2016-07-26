@@ -1,6 +1,5 @@
 === Deserialize Metadata ===
 Contributors: jonathanstegall, minnpost
-Donate link: http://code.minnpost.com/
 Tags: metadata, import
 Requires at least: 4.5.3
 Tested up to: 4.5.3
@@ -8,7 +7,7 @@ Stable tag: 0.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-When migrating from another system (ie Drupal, in this case), it can be necessary to store imported, serialized data unserialized and in its own database specified tables/columns. This plugin can look for this data, and handle it based on its settings, each time it is activated.
+When migrating from another system (i.e. Drupal), WordPress can require data that is currently serialized to be unserialized and stored in its own WordPress-specific tables/columns. This plugin can look for such data, and deserialize and store it, based on the plugin settings.
 
 == Description ==
 

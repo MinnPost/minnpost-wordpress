@@ -1,7 +1,8 @@
 <?php
 /*
 Plugin Name: Deserialize Metadata
-Description: In the process of migrating from Drupal to WordPress by SQL queries, it's likely that some metadata fields that are serialized in Drupal will be migrated into the WordPress database, but will need to be separated into fields.
+Plugin URI: https://wordpress.org/plugins/deserialize-metadata/
+Description: When migrating from another system (i.e. Drupal), WordPress can require data that is currently serialized to be unserialized and stored in its own WordPress-specific tables/columns. This plugin can look for such data, and deserialize and store it, based on the plugin settings.
 Version: 0.0.1
 Author: Jonathan Stegall
 Author URI: http://code.minnpost.com
@@ -468,7 +469,6 @@ class Deserialize_Metadata {
 			);
 			$query = new WP_Query( $args );
 			if ( $query->have_posts() ) {
-				error_log('There are ' . $query->post_count . ' posts with imported metadata.');
 				while ( $query->have_posts() ) {
 					$query->the_post();
 					$post_id = $query->post->ID;
@@ -492,7 +492,7 @@ class Deserialize_Metadata {
 			if ( array_key_exists( $key, $maps ) ) {
 				if ( $maps[$key]['wp_table'] === 'wp_postmeta' && $value != '' && $value != NULL ) {
 					add_post_meta( $post_id, $maps[$key]['wp_column'], $value, $maps[$key]['unique'] );
-				} else if ( $maps[$key]['wp_table'] === 'wp_posts' && $value != '' && $value != NULL ) {
+				} elseif ( $maps[$key]['wp_table'] === 'wp_posts' && $value != '' && $value != NULL ) {
 					$post = array(
 						'ID' => $post_id,
 						$maps[$key]['wp_column'] => $value
