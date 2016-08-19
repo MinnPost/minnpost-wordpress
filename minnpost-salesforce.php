@@ -36,7 +36,6 @@ class Minnpost_Salesforce {
 		//get the base class
 		if ( is_plugin_active('salesforce-rest-api/salesforce-rest-api.php')  ) {
 			require_once plugin_dir_path( __FILE__ ) . '../salesforce-rest-api/salesforce-rest-api.php';
-			//$salesforce = new Salesforce_Rest_API();
 			$salesforce = Salesforce_Rest_API::getInstance();
 			$this->salesforce = $salesforce;
 		}
@@ -48,26 +47,25 @@ class Minnpost_Salesforce {
 	* @throws \Exception
 	*/
     private function init() {
-    	add_filter( 'salesforce_rest_api_create_object_map', array( &$this, 'create_object_match' ), 10, 3 );
+    	add_filter( 'salesforce_rest_api_find_object_match', array( &$this, 'find_object_match' ), 10, 2 );
     }
 
     /**
-	* Create an object map between a WordPress object and a Salesforce object
+	* Find an object match between a WordPress object and a Salesforce object
+	* This is designed to find out if there is already a map based on the available WordPress data
 	*
 	* @param string $salesforce_id
 	*	Unique identifier for the Salesforce object
 	* @param array $wordpress_object
 	*	Array of the wordpress object's data
-	* @param array $field_mapping
-	*	The row that maps the object types together, including which fields match which other fields
 	*
-	* @return string $salesforce_id
-	*	This is the ID for the Salesforce object that should be matched. It can be any valid ID.
+	* @return array $salesforce_id
+	*	Unique identifier for the Salesforce object
 	*
 	*/
-    public function create_object_match( $salesforce_id, $wordpress_object, $field_mapping ) {
-
-    	$salesforce_api = $this->salesforce->salesforce['sfapi'];
+	public function find_object_match( $salesforce_id, $wordpress_object ) {
+		
+		$salesforce_api = $this->salesforce->salesforce['sfapi'];
 
 		// we want to see if the user's email address exists as a primary on any contact and use that contact if so
 		$mail = $wordpress_object['user_email'];
@@ -80,8 +78,8 @@ class Minnpost_Salesforce {
 			error_log('Salesforce has ' . $result['data']['totalSize'] . ' matches for this email. Try to log all of them: ' . print_r($result['data']['records'], true));
 		}
 
-    	return $salesforce_id;
-    }
+		return $salesforce_id;
+	}
 
 
 /// end class
