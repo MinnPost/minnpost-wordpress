@@ -27,21 +27,17 @@ class Minnpost_Salesforce {
 	 * @return void
 	 */
 	public function __construct() {
-
 		$this->version = '0.0.1';
 		add_action( 'admin_init', array( &$this, 'salesforce' ) );
-		//$this->salesforce = $this->salesforce();
 		$this->init();
-
-
-
 	}
 
 	public function salesforce() {
 		//get the base class
 		if ( is_plugin_active('salesforce-rest-api/salesforce-rest-api.php')  ) {
 			require_once plugin_dir_path( __FILE__ ) . '../salesforce-rest-api/salesforce-rest-api.php';
-			$salesforce = new Salesforce_Rest_API();
+			//$salesforce = new Salesforce_Rest_API();
+			$salesforce = Salesforce_Rest_API::getInstance();
 			$this->salesforce = $salesforce;
 		}
 	}
