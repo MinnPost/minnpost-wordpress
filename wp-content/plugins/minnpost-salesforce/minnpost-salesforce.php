@@ -36,7 +36,7 @@ class Minnpost_Salesforce {
 		//get the base class
 		if ( is_plugin_active('salesforce-rest-api/salesforce-rest-api.php')  ) {
 			require_once plugin_dir_path( __FILE__ ) . '../salesforce-rest-api/salesforce-rest-api.php';
-			$salesforce = Salesforce_Rest_API::getInstance();
+			$salesforce = Salesforce_Rest_API::get_instance();
 			$this->salesforce = $salesforce;
 		}
 	}
