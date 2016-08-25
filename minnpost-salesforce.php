@@ -52,6 +52,13 @@ class Minnpost_Salesforce {
 	*/
     private function init() {
     	add_filter( 'salesforce_rest_api_find_object_match', array( &$this, 'find_object_match' ), 10, 2 );
+    	add_filter( 'salesforce_rest_api_push_object_allowed', array( &$this, 'push_not_allowed' ), 10, 5 );
+    }
+
+    public function push_not_allowed( $push_allowed, $object_type, $object, $sf_sync_trigger, $mapping ) {
+    	if ( $object_type === 'user' && $object['ID'] === 1 ) { // do not add user 1 to salesforce
+			return FALSE;
+		}
     }
 
     /**
