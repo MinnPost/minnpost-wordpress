@@ -42,6 +42,7 @@ class Minnpost_Salesforce {
 	*/
 	private function admin_init() {
 		add_action( 'admin_init', array( &$this, 'salesforce' ) );
+		add_action( 'admin_init', array( &$this, 'minnpost_salesforce_settings_forms' ) );
 	}
 
 	/**
@@ -52,6 +53,7 @@ class Minnpost_Salesforce {
     private function init() {
     	add_filter( 'salesforce_rest_api_find_object_match', array( &$this, 'find_object_match' ), 10, 2 );
     	add_filter( 'salesforce_rest_api_push_object_allowed', array( &$this, 'push_not_allowed' ), 10, 5 );
+    	add_filter( 'salesforce_rest_api_settings_tabs', array( &$this, 'minnpost_tabs'), 10, 1 );
     }
 
     /**
@@ -74,8 +76,56 @@ class Minnpost_Salesforce {
 		}
 	}
 
-	
+	/**
+    * Create default WordPress admin settings form for MinnPost-specific salesforce things
+    * This is for the Settings page/tab
+    *
+    */
+    public function minnpost_salesforce_settings_forms() {
+        $page = isset( $_GET['tab'] ) ? $_GET['tab'] : 'settings';
+        $section = isset( $_GET['tab'] ) ? $_GET['tab'] : 'settings';
+        $input_callback_default = array( $this, 'display_input_field' );
+        $input_checkboxes_default = array( &$this, 'display_checkboxes' );
+        $this->fields_minnpost_settings( 'minnpost', 'minnpost', array( 'text' => $input_callback_default, 'checkboxes' => $input_checkboxes_default ) );
     }
+
+    /**
+    * Fields for the Log Settings tab
+    * This runs add_settings_section once, as well as add_settings_field and register_setting methods for each option
+    *
+    * @param string $page
+    * @param string $section
+    * @param array $callbacks
+    */
+    private function fields_minnpost_settings( $page, $section, $callbacks ) {
+        add_settings_section( $page, ucwords( str_replace('_', ' ', $page) ), null, $page );
+        $minnpost_salesforce_settings = array(
+        );
+        foreach ( $minnpost_salesforce_settings as $key => $attributes ) {
+            $id = 'salesforce_api_' . $key;
+            $name = 'salesforce_api_' . $key;
+            $title = $attributes['title'];
+            $callback = $attributes['callback'];
+            $page = $attributes['page'];
+            $section = $attributes['section'];
+            $args = array_merge(
+                $attributes['args'],
+                array(
+                    'title' => $title,
+                    'id' => $id,
+                    'label_for' => $id,
+                    'name' => $name
+                )
+            );
+            add_settings_field( $id, $title, $callback, $page, $section, $args );
+            register_setting( $section, $id );
+        }
+    }
+
+   function minnpost_tabs( $tabs ) {
+		$tabs['minnpost'] = 'MinnPost';
+		return $tabs;
+	}
 
     public function push_not_allowed( $push_allowed, $object_type, $object, $sf_sync_trigger, $mapping ) {
     	if ( $object_type === 'user' && $object['ID'] === 1 ) { // do not add user 1 to salesforce
