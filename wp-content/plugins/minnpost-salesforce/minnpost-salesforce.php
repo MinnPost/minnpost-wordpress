@@ -19,6 +19,9 @@ class Minnpost_Salesforce {
 	*/
 	private $version;
 
+	/**
+	* @var object
+	*/
 	public $salesforce;
 
 	/**
@@ -28,12 +31,38 @@ class Minnpost_Salesforce {
 	 */
 	public function __construct() {
 		$this->version = '0.0.1';
-		add_action( 'admin_init', array( &$this, 'salesforce' ) );
+		$this->admin_init();
 		$this->init();
 	}
 
-	public function salesforce() {
-		//get the base class
+	/**
+	* admin start
+	*
+	* @throws \Exception
+	*/
+	private function admin_init() {
+		add_action( 'admin_init', array( &$this, 'salesforce' ) );
+	}
+
+	/**
+	* start
+	*
+	* @throws \Exception
+	*/
+    private function init() {
+    	add_filter( 'salesforce_rest_api_find_object_match', array( &$this, 'find_object_match' ), 10, 2 );
+    	add_filter( 'salesforce_rest_api_push_object_allowed', array( &$this, 'push_not_allowed' ), 10, 5 );
+    }
+
+    /**
+	* Load the Salesforce object
+	* Also make it available to this whole class
+	*
+	* @return $this->salesforce
+	*
+	*/
+    public function salesforce() {
+		// get the base class
 		if ( ! function_exists( 'is_plugin_active' ) ) {
      		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
      	}
@@ -45,14 +74,7 @@ class Minnpost_Salesforce {
 		}
 	}
 
-	/**
-	* start
-	*
-	* @throws \Exception
-	*/
-    private function init() {
-    	add_filter( 'salesforce_rest_api_find_object_match', array( &$this, 'find_object_match' ), 10, 2 );
-    	add_filter( 'salesforce_rest_api_push_object_allowed', array( &$this, 'push_not_allowed' ), 10, 5 );
+	
     }
 
     public function push_not_allowed( $push_allowed, $object_type, $object, $sf_sync_trigger, $mapping ) {
@@ -73,6 +95,8 @@ class Minnpost_Salesforce {
 	* @return array $salesforce_id
 	*	Unique identifier for the Salesforce object
 	*
+	* todo: need a way for this to prevent a deletion in Salesforce if multiple contacts match the email address, for example
+	*
 	*/
 	public function find_object_match( $salesforce_id, $wordpress_object ) {
 
@@ -92,7 +116,7 @@ class Minnpost_Salesforce {
 
 			if ( $result['data']['totalSize'] === 1 ) {
 				$salesforce_id = $result['data']['records'][0]['Primary_Contact__c'];
-			} else if ( $result['data']['totalSize'] > 1 ) {
+			} elseif ( $result['data']['totalSize'] > 1 ) {
 				error_log('Salesforce has ' . $result['data']['totalSize'] . ' matches for this email. Try to log all of them: ' . print_r($result['data']['records'], true));
 			}
 		} else {
@@ -101,6 +125,70 @@ class Minnpost_Salesforce {
 
 		return $salesforce_id;
 	}
+
+	/**
+    * Default display for <input> fields
+    *
+    * @param array $args
+    */
+    public function display_input_field( $args ) {
+        $type   = $args['type'];
+        $id     = $args['label_for'];
+        $name   = $args['name'];
+        $desc   = $args['desc'];
+        $checked = '';
+
+        $class = 'regular-text';
+
+        if ( $type === 'checkbox' ) {
+            $class = 'checkbox';
+        }
+
+        if ( !defined( $args['constant'] ) ) {
+            $value  = esc_attr( get_option( $id, '' ) );
+            if ( $type === 'checkbox' ) {
+                if ( $value === '1' ) {
+                    $checked = 'checked ';
+                }
+                $value = 1;
+            }
+            if ( $value === '' && isset( $args['default'] ) && $args['default'] !== '' ) {
+                $value = $args['default'];
+            }
+            echo '<input type="' . $type. '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
+            class="' . $class . ' code" ' . $checked . ' />';
+            if ( $desc != '' ) {
+                echo '<p class="description">' . $desc . '</p>';
+            }
+        } else {
+            echo '<p><code>Defined in wp-config.php</code></p>';
+        }
+    }
+
+    /**
+    * Display for multiple checkboxes
+    * Above method can handle a single checkbox as it is
+    *
+    * @param array $args
+    */
+    public function display_checkboxes( $args ) {
+        $type = 'checkbox';
+        $name = $args['name'];
+        $options = get_option( $name );
+        foreach ( $args['items'] as $key => $value ) {
+            $text = $value['text'];
+            $id = $value['id'];
+            $desc = $value['desc'];
+            $checked = '';
+            if (is_array( $options ) && in_array( $key, $options ) ) {
+                $checked = 'checked';
+            }
+            echo '<div><label><input type="' . $type. '" value="' . $key . '" name="' . $name . '[]" id="' . $id . '" ' . $checked . ' />' . $text . '</label></div>';
+            if ( $desc != '' ) {
+                echo '<p class="description">' . $desc . '</p>';
+            }
+        }
+    }
 
 
 /// end class
