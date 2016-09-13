@@ -1,22 +1,23 @@
 === WP Category Permalink ===
-Contributors: TigrouMeow
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H2S7S3G4XMJ6J
+Contributors: TigrouMeow, Okonomiyaki3000
 Tags: category, permalink, woocommerce
 Requires at least: 3.5
-Tested up to: 4.4.0
-Stable tag: 2.2.8
+Tested up to: 4.5.3
+Stable tag: 3.0.4
 
-Allows manual selection of a 'main' category for each post for better permalinks and SEO.
+Allows manual selection of a 'main' category for each post for nicer permalinks and better SEO. Pro version adds custom post type support.
 
 == Description ==
 
-This plugin allows you to select a main category for your posts for better permalinks and SEO.
+This plugin allows you to select a main category (or taxonomy) for your posts for nicer permalinks and SEO.
 
-The chosen category is shown in bold on the 'Posts List' page and the 'Post Edit' page. You can select a different permalink category on the 'Post Edit' page using the 'Categories' box (hover over the categories and click on 'Permalink' to select one, then save your post).
+**Select a category for your permalink**. A custom structure such as **/%category%/%postname%/** should be usually chosen for your permalinks. By default, this %category% is selected automatically (using the lowest ID) in the case your post is assigned to more than one category. This plugin will let you pick the category of your choice from the 'Post Edit' page. The chosen category is shown in bold on the 'Posts List' page and the 'Post Edit' page.
 
-ABOUT WOOCOMMERCE AND CUSTOM TAXONOMIES SUPPORT
+**Post list**. Below the title, you will see the permalink currently set-up for this entry. If a heart is present, it means that the category (or taxonomy) has been picked up.
 
-Previously, specific WooCommerce support was introduced in a Pro version. This support will be continued in an external plugin (= a different plugin) developed by Yaniv. The current Pro customers will be contacted by Yaniv in order to switch to this new plugin. WP Category Permalink will be upgraded in a different way. It will not focus on WooCommerce specifically but will add support for custom taxonomies in general. Don't worry, this upgrade will be smooth and is a good move for everyone. There will be two plugins of quality available for custom permalink with different purposes :)
+**PRO Version**. Features added based on requests from users are made available in the Pro version. For now, the Pro adds support for custom post type and custom taxonomy support (gallery plugins or themes, WooCommerce, etc). Learn more on http://apps.meow.fr/wp-category-permalink/.
+
+**Breadcrumbs**. They have their own way of working and can't be supported automatically by default because they are created by specific themes or plugins. If you encounter issues with breadcrumbs, please say so in the Support Threads and let's see how we can make it work.
 
 Languages: English.
 
@@ -29,69 +30,42 @@ Languages: English.
 
 Please ask your questions in the forum and I will add them here :)
 
-= I donated, can I get rid of the donation button? =
-Of course. I don't like to see too many of those buttons neither ;) You can disable the donation buttons from all my plugins by adding this to your wp-config.php:
-`define('WP_HIDE_DONATION_BUTTONS', true);`
+== Upgrade Notice ==
+
+Nothing to be careful about here, just update :)
 
 == Screenshots ==
 
 1. Pick the category you'd like to have for the permalink.
+2. Check your permalinks in the posts list. If a heart is present, it means a category (or taxonomy) has been chosen.
 
 == Changelog ==
 
+= 3.0.4 =
+* Update: Enhance the way the post meta is handled.
+* Fix: Now newly created categories can be selected.
+* Fix: Pro version validation.
+
+= 3.0.3 =
+- Fix: The permalink below the title was showing a warning even though the category has been picked with a previous version of the plugin.
+- Fix: The categories were not bold nor red on the Posts list. With Pro, that also works with WooCommerce well :)
+- Fix: Issue from the past. If you can't seem to save your columns, you might need to run the query "DELETE FROM `wp_usermeta` WHERE `meta_key` LIKE '%wp_manageedit%'" on your DB, just once, to repair the View Screen options.
+
+= 3.0.2 =
+- Fix: Issue with multisite (with the includes).
+- Add: Pro version with support for custom post type! :) Now, special price for the 'Forever' version. Please check http://apps.meow.fr/wp-category-permalink/. If any issue at all (or feature request), contact me.
+- Add: Permalink shown below the title of the posts list (can be disabled in the option). Heart means a category has been picked, otherwise a little red warning is shown.
+- Update: A lot of coding & UI improvements.
+
 = 2.2.8 =
-* Fix: Infinite hidden columns to user meta (https://wordpress.org/support/topic/infinite-user-meta).
-
-= 2.2.7 =
-* Update: Textual and non major update.
-* Info: Please have a look at the new description of the plugin.
-
-= 2.2.6
-* Fix: Support for product type that is not WooCommerce.
-
-= 2.2.4
-* Fix: Better control for WooCommerce product permalink UI
-* Fix: WooCommerece Permalink Category
-* Fix: Allow for custom post types
-
-= 2.2.3
-* Fix: Product permalink bug (permalink appeared correctly only on product page).
-
-= 2.2.2 =
-* Fix: Restored post behaviour.
-* Fix: Fixed warnings.
-
-= 2.2.0 =
-* Fix: Tags structure issue.
-
-= 2.1 =
-* Fix: Fixed subcategory and post type issues.
+- Fix: Infinite hidden columns to user meta (https://wordpress.org/support/topic/infinite-user-meta).
 
 = 2.0 =
-* Fix: Update issue for non-WooCommerce user.
-* Change: Let's make it 2.0 since it's a major change.
-
-= 1.7 =
-* Fix: Woocommerce compatibility.
-
-= 1.6 =
-* Fix: Woocommerce products page.
-
-= 1.4 =
-* Links, readme, version.
-
-= 1.2 =
-* Works with WordPress 4.0.
-
-= 1.1.0 =
-* Nothing major updated.
-* New version number + readme + information.
+- Fix: Update issue for non-WooCommerce user.
+- Change: Let's make it 2.0 since it's a major change.
 
 = 1.0 =
-* Stable release.
+- Stable release.
 
 = 0.1.4 =
-* Add: default category will be shown in red if no category was picked.
-
-= 0.1 =
-* First release.
+- Add: default category will be shown in red if no category was picked.
