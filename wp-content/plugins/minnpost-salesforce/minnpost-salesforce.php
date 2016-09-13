@@ -51,7 +51,7 @@ class Minnpost_Salesforce {
 	* @throws \Exception
 	*/
     private function init() {
-    	add_filter( 'salesforce_rest_api_find_object_match', array( &$this, 'find_object_match' ), 10, 2 );
+    	add_filter( 'salesforce_rest_api_find_object_match', array( &$this, 'find_object_match' ), 10, 3 );
     	add_filter( 'salesforce_rest_api_push_object_allowed', array( &$this, 'push_not_allowed' ), 10, 5 );
     	add_filter( 'salesforce_rest_api_settings_tabs', array( &$this, 'minnpost_tabs'), 10, 1 );
     }
@@ -141,6 +141,8 @@ class Minnpost_Salesforce {
 	*	Unique identifier for the Salesforce object
 	* @param array $wordpress_object
 	*	Array of the wordpress object's data
+    * @param array $mapping
+    *   Array of the fieldmap between the WordPress and Salesforce object types
 	*
 	* @return array $salesforce_id
 	*	Unique identifier for the Salesforce object
@@ -148,30 +150,32 @@ class Minnpost_Salesforce {
 	* todo: may need a way for this to prevent a deletion in Salesforce if multiple contacts match the email address, for example. the plugin itself will block it if there are existing map rows. we might need to expand it for this, or maybe it is sufficient as it is. mp would probably turn off the delete hooks anyway.
 	*
 	*/
-	public function find_object_match( $salesforce_id, $wordpress_object ) {
+	public function find_object_match( $salesforce_id, $wordpress_object, $mapping = array() ) {
 
-		if ( is_object( $this->salesforce ) ) {
-			$salesforce_api = $this->salesforce->salesforce['sfapi'];
-		} else {
-			$salesforce = $this->salesforce();
-			$salesforce_api = $salesforce->salesforce['sfapi'];
-		}
-		
-		if ( is_object( $salesforce_api ) ) {
+        if ( $mapping['wordpress_object'] === 'user' ) {
+    		if ( is_object( $this->salesforce ) ) {
+    			$salesforce_api = $this->salesforce->salesforce['sfapi'];
+    		} else {
+    			$salesforce = $this->salesforce();
+    			$salesforce_api = $salesforce->salesforce['sfapi'];
+    		}
+    		
+    		if ( is_object( $salesforce_api ) ) {
 
-			// we want to see if the user's email address exists as a primary on any contact and use that contact if so
-			$mail = $wordpress_object['user_email'];
-			$query = "SELECT Primary_Contact__c FROM Email__c WHERE Email_Address__c = '$mail'";
-			$result = $salesforce_api->query( $query );
+    			// we want to see if the user's email address exists as a primary on any contact and use that contact if so
+    			$mail = $wordpress_object['user_email'];
+    			$query = "SELECT Primary_Contact__c FROM Email__c WHERE Email_Address__c = '$mail'";
+    			$result = $salesforce_api->query( $query );
 
-			if ( $result['data']['totalSize'] === 1 ) {
-				$salesforce_id = $result['data']['records'][0]['Primary_Contact__c'];
-			} elseif ( $result['data']['totalSize'] > 1 ) {
-				error_log('Salesforce has ' . $result['data']['totalSize'] . ' matches for this email. Try to log all of them: ' . print_r($result['data']['records'], true));
-			}
-		} else {
-			error_log('object for sf api does not exist');
-		}
+    			if ( $result['data']['totalSize'] === 1 ) {
+    				$salesforce_id = $result['data']['records'][0]['Primary_Contact__c'];
+    			} elseif ( $result['data']['totalSize'] > 1 ) {
+    				error_log('Salesforce has ' . $result['data']['totalSize'] . ' matches for this email. Try to log all of them: ' . print_r($result['data']['records'], true));
+    			}
+    		} else {
+    			error_log('object for sf api does not exist');
+    		}
+        }
 
 		return $salesforce_id;
 	}
