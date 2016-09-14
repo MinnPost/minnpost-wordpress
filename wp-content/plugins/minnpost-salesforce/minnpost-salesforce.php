@@ -51,7 +51,7 @@ class Minnpost_Salesforce {
 	* @throws \Exception
 	*/
     private function init() {
-    	add_filter( 'salesforce_rest_api_find_object_match', array( &$this, 'find_object_match' ), 10, 3 );
+    	add_filter( 'salesforce_rest_api_find_object_match', array( &$this, 'find_object_match' ), 10, 4 );
     	add_filter( 'salesforce_rest_api_push_object_allowed', array( &$this, 'push_not_allowed' ), 10, 5 );
     	add_filter( 'salesforce_rest_api_settings_tabs', array( &$this, 'minnpost_tabs'), 10, 1 );
     }
@@ -143,6 +143,8 @@ class Minnpost_Salesforce {
 	*	Array of the wordpress object's data
     * @param array $mapping
     *   Array of the fieldmap between the WordPress and Salesforce object types
+    * @param string $action
+    *   Is this a push or pull action?
 	*
 	* @return array $salesforce_id
 	*	Unique identifier for the Salesforce object
@@ -150,9 +152,9 @@ class Minnpost_Salesforce {
 	* todo: may need a way for this to prevent a deletion in Salesforce if multiple contacts match the email address, for example. the plugin itself will block it if there are existing map rows. we might need to expand it for this, or maybe it is sufficient as it is. mp would probably turn off the delete hooks anyway.
 	*
 	*/
-	public function find_object_match( $salesforce_id, $wordpress_object, $mapping = array() ) {
+	public function find_object_match( $salesforce_id, $wordpress_object, $mapping = array(), $action ) {
 
-        if ( $mapping['wordpress_object'] === 'user' ) {
+        if ( $action === 'push' && $mapping['wordpress_object'] === 'user' ) {
     		if ( is_object( $this->salesforce ) ) {
     			$salesforce_api = $this->salesforce->salesforce['sfapi'];
     		} else {
