@@ -3,7 +3,7 @@ Contributors: TigrouMeow, Okonomiyaki3000
 Tags: category, permalink, woocommerce
 Requires at least: 3.5
 Tested up to: 4.5.3
-Stable tag: 3.0.4
+Stable tag: 3.0.5
 
 Allows manual selection of a 'main' category for each post for nicer permalinks and better SEO. Pro version adds custom post type support.
 
@@ -41,6 +41,9 @@ Nothing to be careful about here, just update :)
 
 == Changelog ==
 
+= 3.0.5 =
+* Update: Additional error handling.
+
 = 3.0.4 =
 * Update: Enhance the way the post meta is handled.
 * Fix: Now newly created categories can be selected.
@@ -53,7 +56,6 @@ Nothing to be careful about here, just update :)
 
 = 3.0.2 =
 - Fix: Issue with multisite (with the includes).
-- Add: Pro version with support for custom post type! :) Now, special price for the 'Forever' version. Please check http://apps.meow.fr/wp-category-permalink/. If any issue at all (or feature request), contact me.
 - Add: Permalink shown below the title of the posts list (can be disabled in the option). Heart means a category has been picked, otherwise a little red warning is shown.
 - Update: A lot of coding & UI improvements.
 

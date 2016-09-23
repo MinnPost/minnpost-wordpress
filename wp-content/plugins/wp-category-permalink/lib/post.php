@@ -96,7 +96,10 @@ abstract class MWCPPost
             else
             {
                 $terms = get_the_terms( $post->ID, $query_var );
-
+                if ( is_wp_error( $terms ) ) {
+                  error_log( $terms->get_error_message() );
+                  die( "An error occured in WP Category Permalink." );
+                }
                 if ( !empty( $terms ) )
                 {
                     $term_id = $terms[0]->term_id;
