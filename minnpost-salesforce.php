@@ -41,8 +41,8 @@ class Minnpost_Salesforce {
 	* @throws \Exception
 	*/
 	private function admin_init() {
-		add_action( 'admin_init', array( &$this, 'salesforce' ) );
-		add_action( 'admin_init', array( &$this, 'minnpost_salesforce_settings_forms' ) );
+		add_action( 'admin_init', array( $this, 'salesforce' ) );
+		add_action( 'admin_init', array( $this, 'minnpost_salesforce_settings_forms' ) );
 	}
 
 	/**
@@ -51,9 +51,9 @@ class Minnpost_Salesforce {
 	* @throws \Exception
 	*/
     private function init() {
-    	add_filter( 'salesforce_rest_api_find_sf_object_match', array( &$this, 'find_sf_object_match' ), 10, 4 );
-    	add_filter( 'salesforce_rest_api_push_object_allowed', array( &$this, 'push_not_allowed' ), 10, 5 );
-    	add_filter( 'salesforce_rest_api_settings_tabs', array( &$this, 'minnpost_tabs'), 10, 1 );
+    	add_filter( 'salesforce_rest_api_find_sf_object_match', array( $this, 'find_sf_object_match' ), 10, 4 );
+    	add_filter( 'salesforce_rest_api_push_object_allowed', array( $this, 'push_not_allowed' ), 10, 5 );
+    	add_filter( 'salesforce_rest_api_settings_tabs', array( $this, 'minnpost_tabs'), 10, 1 );
     }
 
     /**
@@ -85,7 +85,7 @@ class Minnpost_Salesforce {
         $page = isset( $_GET['tab'] ) ? $_GET['tab'] : 'settings';
         $section = isset( $_GET['tab'] ) ? $_GET['tab'] : 'settings';
         $input_callback_default = array( $this, 'display_input_field' );
-        $input_checkboxes_default = array( &$this, 'display_checkboxes' );
+        $input_checkboxes_default = array( $this, 'display_checkboxes' );
         $this->fields_minnpost_settings( 'minnpost', 'minnpost', array( 'text' => $input_callback_default, 'checkboxes' => $input_checkboxes_default ) );
     }
 
