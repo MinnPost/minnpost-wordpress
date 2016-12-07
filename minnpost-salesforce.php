@@ -101,6 +101,17 @@ class Minnpost_Salesforce {
         add_settings_section( $page, ucwords( str_replace('_', ' ', $page) ), null, $page );
         // todo: figure out how to pick what objects to prematch against and put that here in the admin settings
         $minnpost_salesforce_settings = array(
+            'nonmember_level_name' => array(
+                'title' => 'Name of Non-Member Level',
+                'callback' => $callbacks['text'],
+                'page' => $page,
+                'section' => $section,
+                'args' => array(
+                    'type' => 'text',
+                    'desc' => '',
+                    'constant' => ''
+                ),
+            ),
         );
         foreach ( $minnpost_salesforce_settings as $key => $attributes ) {
             $id = 'salesforce_api_' . $key;
