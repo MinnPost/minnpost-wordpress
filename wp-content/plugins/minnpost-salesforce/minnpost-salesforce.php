@@ -102,14 +102,12 @@ class Minnpost_Salesforce {
                     if ( strpos( $value, 'member_' ) !== FALSE && $level_from_salesforce === $nonmember_level_name ) {
                         // this user is no longer a member, so get rid of the level
                         $user->remove_role( $value );
-                        error_log('remove role ' . $value . ' bc user is no longer a member');
                         return;
                     }
 
                     // if the user has a new member level, get rid of the old one
                     if ( strpos( $value, 'member_' ) !== FALSE && $level_from_wordpress !== $level_from_salesforce ) {
                         $user->remove_role( $value );
-                        error_log('remove role ' . $value . ' bc user is getting a different level');
                     }
                 
                 }
@@ -118,7 +116,6 @@ class Minnpost_Salesforce {
             // if the salesforce level is a role, add it to the user
             if ( array_key_exists( $level_from_salesforce, $wp_roles ) ) {
                 $user->add_role( $level_from_salesforce );
-                error_log('add new level ' . $level_from_salesforce);
             }
 
         }
