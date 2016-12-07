@@ -33,6 +33,9 @@ class Minnpost_Salesforce {
 		$this->version = '0.0.1';
 		$this->admin_init();
 		$this->init();
+        register_activation_hook( __FILE__, array( $this, 'add_user_fields') );
+        register_activation_hook( __FILE__, array( $this, 'add_roles_capabilities' ) );
+        register_deactivation_hook( __FILE__, array( $this, 'remove_roles_capabilities' ) );
 	}
 
 	/**
@@ -44,6 +47,10 @@ class Minnpost_Salesforce {
 		add_action( 'admin_init', array( $this, 'salesforce' ) );
 		add_action( 'admin_init', array( $this, 'minnpost_salesforce_settings_forms' ) );
 	}
+
+    public function add_user_fields() {
+        add_user_meta( 1, 'member_level', '' );
+    }
 
 	/**
 	* start
@@ -255,6 +262,30 @@ class Minnpost_Salesforce {
 
 		return $salesforce_id;
 	}
+
+    /**
+    * Add roles and capabilities
+    * This adds the member roles
+    *
+    */ 
+    public function add_roles_capabilities() {
+        $bronze = add_role('member_bronze', 'Member - Bronze', array());
+        $silver = add_role('member_silver', 'Member - Silver', array());
+        $gold = add_role('member_gold', 'Member - Gold', array());
+        $platinum = add_role('member_platinum', 'Member - Platinum', array());
+    }
+
+    /**
+    * Remove roles and capabilities
+    * This removes the member roles
+    *
+    */
+    public function remove_roles_capabilities() {
+        remove_role('member_bronze');
+        remove_role('member_silver');
+        remove_role('member_gold');
+        remove_role('member_platinum');
+    }
 
 	/**
     * Default display for <input> fields
