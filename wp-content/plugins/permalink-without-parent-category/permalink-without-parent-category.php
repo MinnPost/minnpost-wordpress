@@ -39,7 +39,8 @@ class Permalink_Without_Parent_Category {
 			$cats = get_the_category( $post->ID );
 			if ( $cats ) {
 				// Make sure we use the same start cat as the permalink generator
-				usort( $cats, '_usort_terms_by_ID' ); // order by ID
+				//usort( $cats, '_usort_terms_by_ID' ); // order by ID - this is deprecated in 4.7
+				$cats = wp_list_sort( $cats, 'ID' ); // new method in 4.7
 				$category = $cats[0]->slug;
 				if ( $parent = $cats[0]->parent ) {
 					// If there are parent categories, collect them and replace them in the link
