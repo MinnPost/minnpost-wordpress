@@ -65,63 +65,6 @@ class Minnpost_Salesforce {
         add_action( 'salesforce_rest_api_pre_pull', array( $this, 'member_level' ), 10, 4 );
     }
 
-    function member_level( $wordpress_id, $mapping, $object, $params ) {
-
-        // as per this question, if the only thing that changes is the member level formula that we reference, the updated api call does not get triggered
-        // https://salesforce.stackexchange.com/questions/42726/how-to-detect-changes-in-formula-field-value-via-api
-
-        // i think it should run on the pre pull hook because we don't let salesforce create users by itself
-        if ( $wordpress_id !== NULL && isset( $params['member_level']['value'] ) ) {
-
-            $nonmember_level_name = get_option( 'salesforce_api_nonmember_level_name', 'Non-member' );
-            
-            if ( $params['member_level']['value'] !== $nonmember_level_name ) {
-                $level_from_salesforce = 'member_' . strtolower( substr( $params['member_level']['value'], 9 ) );
-            } else {
-                $level_from_salesforce = $params['member_level']['value'];
-            }
-
-            $wp_roles = new WP_Roles(); // get all the available roles in wordpress
-            $wp_roles = $wp_roles->get_names(); // just get the names
-            
-            $user = get_user_by( 'id', $wordpress_id );
-            $this_user_roles = $user->roles; // this is roles for this user
-            
-            // check all the user's current roles
-            if ( !empty( $this_user_roles ) ) {
-                foreach ( $this_user_roles as $key => $value ) {
-
-                    $level_from_wordpress = $value;
-
-                    // if the user's role didn't change, get out of this function
-                    if ( strpos( $value, 'member_' ) !== FALSE && $level_from_wordpress === $level_from_salesforce ) {
-                        return;
-                    }
-
-                    // this user was a member but now they're not. remove the level and get out of this function.
-                    if ( strpos( $value, 'member_' ) !== FALSE && $level_from_salesforce === $nonmember_level_name ) {
-                        // this user is no longer a member, so get rid of the level
-                        $user->remove_role( $value );
-                        return;
-                    }
-
-                    // if the user has a new member level, get rid of the old one
-                    if ( strpos( $value, 'member_' ) !== FALSE && $level_from_wordpress !== $level_from_salesforce ) {
-                        $user->remove_role( $value );
-                    }
-                
-                }
-            }
-
-            // if the salesforce level is a role, add it to the user
-            if ( array_key_exists( $level_from_salesforce, $wp_roles ) ) {
-                $user->add_role( $level_from_salesforce );
-            }
-
-        }
-
-    }
-
     /**
 	* Load the Salesforce object
 	* Also make it available to this whole class
@@ -259,6 +202,71 @@ class Minnpost_Salesforce {
 
 		return $salesforce_id;
 	}
+
+    /**
+    * Apply the member level
+    * If the current object is a user with an ID, and it comes from Salesforce with a member level, do stuff with it
+    * Currently it just deals with the roles associated with the user
+    *
+    * @return $this->salesforce
+    *
+    */
+    public function member_level( $wordpress_id, $mapping, $object, $params ) {
+
+        // as per this question, if the only thing that changes is the member level formula that we reference, the updated api call does not get triggered
+        // https://salesforce.stackexchange.com/questions/42726/how-to-detect-changes-in-formula-field-value-via-api
+
+        // i think it should run on the pre pull hook because we don't let salesforce create users by itself
+        if ( $wordpress_id !== NULL && isset( $params['member_level']['value'] ) ) {
+
+            $nonmember_level_name = get_option( 'salesforce_api_nonmember_level_name', 'Non-member' );
+            
+            if ( $params['member_level']['value'] !== $nonmember_level_name ) {
+                $level_from_salesforce = 'member_' . strtolower( substr( $params['member_level']['value'], 9 ) );
+            } else {
+                $level_from_salesforce = $params['member_level']['value'];
+            }
+
+            $wp_roles = new WP_Roles(); // get all the available roles in wordpress
+            $wp_roles = $wp_roles->get_names(); // just get the names
+            
+            $user = get_user_by( 'id', $wordpress_id );
+            $this_user_roles = $user->roles; // this is roles for this user
+            
+            // check all the user's current roles
+            if ( !empty( $this_user_roles ) ) {
+                foreach ( $this_user_roles as $key => $value ) {
+
+                    $level_from_wordpress = $value;
+
+                    // if the user's role didn't change, get out of this function
+                    if ( strpos( $value, 'member_' ) !== FALSE && $level_from_wordpress === $level_from_salesforce ) {
+                        return;
+                    }
+
+                    // this user was a member but now they're not. remove the level and get out of this function.
+                    if ( strpos( $value, 'member_' ) !== FALSE && $level_from_salesforce === $nonmember_level_name ) {
+                        // this user is no longer a member, so get rid of the level
+                        $user->remove_role( $value );
+                        return;
+                    }
+
+                    // if the user has a new member level, get rid of the old one
+                    if ( strpos( $value, 'member_' ) !== FALSE && $level_from_wordpress !== $level_from_salesforce ) {
+                        $user->remove_role( $value );
+                    }
+                
+                }
+            }
+
+            // if the salesforce level is a role, add it to the user
+            if ( array_key_exists( $level_from_salesforce, $wp_roles ) ) {
+                $user->add_role( $level_from_salesforce );
+            }
+
+        }
+
+    }
 
     /**
     * Add roles and capabilities
