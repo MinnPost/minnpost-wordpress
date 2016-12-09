@@ -210,7 +210,7 @@ class Minnpost_Salesforce {
     * @return $this->salesforce
     *
     */
-    private function pull_member_level( $wordpress_id, $mapping, $object, $object_id, $params ) {
+    public function pull_member_level( $wordpress_id, $mapping, $object, $object_id, $params ) {
 
         // as per this question, if the only thing that changes is the member level formula that we reference, the updated api call does not get triggered
         // https://salesforce.stackexchange.com/questions/42726/how-to-detect-changes-in-formula-field-value-via-api
