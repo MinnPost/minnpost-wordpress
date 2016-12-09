@@ -208,6 +208,20 @@ class Minnpost_Salesforce {
     * Currently it just deals with the roles associated with the user
     *
     * @return $this->salesforce
+    * This runs before the user has been pulled from Salesforce, but we have Salesforce data for it, which may have a member level
+    * If the current object is a user with an ID, and it comes from Salesforce with a member level, do stuff with it
+    * Currently it just deals with the roles associated with the user
+    *
+    * @param int $wordpress_id
+    *   ID for the WordPress object
+    * @param array $mapping
+    *   The fieldmap between the WordPress and Salesforce objects
+    * @param array $object
+    *   The Salesforce object
+    * @param string $object_id
+    *   How to identify the ID field for the WordPress object
+    * @param array $params
+    *   The params array that matches fields to each other for saving
     *
     */
     public function pull_member_level( $wordpress_id, $mapping, $object, $object_id, $params ) {
@@ -216,15 +230,34 @@ class Minnpost_Salesforce {
         // https://salesforce.stackexchange.com/questions/42726/how-to-detect-changes-in-formula-field-value-via-api
 
         // i think it should run on the pre pull hook because we don't let salesforce create users by itself
+        if ( $wordpress_id !== NULL && isset( $params['member_level']['value'] ) ) {
+            $this->set_member_level( $object_id, $wordpress_id, $params['member_level']['value'] );
+        }
+
+    }
+
+    /**
+    * Do the actual setting of the member level.
+    * This works the same for push and pull, it just requires the correct data
+    *
+    * @param string $object_id
+    *   How to identify the ID field for the WordPress object
+    * @param int $wordpress_id
+    *   ID for the WordPress object
+    * @param array $salesforce_member_level
+    *   The member level value from Salesforce
+    *
+    */
+    private function set_member_level( $object_id, $wordpress_id, $salesforce_member_level ) {
         $user = get_user_by( $object_id, $wordpress_id );
-        if ( $user !== FALSE && isset( $params['member_level']['value'] ) ) {
+        if ( $user !== FALSE ) {
 
             $nonmember_level_name = get_option( 'salesforce_api_nonmember_level_name', 'Non-member' );
             
-            if ( $params['member_level']['value'] !== $nonmember_level_name ) {
-                $level_from_salesforce = 'member_' . strtolower( substr( $params['member_level']['value'], 9 ) );
+            if ( $salesforce_member_level !== $nonmember_level_name ) {
+                $level_from_salesforce = 'member_' . strtolower( substr( $salesforce_member_level, 9 ) );
             } else {
-                $level_from_salesforce = $params['member_level']['value'];
+                $level_from_salesforce = $salesforce_member_level;
             }
 
             $wp_roles = new WP_Roles(); // get all the available roles in wordpress
@@ -254,7 +287,7 @@ class Minnpost_Salesforce {
                     if ( strpos( $value, 'member_' ) !== FALSE && $level_from_wordpress !== $level_from_salesforce ) {
                         $user->remove_role( $value );
                     }
-                
+
                 }
             }
 
@@ -264,7 +297,6 @@ class Minnpost_Salesforce {
             }
 
         }
-
     }
 
     /**
