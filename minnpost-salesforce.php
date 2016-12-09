@@ -62,7 +62,8 @@ class Minnpost_Salesforce {
     	add_filter( 'salesforce_rest_api_push_object_allowed', array( $this, 'push_not_allowed' ), 10, 5 );
     	add_filter( 'salesforce_rest_api_settings_tabs', array( $this, 'minnpost_tabs'), 10, 1 );
 
-        add_action( 'salesforce_rest_api_pre_pull', array( $this, 'member_level' ), 10, 4 );
+        add_action( 'salesforce_rest_api_pre_pull', array( $this, 'pull_member_level' ), 10, 5 );
+
     }
 
     /**
@@ -202,20 +203,21 @@ class Minnpost_Salesforce {
 	}
 
     /**
-    * Apply the member level
+    * Apply the member level to the user's roles
     * If the current object is a user with an ID, and it comes from Salesforce with a member level, do stuff with it
     * Currently it just deals with the roles associated with the user
     *
     * @return $this->salesforce
     *
     */
-    public function member_level( $wordpress_id, $mapping, $object, $params ) {
+    private function pull_member_level( $wordpress_id, $mapping, $object, $object_id, $params ) {
 
         // as per this question, if the only thing that changes is the member level formula that we reference, the updated api call does not get triggered
         // https://salesforce.stackexchange.com/questions/42726/how-to-detect-changes-in-formula-field-value-via-api
 
         // i think it should run on the pre pull hook because we don't let salesforce create users by itself
-        if ( $wordpress_id !== NULL && isset( $params['member_level']['value'] ) ) {
+        $user = get_user_by( $object_id, $wordpress_id );
+        if ( $user !== FALSE && isset( $params['member_level']['value'] ) ) {
 
             $nonmember_level_name = get_option( 'salesforce_api_nonmember_level_name', 'Non-member' );
             
@@ -228,7 +230,6 @@ class Minnpost_Salesforce {
             $wp_roles = new WP_Roles(); // get all the available roles in wordpress
             $wp_roles = $wp_roles->get_names(); // just get the names
             
-            $user = get_user_by( 'id', $wordpress_id );
             $this_user_roles = $user->roles; // this is roles for this user
             
             // check all the user's current roles
