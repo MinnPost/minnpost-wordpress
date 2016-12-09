@@ -62,6 +62,7 @@ class Minnpost_Salesforce {
     	add_filter( 'salesforce_rest_api_push_object_allowed', array( $this, 'push_not_allowed' ), 10, 5 );
     	add_filter( 'salesforce_rest_api_settings_tabs', array( $this, 'minnpost_tabs'), 10, 1 );
 
+        add_action( 'salesforce_rest_api_push_success', array( $this, 'push_member_level' ), 10, 4 );
         add_action( 'salesforce_rest_api_pre_pull', array( $this, 'pull_member_level' ), 10, 5 );
 
     }
@@ -204,10 +205,33 @@ class Minnpost_Salesforce {
 
     /**
     * Apply the member level to the user's roles
+    * This runs after the user has been pushed to Salesforce and has a response from Salesforce, which may have a member level
     * If the current object is a user with an ID, and it comes from Salesforce with a member level, do stuff with it
     * Currently it just deals with the roles associated with the user
     *
-    * @return $this->salesforce
+    * @param string $op
+    *   What kind of operation we were doing (create, update, delete)
+    * @param array $sf_response
+    *   The full response from Salesforce
+    * @param array $synced_object
+    *   The WordPress object, object map, and field map together
+    * @param string $object_id
+    *   How to identify the ID field for the WordPress object
+    *
+    */
+    public function push_member_level( $op, $sf_response, $synced_object, $object_id ) {
+
+        // we run it on the push_success hook because that gives us the salesforce data we need
+        if ( isset( $synced_object['wordpress_object'][$object_id] ) && isset( $sf_response['data']['Membership_Level__c'] ) ) {
+            $wordpress_id = $synced_object['wordpress_object'][$object_id];
+            $salesforce_member_level = $sf_response['data']['Membership_Level__c'];
+            $this->set_member_level( $object_id, $wordpress_id, $salesforce_member_level );
+        }
+
+    }
+
+    /**
+    * Apply the member level to the user's roles
     * This runs before the user has been pulled from Salesforce, but we have Salesforce data for it, which may have a member level
     * If the current object is a user with an ID, and it comes from Salesforce with a member level, do stuff with it
     * Currently it just deals with the roles associated with the user
