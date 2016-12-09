@@ -195,8 +195,6 @@ class Minnpost_Salesforce {
     			} elseif ( $result['data']['totalSize'] > 1 ) {
     				error_log('Salesforce has ' . $result['data']['totalSize'] . ' matches for this email. Try to log all of them: ' . print_r($result['data']['records'], true));
     			}
-    		} else {
-    			error_log('object for sf api does not exist');
     		}
         }
 
