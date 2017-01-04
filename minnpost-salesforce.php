@@ -46,10 +46,39 @@ class Minnpost_Salesforce {
 	private function admin_init() {
 		add_action( 'admin_init', array( $this, 'salesforce' ) );
 		add_action( 'admin_init', array( $this, 'minnpost_salesforce_settings_forms' ) );
+        add_action( 'admin_init', array( $this, 'thermometer_demo' ) );
 	}
 
     public function add_user_fields() {
         add_user_meta( 1, 'member_level', '' );
+    }
+
+    public function thermometer_demo() {
+        if ( is_object( $this->salesforce ) ) {
+            $salesforce_api = $this->salesforce->salesforce['sfapi'];
+        } else {
+            $salesforce = $this->salesforce();
+            $salesforce_api = $salesforce->salesforce['sfapi'];
+        }
+        
+        if ( is_object( $salesforce_api ) ) {
+            // this is a report id
+            $id = '00OF0000006ZU9e';
+            $result = $salesforce_api->run_analytics_report( $id, TRUE );
+
+            if ( $result['data']['attributes']['status'] === 'Success' ) {
+                $factmap = $result['data']['factMap'];
+                foreach ( $factmap as $array ) {
+                    if ( isset( $array['aggregates'] ) ) {
+                        $value = $array['aggregates'][1]['value'];
+                        break;
+                    }
+                }
+            }
+
+            echo 'value of campaign is ' . $value;
+
+        }
     }
 
 	/**
