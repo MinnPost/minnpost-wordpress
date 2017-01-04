@@ -2,8 +2,8 @@
 Contributors: TigrouMeow, Okonomiyaki3000
 Tags: category, permalink, woocommerce
 Requires at least: 3.5
-Tested up to: 4.5.3
-Stable tag: 3.0.5
+Tested up to: 4.7
+Stable tag: 3.2.2
 
 Allows manual selection of a 'main' category for each post for nicer permalinks and better SEO. Pro version adds custom post type support.
 
@@ -15,7 +15,7 @@ This plugin allows you to select a main category (or taxonomy) for your posts fo
 
 **Post list**. Below the title, you will see the permalink currently set-up for this entry. If a heart is present, it means that the category (or taxonomy) has been picked up.
 
-**PRO Version**. Features added based on requests from users are made available in the Pro version. For now, the Pro adds support for custom post type and custom taxonomy support (gallery plugins or themes, WooCommerce, etc). Learn more on http://apps.meow.fr/wp-category-permalink/.
+**PRO Version**. Features added based on requests from users are made available in the Pro version. For now, the Pro adds support for custom post type and custom taxonomy support (gallery plugins or themes, WooCommerce, etc). Learn more on https://meowapps.com/wp-category-permalink/.
 
 **Breadcrumbs**. They have their own way of working and can't be supported automatically by default because they are created by specific themes or plugins. If you encounter issues with breadcrumbs, please say so in the Support Threads and let's see how we can make it work.
 
@@ -41,7 +41,8 @@ Nothing to be careful about here, just update :)
 
 == Changelog ==
 
-= 3.0.5 =
+= 3.2.2 =
+* Fix: Handle events on the label instead of the li. Inject the link into the label too.
 * Update: Additional error handling.
 
 = 3.0.4 =

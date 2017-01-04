@@ -67,10 +67,12 @@ abstract class MWCPPost
     */
     public static function post_type_link( $url, $post )
     {
+        global $MWCP_Admin;
+
         // A list of the only post types we are concerned with.
         $post_types = MWCPPost::post_types();
 
-        if ( !MWCPSettings::is_pro() || !isset( $post_types[$post->post_type] ) )
+        if ( !$MWCP_Admin->is_pro() || !isset( $post_types[$post->post_type] ) )
         {
             return $url;
         }

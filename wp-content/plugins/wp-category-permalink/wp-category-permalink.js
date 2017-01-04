@@ -2,17 +2,22 @@
     'use strict';
 
     $.fn.sCategoryPermalink = function(options) {
-        var $link = $('<a class="taxa-value-selector" style="margin-left: 0px;">&nbsp;<span class="dashicons dashicons-heart" style="font-size: 15px; margin-top: 3px; line-height: inherit; color: rgba(255, 0, 0, 0.65);"></span>Permalink</a>');
+		// Template for the taxa-value-selector link. Clone this whenever needed.
+        var $link = $('<a class="taxa-value-selector" style="position: absolute; margin-top: 2px;">&nbsp;<span class="dashicons dashicons-heart" style="font-size: 15px; margin-top: 1px; line-height: inherit; color: rgba(255, 0, 0, 0.65);"></span>Permalink</a>');
+		// The input to hold our selected permalink value. Need one for each and every taxonomy that can be part of a permalink.
         var $input = $('<input type="hidden" class="permalink-taxa" />');
+		// Just a selector for checkboxes
         var cbSelector = '.tabs-panel label input[type="checkbox"]';
         var hover = {
                 mouseenter: mouseenter,
                 mouseleave: mouseleave
             };
 
+		// Of course you know that 'this' is the collection of elements returned by jQuery(...);
         return this
             .on('click', '.taxa-value-selector', click)
-            .on('hover', '.categorychecklist li', function (event) {
+            .on('hover', '.categorychecklist li label.selectit', function (event) {
+				// In here, 'this' is the hovered item. (that means label.selectit)
                 hover[event.type] && hover[event.type].call(this, event);
             })
             .on('change', cbSelector, change)
@@ -21,6 +26,7 @@
         /**
          * List item was hovered, create a .taxa-value-selector link.
          * Doing this on the fly in case of newly created categories.
+         * Event handler so 'this' is the event target. For this event, it's always label.selectit
          *
          * @param   {Event}  event  Who cares? Don't use.
          *
@@ -38,6 +44,7 @@
 
         /**
          * Trash the .taxa-value-selector, we will create it again next mouseover.
+         * Event handler so 'this' is the event target. For this event, it's always label.selectit
          *
          * @param   {Event}  event  Who cares? Don't use.
          *
@@ -51,6 +58,7 @@
         /**
          * Create the permalinkTaxa input for this taxonomy.
          * Select the currently active category if there is one.
+         * Called by jQuery's 'each' so 'this' is the current element of the set.
          *
          * @return  {void}
          */
@@ -68,6 +76,7 @@
 
         /**
          * Handle a click of the .taxa-value-selector
+         * Event handler so 'this' is the event target. For this event, it's always .taxa-value-selector
          *
          * @param   {Event}  event  Who cares? Don't use.
          *
@@ -85,11 +94,13 @@
          * Handle a changed checkbox.
          * If the checkbox for the currently selected category is unchecked,
          * We must deselect that category.
+         * Event handler so 'this' is the event target. For this event, it's always a match for cbSelector
          *
          * @return  {void}
          */
         function change()
         {
+			// 'this' is a plain element. Get a jQuery.
             var $this = $(this);
 
             if ($this.prop('checked'))

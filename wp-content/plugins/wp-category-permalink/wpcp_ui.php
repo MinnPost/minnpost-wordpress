@@ -12,28 +12,29 @@ abstract class MWCPUI
             cursor:pointer;
             cursor:hand;
         }
+
+        ul.categorychecklist li { white-space: nowrap; }
         </style>
         <?php
     }
 
     public static function enqueue_script()
     {
-        $url = plugins_url('/wp-category-permalink.js', dirname(__FILE__) . '/../..' );
+        $url = plugins_url('/wp-category-permalink.js', dirname(__FILE__) . '/../' );
         wp_enqueue_script( 'wp-category-permalink.js', $url, array( 'jquery' ), '1.8', false );
     }
 
     public static function post_js()
     {
         global $post;
+        global $MWCP_Admin;
 
         $options = array();
 
         if ( $post->ID )
-        {
-            $options['current'] = MWCPPost::getPermalinkMeta( $post->ID );
-        }
-
-        $selector = MWCPSettings::is_pro() ? '[id^="taxonomy-"].categorydiv' : '#taxonomy-category';
+          $options['current'] = MWCPPost::getPermalinkMeta( $post->ID );
+        $MWCP_Admin = new MWCP_Admin();
+        $selector = $MWCP_Admin->is_pro() ? '[id^="taxonomy-"].categorydiv' : '#taxonomy-category';
 
         ?>
         <script type="text/javascript">
@@ -61,7 +62,8 @@ abstract class MWCPUI
     public static function manage_posts_columns( $columns )
     {
         global $post_type;
-        if ( $post_type != 'post' && !MWCPSettings::is_pro() )
+        global $MWCP_Admin;
+        if ( $post_type != 'post' && !$MWCP_Admin->is_pro() )
             return $columns;
         $option = 'manageedit-' . $post_type . 'columnshidden';
         $hidden_columns = (array) get_user_option( $option );
@@ -87,7 +89,7 @@ abstract class MWCPUI
 
     public static function post_row_actions( $actions, $post )
     {
-        $hide_permalink = MWCPSettings::get_option( 'hide_permalink', 'wpcp_basics', false );
+        $hide_permalink = get_option( 'wpcp_hide_permalink', false );
 
         if ( $hide_permalink )
         {
@@ -107,7 +109,7 @@ abstract class MWCPUI
             }
         }
 
-        $dashicon = !$isset ? '<span class="dashicons dashicons-warning" style="font-size: 12px; margin: 1px 0px 0px 0px; width: auto; height: auto; line-height: inherit; color: rgba(255, 0, 0, 0.65);"></span>' : '<span class="dashicons dashicons-heart" style="font-size: 12px; margin: 1px 0px 0px 0px; width: auto; height: auto; line-height: inherit; color: gray;"></span>';
+        $dashicon = !$isset ? '<span class="dashicons dashicons-warning" title="The main category should be chosen in the Edit Post page." style="font-size: 12px; margin: 1px 0px 0px 0px; width: auto; height: auto; line-height: inherit; color: rgba(255, 0, 0, 0.65);"></span>' : '<span class="dashicons dashicons-heart" style="font-size: 12px; margin: 1px 0px 0px 0px; width: auto; height: auto; line-height: inherit; color: gray;"></span>';
         $permalink = get_permalink( $post->ID );
 
         if ( get_post_type( $post ) !== 'post' )

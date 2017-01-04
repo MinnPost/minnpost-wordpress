@@ -3,9 +3,9 @@
 Plugin Name: WP Category Permalink
 Plugin URI: http://meowapps.com
 Description: Allows manual selection of a 'main' category for each post for better permalinks and SEO. Pro version WILL add support for custom taxonomies.
-Version: 3.0.5
+Version: 3.2.2
 Author: Jordy Meow
-Author URI: http://www.meow.fr
+Author URI: http://meowapps.com
 
 Originally developed for two of my websites:
 - Jordy Meow (http://jordymeow.com)
@@ -18,9 +18,13 @@ Originally developed for two of my websites:
 *
 */
 
-require_once 'lib/settings.php';
-require_once 'lib/post.php';
-require_once 'lib/ui.php';
+require_once 'wpcp_admin.php';
+
+global $MWCP_Admin;
+$MWCP_Admin = new MWCP_Admin();
+
+require_once 'wpcp_post.php';
+require_once 'wpcp_ui.php';
 
 // // Setup the UI
 add_action( 'admin_enqueue_scripts', array('MWCPUI', 'enqueue_script') );
@@ -34,22 +38,13 @@ add_action( 'manage_posts_custom_column' , array('MWCPUI', 'manage_posts_custom_
 
 // Handle post data
 add_action( 'transition_post_status', array('MWCPPost', 'transition_post_status'), 0, 3 );
+
 // Set the %category% value for permalinks (normal posts)
 add_filter( 'post_link_category', array('MWCPPost', 'post_link_category'), 10, 3 );
 
 // Pro only, handle custom post types and their custom taxonomies
-if ( MWCPSettings::is_pro() )
+if ( $MWCP_Admin->is_pro() )
 	add_filter( 'post_type_link', array('MWCPPost', 'post_type_link'), 10, 2 );
+
 // Disable the WPSEO v3.1+ Primary Category feature.
 add_filter( 'wpseo_primary_term_taxonomies', '__return_empty_array' );
-
-/**
-*
-* MENU ITEM (SETTINGS)
-*
-*/
-if ( is_admin() )
-{
-	add_action('admin_init', array('MWCPSettings', 'init'));
-	add_action('admin_menu', array('MWCPSettings', 'add_menu_item'));
-}
