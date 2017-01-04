@@ -46,7 +46,6 @@ class Minnpost_Salesforce {
 	private function admin_init() {
 		add_action( 'admin_init', array( $this, 'salesforce' ) );
 		add_action( 'admin_init', array( $this, 'minnpost_salesforce_settings_forms' ) );
-        add_action( 'admin_init', array( $this, 'thermometer_demo' ) );
 	}
 
     public function add_user_fields() {
@@ -76,7 +75,24 @@ class Minnpost_Salesforce {
                 }
             }
 
-            echo 'value of campaign is ' . $value;
+            $percent = ( $value / 10000 ) * 100;
+
+            return '
+                <div class="donation-meter">
+                  <strong>Our Goal</strong>
+                  <strong class="goal">$10,000.00</strong>
+                  <span class="glass">
+                      <strong class="total" data-percent="' . $percent . '">' . $value . '</strong>
+                      <span class="amount"></span>
+                  </span>
+                  <div class="bulb">
+                      <span class="red-circle"></span>
+                      <span class="filler">
+                          <span></span>
+                      </span>
+                  </div>
+                </div>
+            ';
 
         }
     }
@@ -90,10 +106,15 @@ class Minnpost_Salesforce {
     	add_filter( 'salesforce_rest_api_find_sf_object_match', array( $this, 'find_sf_object_match' ), 10, 4 );
     	add_filter( 'salesforce_rest_api_push_object_allowed', array( $this, 'push_not_allowed' ), 10, 5 );
     	add_filter( 'salesforce_rest_api_settings_tabs', array( $this, 'minnpost_tabs'), 10, 1 );
-
+        add_filter( 'salesforce_rest_api_settings_tab_content', array( $this, 'minnpost_tab' ) );
         add_action( 'salesforce_rest_api_push_success', array( $this, 'push_member_level' ), 10, 4 );
         add_action( 'salesforce_rest_api_pre_pull', array( $this, 'pull_member_level' ), 10, 5 );
+        add_action( 'admin_enqueue_scripts', array( $this, 'css_and_js' ) );
+    }
 
+    public function css_and_js() {
+        wp_enqueue_style( 'minnpost-salesforce', plugins_url( 'minnpost-salesforce.css', __FILE__ ), array(), '0.1' );
+        wp_enqueue_script( 'minnpost-salesforce-js', plugins_url( 'minnpost-salesforce.js', __FILE__ ), array( 'jquery-core' ), '0.1' );
     }
 
     /**
@@ -178,6 +199,11 @@ class Minnpost_Salesforce {
 		$tabs['minnpost'] = 'MinnPost';
 		return $tabs;
 	}
+
+    public function minnpost_tab() {
+        $demo = $this->thermometer_demo();
+        return $demo;
+    }
 
     public function push_not_allowed( $push_allowed, $object_type, $object, $sf_sync_trigger, $mapping ) {
     	if ( $object_type === 'user' && $object['ID'] === 1 ) { // do not add user 1 to salesforce
