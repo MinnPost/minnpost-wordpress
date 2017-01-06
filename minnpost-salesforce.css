@@ -1,12 +1,62 @@
+.donation-widget {
+  width: 240px;
+}
+
+/* dynamic donation thermometer */
 .donation-meter {
-  margin-left: 30px;
-  width: 100px;
-  height: 300px;
+  padding-bottom: 40px;
+}
+/* heading */
+.donation-meter h2 {
+  width: 100%;
+}
+.donation-meter h2 span {
+  display: block;
+}
+.donation-meter h2 .logo {
+  overflow: hidden;
+  text-indent: -10000em;
+  background: url(../images/logo.png);
+  height: 22px;
+  background-size: cover;
+}
+.donation-meter h2 .year {
+  margin: 24px 0;
+  font-size: 85px;
+  font-family: NimbusSanNovConD-Bol, Helvetica, Arial, Geneva, sans-serif;
+}
+.donation-meter h2 .drive-name {
+  font-family: NimbusSanNovConD-Bol, Helvetica, Arial, Geneva, sans-serif;
+  margin-bottom: 24px;
+}
+/* end heading */
+
+/* meter */
+.meter-status {
   position: relative;
 }
-.donation-meter .glass {
+.meter-status .thermometer {
+  width: 100px;
+  height: 290px;
+  margin: 0 auto;
+  position: relative;
+}
+.meter-status .thermometer .point {
+  position: absolute;
+}
+.meter-status .thermometer .goal, .meter-status .thermometer .one-third {
+  left: -20px;
+}
+.meter-status .thermometer .two-thirds {
+  bottom: calc((100% / 3) * 2);
+  right: -20px;
+}
+.meter-status .thermometer .one-third {
+  bottom: calc(100% / 3);
+}
+.meter-status .glass {
   background: #e5e5e5;
-  border-radius: 100px 100px 0 0;
+  /*border-radius: 100px 100px 0 0;*/
   display: block;
   height: 225px;
   margin: 0 35px 10px;
@@ -14,49 +64,35 @@
   position: relative;
   width: 20px;
   position: absolute;
-  bottom: 0;
+  top: 0;
 }
-.donation-meter .amount {
+.meter-status .amount {
   background: #f34e54;
-  border-radius: 100px;
+  /*border-radius: 100px;*/
   display: block;
   width: 20px;
   position: absolute;
   bottom: 5px;
 }
-.donation-meter strong {
-  display: block;
-  text-align: center;
-}
-.donation-meter .goal {
-  font-size: 30px;
-}
-.donation-meter .total {
-  font-size: 16px;
-  position: absolute;
-  right: 35px;
-}
-
-.bulb {
+.meter-status .bulb {
   background: #e5e5e5;
   border-radius: 100px;
   display: block;
   height: 50px;
-  margin: 0 35px 10px;
+  margin: 0 20px 10px 20px;
   padding: 5px;
   position: absolute;
-  bottom: -50px;
-  left: -15px;
+  top: 220px;
   width: 50px;
 }
-.bulb .red-circle {
+.meter-status .bulb .red-circle {
   background: #f34e54;
   border-radius: 100px;
   display: block;
   height: 50px;
   width: 50px;
 }
-.bulb .filler {
+.meter-status .bulb .filler {
   background: #f34e54;
   border-radius: 100px 100px 0 0;
   display: block;
@@ -67,3 +103,34 @@
   right: -15px;
   z-index: 30;
 }
+/* end meter */
+
+/* text after thermometer */
+.meter-status .total { /* the overlay total so far */
+  font-size: 32px;
+  position: absolute;
+  bottom: 30px;
+  z-index: 40;
+  width: 100%;
+  text-align: center;
+}
+.meter-status .drive-goal { /* the goal at the bottom */
+  display: block;
+  position: absolute;
+  font-size: 18px;
+  width: 100%;
+  text-align: center;
+  margin-left: -15px;
+  font-family: Helvetica, Arial, Geneva, sans-serif;
+  text-transform: uppercase;
+}
+.meter-status .drive-goal .goal {
+  display: block;
+  margin-left: 45px;
+  font-size: 28px;
+  margin-top: 6px;
+}
+/* end text after thermometer */
+
+
+/* end thermometer */
