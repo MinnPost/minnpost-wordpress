@@ -46,55 +46,16 @@ class Minnpost_Salesforce {
 	private function admin_init() {
 		add_action( 'admin_init', array( $this, 'salesforce' ) );
 		add_action( 'admin_init', array( $this, 'minnpost_salesforce_settings_forms' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'css_and_js' ) );
+        add_action( 'wp_ajax_thermometer_ajax', array( $this, 'thermometer_ajax') );
 	}
+
+    public function register_widgets() {
+        //register_widget( 'MyNewWidget' );
+    }
 
     public function add_user_fields() {
         add_user_meta( 1, 'member_level', '' );
-    }
-
-    public function thermometer_demo() {
-        if ( is_object( $this->salesforce ) ) {
-            $salesforce_api = $this->salesforce->salesforce['sfapi'];
-        } else {
-            $salesforce = $this->salesforce();
-            $salesforce_api = $salesforce->salesforce['sfapi'];
-        }
-        
-        if ( is_object( $salesforce_api ) ) {
-            // this is a report id
-            $id = '00OF0000006ZU9e';
-            $result = $salesforce_api->run_analytics_report( $id, TRUE );
-
-            if ( $result['data']['attributes']['status'] === 'Success' ) {
-                $factmap = $result['data']['factMap'];
-                foreach ( $factmap as $array ) {
-                    if ( isset( $array['aggregates'] ) ) {
-                        $value = $array['aggregates'][1]['value'];
-                        break;
-                    }
-                }
-            }
-
-            $percent = ( $value / 10000 ) * 100;
-
-            return '
-                <div class="donation-meter">
-                  <strong>Our Goal</strong>
-                  <strong class="goal">$10,000.00</strong>
-                  <span class="glass">
-                      <strong class="total" data-percent="' . $percent . '">' . $value . '</strong>
-                      <span class="amount"></span>
-                  </span>
-                  <div class="bulb">
-                      <span class="red-circle"></span>
-                      <span class="filler">
-                          <span></span>
-                      </span>
-                  </div>
-                </div>
-            ';
-
-        }
     }
 
 	/**
@@ -106,15 +67,17 @@ class Minnpost_Salesforce {
     	add_filter( 'salesforce_rest_api_find_sf_object_match', array( $this, 'find_sf_object_match' ), 10, 4 );
     	add_filter( 'salesforce_rest_api_push_object_allowed', array( $this, 'push_not_allowed' ), 10, 5 );
     	add_filter( 'salesforce_rest_api_settings_tabs', array( $this, 'minnpost_tabs'), 10, 1 );
-        add_filter( 'salesforce_rest_api_settings_tab_content', array( $this, 'minnpost_tab' ) );
+        add_filter( 'salesforce_rest_api_settings_tab_content_after', array( $this, 'minnpost_tab' ) );
         add_action( 'salesforce_rest_api_push_success', array( $this, 'push_member_level' ), 10, 4 );
         add_action( 'salesforce_rest_api_pre_pull', array( $this, 'pull_member_level' ), 10, 5 );
-        add_action( 'admin_enqueue_scripts', array( $this, 'css_and_js' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'css_and_js' ) );
+        add_action( 'wp_ajax_nopriv_thermometer_ajax', array( $this, 'thermometer_ajax') );
     }
 
     public function css_and_js() {
         wp_enqueue_style( 'minnpost-salesforce', plugins_url( 'minnpost-salesforce.css', __FILE__ ), array(), '0.1' );
         wp_enqueue_script( 'minnpost-salesforce-js', plugins_url( 'minnpost-salesforce.js', __FILE__ ), array( 'jquery-core' ), '0.1' );
+         wp_localize_script( 'minnpost-salesforce-js', 'minnpost_salesforce', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
     }
 
     /**
@@ -201,7 +164,7 @@ class Minnpost_Salesforce {
 	}
 
     public function minnpost_tab() {
-        $demo = $this->thermometer_demo();
+        $demo = $this->thermometer_html();
         return $demo;
     }
 
@@ -464,6 +427,115 @@ class Minnpost_Salesforce {
                 echo '<p class="description">' . $desc . '</p>';
             }
         }
+    }
+
+    public function thermometer_html() {
+
+        $data = $this->thermometer_data();
+
+        if ( $data['success'] === TRUE ) {
+            $percent = $data['percent_complete'];
+            $value = '$' . number_format( $data['value_opportunities'] );
+            $goal_int = $data['goal'];
+            $goal = '$' . number_format( $goal_int );
+            $one_third_int = $goal_int / 3;
+            $one_third = '$' . number_format( round( $one_third_int ) );
+            $two_thirds = '$' . number_format( round( $one_third_int * 2 ) );
+        } else {
+            $percent = '';
+            $value = '';
+            $goal = '';
+            $one_third = '';
+            $two_thirds = '';
+        }
+
+        $html = '';
+        $html .= '
+        <div class="donation-widget">
+            <div class="donation-meter" data-report="00OF0000006ZU9e" data-campaign="701560000001aYpAAI">
+              <h2 class="pane-title"><span class="logo">MinnPost</span> <span class="year">2016</span> <span class="drive-name">Year-End Member Drive</span></h2>
+              <div class="meter-status">
+                <div class="thermometer">';
+                if ( $goal !== '' ) {
+                  $html .= '<span class="point goal">' . $goal . '</span>';
+                }
+                  $html .= '<span class="point two-thirds">' . $two_thirds . '</span>
+                  <span class="point one-third">' . $one_third . '</span>
+                  <span class="glass">
+                    <span class="amount"></span>
+                  </span>
+                  <div class="bulb">
+                    <span class="red-circle"></span>
+                    <span class="filler">
+                      <span></span>
+                    </span>
+                  </div>
+                </div>
+                <strong class="total" data-percent="' . $percent . '">' . $value . '</strong>';
+                if ( $goal !== '' ) {
+                    echo '<strong class="drive-goal">Drive goal: <span class="goal">' . $goal . '</span></strong>';
+                }
+              $html .=' </div>
+            </div>
+        </div>
+        ';
+
+        return $html;
+
+    }
+
+    public function thermometer_ajax() {
+        $data = $this->thermometer_data();
+        wp_send_json_success( $data );
+    }
+
+    private function thermometer_data() {
+        if ( is_object( $this->salesforce ) ) {
+            $salesforce_api = $this->salesforce->salesforce['sfapi'];
+        } else {
+            $salesforce = $this->salesforce();
+            $salesforce_api = $salesforce->salesforce['sfapi'];
+        }
+
+        if ( is_object( $salesforce_api ) ) {
+            // this is a report id
+            $id = '00OF0000006ZU9e';
+            $report_result = $salesforce_api->run_analytics_report( $id, TRUE );
+            $campaign_result = $salesforce_api->object_read( 'Campaign', '701560000001aYpAAI' );
+
+            if ( isset( $campaign_result['data']['ExpectedRevenue'] ) ) {
+                $goal = $campaign_result['data']['ExpectedRevenue'];
+            } else {
+                $goal = '';
+            }
+
+            if ( $report_result['data']['attributes']['status'] === 'Success' ) {
+                $factmap = $report_result['data']['factMap'];
+                foreach ( $factmap as $array ) {
+                    if ( isset( $array['aggregates'] ) ) {
+                        $success = TRUE;
+                        $value = $array['aggregates'][1]['value'];
+                        break;
+                    }
+                }
+            } elseif ( $report_result['data']['attributes']['status'] === 'Running' ) {
+                $success = 'running';
+                $value = 0;
+            }
+        } else {
+            $success = FALSE;
+            $value = 0;
+        }
+
+        $data = array(
+            'success' => $success,
+            'value_opportunities' => $value,
+            'goal' => $goal,
+            'percent_complete' => ( $value / 10000 ) * 100
+        );
+
+        return $data;
+
     }
 
 
