@@ -473,7 +473,7 @@ class Minnpost_Salesforce {
                 </div>
                 <strong class="total" data-percent="' . $percent . '">' . $value . '</strong>';
                 if ( $goal !== '' ) {
-                    echo '<strong class="drive-goal">Drive goal: <span class="goal">' . $goal . '</span></strong>';
+                    $html .= '<span class<strong class="drive-goal">Drive goal: <span class="goal">' . $goal . '</span></strong>';
                 }
               $html .=' </div>
             </div>
