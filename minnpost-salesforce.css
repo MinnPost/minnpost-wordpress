@@ -1,5 +1,11 @@
 .donation-widget {
-  width: 240px;
+  width: 163px;
+  font: 13px Georgia,"Times New Roman",Times,serif;
+  color: #1a1818;
+  line-height: 1.3em
+}
+.donation-widget h1, .donation-widget h2, .donation-widget h3, .donation-widget h4, .donation-widget h5, .donation-widget h6, .donation-widget strong {
+  font-weight: bold;
 }
 
 /* dynamic donation thermometer */
@@ -9,6 +15,16 @@
 /* heading */
 .donation-meter h2 {
   width: 100%;
+  font-family: NimbusSanNovConD-Bol, Helvetica, Arial, Geneva, sans-serif;
+  font-weight:normal;
+  font-style:normal;
+  font-variant:normal;
+  font-size: 123.1%;
+  text-transform: uppercase;
+  -webkit-font-feature-settings: "calt" 0, "dlig" 0, "ss01" 0, "liga" 0;
+  -moz-font-feature-settings:    "calt" 0, "dlig" 0, "ss01" 0, "liga" 0;
+  -ms-font-feature-settings:     "calt" 0, "dlig" 0, "ss01" 0, "liga" 0;
+  font-feature-settings:         "calt" 0, "dlig" 0, "ss01" 0, "liga" 0;
 }
 .donation-meter h2 span {
   display: block;
@@ -16,7 +32,7 @@
 .donation-meter h2 .logo {
   overflow: hidden;
   text-indent: -10000em;
-  background: url(../images/logo.png);
+  background: url(https://www.minnpost.com/sites/default/themes/siteskin/inc/images/logo.png);
   height: 22px;
   background-size: cover;
 }
