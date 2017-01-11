@@ -75,7 +75,8 @@ class Minnpost_Salesforce {
     }
 
     public function css_and_js() {
-        wp_enqueue_style( 'minnpost-salesforce', plugins_url( 'minnpost-salesforce.css', __FILE__ ), array(), '0.1' );
+        wp_enqueue_style( 'minnpost-nimbus', plugins_url( 'fonts/nimbus.css', __FILE__ ), array(), '0.1' );
+        wp_enqueue_style( 'minnpost-salesforce', plugins_url( 'minnpost-salesforce.css', __FILE__ ), array( 'minnpost-nimbus' ), '0.1' );
         wp_enqueue_script( 'minnpost-salesforce-js', plugins_url( 'minnpost-salesforce.js', __FILE__ ), array( 'jquery-core' ), '0.1' );
          wp_localize_script( 'minnpost-salesforce-js', 'minnpost_salesforce', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
     }
@@ -473,7 +474,7 @@ class Minnpost_Salesforce {
                 </div>
                 <strong class="total" data-percent="' . $percent . '">' . $value . '</strong>';
                 if ( $goal !== '' ) {
-                    $html .= '<span class<strong class="drive-goal">Drive goal: <span class="goal">' . $goal . '</span></strong>';
+                    $html .= '<strong class="drive-goal">Drive goal: <span class="goal">' . $goal . '</span></strong>';
                 }
               $html .=' </div>
             </div>
