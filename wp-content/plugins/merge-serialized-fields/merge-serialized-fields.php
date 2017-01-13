@@ -141,13 +141,13 @@ class Merge_Serialized_Fields {
                 
             ),
             'wp_filter_field_value' => array(
-                'title' => __( 'Field Value', 'merge-serialized-fields' ),
+                'title' => __( 'Field Value(s)', 'merge-serialized-fields' ),
                 'callback' => $input_callback,
                 'page' => $page,
                 'section' => $section,
                 'args' => array(
                     'type' => 'text',
-                    'desc' => __( 'The value of the filter field. This is useful if you want to merge a meta key, such as wp_capabilities', 'merge-serialized-fields' ),
+                    'desc' => __( 'The value of the filter field. This is useful if you want to merge a meta key, such as wp_capabilities. You can comma separate to use multiple fields.', 'merge-serialized-fields' ),
                 ),
                 
             ),
@@ -325,19 +325,38 @@ class Merge_Serialized_Fields {
 
 		// this would theoretically allow us to support multiple imported, serialized fields if it became necessary
 		// and the ui could support it
-		$this->config = array(
-			0 => array(
-				'wp_field_to_merge' => get_option( 'merge_serialized_fields_wp_field_to_merge', '' ),
-				'wp_filter_field' => get_option( 'merge_serialized_fields_wp_filter_field', '' ),
-				'wp_filter_field_value' => get_option( 'merge_serialized_fields_wp_filter_field_value', '' ),
-				'wp_table' => get_option( 'merge_serialized_fields_wp_table', '' ),
-				'group_by' => get_option( 'merge_serialized_fields_group_by', '' ),
-				'primary_key' => get_option( 'merge_serialized_fields_primary_key', '' ),
-				'items_per_load' => get_option( 'merge_serialized_fields_items_per_load', '' ),
-				'schedule' => get_option( 'merge_serialized_fields_schedule', '' )
-			),
-		);
 
+		$wp_filter_field_value = get_option( 'merge_serialized_fields_wp_filter_field_value', '' );
+
+		if ( FALSE !== strpos( $wp_filter_field_value, ',' ) ) {
+			$wp_filter_field_values = explode( ',', $wp_filter_field_value );
+			$this->config = array();
+			foreach ( $wp_filter_field_values as $key => $value ) {
+				$this->config[$key] = array(
+					'wp_field_to_merge' => get_option( 'merge_serialized_fields_wp_field_to_merge', '' ),
+					'wp_filter_field' => get_option( 'merge_serialized_fields_wp_filter_field', '' ),
+					'wp_filter_field_value' => $value,
+					'wp_table' => get_option( 'merge_serialized_fields_wp_table', '' ),
+					'group_by' => get_option( 'merge_serialized_fields_group_by', '' ),
+					'primary_key' => get_option( 'merge_serialized_fields_primary_key', '' ),
+					'items_per_load' => get_option( 'merge_serialized_fields_items_per_load', '' ),
+					'schedule' => get_option( 'merge_serialized_fields_schedule', '' )
+				);
+			}
+		} else {
+			$this->config = array(
+				0 => array(
+					'wp_field_to_merge' => get_option( 'merge_serialized_fields_wp_field_to_merge', '' ),
+					'wp_filter_field' => get_option( 'merge_serialized_fields_wp_filter_field', '' ),
+					'wp_filter_field_value' => get_option( 'merge_serialized_fields_wp_filter_field_value', '' ),
+					'wp_table' => get_option( 'merge_serialized_fields_wp_table', '' ),
+					'group_by' => get_option( 'merge_serialized_fields_group_by', '' ),
+					'primary_key' => get_option( 'merge_serialized_fields_primary_key', '' ),
+					'items_per_load' => get_option( 'merge_serialized_fields_items_per_load', '' ),
+					'schedule' => get_option( 'merge_serialized_fields_schedule', '' )
+				),
+			);
+		}
 	}
 
 	/**
