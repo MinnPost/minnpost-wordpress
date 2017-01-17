@@ -1,0 +1,24 @@
+* html .bwp-gxs-log {
+	height: expression( this.scrollHeight > 200 ? "200px" : "auto" );
+}
+
+.bwp-gxs-log {
+	/* width: 72%; */
+	margin-top: 1.5em;
+
+	font-size: 0.95em;
+	background-color: #ffffff;
+	padding: 5px 10px; padding-top: 0px;
+
+	border: 1px solid #cccccc;
+	overflow: auto;
+}
+
+.bwp-gxs-log-big {
+	max-height: 600px;
+	min-height: 500px;
+}
+
+.bwp-gxs-log-small {
+	max-height: 200px;
+}

@@ -1,0 +1,99 @@
+@import "../../../../bower_components/bootstrap/less/variables.less";
+@import "../../../../bower_components/bootstrap/less/mixins.less";
+
+@import "../../../vendor/bootstrap/less/component-animations.less";
+@import "../../../vendor/bootstrap/less/close.less";
+@import "../../../vendor/bootstrap/less/modals.less";
+@import "../../../vendor/bootstrap/less/tooltip.less";
+@import "../../../vendor/bootstrap/less/popovers.less";
+
+@import "../../../../bower_components/bootstrap/less/utilities.less";
+
+// override some variables
+@brand-primary:         darken(#428bca, 6.5%); // #337ab7
+@brand-success:         #5cb85c;
+@brand-info:            #5bc0de;
+@brand-warning:         #f0ad4e;
+@brand-danger:          #d9534f;
+
+@font-family-sans-serif: inherit;
+@font-size-base: 13px;
+
+// @state-success-text:             #3c763d;
+@state-success-text:             green;
+@state-success-bg:               #dff0d8;
+@state-success-border:           darken(spin(@state-success-bg, -10), 5%);
+
+@state-info-text:                #31708f;
+@state-info-bg:                  #d9edf7;
+@state-info-border:              darken(spin(@state-info-bg, -10), 7%);
+
+@state-warning-text:             #8a6d3b;
+@state-warning-bg:               #fcf8e3;
+@state-warning-border:           darken(spin(@state-warning-bg, -10), 5%);
+
+@state-danger-text:              #dd3d36;
+@state-danger-bg:                #f2dede;
+@state-danger-border:            darken(spin(@state-danger-bg, -10), 5%);
+
+@border-radius-base:        0px;
+@border-radius-large:       0px;
+@border-radius-small:       0px;
+
+@modal-backdrop-bg:         #f1f1f1;
+@modal-backdrop-opacity:    .8;
+
+// copied from type.less
+// Alignment
+.text-left           { text-align: left; }
+.text-right          { text-align: right; }
+.text-center         { text-align: center; }
+.text-justify        { text-align: justify; }
+.text-nowrap         { white-space: nowrap; }
+
+// Transformation
+.text-lowercase      { text-transform: lowercase; }
+.text-uppercase      { text-transform: uppercase; }
+.text-capitalize     { text-transform: capitalize; }
+
+// Contextual colors
+.text-muted {
+	color: @text-muted;
+}
+.text-primary {
+	.text-emphasis-variant(@brand-primary);
+}
+.text-success {
+	.text-emphasis-variant(@state-success-text);
+}
+.text-info {
+	.text-emphasis-variant(@state-info-text);
+}
+.text-warning {
+	.text-emphasis-variant(@state-warning-text);
+}
+.text-danger {
+	.text-emphasis-variant(@state-danger-text);
+}
+
+// Contextual backgrounds
+// For now we'll leave these alongside the text classes until v4 when we can
+// safely shift things around (per SemVer rules).
+.bg-primary {
+	// Given the contrast here, this is the only class to have its color inverted
+	// automatically.
+	color: #fff;
+	.bg-variant(@brand-primary);
+}
+.bg-success {
+	.bg-variant(@state-success-bg);
+}
+.bg-info {
+	.bg-variant(@state-info-bg);
+}
+.bg-warning {
+	.bg-variant(@state-warning-bg);
+}
+.bg-danger {
+	.bg-variant(@state-danger-bg);
+}

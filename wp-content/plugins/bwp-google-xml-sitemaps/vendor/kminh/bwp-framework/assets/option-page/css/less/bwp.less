@@ -1,0 +1,275 @@
+/*--- Common ---*/
+.bwp-option-page {
+	margin-top: 1em;
+	padding-bottom: 1em;
+
+	h4 {
+		font-size: 1.1em;
+		margin: 1em 0;
+	}
+
+	p {
+		margin-top: 0px;
+		margin-bottom: 0px;
+		zoom: 1;
+	}
+
+	.bwp-paragraph {
+		margin: 1em 0;
+	}
+
+	li.bwp-clear, div.bwp-clear {
+		clear: left;
+		margin: 1em 0 0 0;
+		zoom: 1;
+	}
+
+	div.bwp-clear {
+		margin-bottom: 1.7em;
+	}
+}
+
+.bwp-no-display {
+	display: none;
+}
+
+.bwp-hidden {
+	visibility: hidden;
+}
+
+.bwp-meta {
+	color: #999;
+}
+
+.bwp-justin {
+	display: inline-block;
+	position: relative;
+	bottom: 0.5em;
+	font-size: 0.85em;
+	font-weight: 600;
+	color: #f26522;
+}
+/*--- End Common ---*/
+
+/*--- Main ---*/
+.bwp-wrap {
+	clear: both;
+}
+
+#bwp-main {
+	width: auto;
+	overflow: hidden;
+
+	.updated, .error {
+		margin-top: 15px;
+		margin-bottom: 0;
+
+		&.first {
+			margin-top: 20px;
+		}
+	}
+}
+/*--- End Main ---*/
+
+/*--- Header ---*/
+#bwp-header {
+	margin-bottom: 15px;
+	padding-top: 5px;
+
+	h1 {
+		padding: 0;
+		margin-top: 0;
+		margin-bottom: 15px;
+
+		color: #32373c;
+		font-size: 2em;
+		font-weight: 400;
+		line-height: 1.2em;
+	}
+}
+
+#bwp-donation {
+	display: none;
+}
+
+#bwp-get-social {
+	max-width: 450px;
+	margin-top: 15px;
+	margin-bottom: 0;
+
+	overflow: hidden;
+
+	.inside {
+		padding-bottom: 0;
+	}
+
+	h2 {
+		cursor: default;
+		font-size: 14px;
+		line-height: 1.4;
+		margin: 0;
+		padding: 8px 12px;
+	}
+}
+
+#bwp-social-buttons {
+	height: 20px;
+	padding-top: 3px;
+
+	.bwp-twitter-buttons, .bwp-gplus-buttons, .bwp-fb-buttons {
+		float: left;
+		margin-right: 15px;
+	}
+
+	.bwp-fb-buttons {
+		// max-width: 100px;
+	}
+
+	.bwp-gplus-buttons {
+		max-width: 80px;
+		margin-right: 0;
+	}
+
+	.bwp-twitter-buttons {
+		// width: 230px;
+	}
+}
+/*--- End Header ---*/
+
+/*--- Tabs ---*/
+.bwp-option-page-tabs {
+	a {
+		padding-left: 15px;
+		padding-right: 15px;
+
+		color: #c1c1c1;
+		font-size: 18px;
+		font-weight: 600;
+	}
+
+	a.nav-tab-active {
+		color: #000;
+	}
+}
+
+.wrap .bwp-option-page-tabs {
+	padding-left: 6px;
+}
+/*--- End Tabs ---*/
+
+/*--- Button ---*/
+.wp-core-ui .button-inline {
+	vertical-align: middle;
+}
+
+.bwp-button {
+	.dashicons {
+		width: auto;
+		height: 18px;
+		font-size: 14px;
+		vertical-align: middle;
+	}
+}
+
+.bwp-button-paypal {
+	.bwp-mixin-button(#003580; #ffe3b7; #ffc975) !important;
+
+	font-weight: 600;
+
+	.paypal-pay, .paypal-pal {
+		font-weight: bold;
+		font-style: italic;
+	}
+
+	.paypal-pay {
+		color: #003580;
+	}
+
+	.paypal-pal {
+		color: #009DD8;
+	}
+}
+/*--- End Button ---*/
+
+/*--- Sidebars ---*/
+#bwp-sidebar-right {
+	width: 276px;
+	margin: 0 0 10px 20px;
+	float: right;
+
+	.postbox {
+		.inside {
+			max-width: 250px;
+
+			padding-bottom: 0;
+
+			line-height: 1;
+		}
+
+		.hndle {
+			margin: 0;
+			padding: 8px 12px;
+
+			font-size: 14px;
+			line-height: 1.4;
+
+			cursor: default;
+		}
+	}
+}
+
+#bwp-ads {
+	margin-top: 10px;
+
+	a {
+		line-height: 1;
+	}
+}
+
+#bwp-news {
+	a {
+		margin-right: 5px;
+	}
+}
+
+.bwp-button-rss {
+	.bwp-mixin-button(#fff; @brand-color-rss) !important;
+}
+
+.bwp-button-twitter {
+	.bwp-mixin-button(#fff; @brand-color-twitter) !important;
+}
+
+.bwp-feed {
+	list-style: outside none none;
+	margin: 0;
+	padding: 0;
+
+	li {
+		margin-bottom: 8px;
+		line-height: 1.5em;
+	}
+
+	a {
+		font-size: 13px;
+		font-weight: 400;
+		text-decoration: none;
+	}
+}
+
+.bwp-feed-buttons {
+	padding: 12px;
+
+	background-color: #fafafa;
+	border-top: 1px solid #eee;
+}
+/*--- End Sidebars ---*/
+
+/*--- Icons ---*/
+#icon-bwp-plugin {
+	background-repeat: no-repeat;
+	background-position: left center;
+	margin-top: 21px; margin-left: 5px;
+	width: 36px;
+}
+/*--- End Icons ---*/

@@ -1,0 +1,33 @@
+.vendor(@property, @value) {
+    -webkit-@{property}: @value;
+     -khtml-@{property}: @value;
+       -moz-@{property}: @value;
+            @{property}: @value;
+}
+
+.bwp-mixin-button(@color; @bgcolor; @bordercolor:'') {
+	color: @color;
+	text-shadow: 0px 1px 1px darken(@bgcolor, 10%);
+	background: @bgcolor none repeat scroll 0 0;
+
+	border-color: darken(@bgcolor, 10%);
+	box-shadow: 0 1px 0 darken(@bgcolor, 10%);
+
+	& when (iscolor(@bordercolor)) {
+		border-color: @bordercolor;
+		box-shadow: 0 1px 0 @bordercolor;
+	}
+
+	&:hover, &:active {
+		background: lighten(@bgcolor, 3%) none repeat scroll 0 0;
+		border-color: darken(@bgcolor, 15%);
+
+		& when (iscolor(@bordercolor)) {
+			border-color: darken(@bordercolor, 10%);
+		}
+	}
+
+	&:active {
+		box-shadow: 0 2px 5px -3px fade(darken(@bgcolor, 50%), 50%) inset;
+	}
+}

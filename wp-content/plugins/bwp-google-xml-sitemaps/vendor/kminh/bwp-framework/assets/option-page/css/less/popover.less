@@ -1,0 +1,28 @@
+.bwp-popover-full {
+	max-width: 100%;
+}
+
+.bwp-popover-lg {
+	max-width: 75%;
+}
+
+.bwp-popover-md {
+	max-width: 50%;
+}
+
+.bwp-popover-sm {
+	max-width: 25%;
+}
+
+.bwp-popover {
+	.box-shadow(0 3px 6px rgba(0,0,0,.1));
+
+	&.top     { margin-top: -(@popover-arrow-width + 5); }
+	&.right   { margin-left: (@popover-arrow-width + 5); }
+	&.bottom  { margin-top: (@popover-arrow-width + 5); }
+	&.left    { margin-left: -(@popover-arrow-width + 5); }
+}
+
+.bwp-popover-title {
+	padding: 4px 14px;
+}
