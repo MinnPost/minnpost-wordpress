@@ -3,7 +3,7 @@
 Plugin Name: Deserialize Metadata
 Plugin URI: https://wordpress.org/plugins/deserialize-metadata/
 Description: When migrating from another system (i.e. Drupal), WordPress can require data that is currently serialized to be unserialized and stored in its own WordPress-specific tables/columns. This plugin can look for such data, and deserialize and store it, based on the plugin settings.
-Version: 0.0.1
+Version: 0.0.2
 Author: Jonathan Stegall
 Author URI: http://code.minnpost.com
 License: GPL2+
@@ -431,10 +431,12 @@ class Deserialize_Metadata {
 	 * @return void
 	 */
 	public function schedule() {
-		if (! wp_next_scheduled ( 'start_serialized_event' ) ) {
-			wp_schedule_event( time(), $this->config['schedule'], 'start_serialized_event' );
+		foreach ($this->config as $key => $value) {
+			if (! wp_next_scheduled ( 'start_serialized_event' ) ) {
+				wp_schedule_event( time(), $value['schedule'], 'start_serialized_event' );
+		    }
+		    add_action( 'start_serialized_event', array( $this, 'get_posts_with_serialized_metadata') );
 	    }
-	    add_action( 'start_serialized_event', array( $this, 'get_posts_with_serialized_metadata') );
 	}
 
 	/**
