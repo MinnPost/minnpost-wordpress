@@ -96,7 +96,6 @@ class Merge_Serialized_Fields {
 				<form method="post" action="options.php">
 					<?php
 					settings_fields( 'merge-serialized-fields' )  . do_settings_sections( 'merge-serialized-fields' );
-					$merge_serialized_fields_maps = get_option( 'merge_serialized_fields_maps', '' );
 					?>
 	                <?php submit_button( __( 'Save settings', 'merge-serialized-fields' ) ); ?>
 				</form>
@@ -226,7 +225,6 @@ class Merge_Serialized_Fields {
             add_settings_field( $id, $title, $callback, $page, $section, $args );
             register_setting( $section, $id );
         }
-        register_setting( $section, 'merge_serialized_fields_maps' );
 
 	}
 
