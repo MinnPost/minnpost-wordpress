@@ -50,10 +50,6 @@ class Minnpost_Salesforce {
         add_action( 'wp_ajax_thermometer_ajax', array( $this, 'thermometer_ajax') );
 	}
 
-    public function register_widgets() {
-        //register_widget( 'MyNewWidget' );
-    }
-
     public function add_user_fields() {
         add_user_meta( 1, 'member_level', '' );
     }
