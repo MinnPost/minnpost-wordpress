@@ -46,8 +46,6 @@ class Minnpost_Salesforce {
 	private function admin_init() {
 		add_action( 'admin_init', array( $this, 'salesforce' ) );
 		add_action( 'admin_init', array( $this, 'minnpost_salesforce_settings_forms' ) );
-        add_action( 'admin_enqueue_scripts', array( $this, 'css_and_js' ) );
-        //add_action( 'wp_ajax_thermometer_ajax', array( $this, 'thermometer_ajax') );
 	}
 
     public function add_user_fields() {
