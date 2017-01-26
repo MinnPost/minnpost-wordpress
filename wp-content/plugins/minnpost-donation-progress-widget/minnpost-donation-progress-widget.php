@@ -29,6 +29,15 @@ class MinnpostDonationProgress_Widget extends WP_Widget {
 				'description' => __( 'Track donation progress based on a Salesforce campaign report.', 'minnpost-donation-progress-widget' )
 			)
 		);
+
+		add_action( 'wp_enqueue_scripts', array( $this, 'css_and_js' ) );
+
+	}
+
+	public function css_and_js() {
+		wp_enqueue_style( 'minnpost-nimbus', plugins_url( 'fonts/nimbus.css', __FILE__ ), array(), '0.1' );
+        wp_enqueue_style( 'minnpost-donation-progress-widget', plugins_url( 'minnpost-donation-progress-widget.css', __FILE__ ), array( 'minnpost-nimbus' ), '0.1' );
+        wp_enqueue_script( 'minnpost-donation-progress-widget-js', plugins_url( 'minnpost-donation-progress-widget.js', __FILE__ ), array( 'jquery-core' ), '0.1' );
 	}
  
 	/**  
@@ -42,8 +51,6 @@ class MinnpostDonationProgress_Widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 
 		extract( $args );
-
-		error_log(print_r($instance, true));
 
 		/*$title = apply_filters( 'widget_title', $instance['title'] );
 		$message    = $instance['message'];
@@ -202,6 +209,7 @@ class MinnpostDonationProgress_Widget extends WP_Widget {
 
         if ( is_object( $salesforce_api ) ) {
             // this is a report id
+            error_log('run the report');
             $report_result = $salesforce_api->run_analytics_report( $report_id, TRUE );
             $campaign_result = $salesforce_api->object_read( 'Campaign', $campaign_id );
 
@@ -212,7 +220,6 @@ class MinnpostDonationProgress_Widget extends WP_Widget {
             }
 
             if ( $report_result['data']['attributes']['status'] === 'Success' ) {
-            	error_log('there is a success here');
                 $factmap = $report_result['data']['factMap'];
                 foreach ( $factmap as $array ) {
                     if ( isset( $array['aggregates'] ) ) {
