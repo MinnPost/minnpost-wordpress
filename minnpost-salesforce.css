@@ -72,7 +72,6 @@
 }
 .meter-status .glass {
   background: #e5e5e5;
-  /*border-radius: 100px 100px 0 0;*/
   display: block;
   height: 225px;
   margin: 0 35px 10px;
@@ -81,6 +80,7 @@
   width: 20px;
   position: absolute;
   top: 0;
+  box-sizing: content-box;
 }
 .meter-status .amount {
   background: #f34e54;
@@ -100,6 +100,7 @@
   position: absolute;
   top: 220px;
   width: 50px;
+  box-sizing: content-box;
 }
 .meter-status .bulb .red-circle {
   background: #f34e54;
