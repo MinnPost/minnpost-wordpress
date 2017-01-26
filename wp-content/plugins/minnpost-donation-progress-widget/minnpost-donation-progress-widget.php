@@ -209,7 +209,6 @@ class MinnpostDonationProgress_Widget extends WP_Widget {
 
         if ( is_object( $salesforce_api ) ) {
             // this is a report id
-            error_log('run the report');
             $report_result = $salesforce_api->run_analytics_report( $report_id, TRUE );
             $campaign_result = $salesforce_api->object_read( 'Campaign', $campaign_id );
 
