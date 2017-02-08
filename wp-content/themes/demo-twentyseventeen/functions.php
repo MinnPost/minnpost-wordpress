@@ -46,3 +46,24 @@ function twentyseventeen_post_thumbnail() {
 
 	<?php endif; // End is_singular()
 }
+
+add_filter( 'wp_get_attachment_image_src', 'gallery_change_src', 10, 4 );
+
+function gallery_change_src( $image, $attachment_id, $size, $icon ) {
+	$format = get_post_format();
+	$image = image_downsize( $attachment_id, $size );
+	if ( $format === 'gallery' && ! $image ) {
+		$post = get_post( $attachment_id );
+		if ( $post !== null ) {
+			$src = $post->guid;
+			$width = get_option( $size . '_size_w' );
+			$height = get_option( $size . '_size_h' );
+			if ( $src && $width && $height ) {
+				$image = array( $src, $width, $height );
+				return $image;
+			}
+		}
+	} else {
+		return $image;
+	}
+}
