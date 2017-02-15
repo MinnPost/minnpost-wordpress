@@ -3,7 +3,7 @@
 Plugin Name: Deserialize Metadata
 Plugin URI: https://wordpress.org/plugins/deserialize-metadata/
 Description: When migrating from another system (i.e. Drupal), WordPress can require data that is currently serialized to be unserialized and stored in its own WordPress-specific tables/columns. This plugin can look for such data, and deserialize and store it, based on the plugin settings.
-Version: 0.0.2
+Version: 0.0.3
 Author: Jonathan Stegall
 Author URI: http://code.minnpost.com
 License: GPL2+
@@ -36,7 +36,7 @@ class Deserialize_Metadata {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.1';
+		$this->version = '0.0.3';
 		$this->config = array();
 		$this->wp_tables = array(
 			'wp_posts' => 'wp_posts',
@@ -72,9 +72,8 @@ class Deserialize_Metadata {
     }
 
     /**
-    * Default display for <input> fields
+    * Create WordPress admin options page
     *
-    * @param array $args
     */
     public function create_admin_menu() {
     	add_options_page( __( 'Deserialize Metadata', 'deserialize-metadata' ), __( 'Deserialize Metadata', 'deserialize-metadata' ), 'manage_options', 'deserialize-metadata', array( &$this, 'show_admin_page' ) );
@@ -82,6 +81,9 @@ class Deserialize_Metadata {
 
 	/**
     * Display a Settings link on the main Plugins page
+    *
+    * @param array $links
+    * @param string $file
     *
     * @return array $links
     */
@@ -247,8 +249,8 @@ class Deserialize_Metadata {
 	public function admin_settings_form() {
 		$page = 'deserialize-metadata';
 		$section = 'deserialize-metadata';
-		$input_callback = array( &$this, 'display_input_field' );
-		$select_callback = array( &$this, 'display_select' );
+		$input_callback = array( $this, 'display_input_field' );
+		$select_callback = array( $this, 'display_select' );
 		add_settings_section( $page, null, null, $page );
 
 		$settings = array(
@@ -293,20 +295,31 @@ class Deserialize_Metadata {
                     'desc' => __( 'Maximum posts the query should load', 'deserialize-metadata' ),
                 ),
             ),
-            'schedule' => array(
-                'title' => __( 'Schedule', 'deserialize-metadata' ),
-                'callback' => $select_callback,
-                'page' => $page,
-                'section' => $section,
-                'args' => array(
-                    'desc' => __( 'How often the plugin should find and process data', 'deserialize-metadata' ),
-                    'items' => array(
-                    	'hourly' => __( 'Hourly', 'deserialize-metadata' ),
-                    	'twicedaily' => __( 'Twice Daily', 'deserialize-metadata' ),
-                    	'daily' => __( 'Daily', 'deserialize-metadata' )
-                    ) // values from https://codex.wordpress.org/Function_Reference/wp_schedule_event
-                ),
-            ),
+			'schedule_number' => array(
+				'title' => __( 'Run schedule every', 'deserialize-metadata' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'number',
+					'desc' => '',
+				),
+			),
+			'schedule_unit' => array(
+		        'title' => __( 'Time unit', 'deserialize-metadata' ),
+		        'callback' => $select_callback,
+		        'page' => $page,
+		        'section' => $section,
+		        'args' => array(
+		            'type' => 'select',
+		            'desc' => '',
+		            'items' => array(
+		                'minutes' => __( 'Minutes', 'deserialize-metadata' ),
+		                'hours' => __( 'Hours', 'deserialize-metadata' ),
+		                'days' => __( 'Days', 'deserialize-metadata' ),
+		            )
+		        )
+		    )
         );
 
         foreach( $settings as $key => $attributes ) {
@@ -331,6 +344,40 @@ class Deserialize_Metadata {
         register_setting( $section, 'deserialize_metadata_maps' );
 
 	}
+
+    /**
+    * Convert the schedule frequency from the admin settings into an array
+    * interval must be in seconds for the class to use it
+    *
+    */
+    public function get_schedule_frequency_key( $name = '' ) {
+
+    	if ( $name !== '' ) {
+    		$name = '_' . $name;
+    	}
+
+    	$schedule_number = get_option( 'deserialize_metadata' . $name . '_schedule_number', '' );
+    	$schedule_unit = get_option( 'deserialize_metadata' . $name . '_schedule_unit', '' );
+
+		switch ( $schedule_unit ) {
+			case 'minutes':
+				$seconds = 60;
+				break;
+			case 'hours':
+				$seconds = 3600;
+				break;
+            case 'days':
+                $seconds = 86400;
+                break;
+            default:
+                $seconds = 0;
+		}
+
+		$key = $schedule_unit . '_' . $schedule_number;
+
+		return $key;
+
+    }
 
 	/**
     * Default display for <input> fields
@@ -432,9 +479,13 @@ class Deserialize_Metadata {
 	 */
 	public function schedule() {
 		foreach ($this->config as $key => $value) {
-			if (! wp_next_scheduled ( 'start_serialized_event' ) ) {
-				wp_schedule_event( time(), $value['schedule'], 'start_serialized_event' );
+		    // this would need to change to allow different schedules
+		    $schedule_frequency = $this->get_schedule_frequency_key();
+    	
+		    if (! wp_next_scheduled ( 'start_serialized_event' ) ) {
+				wp_schedule_event( time(), $schedule_frequency, 'start_serialized_event' );
 		    }
+
 		    add_action( 'start_serialized_event', array( $this, 'get_posts_with_serialized_metadata') );
 	    }
 	}
@@ -490,16 +541,18 @@ class Deserialize_Metadata {
 	 * @return void
 	 */
 	public function create_fields( $post_id, $metadata, $maps ) {
-		foreach ( $metadata as $key => $value ) {
-			if ( array_key_exists( $key, $maps ) ) {
-				if ( $maps[$key]['wp_table'] === 'wp_postmeta' && $value != '' && $value != NULL ) {
-					add_post_meta( $post_id, $maps[$key]['wp_column'], $value, $maps[$key]['unique'] );
-				} elseif ( $maps[$key]['wp_table'] === 'wp_posts' && $value != '' && $value != NULL ) {
-					$post = array(
-						'ID' => $post_id,
-						$maps[$key]['wp_column'] => $value
-					);
-					wp_update_post( $post );
+		if ( is_array( $metadata ) && !empty( $metadata ) ) {
+			foreach ( $metadata as $key => $value ) {
+				if ( array_key_exists( $key, $maps ) ) {
+					if ( $maps[$key]['wp_table'] === 'wp_postmeta' && $value != '' && $value != NULL ) {
+						add_post_meta( $post_id, $maps[$key]['wp_column'], $value, $maps[$key]['unique'] );
+					} elseif ( $maps[$key]['wp_table'] === 'wp_posts' && $value != '' && $value != NULL ) {
+						$post = array(
+							'ID' => $post_id,
+							$maps[$key]['wp_column'] => $value
+						);
+						wp_update_post( $post );
+					}
 				}
 			}
 		}
