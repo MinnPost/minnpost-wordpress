@@ -62,7 +62,7 @@ class Deserialize_Metadata {
     	add_action( 'admin_menu', array( &$this, 'create_admin_menu' ) );
     	add_action( 'admin_init', array( &$this, 'admin_settings_form' ) );
     	add_action( 'updated_option', function( $option_name, $old_value, $value ) {
-    		if ( $option_name === 'deserialize_metadata_schedule' && $old_value !== $value ) {
+    		if ( ( $option_name === 'deserialize_metadata_schedule_number' && $old_value !== $value ) || ( $option_name === 'deserialize_metadata_schedule_unit' && $old_value !== $value ) ) {
     			// delete the old schedule and create the new one - this means user changed how often it should run
     			$this->deactivate();
     			$this->schedule();
@@ -452,7 +452,8 @@ class Deserialize_Metadata {
 				'post_type' => get_option( 'deserialize_metadata_post_type', '' ),
 				'post_status' => get_option( 'deserialize_metadata_post_status', '' ),
 				'posts_per_page' => get_option( 'deserialize_metadata_posts_per_page', '' ),
-				'schedule' => get_option( 'deserialize_metadata_schedule', '' ),
+				'schedule_number' => get_option( 'deserialize_metadata_schedule_number', '' ),
+				'schedule_unit' => get_option( 'deserialize_metadata_schedule_unit', '' ),
 				'maps' => $config_maps
 			),
 		);
