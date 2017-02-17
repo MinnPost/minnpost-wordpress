@@ -122,6 +122,11 @@ class Deserialize_Metadata {
 		                        <th class="column-actions"><?php _e( 'Actions', 'deserialize-metadata' ); ?></th>
 		                    </tr>
 		                </thead>
+		                <tfoot>
+		                	<tr>
+		                		<td colspan="5"><p class="description">The <strong>unique</strong> checkbox refers to whether or not you want the key to stay unique. When checked, the field will not be added if the given key already exists among custom fields of the specified post.</p></td>
+		                	</tr>
+		                </tfoot>
 		                <tbody>
 		                	<?php
 		                	if ( isset( $deserialize_maps ) && $deserialize_maps !== '' ) {
