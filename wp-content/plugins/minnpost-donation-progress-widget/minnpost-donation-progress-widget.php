@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Donation Progress Widget
 Plugin URI: #
-Description: A plugin containing various widgets created in a TutsPlus series on WordPress widgets
+Description: Create a sidebar widget that displays donation progress, based on a Salesforce Report and a Salesforce Campaign. Requires the Salesforce REST API plugin.
 Version: 0.0.1
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
@@ -51,17 +51,6 @@ class MinnpostDonationProgress_Widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 
 		extract( $args );
-
-		/*$title = apply_filters( 'widget_title', $instance['title'] );
-		$message    = $instance['message'];
-		echo $before_widget;
-
-		if ( $title ) {
-			echo $before_title . $title . $after_title;
-		}
-
-		echo $message;
-		echo $after_widget;*/
 
 		$data = $this->donation_progress_data( $instance['report_id'], $instance['campaign_id'] );
 
