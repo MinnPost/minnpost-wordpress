@@ -1,0 +1,34 @@
+{
+  "name": "jquery-serialize-object",
+  "description": "serialize form fields into an object or JSON",
+  "main": "jquery.serialize-object.js",
+  "authors": [
+    "Paul Macek <paulmacek@gmail.com> (https://github.com/macek)"
+  ],
+  "dependencies": {
+    "jquery": ">=1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/macek/jquery-serialize-object.git"
+  },
+  "ignore": [],
+  "keywords": [
+    "form",
+    "serialize",
+    "json",
+    "object"
+  ],
+  "license": "BSD-3-Clause",
+  "homepage": "https://github.com/macek/jquery-serialize-object",
+  "version": "2.5.0",
+  "_release": "2.5.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.5.0",
+    "commit": "68ec73289dcffa533770f07616633696c552bf6a"
+  },
+  "_source": "https://github.com/macek/jquery-serialize-object.git",
+  "_target": "^2.5.0",
+  "_originalSource": "jquery-serialize-object"
+}
