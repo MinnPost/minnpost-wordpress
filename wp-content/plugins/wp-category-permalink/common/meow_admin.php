@@ -5,11 +5,12 @@ if ( !class_exists( 'Meow_Admin' ) ) {
 	class Meow_Admin {
 
 		public static $loaded = false;
-		public static $version = "0.2";
+		public static $version = "0.3";
 		public $prefix = null;
 		public $item = null;
 
-		public function __construct( $prefix = null, $item = null ) {
+		public function __construct( $prefix = null, $item = null, $domain = '' ) {
+			$this->domain = $domain;
 			if ( !Meow_Admin::$loaded ) {
 				if ( is_admin() ) {
 					add_action( 'admin_menu', array( $this, 'admin_menu_start' ) );
@@ -65,8 +66,8 @@ if ( !class_exists( 'Meow_Admin' ) ) {
 			if ( !isset( $submenu[ 'meowapps-main-menu' ] ) ) {
 				add_menu_page( 'Meow Apps', 'Meow Apps', 'manage_options', 'meowapps-main-menu',
 					array( $this, 'admin_meow_apps' ), 'dashicons-camera', 82 );
-				add_submenu_page( 'meowapps-main-menu', __( 'Dashboard', 'meowapps' ),
-					__( 'Dashboard', 'meowapps' ), 'manage_options',
+				add_submenu_page( 'meowapps-main-menu', __( 'Dashboard', $this->domain ),
+					__( 'Dashboard', $this->domain ), 'manage_options',
 					'meowapps-main-menu', array( $this, 'admin_meow_apps' ) );
 			}
 
@@ -85,7 +86,7 @@ if ( !class_exists( 'Meow_Admin' ) ) {
 			$value = get_option( 'meowapps_hide_ads', null );
 			$html = '<input type="checkbox" id="meowapps_hide_ads" name="meowapps_hide_ads" value="1" ' .
 				checked( 1, get_option( 'meowapps_hide_ads' ), false ) . '/>';
-	    $html .= __( '<label>Hide</label><br /><small>Doesn\'t display the ads.</small>', 'wp-retina-2x' );
+	    $html .= '<label>Hide</label><br /><small>' . __( 'Doesn\'t display the ads.', $this->domain ) . '</small>';
 	    echo $html;
 		}
 
@@ -93,14 +94,14 @@ if ( !class_exists( 'Meow_Admin' ) ) {
 			$value = get_option( 'meowapps_hide_meowapps', null );
 			$html = '<input type="checkbox" id="meowapps_hide_meowapps" name="meowapps_hide_meowapps" value="1" ' .
 				checked( 1, get_option( 'meowapps_hide_meowapps' ), false ) . '/>';
-	    $html .= __( '<label>Hide <b>Meow Apps</b> Menu</label><br /><small>Hide Meow Apps menu and all its components, for a nicer an faster WordPress admin UI. An option will be added in Settings > General to display it again.</small>', 'wp-retina-2x' );
+	    $html .= __( '<label>Hide <b>Meow Apps</b> Menu</label><br /><small>Hide Meow Apps menu and all its components, for a nicer an faster WordPress admin UI. An option will be added in Settings > General to display it again.</small>', $this->domain );
 	    echo $html;
 		}
 
 		function admin_menu_for_serialkey() {
 			// SUBMENU > Settings > Pro Serial
 			add_settings_section( $this->prefix . '_settings_serialkey', null, null, $this->prefix . '_settings_serialkey-menu' );
-			add_settings_field( $this->prefix . '_pro_serial', "Serial Key",
+			add_settings_field( $this->prefix . '_pro_serial', __( "Serial Key", $this->domain ),
 				array( $this, 'admin_serialkey_callback' ),
 				$this->prefix . '_settings_serialkey-menu', $this->prefix . '_settings_serialkey' );
 			register_setting( $this->prefix . '_settings_serialkey', $this->prefix . '_pro_serial' );
@@ -127,7 +128,13 @@ if ( !class_exists( 'Meow_Admin' ) ) {
 						<?php settings_fields( $this->prefix . '_settings_serialkey' ); ?>
 						<?php do_settings_sections( $this->prefix . '_settings_serialkey-menu' ); ?>
 						<?php if ( !$this->is_pro() ): ?>
-							<small class="description">Insert your serial key above. If you don't have one yet, you can get one <a target="_blank" href="<?php echo $url; ?>">here.</a></small>
+							<small class="description">
+								<?php echo sprintf(
+									__( 'Insert your serial key above. If you don\'t have one yet, you can get one <a target="_blank" href="%s">here.</a>',
+									$this->domain ),
+								$url );
+								?>
+							</small>
 						<?php endif; ?>
 						<?php submit_button(); ?>
 					</form>
@@ -157,7 +164,7 @@ if ( !class_exists( 'Meow_Admin' ) ) {
 			$prefix = $this->prefix;
 			$item = $this->item;
 			delete_option( $prefix . '_pro_serial', "" );
-			update_option( $prefix . '_pro_status', __( '', 'meowapps' ) );
+			update_option( $prefix . '_pro_status', "" );
 			set_transient( $prefix . '_validated', false, 0 );
 			if ( empty( $subscr_id ) )
 				return false;
@@ -172,7 +179,7 @@ if ( !class_exists( 'Meow_Admin' ) ) {
 			$body = is_array( $response ) ? $response['body'] : null;
 			$post = @json_decode( $body );
 			if ( !$post || ( property_exists( $post, 'code' ) ) ) {
-				$status = __( "There was an error while validating the serial.<br />Please contact <a target='_blank' href='https://meowapps.com/contact/'>Meow Apps</a> and mention the following log: <br /><ul>" );
+				$status = __( "There was an error while validating the serial.<br />Please contact <a target='_blank' href='https://meowapps.com/contact/'>Meow Apps</a> and mention the following log: <br /><ul>", $this->domain );
 				$status .= "<li>Server IP: <b>" . gethostbyname( $_SERVER['SERVER_NAME'] ) . "</b></li>";
 				$status .= "<li>Google GET: ";
 				$r = wp_remote_get( 'http://google.com' );
@@ -201,7 +208,7 @@ if ( !class_exists( 'Meow_Admin' ) ) {
 			}
 			set_transient( $prefix . '_validated', $subscr_id, 3600 * 24 * 100 );
 			update_option( $prefix . '_pro_serial', $subscr_id );
-			update_option( $prefix . '_pro_status', __( '', 'meowapps' ) );
+			update_option( $prefix . '_pro_status', '' );
 			return true;
 		}
 
@@ -255,15 +262,20 @@ if ( !class_exists( 'Meow_Admin' ) ) {
 				echo "</div>";
 			}
 			else if ( isset( $_GET['tool'] ) && $_GET['tool'] == 'error_log' ) {
+				$errorpath = ini_get( 'error_log' );
 				echo "<a href=\"javascript:history.go(-1)\">< Go back</a><br /><br />";
 				echo '<div id="error_log">';
-				echo "Now (auto-reload every 5 seconds):<br />[" . date( "d-M-Y H:i:s", time() ) . " UTC]<br /<br /><br />Errors (order by latest):";
-				$errorpath = ini_get( 'error_log' );
-				$errors = file_get_contents( $errorpath );
-				$errors = explode( "\n", $errors );
-				$errors = array_reverse( $errors );
-				$errors = implode( "<br />", $errors );
-				echo $errors;
+				if ( file_exists( $errorpath ) ) {
+					echo "Now (auto-reload every 5 seconds):<br />[" . date( "d-M-Y H:i:s", time() ) . " UTC]<br /<br /><br />Errors (order by latest):";
+					$errors = file_get_contents( $errorpath );
+					$errors = explode( "\n", $errors );
+					$errors = array_reverse( $errors );
+					$errors = implode( "<br />", $errors );
+					echo $errors;
+				}
+				else {
+					echo "The PHP Error Logs cannot be found. Please ask your hosting service for it.";
+				}
 				echo "</div>";
 
 			}
@@ -272,7 +284,7 @@ if ( !class_exists( 'Meow_Admin' ) ) {
 				?>
 				<?php $this->display_title(); ?>
 				<p>
-				<?php _e( 'Meow Apps is run by <a href="http://jordymeow.com">Jordy Meow</a>, a photographer and software developer based in Japan. When he realized that WordPress was an environment not so friendly to photographers, Meow Apps was born. It is a suite of plugins dedicate to make the blogging life of image lovers easy and pretty. Meow Apps also teams up with the best players in the community (other themes or plugins developers). For more information, please check <a href="http://meowapps.com" target="_blank">Meow Apps</a>.', 'meowapps' )
+				<?php _e( 'Meow Apps is run by <a href="http://jordymeow.com">Jordy Meow</a>, a photographer and software developer based in Japan. When he realized that WordPress was an environment not so friendly to photographers, Meow Apps was born. It is a suite of plugins dedicate to make the blogging life of image lovers easy and pretty. Meow Apps also teams up with the best players in the community (other themes or plugins developers). For more information, please check <a href="http://meowapps.com" target="_blank">Meow Apps</a>.', $this->domain )
 				?>
 				</p>
 				<div class="meow-row">
@@ -280,26 +292,34 @@ if ( !class_exists( 'Meow_Admin' ) ) {
 						<h3 class=""><span class="dashicons dashicons-camera"></span> UI Plugins </h3>
 						<ul class="">
 							<li><b>WP/LR Sync</b> <?php echo $this->check_install( 'wplr-sync' ) ?><br />
-								Bring synchronization from Lightroom to WordPress.</li>
+								<?php _e( 'Bring synchronization from Lightroom to WordPress.', $this->domain ); ?>
+							</li>
 							<li><b>Meow Lightbox</b> <?php echo $this->check_install( 'meow-lightbox' ) ?><br />
-								Lightbox with EXIF information nicely displayed.</li>
+								<?php _e( 'Lightbox with EXIF information nicely displayed.', $this->domain ); ?>
+							</li>
 							<li><b>Meow Gallery</b> <?php echo $this->check_install( 'meow-gallery' ) ?><br />
-								Simple gallery to make your photos look better (Masonry and others).</li>
+								<?php _e( 'Simple gallery to make your photos look better (Masonry and others).', $this->domain ); ?>
+							</li>
 							<li><b>Audio Story for Images</b> <?php echo $this->check_install( 'audio-story-images' ) ?><br />
-								Add audio to your images.</li>
+								<?php _e( 'Add audio to your images.', $this->domain ); ?>
+							</li>
 						</ul>
 					</div>
 					<div class="meow-box meow-col meow-span_1_of_2">
 						<h3 class=""><span class="dashicons dashicons-admin-tools"></span> System Plugins</h3>
 						<ul class="">
 							<li><b>Media File Renamer</b> <?php echo $this->check_install( 'media-file-renamer' ) ?><br />
-								Nicer filenames and better SEO, automatically.</li>
+								<?php _e( 'Nicer filenames and better SEO, automatically.', $this->domain ); ?>
+							</li>
 							<li><b>Media Cleaner</b> <?php echo $this->check_install( 'media-cleaner' ) ?><br />
-								Detect the files you are not using to clean your system.</li>
+								<?php _e( 'Detect the files you are not using to clean your system.', $this->domain ); ?>
+							</li>
 							<li><b>WP Retina 2x</b> <?php echo $this->check_install( 'wp-retina-2x' ) ?><br />
-								Make your website perfect for retina devices.</li>
+								<?php _e( 'Make your website perfect for retina devices.', $this->domain ); ?>
+							</li>
 							<li><b>WP Category Permalink</b> <?php echo $this->check_install( 'wp-category-permalink' ) ?><br />
-								Allows you to select a main category (or taxonomy) for nicer permalinks.</li>
+								<?php _e( 'Allows you to select a main category (or taxonomy) for nicer permalinks.', $this->domain ); ?>
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -320,8 +340,12 @@ if ( !class_exists( 'Meow_Admin' ) ) {
 						<h3><span class="dashicons dashicons-admin-tools"></span> Debug</h3>
 						<div class="inside">
 							<ul>
-								<li><a href="?page=meowapps-main-menu&amp;tool=error_log">Display Error Log</a></li>
-								<li><a href="?page=meowapps-main-menu&amp;tool=phpinfo">Display PHP Info</a></li>
+								<li><a href="?page=meowapps-main-menu&amp;tool=error_log">
+									<?php _e( 'Display Error Log', $this->domain ); ?>
+								</a></li>
+								<li><a href="?page=meowapps-main-menu&amp;tool=phpinfo">
+									<?php _e( 'Display PHP Info', $this->domain ); ?>
+								</a></li>
 							</ul>
 						</div>
 					</div>

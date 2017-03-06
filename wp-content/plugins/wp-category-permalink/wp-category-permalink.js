@@ -2,161 +2,56 @@
     'use strict';
 
     $.fn.sCategoryPermalink = function(options) {
-		// Template for the taxa-value-selector link. Clone this whenever needed.
-        var $link = $('<a class="taxa-value-selector" style="position: absolute; margin-top: 2px;">&nbsp;<span class="dashicons dashicons-heart" style="font-size: 15px; margin-top: 1px; line-height: inherit; color: rgba(255, 0, 0, 0.65);"></span>Permalink</a>');
-		// The input to hold our selected permalink value. Need one for each and every taxonomy that can be part of a permalink.
-        var $input = $('<input type="hidden" class="permalink-taxa" />');
-		// Just a selector for checkboxes
-        var cbSelector = '.tabs-panel label input[type="checkbox"]';
-        var hover = {
-                mouseenter: mouseenter,
-                mouseleave: mouseleave
-            };
+      var me = this;
+      this.find('.selectit').append(
+        '<span style="display: none; font-size: 11px; font-weight: normal !important; margin-left: 5px; top: -2px; position: relative;" class="taxa-value-selector">' +
+        '<span class="dashicons dashicons-heart" style="font-size: 18px; margin-top: 4px; line-height: inherit; color: rgba(255, 0, 0, 0.65);">' +
+        '</span>Permalink</span>')
+        .mouseenter(function() {
+          $(this).find('.taxa-value-selector').show();
+        })
+        .mouseleave(function() {
+          $(this).find('.taxa-value-selector').hide();
+        })
+        .change(function () {
+          if ($(this).prop('checked'))
+            return;
+          if ($(this).css('fontWeight') == 'bold') {
+            $('.permalink-taxa', me).val('');
+            $(this).css('fontWeight', 'normal');
+          }
+        });
 
-		// Of course you know that 'this' is the collection of elements returned by jQuery(...);
-        return this
-            .on('click', '.taxa-value-selector', click)
-            .on('hover', '.categorychecklist li label.selectit', function (event) {
-				// In here, 'this' is the hovered item. (that means label.selectit)
-                hover[event.type] && hover[event.type].call(this, event);
-            })
-            .on('change', cbSelector, change)
-            .each(setup);
+      this.find('.taxa-value-selector').click(function (event) {
+        event.preventDefault();
+        console.debug(event);
 
-        /**
-         * List item was hovered, create a .taxa-value-selector link.
-         * Doing this on the fly in case of newly created categories.
-         * Event handler so 'this' is the event target. For this event, it's always label.selectit
-         *
-         * @param   {Event}  event  Who cares? Don't use.
-         *
-         * @return  {void}
-         */
-        function mouseenter(event)
-        {
-            var $cb = $('input[type="checkbox"]', this);
-
-            $link.clone()
-                .data('taxaValue', $cb.val())
-                .appendTo(this)
-                .show();
+        if ($(this).css('fontWeight') == 'bold') {
+          $('.permalink-taxa', me).val('');
+          $(this).css('fontWeight', 'normal');
         }
 
-        /**
-         * Trash the .taxa-value-selector, we will create it again next mouseover.
-         * Event handler so 'this' is the event target. For this event, it's always label.selectit
-         *
-         * @param   {Event}  event  Who cares? Don't use.
-         *
-         * @return  {void}
-         */
-        function mouseleave(event)
-        {
-            $('.taxa-value-selector', this).remove();
-        }
+        me.find('.selectit').css('fontWeight', '');
+        $(this).parents('.selectit').css('fontWeight', 'bold');
+        $(this).parents('.selectit').find('input').prop('checked', true);
+        var val = $(this).prev().attr('value');
+        $('.permalink-taxa', me).val(val);
+      });
 
-        /**
-         * Create the permalinkTaxa input for this taxonomy.
-         * Select the currently active category if there is one.
-         * Called by jQuery's 'each' so 'this' is the current element of the set.
-         *
-         * @return  {void}
-         */
-        function setup()
-        {
-            var taxonomy = $(this).data('taxonomy');
+      var taxonomy = $(this).data('taxonomy');
 
-            $input.clone().prop('name', 'permalinkTaxa[' + taxonomy + ']').appendTo(this);
-
-            if (options.current && options.current[taxonomy])
-            {
-                selectValue(options.current[taxonomy], this);
-            }
-        }
-
-        /**
-         * Handle a click of the .taxa-value-selector
-         * Event handler so 'this' is the event target. For this event, it's always .taxa-value-selector
-         *
-         * @param   {Event}  event  Who cares? Don't use.
-         *
-         * @return  {void}
-         */
-        function click(event)
-        {
-            event.preventDefault();
-
-            deselectAll(event.delegateTarget);
-            selectValue($(this).data('taxaValue'), event.delegateTarget);
-        }
-
-        /**
-         * Handle a changed checkbox.
-         * If the checkbox for the currently selected category is unchecked,
-         * We must deselect that category.
-         * Event handler so 'this' is the event target. For this event, it's always a match for cbSelector
-         *
-         * @return  {void}
-         */
-        function change()
-        {
-			// 'this' is a plain element. Get a jQuery.
-            var $this = $(this);
-
-            if ($this.prop('checked'))
-            {
-                return;
-            }
-
-            var value = $this.val();
-            var $scope = $this.parents('.categorydiv').first();
-            var current = $scope.find('.permalink-taxa').val();
-
-            if (current === value)
-            {
-                deselectAll($scope);
-            }
-        }
-
-        /**
-         * Remove the value from the permalinkTaxa input.
-         * Unbold labels.
-         *
-         * @param   {Mixed}  scope  DOM Element or jQuery
-         *
-         * @return  {void}
-         */
-        function deselectAll(scope)
-        {
-            $(cbSelector, scope)
-                .parent('label').css('fontWeight', '');
-
-            $('.permalink-taxa', scope).val('');
-        }
-
-        /**
-         * Select a value for the permalinkTaxa field.
-         * Bold the label and automatically check the box if it's not already.
-         *
-         * @param   {Integer}  value  Category ID
-         * @param   {Mixed}    scope  DOM Element or jQuery
-         *
-         * @return  {void}
-         */
-        function selectValue(value, scope)
-        {
-            $(cbSelector, scope)
-                .filter('[value="' + value + '"]').prop('checked', true)
-                    .parent('label').css('fontWeight', 'bold');
-
-            $('.permalink-taxa', scope).val(value);
-        }
-    };
+      $(this).append('<input type="hidden" name="permalinkTaxa[' + taxonomy + ']" class="permalink-taxa" />');
+      if (options.current && options.current[taxonomy])
+      {
+        $(this).find('input[value="' + options.current[taxonomy] + '"]').prop('checked', true).parent('label').css('fontWeight', 'bold')
+        $('.permalink-taxa', me).val(options.current[taxonomy]);
+      }
+      return this;
+  };
 }(jQuery));
 
 jQuery(function($) {
     'use strict';
-
     $('.posts .scategory_permalink_name').each(function () {
         var $this = $(this);
         var category = $this.text().trim();

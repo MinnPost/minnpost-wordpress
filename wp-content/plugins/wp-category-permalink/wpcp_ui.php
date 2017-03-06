@@ -21,7 +21,7 @@ abstract class MWCPUI
     public static function enqueue_script()
     {
         $url = plugins_url('/wp-category-permalink.js', dirname(__FILE__) . '/../' );
-        wp_enqueue_script( 'wp-category-permalink.js', $url, array( 'jquery' ), '1.8', false );
+        wp_enqueue_script( 'wp-category-permalink.js', $url, array( 'jquery' ), '3.2.3', false );
     }
 
     public static function post_js()
@@ -82,40 +82,28 @@ abstract class MWCPUI
             $columns[$column_key] = __( 'Permalink ' . $info->labels->singular_name, 'wp-category-permalink' );
             $hidden_columns[] = $column_key;
         }
-        //$user = wp_get_current_user();
-        //update_user_option( $user->ID, $option, array_unique( $hidden_columns ) );
         return $columns;
     }
 
     public static function post_row_actions( $actions, $post )
     {
         $hide_permalink = get_option( 'wpcp_hide_permalink', false );
-
         if ( $hide_permalink )
-        {
             return $actions;
-        }
-
         $permalink_cat = MWCPPost::getPermalinkMeta( $post->ID );
         $isset = false;
-
-        foreach ( $permalink_cat as $taxa => $cat )
-        {
-            if ( !empty( $cat ) )
-            {
-                $isset = true;
-
-                break;
-            }
+        foreach ( $permalink_cat as $taxa => $cat ) {
+          if ( !empty( $cat ) ) {
+            $isset = true;
+            break;
+          }
         }
 
-        $dashicon = !$isset ? '<span class="dashicons dashicons-warning" title="The main category should be chosen in the Edit Post page." style="font-size: 12px; margin: 1px 0px 0px 0px; width: auto; height: auto; line-height: inherit; color: rgba(255, 0, 0, 0.65);"></span>' : '<span class="dashicons dashicons-heart" style="font-size: 12px; margin: 1px 0px 0px 0px; width: auto; height: auto; line-height: inherit; color: gray;"></span>';
+        $dashicon = !$isset ? '' : '<span class="dashicons dashicons-heart" style="font-size: 12px; color: rgba(255, 0, 0, 0.65); margin: 1px 0px 0px 0px; width: auto; height: auto; line-height: inherit;"></span>';
         $permalink = get_permalink( $post->ID );
-
         if ( get_post_type( $post ) !== 'post' )
-            echo '<br />';
+          echo '<br />';
         echo '<small style="position: relative; top: -3px;">' . $dashicon . '&nbsp;' . $permalink . '</small>';
-
         return $actions;
     }
 

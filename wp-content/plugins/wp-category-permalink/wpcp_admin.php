@@ -90,7 +90,9 @@ class MWCP_Admin extends Meow_Admin {
 				            if ( empty( $taxa ) )
 				                continue;
 				            $query_vars = array_map( $map, $taxa );
-				            echo __( '<small>Permalink: <b>' ) . $post_info->rewrite['slug'] . '/</b> + <i>' . $post_info->query_var  . '</i><br>' .
+										global $wp_rewrite;
+						        $post_link = $wp_rewrite->get_extra_permastruct( $type );
+				            echo __( '<small>Permalink: ' ) . $post_link . '<br>' .
 				              __( 'Post Type: ' ) . $type . '<br />' .
 				              __( 'Taxonomies: ' ) . implode( ' ', $query_vars ) . '</small>';
 					        }

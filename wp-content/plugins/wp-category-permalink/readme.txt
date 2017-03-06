@@ -2,8 +2,8 @@
 Contributors: TigrouMeow, Okonomiyaki3000
 Tags: category, permalink, woocommerce
 Requires at least: 3.5
-Tested up to: 4.7
-Stable tag: 3.2.2
+Tested up to: 4.7.2
+Stable tag: 3.2.3
 
 Allows manual selection of a 'main' category for each post for nicer permalinks and better SEO. Pro version adds custom post type support.
 
@@ -11,11 +11,11 @@ Allows manual selection of a 'main' category for each post for nicer permalinks 
 
 This plugin allows you to select a main category (or taxonomy) for your posts for nicer permalinks and SEO.
 
-**Select a category for your permalink**. A custom structure such as **/%category%/%postname%/** should be usually chosen for your permalinks. By default, this %category% is selected automatically (using the lowest ID) in the case your post is assigned to more than one category. This plugin will let you pick the category of your choice from the 'Post Edit' page. The chosen category is shown in bold on the 'Posts List' page and the 'Post Edit' page.
+**What it does**. A custom structure such as **/%category%/%postname%/** should be usually chosen for your permalinks. By default, this %category% is selected automatically (using the lowest ID) in the case your post is assigned to more than one category. This plugin will let you pick the category of your choice from the 'Post Edit' page. The chosen category is shown in bold on the 'Posts List' page and the 'Post Edit' page.
 
 **Post list**. Below the title, you will see the permalink currently set-up for this entry. If a heart is present, it means that the category (or taxonomy) has been picked up.
 
-**PRO Version**. Features added based on requests from users are made available in the Pro version. For now, the Pro adds support for custom post type and custom taxonomy support (gallery plugins or themes, WooCommerce, etc). Learn more on https://meowapps.com/wp-category-permalink/.
+**Pro Version**. Features added based on requests from users are made available in the Pro version. For now, the Pro adds support for custom post type and custom taxonomy support (gallery plugins or themes, WooCommerce, etc). Learn more on https://meowapps.com/wp-category-permalink/.
 
 **Breadcrumbs**. They have their own way of working and can't be supported automatically by default because they are created by specific themes or plugins. If you encounter issues with breadcrumbs, please say so in the Support Threads and let's see how we can make it work.
 
@@ -40,6 +40,10 @@ Nothing to be careful about here, just update :)
 2. Check your permalinks in the posts list. If a heart is present, it means a category (or taxonomy) has been chosen.
 
 == Changelog ==
+
+= 3.2.3 =
+* Fix: Display issues (heart icon was flying all over the place).
+* Fix: Permalinks are handled in a much better way. More support for other plugins for custom permalinks.
 
 = 3.2.2 =
 * Fix: Handle events on the label instead of the li. Inject the link into the label too.

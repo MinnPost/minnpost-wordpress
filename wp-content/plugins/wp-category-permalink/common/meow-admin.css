@@ -11,7 +11,7 @@
   border-top-right-radius: 8px;
 }
 
-.meow-box input, th, label {
+.meow-box input, .meow-box th, .meow-box label, .meow-box select {
   font-size: 13px !important;
 }
 
@@ -84,9 +84,13 @@
   border-radius: 0px;
 }
 
-.meow-box [type="text"] {
-  margin-top: -3px;
+.meow-box [type="text"], .meow-box select {
   width: 100%;
+}
+
+/* CONTROLS INSIDE A COLUMN (LABEL ON THE LEFT, VALUE ON THE RIGHT) */
+.meow-box td [type="text"], .meow-box td [type="checkbox"], .meow-box td select {
+  margin-top: -3px;
 }
 
 .meow-header-ad {
