@@ -85,7 +85,7 @@ abstract class MWCPPost
         $slug = $post_types[$post->post_type]->rewrite['slug'];
         $slug = trailingslashit( site_url( trailingslashit( $slug ) . '%postname%' ) );
         $newUrl = str_replace( $find, $replace, $post_link );
-        $newUrl = site_url( $newUrl );
+        $newUrl = rtrim( site_url( $newUrl ) ) . '/';
         //echo "post_link: $post_link<br />leavename: $leavename<br/>slug: $slug<br/>url: $url<br/>newUrl: $newUrl<br /><br />";
         return $newUrl;
     }

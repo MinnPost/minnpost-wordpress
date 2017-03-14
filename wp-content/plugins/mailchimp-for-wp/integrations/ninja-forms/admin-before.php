@@ -1,3 +1,3 @@
 <p>
-	<?php echo __( 'To integrate with Ninja Forms, add the "MailChimp" field to your Ninja Forms forms.', 'mailchimp-for-wp' ); ?>
+    <?php echo sprintf( __( 'To integrate with Ninja Forms, add the "MailChimp" action to <a href="%s">one of your Ninja Forms forms</a>.', 'mailchimp-for-wp' ), admin_url( 'admin.php?page=ninja-forms' ) ); ?>
 </p>

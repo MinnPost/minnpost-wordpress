@@ -3,7 +3,7 @@ Contributors: TigrouMeow, Okonomiyaki3000
 Tags: category, permalink, woocommerce
 Requires at least: 3.5
 Tested up to: 4.7.2
-Stable tag: 3.2.3
+Stable tag: 3.2.5
 
 Allows manual selection of a 'main' category for each post for nicer permalinks and better SEO. Pro version adds custom post type support.
 
@@ -40,6 +40,9 @@ Nothing to be careful about here, just update :)
 2. Check your permalinks in the posts list. If a heart is present, it means a category (or taxonomy) has been chosen.
 
 == Changelog ==
+
+= 3.2.4 =
+* Fix: Trailing slashes.
 
 = 3.2.3 =
 * Fix: Display issues (heart icon was flying all over the place).
