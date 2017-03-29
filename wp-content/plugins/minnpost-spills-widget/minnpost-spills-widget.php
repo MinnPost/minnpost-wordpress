@@ -21,6 +21,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 
  
 	public function __construct() {
+
 		parent::__construct(
 			'MinnpostSpills_Widget', __( 'MinnPost Spills Widget', 'minnpost-spills-widget' ),
 			array(
@@ -30,17 +31,16 @@ class MinnpostSpills_Widget extends WP_Widget {
 		);
 
 		// Register hooks
-		add_action('admin_print_scripts', array( $this, 'add_script') );
-		add_action('admin_head', array( $this, 'add_script_config') );
+		add_action( 'admin_enqueue_scripts', array( $this, 'add_suggest_script' ) );
+		add_action( 'admin_print_footer_scripts', array( $this, 'add_script_config' ), 30 );
 
 	}
 
 	/**
 	 * Add script to admin page
 	 */
-	function add_script() {
-	    // Build in tag auto complete script
-	    wp_enqueue_script( 'suggest' );
+	function add_suggest_script() {
+		wp_enqueue_script( 'suggest' );
 	}
 
 	/**
@@ -48,12 +48,14 @@ class MinnpostSpills_Widget extends WP_Widget {
 	 */
 	function add_script_config() {
 	?>
-
 	    <script>
 	    // Function to add auto suggest
-	    function setSuggest(id) {
-	        jQuery('#' + id).suggest("<?php echo get_bloginfo('wpurl'); ?>/wp-admin/admin-ajax.php?action=ajax-tag-search&tax=post_tag", {multiple:true, multipleSep: ","});
-	    }
+	    $(document).ready(function() {
+		    function setSuggest(id) {
+		        jQuery('#' + id).suggest("<?php echo get_bloginfo('wpurl'); ?>/wp-admin/admin-ajax.php?action=ajax-tag-search&tax=post_tag", {multiple:true, multipleSep: ","});
+		    }
+		    setSuggest('<?php echo $this->get_field_id('widget_terms'); ?>');
+	    });
 	    </script>
 	<?php
 	}
@@ -129,20 +131,16 @@ class MinnpostSpills_Widget extends WP_Widget {
 			$categories = false;
 		}
 
-		if ( isset( $instance['terms'] ) ) {
-			$terms = $instance['terms'];
+		if ( isset( $instance['widget_terms'] ) ) {
+			$terms = $instance['widget_terms'];
 		} else {
-			$terms = '';
+			$terms = false;
 		}
 
 		// Instantiate the walker passing name and id as arguments to constructor
         $category_walker = new Walker_Category_Checklist_Widget(
             $this->get_field_name( 'widget_categories' ), 
             $this->get_field_id( 'widget_categories' )
-        );
-        $term_walker = new Walker_Category_Checklist_Widget(
-            $this->get_field_name( 'widget_terms' ), 
-            $this->get_field_id( 'widget_terms' )
         );
 
 		?>
@@ -152,7 +150,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 		</div>
 		<div>
-			<label for="<?php echo $this->get_field_id('categories'); ?>"><?php _e('Categories:'); ?></label> 
+			<label for="<?php echo $this->get_field_id('widget_categories'); ?>"><?php _e('Categories:'); ?></label> 
 			<?php $checked_ontop = true; ?>
 			<ul class="categorychecklist" style="height: 200px; overflow: auto; border: 1px solid #ddd; background: #fdfdfd; padding: 0 0.9em;">
 				<?php wp_category_checklist( 0, 0, $categories, false, $category_walker, $checked_ontop ); ?>
@@ -160,11 +158,11 @@ class MinnpostSpills_Widget extends WP_Widget {
 		</div>
 
 		<div>
-			<label for="<?php echo $this->get_field_id('terms'); ?>"><?php _e('Terms:'); ?></label> 
-			<input class="widefat" id="<?php echo $this->get_field_id('terms'); ?>" name="<?php echo $this->get_field_name('terms'); ?>" type="text" value="<?php echo $terms; ?>" />
+			<label for="<?php echo $this->get_field_id('widget_terms'); ?>"><?php _e('Terms:'); ?></label> 
+			<input class="widefat" id="<?php echo $this->get_field_id('widget_terms'); ?>" name="<?php echo $this->get_field_name('widget_terms'); ?>" type="text" value="<?php echo $terms; ?>" />
 		</div>
 		<script>
-		setSuggest(<?php echo $this->get_field_id('terms'); ?>);
+		
 		</script>
 
 		<?php 
