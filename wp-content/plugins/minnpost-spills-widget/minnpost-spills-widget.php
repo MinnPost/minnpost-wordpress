@@ -69,7 +69,6 @@ class MinnpostSpills_Widget extends WP_Widget {
 	* @param array $instance Saved values from database.
 	*/
 	public function widget( $args, $instance ) {
-		error_log('run spill widget');
 
 		extract( $args );
 
@@ -81,6 +80,8 @@ class MinnpostSpills_Widget extends WP_Widget {
 		if ( $title ) {
 			echo $before_title . $title . $after_title;
 		}
+
+		$output = $this->get_spill_posts($categories, $terms);
 
 		//echo $message;
 		echo $after_widget;
@@ -103,8 +104,16 @@ class MinnpostSpills_Widget extends WP_Widget {
 		$instance = $old_instance;
 
 		$instance['title'] = sanitize_text_field( $new_instance['title'] );
-		$instance['widget_categories'] = $new_instance['widget_categories'];
-		$instance['widget_terms'] = $new_instance['widget_terms'];
+		if ( !empty($new_instance['widget_categories'] ) ) {
+			$instance['widget_categories'] = $new_instance['widget_categories'];
+		} else {
+			$instance['widget_categories'] = array();
+		}
+		if ( !empty( $new_instance['widget_terms'] ) ) {
+			$instance['widget_terms'] = $new_instance['widget_terms'];
+		} else {
+			$instance['widget_terms'] = array();
+		}
 
 		return $instance;
 
@@ -175,73 +184,39 @@ class MinnpostSpills_Widget extends WP_Widget {
 	* @return $this->salesforce
 	*
 	*/
-    private function salesforce() {
-		// get the base class
-		if ( ! function_exists( 'is_plugin_active' ) ) {
-     		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-     	}
-		if ( is_plugin_active('salesforce-rest-api/salesforce-rest-api.php') ) {
-			require_once plugin_dir_path( __FILE__ ) . '../salesforce-rest-api/salesforce-rest-api.php';
-			$salesforce = Salesforce_Rest_API::get_instance();
-			$this->salesforce = $salesforce;
-			return $this->salesforce;
+    private function get_spill_posts( $categories, $terms ) {
+
+    	if ( !empty( $terms ) ) {
+			$the_query = new WP_Query(
+				array(
+					'posts_per_page' => 4,
+					'tag' => $terms
+				)
+			);			
 		}
+
+		?>
+
+		<?php if ( $the_query->have_posts() ) : ?>
+
+			<!-- the loop -->
+			<?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
+				<?php
+				$url_array = explode('/',get_permalink());
+				$category = $url_array[3];
+				?>
+				<p class="spill-item-category"><?php echo get_category_by_slug( $category )->name; ?></p>
+				<p class="spill-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></p>
+			<?php endwhile; ?>
+			<!-- end of the loop -->
+
+			<?php wp_reset_postdata(); ?>
+
+		<?php endif; ?>
+
+		<?php
+
 	}
-
-	/**
-	* Load the data for the campaign's progress
-	*
-	* @see WP_Widget::form()
-	*
-	* @param array $instance Previously saved values from database.
-	*/
-	private function donation_progress_data( $report_id, $campaign_id ) {
-        if ( is_object( $this->salesforce ) ) {
-            $salesforce_api = $this->salesforce->salesforce['sfapi'];
-        } else {
-            $salesforce = $this->salesforce();
-            $salesforce_api = $salesforce->salesforce['sfapi'];
-        }
-
-        if ( is_object( $salesforce_api ) ) {
-            // this is a report id
-            $report_result = $salesforce_api->run_analytics_report( $report_id, TRUE );
-            $campaign_result = $salesforce_api->object_read( 'Campaign', $campaign_id );
-
-            if ( isset( $campaign_result['data']['ExpectedRevenue'] ) ) {
-                $goal = $campaign_result['data']['ExpectedRevenue'];
-            } else {
-                $goal = '';
-            }
-
-            if ( $report_result['data']['attributes']['status'] === 'Success' ) {
-                $factmap = $report_result['data']['factMap'];
-                foreach ( $factmap as $array ) {
-                    if ( isset( $array['aggregates'] ) ) {
-                        $success = TRUE;
-                        $value = $array['aggregates'][1]['value'];
-                        break;
-                    }
-                }
-            } elseif ( $report_result['data']['attributes']['status'] === 'Running' || $report_result['data']['attributes']['status'] === 'New' ) {
-                $success = 'running';
-                $value = 0;
-            }
-        } else {
-            $success = FALSE;
-            $value = 0;
-        }
-
-        $data = array(
-            'success' => $success,
-            'value_opportunities' => $value,
-            'goal' => $goal,
-            'percent_complete' => ( $value / 10000 ) * 100
-        );
-
-        return $data;
-
-    }
      
 }
 
