@@ -194,6 +194,21 @@ class MinnpostSpills_Widget extends WP_Widget {
 	*/
     private function get_spill_posts( $categories, $terms ) {
 
+    	if ( !empty( $categories ) ) {
+    		$slugs = array();
+    		foreach ( $categories as $id ) {
+    			$category = get_term_by( 'id', $id, 'category' );
+    			$slugs[] = $category->slug;
+    		}
+    		$the_query = new WP_Query(
+    			array(
+    				'posts_per_page' => 4,
+    				'category_name' => $slugs ? implode( ',', $slugs ) : '',
+    				'orderby' => 'date'
+    			)
+    		);
+    	}
+
     	if ( !empty( $terms ) ) {
 			$the_query = new WP_Query(
 				array(
@@ -201,7 +216,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 					'tag' => $terms,
 					'orderby' => 'date'
 				)
-			);			
+			);
 		}
 
 		?>
@@ -213,6 +228,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 				<?php
 				$url_array = explode('/',get_permalink());
 				$category = $url_array[3];
+				error_log('category is ' . print_r($category, true));
 				?>
 				<p class="spill-item-category"><?php echo get_category_by_slug( $category )->name; ?></p>
 				<p class="spill-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></p>
