@@ -49,12 +49,20 @@ class MinnpostSpills_Widget extends WP_Widget {
 	function add_script_config() {
 	?>
 	    <script>
-	    // Function to add auto suggest
+	    function setSuggest() {
+	        jQuery('.mp-spills-terms').suggest(
+	        	"<?php echo get_bloginfo('wpurl'); ?>/wp-admin/admin-ajax.php?action=ajax-tag-search&tax=post_tag",
+	        	{
+	        		multiple:true, 
+	        		multipleSep: ","
+	        	}
+	        );
+	    }
 	    $(document).ready(function() {
-		    function setSuggest(id) {
-		        jQuery('#' + id).suggest("<?php echo get_bloginfo('wpurl'); ?>/wp-admin/admin-ajax.php?action=ajax-tag-search&tax=post_tag", {multiple:true, multipleSep: ","});
-		    }
-		    setSuggest('<?php echo $this->get_field_id('widget_terms'); ?>');
+	    	setSuggest();
+	    });
+	    $(document).on('widget-updated widget-added', function() {
+		   setSuggest(); 
 	    });
 	    </script>
 	<?php
@@ -168,7 +176,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 		<div>
 			<label for="<?php echo $this->get_field_id('widget_terms'); ?>"><?php _e('Terms:'); ?></label> 
-			<input class="widefat" id="<?php echo $this->get_field_id('widget_terms'); ?>" name="<?php echo $this->get_field_name('widget_terms'); ?>" type="text" value="<?php echo $terms; ?>" />
+			<input class="mp-spills-terms widefat" id="<?php echo $this->get_field_id('widget_terms'); ?>" name="<?php echo $this->get_field_name('widget_terms'); ?>" type="text" value="<?php echo $terms; ?>" />
 		</div>
 		<script>
 		
@@ -190,7 +198,8 @@ class MinnpostSpills_Widget extends WP_Widget {
 			$the_query = new WP_Query(
 				array(
 					'posts_per_page' => 4,
-					'tag' => $terms
+					'tag' => $terms,
+					'orderby' => 'date'
 				)
 			);			
 		}
