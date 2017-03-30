@@ -134,7 +134,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 	*
 	* @param array $instance Previously saved values from database.
 	*/
-	public function form( $instance ) {    
+	public function form( $instance ) {
 
 		if ( isset( $instance['title'] ) ) {
 			$title = sanitize_text_field( $instance['title'] );
