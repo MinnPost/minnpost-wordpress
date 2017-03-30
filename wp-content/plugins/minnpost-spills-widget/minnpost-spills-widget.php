@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Spills Widget
 Plugin URI: #
-Description: A plugin containing various widgets created in a TutsPlus series on WordPress widgets
+Description: This plugin creates a sidebar widget that is able to display posts from a group of categories and/or tags
 Version: 0.0.1
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
@@ -26,7 +26,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 			'MinnpostSpills_Widget', __( 'MinnPost Spills Widget', 'minnpost-spills-widget' ),
 			array(
 				'classname'   => 'MinnpostSpills_Widget',
-				'description' => __( 'Posts from a group of categories.', 'minnpost-spills-widget' )
+				'description' => __( 'Posts from a group of categories and/or tags.', 'minnpost-spills-widget' )
 			)
 		);
 
