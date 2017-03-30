@@ -176,7 +176,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 		<div>
 			<label for="<?php echo $this->get_field_id('widget_terms'); ?>"><?php _e('Terms:'); ?></label> 
-			<input class="mp-spills-terms widefat" id="<?php echo $this->get_field_id('widget_terms'); ?>" name="<?php echo $this->get_field_name('widget_terms'); ?>" type="text" value="<?php echo $terms; ?>" />
+			<input class="mp-spills-terms widefat" id="<?php echo $this->get_field_id('widget_terms'); ?>" name="<?php echo $this->get_field_name('widget_terms'); ?>" type="text" value="<?php echo is_array( $terms ) ? implode( ',', $terms ) : $terms; ?>" />
 		</div>
 		<script>
 		
@@ -228,7 +228,6 @@ class MinnpostSpills_Widget extends WP_Widget {
 				<?php
 				$url_array = explode('/',get_permalink());
 				$category = $url_array[3];
-				error_log('category is ' . print_r($category, true));
 				?>
 				<p class="spill-item-category"><?php echo get_category_by_slug( $category )->name; ?></p>
 				<p class="spill-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></p>
