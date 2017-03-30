@@ -1,4 +1,10 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.2.1
+	- Updated email format so that it defaults to html instead of multipart.
+	- Added filter to allow email TO formatting to be turned on or off. Defaults to off.
+	- Fixed a typo in the notification From header.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.2
 	- Added System Report page.
 	- Added search functionality to Forms list page.
@@ -6,8 +12,9 @@ Version 2.2
 	- Added security enhancements.
 	- Added emoji support to entry values where UTF-8 is the available charset.
 	- Updated the file download process to clean the out buffer before delivering the file. This reduces the risk of potential conflicts with third-party code which can affect the delivery of the file.
-	- Updated notifications to include SpamAssassing optimizations, which will make notifications less likely to be marked as spam.
+	- Updated notifications to include SpamAssassin optimizations, which will make notifications less likely to be marked as spam.
 	- Updated feed list page so that it is responsive.
+	- Updated the way the entry IP Addresses are collected. This may affect sites behind reverse proxies. Further details: https://www.gravityhelp.com/documentation/article/changes-entry-ip-detection/
 	- Updated form editor so that fields are only deleted after the "Update" button is pressed.
 	- Fixed an issue when sending emails with special characters in the subject.
 	- Fixed fatal error when Logging Add-On is installed.

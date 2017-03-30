@@ -1749,9 +1749,15 @@ class GFCommon {
 		$bcc       = GFCommon::replace_variables( rgar( $notification, 'bcc' ), $form, $lead, false, false, true, 'html', $data );
 		$replyTo   = GFCommon::replace_variables( rgar( $notification, 'replyTo' ), $form, $lead, false, false, true, 'html', $data );
 
-		$message_format = rgempty( 'message_format', $notification ) ? 'html' : rgar( $notification, 'message_format' );
+		// Default to multipart to improve Spam Assassin score.
+		//$message_format = rgar( $notification, 'message_format', 'multipart' );
 
-		$message = GFCommon::replace_variables( rgar( $notification, 'message' ), $form, $lead, false, false, ! rgar( $notification, 'disableAutoformat' ), $message_format, $data );
+		// Default to html to prevent issues with mail clients.
+		$message_format = rgar( $notification, 'message_format', 'html' );
+
+		$merge_tag_format = $message_format === 'multipart' ? 'html' : $message_format;
+
+		$message = GFCommon::replace_variables( rgar( $notification, 'message' ), $form, $lead, false, false, ! rgar( $notification, 'disableAutoformat' ), $merge_tag_format, $data );
 
 		if ( apply_filters( 'gform_enable_shortcode_notification_message', true, $form, $lead ) ) {
 			$message = do_shortcode( $message );
@@ -1765,8 +1771,7 @@ class GFCommon {
 			$attachments = array();
 		}
 
-		// For HTML messages, send them as multi-part to improve Spam Assassin score.
-		if ( $message_format === 'html' ) {
+		if ( $message_format === 'multipart' ) {
 
 			// Creating alternate text message.
 			$text_message = GFCommon::replace_variables( rgar( $notification, 'message' ), $form, $lead, false, false, ! rgar( $notification, 'disableAutoformat' ), 'text', $data );
@@ -1777,9 +1782,6 @@ class GFCommon {
 
 			// Formatting text message. Removes all tags.
 			$text_message = self::format_text_message( $text_message );
-
-			// Sets message format to multipart
-			$message_format = 'multipart';
 
 			// Sends text and html messages to send_email()
 			$message = array(
@@ -1908,8 +1910,8 @@ class GFCommon {
 
 		global $phpmailer;
 
-		$to    = str_replace( ' ', '', $to );
-		$bcc   = str_replace( ' ', '', $bcc );
+		$to  = str_replace( ' ', '', $to );
+		$bcc = str_replace( ' ', '', $bcc );
 
 		if ( ! GFCommon::is_valid_email( $from ) ) {
 			$from = get_bloginfo( 'admin_email' );
@@ -1939,7 +1941,7 @@ class GFCommon {
 				break;
 
 			case 'multipart' :
-				$boundary = self::$email_boundary;
+				$boundary     = self::$email_boundary;
 				$content_type = "multipart/alternative; boundary={$boundary}";
 
 				break;
@@ -1969,15 +1971,24 @@ class GFCommon {
 			return;
 		}
 
-		// Formats email TO field to improve Spam Assassin score
-		$to = self::format_email_to( $to );
+		/**
+		 * Allows for formatting of the TO email address to improve spam score.
+		 *
+		 * @param bool enabled Value being filtered. Return true to format email TO, or false to leave email TO as is. Defaults to false.
+		 *
+		 * @since 2.2.0.3
+		 */
+		if ( apply_filters( 'gform_format_email_to', false ) ) {
+			// Formats email TO field to improve Spam Assassin score
+			$to = self::format_email_to( $to );
+		}
 
 		$message = self::format_email_message( $message, $message_format, $subject );
 
 		$name = empty( $from_name ) ? $from : $from_name;
 
 		$headers         = array();
-		$headers['From'] = 'From: "' . wp_strip_all_tags( $name, true ) . ' <' . $from . '>';
+		$headers['From'] = 'From: "' . wp_strip_all_tags( $name, true ) . '" <' . $from . '>';
 
 		if ( GFCommon::is_valid_email_list( $reply_to ) ) {
 			$headers['Reply-To'] = "Reply-To: {$reply_to}";
@@ -2075,12 +2086,13 @@ class GFCommon {
 
 	/**
 	 * Sets the character set email header.
+	 *
 	 * This is a target of the wp_mail_charset filter and is needed to get around a WordPress bug
 	 * that ignores the charset attribute if added to the $headers parameter of wp_mail().
 	 *
 	 * @since 2.2
 	 *
-	 * @param $charset Character set to be filtered
+	 * @param string $charset Character set to be filtered.
 	 *
 	 * @return string
 	 */
@@ -2114,7 +2126,7 @@ class GFCommon {
 
 			// Formatting To to improve Spam Assassin score
 			if ( strpos( $email, '<' ) === false ) {
-				$email_list[] = "{$email} <$email>";
+				$email_list[] = "\"{$email}\" <$email>";
 			}
 		}
 
@@ -2153,7 +2165,7 @@ class GFCommon {
 
 				$html_message = self::format_html_message( $message['html'], $subject );
 				$text_message = $message['text'];
-				$boundary = self::$email_boundary;
+				$boundary     = self::$email_boundary;
 
 				// Formatting multipart message
 				$message = "--{$boundary}
@@ -3625,7 +3637,7 @@ Content-Type: text/html;
 
 		$fields = self::get_akismet_fields( $form, $lead );
 
-		//Submitting info to Akismet
+		// Submitting info to Akismet
 		if ( defined( 'AKISMET_VERSION' ) && AKISMET_VERSION < 3.0 ) {
 			//Akismet versions before 3.0
 			$response = akismet_http_post( $fields, $akismet_api_host, '/1.1/comment-check', $akismet_api_port );
@@ -3644,7 +3656,7 @@ Content-Type: text/html;
 		$fields = self::get_akismet_fields( $form, $lead );
 		$as     = $is_spam ? 'spam' : 'ham';
 
-		//Submitting info to Akismet
+		// Submitting info to Akismet
 		if ( defined( 'AKISMET_VERSION' ) && AKISMET_VERSION < 3.0 ) {
 			//Akismet versions before 3.0
 			akismet_http_post( $fields, $akismet_api_host, '/1.1/submit-' . $as, $akismet_api_port );
@@ -3659,7 +3671,7 @@ Content-Type: text/html;
 		$is_entry_detail = GFCommon::is_entry_detail();
 		$is_admin        = $is_form_editor || $is_entry_detail;
 
-		//Gathering Akismet information
+		// Gathering Akismet information
 		$akismet_info                         = array();
 		$akismet_info['comment_type']         = 'gravity_form';
 		$akismet_info['comment_author']       = self::get_akismet_field( 'name', $form, $lead );
@@ -4026,10 +4038,10 @@ Content-Type: text/html;
 		$form_id = $is_admin ? rgget( 'id' ) : $field->formId;
 
 		/**
-		 * Allows you to filter (modify) the post category choices when using post fields
+		 * Allows you to filter (modify) the post category choices when using post fields.
 		 *
-		 * @param array $field   The Cateogry choices field
-		 * @param int   $form_id The CUrrent form ID
+		 * @param GF_Field $field   The category choices field.
+		 * @param int      $form_id The current form ID.
 		 */
 		$field->choices = gf_apply_filters( array(
 			'gform_post_category_choices',
