@@ -3,7 +3,7 @@
 Plugin Name: WP Category Permalink
 Plugin URI: http://meowapps.com
 Description: Allows manual selection of a 'main' category for each post for better permalinks and SEO. Pro version WILL add support for custom taxonomies.
-Version: 3.2.5
+Version: 3.2.6
 Author: Jordy Meow
 Author URI: http://meowapps.com
 
