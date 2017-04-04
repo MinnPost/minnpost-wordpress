@@ -139,13 +139,7 @@ add_action( 'cmb2_admin_init', 'minnpost_twentyseventeen_post_image_settings' );
  */
 function minnpost_twentyseventeen_post_image_settings() {
 
-	// Start with an underscore to hide fields from custom fields list
-	$prefix = '_mp_image_settings_';
-
-	/**
-	 * Initiate the metabox
-	 */
-	$cmb = new_cmb2_box( array(
+	$image_settings = new_cmb2_box( array(
 		'id'            => 'image_settings',
 		'title'         => __( 'Image Settings', 'minnpost_twentyseventeen' ),
 		'object_types'  => array( 'post', ), // Post type
@@ -156,10 +150,10 @@ function minnpost_twentyseventeen_post_image_settings() {
 		// 'closed'     => true, // Keep the metabox closed by default
 	) );
 
-	$cmb->add_field( array(
+	$image_settings->add_field( array(
 		'name'             => 'Homepage Image Size',
 		'desc'             => 'Size to use if this post appears on the homepage',
-		'id'               => $prefix . 'homepage_image_size',
+		'id'               => '_mp_image_settings_homepage_image_size',
 		'type'             => 'select',
 		'show_option_none' => true,
 		'default'          => 'large',
@@ -170,27 +164,49 @@ function minnpost_twentyseventeen_post_image_settings() {
 		),
 	) );
 
-	/*// Regular text field
-	$cmb->add_field( array(
-		'name'       => __( 'Test Text', 'minnpost_twentyseventeen' ),
-		'desc'       => __( 'field description (optional)', 'minnpost_twentyseventeen' ),
-		'id'         => $prefix . 'text',
-		'type'       => 'text',
-		'show_on_cb' => 'cmb2_hide_if_no_cats', // function should return a bool value
-		// 'sanitization_cb' => 'my_custom_sanitization', // custom sanitization callback parameter
-		// 'escape_cb'       => 'my_custom_escaping',  // custom escaping callback parameter
-		// 'on_front'        => false, // Optionally designate a field to wp-admin only
-		// 'repeatable'      => true,
+	$subtitle_settings = new_cmb2_box( array(
+		'id'            => 'subtitle_settings',
+		'title'         => __( 'Subtitle Settings', 'minnpost_twentyseventeen' ),
+		'object_types'  => array( 'post', ), // Post type
+		'context'       => 'subtitles',
+		'priority'      => 'high',
+		'show_names'    => true, // Show field names on the left
+		// 'cmb_styles' => false, // false to disable the CMB stylesheet
+		 'closed'     => true, // Keep the metabox closed by default
 	) );
 
-	// URL text field
-	$cmb->add_field( array(
-		'name' => __( 'Website URL', 'cmb2' ),
-		'desc' => __( 'field description (optional)', 'cmb2' ),
-		'id'   => $prefix . 'url',
-		'type' => 'text_url',
-		// 'protocols' => array('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet'), // Array of allowed protocols
-		// 'repeatable' => true,
-	) );*/
+	/*'type'       => 'text',
+	'show_on_cb' => 'cmb2_hide_if_no_cats', // function should return a bool value
+	// 'sanitization_cb' => 'my_custom_sanitization', // custom sanitization callback parameter
+	// 'escape_cb'       => 'my_custom_escaping',  // custom escaping callback parameter
+	// 'on_front'        => false, // Optionally designate a field to wp-admin only
+	// 'repeatable'      => true,*/
+
+	$subtitle_settings->add_field( array(
+		'name'             => 'Deck',
+		'desc'             => '',
+		'id'               => '_mp_subtitle_settings_deck',
+		'type'             => 'text',
+	) );
+
+	$subtitle_settings->add_field( array(
+		'name'             => 'Byline',
+		'desc'             => '',
+		'id'               => '_mp_subtitle_settings_byline',
+		'type'             => 'text',
+	) );
 
 }
+
+function minnpost_twentyseventeen_subtitles() {
+        # Get the globals:
+        global $post, $wp_meta_boxes;
+
+        # Output the "advanced" meta boxes:
+        do_meta_boxes( get_current_screen(), 'subtitles', $post );
+
+        # Remove the initial "advanced" meta boxes:
+        unset($wp_meta_boxes['post']['subtitles']);
+    }
+
+add_action('edit_form_after_title', 'minnpost_twentyseventeen_subtitles');
