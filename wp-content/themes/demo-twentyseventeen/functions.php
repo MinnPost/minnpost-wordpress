@@ -157,3 +157,65 @@ function minnpost_twentyseventeen_widgets_init() {
 	) );
 }
 add_action( 'widgets_init', 'minnpost_twentyseventeen_widgets_init', 20 );
+
+add_action( 'cmb2_admin_init', 'minnpost_twentyseventeen_post_image_settings' );
+/**
+ * Define the metabox and field configurations.
+ */
+function minnpost_twentyseventeen_post_image_settings() {
+
+	// Start with an underscore to hide fields from custom fields list
+	$prefix = '_mp_image_settings';
+
+	/**
+	 * Initiate the metabox
+	 */
+	$cmb = new_cmb2_box( array(
+		'id'            => 'image_settings',
+		'title'         => __( 'Image Settings', 'minnpost_twentyseventeen' ),
+		'object_types'  => array( 'post', ), // Post type
+		'context'       => 'side',
+		'priority'      => 'low',
+		'show_names'    => true, // Show field names on the left
+		// 'cmb_styles' => false, // false to disable the CMB stylesheet
+		// 'closed'     => true, // Keep the metabox closed by default
+	) );
+
+	$cmb->add_field( array(
+		'name'             => 'Homepage Image Size',
+		'desc'             => 'Size to use if this post appears on the homepage',
+		'id'               => 'homepage_image_size',
+		'type'             => 'select',
+		'show_option_none' => true,
+		'default'          => 'large',
+		'options'          => array(
+			'medium' => __( 'Medium', 'minnpost_twentyseventeen' ),
+			'none'   => __( 'Do not display image', 'minnpost_twentyseventeen' ),
+			'large'     => __( 'Large', 'minnpost_twentyseventeen' ),
+		),
+	) );
+
+	/*// Regular text field
+	$cmb->add_field( array(
+		'name'       => __( 'Test Text', 'minnpost_twentyseventeen' ),
+		'desc'       => __( 'field description (optional)', 'minnpost_twentyseventeen' ),
+		'id'         => $prefix . 'text',
+		'type'       => 'text',
+		'show_on_cb' => 'cmb2_hide_if_no_cats', // function should return a bool value
+		// 'sanitization_cb' => 'my_custom_sanitization', // custom sanitization callback parameter
+		// 'escape_cb'       => 'my_custom_escaping',  // custom escaping callback parameter
+		// 'on_front'        => false, // Optionally designate a field to wp-admin only
+		// 'repeatable'      => true,
+	) );
+
+	// URL text field
+	$cmb->add_field( array(
+		'name' => __( 'Website URL', 'cmb2' ),
+		'desc' => __( 'field description (optional)', 'cmb2' ),
+		'id'   => $prefix . 'url',
+		'type' => 'text_url',
+		// 'protocols' => array('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet'), // Array of allowed protocols
+		// 'repeatable' => true,
+	) );*/
+
+}
