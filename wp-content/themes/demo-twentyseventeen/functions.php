@@ -22,31 +22,6 @@ function minnpost_demo_post_thumbnail_sizes_attr( $attr = array(), $attachment, 
 add_filter( 'wp_get_attachment_image_attributes', 'minnpost_demo_post_thumbnail_sizes_attr', 10 , 3 );
 
 
-function twentyseventeen_post_thumbnail() {
-	if ( post_password_required() || is_attachment() || ! has_post_thumbnail() ) {
-		return;
-	}
-
-	if ( is_singular() ) :
-	?>
-
-	<div class="post-thumbnail">
-		<?php the_post_thumbnail( 'detail' ); ?>
-	</div><!-- .post-thumbnail -->
-
-	<?php else : ?>
-
-	<a class="post-thumbnail" href="<?php the_permalink(); ?>" aria-hidden="true">
-	<?php if ( is_home() ) : ?>
-		<?php the_post_thumbnail( 'thumbnail', array( 'alt' => the_title_attribute( 'echo=0' ) )); ?>
-	<?php else : ?>
-		<?php the_post_thumbnail( 'feature', array( 'alt' => the_title_attribute( 'echo=0' ) )); ?>
-	<?php endif; ?>
-	</a>
-
-	<?php endif; // End is_singular()
-}
-
 add_filter( 'wp_get_attachment_image_src', 'gallery_change_src', 10, 4 );
 
 function gallery_change_src( $image, $attachment_id, $size, $icon ) {
@@ -165,7 +140,7 @@ add_action( 'cmb2_admin_init', 'minnpost_twentyseventeen_post_image_settings' );
 function minnpost_twentyseventeen_post_image_settings() {
 
 	// Start with an underscore to hide fields from custom fields list
-	$prefix = '_mp_image_settings';
+	$prefix = '_mp_image_settings_';
 
 	/**
 	 * Initiate the metabox
@@ -184,7 +159,7 @@ function minnpost_twentyseventeen_post_image_settings() {
 	$cmb->add_field( array(
 		'name'             => 'Homepage Image Size',
 		'desc'             => 'Size to use if this post appears on the homepage',
-		'id'               => 'homepage_image_size',
+		'id'               => $prefix . 'homepage_image_size',
 		'type'             => 'select',
 		'show_option_none' => true,
 		'default'          => 'large',
