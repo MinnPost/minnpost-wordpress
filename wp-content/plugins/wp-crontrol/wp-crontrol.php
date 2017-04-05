@@ -3,8 +3,9 @@
  * Plugin Name: WP Crontrol
  * Plugin URI:  https://wordpress.org/plugins/wp-crontrol/
  * Description: WP Crontrol lets you view and control what's happening in the WP-Cron system.
- * Author:      <a href="https://johnblackbourn.com/">John Blackbourn</a> & <a href="http://www.scompt.com/">Edward Dale</a>
- * Version:     1.4
+ * Author:      John Blackbourn & contributors
+ * Author URI:  https://github.com/johnbillion/wp-crontrol/graphs/contributors
+ * Version:     1.5
  * Text Domain: wp-crontrol
  * Domain Path: /languages/
  * License:     GPL v2 or later
@@ -32,7 +33,7 @@
  *
  * @package    WP Crontrol
  * @author     Edward Dale <scompt@scompt.com> & John Blackbourn <john@johnblackbourn.com>
- * @copyright  Copyright 2013 Edward Dale & John Blackbourn
+ * @copyright  Copyright 2008 Edward Dale, 2012-2017 John Blackbourn
  * @license    http://www.gnu.org/licenses/gpl.txt GPL 2.0
  * @link       https://wordpress.org/plugins/wp-crontrol/
  * @since      0.2
@@ -71,7 +72,7 @@ class Crontrol {
 	 * Run using the 'init' action.
 	 */
 	public function action_init() {
-		load_plugin_textdomain( 'wp-crontrol', false, dirname( plugin_basename( __FILE__ ) ) . '/gettext' );
+		load_plugin_textdomain( 'wp-crontrol', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	}
 
 	/**
@@ -107,10 +108,11 @@ class Crontrol {
 			);
 			$next_run = $in_next_run_date . ' ' . $in_next_run_time;
 			$this->add_cron( $next_run, $in_schedule, 'crontrol_cron_job', $args );
+			$hookname = ( ! empty( $in_eventname ) ) ? $in_eventname : __( 'PHP Cron', 'wp-crontrol' );
 			$redirect = array(
 				'page'             => 'crontrol_admin_manage_page',
 				'crontrol_message' => '5',
-				'crontrol_name'    => urlencode( $in_hookname ),
+				'crontrol_name'    => urlencode( $hookname ),
 			);
 			wp_redirect( add_query_arg( $redirect, admin_url( 'tools.php' ) ) );
 			exit;
@@ -150,10 +152,11 @@ class Crontrol {
 			$i = $this->delete_cron( $in_original_hookname, $in_original_sig, $in_original_next_run );
 			$next_run = $in_next_run_date . ' ' . $in_next_run_time;
 			$i = $this->add_cron( $next_run, $in_schedule, 'crontrol_cron_job', $args );
+			$hookname = ( ! empty( $in_eventname ) ) ? $in_eventname : __( 'PHP Cron', 'wp-crontrol' );
 			$redirect = array(
 				'page'             => 'crontrol_admin_manage_page',
 				'crontrol_message' => '4',
-				'crontrol_name'    => urlencode( $in_hookname ),
+				'crontrol_name'    => urlencode( $hookname ),
 			);
 			wp_redirect( add_query_arg( $redirect, admin_url( 'tools.php' ) ) );
 			exit;
@@ -741,7 +744,7 @@ class Crontrol {
 						</tr>
 					<?php else : ?>
 						<tr>
-							<th valign="top" scope="row"><label for="hookname"><?php esc_html_e( 'Action Name', 'wp-crontrol' ); ?></label></th>
+							<th valign="top" scope="row"><label for="hookname"><?php esc_html_e( 'Hook Name', 'wp-crontrol' ); ?></label></th>
 							<td><input type="text" class="regular-text" id="hookname" name="hookname" value="<?php echo esc_attr( $existing['hookname'] ); ?>" required /></td>
 						</tr>
 						<tr>
@@ -872,6 +875,15 @@ class Crontrol {
 		$doing_edit = ( isset( $_GET['action'] ) && 'edit-cron' == $_GET['action'] ) ? wp_unslash( $_GET['id'] ) : false ;
 		$time_format = 'Y-m-d H:i:s';
 
+		$core_hooks = array(
+			'wp_version_check',
+			'wp_update_plugins',
+			'wp_update_themes',
+			'wp_scheduled_delete',
+			'wp_scheduled_auto_draft_delete',
+			'update_network_counts',
+		);
+
 		$this->show_cron_status();
 
 		?>
@@ -880,8 +892,9 @@ class Crontrol {
 		<table class="widefat striped">
 		<thead>
 			<tr>
-				<th scope="col"><?php esc_html_e( 'Action Name', 'wp-crontrol' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Hook Name', 'wp-crontrol' ); ?></th>
 				<th scope="col"><?php esc_html_e( 'Arguments', 'wp-crontrol' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Actions', 'wp-crontrol' ); ?></th>
 				<th scope="col"><?php esc_html_e( 'Next Run', 'wp-crontrol' ); ?></th>
 				<th scope="col"><?php esc_html_e( 'Recurrence', 'wp-crontrol' ); ?></th>
 				<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'wp-crontrol' ); ?></span></th>
@@ -891,7 +904,7 @@ class Crontrol {
 		<?php
 		if ( is_wp_error( $events ) ) {
 			?>
-			<tr><td colspan="7"><?php echo esc_html( $events->get_error_message() ); ?></td></tr>
+			<tr><td colspan="6"><?php echo esc_html( $events->get_error_message() ); ?></td></tr>
 			<?php
 		} else {
 			foreach ( $events as $id => $event ) {
@@ -907,12 +920,12 @@ class Crontrol {
 				}
 
 				if ( empty( $event->args ) ) {
-					$args = __( 'None', 'wp-crontrol' );
+					$args = '<em>' . esc_html__( 'None', 'wp-crontrol' ) . '</em>';
 				} else {
 					if ( defined( 'JSON_UNESCAPED_SLASHES' ) ) {
-						$args = wp_json_encode( $event->args, JSON_UNESCAPED_SLASHES );
+						$args = '<code>' . wp_json_encode( $event->args, JSON_UNESCAPED_SLASHES ) . '</code>';
 					} else {
-						$args = stripslashes( wp_json_encode( $event->args ) );
+						$args = '<code>' . stripslashes( wp_json_encode( $event->args ) ) . '</code>';
 					}
 				}
 
@@ -926,9 +939,17 @@ class Crontrol {
 						echo '<td><em>' . esc_html__( 'PHP Cron', 'wp-crontrol' ) . '</em></td>';
 					}
 					echo '<td><em>' . esc_html__( 'PHP Code', 'wp-crontrol' ) . '</em></td>';
+					echo '<td><em>' . esc_html__( 'WP Crontrol', 'wp-crontrol' ) . '</em></td>';
 				} else {
 					echo '<td>' . esc_html( $event->hook ) . '</td>';
-					echo '<td>' . esc_html( $args ) . '</td>';
+					echo '<td>' . $args . '</td>'; // WPCS:: XSS ok.
+					echo '<td>';
+					$callbacks = array();
+					foreach ( $this->get_action_callbacks( $event->hook ) as $callback ) {
+						$callbacks[] = '<code>' . esc_html( $callback['callback']['name'] ) . '</code>';
+					}
+					echo implode( '<br>', $callbacks ); // WPCS:: XSS ok.
+					echo '</td>';
 				}
 
 				echo '<td>';
@@ -948,6 +969,10 @@ class Crontrol {
 					echo '</td>';
 				}
 
+				$links = array();
+
+				echo '<td><span class="row-actions visible">';
+
 				$link = array(
 					'page'     => 'crontrol_admin_manage_page',
 					'action'   => 'edit-cron',
@@ -956,8 +981,7 @@ class Crontrol {
 					'next_run' => urlencode( $event->time ),
 				);
 				$link = add_query_arg( $link, admin_url( 'tools.php' ) ) . '#crontrol_form';
-				echo '<td><span class="row-actions visible">';
-				echo "<a href='" . esc_url( $link ) . "'>" . esc_html__( 'Edit', 'wp-crontrol' ) . '</a> | ';
+				$links[] = "<a href='" . esc_url( $link ) . "'>" . esc_html__( 'Edit', 'wp-crontrol' ) . '</a>';
 
 				$link = array(
 					'page'     => 'crontrol_admin_manage_page',
@@ -968,20 +992,23 @@ class Crontrol {
 				);
 				$link = add_query_arg( $link, admin_url( 'tools.php' ) );
 				$link = wp_nonce_url( $link, "run-cron_{$event->hook}_{$event->sig}" );
-				echo "<a href='". esc_url( $link ) ."'>" . esc_html__( 'Run Now', 'wp-crontrol' ) . '</a> | ';
+				$links[] = "<a href='" . esc_url( $link ) . "'>" . esc_html__( 'Run Now', 'wp-crontrol' ) . '</a>';
 
-				$link = array(
-					'page'     => 'crontrol_admin_manage_page',
-					'action'   => 'delete-cron',
-					'id'       => urlencode( $event->hook ),
-					'sig'      => urlencode( $event->sig ),
-					'next_run' => urlencode( $event->time ),
-				);
-				$link = add_query_arg( $link, admin_url( 'tools.php' ) );
-				$link = wp_nonce_url( $link, "delete-cron_{$event->hook}_{$event->sig}_{$event->time}" );
-				echo "<span class='delete'><a href='".esc_url( $link )."'>" . esc_html__( 'Delete', 'wp-crontrol' ) . '</a></span>';
-				echo '</td>';
+				if ( ! in_array( $event->hook, $core_hooks, true ) ) {
+					$link = array(
+						'page'     => 'crontrol_admin_manage_page',
+						'action'   => 'delete-cron',
+						'id'       => urlencode( $event->hook ),
+						'sig'      => urlencode( $event->sig ),
+						'next_run' => urlencode( $event->time ),
+					);
+					$link = add_query_arg( $link, admin_url( 'tools.php' ) );
+					$link = wp_nonce_url( $link, "delete-cron_{$event->hook}_{$event->sig}_{$event->time}" );
+					$links[] = "<span class='delete'><a href='" . esc_url( $link ) . "'>" . esc_html__( 'Delete', 'wp-crontrol' ) . '</a></span>';
+				}
 
+				echo implode( ' | ', $links ); // WPCS:: XSS ok.
+				echo '</span></td>';
 				echo '</tr>';
 
 			}
@@ -997,6 +1024,79 @@ class Crontrol {
 		} else {
 			$this->show_cron_form( ( isset( $_GET['action'] ) and 'new-php-cron' == $_GET['action'] ), false );
 		}
+	}
+
+	protected function get_action_callbacks( $name ) {
+		global $wp_filter;
+
+		$actions = array();
+
+		if ( isset( $wp_filter[$name] ) ) {
+
+			# http://core.trac.wordpress.org/ticket/17817
+			$action = $wp_filter[$name];
+
+			foreach ( $action as $priority => $callbacks ) {
+
+				foreach ( $callbacks as $callback ) {
+
+					$callback = self::populate_callback( $callback );
+
+					$actions[] = array(
+						'priority'  => $priority,
+						'callback'  => $callback,
+					);
+
+				}
+
+			}
+
+		}
+
+		return $actions;
+
+	}
+
+	public static function populate_callback( array $callback ) {
+
+		// If Query Monitor is installed, use its rich callback analysis:
+		if ( method_exists( 'QM_Util', 'populate_callback' ) ) {
+			return QM_Util::populate_callback( $callback );
+		}
+
+		if ( is_string( $callback['function'] ) && ( false !== strpos( $callback['function'], '::' ) ) ) {
+			$callback['function'] = explode( '::', $callback['function'] );
+		}
+
+		if ( is_array( $callback['function'] ) ) {
+
+			if ( is_object( $callback['function'][0] ) ) {
+				$class  = get_class( $callback['function'][0] );
+				$access = '->';
+			} else {
+				$class  = $callback['function'][0];
+				$access = '::';
+			}
+
+			$callback['name'] = $class . $access . $callback['function'][1] . '()';
+
+		} elseif ( is_object( $callback['function'] ) ) {
+
+			if ( is_a( $callback['function'], 'Closure' ) ) {
+				$callback['name'] = 'Closure';
+			} else {
+				$class = get_class( $callback['function'] );
+				$callback['name'] = $class . '->__invoke()';
+			}
+
+		} else {
+
+			$callback['name'] = $callback['function'] . '()';
+
+		}
+
+		return $callback;
+
 	}
 
 	/**
