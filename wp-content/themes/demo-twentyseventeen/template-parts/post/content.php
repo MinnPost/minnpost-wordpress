@@ -28,7 +28,9 @@
 		?>
 
 		<?php if ( 'post' === get_post_type() ) : ?>
-		<div class="entry-meta">By <?php function_exists( 'coauthors_posts_links' ) ? coauthors_posts_links() : the_author_posts_link(); ?> | <?php echo is_single() ? twentyseventeen_time_link() : twentyseventeen_time_link() . twentyseventeen_edit_link() ?></div>
+
+		<div class="entry-meta">By <?php echo ! empty( esc_html( get_post_meta( get_the_ID(), '_mp_subtitle_settings_byline', true ) ) ) ? esc_html( get_post_meta( get_the_ID(), '_mp_subtitle_settings_byline', true ) ) : function_exists( 'coauthors_posts_links' ) ? coauthors_posts_links( ',', ',', null, null, false ) : the_author_posts_link(); ?> | <?php echo is_single() ? twentyseventeen_time_link() : twentyseventeen_time_link() ?> <?php twentyseventeen_edit_link(); ?></div>
+
 		<?php endif; ?>
 
 	</header><!-- .entry-header -->
