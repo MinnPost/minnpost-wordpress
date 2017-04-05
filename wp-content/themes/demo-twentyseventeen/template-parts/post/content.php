@@ -41,6 +41,7 @@
 
 		<div class="post-thumbnail">
 			<?php the_post_thumbnail( 'detail' ); ?>
+			<p><?php echo get_media_credit_html( get_post_thumbnail_id() ); ?></p>
 		</div><!-- .post-thumbnail -->
 
 		<?php else : ?>
