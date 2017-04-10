@@ -2,9 +2,9 @@
 /**
  * Plugin Name: WWW Post Thumbnail
  * Description: Allow to use an external image url as featured image.
- * Plugin URI: https://gist.github.com/Giuseppe-Mazzapica/928bc22e5f49a654cf7c
+ * Plugin URI: https://gist.github.com/gmazzap/928bc22e5f49a654cf7c
  * Author: Giuseppe Mazzapica
- * Author URI: https://github.com/Giuseppe-Mazzapica
+ * Author URI: https://github.com/gmazzap
  * License: MIT
  * Version: 0.1.1
  * Modified by Jonathan Stegall
@@ -33,17 +33,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 add_action( 'plugins_loaded', 'GM\WWWPostThumbnail\txtdomain' );
+
 function txtdomain() {
   load_plugin_textdomain( 'www-post-thumb', FALSE, dirname( plugin_basename( __FILE__ ) ) . '/' ); 
 }
+
 add_filter( 'admin_post_thumbnail_html', 'GM\WWWPostThumbnail\field' );
+
 add_action( 'save_post', 'GM\WWWPostThumbnail\save', 10, 2 );
+
 add_filter( 'post_thumbnail_html', 'GM\WWWPostThumbnail\markup', 10, PHP_INT_MAX );
+
 function is_image( $url ) {
   $ext = array( 'jpeg', 'jpg', 'gif', 'png' );
   $info = (array) pathinfo( parse_url( $url, PHP_URL_PATH ) );
   return isset( $info['extension'] ) && in_array( strtolower( $info['extension'] ), $ext, TRUE );
 }
+
 function field( $html ) {
   global $post;
   $value = get_post_meta( $post->ID, '_thumbnail_ext_url', TRUE ) ? : "";
@@ -59,6 +65,7 @@ function field( $html ) {
   $html .= '</div>';
   return $html;
 }
+
 function save( $pid, $post ) {
   $cap = $post->post_type === 'page' ? 'edit_page' : 'edit_post';
   if (
@@ -90,6 +97,7 @@ function save( $pid, $post ) {
     }
   }
 }
+
 function markup( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
   $size = '_' . $size;
 
