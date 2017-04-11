@@ -1,6 +1,18 @@
 Changelog
 =========
 
+#### 4.1.1 - April 11, 2017
+
+**Fixes**
+
+- WPML String Translation not working with the checkbox label for sign-up integrations.
+
+**Improvements**
+
+- Use updated order methods when using WooCommerce 3.0, thanks to Liam McArthur.
+- Updated JavaScript dependencies.
+
+
 #### 4.1.0 - March 14, 2017
 
 **Improvements**
