@@ -41,8 +41,29 @@
 
 		<nav id="site-navigation" class="main-navigation" role="navigation">
 			<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Primary Menu', 'largo' ); ?></button>
-			<?php wp_nav_menu( array( 'theme_location' => 'primary_links', 'menu_id' => 'primary-links' ) ); ?>
+			<?php wp_nav_menu(
+				array(
+					'theme_location' => 'primary_links',
+					'menu_id' => 'primary-links',
+					'depth' => 2,
+					'container' => false,
+					'walker' => new Minnpost_Walker_Nav_Menu,
+				)
+			); ?>
+			<?php wp_nav_menu(
+				array(
+					'theme_location' => 'primary_links',
+					'menu_id' => 'primary-links',
+					'depth' => 2,
+					'container' => false,
+					'walker' => new Minnpost_Walker_Nav_Menu,
+					'sub_menu' => true
+				)
+			); ?>
 		</nav><!-- #site-navigation -->
+
+
+
 	</header><!-- #masthead -->
 
 	<div id="content" class="site-content">

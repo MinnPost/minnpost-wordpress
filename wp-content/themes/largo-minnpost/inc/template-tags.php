@@ -117,6 +117,7 @@ function minnpost_edit_link() {
 }
 endif;
 
+
 /**
  * Returns true if a blog has more than 1 category.
  *
@@ -159,3 +160,90 @@ function minnpost_category_transient_flusher() {
 }
 add_action( 'edit_category', 'minnpost_category_transient_flusher' );
 add_action( 'save_post',     'minnpost_category_transient_flusher' );
+
+
+class Minnpost_Walker_Nav_Menu extends Walker_Nav_Menu {
+    public function start_lvl( &$output, $depth = 0, $args = array() ) {
+        $output .= '<ul>';
+    }
+
+    public function end_lvl( &$output, $depth = 0, $args = array() ) {
+        $output .= '</ul>';
+    }
+
+    public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+        $classes = array();
+        if( !empty( $item->classes ) ) {
+            $classes = (array) $item->classes;
+        }
+
+        $active_class = '';
+        if( in_array('current-menu-item', $classes) ) {
+            $active_class = ' class="active"';
+        } else if( in_array('current-menu-parent', $classes) ) {
+            $active_class = ' class="active-parent"';
+        } else if( in_array('current-menu-ancestor', $classes) ) {
+            $active_class = ' class="active-ancestor"';
+        }
+
+        $url = '';
+        if( !empty( $item->url ) ) {
+            $url = $item->url;
+        }
+
+        $output .= '<li'. $active_class . '><a href="' . $url . '">' . $item->title . '</a></li>';
+    }
+
+    public function end_el( &$output, $item, $depth = 0, $args = array() ) {
+        $output .= '</li>';
+    }
+}
+
+// get submenu functionality from https://christianvarga.com/how-to-get-submenu-items-from-a-wordpress-menu-based-on-parent-or-sibling/
+add_filter( 'wp_nav_menu_objects', 'minnpost_wp_nav_menu_objects_sub_menu', 10, 2 );
+// filter_hook function to react on sub_menu flag
+function minnpost_wp_nav_menu_objects_sub_menu( $sorted_menu_items, $args ) {
+	if ( isset( $args->sub_menu ) ) {
+		$root_id = 0;
+
+		// find the current menu item
+		foreach ( $sorted_menu_items as $menu_item ) {
+			if ( $menu_item->current ) {
+				// set the root id based on whether the current menu item has a parent or not
+				$root_id = ( $menu_item->menu_item_parent ) ? $menu_item->menu_item_parent : $menu_item->ID;
+				break;
+			}
+		}
+
+		// find the top level parent
+		if ( ! isset( $args->direct_parent ) ) {
+			$prev_root_id = $root_id;
+			while ( $prev_root_id != 0 ) {
+				foreach ( $sorted_menu_items as $menu_item ) {
+					if ( $menu_item->ID == $prev_root_id ) {
+						$prev_root_id = $menu_item->menu_item_parent;
+						// don't set the root_id to 0 if we've reached the top of the menu
+						if ( $prev_root_id != 0 ) $root_id = $menu_item->menu_item_parent;
+						break;
+					}
+				}
+			}
+		}
+		$menu_item_parents = array();
+		foreach ( $sorted_menu_items as $key => $item ) {
+			// init menu_item_parents
+			if ( $item->ID == $root_id ) $menu_item_parents[] = $item->ID;
+			if ( in_array( $item->menu_item_parent, $menu_item_parents ) ) {
+				// part of sub-tree: keep!
+				$menu_item_parents[] = $item->ID;
+			} else if ( ! ( isset( $args->show_parent ) && in_array( $item->ID, $menu_item_parents ) ) ) {
+				// not part of sub-tree: away with it!
+				unset( $sorted_menu_items[$key] );
+			}
+		}
+
+		return $sorted_menu_items;
+	} else {
+		return $sorted_menu_items;
+	}
+}

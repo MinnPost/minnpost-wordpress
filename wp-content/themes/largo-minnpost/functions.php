@@ -29,8 +29,27 @@ if ( ! function_exists( 'minnpost_menus' ) ) :
 
 endif;
 
+/**
+ * Implement the Custom Header feature.
+ */
+//require get_stylesheet_directory() . '/inc/custom-header.php';
 
 /**
  * Custom template tags for this theme.
  */
 require get_stylesheet_directory() . '/inc/template-tags.php';
+
+/**
+ * Custom functions that act independently of the theme templates.
+ */
+//require get_stylesheet_directory() . '/inc/extras.php';
+
+/**
+ * Customizer additions.
+ */
+//require get_stylesheet_directory() . '/inc/customizer/customizer.php';
+
+/**
+ * Load Jetpack compatibility file.
+ */
+//require get_stylesheet_directory() . '/inc/jetpack.php';
