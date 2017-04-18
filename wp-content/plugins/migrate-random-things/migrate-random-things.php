@@ -193,20 +193,31 @@ class Migrate_Random_Things {
                     'desc' => __( 'Maximum items the query should load per run', 'migrate-random-things' ),
                 ),
             ),*/
-            'schedule' => array(
-                'title' => __( 'Schedule', 'migrate-random-things' ),
-                'callback' => $select_callback,
-                'page' => $page,
-                'section' => $section,
-                'args' => array(
-                    'desc' => __( 'How often the plugin should find and process data', 'migrate-random-things' ),
-                    'items' => array(
-                    	'hourly' => __( 'Hourly', 'migrate-random-things' ),
-                    	'twicedaily' => __( 'Twice Daily', 'migrate-random-things' ),
-                    	'daily' => __( 'Daily', 'migrate-random-things' )
-                    ) // values from https://codex.wordpress.org/Function_Reference/wp_schedule_event
-                ),
-            ),
+            'schedule_number' => array(
+				'title' => __( 'Run schedule every', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'number',
+					'desc' => '',
+				),
+			),
+			'schedule_unit' => array(
+		        'title' => __( 'Time unit', 'migrate-random-things' ),
+		        'callback' => $select_callback,
+		        'page' => $page,
+		        'section' => $section,
+		        'args' => array(
+		            'type' => 'select',
+		            'desc' => '',
+		            'items' => array(
+		                'minutes' => __( 'Minutes', 'migrate-random-things' ),
+		                'hours' => __( 'Hours', 'migrate-random-things' ),
+		                'days' => __( 'Days', 'migrate-random-things' ),
+		            )
+		        )
+		    )
         );
 
         foreach( $settings as $key => $attributes ) {
@@ -230,6 +241,40 @@ class Migrate_Random_Things {
         }
 
 	}
+
+	/**
+    * Convert the schedule frequency from the admin settings into an array
+    * interval must be in seconds for the class to use it
+    *
+    */
+    public function get_schedule_frequency_key( $name = '' ) {
+
+    	if ( $name !== '' ) {
+    		$name = '_' . $name;
+    	}
+
+    	$schedule_number = get_option( 'migrate_random_things' . $name . '_schedule_number', '' );
+    	$schedule_unit = get_option( 'migrate_random_things' . $name . '_schedule_unit', '' );
+
+		switch ( $schedule_unit ) {
+			case 'minutes':
+				$seconds = 60;
+				break;
+			case 'hours':
+				$seconds = 3600;
+				break;
+            case 'days':
+                $seconds = 86400;
+                break;
+            default:
+                $seconds = 0;
+		}
+
+		$key = $schedule_unit . '_' . $schedule_number;
+
+		return $key;
+
+    }
 
 	/**
     * Default display for <input> fields
@@ -292,7 +337,8 @@ class Migrate_Random_Things {
 			if ( $menus !== '' && $menu_items !== '' ) {
 				$menu_rows = $wpdb->get_results( 'SELECT * FROM ' . $menus . ' ORDER BY id');
 				foreach ( $menu_rows as $menu ) {
-					$items = $wpdb->get_results( 'SELECT `menu-item-title`, `menu-item-url`, `menu-item-status` FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" ORDER BY id');
+					// order by parent, then id so we get all the items without a parent before we try to add their children
+					$items = $wpdb->get_results( 'SELECT `id`, `menu-item-title`, `menu-item-url`, `menu-item-status`, `menu-item-parent` FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" ORDER BY `menu-item-parent`, id');
 					$menu_exists = wp_get_nav_menu_object( $menu->name );
 
 					// If it doesn't exist, let's create it.
@@ -306,7 +352,6 @@ class Migrate_Random_Things {
 					foreach ( $items as $key => $item ) {
 
 						if ( isset( $existing_items ) ) {
-							//error_log('check for ' . $existing_items[$key]->title . ' matched with ' . $item->{'menu-item-title'});
 							if ( isset( $existing_items[$key]->title ) && $existing_items[$key]->title === $item->{'menu-item-title'}) {
 								// menu item exists already
 								continue;
@@ -318,12 +363,25 @@ class Migrate_Random_Things {
 				    		$url = home_url( $url );
 				    	}
 
+				    	$parent_id = 0;
+				    	$parent_title = $item->{'menu-item-parent'};
+				    	if ( $parent_title !== NULL ) {
+				    		$parent_title = esc_html( $parent_title );
+				    		$parent = wp_get_nav_menu_items( $menu->name, array( 'title' => $parent_title ) );
+				    		if ( isset( $parent[0] ) && is_object( $parent[0] ) ) {
+				    			$parent_id = $parent[0]->ID;
+				    		} else {
+				    			// we couldn't load a nav menu item for the parent value
+				    			continue 2;
+				    		}
+				    	}
+
 				    	wp_update_nav_menu_item($menu_id, 0, array(
 					        'menu-item-title' =>  __($item->{'menu-item-title'}),
 					        'menu-item-url' => $url, 
-					        'menu-item-status' => $item->{'menu-item-status'})
+					        'menu-item-status' => $item->{'menu-item-status'},
+				    		'menu-item-parent-id' => $parent_id)
 					    );
-					    //error_log('delete the item');
 					    $delete = $wpdb->query( 'DELETE FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" AND `menu-item-title` = "' . $item->{'menu-item-title'} . '" AND `menu-item-url` = "' . $item->{'menu-item-url'} . '"' );
 
 				    }
@@ -338,67 +396,16 @@ class Migrate_Random_Things {
 
 				    // then update the menu_check option to make sure this code only runs once
 				    //update_option('menu_check', true);
+
 					//}
 
-				    //error_log('add the ' . $menu->name . ' menu to the position it needs, then delete the fake row');
-				    //error_log('delete the menu');
 				    $delete = $wpdb->query( 'DELETE FROM ' . $menus . ' WHERE `name` = "' . $menu->name . '"' );
 				}
 
-				
+			}
 
-				// can we position the menus now?
-
-			}
-			/*$offset = '';
-			$last_row_checked = get_option( 'migrate_random_things_last_row_checked', '0' );
-			if ( $last_row_checked !== '0' ) {
-				$offset = ' OFFSET ' . $last_row_checked;
-			}
-			$merge_rows = $wpdb->get_results( 'SELECT ' . $config['group_by'] . ' FROM ' . $config['wp_table'] . ' WHERE ' . $config['wp_filter_field'] . ' = "' . $config['wp_filter_field_value'] . '" LIMIT ' . $config['items_per_load'] . $offset, OBJECT );
-			foreach ( $merge_rows as $key => $merge_row ) {
-				if ( $key === ( count( $merge_rows ) - 1 ) ) {
-					update_option( 'migrate_random_things_last_row_checked', count( $merge_rows ) + $last_row_checked );
-				}
-				$id = $merge_row->$config['group_by'];
-				$merge_items = $wpdb->get_results( 'SELECT ' . $config['primary_key'] . ', ' . $config['wp_field_to_merge'] . ' FROM ' . $config['wp_table'] . ' WHERE ' . $config['wp_filter_field'] . ' = "' . $config['wp_filter_field_value'] . '" AND ' . $config['group_by'] . ' = "' . $id . '"', OBJECT );
-				if ( count( $merge_items) > 1 ) {
-					$merged_array = [];
-					foreach ( $merge_items as $key => $value ) {
-						$last_item_checked = $value->$config['primary_key'];
-						if ( $key === 0 ) {
-							$id_to_update = $value->$config['primary_key'];
-						}
-						error_log('key is ' . $key . ' and count is ' . ( count($merge_items) - 1 ) . ' and id is ' . $last_item_checked);
-						if ( $key === ( count( $merge_items ) - 1 ) ) {
-							error_log('new value should be ' .  ($last_row_checked + $last_item_checked));
-							update_option( 'migrate_random_things_last_row_checked', ( $last_row_checked + $last_item_checked ) );
-						}
-						$value = $value->$config['wp_field_to_merge'];
-						if ( !is_array( maybe_unserialize( $value ) ) ) {
-							continue;
-						}
-						$merged_array = array_merge( $merged_array, maybe_unserialize( $value ) );
-					}
-					//error_log( 'merged value is ' . serialize( $merged_array ), true );
-					$merged_serialized = serialize( $merged_array );
-				}
-			}
-			// then run sql to combine the fields
-			*/
 		}
-		/*
-		if ( isset( $id_to_update ) && isset( $merged_serialized ) ) {
-			$table = $config['wp_table'];
-			$wp_field_to_merge = $config['wp_field_to_merge'];
-			$primary_key = $config['primary_key'];
-			$group_by = $config['group_by'];
-			$wp_filter_field = $config['wp_filter_field'];
-			$wp_filter_field_value = $config['wp_filter_field_value'];
-			$update = $wpdb->query( "UPDATE $table SET $wp_field_to_merge = '$merged_serialized' WHERE $primary_key = '$id_to_update'" );
-			$delete = $wpdb->query( "DELETE FROM $table WHERE $group_by = '$id' AND $primary_key != '$id_to_update' AND $wp_filter_field = '$wp_filter_field_value'" );
-			//error_log('update is ' . $update);
-		}*/
+
 	}
 
 	/**
@@ -426,7 +433,8 @@ class Migrate_Random_Things {
 					'group_by' => get_option( 'migrate_random_things_group_by', '' ),
 					'primary_key' => get_option( 'migrate_random_things_primary_key', '' ),
 					'items_per_load' => get_option( 'migrate_random_things_items_per_load', '' ),
-					'schedule' => get_option( 'migrate_random_things_schedule', '' )
+					'schedule_number' => get_option( 'migrate_random_things_schedule_number', '' ),
+					'schedule_unit' => get_option( 'migrate_random_things_schedule_unit', '' )
 				);
 			}
 		} else {
@@ -439,7 +447,8 @@ class Migrate_Random_Things {
 					'group_by' => get_option( 'migrate_random_things_group_by', '' ),
 					'primary_key' => get_option( 'migrate_random_things_primary_key', '' ),
 					'items_per_load' => get_option( 'migrate_random_things_items_per_load', '' ),
-					'schedule' => get_option( 'migrate_random_things_schedule', '' )
+					'schedule_number' => get_option( 'migrate_random_things_schedule_number', '' ),
+					'schedule_unit' => get_option( 'migrate_random_things_schedule_unit', '' )
 				),
 			);
 		}
@@ -452,11 +461,16 @@ class Migrate_Random_Things {
 	 * @return void
 	 */
 	public function schedule() {
+
 		foreach ($this->config as $key => $value) {
-			if (! wp_next_scheduled ( 'migrate_serialized_event' ) ) {
-				wp_schedule_event( time(), $value['schedule'], 'migrate_serialized_event' );
+		    // this would need to change to allow different schedules
+		    $schedule_frequency = $this->get_schedule_frequency_key();
+    	
+		    if (! wp_next_scheduled ( 'migrate_random_event' ) ) {
+				wp_schedule_event( time(), $schedule_frequency, 'migrate_random_event' );
 		    }
-		    add_action( 'migrate_serialized_event', array( $this, 'get_things_to_migrate') );
+
+		    add_action( 'migrate_random_event', array( $this, 'get_things_to_migrate') );
 	    }
 	}
 
@@ -467,7 +481,7 @@ class Migrate_Random_Things {
 	 * @return void
 	 */
 	public function deactivate() {
-		wp_clear_scheduled_hook( 'migrate_serialized_event' );
+		wp_clear_scheduled_hook( 'migrate_random_event' );
 	}
 
 }
