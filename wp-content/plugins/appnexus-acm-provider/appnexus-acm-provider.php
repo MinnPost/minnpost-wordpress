@@ -13,6 +13,8 @@ Text Domain: appnexus_acm_provider
 
 class Appnexus_Async_ACM_Provider extends ACM_Provider {
 	//public $crawler_user_agent = 'Mediapartners-Google';
+	public $default_domain = 'oasc17.247realmedia.com';
+	public $default_url = 'https://oasc17.247realmedia.com/RealMedia/ads/';
 
 	public function __construct() {
 
@@ -179,6 +181,8 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 
 		add_action( 'wp_head', array( $this, 'action_wp_head' ) );
 
+		$this->whitelisted_script_urls = array( $this->default_domain );
+
 		parent::__construct();
 	}
 
@@ -228,7 +232,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 				<script type=\"text/javascript\">
 				  /* <![CDATA[ */
 				  // Configuration
-				  var OAS_url = 'https://oasc17.247realmedia.com/';
+				  var OAS_url = '" . $this->default_url . "';
 				  var OAS_sitepage = 'MP' + window.location.pathname;
 				  var OAS_listpos = '" . implode( ',', $tags ) . "';
 				  var OAS_query = '';
