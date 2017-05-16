@@ -229,7 +229,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 				}
 				$output_script = "
 				<!-- OAS HEADER SETUP begin -->
-				<script type=\"text/javascript\">
+				<script>
 				  /* <![CDATA[ */
 				  // Configuration
 				  var OAS_url = '" . $this->default_url . "';
@@ -239,7 +239,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 				  var OAS_target = '_top';
 				  
 				  var OAS_rns = (Math.random() + \"\").substring(2, 11);
-				  document.write('<scr' + 'ipt type=\"text/javascript\" src=\"' + OAS_url + 'adstream_mjx.ads/' + OAS_sitepage + '/1' + OAS_rns + '@' + OAS_listpos + '?' + OAS_query + '\">' + '<\/script>');
+				  document.write('<scr' + 'ipt src=\"' + OAS_url + 'adstream_mjx.ads/' + OAS_sitepage + '/1' + OAS_rns + '@' + OAS_listpos + '?' + OAS_query + '\">' + '<\/script>');
 				  
 				  function OAS_AD(pos) {
 				    if (typeof OAS_RICH != 'undefined') {
@@ -250,13 +250,14 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 				</script>  
 				<!-- OAS HEADER SETUP end --> 
 				";
+
 				break;
 			default:
 				$matching_ad_code = $ad_code_manager->get_matching_ad_code( $tag_id );
 				if ( ! empty( $matching_ad_code ) ) {
 					$output_script = '
-						<div class="minnpost-ads-ad minnpost-ads-ad-'. $tag_id . '">
-							<script type="text/javascript">OAS_AD("'. $tag_id .'");</script>
+						<div class="appnexus-ad ad-'. sanitize_title( $tag_id ) . '">
+							<script>OAS_AD("'. $tag_id .'");</script>
 						</div>
 					';
 				}
