@@ -83,15 +83,20 @@ class MinnpostSpills_Widget extends WP_Widget {
 		$title = apply_filters( 'widget_title', $instance['title'] );
 		$categories = $instance['widget_categories'];
 		$terms = $instance['widget_terms'];
-		echo $before_widget;
+		$output_function = $instance['output_function'];
+		echo str_replace( 'widget MinnpostSpills-widget', 'widget minnpost-spills-widget', str_replace('_Widget"', '-widget ' . sanitize_title( $title ) . '"', $before_widget));
 
-		if ( $title ) {
-			echo $before_title . $title . $after_title;
+		if ( isset( $output_function ) && function_exists( $output_function ) ) {
+			$output = $output_function( $before_title, $title, $after_title, $categories, $terms );
+		} else {
+			if ( $title ) {
+				echo $before_title . $title . $after_title;
+			}
+			echo '<div class="contents">';
+			$output = $this->get_spill_posts( $categories, $terms );
+			echo '</div>';
 		}
 
-		$output = $this->get_spill_posts($categories, $terms);
-
-		//echo $message;
 		echo $after_widget;
 
 	}
@@ -121,6 +126,11 @@ class MinnpostSpills_Widget extends WP_Widget {
 			$instance['widget_terms'] = $new_instance['widget_terms'];
 		} else {
 			$instance['widget_terms'] = array();
+		}
+		if ( !empty( $new_instance['output_function'] ) ) {
+			$instance['output_function'] = $new_instance['output_function'];
+		} else {
+			$instance['output_function'] = array();
 		}
 
 		return $instance;
@@ -154,6 +164,12 @@ class MinnpostSpills_Widget extends WP_Widget {
 			$terms = false;
 		}
 
+		if ( isset( $instance['output_function'] ) ) {
+			$output_function = sanitize_text_field( $instance['output_function'] );
+		} else {
+			$output_function = '';
+		}
+
 		// Instantiate the walker passing name and id as arguments to constructor
         $category_walker = new Walker_Category_Checklist_Widget(
             $this->get_field_name( 'widget_categories' ), 
@@ -175,6 +191,10 @@ class MinnpostSpills_Widget extends WP_Widget {
 		<div>
 			<label for="<?php echo $this->get_field_id('widget_terms'); ?>"><?php _e('Terms:'); ?></label> 
 			<input class="mp-spills-terms widefat" id="<?php echo $this->get_field_id('widget_terms'); ?>" name="<?php echo $this->get_field_name('widget_terms'); ?>" type="text" value="<?php echo is_array( $terms ) ? implode( ',', $terms ) : $terms; ?>" />
+		</div>
+		<div>
+			<label for="<?php echo $this->get_field_id('output_function'); ?>"><?php _e('Custom Output Function:'); ?></label> 
+			<input class="widefat" id="<?php echo $this->get_field_id('output_function'); ?>" name="<?php echo $this->get_field_name('output_function'); ?>" type="text" value="<?php echo $output_function; ?>" />
 		</div>
 		<?php 
 	}
