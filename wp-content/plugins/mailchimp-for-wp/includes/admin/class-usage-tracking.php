@@ -155,8 +155,8 @@ class MC4WP_Usage_Tracking {
 	 */
 	protected function get_mailchimp_lists_count() {
 		$mailchimp = new MC4WP_MailChimp();
-		$lists = $mailchimp->get_cached_lists();
-		return count( $lists );
+		$list_ids = $mailchimp->get_list_ids( false );
+		return count( $list_ids );
 	}
 
 

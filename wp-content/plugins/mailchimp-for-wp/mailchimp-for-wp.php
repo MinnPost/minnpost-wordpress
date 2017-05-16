@@ -3,7 +3,7 @@
 Plugin Name: MailChimp for WordPress
 Plugin URI: https://mc4wp.com/#utm_source=wp-plugin&utm_medium=mailchimp-for-wp&utm_campaign=plugins-page
 Description: MailChimp for WordPress by ibericode. Adds various highly effective sign-up methods to your site.
-Version: 4.1.1
+Version: 4.1.2
 Author: ibericode
 Author URI: https://ibericode.com/
 Text Domain: mailchimp-for-wp
@@ -47,7 +47,7 @@ function _mc4wp_load_plugin() {
 	}
 
 	// bootstrap the core plugin
-	define( 'MC4WP_VERSION', '4.1.1' );
+	define( 'MC4WP_VERSION', '4.1.2' );
 	define( 'MC4WP_PLUGIN_DIR', dirname( __FILE__ ) . '/' );
 	define( 'MC4WP_PLUGIN_URL', plugins_url( '/' , __FILE__ ) );
 	define( 'MC4WP_PLUGIN_FILE', __FILE__ );
@@ -74,9 +74,8 @@ function _mc4wp_load_plugin() {
 	$mc4wp['integrations'] = new MC4WP_Integration_Manager();
 	$mc4wp['integrations']->add_hooks();
 
-	// schedule bootstrapping of core integrations
-    add_action( 'plugins_loaded', '_mc4wp_bootstrap_integrations', 90 );
-
+	// bootstrapping of core integrations
+	_mc4wp_bootstrap_integrations();
 
     // Doing cron? Load Usage Tracking class.
 	if( defined( 'DOING_CRON' ) && DOING_CRON ) {
@@ -125,10 +124,6 @@ add_action( 'plugins_loaded', '_mc4wp_load_plugin', 8 );
  * @since 3.0
  */
 function _mc4wp_on_plugin_activation() {
-	delete_transient( 'mc4wp_mailchimp_lists_v3' );
-	delete_transient( 'mc4wp_mailchimp_lists_v3_fallback' );
-	delete_transient( 'mc4wp_list_counts' );
-
     wp_schedule_event( strtotime('tomorrow 3 am'), 'daily', 'mc4wp_refresh_mailchimp_lists' );
 }
 
@@ -139,7 +134,10 @@ function _mc4wp_on_plugin_activation() {
  * @since 4.0.3
  */
 function _mc4wp_on_plugin_deactivation() {
-    wp_clear_scheduled_hook( 'mc4wp_refresh_mailchimp_lists' );
+	global $wpdb;
+	wp_clear_scheduled_hook( 'mc4wp_refresh_mailchimp_lists' );
+
+	$wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'mc4wp_mailchimp_list_%'");
 }
 
 register_activation_hook( __FILE__, '_mc4wp_on_plugin_activation' );

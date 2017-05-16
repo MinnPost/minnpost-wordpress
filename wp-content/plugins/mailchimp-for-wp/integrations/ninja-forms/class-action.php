@@ -102,7 +102,7 @@ final class MC4WP_Ninja_Forms_Action extends NF_Abstracts_ActionNewsletter
         $list_id = $action_settings['newsletter_list'];
         $email_address = $action_settings['EMAIL'];
         $mailchimp = new MC4WP_MailChimp();
-        $list = $mailchimp->get_list( $list_id );
+        $list = $mailchimp->get_list( $list_id, true );
 
         $merge_fields = array();
         foreach( $list->merge_fields as $merge_field ) {
@@ -135,7 +135,7 @@ final class MC4WP_Ninja_Forms_Action extends NF_Abstracts_ActionNewsletter
         $mailchimp = new MC4WP_MailChimp();
 
         /** @var MC4WP_MailChimp_List[] $lists */
-        $lists = $mailchimp->get_cached_lists();
+        $lists = $mailchimp->get_lists();
         $return = array();
 
         foreach( $lists as $list ) {
