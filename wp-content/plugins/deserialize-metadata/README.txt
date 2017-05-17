@@ -3,7 +3,7 @@ Contributors: jonathanstegall, minnpost
 Tags: metadata, import
 Requires at least: 4.5.3
 Tested up to: 4.7
-Stable tag: 0.0.4
+Stable tag: 0.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,7 +27,7 @@ if ( $maps[$key]['wp_table'] === 'wp_postmeta' && $value != '' && $value != NULL
 }
 ```
 
-The `wp_schedule_event` method is used to deserialize the data and place it into its appropriate fields, and it can run hourly, twice daily, or daily.
+The `wp_schedule_event` method is used to deserialize the data and place it into its appropriate fields, and it can run at any configurable interval (you pick a number, and then a unit of time).
 
 == Installation ==
 
