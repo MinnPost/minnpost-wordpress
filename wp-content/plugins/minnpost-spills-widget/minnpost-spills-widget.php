@@ -48,23 +48,23 @@ class MinnpostSpills_Widget extends WP_Widget {
 	 */
 	function add_script_config() {
 	?>
-	    <script>
-	    function setSuggest() {
-	        jQuery('.mp-spills-terms').suggest(
-	        	"<?php echo get_bloginfo('wpurl'); ?>/wp-admin/admin-ajax.php?action=ajax-tag-search&tax=post_tag",
-	        	{
-	        		multiple:true, 
-	        		multipleSep: ","
-	        	}
-	        );
-	    }
-	    $(document).ready(function() {
-	    	setSuggest();
-	    });
-	    $(document).on('widget-updated widget-added', function() {
+		<script>
+		function setSuggest() {
+			jQuery('.mp-spills-terms').suggest(
+				"<?php echo get_bloginfo('wpurl'); ?>/wp-admin/admin-ajax.php?action=ajax-tag-search&tax=post_tag",
+				{
+					multiple:true, 
+					multipleSep: ","
+				}
+			);
+		}
+		$(document).ready(function() {
+			setSuggest();
+		});
+		$(document).on('widget-updated widget-added', function() {
 		   setSuggest(); 
-	    });
-	    </script>
+		});
+		</script>
 	<?php
 	}
 
@@ -100,8 +100,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 		echo $after_widget;
 
 	}
- 
-  
+
 	/**
 	* Sanitize widget form values as they are saved.
 	*
@@ -136,7 +135,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 		return $instance;
 
 	}
-  
+
 	/**
 	* Back-end widget form.
 	*
@@ -171,32 +170,32 @@ class MinnpostSpills_Widget extends WP_Widget {
 		}
 
 		// Instantiate the walker passing name and id as arguments to constructor
-        $category_walker = new Walker_Category_Checklist_Widget(
-            $this->get_field_name( 'widget_categories' ), 
-            $this->get_field_id( 'widget_categories' )
-        );
+		$category_walker = new Walker_Category_Checklist_Widget(
+			$this->get_field_name( 'widget_categories' ),
+			$this->get_field_id( 'widget_categories' )
+		);
 
 		?>
 		<div>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label> 
-			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e('Title:'); ?></label> 
+			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
 		</div>
 		<div>
-			<label for="<?php echo $this->get_field_id('widget_categories'); ?>"><?php _e('Categories:'); ?></label> 
+			<label for="<?php echo $this->get_field_id( 'widget_categories' ); ?>"><?php _e( 'Categories:' ); ?></label> 
 			<?php $checked_ontop = true; ?>
 			<ul class="categorychecklist" style="height: 200px; overflow: auto; border: 1px solid #ddd; background: #fdfdfd; padding: 0 0.9em;">
 				<?php wp_category_checklist( 0, 0, $categories, false, $category_walker, $checked_ontop ); ?>
 			</ul>
 		</div>
 		<div>
-			<label for="<?php echo $this->get_field_id('widget_terms'); ?>"><?php _e('Terms:'); ?></label> 
-			<input class="mp-spills-terms widefat" id="<?php echo $this->get_field_id('widget_terms'); ?>" name="<?php echo $this->get_field_name('widget_terms'); ?>" type="text" value="<?php echo is_array( $terms ) ? implode( ',', $terms ) : $terms; ?>" />
+			<label for="<?php echo $this->get_field_id( 'widget_terms' ); ?>"><?php _e( 'Terms:' ); ?></label> 
+			<input class="mp-spills-terms widefat" id="<?php echo $this->get_field_id( 'widget_terms' ); ?>" name="<?php echo $this->get_field_name( 'widget_terms' ); ?>" type="text" value="<?php echo is_array( $terms ) ? implode( ',', $terms ) : $terms; ?>" />
 		</div>
 		<div>
-			<label for="<?php echo $this->get_field_id('output_function'); ?>"><?php _e('Custom Output Function:'); ?></label> 
-			<input class="widefat" id="<?php echo $this->get_field_id('output_function'); ?>" name="<?php echo $this->get_field_name('output_function'); ?>" type="text" value="<?php echo $output_function; ?>" />
+			<label for="<?php echo $this->get_field_id( 'output_function' ); ?>"><?php _e( 'Custom Output Function:' ); ?></label> 
+			<input class="widefat" id="<?php echo $this->get_field_id( 'output_function' ); ?>" name="<?php echo $this->get_field_name( 'output_function' ); ?>" type="text" value="<?php echo $output_function; ?>" />
 		</div>
-		<?php 
+		<?php
 	}
 
 	/**
@@ -206,29 +205,29 @@ class MinnpostSpills_Widget extends WP_Widget {
 	* @return $this->salesforce
 	*
 	*/
-    private function get_spill_posts( $categories, $terms ) {
+	private function get_spill_posts( $categories, $terms ) {
 
-    	if ( !empty( $categories ) ) {
-    		$slugs = array();
-    		foreach ( $categories as $id ) {
-    			$category = get_term_by( 'id', $id, 'category' );
-    			$slugs[] = $category->slug;
-    		}
-    		$the_query = new WP_Query(
-    			array(
-    				'posts_per_page' => 4,
-    				'category_name' => $slugs ? implode( ',', $slugs ) : '',
-    				'orderby' => 'date'
-    			)
-    		);
-    	}
+		if ( ! empty( $categories ) ) {
+			$slugs = array();
+			foreach ( $categories as $id ) {
+				$category = get_term_by( 'id', $id, 'category' );
+				$slugs[] = $category->slug;
+			}
+			$the_query = new WP_Query(
+				array(
+					'posts_per_page' => 4,
+					'category_name' => $slugs ? implode( ',', $slugs ) : '',
+					'orderby' => 'date',
+				)
+			);
+		}
 
-    	if ( !empty( $terms ) ) {
+		if ( ! empty( $terms ) ) {
 			$the_query = new WP_Query(
 				array(
 					'posts_per_page' => 4,
 					'tag' => $terms,
-					'orderby' => 'date'
+					'orderby' => 'date',
 				)
 			);
 		}
@@ -240,7 +239,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 			<!-- the loop -->
 			<?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
 				<?php
-				$url_array = explode('/',get_permalink());
+				$url_array = explode( '/',get_permalink() );
 				$category = $url_array[3];
 				?>
 				<p class="spill-item-category"><?php echo get_category_by_slug( $category )->name; ?></p>
@@ -255,7 +254,6 @@ class MinnpostSpills_Widget extends WP_Widget {
 		<?php
 
 	}
-     
 }
 
 // This is required to be sure Walker_Category_Checklist class is available
@@ -265,30 +263,31 @@ require_once ABSPATH . 'wp-admin/includes/template.php';
  */
 class Walker_Category_Checklist_Widget extends Walker_Category_Checklist {
 
-    private $name;
-    private $id;
+	private $name;
+	private $id;
 
-    function __construct( $name = '', $id = '' ) {
-        $this->name = $name;
-        $this->id = $id;
-    }
+	function __construct( $name = '', $id = '' ) {
+		$this->name = $name;
+		$this->id = $id;
+	}
 
-    function start_el( &$output, $cat, $depth = 0, $args = array(), $id = 0 ) {
-        extract( $args );
-        if ( empty( $taxonomy ) ) $taxonomy = 'category';
-        $class = in_array( $cat->term_id, $popular_cats ) ? ' class="popular-category"' : '';
-        $id = $this->id . '-' . $cat->term_id;
-        $checked = checked( in_array( $cat->term_id, $selected_cats ), true, false );
-        $output .= "\n<li id='{$taxonomy}-{$cat->term_id}'$class>" 
-            . '<label class="selectit"><input value="' 
-            . $cat->term_id . '" type="checkbox" name="' . $this->name 
-            . '[]" id="in-'. $id . '"' . $checked 
-            . disabled( empty( $args['disabled'] ), false, false ) . ' /> ' 
-            . esc_html( apply_filters( 'the_category', $cat->name ) ) 
-            . '</label>';
-      }
+	function start_el( &$output, $cat, $depth = 0, $args = array(), $id = 0 ) {
+		extract( $args );
+		if ( empty( $taxonomy ) ) {
+			$taxonomy = 'category';
+		}
+		$class = in_array( $cat->term_id, $popular_cats ) ? ' class="popular-category"' : '';
+		$id = $this->id . '-' . $cat->term_id;
+		$checked = checked( in_array( $cat->term_id, $selected_cats ), true, false );
+		$output .= "\n<li id='{$taxonomy}-{$cat->term_id}'$class>"
+			. '<label class="selectit"><input value="'
+			. $cat->term_id . '" type="checkbox" name="' . $this->name
+			. '[]" id="in-' . $id . '"' . $checked
+			. disabled( empty( $args['disabled'] ), false, false ) . ' /> '
+			. esc_html( apply_filters( 'the_category', $cat->name ) )
+			. '</label>';
+	}
 }
- 
 /* Register the widget */
 add_action( 'widgets_init', function() {
 	register_widget( 'MinnpostSpills_Widget' );
