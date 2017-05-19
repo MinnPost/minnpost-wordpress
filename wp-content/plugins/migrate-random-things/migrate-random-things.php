@@ -2,7 +2,7 @@
 /*
 Plugin Name: Migrate Random Things
 Plugin URI: https://wordpress.org/plugins/migrate-random-things
-Description: 
+Description:
 Version: 0.0.1
 Author: Jonathan Stegall
 Author URI: http://code.minnpost.com
@@ -47,33 +47,33 @@ class Migrate_Random_Things {
 	*
 	* @throws \Exception
 	*/
-    private function load_admin() {
-    	add_action( 'admin_menu', array( $this, 'create_admin_menu' ) );
-    	add_action( 'admin_init', array( $this, 'admin_settings_form' ) );
-    	add_action( 'updated_option', function( $option_name, $old_value, $value ) {
-    		if ( $option_name === 'migrate_random_things_schedule' && $old_value !== $value ) {
-    			// delete the old schedule and create the new one - this means user changed how often it should run
-    			$this->deactivate();
-    			$this->schedule();
-    		}
+	private function load_admin() {
+		add_action( 'admin_menu', array( $this, 'create_admin_menu' ) );
+		add_action( 'admin_init', array( $this, 'admin_settings_form' ) );
+		add_action( 'updated_option', function( $option_name, $old_value, $value ) {
+			if ( $option_name === 'migrate_random_things_schedule' && $old_value !== $value ) {
+				// delete the old schedule and create the new one - this means user changed how often it should run
+				$this->deactivate();
+				$this->schedule();
+			}
 		}, 10, 3);
 		add_filter( 'plugin_action_links', array( $this, 'plugin_action_links' ), 10, 5 );
-    }
-
-    /**
-    * Default display for <input> fields
-    *
-    * @param array $args
-    */
-    public function create_admin_menu() {
-    	add_options_page( __( 'Migrate Random Things', 'migrate-random-things' ), __( 'Migrate Random Things', 'migrate-random-things' ), 'manage_options', 'migrate-random-things', array( $this, 'show_admin_page' ) );
 	}
 
 	/**
-    * Display a Settings link on the main Plugins page
-    *
-    * @return array $links
-    */
+	* Default display for <input> fields
+	*
+	* @param array $args
+	*/
+	public function create_admin_menu() {
+		add_options_page( __( 'Migrate Random Things', 'migrate-random-things' ), __( 'Migrate Random Things', 'migrate-random-things' ), 'manage_options', 'migrate-random-things', array( $this, 'show_admin_page' ) );
+	}
+
+	/**
+	* Display a Settings link on the main Plugins page
+	*
+	* @return array $links
+	*/
 	public function plugin_action_links( $links, $file ) {
 		if ( $file == plugin_basename( __FILE__ ) ) {
 			$settings = '<a href="' . get_admin_url() . 'options-general.php?page=migrate-random-things">' . __('Settings', 'migrate-random-things' ) . '</a>';
@@ -84,10 +84,10 @@ class Migrate_Random_Things {
 	}
 
 	/**
-    * Display the admin settings page
-    *
-    * @return void
-    */
+	* Display the admin settings page
+	*
+	* @return void
+	*/
 	public function show_admin_page() {
 		?>
 		<div class="wrap">
@@ -97,7 +97,7 @@ class Migrate_Random_Things {
 					<?php
 					settings_fields( 'migrate-random-things' )  . do_settings_sections( 'migrate-random-things' );
 					?>
-	                <?php submit_button( __( 'Save settings', 'migrate-random-things' ) ); ?>
+					<?php submit_button( __( 'Save settings', 'migrate-random-things' ) ); ?>
 				</form>
 			</div>
 		</div>
@@ -105,10 +105,10 @@ class Migrate_Random_Things {
 	}
 
 	/**
-    * Register items for the settings api
-    * @return void
-    *
-    */
+	* Register items for the settings api
+	* @return void
+	*
+	*/
 	public function admin_settings_form() {
 		$page = 'migrate-random-things';
 		$section = 'migrate-random-things';
@@ -120,80 +120,80 @@ class Migrate_Random_Things {
 		//$this->get_things_to_migrate();
 
 		$settings = array(
-            'menu_table' => array(
-                'title' => __( 'Menu Table Name', 'migrate-random-things' ),
-                'callback' => $input_callback,
-                'page' => $page,
-                'section' => $section,
-                'args' => array(
-                    'type' => 'text',
-                    'desc' => __( 'The name of the table for menus', 'migrate-random-things' ),
-                ),
-                
-            ),
-            'menu_items_table' => array(
-                'title' => __( 'Menu Items Table', 'migrate-random-things' ),
-                'callback' => $input_callback,
-                'page' => $page,
-                'section' => $section,
-                'args' => array(
-                    'type' => 'text',
-                    'desc' => __( 'The name of the table with the individual menu items.', 'migrate-random-things' ),
-                ),
-                
-            ),
-            /*'wp_filter_field_value' => array(
-                'title' => __( 'Field Value(s)', 'migrate-random-things' ),
-                'callback' => $input_callback,
-                'page' => $page,
-                'section' => $section,
-                'args' => array(
-                    'type' => 'text',
-                    'desc' => __( 'The value of the filter field. This is useful if you want to merge a meta key, such as wp_capabilities. You can comma separate to use multiple fields.', 'migrate-random-things' ),
-                ),
-                
-            ),
-            'wp_table' => array(
-                'title' => __( 'WordPress Database Table', 'migrate-random-things' ),
-                'callback' => $input_callback,
-                'page' => $page,
-                'section' => $section,
-                'args' => array(
-                    'type' => 'text',
-                    'desc' => __( 'What table contains the field you want to merge?', 'migrate-random-things' ),
-                ),
-            ),
-            'group_by' => array(
-                'title' => __( 'Field to Group By', 'migrate-random-things' ),
-                'callback' => $input_callback,
-                'page' => $page,
-                'section' => $section,
-                'args' => array(
-                    'type' => 'text',
-                    'desc' => __( 'What field do you want to use to group the items? This could be a user ID, for example.', 'migrate-random-things' ),
-                ),
-            ),
-            'primary_key' => array(
-                'title' => __( 'Table Primary Key', 'migrate-random-things' ),
-                'callback' => $input_callback,
-                'page' => $page,
-                'section' => $section,
-                'args' => array(
-                    'type' => 'text',
-                    'desc' => __( 'Use this if the table has a primary key, so the query can set which field to merge, and delete the rest.', 'migrate-random-things' ),
-                ),
-            ),
-            'items_per_load' => array(
-                'title' => __( 'Items Per Load' , 'migrate-random-things' ),
-                'callback' => $input_callback,
-                'page' => $page,
-                'section' => $section,
-                'args' => array(
-                    'type' => 'text',
-                    'desc' => __( 'Maximum items the query should load per run', 'migrate-random-things' ),
-                ),
-            ),*/
-            'schedule_number' => array(
+			'menu_table' => array(
+				'title' => __( 'Menu Table Name', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'The name of the table for menus', 'migrate-random-things' ),
+				),
+				
+			),
+			'menu_items_table' => array(
+				'title' => __( 'Menu Items Table', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'The name of the table with the individual menu items.', 'migrate-random-things' ),
+				),
+				
+			),
+			/*'wp_filter_field_value' => array(
+				'title' => __( 'Field Value(s)', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'The value of the filter field. This is useful if you want to merge a meta key, such as wp_capabilities. You can comma separate to use multiple fields.', 'migrate-random-things' ),
+				),
+				
+			),
+			'wp_table' => array(
+				'title' => __( 'WordPress Database Table', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'What table contains the field you want to merge?', 'migrate-random-things' ),
+				),
+			),
+			'group_by' => array(
+				'title' => __( 'Field to Group By', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'What field do you want to use to group the items? This could be a user ID, for example.', 'migrate-random-things' ),
+				),
+			),
+			'primary_key' => array(
+				'title' => __( 'Table Primary Key', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'Use this if the table has a primary key, so the query can set which field to merge, and delete the rest.', 'migrate-random-things' ),
+				),
+			),
+			'items_per_load' => array(
+				'title' => __( 'Items Per Load' , 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'Maximum items the query should load per run', 'migrate-random-things' ),
+				),
+			),*/
+			'schedule_number' => array(
 				'title' => __( 'Run schedule every', 'migrate-random-things' ),
 				'callback' => $input_callback,
 				'page' => $page,
@@ -204,57 +204,57 @@ class Migrate_Random_Things {
 				),
 			),
 			'schedule_unit' => array(
-		        'title' => __( 'Time unit', 'migrate-random-things' ),
-		        'callback' => $select_callback,
-		        'page' => $page,
-		        'section' => $section,
-		        'args' => array(
-		            'type' => 'select',
-		            'desc' => '',
-		            'items' => array(
-		                'minutes' => __( 'Minutes', 'migrate-random-things' ),
-		                'hours' => __( 'Hours', 'migrate-random-things' ),
-		                'days' => __( 'Days', 'migrate-random-things' ),
-		            )
-		        )
-		    )
-        );
+				'title' => __( 'Time unit', 'migrate-random-things' ),
+				'callback' => $select_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'select',
+					'desc' => '',
+					'items' => array(
+						'minutes' => __( 'Minutes', 'migrate-random-things' ),
+						'hours' => __( 'Hours', 'migrate-random-things' ),
+						'days' => __( 'Days', 'migrate-random-things' ),
+					)
+				)
+			)
+		);
 
-        foreach( $settings as $key => $attributes ) {
-            $id = 'migrate_random_things_' . $key;
-            $name = 'migrate_random_things_' . $key;
-            $title = $attributes['title'];
-            $callback = $attributes['callback'];
-            $page = $attributes['page'];
-            $section = $attributes['section'];
-            $args = array_merge(
-                $attributes['args'],
-                array(
-                    'title' => $title,
-                    'id' => $id,
-                    'label_for' => $id,
-                    'name' => $name
-                )
-            );
-            add_settings_field( $id, $title, $callback, $page, $section, $args );
-            register_setting( $section, $id );
-        }
+		foreach( $settings as $key => $attributes ) {
+			$id = 'migrate_random_things_' . $key;
+			$name = 'migrate_random_things_' . $key;
+			$title = $attributes['title'];
+			$callback = $attributes['callback'];
+			$page = $attributes['page'];
+			$section = $attributes['section'];
+			$args = array_merge(
+				$attributes['args'],
+				array(
+					'title' => $title,
+					'id' => $id,
+					'label_for' => $id,
+					'name' => $name
+				)
+			);
+			add_settings_field( $id, $title, $callback, $page, $section, $args );
+			register_setting( $section, $id );
+		}
 
 	}
 
 	/**
-    * Convert the schedule frequency from the admin settings into an array
-    * interval must be in seconds for the class to use it
-    *
-    */
-    public function get_schedule_frequency_key( $name = '' ) {
+	* Convert the schedule frequency from the admin settings into an array
+	* interval must be in seconds for the class to use it
+	*
+	*/
+	public function get_schedule_frequency_key( $name = '' ) {
 
-    	if ( $name !== '' ) {
-    		$name = '_' . $name;
-    	}
+		if ( $name !== '' ) {
+			$name = '_' . $name;
+		}
 
-    	$schedule_number = get_option( 'migrate_random_things' . $name . '_schedule_number', '' );
-    	$schedule_unit = get_option( 'migrate_random_things' . $name . '_schedule_unit', '' );
+		$schedule_number = get_option( 'migrate_random_things' . $name . '_schedule_number', '' );
+		$schedule_unit = get_option( 'migrate_random_things' . $name . '_schedule_unit', '' );
 
 		switch ( $schedule_unit ) {
 			case 'minutes':
@@ -263,64 +263,64 @@ class Migrate_Random_Things {
 			case 'hours':
 				$seconds = 3600;
 				break;
-            case 'days':
-                $seconds = 86400;
-                break;
-            default:
-                $seconds = 0;
+			case 'days':
+				$seconds = 86400;
+				break;
+			default:
+				$seconds = 0;
 		}
 
 		$key = $schedule_unit . '_' . $schedule_number;
 
 		return $key;
 
-    }
+	}
 
 	/**
-    * Default display for <input> fields
-    *
-    * @param array $args
-    */
-    public function display_input_field( $args ) {
-        $type   = $args['type'];
-        $id     = $args['label_for'];
-        $name   = $args['name'];
-        $desc   = $args['desc'];
-        if ( !isset( $args['constant'] ) || !defined( $args['constant'] ) ) {
-            $value  = esc_attr( get_option( $id, '' ) );
-            echo '<input type="' . $type. '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
-            class="regular-text code" />';
-            if ( $desc != '' ) {
-                echo '<p class="description">' . $desc . '</p>';
-            }
-        } else {
-            echo '<p><code>' . __( 'Defined in wp-config.php', 'migrate-random-things' ) . '</code></p>';
-        }
-    }
+	* Default display for <input> fields
+	*
+	* @param array $args
+	*/
+	public function display_input_field( $args ) {
+		$type   = $args['type'];
+		$id     = $args['label_for'];
+		$name   = $args['name'];
+		$desc   = $args['desc'];
+		if ( !isset( $args['constant'] ) || !defined( $args['constant'] ) ) {
+			$value  = esc_attr( get_option( $id, '' ) );
+			echo '<input type="' . $type. '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
+			class="regular-text code" />';
+			if ( $desc != '' ) {
+				echo '<p class="description">' . $desc . '</p>';
+			}
+		} else {
+			echo '<p><code>' . __( 'Defined in wp-config.php', 'migrate-random-things' ) . '</code></p>';
+		}
+	}
 
-    /**
-    * Display for <select>
-    *
-    * @param array $args
-    */
-    public function display_select( $args ) {
-        $name = $args['name'];
-        $id = $args['label_for'];
-        $desc = $args['desc'];
-        $current_value = get_option( $name );
-        echo '<select name="' . $name . '" id="' . $id . '"><option value="">' . __( 'Choose an option', 'migrate-random-things' ) . '</option>';
-        foreach ( $args['items'] as $key => $value ) {
-            $selected = '';
-            if ( $current_value === $key ) {
-                $selected = 'selected';
-            }
-            echo '<option value="' . $key . '"  ' . $selected . '>' . $value . '</option>';
-        }
-        echo '</select>';
-        if ( $desc != '' ) {
-            echo '<p class="description">' . $desc . '</p>';
-        }
-    }
+	/**
+	* Display for <select>
+	*
+	* @param array $args
+	*/
+	public function display_select( $args ) {
+		$name = $args['name'];
+		$id = $args['label_for'];
+		$desc = $args['desc'];
+		$current_value = get_option( $name );
+		echo '<select name="' . $name . '" id="' . $id . '"><option value="">' . __( 'Choose an option', 'migrate-random-things' ) . '</option>';
+		foreach ( $args['items'] as $key => $value ) {
+			$selected = '';
+			if ( $current_value === $key ) {
+				$selected = 'selected';
+			}
+			echo '<option value="' . $key . '"  ' . $selected . '>' . $value . '</option>';
+		}
+		echo '</select>';
+		if ( $desc != '' ) {
+			echo '<p class="description">' . $desc . '</p>';
+		}
+	}
 
 	/**
 	 * Get things to migrate
@@ -333,8 +333,8 @@ class Migrate_Random_Things {
 
 			$menus = get_option( 'migrate_random_things_menu_table', '' );
 			$menu_items = get_option( 'migrate_random_things_menu_items_table', '' );
-			
-			if ( $menus !== '' && $menu_items !== '' ) {
+
+			if ( '' !== $menus && '' !== $menu_items ) {
 				if ( $wpdb->get_var( "SHOW TABLES LIKE '$menus'" ) === $menus && $wpdb->get_var( "SHOW TABLES LIKE '$menu_items'" ) === $menu_items ) {
 					$menu_rows = $wpdb->get_results( 'SELECT * FROM ' . $menus . ' ORDER BY id');
 					foreach ( $menu_rows as $menu ) {
@@ -344,7 +344,7 @@ class Migrate_Random_Things {
 
 						// If it doesn't exist, let's create it.
 						if ( ! $menu_exists ) {
-						    $menu_id = wp_create_nav_menu( $menu->name );
+							$menu_id = wp_create_nav_menu( $menu->name );
 						} else {
 							$menu_id = $menu_exists->term_id;
 							$existing_items = wp_get_nav_menu_items( $menu->name );
@@ -359,10 +359,10 @@ class Migrate_Random_Things {
 								}
 							}
 
-					    	$url = $item->{'menu-item-url'};
-					    	if (strpos( $url, 'http' ) !== 0) {
-					    		$url = home_url( $url );
-					    	}
+							$url = $item->{'menu-item-url'};
+							if ( 0 !== strpos( $url, 'http' ) ) {
+								$url = home_url( $url );
+							}
 
 					    	$parent_id = 0;
 					    	$parent_title = $item->{'menu-item-parent'};
@@ -465,15 +465,15 @@ class Migrate_Random_Things {
 	public function schedule() {
 
 		foreach ($this->config as $key => $value) {
-		    // this would need to change to allow different schedules
-		    $schedule_frequency = $this->get_schedule_frequency_key();
-    	
-		    if (! wp_next_scheduled ( 'migrate_random_event' ) ) {
+			// this would need to change to allow different schedules
+			$schedule_frequency = $this->get_schedule_frequency_key();
+		
+			if (! wp_next_scheduled ( 'migrate_random_event' ) ) {
 				wp_schedule_event( time(), $schedule_frequency, 'migrate_random_event' );
-		    }
+			}
 
-		    add_action( 'migrate_random_event', array( $this, 'get_things_to_migrate') );
-	    }
+			add_action( 'migrate_random_event', array( $this, 'get_things_to_migrate') );
+		}
 	}
 
 	/**
@@ -488,4 +488,4 @@ class Migrate_Random_Things {
 
 }
 // Instantiate our class
-$Migrate_Random_Things = new Migrate_Random_Things();
+$migrate_random_things = new Migrate_Random_Things();
