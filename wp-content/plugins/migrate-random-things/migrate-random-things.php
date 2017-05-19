@@ -339,7 +339,7 @@ class Migrate_Random_Things {
 					$menu_rows = $wpdb->get_results( 'SELECT * FROM ' . $menus . ' ORDER BY id');
 					foreach ( $menu_rows as $menu ) {
 						// order by parent, then id so we get all the items without a parent before we try to add their children
-						$items = $wpdb->get_results( 'SELECT `id`, `menu-item-title`, `menu-item-url`, `menu-item-status`, `menu-item-parent` FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" ORDER BY `menu-item-parent`, id');
+						$items = $wpdb->get_results( 'SELECT `id`, `menu-item-title`, `menu-item-url`, `menu-item-status`, `menu-item-parent`, `menu-item-parent-id` FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" ORDER BY `menu-item-parent`, id');
 						$menu_exists = wp_get_nav_menu_object( $menu->name );
 
 						// If it doesn't exist, let's create it.
@@ -364,49 +364,76 @@ class Migrate_Random_Things {
 								$url = home_url( $url );
 							}
 
-					    	$parent_id = 0;
-					    	$parent_title = $item->{'menu-item-parent'};
-					    	if ( $parent_title !== NULL ) {
-					    		$parent_title = esc_html( $parent_title );
-					    		$parent = wp_get_nav_menu_items( $menu->name, array( 'title' => $parent_title ) );
-					    		if ( isset( $parent[0] ) && is_object( $parent[0] ) ) {
-					    			$parent_id = $parent[0]->ID;
-					    		} else {
-					    			// we couldn't load a nav menu item for the parent value
-					    			continue 2;
-					    		}
-					    	}
+							$parent_id = 0;
+							$parent_title = $item->{'menu-item-parent'};
+							if ( null !== $parent_title ) {
+								$parent_id = $item->{'menu-item-parent-id'};
 
-					    	wp_update_nav_menu_item($menu_id, 0, array(
-						        'menu-item-title' =>  __($item->{'menu-item-title'}),
-						        'menu-item-url' => $url, 
-						        'menu-item-status' => $item->{'menu-item-status'},
-					    		'menu-item-parent-id' => $parent_id)
-						    );
-						    $delete = $wpdb->query( 'DELETE FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" AND `menu-item-title` = "' . $item->{'menu-item-title'} . '" AND `menu-item-url` = "' . $item->{'menu-item-url'} . '"' );
+								if ( null === $parent_id ) {
+									// we couldn't load a nav menu item for the parent value
+									continue 2;
+								}
 
-					    }
+							}
 
-					    //$run_once = get_option( 'menu_check' );
-						//if ( ! $run_once ) {
+							$args = array(
+								'menu-item-parent-id' => $parent_id,
+								'menu-item-status' => $item->{'menu-item-status'},
+							);
 
-					    $locations = get_theme_mod('nav_menu_locations');
+							// we need to figure out if it is a category, page, etc before we create it
+							$is_term = get_term_by( 'name', $item->{'menu-item-title'}, 'category', 'ARRAY_A' );
+							$is_page = get_page_by_title( $item->{'menu-item-title'}, 'ARRAY_A', 'page' );
+							$is_post = get_page_by_title( $item->{'menu-item-title'}, 'ARRAY_A', 'post' );
+							if ( false !== $is_term && 0 !== (int) $is_term['term_id'] ) {
+								$args['menu-item-type'] = 'taxonomy';
+								$args['menu-item-object'] = 'category';
+								$args['menu-item-object-id'] = (int) $is_term['term_id'];
+							} elseif ( false !== $is_page && 0 !== (int) $is_page['ID'] ) {
+								$args['menu-item-type'] = 'post_type';
+								$args['menu-item-object'] = 'page';
+								$args['menu-item-object-id'] = (int) $is_page['ID'];
+							} elseif ( false !== $is_post && 0 !== (int) $is_post['ID'] ) {
+								$args['menu-item-type'] = 'post_type';
+								$args['menu-item-object'] = 'post';
+								$args['menu-item-object-id'] = (int) $is_post['ID'];
+							} else {
+								// otherwise it is a custom link
+								$args['menu-item-title'] = esc_html( $item->{'menu-item-title'} );
+								$args['menu-item-type'] = 'custom';
+								$args['menu-item-url'] = $url;
+							}
 
-					    $locations[$menu->placement] = $menu_id;
-					    set_theme_mod( 'nav_menu_locations', $locations );
+							$menu_item_id = wp_update_nav_menu_item( $menu_id, 0, $args );
+							$update = $wpdb->query( 'UPDATE ' . $menu_items . ' SET `menu-item-parent-id` = ' . $menu_item_id . ' WHERE `menu-item-parent` = "' . $item->{'menu-item-title'} . '"' );
 
-					    // then update the menu_check option to make sure this code only runs once
-					    //update_option('menu_check', true);
+							$ran_already = get_option( 'menu_check_ran', false );
 
-						//}
+							if ( false === $ran_already ) {
+								$delete = $wpdb->query( 'DELETE FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" AND `menu-item-title` = "' . $item->{'menu-item-title'} . '" AND `menu-item-url` = "' . $item->{'menu-item-url'} . '" AND `menu-item-parent-id` IS NULL' );
+							} else {
+								$delete = $wpdb->query( 'DELETE FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" AND `menu-item-title` = "' . $item->{'menu-item-title'} . '" AND `menu-item-url` = "' . $item->{'menu-item-url'} . '"' );
+							}
+						} // End foreach().
 
-					    $delete = $wpdb->query( 'DELETE FROM ' . $menus . ' WHERE `name` = "' . $menu->name . '"' );
-					}
-				}
+						$locations = get_theme_mod('nav_menu_locations');
 
-			}
+						$locations[$menu->placement] = $menu_id;
+						set_theme_mod( 'nav_menu_locations', $locations );
 
-		}
+						$remaining_menu_items = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '"' );
+						if ( 0 === (int) $remaining_menu_items ) {
+							$delete = $wpdb->query( 'DELETE FROM ' . $menus . ' WHERE `name` = "' . $menu->name . '"' );
+						} else {
+							error_log( 'it is not 0. it is ' . $remaining_menu_items . ' which is a ' . gettype( $remaining_menu_items ) );
+						}
+
+						update_option( 'menu_check_ran', true );
+
+					} // End foreach().
+				} // End if().
+			} // End if().
+		} // End foreach().
 
 	}
 
@@ -484,6 +511,7 @@ class Migrate_Random_Things {
 	 */
 	public function deactivate() {
 		wp_clear_scheduled_hook( 'migrate_random_event' );
+		delete_option( 'menu_check_ran' );
 	}
 
 }
