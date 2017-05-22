@@ -620,7 +620,7 @@ class Deserialize_Metadata {
 						// check to see if it has a value
 						$pre_existing_value = get_post_meta( $post_id, $maps[ $key ]['wp_column'], true );
 						if ( ! empty( $pre_existing_value ) ) {
-							error_log( 'meta field already exists on this post. the value is ' . $pre_existing_value );
+							error_log( 'meta field already exists on this post. the existing value is ' . $pre_existing_value . '. compare with new value of ' . $value );
 						} else {
 							add_post_meta( $post_id, $maps[ $key ]['wp_column'], $value, $maps[ $key ]['unique'] );
 						}
@@ -628,7 +628,7 @@ class Deserialize_Metadata {
 						$pre_existing_post = get_post( $post_id, 'ARRAY_A' );
 						$pre_existing_value = $pre_existing_post[ $maps[ $key ]['wp_column'] ];
 						if ( ! empty( $pre_existing_value ) ) {
-							error_log( 'the field already exists on this post. the value is ' . $pre_existing_value );
+							error_log( 'the field already exists on this post. the value is ' . $pre_existing_value . '. compare with new value of ' . $value );
 						} else {
 							$post = array(
 								'ID' => $post_id,
