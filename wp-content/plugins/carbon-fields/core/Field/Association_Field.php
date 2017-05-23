@@ -110,7 +110,9 @@ class Association_Field extends Relationship_Field {
 			$title = get_the_title( $id );
 		} elseif ( $type === 'term' ) {
 			$term = get_term_by( 'id', $id, $subtype );
-			$title = $term->name;
+			if ( $term ) {
+				$title = $term->name;
+			}
 		} elseif ( $type === 'user' ) {
 			$title = get_the_author_meta( 'user_login', $id );
 		} elseif ( $type === 'comment' ) {
@@ -354,6 +356,13 @@ class Association_Field extends Relationship_Field {
 			'allow_duplicates' => $this->allow_duplicates,
 		) );
 
+		$i = 0;
+		foreach ( $field_data['value'] as $key => $value ) {
+			$field_data['value'][$key]['fieldIndex'] = $i;
+			$i++;
+		}
+		$field_data['nextfieldIndex'] = $i;
+
 		return $field_data;
 	}
 
@@ -379,7 +388,7 @@ class Association_Field extends Relationship_Field {
 				<# } #>
 			</a>
 			<?php if ( $display_input ) :  ?>
-				<input type="hidden" name="{{{ name }}}[]" value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}" />
+				<input type="hidden" name="{{{ name }}}[{{{ item.fieldIndex }}}]" value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}" />
 			<?php endif; ?>
 		</li>
 		<?php

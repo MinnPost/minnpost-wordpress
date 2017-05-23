@@ -61,10 +61,10 @@ class Gravity_Form_Field extends Select_Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
-		$this->set_options( apply_filters( 'crb_gravity_form_options', $this->options ) );
+		$this->set_options( apply_filters( 'crb_gravity_form_options', $this->get_options() ) );
 
 		$field_data = array_merge( $field_data, array(
-			'options' => $this->parse_options( $this->options ),
+			'options' => $this->parse_options( $this->get_options() ),
 		) );
 
 		return $field_data;
@@ -81,11 +81,28 @@ class Gravity_Form_Field extends Select_Field {
 		}
 
 		// No forms have been found
-		if ( empty( $this->options ) ) {
+		$options = $this->get_options();
+		if ( empty( $options ) ) {
 			?><em><?php _e( 'No Gravity Forms have been found.', 'carbon-fields' ); ?></em><?php
 			return;
 		}
 
-		parent::template();
+		?>
+		<div class="carbon-field-group">
+			<select id="{{{ id }}}" name="{{{ name }}}" class="carbon-field-group-input">
+				<# _.each(options, function(option) { #>
+					<option value="{{ option.value }}" {{{ option.value == value ? 'selected="selected"' : '' }}}>
+						{{{ option.name }}}
+					</option>
+				<# }) #>
+			</select>
+
+			<# if (parseInt(value) !== 0) { #>
+				<div class="carbon-field-group-button">
+					<a class="carbon-gravity-form-edit button hide-if-no-js" href="admin.php?page=gf_edit_forms&amp;id={{{ value }}}" target="_blank"><?php _e( 'Edit form', 'carbon-fields' ); ?></a>
+				</div>
+			<# } #>
+		</div>
+		<?php
 	}
 }

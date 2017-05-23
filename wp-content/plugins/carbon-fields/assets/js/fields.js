@@ -373,6 +373,14 @@ window.carbon = window.carbon || {};
 				case '<=' : return value1 <= value2;
 				case 'IN' : return _.some(value2, function(value) { return value == value1; });
 				case 'NOT IN' : return _.every(value2, function(value) { return value != value1; });
+				case 'INCLUDES': return _.every([].concat(value2), function(value) {
+					var val = (value1 === null) ? '' : value1;
+					return val.indexOf(value) !== -1;
+				} );
+				case 'EXCLUDES': return _.every([].concat(value2), function(value) {
+					var val = (value1 === null) ? '' : value1;
+					return val.indexOf(value) === -1;
+				} );
 			}
 		}
 	});
@@ -929,7 +937,19 @@ window.carbon = window.carbon || {};
 	 *------------------------------------------------------------------------*/
 
 	// Gravity Form MODEL
-	carbon.fields.Model.GravityForm = carbon.fields.Model.Select.extend();
+	carbon.fields.Model.GravityForm = carbon.fields.Model.Select.extend({
+		initialize: function () {
+			carbon.fields.Model.Select.prototype.initialize.apply(this);
+		},
+	});
+
+	// Gravity Form VIEW
+	carbon.fields.View.GravityForm = carbon.fields.View.extend({
+		initialize: function() {
+			carbon.fields.View.prototype.initialize.apply(this);
+			this.listenTo(this.model, 'change:value', this.render);
+		}
+	});
 
 	/*--------------------------------------------------------------------------
 	 * SIDEBAR
@@ -954,7 +974,7 @@ window.carbon = window.carbon || {};
 				var sidebarId   = model.get('id');
 				var sidebar = {
 					name: sidebarName,
-					value: sidebarName
+					value: sidebarId
 				};
 
 				// If this sidebar is excluded ( by name or by ID), do not add it to the options.
@@ -1112,6 +1132,7 @@ window.carbon = window.carbon || {};
 			var windowLabel = this.model.get('window_label');
 			var typeFilter = this.model.get('type_filter');
 			var valueType = this.model.get('value_type');
+			var value = this.model.get('value');
 			var mediaTypes = {};
 
 			var getAttachmentThumb = function(attachment) {
@@ -1136,44 +1157,54 @@ window.carbon = window.carbon || {};
 			var mediaField = mediaTypes[type];
 
 			// Runs when an image is selected.
-			mediaField.on('select', function () {
-				// Grabs the attachment selection and creates a JSON representation of the model.
-				var mediaAttachments = mediaField.state().get('selection').toJSON();
+			mediaField
+				.on('select', function () {
+					// Grabs the attachment selection and creates a JSON representation of the model.
+					var mediaAttachments = mediaField.state().get('selection').toJSON();
 
-				// Get the first attachment and remove it from the array
-				var mediaAttachment = mediaAttachments.shift();
+					// Get the first attachment and remove it from the array
+					var mediaAttachment = mediaAttachments.shift();
 
-				// If multiple attachments, multiply the field
-				_.each(mediaAttachments, function(att) {
-					var thumbUrl = getAttachmentThumb(att);
-					if ( ! thumbUrl ) {
-						thumbUrl = _this.model.get('default_thumb_url')
-					}
-					_this.model.set('multiply', {
-						'value': att[valueType],
-						'file_type': att.type,
-						'file_name': att.filename,
-						'thumb_url': thumbUrl
+					// If multiple attachments, multiply the field
+					_.each(mediaAttachments, function(att) {
+						var thumbUrl = getAttachmentThumb(att);
+						if ( ! thumbUrl ) {
+							thumbUrl = _this.model.get('default_thumb_url')
+						}
+						_this.model.set('multiply', {
+							'value': att[valueType],
+							'file_type': att.type,
+							'file_name': att.filename,
+							'thumb_url': thumbUrl
+						});
 					});
+
+					var mediaValue = mediaAttachment[valueType];
+					var thumbUrl = getAttachmentThumb(mediaAttachment);
+					if ( ! thumbUrl ) {
+						thumbUrl = _this.model.get('default_thumb_url');
+					}
+
+					// Update the model
+					this.model.set('file_type', mediaAttachment.type);
+					this.model.set('file_name', mediaAttachment.filename);
+					this.model.set('value', mediaValue);
+					this.model.set('thumb_url', thumbUrl);
+
+					// Trigger an event that notifies that a media file is selected
+					this.trigger('media:updated', mediaAttachment);
+				}, this)
+				.on('open', function() {
+					if ( ! value ) {
+						return;
+					};
+
+					var attachment = wp.media.attachment(value);
+					var selection = mediaField.state().get('selection');
+
+					attachment.fetch();
+					selection.set( attachment ? [ attachment ] : [] );
 				});
-
-				var mediaValue = mediaAttachment[valueType];
-				var thumbUrl = getAttachmentThumb(mediaAttachment);
-				if ( ! thumbUrl ) {
-					thumbUrl = _this.model.get('default_thumb_url');
-				}
-
-				console.log(mediaAttachment);
-
-				// Update the model
-				this.model.set('file_type', mediaAttachment.type);
-				this.model.set('file_name', mediaAttachment.filename);
-				this.model.set('value', mediaValue);
-				this.model.set('thumb_url', thumbUrl);
-
-				// Trigger an event that notifies that a media file is selected
-				this.trigger('media:updated', mediaAttachment);
-			}, this);
 
 			// Opens the media library frame
 			mediaField.open();
@@ -1334,7 +1365,7 @@ window.carbon = window.carbon || {};
 
 			// Fetch the selected items and deactivate them
 			// in the left list (if duplicate items are not allowed)
-			this.$rightList.find('input[name="' + name + '[]"]').each(function() {
+			this.$rightList.find('input[name^="' + name + '["]').each(function() {
 				_this.selectedItems.push(this.value);
 				if (!allowDuplicates) {
 					_this.$leftList.find('a[data-value="' + this.value + '"]').parent().addClass(_this.disabledClass);
@@ -1422,6 +1453,7 @@ window.carbon = window.carbon || {};
 				name: this.model.get('name'),
 				item: this.buildItem(id, title, type, subtype, label)
 			});
+			this.model.set( 'nextfieldIndex', this.model.get('nextfieldIndex') + 1 );
 
 			this.$rightList.append(newLi);
 			this.selectedItems.push(value);
@@ -1520,7 +1552,8 @@ window.carbon = window.carbon || {};
 				title: title,
 				type: type,
 				subtype: subtype,
-				label: label
+				label: label,
+				fieldIndex: this.model.get('nextfieldIndex')
 			};
 		},
 
@@ -1599,6 +1632,13 @@ window.carbon = window.carbon || {};
 			event.preventDefault();
 		}
 	});
+
+	/*--------------------------------------------------------------------------
+	 * RADIO IMAGE
+	 *------------------------------------------------------------------------*/
+
+	// Radio Image MODEL
+	carbon.fields.Model.RadioImage = carbon.fields.Model.Select;
 
 	/*--------------------------------------------------------------------------
 	 * DATE_TIME
@@ -1682,9 +1722,9 @@ window.carbon = window.carbon || {};
 	// Complex VIEW
 	carbon.fields.View.Complex = carbon.fields.View.extend({
 		events: {
-			'click > .carbon-subcontainer > .carbon-actions a': 'buttonAction',
-			'click > .carbon-subcontainer > .groups-wrapper > .group-tabs-nav-holder > .carbon-actions a': 'buttonAction',
-			'click > .carbon-subcontainer > .carbon-empty-row a': 'buttonAction',
+			'click > .carbon-subcontainer > .carbon-actions a': 'addEntry',
+			'click > .carbon-subcontainer > .groups-wrapper > .group-tabs-nav-holder > .carbon-actions a': 'addEntry',
+			'click > .carbon-subcontainer > .carbon-empty-row a': 'addEntry',
 			'click > .carbon-subcontainer > .groups-wrapper > .group-tabs-nav-holder > .group-tabs-nav > li > a': 'showGroupTab'
 		},
 
@@ -1826,6 +1866,10 @@ window.carbon = window.carbon || {};
 			var groups = this.model.get('value');
 
 			_.each(groups, function(group) {
+				// Set the value defined by the user in PHP land
+				// This code will run only the first time that the groups are created
+				group.collapsed = _this.model.get('collapsed');
+
 				_this.groupsCollection.add(group, {
 					sort: false
 				});
@@ -1874,7 +1918,7 @@ window.carbon = window.carbon || {};
 			});
 		},
 
-		buttonAction: function(event) {
+		addEntry: function(event) {
 			var $element = $(event.target);
 			var groupName = $element.data('group');
 
@@ -1889,7 +1933,7 @@ window.carbon = window.carbon || {};
 
 				this.$groupsList.toggleClass('right-aligned', 0 > list_position);
 			} else {
-				this.$actions.find('a.button').trigger('click');
+				this.$actions.find('a.button').eq(0).trigger('click');
 			}
 
 			event.preventDefault();
@@ -2178,8 +2222,13 @@ window.carbon = window.carbon || {};
 		toggleCollapse: function(model) {
 			var collapsed = model.get('collapsed');
 
+			if (this.complexModel.isTabbed()) {
+				return;
+			}
+
 			this.$el.toggleClass('collapsed', collapsed);
 		},
+
 		toggleGroupError: function (model) {
 			var hasClass = this.model.get('error');
 
@@ -2389,6 +2438,9 @@ window.carbon = window.carbon || {};
 
 		afterRenderInit: function() {
 			var _this = this;
+
+			// Update collapse state/visibility
+			this.toggleCollapse(this.model);
 
 			// Trigger the add event on the collection, this should initialize the fields rendering
 			this.fieldsCollection.each(function(model) {

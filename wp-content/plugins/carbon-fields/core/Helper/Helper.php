@@ -5,7 +5,7 @@ namespace Carbon_Fields\Helper;
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Container\Container;
 use Carbon_Fields\Templater\Templater;
-use Carbon_Fields\Manager\Sidebar_Manager;
+use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -18,6 +18,9 @@ class Helper {
 	 * Hook the main Carbon Fields initialization functionality.
 	 */
 	public function __construct() {
+		# Initialize sidebar manager
+		Sidebar_Manager::instance();
+		
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_after_register_fields', array( $this, 'init_containers' ) );
 		add_action( 'admin_footer', array( $this, 'init_scripts' ), 0 );
@@ -28,9 +31,6 @@ class Helper {
 
 		# Initialize templater
 		new Templater();
-
-		# Initialize sidebar manager
-		Sidebar_Manager::instance();
 	}
 
 	/**
@@ -71,8 +71,8 @@ class Helper {
 	 * Initialize main scripts
 	 */
 	public function init_scripts() {
-		wp_enqueue_script( 'carbon-ext', \Carbon_Fields\URL . '/assets/js/ext.js', array( 'jquery' ) );
-		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable', 'carbon-ext' ) );
+		wp_enqueue_script( 'carbon-ext', \Carbon_Fields\URL . '/assets/js/ext.js', array( 'jquery' ), \Carbon_Fields\VERSION );
+		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable', 'carbon-ext' ), \Carbon_Fields\VERSION );
 	}
 
 	/**
@@ -224,10 +224,10 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 			case 'map':
 			case 'map_with_address':
 				$value = array(
-					'lat' => (float) self::get_field_value_by_store( $data_type, $name . '-lat', $id ),
-					'lng' => (float) self::get_field_value_by_store( $data_type, $name . '-lng', $id ),
-					'address' => self::get_field_value_by_store( $data_type, $name . '-address', $id ),
-					'zoom' => (int) self::get_field_value_by_store( $data_type, $name . '-zoom', $id ),
+					'lat' => (float) self::get_field_value_by_datastore( $data_type, $name . '-lat', $id ),
+					'lng' => (float) self::get_field_value_by_datastore( $data_type, $name . '-lng', $id ),
+					'address' => self::get_field_value_by_datastore( $data_type, $name . '-address', $id ),
+					'zoom' => (int) self::get_field_value_by_datastore( $data_type, $name . '-zoom', $id ),
 				);
 
 				if ( ! array_filter( $value ) ) {
@@ -236,12 +236,12 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 			break;
 
 			case 'association':
-				$raw_value = self::get_field_value_by_store( $data_type, $name, $id );
+				$raw_value = self::get_field_value_by_datastore( $data_type, $name, $id );
 				$value = self::parse_relationship_field( $raw_value, $type );
 			break;
 
 			default:
-				$value = self::get_field_value_by_store( $data_type, $name, $id );
+				$value = self::get_field_value_by_datastore( $data_type, $name, $id );
 
 				// backward compatibility for the old Relationship field
 				$value = self::maybe_old_relationship_field( $value );
@@ -252,18 +252,18 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 
 	/**
 	 * Retrieve a certain field value from the database.
-	 * Handles the logic for different data stores (containers).
+	 * Handles the logic for different datastores (containers).
 	 *
-	 * @param  string $store_type Data store type.
+	 * @param  string $datastore_type Datastore type.
 	 * @param  string $name       Custom field name.
 	 * @param  int    $id         ID (optional).
 	 * @return mixed              Meta value.
 	 */
-	public static function get_field_value_by_store( $store_type, $name, $id = null ) {
+	public static function get_field_value_by_datastore( $datastore_type, $name, $id = null ) {
 		$args = array( $id, $name, true );
 		$function = '';
 
-		switch ( $store_type ) {
+		switch ( $datastore_type ) {
 			case 'post_meta':
 				$function = 'get_post_meta';
 			break;

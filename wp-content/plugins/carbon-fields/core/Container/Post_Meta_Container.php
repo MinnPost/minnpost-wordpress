@@ -52,7 +52,7 @@ class Post_Meta_Container extends Container {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Post_Meta_Datastore() );
+			$this->set_datastore( new Post_Meta_Datastore(), $this->has_default_datastore() );
 		}
 	}
 
@@ -386,7 +386,7 @@ class Post_Meta_Container extends Container {
 	 **/
 	public function set_post_id( $post_id ) {
 		$this->post_id = $post_id;
-		$this->store->set_id( $post_id );
+		$this->get_datastore()->set_id( $post_id );
 	}
 
 	/**
@@ -456,6 +456,11 @@ class Post_Meta_Container extends Container {
 	 * @return object $this
 	 **/
 	public function show_on_template( $template_path ) {
+		// Backwards compatibility where only pages support templates
+		if ( version_compare( get_bloginfo( 'version' ), '4.7', '<' ) ) {
+			$this->show_on_post_type( 'page' );
+		}
+
 		if ( is_array( $template_path ) ) {
 			foreach ( $template_path as $path ) {
 				$this->show_on_template( $path );

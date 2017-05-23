@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Datastore\Datastore_Interface;
+use Carbon_Fields\Datastore\Datastore_Holder_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -10,7 +11,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Defines the key container methods and their default implementations.
  * Implements factory design pattern.
  **/
-class Field {
+class Field implements Datastore_Holder_Interface {
 	/**
 	 * Stores all the field Backbone templates
 	 *
@@ -90,7 +91,16 @@ class Field {
 	 * @see get_datastore()
 	 * @var Datastore_Interface
 	 */
-	protected $store;
+	protected $datastore;
+
+	/**
+	 * Flag whether the datastore is the default one or replaced with a custom one
+	 *
+	 * @see set_datastore()
+	 * @see get_datastore()
+	 * @var object
+	 */
+	protected $has_default_datastore = true;
 
 	/**
 	 * The type of the container this field is in
@@ -266,7 +276,7 @@ class Field {
 	 * Delegate load to the field DataStore instance
 	 **/
 	public function load() {
-		$this->store->load( $this );
+		$this->get_datastore()->load( $this );
 
 		if ( $this->get_value() === false ) {
 			$this->set_value( $this->default_value );
@@ -277,14 +287,14 @@ class Field {
 	 * Delegate save to the field DataStore instance
 	 **/
 	public function save() {
-		return $this->store->save( $this );
+		return $this->get_datastore()->save( $this );
 	}
 
 	/**
 	 * Delegate delete to the field DataStore instance
 	 **/
 	public function delete() {
-		return $this->store->delete( $this );
+		return $this->get_datastore()->delete( $this );
 	}
 
 	/**
@@ -305,23 +315,36 @@ class Field {
 	}
 
 	/**
+	 * Return whether the datastore instance is the default one or has been overriden
+	 *
+	 * @return Datastore_Interface $datastore
+	 **/
+	public function has_default_datastore() {
+		return $this->has_default_datastore;
+	}
+
+	/**
 	 * Assign DataStore instance for use during load, save and delete
 	 *
-	 * @param object $store
+	 * @param object $datastore
 	 * @return object $this
 	 **/
-	public function set_datastore( Datastore_Interface $store ) {
-		$this->store = $store;
+	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
+		if ( $set_as_default && !$this->has_default_datastore() ) {
+			return $this; // datastore has been overriden with a custom one - abort changing to a default one
+		}
+		$this->datastore = $datastore;
+		$this->has_default_datastore = $set_as_default;
 		return $this;
 	}
 
 	/**
 	 * Return the DataStore instance used by the field
 	 *
-	 * @return object $store
+	 * @return object $datastore
 	 **/
 	public function get_datastore() {
-		return $this->store;
+		return $this->datastore;
 	}
 
 	/**
@@ -592,7 +615,7 @@ class Field {
 	 * @param bool $required
 	 * @return object $this
 	 **/
-	public function set_required( $required ) {
+	public function set_required( $required = true ) {
 		$this->required = $required;
 		return $this;
 	}
@@ -751,7 +774,7 @@ class Field {
 			Incorrect_Syntax_Exception::raise( 'Conditional logic rules argument should be an array.' );
 		}
 
-		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN' );
+		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN', 'INCLUDES', 'EXCLUDES' );
 		$allowed_relations = array( 'AND', 'OR' );
 
 		$parsed_rules = array(
@@ -812,7 +835,7 @@ class Field {
 	 */
 	public static function admin_hook_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_script( 'carbon-fields', \Carbon_Fields\URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ) );
+		wp_enqueue_script( 'carbon-fields', \Carbon_Fields\URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ), \Carbon_Fields\VERSION );
 		wp_localize_script( 'carbon-fields', 'crbl10n',
 			array(
 				'title' => __( 'Files', 'carbon-fields' ),
@@ -821,15 +844,14 @@ class Field {
 				'max_num_items_reached' => __( 'Maximum number of items reached (%s items)', 'carbon-fields' ),
 				'max_num_rows_reached' => __( 'Maximum number of rows reached (%s rows)', 'carbon-fields' ),
 				'cannot_create_more_rows' => __( 'Cannot create more than %s rows', 'carbon-fields' ),
-				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
-				'remove_sidebar_confirmation' => __( 'Are you sure you wish to remove this sidebar?', 'carbon-fields' ),
-				'add_sidebar' => __( 'Add Sidebar', 'carbon-fields' ),
 				'complex_no_rows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
 				'complex_add_button' => __( 'Add %s', 'carbon-fields' ),
-				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%d %s)', 'carbon-fields' ),
+				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%1$d %2$s)', 'carbon-fields' ),
 				'message_form_validation_failed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
 				'message_required_field' => __( 'This field is required. ', 'carbon-fields' ),
 				'message_choose_option' => __( 'Please choose an option. ', 'carbon-fields' ),
+
+				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
 			)
 		);
 	}

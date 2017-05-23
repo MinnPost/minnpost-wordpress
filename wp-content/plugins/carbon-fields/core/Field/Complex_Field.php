@@ -26,6 +26,7 @@ class Complex_Field extends Field {
 	protected $layout = self::LAYOUT_GRID;
 	protected $values_min = -1;
 	protected $values_max = -1;
+	protected $collapsed = false;
 
 	public $labels = array(
 		'singular_name' => 'Entry',
@@ -80,7 +81,7 @@ class Complex_Field extends Field {
 			Incorrect_Syntax_Exception::raise( 'Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.' );
 		}
 
-		$group = new Group_Field($name, $label, $fields);
+		$group = new Group_Field( $name, $label, $fields );
 
 		$this->groups[ $group->get_name() ] = $group;
 
@@ -94,8 +95,8 @@ class Complex_Field extends Field {
 	 * @return $this
 	 */
 	public function set_header_template( $template ) {
-		if ( count($this->groups) === 0 ) {
-			Incorrect_Syntax_Exception::raise( "Can't set group label template. There are no present groups for Complex Field " . $this->get_label() . "." );
+		if ( count( $this->groups ) === 0 ) {
+			Incorrect_Syntax_Exception::raise( "Can't set group label template. There are no present groups for Complex Field " . $this->get_label() . '.' );
 		}
 
 		$template = is_callable( $template ) ? call_user_func( $template ) : $template;
@@ -146,14 +147,19 @@ class Complex_Field extends Field {
 	/**
 	 * Set the datastore of this field.
 	 *
-	 * @param Datastore_Interface $store
+	 * @param Datastore_Interface $datastore
 	 */
-	public function set_datastore( Datastore_Interface $store ) {
-		$this->store = $store;
+	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
+		if ( $set_as_default && !$this->has_default_datastore() ) {
+			return $this; // datastore has been overriden with a custom one - abort changing to a default one
+		}
+		$this->datastore = $datastore;
+		$this->has_default_datastore = $set_as_default;
 
 		foreach ( $this->groups as $group ) {
-			$group->set_datastore( $this->store );
+			$group->set_datastore( $this->get_datastore(), true );
 		}
+		return $this;
 	}
 
 	/**
@@ -175,13 +181,12 @@ class Complex_Field extends Field {
 		$input_groups = $input[ $this->get_name() ];
 		$index = 0;
 
-
 		foreach ( $input_groups as $values ) {
-			$value_group = array();
 			if ( ! isset( $values['group'] ) || ! isset( $this->groups[ $values['group'] ] ) ) {
 				continue;
 			}
 
+			$value_group = array( 'type' => $values['group'] );
 			$group = $this->groups[ $values['group'] ];
 			unset( $values['group'] );
 
@@ -234,6 +239,9 @@ class Complex_Field extends Field {
 
 		foreach ( $this->values as $value ) {
 			foreach ( $value as $field ) {
+				if ( !is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
+					continue;
+				}
 				$field->save();
 			}
 		}
@@ -243,23 +251,23 @@ class Complex_Field extends Field {
 	 * Delete the values of all contained fields.
 	 */
 	public function delete() {
-		return $this->store->delete_values( $this );
+		return $this->get_datastore()->delete_values( $this );
 	}
 
 	/**
 	 * Load and parse the field data.
 	 */
 	public function load_values() {
-		return $this->load_values_from_db();
+		return $this->load_values_from_datastore();
 	}
 
 	/**
 	 * Load and parse the field data from the database.
 	 */
-	public function load_values_from_db() {
+	public function load_values_from_datastore() {
 		$this->values = array();
 
-		$group_rows = $this->store->load_values( $this );
+		$group_rows = $this->get_datastore()->load_values( $this );
 
 		return $this->process_loaded_values( $group_rows );
 	}
@@ -283,7 +291,7 @@ class Complex_Field extends Field {
 			}
 
 			$group_rows[] = array(
-				'field_key' => preg_replace( '~^(' . preg_quote( $this->name, '~' ) . ')_\d+_~', '$1_', $key ),
+				'field_key' => preg_replace( '~^(' . preg_quote( $this->get_name(), '~' ) . ')_\d+_~', '$1_', $key ),
 				'field_value' => $value,
 			);
 		}
@@ -315,7 +323,7 @@ class Complex_Field extends Field {
 
 		// load and parse values and group type
 		foreach ( $group_rows as $row ) {
-			if ( ! preg_match( Helper::get_complex_field_regex( $this->name, array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
+			if ( ! preg_match( Helper::get_complex_field_regex( $this->get_name(), array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
 				continue;
 			}
 
@@ -419,6 +427,7 @@ class Complex_Field extends Field {
 			'multiple_groups' => count( $groups_data ) > 1,
 			'groups' => $groups_data,
 			'value' => $values_data,
+			'collapsed' => $this->collapsed,
 		) );
 
 		return $complex_data;
@@ -493,16 +502,16 @@ class Complex_Field extends Field {
 			</div>
 
 			<div class="carbon-group-actions carbon-group-actions-{{ layout }}">
-				<a class="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
-					<?php _e( 'Clone', 'carbon_fields' ); ?>
+				<a class="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="<?php esc_attr_e( 'Clone', 'carbon-fields' ); ?>">
+					<?php _e( 'Clone', 'carbon-fields' ); ?>
 				</a>
 
-				<a class="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
-					<?php _e( 'Remove', 'carbon_fields' ); ?>
+				<a class="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="<?php esc_attr_e( 'Remove', 'carbon-fields' ); ?>">
+					<?php _e( 'Remove', 'carbon-fields' ); ?>
 				</a>
 
-				<a class="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
-					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
+				<a class="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon-fields' ); ?>">
+					<?php _e( 'Collapse/Expand', 'carbon-fields' ); ?>
 				</a>
 			</div>
 
@@ -568,7 +577,7 @@ class Complex_Field extends Field {
 		if ( $layout === self::LAYOUT_TABBED ) {
 			// The library used to provide just one kind of tabs -- horizontal ones. Later vertical tabs were added.
 			// So the "tabbed" name was renamed to "tabbed-horizontal" and "tabbed-vertical" layout was introduced.
-			_doing_it_wrong( __METHOD__, sprintf( __( 'Complex field "%1$s" layout is deprecated, please use "%2$s" or "%3$s" instead.', 'carbon_fields' ), self::LAYOUT_TABBED, self::LAYOUT_TABBED_HORIZONTAL, self::LAYOUT_TABBED_VERTICAL ), null );
+			_doing_it_wrong( __METHOD__, sprintf( __( 'Complex field "%1$s" layout is deprecated, please use "%2$s" or "%3$s" instead.', 'carbon-fields' ), self::LAYOUT_TABBED, self::LAYOUT_TABBED_HORIZONTAL, self::LAYOUT_TABBED_VERTICAL ), null );
 
 			$layout = self::LAYOUT_TABBED_HORIZONTAL;
 		}
@@ -581,7 +590,7 @@ class Complex_Field extends Field {
 		}
 
 		if ( $layout === self::LAYOUT_LIST ) {
-			_doing_it_wrong( __METHOD__, __( 'Complex field <code>' . self::LAYOUT_LIST . '</code> layout is deprecated, please use <code>set_width()</code> instead.', 'carbon_fields' ), null );
+			_doing_it_wrong( __METHOD__, __( 'Complex field <code>' . self::LAYOUT_LIST . '</code> layout is deprecated, please use <code>set_width()</code> instead.', 'carbon-fields' ), null );
 		}
 
 		$this->layout = $layout;
@@ -625,6 +634,18 @@ class Complex_Field extends Field {
 	 */
 	public function get_max() {
 		return $this->values_max;
+	}
+
+	/**
+	 * Change the groups initial collapse state.
+	 * This state relates to the state of which the groups are rendered.
+	 *
+	 * @param bool $collapsed
+	 */
+	public function set_collapsed( $collapsed = true ) {
+		$this->collapsed = $collapsed;
+
+		return $this;
 	}
 
 	/**

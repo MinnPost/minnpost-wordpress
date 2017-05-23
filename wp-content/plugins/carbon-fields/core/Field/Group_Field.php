@@ -56,7 +56,7 @@ class Group_Field {
 	 * @param string $label
 	 * @param array  $fields
 	 */
-	public function __construct($name, $label, $fields) {
+	public function __construct( $name, $label, $fields ) {
 		$this->set_name( $name );
 		$this->set_label( $label );
 		$this->add_fields( $fields );
@@ -188,7 +188,7 @@ class Group_Field {
 	 *
 	 * @param string $template
 	 */
-	public function set_label_template($template) {
+	public function set_label_template( $template ) {
 		$this->label_template = $template;
 	}
 
@@ -236,13 +236,11 @@ class Group_Field {
 	/**
 	 * Assign a DataStore instance for all group fields.
 	 *
-	 * @param object $store
+	 * @param object $datastore
 	 */
-	public function set_datastore( Datastore_Interface $store ) {
+	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		foreach ( $this->fields as $field ) {
-			if ( ! $field->get_datastore() ) {
-				$field->set_datastore( $store );
-			}
+			$field->set_datastore( $datastore, $set_as_default );
 		}
 	}
 
