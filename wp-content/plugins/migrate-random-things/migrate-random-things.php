@@ -424,8 +424,6 @@ class Migrate_Random_Things {
 						$remaining_menu_items = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '"' );
 						if ( 0 === (int) $remaining_menu_items ) {
 							$delete = $wpdb->query( 'DELETE FROM ' . $menus . ' WHERE `name` = "' . $menu->name . '"' );
-						} else {
-							error_log( 'it is not 0. it is ' . $remaining_menu_items . ' which is a ' . gettype( $remaining_menu_items ) );
 						}
 
 						update_option( 'menu_check_ran', true );
