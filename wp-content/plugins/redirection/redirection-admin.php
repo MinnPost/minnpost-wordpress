@@ -41,6 +41,8 @@ class Redirection_Admin {
 		add_action( 'wp_ajax_red_get_nginx', array( &$this, 'ajax_get_nginx' ) );
 
 		$this->monitor = new Red_Monitor( red_get_options() );
+
+		$this->export_rss();
 	}
 
 	public static function plugin_activated() {
@@ -107,6 +109,11 @@ class Redirection_Admin {
 			include_once dirname( REDIRECTION_FILE ).'/models/database.php';
 
 			$database = new RE_Database();
+
+			if ( $version === false ) {
+				$database->install();
+			}
+
 			return $database->upgrade( $version, REDIRECTION_VERSION );
 		}
 
@@ -159,7 +166,21 @@ class Redirection_Admin {
 	}
 
 	function admin_menu() {
-		add_management_page( __( 'Redirection', 'redirection' ), __( 'Redirection', 'redirection' ), apply_filters( 'redirection_role', 'administrator' ), basename( REDIRECTION_FILE ), array( &$this, 'admin_screen' ) );
+		add_management_page( 'Redirection', 'Redirection', apply_filters( 'redirection_role', 'administrator' ), basename( REDIRECTION_FILE ), array( &$this, 'admin_screen' ) );
+	}
+
+	function export_rss() {
+		if ( isset( $_GET['token'] ) && isset( $_GET['page'] ) && isset( $_GET['sub'] ) && $_GET['page'] === 'redirection.php' && $_GET['sub'] === 'rss' ) {
+			$options = red_get_options();
+
+			if ( $_GET['token'] === $options['token'] && !empty( $options['token'] ) ) {
+				$items = Red_Item::get_all_for_module( intval( $_GET['module'] ) );
+
+				$exporter = Red_FileIO::create( 'rss' );
+				$exporter->export( $items );
+				die();
+			}
+		}
 	}
 
 	function admin_screen() {
@@ -194,15 +215,14 @@ class Redirection_Admin {
 	}
 
 	function inject() {
-		$options = red_get_options();
-
 		if ( isset( $_POST['id'] ) && ! isset( $_POST['action'] ) ) {
 			wp_safe_redirect( add_query_arg( 'id', intval( $_POST['id'] ), $_SERVER['REQUEST_URI'] ) );
 			die();
 		}
 
-		if ( isset( $_GET['token'] ) && isset( $_GET['page'] ) && isset( $_GET['sub'] ) && $_GET['token'] === $options['token'] && $_GET['page'] === 'redirection.php' ) {
+		if ( isset( $_GET['page'] ) && isset( $_GET['sub'] ) && $_GET['page'] === 'redirection.php' ) {
 			$exporter = Red_FileIO::create( $_GET['sub'] );
+
 			if ( $exporter ) {
 				$items = Red_Item::get_all_for_module( intval( $_GET['module'] ) );
 
@@ -333,7 +353,7 @@ class Redirection_Admin {
 			$start = strpos( $readme, 'Redirection is available in' );
 			$end   = strpos( $readme, '==', $start );
 			if ( $start !== false && $end !== false ) {
-				if ( preg_match_all( '/^\* (.*?) by (.*?)/m', substr( $readme, $start, $end ), $matches ) > 0 ) {
+				if ( preg_match_all( '/^\* (.*? by .*)/m', substr( $readme, $start, $end ), $matches ) > 0 ) {
 					$locales = $matches[1];
 				}
 			}

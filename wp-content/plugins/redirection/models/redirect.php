@@ -277,8 +277,9 @@ class Red_Item {
 			// Save this
 			$wpdb->update( $wpdb->prefix.'redirection_items', array( 'url' => $this->url, 'regex' => $this->regex, 'action_code' => $this->action_code, 'action_data' => $data, 'group_id' => $this->group_id, 'title' => $this->title ), array( 'id' => $this->id ) );
 
+			Red_Module::flush( $this->group_id );
+
 			if ( $old_group !== $this->group_id ) {
-				Red_Module::flush( $this->group_id );
 				Red_Module::flush( $old_group );
 			}
 		}
@@ -333,21 +334,41 @@ class Red_Item {
 
 	function visit( $url, $target ) {
 		if ( $this->tracking && $this->id ) {
-			global $wpdb, $redirection;
+			global $wpdb;
 
 			// Update the counters
 			$count = $this->last_count + 1;
 			$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}redirection_items SET last_count=%d, last_access=NOW() WHERE id=%d", $count, $this->id ) );
 
-			if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) )
-			  $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-			elseif ( isset( $_SERVER['REMOTE_ADDR'] ) )
-			  $ip = $_SERVER['REMOTE_ADDR'];
-
 			$options = red_get_options();
-			if ( isset( $options['expire_redirect'] ) && $options['expire_redirect'] >= 0 )
-				$log = RE_Log::create( $url, $target, $_SERVER['HTTP_USER_AGENT'], $ip, isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : '', array( 'redirect_id' => $this->id, 'group_id' => $this->group_id ) );
+			if ( isset( $options['expire_redirect'] ) && $options['expire_redirect'] >= 0 ) {
+				$log = RE_Log::create( $url, $target, $this->get_user_agent(), $this->get_ip(), $this->get_referrer(), array( 'redirect_id' => $this->id, 'group_id' => $this->group_id ) );
+			}
 		}
+	}
+
+	private function get_ip() {
+		if ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) )
+			return $_SERVER['HTTP_X_FORWARDED_FOR'];
+		elseif ( isset( $_SERVER['REMOTE_ADDR'] ) )
+			return $_SERVER['REMOTE_ADDR'];
+		return '';
+	}
+
+	private function get_referrer() {
+		if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
+			return $_SERVER['HTTP_REFERER'];
+		}
+
+		return '';
+	}
+
+	private function get_user_agent() {
+		if ( isset( $_SERVER['HTTP_USER_AGENT'] ) ) {
+			return $_SERVER['HTTP_USER_AGENT'];
+		}
+
+		return '';
 	}
 
 	public function is_enabled() {

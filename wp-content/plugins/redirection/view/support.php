@@ -1,13 +1,11 @@
 <?php if (!defined ('ABSPATH')) die ('No direct access allowed'); ?>
 <div class="wrap supporter">
-	<?php screen_icon(); ?>
-
 	<h2><?php _e ('Redirection Support', 'redirection'); ?></h2>
 	<?php $this->render( 'submenu', array( 'options' => $options ) ); ?>
 
 	<p style="clear: both; padding-top: 20px">
 		<?php _e( 'Redirection is free to use - life is wonderful and lovely!  However, it has required a great deal of time and effort to develop and if it has been useful you can help support this development by <strong>making a small donation</strong>.', 'redirection'); ?>
-		<?php _e( 'This will act as an incentive for me to carry on developing. You get some useful software and I get to carry on making it.  Everybody wins.', 'redirection'); ?>		
+		<?php _e( 'This will act as an incentive for me to carry on developing. You get some useful software and I get to carry on making it.  Everybody wins.', 'redirection'); ?>
 	</p>
 
 	<p><?php _e( 'Please note that a donation is just a donation - it is not a payment for support. I am not a business, this is not a product, and I\'m afraid I cannot provide paid support' ); ?></p>
@@ -20,7 +18,7 @@
 				<input type="hidden" name="cmd" value="_xclick">
 				<input type="hidden" name="business" value="admin@urbangiraffe.com">
 				<input type="hidden" name="item_name" value="Redirection - Individual">
-				<input type="hidden" name="amount" value="16.00">
+				<input type="hidden" name="amount" value="20.00">
 				<input type="hidden" name="buyer_credit_promo_code" value="">
 				<input type="hidden" name="buyer_credit_product_category" value="">
 				<input type="hidden" name="buyer_credit_shipping_method" value="">
@@ -35,7 +33,7 @@
 				<input type="image" style="border: none" src="<?php echo plugins_url( '/images/donate.gif', REDIRECTION_FILE ); ?>" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!"/>
 			</form>
 
-			<p><strong>$16</strong><br/><?php _e( 'Individual<br/>Donation', 'redirection' ); ?></p>
+			<p><strong>$20</strong><br/><?php _e( 'Individual<br/>Donation', 'redirection' ); ?></p>
 		</li>
 		<li>
 			<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
@@ -59,9 +57,26 @@
 		</li>
 	</ul>
 
+	<h3 style="clear: both"><?php _e( 'Help! Frequently Asked Questions', 'redirection' )?></h3>
+
+	<ul>
+		<li>
+			<h3>I deleted a redirection, why is it still redirecting?</h3>
+			<p>Your browser will cache redirections. If you have deleted a redirection and your browser is still performing the redirection then <a href="http://www.refreshyourcache.com/en/home/">clear your browser cache</a>.</p>
+		</li>
+		<li>
+			<h3>Can I open a redirect in a new tab?</h3>
+			<p>It's not possible to do this on the server. Instead you will need to add <code>target="blank"</code> to your link.</p>
+		</li>
+		<li>
+			<h3>Something isn't working!</h3>
+			<p>Please disable all other plugins and check if the problem persists. If it does please report it <a href="https://github.com/johngodley/redirection/">here</a> with full details about the problem and a way to reproduce it.</p>
+		</li>
+	</ul>
+
 	<h3 style="clear: both"><?php _e( 'Translations', 'redirection' )?></h3>
 
-	<p><?php _e( 'If you\'re multi-lingual then you may want to consider donating a translation:', 'redirection' )?>
+	<p><?php _e( 'Many thanks to the following for their translations:', 'redirection' )?>
 
 	<ul class="translators">
 		<?php foreach( $this->locales() AS $language ) : ?>
