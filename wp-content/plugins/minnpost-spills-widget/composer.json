@@ -1,0 +1,14 @@
+{
+    "name": "minnpost/minnpost-spills",
+    "type": "wordpress-plugin",
+    "authors": [
+        {
+            "name": "Jonathan Stegall",
+            "email": "jstegall@minnpost.com"
+        }
+    ],
+    "require": {
+        "brain/cortex": "~1.0.0"
+    },
+    "minimum-stability": "dev"
+}

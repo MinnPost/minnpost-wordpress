@@ -1,16 +1,138 @@
 <?php
 /*
-Plugin Name: MinnPost Spills Widget
-Plugin URI: #
-Description: This plugin creates a sidebar widget that is able to display posts from a group of categories and/or tags
+Plugin Name: MinnPost Spills
+Description: This plugin creates a sidebar widget and endpoint URL that is able to display posts from a group of categories and/or tags
 Version: 0.0.1
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
-Text Domain: minnpost-spills-widget
+Text Domain: minnpost-spills
 License: GPL2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
- 
+
+use Brain\Cortex\Route\RouteCollectionInterface;
+use Brain\Cortex\Route\QueryRoute;
+
+class MinnpostSpills {
+
+	/**
+	 * This is our constructor
+	 *
+	 * @return void
+	 */
+	public function __construct() {
+
+		$this->version = '0.0.2';
+
+		$this->load_admin();
+
+		$this->template = 'minnpost-spill.php';
+
+		//$this->config();
+		//$this->schedule();
+
+		// register the widget
+		add_action( 'widgets_init', function() {
+			register_widget( 'MinnpostSpills_Widget' );
+		});
+
+		// handle the permalinks
+		$this->init();
+
+	}
+
+	private function init() {
+		if ( ! is_admin() ) {
+			if ( ! class_exists( 'Brain\Cortex' ) ) {
+				require_once( 'vendor/autoload.php' );
+			}
+			Brain\Cortex::boot();
+
+			add_action( 'cortex.routes', function( RouteCollectionInterface $routes ) {
+
+				$widget_instances = get_option( 'widget_MinnpostSpills_Widget', false );
+				$instances = array_values( $widget_instances );
+
+				add_filter( 'get_the_archive_title', array( $this, 'set_wp_title' ) );
+				add_filter( 'pre_get_document_title', array( $this, 'set_wp_title' ) );
+				
+				foreach ( $widget_instances as $instance ) {
+					
+					$title = sanitize_title( $instance['title'] );
+					$key = array_search( $instance['title'], array_column( $instances, 'title' ), true );
+					$match = $instances[$key];
+					$query = array(
+						'post_type' => 'post',
+						'tax_query' => array(
+							'relation' => 'OR',
+						)
+					);
+					if ( ! empty( $match['widget_categories'] ) ) {
+						$query['tax_query'][] = array(
+							'taxonomy' => 'category',
+							'field' => 'term_id',
+							'terms' => $match['widget_categories'],
+						);
+					}
+					if ( ! empty( $match['widget_terms'] ) ) {
+						if ( ! is_array ( $match['widget_terms'] ) ) {
+							$widget_terms = explode( ',', $match['widget_terms'] );
+						} else {
+							$widget_terms = $match['widget_terms'];
+						}
+						$query['tax_query'][] = array(
+							'taxonomy' => 'post_tag',
+							'field' => 'name',
+							'terms' => $widget_terms
+						);
+					}
+					$routes->addRoute( new QueryRoute(
+						$title,
+						$query,
+						['template' => $this->template]
+					));
+				}
+
+			});
+		}
+	}
+
+	private function load_admin() {
+		if ( is_admin() ) {
+			// This is required to be sure Walker_Category_Checklist class is available
+			require_once ABSPATH . 'wp-admin/includes/template.php';
+		}
+	}
+
+	public function set_wp_title( $title ) {
+		global $template;
+		if ( $this->template === basename($template) ) {
+
+			$widget_instances = get_option( 'widget_MinnpostSpills_Widget', false );
+			$instances = array_values( $widget_instances );
+
+			add_filter( 'get_the_archive_title', array( $this, 'set_wp_title' ) );
+			add_filter( 'pre_get_document_title', array( $this, 'set_wp_title' ) );
+
+			$url = str_replace( '/', '', $_SERVER['REQUEST_URI'] );
+			
+			foreach ( $widget_instances as $instance ) {
+				$slug = sanitize_title( $instance['title'] );
+				if ( $slug === $url ) {
+					$key = array_search( $instance['title'], array_column( $instances, 'title' ), true );
+					$match = $instances[$key];
+					return $match['title'];
+				}
+			}
+			return $title;
+		}
+		return $title;
+	}
+
+}
+
+// Instantiate our class
+$minnpost_spills = new MinnpostSpills();
  
 class MinnpostSpills_Widget extends WP_Widget {
 
@@ -83,17 +205,19 @@ class MinnpostSpills_Widget extends WP_Widget {
 		$title = apply_filters( 'widget_title', $instance['title'] );
 		$categories = $instance['widget_categories'];
 		$terms = $instance['widget_terms'];
-		$output_function = $instance['output_function'];
-		echo str_replace( 'widget MinnpostSpills-widget', 'widget minnpost-spills-widget', str_replace('_Widget"', '-widget ' . sanitize_title( $title ) . '"', $before_widget));
+		$output_function = isset( $instance['output_function'] ) ? $instance['output_function'] : '';
+
+		echo str_replace( 'widget MinnpostSpills-widget', 'm-widget m-minnpost-spills-widget', str_replace('_Widget"', '-widget ' . sanitize_title( $title ) . '"', $before_widget));
 
 		if ( isset( $output_function ) && function_exists( $output_function ) ) {
 			$output = $output_function( $before_title, $title, $after_title, $categories, $terms );
 		} else {
 			if ( $title ) {
+				$before_title = str_replace('widget-title', 'a-widget-title', $before_title);
 				echo $before_title . $title . $after_title;
 			}
-			echo '<div class="contents">';
-			$output = $this->get_spill_posts( $categories, $terms );
+			echo '<div class="m-widget-contents">';
+				$output = $this->get_spill_posts( $categories, $terms );
 			echo '</div>';
 		}
 
@@ -116,20 +240,20 @@ class MinnpostSpills_Widget extends WP_Widget {
 		$instance = $old_instance;
 
 		$instance['title'] = sanitize_text_field( $new_instance['title'] );
-		if ( !empty($new_instance['widget_categories'] ) ) {
+		if ( ! empty($new_instance['widget_categories'] ) ) {
 			$instance['widget_categories'] = $new_instance['widget_categories'];
 		} else {
 			$instance['widget_categories'] = array();
 		}
-		if ( !empty( $new_instance['widget_terms'] ) ) {
+		if ( ! empty( $new_instance['widget_terms'] ) ) {
 			$instance['widget_terms'] = $new_instance['widget_terms'];
 		} else {
 			$instance['widget_terms'] = array();
 		}
-		if ( !empty( $new_instance['output_function'] ) ) {
+		if ( ! empty( $new_instance['output_function'] ) ) {
 			$instance['output_function'] = $new_instance['output_function'];
 		} else {
-			$instance['output_function'] = array();
+			$instance['output_function'] = '';
 		}
 
 		return $instance;
@@ -191,6 +315,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'widget_terms' ); ?>"><?php _e( 'Terms:' ); ?></label> 
 			<input class="mp-spills-terms widefat" id="<?php echo $this->get_field_id( 'widget_terms' ); ?>" name="<?php echo $this->get_field_name( 'widget_terms' ); ?>" type="text" value="<?php echo is_array( $terms ) ? implode( ',', $terms ) : $terms; ?>" />
 		</div>
+
 		<div>
 			<label for="<?php echo $this->get_field_id( 'output_function' ); ?>"><?php _e( 'Custom Output Function:' ); ?></label> 
 			<input class="widefat" id="<?php echo $this->get_field_id( 'output_function' ); ?>" name="<?php echo $this->get_field_name( 'output_function' ); ?>" type="text" value="<?php echo $output_function; ?>" />
@@ -235,15 +360,16 @@ class MinnpostSpills_Widget extends WP_Widget {
 		?>
 
 		<?php if ( $the_query->have_posts() ) : ?>
-
 			<!-- the loop -->
 			<?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
-				<?php
-				$url_array = explode( '/',get_permalink() );
-				$category = $url_array[3];
-				?>
-				<p class="spill-item-category"><?php echo get_category_by_slug( $category )->name; ?></p>
-				<p class="spill-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></p>
+				<article id="<?php the_ID(); ?>" class="m-post m-post-spill">
+					<?php
+					$url_array = explode( '/',get_permalink() );
+					$category = $url_array[3];
+					?>
+					<p class="spill-item-category"><?php echo get_category_by_slug( $category )->name; ?></p>
+					<p class="spill-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></p>
+				</article>
 			<?php endwhile; ?>
 			<!-- end of the loop -->
 
@@ -256,39 +382,35 @@ class MinnpostSpills_Widget extends WP_Widget {
 	}
 }
 
-// This is required to be sure Walker_Category_Checklist class is available
-require_once ABSPATH . 'wp-admin/includes/template.php';
 /**
  * Custom walker to print category checkboxes for widget forms
  */
-class Walker_Category_Checklist_Widget extends Walker_Category_Checklist {
+if ( class_exists( 'Walker_Category_Checklist' ) ) {
+	class Walker_Category_Checklist_Widget extends Walker_Category_Checklist {
 
-	private $name;
-	private $id;
+		private $name;
+		private $id;
 
-	function __construct( $name = '', $id = '' ) {
-		$this->name = $name;
-		$this->id = $id;
-	}
-
-	function start_el( &$output, $cat, $depth = 0, $args = array(), $id = 0 ) {
-		extract( $args );
-		if ( empty( $taxonomy ) ) {
-			$taxonomy = 'category';
+		function __construct( $name = '', $id = '' ) {
+			$this->name = $name;
+			$this->id = $id;
 		}
-		$class = in_array( $cat->term_id, $popular_cats ) ? ' class="popular-category"' : '';
-		$id = $this->id . '-' . $cat->term_id;
-		$checked = checked( in_array( $cat->term_id, $selected_cats ), true, false );
-		$output .= "\n<li id='{$taxonomy}-{$cat->term_id}'$class>"
-			. '<label class="selectit"><input value="'
-			. $cat->term_id . '" type="checkbox" name="' . $this->name
-			. '[]" id="in-' . $id . '"' . $checked
-			. disabled( empty( $args['disabled'] ), false, false ) . ' /> '
-			. esc_html( apply_filters( 'the_category', $cat->name ) )
-			. '</label>';
+
+		function start_el( &$output, $cat, $depth = 0, $args = array(), $id = 0 ) {
+			extract( $args );
+			if ( empty( $taxonomy ) ) {
+				$taxonomy = 'category';
+			}
+			$class = in_array( $cat->term_id, $popular_cats ) ? ' class="popular-category"' : '';
+			$id = $this->id . '-' . $cat->term_id;
+			$checked = checked( in_array( $cat->term_id, $selected_cats ), true, false );
+			$output .= "\n<li id='{$taxonomy}-{$cat->term_id}'$class>"
+				. '<label class="selectit"><input value="'
+				. $cat->term_id . '" type="checkbox" name="' . $this->name
+				. '[]" id="in-' . $id . '"' . $checked
+				. disabled( empty( $args['disabled'] ), false, false ) . ' /> '
+				. esc_html( apply_filters( 'the_category', $cat->name ) )
+				. '</label>';
+		}
 	}
 }
-/* Register the widget */
-add_action( 'widgets_init', function() {
-	register_widget( 'MinnpostSpills_Widget' );
-});
