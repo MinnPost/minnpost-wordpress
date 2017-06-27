@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+  <title>Add Widget Instance</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+  <link href="tinymce.css?ver=1" media="screen, projection" rel="stylesheet" type="text/css" />
+  <script type="text/javascript" src="js/LAB.min.js"></script>
+  <script>
+    $LAB
+    .setOptions({ 'BasePath' : window.parent.widgetinstance.BasePath })
+    .script("js/jquery/jquery.js")
+    .script("js/tinymce/tiny_mce_popup.js");
+    $LAB
+    .script("js/wysiwyg.js");
+  </script>
+  <script type="text/html">
+  <optgroup label="{{sidebar}}">
+    {{#widget}}
+    <option>{{.}}</option>
+    {{#widget}}
+    <option value="">No widgets found</option>
+  </optgroup>
+  </script>
+</head>
+<body>
+  <div class="widgetinstance_wrapper">
+    <form id="widgetinstance_form">
+      <div class="wrap">
+        <div id="content1" class="">
+          <h2>Available widgets</h2>
+          <p>
+            <label for="photoid">Widget</label>
+            <select id="select-widget">
+              <option>select a widget</option>
+            </select>
+          </p>
+          <p>
+            <label for="format">Include sidebar format</label>
+            <input id="format" type="checkbox" value="1" />
+          </p>
+        </div>
+      </div>
+    </form>
+    <div class="mceActionPanel">
+      <div style="float: left">
+        <input type="button" id="cancel" name="cancel" value="Cancel" />
+      </div>
+      <div style="float: right">
+        <input type="submit" id="insert" name="insert" value="Insert" />
+      </div>
+    </div>
+  </div>
+</body>
+</html>
