@@ -70,7 +70,7 @@ class MinnpostSpills {
 					if ( ! empty( $match['widget_categories'] ) ) {
 						$query['tax_query'][] = array(
 							'taxonomy' => 'category',
-							'field' => 'term_id',
+							'field' => 'slug',
 							'terms' => $match['widget_categories'],
 						);
 					}
@@ -236,7 +236,9 @@ class MinnpostSpills_Widget extends WP_Widget {
 	*
 	* @return array Updated safe values to be saved.
 	*/
-	public function update( $new_instance, $old_instance ) {        
+	public function update( $new_instance, $old_instance ) {
+
+		// need a way to clear the widget's cache when its settings get updated   
 
 		$instance = $old_instance;
 
@@ -289,8 +291,20 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 		if ( isset( $instance['widget_categories'] ) ) {
 			$categories = $instance['widget_categories'];
+			$category_ids = array();
+			foreach ( $categories as $category ) {
+				if ( isset( $category ) && ! is_numeric( $category ) ) {
+					$id = get_category_by_slug( $category )->term_id;
+				} else {
+					$id = $category;
+				}
+				if ( isset( $id ) ) {
+					$category_ids[] = $id;
+				}
+			}
 		} else {
 			$categories = false;
+			$category_ids = false;
 		}
 
 		if ( isset( $instance['widget_terms'] ) ) {
@@ -324,7 +338,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'widget_categories' ); ?>"><?php _e( 'Categories:' ); ?></label> 
 			<?php $checked_ontop = true; ?>
 			<ul class="categorychecklist" style="height: 200px; overflow: auto; border: 1px solid #ddd; background: #fdfdfd; padding: 0 0.9em;">
-				<?php wp_category_checklist( 0, 0, $categories, false, $category_walker, $checked_ontop ); ?>
+				<?php wp_category_checklist( 0, 0, $category_ids, false, $category_walker, $checked_ontop ); ?>
 			</ul>
 		</div>
 		<div>
@@ -350,9 +364,13 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 		if ( ! empty( $categories ) ) {
 			$slugs = array();
-			foreach ( $categories as $id ) {
-				$category = get_term_by( 'id', $id, 'category' );
-				$slugs[] = $category->slug;
+			foreach ( $categories as $category ) {
+				if ( is_numeric( $category ) ) {
+					$category = get_term_by( 'id', $category, 'category' );
+					$slugs[] = $category->slug;
+				} else {
+					$slugs[] = $category;
+				}
 			}
 			$the_query = new WP_Query(
 				array(
@@ -417,12 +435,12 @@ if ( class_exists( 'Walker_Category_Checklist' ) ) {
 			if ( empty( $taxonomy ) ) {
 				$taxonomy = 'category';
 			}
-			$class = in_array( $cat->term_id, $popular_cats ) ? ' class="popular-category"' : '';
-			$id = $this->id . '-' . $cat->term_id;
+			$class = in_array( $cat->slug, $popular_cats ) ? ' class="popular-category"' : '';
+			$id = $this->id . '-' . $cat->slug;
 			$checked = checked( in_array( $cat->term_id, $selected_cats ), true, false );
-			$output .= "\n<li id='{$taxonomy}-{$cat->term_id}'$class>"
+			$output .= "\n<li id='{$taxonomy}-{$cat->slug}'$class>"
 				. '<label class="selectit"><input value="'
-				. $cat->term_id . '" type="checkbox" name="' . $this->name
+				. $cat->slug . '" type="checkbox" name="' . $this->name
 				. '[]" id="in-' . $id . '"' . $checked
 				. disabled( empty( $args['disabled'] ), false, false ) . ' /> '
 				. esc_html( apply_filters( 'the_category', $cat->name ) )
