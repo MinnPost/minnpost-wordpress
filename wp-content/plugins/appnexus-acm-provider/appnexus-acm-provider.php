@@ -8,17 +8,35 @@ Author: Jonathan Stegall
 Author URI: http://code.minnpost.com
 License: GPL2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: appnexus_acm_provider
+Text Domain: appnexus-acm-provider
 */
 
 class Appnexus_Async_ACM_Provider extends ACM_Provider {
-	//public $crawler_user_agent = 'Mediapartners-Google';
-	public $default_domain = 'oasc17.247realmedia.com';
-	public $default_url = 'https://oasc17.247realmedia.com/RealMedia/ads/';
+
+	private $version;
+	public $default_domain;
+	public $server_path;
+	public $default_url;
 
 	public function __construct() {
 
-		// Default ad zones for DFP Async
+		$this->version = '0.0.2';
+
+		$this->load_admin();
+		$this->default_domain = trim( get_option( 'appnexus_acm_provider_default_domain', '' ) );
+		$this->server_path = trim( get_option( 'appnexus_acm_provider_server_path', '' ) );
+
+		if ( '' !== $this->default_domain && '' !== $this->server_path ) {
+			$use_https = get_option( 'appnexus_acm_provider_use_https', true );
+			if ( true === $use_https || 'yes' === $use_https[0] ) {
+				$protocol = 'https://';
+			} else {
+				$use_https = 'http://';
+			}
+			$this->default_url = $protocol . $this->default_domain . '/' . $this->server_path . '/';
+		}
+
+		// Default ad zones for Appnexus
 		$this->ad_tag_ids = array(
 			array(
 				'tag'       => 'Top',
@@ -187,7 +205,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 	}
 
 	/**
-	 * Register the 'tag's available for mapping in the UI
+	 * Register the tags available for mapping in the UI
 	 */
 	public function filter_ad_code_args( $ad_code_args ) {
 		global $ad_code_manager;
@@ -298,6 +316,221 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 			);
 		}
 		return $unit_sizes_output;
+	}
+
+	/**
+	* load the admin stuff
+	* creates admin menu to save the config options
+	*
+	* @throws \Exception
+	*/
+	private function load_admin() {
+		add_action( 'admin_menu', array( $this, 'create_admin_menu' ) );
+		add_action( 'admin_init', array( $this, 'admin_settings_form' ) );
+	}
+
+	/**
+	* Default display for <input> fields
+	*
+	* @param array $args
+	*/
+	public function create_admin_menu() {
+		add_options_page( __( 'AppNexus Ad Settings', 'appnexus-acm-provider' ), __( 'AppNexus Ad Settings', 'appnexus-acm-provider' ), 'manage_options', 'appnexus-acm-provider', array( $this, 'show_admin_page' ) );
+	}
+
+	/**
+	* Display a Settings link on the main Plugins page
+	*
+	* @return array $links
+	*/
+	public function plugin_action_links( $links, $file ) {
+		if ( plugin_basename( __FILE__ ) === $file ) {
+			$settings = '<a href="' . get_admin_url() . 'options-general.php?page=appnexus-acm-provider">' . __('Settings', 'appnexus-acm-provider' ) . '</a>';
+			// make the 'Settings' link appear first
+			array_unshift( $links, $settings );
+		}
+		return $links;
+	}
+
+	/**
+	* Display the admin settings page
+	*
+	* @return void
+	*/
+	public function show_admin_page() {
+		?>
+		<div class="wrap">
+			<h1><?php _e( get_admin_page_title() , 'appnexus-acm-provider' ); ?></h1>
+			<div id="main">
+				<form method="post" action="options.php">
+					<?php
+					settings_fields( 'appnexus-acm-provider' )  . do_settings_sections( 'appnexus-acm-provider' );
+					?>
+					<?php submit_button( __( 'Save settings', 'appnexus-acm-provider' ) ); ?>
+				</form>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	* Register items for the settings api
+	* @return void
+	*
+	*/
+	public function admin_settings_form() {
+		$page = 'appnexus-acm-provider';
+		$section = 'appnexus-acm-provider';
+		$input_callback = array( $this, 'display_input_field' );
+		$checkbox_callback = array( $this, 'display_checkboxes' );
+		add_settings_section( $page, null, null, $page );
+
+		$settings = array(
+			'default_domain' => array(
+				'title' => __( 'Default Domain', 'appnexus-acm-provider' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'The ad server domain', 'appnexus-acm-provider' ),
+				),
+			),
+			'use_https' => array(
+				'title' => __( 'Use HTTPS?', 'appnexus-acm-provider' ),
+				'callback' => $checkbox_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'checkboxes',
+					'desc' => 'Whether to use HTTPS on the domain',
+					'items' => array(
+						'yes' => array(
+							'text' => 'Yes',
+							'id' => 'yes',
+							'desc' => '',
+							'default' => true,
+						),
+					),
+				),
+			),
+			'server_path' => array(
+				'title' => __( 'Server Path', 'appnexus-acm-provider' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'The server path, if applicable.', 'appnexus-acm-provider' ),
+				),
+			),
+			'auto_embed_position' => array(
+				'title' => __( 'Auto embed position', 'appnexus-acm-provider' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'Position for the in-story ad, if it is not otherwise included.', 'appnexus-acm-provider' ),
+				),
+			),
+			'auto_embed_top_offset' => array(
+				'title' => __( 'Auto embed top character offset', 'appnexus-acm-provider' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'How many characters from the top of the story to put the ad.', 'appnexus-acm-provider' ),
+				),
+			),
+			'auto_embed_bottom_offset' => array(
+				'title' => __( 'Auto embed bottom character offset', 'appnexus-acm-provider' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'How many characters from the bottom of the story to put the ad.', 'appnexus-acm-provider' ),
+				),
+			),
+		);
+
+		foreach ( $settings as $key => $attributes ) {
+			$id = 'appnexus_acm_provider_' . $key;
+			$name = 'appnexus_acm_provider_' . $key;
+			$title = $attributes['title'];
+			$callback = $attributes['callback'];
+			$page = $attributes['page'];
+			$section = $attributes['section'];
+			$args = array_merge(
+				$attributes['args'],
+				array(
+					'title' => $title,
+					'id' => $id,
+					'label_for' => $id,
+					'name' => $name,
+				)
+			);
+			add_settings_field( $id, $title, $callback, $page, $section, $args );
+			register_setting( $section, $id );
+		}
+
+	}
+
+	/**
+	* Default display for <input> fields
+	*
+	* @param array $args
+	*/
+	public function display_input_field( $args ) {
+		$type   = $args['type'];
+		$id     = $args['label_for'];
+		$name   = $args['name'];
+		$desc   = $args['desc'];
+		$value  = esc_attr( get_option( $id, '' ) );
+		echo '<input type="' . $type. '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
+		class="regular-text code" />';
+		if ( '' !== $desc ) {
+			echo '<p class="description">' . $desc . '</p>';
+		}
+	}
+
+	/**
+	* Default display for <input type="checkbox"> fields
+	*
+	* @param array $args
+	*/
+	public function display_checkboxes( $args ) {
+		$type = 'checkbox';
+		$name = $args['name'];
+		$options = get_option( $name, array() );
+		foreach ( $args['items'] as $key => $value ) {
+			$text = $value['text'];
+			$id = $value['id'];
+			$desc = $value['desc'];
+			$checked = '';
+			if ( is_array( $options ) && in_array( (string) $key, $options, true ) ) {
+				$checked = 'checked';
+			} elseif ( is_array( $options ) && empty( $options ) ) {
+				if ( isset( $value['default'] ) && true === $value['default'] ) {
+					$checked = 'checked';
+				}
+			}
+			echo sprintf( '<div class="checkbox"><label><input type="%1$s" value="%2$s" name="%3$s[]" id="%4$s"%5$s>%6$s</label></div>',
+				esc_attr( $type ),
+				esc_attr( $key ),
+				esc_attr( $name ),
+				esc_attr( $id ),
+				esc_html( $checked ),
+				esc_html( $text )
+			);
+			if ( '' !== $desc ) {
+				echo sprintf( '<p class="description">%1$s</p>',
+					esc_html( $desc )
+				);
+			}
+		}
 	}
 
 }
