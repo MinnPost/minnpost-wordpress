@@ -3,7 +3,7 @@
 Plugin Name: Redirection
 Plugin URI: http://urbangiraffe.com/plugins/redirection/
 Description: Manage all your 301 redirects and monitor 404 errors
-Version: 2.6.2
+Version: 2.6.3
 Author: John Godley
 Author URI: http://urbangiraffe.com
 Text Domain: redirection
@@ -58,7 +58,8 @@ function red_get_options() {
 	return $options;
 }
 
-if ( is_admin() )
+if ( is_admin() ) {
 	include dirname( __FILE__ ).'/redirection-admin.php';
-else
+} else {
 	include dirname( __FILE__ ).'/redirection-front.php';
+}
