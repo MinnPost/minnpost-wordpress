@@ -129,7 +129,6 @@ class Migrate_Random_Things {
 					'type' => 'text',
 					'desc' => __( 'The name of the table for menus', 'migrate-random-things' ),
 				),
-				
 			),
 			'menu_items_table' => array(
 				'title' => __( 'Menu Items Table', 'migrate-random-things' ),
@@ -140,7 +139,6 @@ class Migrate_Random_Things {
 					'type' => 'text',
 					'desc' => __( 'The name of the table with the individual menu items.', 'migrate-random-things' ),
 				),
-				
 			),
 			/*'wp_filter_field_value' => array(
 				'title' => __( 'Field Value(s)', 'migrate-random-things' ),
@@ -151,7 +149,6 @@ class Migrate_Random_Things {
 					'type' => 'text',
 					'desc' => __( 'The value of the filter field. This is useful if you want to merge a meta key, such as wp_capabilities. You can comma separate to use multiple fields.', 'migrate-random-things' ),
 				),
-				
 			),
 			'wp_table' => array(
 				'title' => __( 'WordPress Database Table', 'migrate-random-things' ),
@@ -215,12 +212,12 @@ class Migrate_Random_Things {
 						'minutes' => __( 'Minutes', 'migrate-random-things' ),
 						'hours' => __( 'Hours', 'migrate-random-things' ),
 						'days' => __( 'Days', 'migrate-random-things' ),
-					)
-				)
-			)
+					),
+				),
+			),
 		);
 
-		foreach( $settings as $key => $attributes ) {
+		foreach ( $settings as $key => $attributes ) {
 			$id = 'migrate_random_things_' . $key;
 			$name = 'migrate_random_things_' . $key;
 			$title = $attributes['title'];
@@ -233,7 +230,7 @@ class Migrate_Random_Things {
 					'title' => $title,
 					'id' => $id,
 					'label_for' => $id,
-					'name' => $name
+					'name' => $name,
 				)
 			);
 			add_settings_field( $id, $title, $callback, $page, $section, $args );
@@ -249,7 +246,7 @@ class Migrate_Random_Things {
 	*/
 	public function get_schedule_frequency_key( $name = '' ) {
 
-		if ( $name !== '' ) {
+		if ( '' !== $name ) {
 			$name = '_' . $name;
 		}
 
@@ -286,11 +283,11 @@ class Migrate_Random_Things {
 		$id     = $args['label_for'];
 		$name   = $args['name'];
 		$desc   = $args['desc'];
-		if ( !isset( $args['constant'] ) || !defined( $args['constant'] ) ) {
+		if ( ! isset( $args['constant'] ) || ! defined( $args['constant'] ) ) {
 			$value  = esc_attr( get_option( $id, '' ) );
-			echo '<input type="' . $type. '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
+			echo '<input type="' . $type . '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
 			class="regular-text code" />';
-			if ( $desc != '' ) {
+			if ( '' !== $desc ) {
 				echo '<p class="description">' . $desc . '</p>';
 			}
 		} else {
@@ -317,7 +314,7 @@ class Migrate_Random_Things {
 			echo '<option value="' . $key . '"  ' . $selected . '>' . $value . '</option>';
 		}
 		echo '</select>';
-		if ( $desc != '' ) {
+		if ( '' !== $desc ) {
 			echo '<p class="description">' . $desc . '</p>';
 		}
 	}
@@ -336,10 +333,10 @@ class Migrate_Random_Things {
 
 			if ( '' !== $menus && '' !== $menu_items ) {
 				if ( $wpdb->get_var( "SHOW TABLES LIKE '$menus'" ) === $menus && $wpdb->get_var( "SHOW TABLES LIKE '$menu_items'" ) === $menu_items ) {
-					$menu_rows = $wpdb->get_results( 'SELECT * FROM ' . $menus . ' ORDER BY id');
+					$menu_rows = $wpdb->get_results( 'SELECT * FROM ' . $menus . ' ORDER BY id' );
 					foreach ( $menu_rows as $menu ) {
 						// order by parent, then id so we get all the items without a parent before we try to add their children
-						$items = $wpdb->get_results( 'SELECT `id`, `menu-item-title`, `menu-item-url`, `menu-item-status`, `menu-item-parent`, `menu-item-parent-id` FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" ORDER BY `menu-item-parent`, id');
+						$items = $wpdb->get_results( 'SELECT `id`, `menu-item-title`, `menu-item-url`, `menu-item-status`, `menu-item-parent`, `menu-item-parent-id` FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" ORDER BY `menu-item-parent`, id' );
 						$menu_exists = wp_get_nav_menu_object( $menu->name );
 
 						// If it doesn't exist, let's create it.
@@ -353,7 +350,7 @@ class Migrate_Random_Things {
 						foreach ( $items as $key => $item ) {
 
 							if ( isset( $existing_items ) ) {
-								if ( isset( $existing_items[$key]->title ) && $existing_items[$key]->title === $item->{'menu-item-title'}) {
+								if ( isset( $existing_items[ $key ]->title ) && $existing_items[ $key ]->title === $item->{'menu-item-title'} ) {
 									// menu item exists already
 									continue;
 								}
@@ -373,7 +370,6 @@ class Migrate_Random_Things {
 									// we couldn't load a nav menu item for the parent value
 									continue 2;
 								}
-
 							}
 
 							$args = array(
@@ -416,9 +412,9 @@ class Migrate_Random_Things {
 							}
 						} // End foreach().
 
-						$locations = get_theme_mod('nav_menu_locations');
+						$locations = get_theme_mod( 'nav_menu_locations' );
 
-						$locations[$menu->placement] = $menu_id;
+						$locations[ $menu->placement ] = $menu_id;
 						set_theme_mod( 'nav_menu_locations', $locations );
 
 						$remaining_menu_items = $wpdb->get_var( 'SELECT COUNT(*) FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '"' );
@@ -448,11 +444,11 @@ class Migrate_Random_Things {
 
 		$wp_filter_field_value = get_option( 'migrate_random_things_wp_filter_field_value', '' );
 
-		if ( FALSE !== strpos( $wp_filter_field_value, ',' ) ) {
+		if ( false !== strpos( $wp_filter_field_value, ',' ) ) {
 			$wp_filter_field_values = explode( ',', $wp_filter_field_value );
 			$this->config = array();
 			foreach ( $wp_filter_field_values as $key => $value ) {
-				$this->config[$key] = array(
+				$this->config[ $key ] = array(
 					'wp_field_to_merge' => get_option( 'migrate_random_things_wp_field_to_merge', '' ),
 					'wp_filter_field' => get_option( 'migrate_random_things_wp_filter_field', '' ),
 					'wp_filter_field_value' => $value,
@@ -461,7 +457,7 @@ class Migrate_Random_Things {
 					'primary_key' => get_option( 'migrate_random_things_primary_key', '' ),
 					'items_per_load' => get_option( 'migrate_random_things_items_per_load', '' ),
 					'schedule_number' => get_option( 'migrate_random_things_schedule_number', '' ),
-					'schedule_unit' => get_option( 'migrate_random_things_schedule_unit', '' )
+					'schedule_unit' => get_option( 'migrate_random_things_schedule_unit', '' ),
 				);
 			}
 		} else {
@@ -475,7 +471,7 @@ class Migrate_Random_Things {
 					'primary_key' => get_option( 'migrate_random_things_primary_key', '' ),
 					'items_per_load' => get_option( 'migrate_random_things_items_per_load', '' ),
 					'schedule_number' => get_option( 'migrate_random_things_schedule_number', '' ),
-					'schedule_unit' => get_option( 'migrate_random_things_schedule_unit', '' )
+					'schedule_unit' => get_option( 'migrate_random_things_schedule_unit', '' ),
 				),
 			);
 		}
@@ -489,15 +485,20 @@ class Migrate_Random_Things {
 	 */
 	public function schedule() {
 
-		foreach ($this->config as $key => $value) {
+		foreach ( $this->config as $key => $value ) {
 			// this would need to change to allow different schedules
 			$schedule_frequency = $this->get_schedule_frequency_key();
-		
-			if (! wp_next_scheduled ( 'migrate_random_event' ) ) {
+
+			if ( ! wp_next_scheduled( 'migrate_random_event' ) ) {
 				wp_schedule_event( time(), $schedule_frequency, 'migrate_random_event' );
 			}
 
-			add_action( 'migrate_random_event', array( $this, 'get_things_to_migrate') );
+			add_action( 'migrate_random_event',
+				array(
+					$this,
+					'get_things_to_migrate',
+				)
+			);
 		}
 	}
 
