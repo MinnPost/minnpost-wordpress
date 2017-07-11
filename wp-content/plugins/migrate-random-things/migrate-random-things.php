@@ -140,6 +140,16 @@ class Migrate_Random_Things {
 					'desc' => __( 'The name of the table with the individual menu items.', 'migrate-random-things' ),
 				),
 			),
+			'ads_table' => array(
+				'title' => __( 'Ads Table', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'The name of the table with the advertisement data.', 'migrate-random-things' ),
+				),
+			),
 			/*'wp_filter_field_value' => array(
 				'title' => __( 'Field Value(s)', 'migrate-random-things' ),
 				'callback' => $input_callback,
@@ -331,6 +341,8 @@ class Migrate_Random_Things {
 			$menus = get_option( 'migrate_random_things_menu_table', '' );
 			$menu_items = get_option( 'migrate_random_things_menu_items_table', '' );
 
+			$ads_table = get_option( 'migrate_random_things_ads_table', '' );
+
 			if ( '' !== $menus && '' !== $menu_items ) {
 				if ( $wpdb->get_var( "SHOW TABLES LIKE '$menus'" ) === $menus && $wpdb->get_var( "SHOW TABLES LIKE '$menu_items'" ) === $menu_items ) {
 					$menu_rows = $wpdb->get_results( 'SELECT * FROM ' . $menus . ' ORDER BY id' );
@@ -427,6 +439,129 @@ class Migrate_Random_Things {
 					} // End foreach().
 				} // End if().
 			} // End if().
+
+			if ( '' !== $ads_table ) {
+				if ( $wpdb->get_var( "SHOW TABLES LIKE '$ads_table'" ) === $ads_table ) {
+					$ad_rows = $wpdb->get_results( 'SELECT * FROM ' . $ads_table . ' ORDER BY id' );
+					foreach ( $ad_rows as $ad ) {
+						if ( is_serialized( $ad->conditions ) && '0' === $ad->stage ) {
+							$result = $wpdb->update(
+								$ads_table,
+								array(
+									'priority' => abs( $ad->priority ),
+									'conditions' => print_r( maybe_unserialize( $ad->conditions ), true ),
+									'result' => print_r( maybe_unserialize( $ad->result ), true ),
+									'stage' => 1,
+								),
+								array(
+									'id' => $ad->id,
+								)
+							);
+						}
+						if ( false !== strpos( $ad->conditions, 'Array' ) ) {
+							$array = $this->print_r_reverse( $ad->conditions );
+							$conditional = array();
+							if ( false !== strpos( $ad->tag_id, 'sitewide' ) ) {
+								$conditional = 'None';
+								$result = $wpdb->update(
+									$ads_table,
+									array(
+										'priority' => abs( $ad->priority ),
+										'conditions' => '',
+										'stage' => 2,
+									),
+									array(
+										'id' => $ad->id,
+									)
+								);
+							} elseif ( isset( $array['node']['values'] ) ) {
+								$checker = array(
+									'content_type' => current( array_keys( $array['node']['values'] ) ),
+									'full' => $array,
+								);
+								$conditional = $this->get_conditional( $checker );
+							} elseif ( isset( $array['path']['values'] ) ) {
+								//$path = current( array_keys( $array['path']['values'] ) );
+								$conditional = $this->get_conditional( $array['path']['values'] );
+							}
+
+							if ( ( is_array( $conditional ) && empty( $conditional ) ) || 'None' === $conditional ) {
+								//error_log( 'no conditional for ' . $ad->id );
+								// it's possible we will need to put something in here
+							} else {
+								$new_conditional = array();
+								if ( is_array( $conditional ) ) {
+									foreach ( $conditional as $condition ) {
+										//error_log( 'value is ' . $condition['value'] );
+										$new_conditional[] = array(
+											array(
+												'function' => $condition['method'],
+												'arguments' => array(
+													$condition['value'],
+												),
+											),
+										);
+									}
+									//error_log( 'new conditional is ' . print_r( $new_conditional, true ) );
+									//echo 'new conditional is ' . print_r( $new_conditional, true );
+									$new_conditions = serialize( $new_conditional );
+									//error_log('new conditions are ' . $new_conditions);
+									$result = $wpdb->update(
+										$ads_table,
+										array(
+											'conditions' => $new_conditions,
+											'stage' => 2,
+										),
+										array(
+											'id' => $ad->id,
+										)
+									);
+								}
+							}
+						} // End if().
+
+						// add ads as posts
+						if ( '2' === $ad->stage ) {
+
+							if ( is_array( maybe_unserialize( $ad->conditions ) ) ) {
+								$conditionals = call_user_func_array( 'array_merge', unserialize( $ad->conditions ) );
+							} else {
+								$conditionals = $ad->conditions;
+							}
+
+							$content = array(
+								'post_author' => 1,
+								'post_title' => $ad->tag . '-' . $ad->tag_id . '-' . $ad->tag_name,
+								'post_status' => 'publish',
+								'post_type' => 'acm-code',
+								'comment_status' => 'closed',
+								'ping_status' => 'closed',
+								'post_name' => strtolower( $ad->tag )  . '-' . $ad->tag_id . '-' . sanitize_title( $ad->tag_name ),
+								'guid' => site_url( '/?acm-code=' . strtolower( $ad->tag ) . '-' . $ad->tag_id . '-' . sanitize_title( $ad->tag_name ), 'https' ),
+								'tax_input' => array(
+								),
+								'meta_input' => array(
+									'wide_assets' => '',
+									'tag' => $ad->tag,
+									'tag_id' => $ad->tag_id,
+									'tag_name' => $ad->tag_name,
+									'priority' => $ad->priority,
+									'operator' => 'OR',
+									'conditionals' => $conditionals,
+								),
+							);
+							wp_defer_term_counting(true);
+
+							$post_id = wp_insert_post( $content );
+
+							if ( 0 !== $post_id ) {
+								$wpdb->delete( $ads_table, array( 'id' => $ad->id ), array( '%d' ) );
+							}
+						}
+					} // End foreach().
+
+				} // End if().
+			} // End if().
 		} // End foreach().
 
 	}
@@ -511,6 +646,107 @@ class Migrate_Random_Things {
 	public function deactivate() {
 		wp_clear_scheduled_hook( 'migrate_random_event' );
 		delete_option( 'menu_check_ran' );
+	}
+
+	private function print_r_reverse( $in ) {
+		$lines = explode( "\n", trim( $in ) );
+		if ( 'Array' !== trim( $lines[0] ) ) {
+			// bottomed out to something that isn't an array
+			return $in;
+		} else {
+			// this is an array, lets parse it
+			if ( preg_match( '/(\s{5,})\(/', $lines[1], $match ) ) {
+				// this is a tested array/recursive call to this function
+				// take a set of spaces off the beginning
+				$spaces = $match[1];
+				$spaces_length = strlen( $spaces );
+				$lines_total = count( $lines );
+				for ( $i = 0; $i < $lines_total; $i++ ) {
+					if ( substr( $lines[ $i ], 0, $spaces_length ) == $spaces ) {
+						$lines[ $i ] = substr( $lines[ $i ], $spaces_length );
+					}
+				}
+			}
+			array_shift( $lines ); // Array
+			array_shift( $lines ); // (
+			array_pop( $lines ); // )
+			$in = implode( "\n", $lines );
+			// make sure we only match stuff with 4 preceding spaces (stuff for this array and not a nested one)
+			preg_match_all( '/^\s{4}\[(.+?)\] \=\> /m', $in, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER );
+			$pos = array();
+			$previous_key = '';
+			$in_length = strlen( $in );
+			// store the following in $pos:
+			// array with key = key of the parsed array's item
+			// value = array(start position in $in, $end position in $in)
+			foreach ( $matches as $match ) {
+				$key = $match[1][0];
+				$start = $match[0][1] + strlen( $match[0][0] );
+				$pos[ $key ] = array( $start, $in_length );
+				if ( '' !== $previous_key ) {
+					$pos[ $previous_key ][1] = $match[0][1] - 1;
+				}
+				$previous_key = $key;
+			}
+			$ret = array();
+			foreach ( $pos as $key => $where ) {
+				// recursively see if the parsed out value is an array too
+				$ret[ $key ] = $this->print_r_reverse( substr( $in, $where[0], $where[1] - $where[0] ) );
+			}
+			return $ret;
+		} // End if().
+	}
+
+	private function get_conditional( $checker ) {
+		$conditional = array();
+		if ( is_array( $checker ) ) {
+
+			if ( isset( $checker['content_type'] ) ) {
+				if ( 'section' === $checker['content_type'] ) {
+					$conditional[] = array(
+						'method' => 'is_category',
+						'value' => true,
+					);
+				}
+			} else {
+				foreach ( $checker as $key => $value ) {
+					if ( '<front>' === $value ) {
+						$conditional[] = array(
+							'method' => 'is_home',
+							'value' => true,
+						);
+					} elseif ( false !== strpos( $value, '/' ) ) {
+						$path = explode( '/', $value );
+						$parent = $path[0];
+						if ( isset( $path[1] ) ) {
+							$conditional[] = array(
+								'method' => 'is_page',
+								'value' => rtrim( $path[1], '*' ),
+							);
+						}
+					} elseif ( false !== strpos( $value, '*' ) ) {
+						if ( '*' === $value ) {
+							return $conditional;
+						}
+						$path = rtrim( $value, '*' );
+						if ( is_object( get_category_by_slug( $path ) ) ) {
+							$conditional[] = array(
+								'method' => 'is_category',
+								'value' => $path,
+							);
+						} elseif ( is_object( get_page_by_path( $path ) ) ) {
+							$conditional[] = array(
+								'method' => 'is_page',
+								'value' => $path,
+							);
+						}
+					} else {
+						//error_log( 'checker is array. it is ' . print_r( $checker, true ) );
+					} // End if().
+				}
+			} // End if().
+		} // End if().
+		return $conditional;
 	}
 
 }
