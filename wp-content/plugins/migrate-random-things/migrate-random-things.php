@@ -51,7 +51,7 @@ class Migrate_Random_Things {
 		add_action( 'admin_menu', array( $this, 'create_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'admin_settings_form' ) );
 		add_action( 'updated_option', function( $option_name, $old_value, $value ) {
-			if ( $option_name === 'migrate_random_things_schedule' && $old_value !== $value ) {
+			if ( 'migrate_random_things_schedule' === $option_name && $old_value !== $value ) {
 				// delete the old schedule and create the new one - this means user changed how often it should run
 				$this->deactivate();
 				$this->schedule();
@@ -75,8 +75,8 @@ class Migrate_Random_Things {
 	* @return array $links
 	*/
 	public function plugin_action_links( $links, $file ) {
-		if ( $file == plugin_basename( __FILE__ ) ) {
-			$settings = '<a href="' . get_admin_url() . 'options-general.php?page=migrate-random-things">' . __('Settings', 'migrate-random-things' ) . '</a>';
+		if ( plugin_basename( __FILE__ ) === $file ) {
+			$settings = '<a href="' . get_admin_url() . 'options-general.php?page=migrate-random-things">' . __( 'Settings', 'migrate-random-things' ) . '</a>';
 			// make the 'Settings' link appear first
 			array_unshift( $links, $settings );
 		}
@@ -95,7 +95,7 @@ class Migrate_Random_Things {
 			<div id="main">
 				<form method="post" action="options.php">
 					<?php
-					settings_fields( 'migrate-random-things' )  . do_settings_sections( 'migrate-random-things' );
+					settings_fields( 'migrate-random-things' ) . do_settings_sections( 'migrate-random-things' );
 					?>
 					<?php submit_button( __( 'Save settings', 'migrate-random-things' ) ); ?>
 				</form>
