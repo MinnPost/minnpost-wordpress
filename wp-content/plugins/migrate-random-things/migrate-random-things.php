@@ -433,9 +433,9 @@ class Migrate_Random_Things {
 							);
 
 							// we need to figure out if it is a category, page, etc before we create it
-							$is_term = get_term_by( 'name', $item->{'menu-item-title'}, 'category', 'ARRAY_A' );
-							$is_page = get_page_by_title( $item->{'menu-item-title'}, 'ARRAY_A', 'page' );
-							$is_post = get_page_by_title( $item->{'menu-item-title'}, 'ARRAY_A', 'post' );
+							$is_term = get_term_by( 'slug', sanitize_title( $item->{'menu-item-title'} ), 'category', 'ARRAY_A' );
+							$is_page = get_page_by_path( sanitize_title( $item->{'menu-item-title'} ), 'ARRAY_A', 'page' );
+							$is_post = get_page_by_path( sanitize_title( $item->{'menu-item-title'} ), 'ARRAY_A', 'post' );
 							if ( false !== $is_term && 0 !== (int) $is_term['term_id'] ) {
 								$args['menu-item-type'] = 'taxonomy';
 								$args['menu-item-object'] = 'category';
