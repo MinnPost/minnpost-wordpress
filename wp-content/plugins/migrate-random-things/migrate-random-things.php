@@ -116,8 +116,8 @@ class Migrate_Random_Things {
 		$select_callback = array( $this, 'display_select' );
 		add_settings_section( $page, null, null, $page );
 
-		//$this->get_things_to_migrate();
 		// temp uncomment for testing when we don't want to wait for schedule to run
+		//$this->get_things_to_migrate();
 
 		$settings = array(
 			'menu_table' => array(
