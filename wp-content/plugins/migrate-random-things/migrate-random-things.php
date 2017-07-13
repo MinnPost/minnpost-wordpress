@@ -150,6 +150,46 @@ class Migrate_Random_Things {
 					'desc' => __( 'The name of the table with the advertisement data.', 'migrate-random-things' ),
 				),
 			),
+			'newsletter_top_posts_import_field' => array(
+				'title' => __( 'Newsletter Top Posts Import Field', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'The name of the meta field with imported newsletter post data', 'migrate-random-things' ),
+				),
+			),
+			'newsletter_more_posts_import_field' => array(
+				'title' => __( 'Newsletter More Posts Import Field', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'The name of the meta field with imported newsletter post data', 'migrate-random-things' ),
+				),
+			),
+			'newsletter_top_posts_field' => array(
+				'title' => __( 'Newsletter Top Posts Field', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'The name of the meta field with top posts for newsletter', 'migrate-random-things' ),
+				),
+			),
+			'newsletter_more_posts_field' => array(
+				'title' => __( 'Newsletter More Posts Field', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'The name of the meta field with more posts for newsletter', 'migrate-random-things' ),
+				),
+			),
 			/*'wp_filter_field_value' => array(
 				'title' => __( 'Field Value(s)', 'migrate-random-things' ),
 				'callback' => $input_callback,
@@ -343,6 +383,9 @@ class Migrate_Random_Things {
 
 			$ads_table = get_option( 'migrate_random_things_ads_table', '' );
 
+			$newsletter_top_posts_import = get_option( 'migrate_random_things_newsletter_top_posts_import_field', '');
+			$newsletter_more_posts_import = get_option( 'migrate_random_things_newsletter_more_posts_import_field', '');
+
 			if ( '' !== $menus && '' !== $menu_items ) {
 				if ( $wpdb->get_var( "SHOW TABLES LIKE '$menus'" ) === $menus && $wpdb->get_var( "SHOW TABLES LIKE '$menu_items'" ) === $menu_items ) {
 					$menu_rows = $wpdb->get_results( 'SELECT * FROM ' . $menus . ' ORDER BY id' );
@@ -354,7 +397,7 @@ class Migrate_Random_Things {
 						// If it doesn't exist, let's create it.
 						if ( ! $menu_exists ) {
 							$menu_id = wp_create_nav_menu( $menu->name );
-						} else {
+						} else if ( is_object( $menu_exists ) ) {
 							$menu_id = $menu_exists->term_id;
 							$existing_items = wp_get_nav_menu_items( $menu->name );
 						}
@@ -413,14 +456,19 @@ class Migrate_Random_Things {
 							}
 
 							$menu_item_id = wp_update_nav_menu_item( $menu_id, 0, $args );
-							$update = $wpdb->query( 'UPDATE ' . $menu_items . ' SET `menu-item-parent-id` = ' . $menu_item_id . ' WHERE `menu-item-parent` = "' . $item->{'menu-item-title'} . '"' );
 
-							$ran_already = get_option( 'menu_check_ran', false );
+							//error_log('item id is ' . print_r( $menu_item_id, true ) );
+							if ( ! is_object( $menu_item_id ) ) {
 
-							if ( false === $ran_already ) {
-								$delete = $wpdb->query( 'DELETE FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" AND `menu-item-title` = "' . $item->{'menu-item-title'} . '" AND `menu-item-url` = "' . $item->{'menu-item-url'} . '" AND `menu-item-parent-id` IS NULL' );
-							} else {
-								$delete = $wpdb->query( 'DELETE FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" AND `menu-item-title` = "' . $item->{'menu-item-title'} . '" AND `menu-item-url` = "' . $item->{'menu-item-url'} . '"' );
+								$update = $wpdb->query( 'UPDATE ' . $menu_items . ' SET `menu-item-parent-id` = ' . $menu_item_id . ' WHERE `menu-item-parent` = "' . $item->{'menu-item-title'} . '"' );
+
+								$ran_already = get_option( 'menu_check_ran', false );
+
+								if ( false === $ran_already ) {
+									$delete = $wpdb->query( 'DELETE FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" AND `menu-item-title` = "' . $item->{'menu-item-title'} . '" AND `menu-item-url` = "' . $item->{'menu-item-url'} . '" AND `menu-item-parent-id` IS NULL' );
+								} else {
+									$delete = $wpdb->query( 'DELETE FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" AND `menu-item-title` = "' . $item->{'menu-item-title'} . '" AND `menu-item-url` = "' . $item->{'menu-item-url'} . '"' );
+								}
 							}
 						} // End foreach().
 
@@ -562,8 +610,37 @@ class Migrate_Random_Things {
 
 				} // End if().
 			} // End if().
+
+			if ( '' !== $newsletter_top_posts_import ) {
+				$newsletter_top_rows = $wpdb->get_results( 'SELECT * FROM wp_postmeta WHERE meta_key = "' . $newsletter_top_posts_import . '"' );
+				foreach ( $newsletter_top_rows as $newsletter_row ) {
+					$result = $this->serialize_newsletter_posts( $newsletter_row->meta_id, $newsletter_row->post_id, $newsletter_row->meta_value );
+				}
+			} // End if().
+
+			if ( '' !== $newsletter_more_posts_import ) {
+				$newsletter_more_rows = $wpdb->get_results( 'SELECT * FROM wp_postmeta WHERE meta_key = "' . $newsletter_more_posts_import . '"' );
+				foreach ( $newsletter_more_rows as $newsletter_row ) {
+					$result = $this->serialize_newsletter_posts( $newsletter_row->meta_id, $newsletter_row->post_id, $newsletter_row->meta_value );
+				}
+			} // End if().
+
 		} // End foreach().
 
+	}
+
+	private function serialize_newsletter_posts( $meta_id, $post_id, $csv ) {
+
+		$newsletter_top_posts_import = get_option( 'migrate_random_things_newsletter_top_posts_import_field', '');
+		$newsletter_more_posts_import = get_option( 'migrate_random_things_newsletter_more_posts_import_field', '');
+
+		$newsletter_top_posts = get_option( 'migrate_random_things_newsletter_top_posts_field', '');
+		$newsletter_more_posts = get_option( 'migrate_random_things_newsletter_more_posts_field', '');
+
+		global $wpdb;
+		$array = explode( ',', $csv );
+		update_post_meta( $post_id, $newsletter_top_posts, $array, true );
+		delete_post_meta( $post_id, $newsletter_top_posts_import );
 	}
 
 	/**
