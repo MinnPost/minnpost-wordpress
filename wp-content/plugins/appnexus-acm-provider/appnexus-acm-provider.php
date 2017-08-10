@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: Appnexus ACM Provider
-Plugin URI: 
-Description: 
+Plugin URI:
+Description:
 Version: 0.0.1
 Author: Jonathan Stegall
 Author URI: http://code.minnpost.com
@@ -192,6 +192,8 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 			),
 		);
 
+		add_filter( 'the_content', array( $this, 'insert_inline_ad' ) );
+
 		add_filter( 'acm_ad_code_args', array( $this, 'filter_ad_code_args' ) );
 		add_filter( 'acm_output_html', array( $this, 'filter_output_html' ), 10, 2 );
 
@@ -212,15 +214,16 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 
 		foreach ( $ad_code_args as $tag => $ad_code_arg ) {
 
-			if ( 'tag' != $ad_code_arg['key'] )
+			if ( 'tag' !== $ad_code_arg['key'] ) {
 				continue;
-
-			// Get all of the tags that are registered, and provide them as options
-			foreach ( (array)$ad_code_manager->ad_tag_ids as $ad_tag ) {
-				if ( isset( $ad_tag['enable_ui_mapping'] ) && $ad_tag['enable_ui_mapping'] )
-					$ad_code_args[$tag]['options'][$ad_tag['tag']] = $ad_tag['tag'];
 			}
 
+			// Get all of the tags that are registered, and provide them as options
+			foreach ( (array) $ad_code_manager->ad_tag_ids as $ad_tag ) {
+				if ( isset( $ad_tag['enable_ui_mapping'] ) && $ad_tag['enable_ui_mapping'] ) {
+					$ad_code_args[ $tag ]['options'][ $ad_tag['tag'] ] = $ad_tag['tag'];
+				}
+			}
 		}
 		return $ad_code_args;
 	}
@@ -238,7 +241,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 			case 'appnexus_head':
 				$tags = array();
 				foreach ( (array) $ad_tags as $tag ) {
-					if ( $tag['tag'] !== 'appnexus_head' ) {
+					if ( 'appnexus_head' !== $tag['tag'] ) {
 						$matching_ad_code = $ad_code_manager->get_matching_ad_code( $tag['tag'] );
 						if ( ! empty( $matching_ad_code ) ) {
 							array_push( $tags, $tag['tag'] );
@@ -274,16 +277,102 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 				$matching_ad_code = $ad_code_manager->get_matching_ad_code( $tag_id );
 				if ( ! empty( $matching_ad_code ) ) {
 					$output_script = '
-						<div class="appnexus-ad ad-'. sanitize_title( $tag_id ) . '">
-							<script>OAS_AD("'. $tag_id .'");</script>
+						<div class="appnexus-ad ad-' . sanitize_title( $tag_id ) . '">
+							<script>OAS_AD("' . $tag_id . '");</script>
 						</div>
 					';
 				}
-		}
+		} // End switch().
 
 		return $output_script;
 
 	}
+
+	/**
+	 * Use an inline ad
+	 */
+	public function insert_inline_ad( $content = '' ) {
+		// abort if this is not being called In The Loop.
+		if ( ! in_the_loop() || ! is_main_query() ) {
+			return $content;
+		}
+		// abort if this is not a normal post
+		// we should change this to a list of post types
+		global $wp_query;
+		if ( 'post' !== $wp_query->queried_object->post_type ) {
+			return $content;
+		}
+
+		/*
+		* Abort if this post has the option set to not add ads.
+		*/
+		if ( 'on' === get_post_meta( $wp_query->queried_object->ID, 'scaip_prevent_shortcode_addition', true ) ) {
+			return $content;
+		}
+
+		/*
+		* Check that there isn't a line starting with `[ad`. If there is, abort! The content must be passed to the shortcode parser without adding more shortcodes. The user may have set a shortcode manually or set the `[ad no]` shortcode.
+		*/
+		if ( preg_match( '/^\[ad/m', $content ) ) {
+			return $content;
+		}
+
+		global $ad_code_manager;
+
+		$top_offset = get_option( 'appnexus_acm_provider_auto_embed_top_offset', 1000 );
+		$bottom_offset = get_option( 'appnexus_acm_provider_auto_embed_bottom_offset', 400 );
+		$tag_id = get_option( 'appnexus_acm_provider_auto_embed_position', 'Middle' );
+
+		$end = strlen( $content );
+		$position = $end;
+
+		// if the body is longer than the minimum ad spot find a break.
+	    // otherwise place the ad at the end
+	    if ( $position > $top_offset ) {
+	    	// find the break point
+	    	$breakpoints = array(
+	    		'</p>' => 4,
+	    		'<br />' => 6,
+	    		'<br/>' => 5,
+	    		'<br>' => 4,
+	    		'<!--pagebreak-->' => 0,
+	    		'<p>' => 0,
+	    	);
+
+	    	// We use strpos on the reversed needle and haystack for speed.
+			foreach ( $breakpoints as $point => $offset ) {
+				$length = stripos( $content, $point, $top_offset );
+				if ( false !== $length ) {
+					$position = min( $position, $length + $offset );
+				}
+			}
+	    }
+
+	    // If the position is at or near the end of the article.
+	    if ( $position > $end - $bottom_offset ) {
+	    	$position = $end;
+	    }
+
+	    // get the code for the ad
+		$matching_ad_code = $ad_code_manager->get_matching_ad_code( $tag_id );
+		if ( ! empty( $matching_ad_code ) ) {
+			$output_html = '
+				<div class="appnexus-ad ad-' . sanitize_title( $tag_id ) . '">
+					<script>OAS_AD("' . $tag_id . '");</script>
+				</div>
+			';
+		}
+
+		// use the function we already have for the placeholder ad
+		if ( function_exists( 'minnpost_no_ad_users' ) ) {
+			$output_html = minnpost_no_ad_users( $output_html, $tag_id );
+		}
+
+		// put it into the post's content
+		$content = substr_replace( $content, $output_html, $position, 0 );
+		return $content;
+	}
+
 
 	/**
 	 * Add the initialization code in the head
@@ -298,17 +387,18 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 	 * sizes may be required to load in the same ad unit.
 	 */
 	public function parse_ad_tag_sizes( $url_vars ) {
-		if ( empty( $url_vars ) ) 
+		if ( empty( $url_vars ) ) {
 			return;
+		}
 
 		$unit_sizes_output = '';
 		if ( ! empty( $url_vars['sizes'] ) ) {
-			foreach( $url_vars['sizes'] as $unit_size ) {
+			foreach ( $url_vars['sizes'] as $unit_size ) {
 				$unit_sizes_output[] = array(
 					(int) $unit_size['width'],
 					(int) $unit_size['height'],
 				);
-			}			
+			}
 		} else { // fallback for old style width x height
 			$unit_sizes_output = array(
 				(int) $url_vars['width'],
@@ -345,7 +435,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 	*/
 	public function plugin_action_links( $links, $file ) {
 		if ( plugin_basename( __FILE__ ) === $file ) {
-			$settings = '<a href="' . get_admin_url() . 'options-general.php?page=appnexus-acm-provider">' . __('Settings', 'appnexus-acm-provider' ) . '</a>';
+			$settings = '<a href="' . get_admin_url() . 'options-general.php?page=appnexus-acm-provider">' . __( 'Settings', 'appnexus-acm-provider' ) . '</a>';
 			// make the 'Settings' link appear first
 			array_unshift( $links, $settings );
 		}
@@ -364,7 +454,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 			<div id="main">
 				<form method="post" action="options.php">
 					<?php
-					settings_fields( 'appnexus-acm-provider' )  . do_settings_sections( 'appnexus-acm-provider' );
+					settings_fields( 'appnexus-acm-provider' ) . do_settings_sections( 'appnexus-acm-provider' );
 					?>
 					<?php submit_button( __( 'Save settings', 'appnexus-acm-provider' ) ); ?>
 				</form>
@@ -489,7 +579,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 		$name   = $args['name'];
 		$desc   = $args['desc'];
 		$value  = esc_attr( get_option( $id, '' ) );
-		echo '<input type="' . $type. '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
+		echo '<input type="' . $type . '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
 		class="regular-text code" />';
 		if ( '' !== $desc ) {
 			echo '<p class="description">' . $desc . '</p>';
@@ -538,10 +628,10 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 class Appnexus_ACM_WP_List_Table extends ACM_WP_List_Table {
 	function __construct() {
 		parent::__construct( array(
-				'singular'=> 'appnexus_acm_wp_list_table', //Singular label
+				'singular' => 'appnexus_acm_wp_list_table', //Singular label
 				'plural' => 'appnexus_acm_wp_list_table', //plural label, also this well be one of the table css class
-				'ajax' => true
-			) );
+				'ajax' => true,
+		) );
 	}
 
 	/**
