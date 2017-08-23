@@ -135,12 +135,6 @@ class MinnpostSpills {
 $minnpost_spills = new MinnpostSpills();
  
 class MinnpostSpills_Widget extends WP_Widget {
-
-	/**
-	* @var object
-	*/
-	private $salesforce;
-
  
 	public function __construct() {
 
@@ -354,10 +348,8 @@ class MinnpostSpills_Widget extends WP_Widget {
 	}
 
 	/**
-	* Load the Salesforce object
-	* Also make it available to this whole class
-	*
-	* @return $this->salesforce
+	* Load the spills for the posts
+	* This outputs HTML
 	*
 	*/
 	private function get_spill_posts( $categories, $terms ) {
