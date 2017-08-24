@@ -190,6 +190,17 @@ class Migrate_Random_Things {
 					'desc' => __( 'The name of the meta field with more posts for newsletter', 'migrate-random-things' ),
 				),
 			),
+			'category_featured_categories' => array(
+				'title' => __( 'Featured Categories for Categories Field', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'The name of the meta field that has the categories that should be featured on a category', 'migrate-random-things' ),
+				),
+			),
+
 			/*'wp_filter_field_value' => array(
 				'title' => __( 'Field Value(s)', 'migrate-random-things' ),
 				'callback' => $input_callback,
@@ -385,6 +396,8 @@ class Migrate_Random_Things {
 
 			$newsletter_top_posts_import = get_option( 'migrate_random_things_newsletter_top_posts_import_field', '');
 			$newsletter_more_posts_import = get_option( 'migrate_random_things_newsletter_more_posts_import_field', '');
+
+			$category_featured_categories = get_option( 'migrate_random_things_category_featured_categories' );
 
 			if ( '' !== $menus && '' !== $menu_items ) {
 				if ( $wpdb->get_var( "SHOW TABLES LIKE '$menus'" ) === $menus && $wpdb->get_var( "SHOW TABLES LIKE '$menu_items'" ) === $menu_items ) {
@@ -625,6 +638,14 @@ class Migrate_Random_Things {
 				}
 			} // End if().
 
+			if ( '' !== $category_featured_categories ) {
+				$featured_category_rows = $wpdb->get_results( 'SELECT * FROM wp_termmeta WHERE meta_key = "' . $category_featured_categories . '"' );
+				foreach ( $featured_category_rows as $category_row ) {
+					//error_log('row is ' . print_r($category_row, true) );
+					$result = $this->serialize_category_meta( $category_row->meta_id, $category_row->term_id, $category_row->meta_value );
+				}
+			} // End if().
+
 		} // End foreach().
 
 	}
@@ -641,6 +662,20 @@ class Migrate_Random_Things {
 		$array = explode( ',', $csv );
 		update_post_meta( $post_id, $newsletter_top_posts, $array, true );
 		delete_post_meta( $post_id, $newsletter_top_posts_import );
+	}
+
+	private function serialize_category_meta( $meta_id, $term_id, $csv ) {
+
+		$category_featured_categories = get_option( 'migrate_random_things_category_featured_categories' );
+
+		if ( is_serialized( $csv ) ) {
+			return;
+		}
+
+		global $wpdb;
+		$array = explode( ',', $csv );
+		update_term_meta( $term_id, $category_featured_categories, $array );
+		//delete_term_meta( $term_id, $category_featured_categories );
 	}
 
 	/**
