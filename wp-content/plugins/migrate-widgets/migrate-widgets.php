@@ -64,6 +64,7 @@ function add_widgets_to_sidebar( $args ) {
 
 add_action( 'migrate_widgets_widget_init', 'migrate_widgets_initialize_widgets' );
 function migrate_widgets_initialize_widgets( $args ) {
+	//error_log('widget init');
 	extract( $args[0][0] );
 	$widgets = array();
 	// Here the widgets previously defined in filter functions are initialized,
@@ -71,14 +72,19 @@ function migrate_widgets_initialize_widgets( $args ) {
 
 	global $wpdb;
 
-	$test_widgets = $wpdb->get_results( 'SELECT `title`, `content`, `show_on`, `migrated` FROM wp_sidebars WHERE migrated != "1"' );
+	$imported_widgets = $wpdb->get_results( 'SELECT `title`, `content`, `show_on`, `migrated` FROM wp_sidebars WHERE migrated != "1"' );
 
-	foreach ( $test_widgets as $widget ) {
-
-		$widgets = apply_filters( 'alter_initialization_widgets_' . $current_sidebar_short_name, $widgets );
-		if ( ! empty( $widgets ) ) {
-			do_action( 'create_widgets_for_sidebar', array( &$args ), $widgets );
-		}
+	foreach ( $imported_widgets as $key => $widget ) {
+		//error_log('here');
+		//if ( 0 === $key ) {
+			//error_log('key is ' . $key);
+			error_log('sidebar name is ' . $current_sidebar_short_name);
+			$widgets = apply_filters( 'alter_initialization_widgets_' . $current_sidebar_short_name, $widgets );
+			if ( ! empty( $widgets ) ) {
+				error_log('create some widgets');
+				do_action( 'create_widgets_for_sidebar', array( &$args ), $widgets );
+			}
+		//}
 
 	}
 }
@@ -127,10 +133,6 @@ function current_initialization_sidebars( $sidebars ) {
 }
 
 add_filter( 'alter_initialization_widgets_test', 'migrate_widgets' );
-// Add a filter hook for each sidebar you have. The hook name is derived from
-// the array keys passed in the alter_initialization_sidebars filter. 
-// Each filter has a name of 'alter_initialization_widgets_' and the array 
-// key appended to it.
 function migrate_widgets( $widgets ) {
 	// add widgets to sidebar
 	global $wpdb;
@@ -138,8 +140,10 @@ function migrate_widgets( $widgets ) {
 	$imported_widgets = $wpdb->get_results( 'SELECT `title`, `content`, `show_on`, `migrated` FROM wp_sidebars WHERE migrated != "1"' );
 
 	foreach ( $imported_widgets as $key => $widget ) {
+		error_log('what');
 		if ( 0 === $key ) {
 			$widget_id = $key + 1;
+			error_log('id is ' . $widget_id);
 			$new_widget['custom_html'] = array(
 				'title' => $widget->title,
 				'content' => $widget->content,
@@ -214,92 +218,7 @@ function migrate_widgets( $widgets ) {
 
 	}
 
-	return $new_widget;
-}
-
-
-
-//add_filter( 'widget_update_callback', 'test_widget_update', 20, 3 );
-function test_widget_update( $instance, $new_instance, $old_instance ) {
-
-	//error_log('start');
-	global $wpdb;
-
-	$test_widgets = $wpdb->get_results( 'SELECT `title`, `content`, `show_on`, `migrated` FROM wp_sidebars WHERE migrated != "1"' );
-
-	foreach ( $test_widgets as $key => $widget ) {
-		//error_log('key is ' . $key );
-		$data = array();
-		if ( 0 === $key ) {
-			//error_log('start');
-			$data['conditions']['action'] = 'show';
-			if ( '<front>' === $widget->show_on ) {
-				//error_log('yep');
-				//$new_widget['is_front_page'] = '1';
-				//$new_widget['location']['is_front_page'] = '1';
-				$data['conditions']['rules_major'][] = 'page';
-				$data['conditions']['rules_minor'][] = 'front';
-			} else {
-				$url = str_replace( '/%', '', $widget->show_on );
-				$url = str_replace( '%', '', $url );
-				$category = get_category_by_slug( $url );
-				if ( false !== $category ) {
-					$id = $category->term_id;
-					$data['conditions']['rules_major'][] = 'category';
-					$data['conditions']['rules_minor'][] = (string) $id;
-				}
-			}
-
-			if ( empty( $data['conditions'] ) ) {
-				return $instance;
-			}
-
-			//error_log('we have some conditions');
-
-			$conditions = array();
-			$conditions['action'] = $data['conditions']['action'];
-			$conditions['match_all'] = ( isset( $data['conditions']['match_all'] ) ? '1' : '0' );
-			$conditions['rules'] = array();
-
-			foreach ( $data['conditions']['rules_major'] as $index => $major_rule ) {
-				//error_log('index is ' . $index . ' and major rule is ' . $major_rule);
-				if ( ! $major_rule )
-					continue;
-
-				$conditions['rules'][] = array(
-					'major' => $major_rule,
-					'minor' => isset( $data['conditions']['rules_minor'][$index] ) ? $data['conditions']['rules_minor'][$index] : '',
-					'has_children' => isset( $data['conditions']['page_children'][$index] ) ? true : false,
-				);
-			}
-
-			if ( ! empty( $conditions['rules'] ) )
-				$instance['conditions'] = $conditions;
-			else
-				unset( $instance['conditions'] );
-
-			if (
-					( isset( $instance['conditions'] ) && ! isset( $old_instance['conditions'] ) )
-					||
-					(
-						isset( $instance['conditions'], $old_instance['conditions'] )
-						&&
-						serialize( $instance['conditions'] ) != serialize( $old_instance['conditions'] )
-					)
-				) {
-
-			}
-			else if ( ! isset( $instance['conditions'] ) && isset( $old_instance['conditions'] ) ) {
-
-			}
-
-			$update = $wpdb->query( 'UPDATE wp_sidebars SET `migrated` = "1" WHERE `title` = "' . $widget->title . '"' );
-		}
-	}
-
-	//error_log('instance is ' . print_r($instance, true));
-
-	return $instance;
+	return $widgets;
 }
 
 
