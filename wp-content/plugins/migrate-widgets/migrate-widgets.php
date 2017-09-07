@@ -21,20 +21,26 @@ function mp_sidebar_item_widgets() {
 	$sidebar_item_widgets = $wpdb->get_results( 'SELECT `title`, `content`, `show_on`, `migrated` FROM wp_sidebars WHERE migrated != "1"' );
 
 	$sidebars = array (
+		'sidebar-2' => 'sidebar-2', // do the middle sidebar first
 		'sidebar-1' => 'sidebar-1',
-		'sidebar-2' => 'sidebar-2',
+		
 	);
 
 	foreach ( $sidebars as $key => $value ) {
 	
 		if ( ! empty ( $active_widgets[ $sidebars[ $key ] ] ) ) {
-			//return;
 			$counter = count( $active_widgets[ $sidebars[ $key ] ] ) + 1;
 		} else {
 			$counter = 0;
 		}
 
 		foreach ( $sidebar_item_widgets as $widget ) {
+
+			$search_key = array_search( $widget->title, array_column( $migrated_widgets, 'title' ) );
+
+			if ( false !== $search_key ) { // don't add the same box twice
+				continue;
+			}
 
 			// add this widget to this sidebar
 			$active_widgets[ $sidebars[$key] ][$counter] = 'custom_html-' . $counter;
@@ -52,6 +58,8 @@ function mp_sidebar_item_widgets() {
 			if ( '<front>' === $widget->show_on ) {
 				$data['conditions']['rules_major'][] = 'page';
 				$data['conditions']['rules_minor'][] = 'front';
+				// note: sometimes the form renders this wrong and have to do a refresh even when the data is right
+				// ¯\_(ツ)_/¯
 			} else {
 				$url = str_replace( '/%', '', $widget->show_on );
 				$url = str_replace( '%', '', $url );
@@ -76,28 +84,28 @@ function mp_sidebar_item_widgets() {
 						$data['conditions']['rules_minor'][] = 'post_type-post';
 
 						if ( 'sidebar-2' === $key ) { // the current loop is the middle sidebar
-							// add this widget to this sidebar
-							unset( $active_widgets[ $sidebars[$key] ][$counter] );
-							// and write into it:
+							// we don't want this widget in this sidebar
+							unset( $active_widgets[ $sidebars[ $key ] ][ $counter ] );
 							unset( $migrated_widgets[ $counter ] );
 							$migrating = false;
 						}
-
 					} else {
 						// put these in the middle sidebar
 						$data['conditions']['match_all'] = '1';
 						$data['conditions']['rules_major'][] = 'page';
 						$data['conditions']['rules_minor'][] = 'archive';
 
-						if ( 'sidebar-1' === $key ) { // the current loop is the middle sidebar
-							// add this widget to this sidebar
-							unset( $active_widgets[ $sidebars[$key] ][$counter] );
-							// and write into it:
+						if ( 'sidebar-1' === $key ) { // the current loop is the right sidebar
+							// we don't want this widget in this sidebar
+							unset( $active_widgets[ $sidebars[ $key ] ][ $counter ] );
 							unset( $migrated_widgets[ $counter ] );
 							$migrating = false;
 						}
-
 					}
+				} elseif ( '' == $widget->show_on ) { // if it is not shown anywhere, it should be inactive
+					unset( $active_widgets[ $sidebars[ $key ] ][ $counter ] );
+					unset( $migrated_widgets[ $counter ] );
+					$migrating = false;
 				}
 			}
 
@@ -127,8 +135,17 @@ function mp_sidebar_item_widgets() {
 
 	}
 
-	update_option( 'widget_custom_html', $migrated_widgets );
-	// Now save the $active_widgets array.
-	update_option( 'sidebars_widgets', $active_widgets );
+	$previous_widgets = get_option( 'widget_custom_html', '' );
+	$previously_active_widgets = get_option( 'sidebars_widgets', '' );
+
+	if ( $previous_widgets !== $migrated_widgets && ! empty( $migrated_widgets ) ) {
+		// save the widget content only if it has changed from whatever it was before
+		update_option( 'widget_custom_html', $migrated_widgets );
+	}
+
+	if ( $previously_active_widgets !== $active_widgets ) {
+		// save the $active_widgets array, if it has changed from whatever it was before
+		update_option( 'sidebars_widgets', $active_widgets );
+	}
 
 }
