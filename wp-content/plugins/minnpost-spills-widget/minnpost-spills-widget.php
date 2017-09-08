@@ -196,6 +196,10 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 		extract( $args );
 
+		if ( ! isset( $instance['conditions']['action'] ) ) {
+			return;
+		}
+
 		$title = apply_filters( 'widget_title', $instance['title'] );
 		$url = isset( $instance['url'] ) && '' !== $instance['url'] ? $instance['url'] : '/' . sanitize_title( $instance['title'] ) . '/';
 		$categories = $instance['widget_categories'];
