@@ -22,8 +22,8 @@ function mp_sidebar_item_widgets() {
 
 	$sidebars = array (
 		'sidebar-2' => 'sidebar-2', // do the middle sidebar first
-		'sidebar-1' => 'sidebar-1',
-		
+		'sidebar-1' => 'sidebar-1', // this is the right sidebar
+		'wp_inactive_widgets' => 'wp_inactive_widgets', // we do want to be able to migrate some widgets and keep them inactive
 	);
 
 	foreach ( $sidebars as $key => $value ) {
@@ -34,11 +34,24 @@ function mp_sidebar_item_widgets() {
 			$counter = 0;
 		}
 
+		$original_root = '<img src="https://www.minnpost.com/sites/default/files/images/thumbnails/';
+
+		if ( 'sidebar-2' === $key ) {
+			// image urls for middle sidebar
+			$image_root = '<img src="https://www.minnpost.com/sites/default/files/imagecache/sidebar_middle/images/thumbnails/';
+		} else if ( 'sidebar-1' === $key ) {
+			// image urls for right sidebar
+			$image_root = '<img src="https://www.minnpost.com/sites/default/files/imagecache/sidebar_right/images/thumbnails/';
+		}
+
 		foreach ( $sidebar_item_widgets as $widget ) {
+
+			$widget_content = str_replace( $original_root, $image_root, $widget->content );
 
 			$search_key = array_search( $widget->title, array_column( $migrated_widgets, 'title' ) );
 
-			if ( false !== $search_key ) { // don't add the same box twice
+			if ( false !== $search_key && ( 'wp_inactive_widgets' === $key || false === strpos( $widget->show_on, '%') ) ) {
+				// it's not already in the array, unless the show_on field has a % in it for whatever follows after it
 				continue;
 			}
 
@@ -48,7 +61,7 @@ function mp_sidebar_item_widgets() {
 			// and write into it:
 			$migrated_widgets[ $counter ] = array(
 				'title' => $widget->title,
-				'content' => $widget->content,
+				'content' => $widget_content,
 				'wc_cache' => 'yes',
 			);
 			$migrating = true;
