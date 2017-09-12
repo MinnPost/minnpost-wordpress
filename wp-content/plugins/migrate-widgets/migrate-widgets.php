@@ -45,14 +45,19 @@ function mp_sidebar_item_widgets() {
 		}
 
 		foreach ( $sidebar_item_widgets as $widget ) {
-
+			//error_log('key is ' . $key);
 			$widget_content = str_replace( $original_root, $image_root, $widget->content );
 
 			$search_key = array_search( $widget->title, array_column( $migrated_widgets, 'title' ) );
 
-			if ( false !== $search_key && ( 'wp_inactive_widgets' === $key || false === strpos( $widget->show_on, '%') ) ) {
-				// it's not already in the array, unless the show_on field has a % in it for whatever follows after it
-				continue;
+			if ( false !== $search_key ) { // this widget is already found in the migrated_widgets array of titles
+				if ( 'wp_inactive_widgets' === $key ) {
+					continue;
+				}
+				if ( false === strpos( $widget->show_on, '%' ) && false !== strpos( $widget->show_on, '/' ) ) {
+					// there is not a /% so it doesn't get used in multiple cases
+					continue;
+				}
 			}
 
 			// add this widget to this sidebar
@@ -66,40 +71,30 @@ function mp_sidebar_item_widgets() {
 			);
 			$migrating = true;
 
-			$data = mp_sidebar_set_conditions_data( $widget->show_on );
+			$data = mp_sidebar_set_conditions_data( $widget->show_on, $key );
 
-			if ( ( isset( $data['conditions']['rules_major'] ) && in_array( 'category', $data['conditions']['rules_major'] ) ) || ( isset( $data['conditions']['rules_major'] ) && in_array( 'taxonomy', $data['conditions']['rules_major'] ) ) ) {
 
-				if ( false !== strpos( $widget->show_on, '/%') ) {
-					if ( 'sidebar-1' !== $key ) { // the current loop is the middle sidebar
-						// we don't want this widget in this sidebar
-						unset( $active_widgets[ $sidebars[ $key ] ][ $counter ] );
-						unset( $migrated_widgets[ $counter ] );
-						$migrating = false;
-					}
-				} else if ( false !== strpos( $widget->show_on, '%') ) {
-					if ( 'sidebar-1' !== $key && 'sidebar-2' !== $key ) {
-						// we don't want this widget in this sidebar
-						unset( $active_widgets[ $sidebars[ $key ] ][ $counter ] );
-						unset( $migrated_widgets[ $counter ] );
-						$migrating = false;
-					}
+			error_log('data is ' . print_r($data, true));
+
+
+			//error_log('data is ' . print_r($data, true));
+
+			if ( '' !== $widget->show_on && isset( $data['conditions']['show_on'] ) ) {
+				if ( $data['conditions']['show_on'] === $key && 'wp_inactive_widgets' !== $key ) {
+					// the key matches the show_on value and this is not the inactive sidebar
 				} else {
-					if ( 'sidebar-2' !== $key ) { // the current loop is the right sidebar
-						// we don't want this widget in this sidebar
-						unset( $active_widgets[ $sidebars[ $key ] ][ $counter ] );
-						unset( $migrated_widgets[ $counter ] );
-						$migrating = false;
-					}
-				}
-			} elseif ( '' == $widget->show_on ) {
-				// if it is not shown anywhere, it should be inactive
-				// this means we should put it in the inactive widgets sidebar
-				if ( 'wp_inactive_widgets' !== $key ) {
+					// if it is not shown anywhere, it should be inactive
+					// this means we should put it in the inactive widgets sidebar
 					unset( $active_widgets[ $sidebars[ $key ] ][ $counter ] );
 					unset( $migrated_widgets[ $counter ] );
 					$migrating = false;
 				}
+			} else {
+				// if it is not shown anywhere, it should be inactive
+				// this means we should put it in the inactive widgets sidebar
+				unset( $active_widgets[ $sidebars[ $key ] ][ $counter ] );
+				unset( $migrated_widgets[ $counter ] );
+				$migrating = false;
 			}
 
 			$conditions = array();
@@ -144,7 +139,7 @@ function mp_sidebar_item_widgets() {
 }
 
 
-function mp_sidebar_set_conditions_data( $show_on ) {
+function mp_sidebar_set_conditions_data( $show_on, $key ) {
 	$show_on = explode( ',', $show_on );
 	$data = array();
 	$data['conditions']['action'] = 'show';
@@ -153,18 +148,20 @@ function mp_sidebar_set_conditions_data( $show_on ) {
 		if ( in_array( '<front>', $show_on ) ) {
 			$data['conditions']['rules_major'][] = 'page';
 			$data['conditions']['rules_minor'][] = 'front';
+			$data['conditions']['show_on'] = 'sidebar-2';
 		}
 		foreach ( $show_on as $show_item ) {
 			if ( '<front>' !== $show_item ) {
-				$data['conditions'] = mp_sidebar_rule_iterator( $data['conditions'], $show_item, true );
+				$data['conditions'] = mp_sidebar_rule_iterator( $data['conditions'], $show_item, $key );
 			}
 		}
 	} else {
 		if ( '<front>' === $show_on ) {
 			$data['conditions']['rules_major'][] = 'page';
 			$data['conditions']['rules_minor'][] = 'front';
+			$data['conditions']['show_on'] = 'sidebar-2';
 		} else {
-			$data['conditions'] = mp_sidebar_rule_iterator( $data['conditions'], $show_on );
+			$data['conditions'] = mp_sidebar_rule_iterator( $data['conditions'], $show_on, $key );
 		}
 	}
 	
@@ -172,7 +169,7 @@ function mp_sidebar_set_conditions_data( $show_on ) {
 }
 
 
-function mp_sidebar_rule_iterator( $conditions, $show_on, $is_iterating = false ) {
+function mp_sidebar_rule_iterator( $conditions, $show_on, $key ) {
 	$url = str_replace( '/%', '', $show_on );
 	$url = str_replace( '%', '', $url );
 	$url = str_replace( 'tag/', '', $url );
@@ -191,42 +188,50 @@ function mp_sidebar_rule_iterator( $conditions, $show_on, $is_iterating = false 
 	}
 
 	if ( false !== $category || false !== $tag ) {
+		//error_log('taxonomy is ' . $category->name);
 		$conditions['rules_minor'][] = (string) $id;
 		if ( false !== strpos( $show_on, '/%') ) {
-			// we only want to show the widget inside the category or tag, not the category or tag itself
-			// put these on the main right sidebar
-			if ( false === $is_iterating ) {
+			// this only shows on the right side
+			// it is a category/tag, but only the content inside
+			// not the archive
+			if ( 'sidebar-1' === $key ) {
 				$conditions['match_all'] = '1';
 				$conditions['rules_major'][] = 'page';
 				$conditions['rules_minor'][] = 'post_type-post';
+				$conditions['show_on'] = $key;
 			}
+			//error_log('right sidebar of child pages');
 		} else if ( false !== strpos( $show_on, '%') ) {
 			// we want to show the widget inside the category or tag, and also on its archive page
 			// put these on the middle sidebar and the right sidebar
-			if ( false === $is_iterating ) {
-				$conditions['match_all'] = '1';
-			}
+			// something is getting added here every time though i think
+			$conditions['match_all'] = '1';
 			$conditions['rules_major'][] = 'page';
-
 			// for posts, put it on the right sidebar
 			if ( 'sidebar-1' === $key ) {
 				$conditions['rules_minor'][] = 'post_type-post';
-			} else if ( 'sidebar-2' === $key ) {
+			}/* else if ( 'sidebar-2' === $key ) {
 				// for archive, put in the middle sidebar
 				$conditions['rules_minor'][] = 'archive';
-			}
+			}*/
+			$conditions['show_on'] = $key; // it shows everywhere
 		} else {
 			// put these in the middle sidebar
-			if ( false === $is_iterating ) {
+			// it is a category/tag, but not the contents
+			if ( 'sidebar-2' === $key ) {
 				$conditions['match_all'] = '1';
+				//$conditions['rules_major'][] = 'page';
+				//$conditions['rules_minor'][] = 'archive';
+				$conditions['show_on'] = $key;
 			}
-			$conditions['rules_major'][] = 'page';
-			$conditions['rules_minor'][] = 'archive';
 		}
 	} elseif ( false !== $page ) {
-		$conditions['rules_minor'][] = (string) $id;
-		$conditions['rules_major'][] = 'page';
-		$conditions['rules_minor'][] = 'post_type-page';
+		if ( 'sidebar-1' === $key ) {
+			$conditions['rules_minor'][] = (string) $id;
+			$conditions['rules_major'][] = 'page';
+			$conditions['rules_minor'][] = 'post_type-page';
+			$conditions['show_on'] = $key;
+		}
 	}
 
 	return $conditions;
