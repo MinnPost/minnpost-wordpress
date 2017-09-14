@@ -20,15 +20,14 @@ function mp_sidebar_item_widgets() {
 	global $wpdb;
 	$sidebar_item_widgets = $wpdb->get_results( 'SELECT `title`, `content`, `show_on`, `migrated` FROM wp_sidebars WHERE migrated != "1"' );
 
-	$sidebars = array (
+	$sidebars = array(
 		'sidebar-2' => 'sidebar-2', // do the middle sidebar first
 		'sidebar-1' => 'sidebar-1', // this is the right sidebar
 		'wp_inactive_widgets' => 'wp_inactive_widgets', // we do want to be able to migrate some widgets and keep them inactive
 	);
 
 	foreach ( $sidebars as $key => $value ) {
-	
-		if ( ! empty ( $active_widgets[ $sidebars[ $key ] ] ) ) {
+		if ( ! empty( $active_widgets[ $sidebars[ $key ] ] ) ) {
 			$counter = count( $active_widgets[ $sidebars[ $key ] ] ) + 1;
 		} else {
 			$counter = 0;
@@ -39,7 +38,7 @@ function mp_sidebar_item_widgets() {
 		if ( 'sidebar-2' === $key ) {
 			// image urls for middle sidebar
 			$image_root = '<img src="https://www.minnpost.com/sites/default/files/imagecache/sidebar_middle/images/thumbnails/';
-		} else if ( 'sidebar-1' === $key ) {
+		} elseif ( 'sidebar-1' === $key ) {
 			// image urls for right sidebar
 			$image_root = '<img src="https://www.minnpost.com/sites/default/files/imagecache/sidebar_right/images/thumbnails/';
 		}
@@ -61,7 +60,7 @@ function mp_sidebar_item_widgets() {
 			}
 
 			// add this widget to this sidebar
-			$active_widgets[ $sidebars[$key] ][$counter] = 'custom_html-' . $counter;
+			$active_widgets[ $sidebars[ $key ] ][ $counter ] = 'custom_html-' . $counter;
 
 			// and write into it:
 			$migrated_widgets[ $counter ] = array(
@@ -106,8 +105,8 @@ function mp_sidebar_item_widgets() {
 				foreach ( $data['conditions']['rules_major'] as $index => $major_rule ) {
 					$conditions['rules'][] = array(
 						'major' => $major_rule,
-						'minor' => isset( $data['conditions']['rules_minor'][$index] ) ? $data['conditions']['rules_minor'][$index] : '',
-						'has_children' => isset( $data['conditions']['page_children'][$index] ) ? true : false,
+						'minor' => isset( $data['conditions']['rules_minor'][ $index ] ) ? $data['conditions']['rules_minor'][ $index ] : '',
+						'has_children' => isset( $data['conditions']['page_children'][ $index ] ) ? true : false,
 					);
 				}
 
@@ -118,9 +117,7 @@ function mp_sidebar_item_widgets() {
 				$counter++;
 				$update = $wpdb->query( 'UPDATE wp_sidebars SET `migrated` = "1" WHERE `title` = "' . $widget->title . '"' );
 			}
-
 		}
-
 	}
 
 	$previous_widgets = get_option( 'widget_custom_html', '' );
@@ -164,7 +161,6 @@ function mp_sidebar_set_conditions_data( $show_on, $key ) {
 			$data['conditions'] = mp_sidebar_rule_iterator( $data['conditions'], $show_on, $key );
 		}
 	}
-	
 	return $data;
 }
 
@@ -201,7 +197,7 @@ function mp_sidebar_rule_iterator( $conditions, $show_on, $key ) {
 				$conditions['show_on'] = $key;
 			}
 			//error_log('right sidebar of child pages');
-		} else if ( false !== strpos( $show_on, '%') ) {
+		} elseif ( false !== strpos( $show_on, '%' ) ) {
 			// we want to show the widget inside the category or tag, and also on its archive page
 			// put these on the middle sidebar and the right sidebar
 			// something is getting added here every time though i think
