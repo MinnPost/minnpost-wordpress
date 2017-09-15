@@ -508,7 +508,7 @@ class Deserialize_Metadata {
 			$config_maps[ "$key" ] = array(
 				'wp_table' => $map['wp_table'],
 				'wp_column' => $map['wp_column'],
-				'unique' => $map['unique'],
+				'unique' => isset( $map['unique'] ) ? $map['unique'] : 0,
 			);
 		}
 
