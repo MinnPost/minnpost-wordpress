@@ -365,6 +365,9 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 
 		// use the function we already have for the placeholder ad
 		if ( function_exists( 'minnpost_no_ad_users' ) ) {
+			if ( ! isset( $output_html ) ) {
+				$output_html = '';
+			}
 			$output_html = minnpost_no_ad_users( $output_html, $tag_id );
 		}
 
