@@ -327,33 +327,33 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 		$position = $end;
 
 		// if the body is longer than the minimum ad spot find a break.
-	    // otherwise place the ad at the end
-	    if ( $position > $top_offset ) {
-	    	// find the break point
-	    	$breakpoints = array(
-	    		'</p>' => 4,
-	    		'<br />' => 6,
-	    		'<br/>' => 5,
-	    		'<br>' => 4,
-	    		'<!--pagebreak-->' => 0,
-	    		'<p>' => 0,
-	    	);
+		// otherwise place the ad at the end
+		if ( $position > $top_offset ) {
+			// find the break point
+			$breakpoints = array(
+				'</p>' => 4,
+				'<br />' => 6,
+				'<br/>' => 5,
+				'<br>' => 4,
+				'<!--pagebreak-->' => 0,
+				'<p>' => 0,
+			);
 
-	    	// We use strpos on the reversed needle and haystack for speed.
+			// We use strpos on the reversed needle and haystack for speed.
 			foreach ( $breakpoints as $point => $offset ) {
 				$length = stripos( $content, $point, $top_offset );
 				if ( false !== $length ) {
 					$position = min( $position, $length + $offset );
 				}
 			}
-	    }
+		}
 
-	    // If the position is at or near the end of the article.
-	    if ( $position > $end - $bottom_offset ) {
-	    	$position = $end;
-	    }
+		// If the position is at or near the end of the article.
+		if ( $position > $end - $bottom_offset ) {
+			$position = $end;
+		}
 
-	    // get the code for the ad
+		// get the code for the ad
 		$matching_ad_code = $ad_code_manager->get_matching_ad_code( $tag_id );
 		if ( ! empty( $matching_ad_code ) ) {
 			$output_html = '
@@ -628,9 +628,9 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 class Appnexus_ACM_WP_List_Table extends ACM_WP_List_Table {
 	function __construct() {
 		parent::__construct( array(
-				'singular' => 'appnexus_acm_wp_list_table', //Singular label
-				'plural' => 'appnexus_acm_wp_list_table', //plural label, also this well be one of the table css class
-				'ajax' => true,
+			'singular' => 'appnexus_acm_wp_list_table', //Singular label
+			'plural' => 'appnexus_acm_wp_list_table', //plural label, also this well be one of the table css class
+			'ajax' => true,
 		) );
 	}
 
