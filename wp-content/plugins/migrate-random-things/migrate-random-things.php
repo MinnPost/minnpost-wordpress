@@ -664,10 +664,14 @@ class Migrate_Random_Things {
 		$newsletter_top_posts = get_option( 'migrate_random_things_newsletter_top_posts_field', '' );
 		$newsletter_more_posts = get_option( 'migrate_random_things_newsletter_more_posts_field', '' );
 
+		// todo: should make sure these run together without conflicting with each other probably
 		global $wpdb;
 		$array = explode( ',', $csv );
 		update_post_meta( $post_id, $newsletter_top_posts, $array, true );
 		delete_post_meta( $post_id, $newsletter_top_posts_import );
+
+		update_post_meta( $post_id, $newsletter_more_posts, $array, true );
+		delete_post_meta( $post_id, $newsletter_more_posts_import );
 	}
 
 	private function serialize_category_meta( $meta_id, $term_id, $csv ) {
