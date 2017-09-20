@@ -634,14 +634,14 @@ class Migrate_Random_Things {
 			if ( '' !== $newsletter_top_posts_import ) {
 				$newsletter_top_rows = $wpdb->get_results( 'SELECT * FROM wp_postmeta WHERE meta_key = "' . $newsletter_top_posts_import . '"' );
 				foreach ( $newsletter_top_rows as $newsletter_row ) {
-					$result = $this->serialize_newsletter_posts( $newsletter_row->meta_id, $newsletter_row->post_id, $newsletter_row->meta_value );
+					$result = $this->serialize_newsletter_posts( $newsletter_row->meta_id, $newsletter_row->post_id, $newsletter_row->meta_value, 'top' );
 				}
 			} // End if().
 
 			if ( '' !== $newsletter_more_posts_import ) {
 				$newsletter_more_rows = $wpdb->get_results( 'SELECT * FROM wp_postmeta WHERE meta_key = "' . $newsletter_more_posts_import . '"' );
 				foreach ( $newsletter_more_rows as $newsletter_row ) {
-					$result = $this->serialize_newsletter_posts( $newsletter_row->meta_id, $newsletter_row->post_id, $newsletter_row->meta_value );
+					$result = $this->serialize_newsletter_posts( $newsletter_row->meta_id, $newsletter_row->post_id, $newsletter_row->meta_value, 'more' );
 				}
 			} // End if().
 
@@ -656,7 +656,7 @@ class Migrate_Random_Things {
 
 	}
 
-	private function serialize_newsletter_posts( $meta_id, $post_id, $csv ) {
+	private function serialize_newsletter_posts( $meta_id, $post_id, $csv, $location ) {
 
 		$newsletter_top_posts_import = get_option( 'migrate_random_things_newsletter_top_posts_import_field', '' );
 		$newsletter_more_posts_import = get_option( 'migrate_random_things_newsletter_more_posts_import_field', '' );
@@ -667,11 +667,16 @@ class Migrate_Random_Things {
 		// todo: should make sure these run together without conflicting with each other probably
 		global $wpdb;
 		$array = explode( ',', $csv );
-		update_post_meta( $post_id, $newsletter_top_posts, $array, true );
-		delete_post_meta( $post_id, $newsletter_top_posts_import );
 
-		update_post_meta( $post_id, $newsletter_more_posts, $array, true );
-		delete_post_meta( $post_id, $newsletter_more_posts_import );
+		if ( 'top' === $location ) {
+			update_post_meta( $post_id, $newsletter_top_posts, $array, true );
+			delete_post_meta( $post_id, $newsletter_top_posts_import );
+		}
+
+		if ( 'more' === $location ) {
+			update_post_meta( $post_id, $newsletter_more_posts, $array, true );
+			delete_post_meta( $post_id, $newsletter_more_posts_import );
+		}
 	}
 
 	private function serialize_category_meta( $meta_id, $term_id, $csv ) {
