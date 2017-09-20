@@ -664,7 +664,6 @@ class Migrate_Random_Things {
 		$newsletter_top_posts = get_option( 'migrate_random_things_newsletter_top_posts_field', '' );
 		$newsletter_more_posts = get_option( 'migrate_random_things_newsletter_more_posts_field', '' );
 
-		// todo: should make sure these run together without conflicting with each other probably
 		global $wpdb;
 		$array = explode( ',', $csv );
 
