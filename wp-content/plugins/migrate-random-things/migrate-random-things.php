@@ -394,8 +394,8 @@ class Migrate_Random_Things {
 
 			$ads_table = get_option( 'migrate_random_things_ads_table', '' );
 
-			$newsletter_top_posts_import = get_option( 'migrate_random_things_newsletter_top_posts_import_field', '');
-			$newsletter_more_posts_import = get_option( 'migrate_random_things_newsletter_more_posts_import_field', '');
+			$newsletter_top_posts_import = get_option( 'migrate_random_things_newsletter_top_posts_import_field', '' );
+			$newsletter_more_posts_import = get_option( 'migrate_random_things_newsletter_more_posts_import_field', '' );
 
 			$category_featured_categories = get_option( 'migrate_random_things_category_featured_categories' );
 
@@ -410,7 +410,7 @@ class Migrate_Random_Things {
 						// If it doesn't exist, let's create it.
 						if ( ! $menu_exists ) {
 							$menu_id = wp_create_nav_menu( $menu->name );
-						} else if ( is_object( $menu_exists ) ) {
+						} elseif ( is_object( $menu_exists ) ) {
 							$menu_id = $menu_exists->term_id;
 							$existing_items = wp_get_nav_menu_items( $menu->name );
 						}
@@ -611,16 +611,23 @@ class Migrate_Random_Things {
 									'conditionals' => $conditionals,
 								),
 							);
-							wp_defer_term_counting(true);
+							wp_defer_term_counting( true );
 
 							$post_id = wp_insert_post( $content );
 
 							if ( 0 !== $post_id ) {
-								$wpdb->delete( $ads_table, array( 'id' => $ad->id ), array( '%d' ) );
+								$wpdb->delete(
+									$ads_table,
+									array(
+										'id' => $ad->id,
+									),
+									array(
+										'%d',
+									)
+								);
 							}
 						}
 					} // End foreach().
-
 				} // End if().
 			} // End if().
 
@@ -645,18 +652,17 @@ class Migrate_Random_Things {
 					$result = $this->serialize_category_meta( $category_row->meta_id, $category_row->term_id, $category_row->meta_value );
 				}
 			} // End if().
-
 		} // End foreach().
 
 	}
 
 	private function serialize_newsletter_posts( $meta_id, $post_id, $csv ) {
 
-		$newsletter_top_posts_import = get_option( 'migrate_random_things_newsletter_top_posts_import_field', '');
-		$newsletter_more_posts_import = get_option( 'migrate_random_things_newsletter_more_posts_import_field', '');
+		$newsletter_top_posts_import = get_option( 'migrate_random_things_newsletter_top_posts_import_field', '' );
+		$newsletter_more_posts_import = get_option( 'migrate_random_things_newsletter_more_posts_import_field', '' );
 
-		$newsletter_top_posts = get_option( 'migrate_random_things_newsletter_top_posts_field', '');
-		$newsletter_more_posts = get_option( 'migrate_random_things_newsletter_more_posts_field', '');
+		$newsletter_top_posts = get_option( 'migrate_random_things_newsletter_top_posts_field', '' );
+		$newsletter_more_posts = get_option( 'migrate_random_things_newsletter_more_posts_field', '' );
 
 		global $wpdb;
 		$array = explode( ',', $csv );
