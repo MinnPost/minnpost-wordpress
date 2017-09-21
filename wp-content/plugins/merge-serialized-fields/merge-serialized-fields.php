@@ -76,7 +76,7 @@ class Merge_Serialized_Fields {
 	*/
 	public function plugin_action_links( $links, $file ) {
 		if ( plugin_basename( __FILE__ ) === $file ) {
-			$settings = '<a href="' . get_admin_url() . 'options-general.php?page=merge-serialized-fields">' . __('Settings', 'merge-serialized-fields' ) . '</a>';
+			$settings = '<a href="' . get_admin_url() . 'options-general.php?page=merge-serialized-fields">' . __( 'Settings', 'merge-serialized-fields' ) . '</a>';
 			// make the 'Settings' link appear first
 			array_unshift( $links, $settings );
 		}
@@ -95,7 +95,7 @@ class Merge_Serialized_Fields {
 			<div id="main">
 				<form method="post" action="options.php">
 					<?php
-					settings_fields( 'merge-serialized-fields' )  . do_settings_sections( 'merge-serialized-fields' );
+					settings_fields( 'merge-serialized-fields' ) . do_settings_sections( 'merge-serialized-fields' );
 					?>
 					<?php submit_button( __( 'Save settings', 'merge-serialized-fields' ) ); ?>
 				</form>
@@ -237,7 +237,7 @@ class Merge_Serialized_Fields {
 		$desc   = $args['desc'];
 		if ( ! isset( $args['constant'] ) || ! defined( $args['constant'] ) ) {
 			$value  = esc_attr( get_option( $id, '' ) );
-			echo '<input type="' . $type. '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
+			echo '<input type="' . $type . '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
 			class="regular-text code" />';
 			if ( '' !== $desc ) {
 				echo '<p class="description">' . $desc . '</p>';
@@ -290,9 +290,7 @@ class Merge_Serialized_Fields {
 					update_option( 'merge_serialized_fields_last_row_checked', count( $merge_rows ) + $last_row_checked );
 				}
 				if ( ! is_array( $merge_row->$config['group_by'] ) ) {
-					$id = $merge_row->$config['group_by'];	
-				} else {
-					error_log('config group by is ' . print_r( $merge_row->$config['group_by'] ) );
+					$id = $merge_row->$config['group_by'];
 				}
 
 				$merge_items = $wpdb->get_results( 'SELECT ' . $config['primary_key'] . ', ' . $config['wp_field_to_merge'] . ' FROM ' . $config['wp_table'] . ' WHERE ' . $config['wp_filter_field'] . ' = "' . $config['wp_filter_field_value'] . '" AND ' . $config['group_by'] . ' = "' . $id . '"', OBJECT );
@@ -303,9 +301,9 @@ class Merge_Serialized_Fields {
 						if ( 0 === $key ) {
 							$id_to_update = $value->$config['primary_key'];
 						}
-						error_log( 'key is ' . $key . ' and count is ' . ( count( $merge_items ) - 1 ) . ' and id is ' . $last_item_checked );
+						//error_log( 'key is ' . $key . ' and count is ' . ( count( $merge_items ) - 1 ) . ' and id is ' . $last_item_checked );
 						if ( ( count( $merge_items ) - 1 ) === $key ) {
-							error_log( 'new value should be ' .  ( $last_row_checked + $last_item_checked ) );
+							//error_log( 'new value should be ' .  ( $last_row_checked + $last_item_checked ) );
 							update_option( 'merge_serialized_fields_last_row_checked', ( $last_row_checked + $last_item_checked ) );
 						}
 						$value = $value->$config['wp_field_to_merge'];
