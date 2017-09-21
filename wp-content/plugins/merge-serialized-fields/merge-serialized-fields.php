@@ -289,7 +289,12 @@ class Merge_Serialized_Fields {
 				if ( ( count( $merge_rows ) - 1 ) === $key ) {
 					update_option( 'merge_serialized_fields_last_row_checked', count( $merge_rows ) + $last_row_checked );
 				}
-				$id = $merge_row->$config['group_by'];
+				if ( ! is_array( $merge_row->$config['group_by'] ) ) {
+					$id = $merge_row->$config['group_by'];	
+				} else {
+					error_log('config group by is ' . print_r( $merge_row->$config['group_by'] ) );
+				}
+
 				$merge_items = $wpdb->get_results( 'SELECT ' . $config['primary_key'] . ', ' . $config['wp_field_to_merge'] . ' FROM ' . $config['wp_table'] . ' WHERE ' . $config['wp_filter_field'] . ' = "' . $config['wp_filter_field_value'] . '" AND ' . $config['group_by'] . ' = "' . $id . '"', OBJECT );
 				if ( count( $merge_items ) > 1 ) {
 					$merged_array = [];
