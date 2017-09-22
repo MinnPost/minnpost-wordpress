@@ -248,7 +248,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 		} else {
 			$instance['url'] = '';
 		}
-		if ( ! empty($new_instance['widget_categories'] ) ) {
+		if ( ! empty( $new_instance['widget_categories'] ) ) {
 			$instance['widget_categories'] = $new_instance['widget_categories'];
 		} else {
 			$instance['widget_categories'] = array();
