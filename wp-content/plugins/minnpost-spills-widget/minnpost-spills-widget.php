@@ -55,17 +55,17 @@ class MinnpostSpills {
 
 				add_filter( 'get_the_archive_title', array( $this, 'set_wp_title' ) );
 				add_filter( 'pre_get_document_title', array( $this, 'set_wp_title' ) );
-				
+
 				foreach ( $widget_instances as $instance ) {
-					
+
 					$title = sanitize_title( $instance['title'] );
 					$key = array_search( $instance['title'], array_column( $instances, 'title' ), true );
-					$match = $instances[$key];
+					$match = $instances[ $key ];
 					$query = array(
 						'post_type' => 'post',
 						'tax_query' => array(
 							'relation' => 'OR',
-						)
+						),
 					);
 					if ( ! empty( $match['widget_categories'] ) ) {
 						$query['tax_query'][] = array(
@@ -75,7 +75,7 @@ class MinnpostSpills {
 						);
 					}
 					if ( ! empty( $match['widget_terms'] ) ) {
-						if ( ! is_array ( $match['widget_terms'] ) ) {
+						if ( ! is_array( $match['widget_terms'] ) ) {
 							$widget_terms = explode( ',', $match['widget_terms'] );
 						} else {
 							$widget_terms = $match['widget_terms'];
@@ -83,13 +83,15 @@ class MinnpostSpills {
 						$query['tax_query'][] = array(
 							'taxonomy' => 'post_tag',
 							'field' => 'name',
-							'terms' => $widget_terms
+							'terms' => $widget_terms,
 						);
 					}
 					$routes->addRoute( new QueryRoute(
 						$title,
 						$query,
-						['template' => $this->template]
+						[
+							'template' => $this->template,
+						]
 					));
 				}
 
@@ -106,7 +108,7 @@ class MinnpostSpills {
 
 	public function set_wp_title( $title ) {
 		global $template;
-		if ( $this->template === basename($template) ) {
+		if ( basename( $template ) === $this->template ) {
 
 			$widget_instances = get_option( 'widget_MinnpostSpills_Widget', false );
 			$instances = array_values( $widget_instances );
@@ -115,12 +117,12 @@ class MinnpostSpills {
 			add_filter( 'pre_get_document_title', array( $this, 'set_wp_title' ) );
 
 			$url = str_replace( '/', '', $_SERVER['REQUEST_URI'] );
-			
+
 			foreach ( $widget_instances as $instance ) {
 				$slug = sanitize_title( $instance['title'] );
 				if ( $slug === $url ) {
 					$key = array_search( $instance['title'], array_column( $instances, 'title' ), true );
-					$match = $instances[$key];
+					$match = $instances[ $key ];
 					return $match['title'];
 				}
 			}
@@ -133,16 +135,16 @@ class MinnpostSpills {
 
 // Instantiate our class
 $minnpost_spills = new MinnpostSpills();
- 
+
 class MinnpostSpills_Widget extends WP_Widget {
- 
+
 	public function __construct() {
 
 		parent::__construct(
 			'MinnpostSpills_Widget', __( 'MinnPost Spills Widget', 'minnpost-spills-widget' ),
 			array(
 				'classname'   => 'MinnpostSpills_Widget',
-				'description' => __( 'Posts from a group of categories and/or tags.', 'minnpost-spills-widget' )
+				'description' => __( 'Posts from a group of categories and/or tags.', 'minnpost-spills-widget' ),
 			)
 		);
 
@@ -167,7 +169,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 		<script>
 		function setSuggest() {
 			jQuery('.mp-spills-terms').suggest(
-				"<?php echo get_bloginfo('wpurl'); ?>/wp-admin/admin-ajax.php?action=ajax-tag-search&tax=post_tag",
+				"<?php echo get_bloginfo( 'wpurl' ); ?>/wp-admin/admin-ajax.php?action=ajax-tag-search&tax=post_tag",
 				{
 					multiple:true, 
 					multipleSep: ","
@@ -184,7 +186,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 	<?php
 	}
 
-	/**  
+	/**
 	* Front-end display of widget.
 	*
 	* @see WP_Widget::widget()
@@ -206,13 +208,13 @@ class MinnpostSpills_Widget extends WP_Widget {
 		$terms = $instance['widget_terms'];
 		$output_function = isset( $instance['output_function'] ) ? $instance['output_function'] : '';
 
-		echo str_replace( 'widget MinnpostSpills-widget', 'm-widget m-minnpost-spills-widget', str_replace('_Widget"', '-widget ' . sanitize_title( $title ) . '"', $before_widget));
+		echo str_replace( 'widget MinnpostSpills-widget', 'm-widget m-minnpost-spills-widget', str_replace( '_Widget"', '-widget ' . sanitize_title( $title ) . '"', $before_widget ) );
 
 		if ( isset( $output_function ) && function_exists( $output_function ) ) {
 			$output = $output_function( $before_title, $title, $after_title, $categories, $terms );
 		} else {
 			if ( $title ) {
-				$before_title = str_replace('widget-title', 'a-widget-title', $before_title);
+				$before_title = str_replace( 'widget-title', 'a-widget-title', $before_title );
 				echo $before_title . '<a href="' . $url . '">' . $title . '</a>' . $after_title;
 			}
 			echo '<div class="m-widget-contents">';
@@ -236,7 +238,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 	*/
 	public function update( $new_instance, $old_instance ) {
 
-		// need a way to clear the widget's cache when its settings get updated   
+		// need a way to clear the widget's cache when its settings get updated
 
 		$instance = $old_instance;
 
@@ -325,11 +327,11 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 		?>
 		<div>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e('Title:'); ?></label> 
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
 		</div>
 		<div>
-			<label for="<?php echo $this->get_field_id( 'url' ); ?>"><?php _e('Link URL:'); ?></label> 
+			<label for="<?php echo $this->get_field_id( 'url' ); ?>"><?php _e( 'Link URL:' ); ?></label> 
 			<input class="widefat" id="<?php echo $this->get_field_id( 'url' ); ?>" name="<?php echo $this->get_field_name( 'url' ); ?>" type="text" value="<?php echo $url; ?>" />
 		</div>
 		<div>
