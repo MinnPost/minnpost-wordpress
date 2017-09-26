@@ -18,163 +18,295 @@ function mp_sidebar_item_widgets() {
 	$active_widgets = get_option( 'sidebars_widgets' );
 	$migrated_widgets = array();
 	global $wpdb;
-	$sidebar_item_widgets = $wpdb->get_results( 'SELECT `title`, `content`, `show_on`, `migrated` FROM wp_sidebars WHERE migrated != "1"' );
 
-	$sidebars = array(
-		'sidebar-2' => 'sidebar-2', // do the middle sidebar first
-		'sidebar-1' => 'sidebar-1', // this is the right sidebar
-		'wp_inactive_widgets' => 'wp_inactive_widgets', // we do want to be able to migrate some widgets and keep them inactive
-	);
+	$types = $wpdb->get_results( 'SELECT DISTINCT `type` FROM wp_sidebars WHERE migrated != "1" ORDER BY `type` DESC' );
 
-	foreach ( $sidebars as $key => $value ) {
-		if ( ! empty( $active_widgets[ $sidebars[ $key ] ] ) ) {
-			$counter = count( $active_widgets[ $sidebars[ $key ] ] ) + 1;
-		} else {
-			$counter = 0;
-		}
+	foreach ( $types as $type_object ) {
+		$type = $type_object->type;
 
-		$original_root = '<img src="https://www.minnpost.com/sites/default/files/images/thumbnails/';
+		$sidebar_item_widgets = $wpdb->get_results( 'SELECT `title`, `url`, `content`, `type`, `show_on`, `categories`, `tags`, `migrated` FROM wp_sidebars WHERE migrated != "1" and type = "' . $type . '" ORDER BY `id`' );
 
-		if ( 'sidebar-2' === $key ) {
-			// image urls for middle sidebar
-			$image_root = '<img src="https://www.minnpost.com/sites/default/files/imagecache/sidebar_middle/images/thumbnails/';
-		} elseif ( 'sidebar-1' === $key ) {
-			// image urls for right sidebar
-			$image_root = '<img src="https://www.minnpost.com/sites/default/files/imagecache/sidebar_right/images/thumbnails/';
-		}
+		$sidebars = array(
+			'sidebar-2' => 'sidebar-2', // do the middle sidebar first
+			'sidebar-1' => 'sidebar-1', // this is the right sidebar
+			'wp_inactive_widgets' => 'wp_inactive_widgets', // we do want to be able to migrate some widgets and keep them inactive
+		);
 
-		foreach ( $sidebar_item_widgets as $widget ) {
-			$widget_content = str_replace( $original_root, $image_root, $widget->content );
-
-			$search_key = array_search( $widget->title, array_column( $migrated_widgets, 'title' ) );
-
-			if ( false !== $search_key ) { // this widget is already found in the migrated_widgets array of titles
-				if ( 'wp_inactive_widgets' === $key ) {
-					continue;
-				}
-				if ( false === strpos( $widget->show_on, '%' ) && false !== strpos( $widget->show_on, '/' ) ) {
-					// there is not a % without a / so it doesn't get used in multiple cases
-					continue;
-				}
+		foreach ( $sidebars as $key => $value ) {
+			if ( ! empty( $active_widgets[ $sidebars[ $key ] ] ) ) {
+				$counter = count( $active_widgets[ $sidebars[ $key ] ] ) + 1;
+			} elseif ( ! empty( $migrated_widgets ) ) {
+				$counter = count( $migrated_widgets ) + 1;
+			} else {
+				$counter = 0;
 			}
 
-			// add this widget to this sidebar
-			$active_widgets[ $sidebars[ $key ] ][ $counter ] = 'custom_html-' . $counter;
+			$original_root = '<img src="https://www.minnpost.com/sites/default/files/images/thumbnails/';
 
-			// and write into it:
-			$migrated_widgets[ $counter ] = array(
-				'title' => $widget->title,
-				'content' => $widget_content,
-				'wc_cache' => 'yes',
-			);
+			if ( 'sidebar-2' === $key ) {
+				// image urls for middle sidebar
+				$image_root = '<img src="https://www.minnpost.com/sites/default/files/imagecache/sidebar_middle/images/thumbnails/';
+			} elseif ( 'sidebar-1' === $key ) {
+				// image urls for right sidebar
+				$image_root = '<img src="https://www.minnpost.com/sites/default/files/imagecache/sidebar_right/images/thumbnails/';
+			}
 
-			$data = mp_sidebar_set_conditions_data( $widget->show_on, $key, $counter );
+			foreach ( $sidebar_item_widgets as $widget ) {
 
-			if ( '' !== $widget->show_on && isset( $data['show_on'] ) && isset( $data['class']['logic'] ) ) {
-				if ( $data['show_on'] === $key && 'wp_inactive_widgets' !== $key ) {
-					// the key matches the show_on value and this is not the inactive sidebar
-					$migrating = true;
+				$type = $widget->type;
+
+				if ( 'custom_html' === $type ) {
+					$widget_content = str_replace( $original_root, $image_root, $widget->content );
+				} else {
+					$widget_content = $widget->content;
+				}
+
+				$search_key = array_search( $widget->title, array_column( $migrated_widgets, 'title' ) );
+
+				if ( false !== $search_key ) { // this widget is already found in the migrated_widgets array of titles
+					if ( 'wp_inactive_widgets' === $key ) {
+						continue;
+					}
+					if ( false === strpos( $widget->show_on, '%' ) && false !== strpos( $widget->show_on, '/' ) ) {
+						// there is not a % without a / so it doesn't get used in multiple cases
+						continue;
+					}
+					// fix the glean so it can be in the middle sidebar
+					if ( 'minnpostspills_widget' === $widget->type && ( 'glean' !== $widget->url && 'sidebar-2' === $key ) || ( 'glean' === $widget->url && 'sidebar-2' !== $key ) ) {
+						continue;
+					}
+					if ( 'nav_menu' === $widget->type && 'sidebar-1' === $key ) {
+						continue;
+					}
+				}
+
+				// add this widget to this sidebar
+				$active_widgets[ $sidebars[ $key ] ][ $counter ] = $type . '-' . $counter;
+
+				// and write into it:
+				if ( 'custom_html' === $type ) {
+					$migrated_widgets[ $counter ] = array(
+						'title' => $widget->title,
+						'content' => $widget_content,
+						//'wc_cache' => 'yes', // todo: we need to put this later so it can do all the conditionals first, if we determine we need to cache the data
+					);
+				} elseif ( 'nav_menu' === $type ) {
+					$menu = wp_get_nav_menu_object( $widget_content );
+					if ( is_object( $menu ) ) {
+						$migrated_widgets[ $counter ] = array(
+							'title' => $widget->title,
+							'nav_menu' => $menu->term_id,
+							//'wc_cache' => 'yes', // todo: we need to put this later so it can do all the conditionals first, if we determine we need to cache the data
+						);
+					}
+				} elseif ( 'minnpostspills_widget' === $type ) {
+					if ( null !== $widget->categories ) {
+						$categories = explode( ',', $widget->categories );
+						$category_ids = array();
+						foreach ( $categories as $category ) {
+							$slug = sanitize_title( str_replace( '.', '', $category ) );
+							$cat = get_category_by_slug( $slug );
+							if ( is_object( $cat ) ) {
+								$category_ids[] = $cat->term_id;
+							}
+						}
+					} else {
+						$category_ids = '';
+					}
+					if ( null !== $widget->tags ) {
+						$tags = explode( ',', $widget->tags );
+						$tag_names = array();
+						foreach ( $tags as $tag ) {
+							$slug = sanitize_title( str_replace( '.', '', $tag ) );
+							$tag = get_term_by( 'slug', $tag, 'post_tag' );
+							if ( is_object( $tag ) ) {
+								$tag_names[] = $tag->name;
+							}
+						}
+					} else {
+						$tag_names = '';
+					}
+
+					if ( null !== $widget->url ) {
+						$url = '/' . $widget->url . '/';
+					} else {
+						$url = '';
+					}
+
+					if ( 'glean' === $widget->url ) {
+						$output_function = 'minnpost_largo_glean';
+					} else {
+						$output_function = '';
+					}
+
+					$migrated_widgets[ $counter ] = array(
+						'title' => $widget->title,
+						'url' => $url,
+						//'content' => $widget_content,
+						'widget_categories' => $category_ids,
+						'widget_terms' => $tag_names,
+						'output_function' => $output_function,
+						//'wc_cache' => 'yes', // todo: we need to put this later so it can do all the conditionals first, if we determine we need to cache the data
+					);
+				}
+
+				$data = mp_sidebar_set_conditions_data( $widget->show_on, $key, $counter, $type, $widget->url );
+
+				if ( ( '' !== $widget->show_on || '' !== $widget->categories || '' !== $widget->tags ) && isset( $data['show_on'] ) && isset( $data['class']['logic'] ) ) {
+					if ( $data['show_on'] === $key && 'wp_inactive_widgets' !== $key ) {
+						// the key matches the show_on value and this is not the inactive sidebar
+						$migrating = true;
+					} else {
+						// if it is not shown anywhere, it should be inactive
+						// this means we should put it in the inactive widgets sidebar
+						unset( $active_widgets[ $sidebars[ $key ] ][ $counter ] );
+						unset( $migrated_widgets[ $counter ] );
+						$migrating = false;
+					}
 				} else {
 					// if it is not shown anywhere, it should be inactive
 					// this means we should put it in the inactive widgets sidebar
-					unset( $active_widgets[ $sidebars[ $key ] ][ $counter ] );
-					unset( $migrated_widgets[ $counter ] );
-					$migrating = false;
+					if ( 'wp_inactive_widgets' !== $key ) {
+						unset( $active_widgets[ $sidebars[ $key ] ][ $counter ] );
+						unset( $migrated_widgets[ $counter ] );
+						$migrating = false;
+					} else {
+						$migrating = true;
+					}
 				}
-			} else {
-				// if it is not shown anywhere, it should be inactive
-				// this means we should put it in the inactive widgets sidebar
-				if ( 'wp_inactive_widgets' !== $key ) {
-					unset( $active_widgets[ $sidebars[ $key ] ][ $counter ] );
-					unset( $migrated_widgets[ $counter ] );
-					$migrating = false;
-				} else {
-					$migrating = true;
+
+				unset( $data['show_on'] ); // we don't need to save this value
+
+				if ( ! empty( $data ) && ! empty( $migrated_widgets[ $counter ] ) ) {
+					$migrated_widgets[ $counter ][ 'extended_widget_opts-' . $type . '-' . $counter ] = $data;
 				}
-			}
 
-			unset( $data['show_on'] ); // we don't need to save this value
-
-			if ( ! empty( $data ) ) {
-				$migrated_widgets[ $counter ][ 'extended_widget_opts-custom_html-' . $counter ] = $data;
-			}
-
-			if ( true === $migrating ) {
-				$counter++;
-				$update = $wpdb->query( 'UPDATE wp_sidebars SET `migrated` = "1" WHERE `title` = "' . $widget->title . '"' );
+				if ( true === $migrating ) {
+					$counter++;
+					$update = $wpdb->query( 'UPDATE wp_sidebars SET `migrated` = "1" WHERE `title` = "' . $widget->title . '"' );
+				}
 			}
 		}
-	}
 
-	$previous_widgets = get_option( 'widget_custom_html', '' );
-	$previously_active_widgets = get_option( 'sidebars_widgets', '' );
+		/*if ( ! empty( $active_widgets['sidebar-2'] ) && array_filter( $active_widgets['sidebar-2'] ) ) {
+			$active_widgets['sidebar-2'] = moveDown( $active_widgets['sidebar-2'], 0 );
+		}*/
 
-	if ( $previous_widgets !== $migrated_widgets && ! empty( $migrated_widgets ) ) {
-		// save the widget content only if it has changed from whatever it was before
-		update_option( 'widget_custom_html', $migrated_widgets );
-	}
+		$previous_widgets = get_option( 'widget_' . $type, '' );
+		$previously_active_widgets = get_option( 'sidebars_widgets', '' );
 
-	if ( $previously_active_widgets !== $active_widgets ) {
-		// save the $active_widgets array, if it has changed from whatever it was before
-		update_option( 'sidebars_widgets', $active_widgets );
+		if ( $previous_widgets !== $migrated_widgets && ! empty( $migrated_widgets ) ) {
+			// save the widget content only if it has changed from whatever it was before
+			update_option( 'widget_' . $type, $migrated_widgets );
+		}
+
+		if ( $previously_active_widgets !== $active_widgets ) {
+			// save the $active_widgets array, if it has changed from whatever it was before
+			update_option( 'sidebars_widgets', $active_widgets );
+		}
 	}
 
 }
 
+function movedown( $input, $index ) {
+	$new_array = $input;
 
-function mp_sidebar_set_conditions_data( $show_on, $key, $counter ) {
-	$show_on = explode( ',', $show_on );
-	$data = array(
-		'id_base' => 'custom_html-' . $counter,
-		'visibility' => array(
-			'options' => 'hide',
-			'selected' => '0',
-		),
-		'devices' => array(
-			'options' => 'hide',
-		),
-		'alignment' => array(
-			'desktop' => 'default',
-		),
-		'class' => array(
-			'selected' => '2',
-			'id' => '',
-			'classes' => '',
-		),
-		'tabselect' => '3',
-	);
+	if ( count( $new_array ) > $index ) {
+		array_splice( $new_array, $index + 2, 0, $input[ $index ] );
+		array_splice( $new_array, $index, 1 );
+	}
 
-	if ( is_array( $show_on ) ) {
-		$data['class']['logic'] = array();
-		if ( in_array( '<front>', $show_on ) ) {
-			$data['class']['logic'][] = 'is_home()';
-			$data['show_on'] = 'sidebar-2';
-		}
-		foreach ( $show_on as $show_item ) {
-			if ( '<front>' !== $show_item ) {
+	return $new_array;
+}
+
+
+function mp_sidebar_set_conditions_data( $show_on, $key, $counter, $type, $url ) {
+	$data = array();
+	if ( null === $show_on || '' === $show_on ) {
+		$data = array(
+			'id_base' => $type . '-' . $counter,
+			'visibility' => array(
+				'options' => 'show',
+				'selected' => '1',
+			),
+			'devices' => array(
+				'options' => 'hide',
+			),
+			'alignment' => array(
+				'desktop' => 'default',
+			),
+			'class' => array(
+				'selected' => '2',
+				'id' => '',
+				'classes' => '',
+			),
+			'tabselect' => '3',
+		);
+	} else {
+		$show_on = explode( ',', $show_on );
+		$data = array(
+			'id_base' => $type . '-' . $counter,
+			'visibility' => array(
+				'options' => 'hide',
+				'selected' => '0',
+			),
+			'devices' => array(
+				'options' => 'hide',
+			),
+			'alignment' => array(
+				'desktop' => 'default',
+			),
+			'class' => array(
+				'selected' => '2',
+				'id' => '',
+				'classes' => '',
+			),
+			'tabselect' => '3',
+		);
+
+		if ( is_array( $show_on ) ) {
+			$data['class']['logic'] = array();
+			if ( in_array( '<front>', $show_on ) ) {
+				$data['class']['logic'][] = 'is_home()';
+				$data['show_on'] = 'sidebar-2';
+			}
+			foreach ( $show_on as $show_item ) {
+				if ( '<front>' !== $show_item ) {
+					$iterator = mp_sidebar_rule_iterator( $show_item, $key );
+					if ( '' !== $iterator['logic'] && '' !== $iterator['show_on'] ) {
+						$data['class']['logic'][] = $iterator['logic'];
+						$data['show_on'] = $iterator['show_on'];
+					}
+				}
+			}
+		} else {
+			$data['class']['logic'] = '';
+			if ( '<front>' === $show_on ) {
+				$data['class']['logic'] = 'is_home()';
+				$data['show_on'] = 'sidebar-2';
+			} else {
 				$iterator = mp_sidebar_rule_iterator( $show_item, $key );
 				if ( '' !== $iterator['logic'] && '' !== $iterator['show_on'] ) {
-					$data['class']['logic'][] = $iterator['logic'];
+					$data['class']['logic'] = $iterator['logic'];
 					$data['show_on'] = $iterator['show_on'];
 				}
 			}
 		}
-	} else {
-		$data['class']['logic'] = '';
-		if ( '<front>' === $show_on ) {
-			$data['class']['logic'] = 'is_home()';
-			$data['show_on'] = 'sidebar-2';
-		} else {
-			$iterator = mp_sidebar_rule_iterator( $show_item, $key );
-			if ( '' !== $iterator['logic'] && '' !== $iterator['show_on'] ) {
-				$data['class']['logic'] = $iterator['logic'];
-				$data['show_on'] = $iterator['show_on'];
+
+		if ( is_array( $data['class']['logic'] ) ) {
+			$data['class']['logic'] = implode( ' || ', $data['class']['logic'] );
+		}
+
+		if ( 'minnpostspills_widget' === $type ) {
+			$data['show_on'] = 'sidebar-1';
+			if ( 'glean' === $url ) {
+				$data['show_on'] = 'sidebar-2';
 			}
 		}
-	}
 
-	if ( is_array( $data['class']['logic'] ) ) {
-		$data['class']['logic'] = implode( ' || ', $data['class']['logic'] );
+		if ( 'nav_menu' === $type ) {
+			$data['show_on'] = 'sidebar-2';
+		}
 	}
 
 	return $data;
