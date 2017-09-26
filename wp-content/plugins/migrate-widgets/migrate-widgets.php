@@ -21,6 +21,11 @@ function mp_sidebar_item_widgets() {
 
 	$types = $wpdb->get_results( 'SELECT DISTINCT `type` FROM wp_sidebars WHERE migrated != "1" ORDER BY `type` DESC' );
 
+	$counter = 0;
+	if ( ! empty( $active_widgets ) ) {
+		$counter = count( $active_widgets ) + 1;
+	}
+
 	foreach ( $types as $type_object ) {
 		$type = $type_object->type;
 
@@ -33,13 +38,13 @@ function mp_sidebar_item_widgets() {
 		);
 
 		foreach ( $sidebars as $key => $value ) {
-			if ( ! empty( $active_widgets[ $sidebars[ $key ] ] ) ) {
+			/*if ( ! empty( $active_widgets[ $sidebars[ $key ] ] ) ) {
 				$counter = count( $active_widgets[ $sidebars[ $key ] ] ) + 1;
 			} elseif ( ! empty( $migrated_widgets ) ) {
 				$counter = count( $migrated_widgets ) + 1;
 			} else {
 				$counter = 0;
-			}
+			}*/
 
 			$original_root = '<img src="https://www.minnpost.com/sites/default/files/images/thumbnails/';
 
@@ -104,8 +109,7 @@ function mp_sidebar_item_widgets() {
 						$categories = explode( ',', $widget->categories );
 						$category_ids = array();
 						foreach ( $categories as $category ) {
-							$slug = sanitize_title( str_replace( '.', '', $category ) );
-							$cat = get_category_by_slug( $slug );
+							$cat = get_category_by_slug( $category );
 							if ( is_object( $cat ) ) {
 								$category_ids[] = $cat->term_id;
 							}
@@ -118,13 +122,17 @@ function mp_sidebar_item_widgets() {
 						$tag_names = array();
 						foreach ( $tags as $tag ) {
 							$slug = sanitize_title( str_replace( '.', '', $tag ) );
-							$tag = get_term_by( 'slug', $tag, 'post_tag' );
+							$tag = get_term_by( 'slug', $slug, 'post_tag' );
 							if ( is_object( $tag ) ) {
 								$tag_names[] = $tag->name;
 							}
 						}
 					} else {
 						$tag_names = '';
+					}
+
+					if ( is_array( $tag_names ) && 1 === count( $tag_names ) ) {
+						$tag_names = $tag_names[0] . ',';
 					}
 
 					if ( null !== $widget->url ) {
@@ -188,10 +196,6 @@ function mp_sidebar_item_widgets() {
 			}
 		}
 
-		/*if ( ! empty( $active_widgets['sidebar-2'] ) && array_filter( $active_widgets['sidebar-2'] ) ) {
-			$active_widgets['sidebar-2'] = moveDown( $active_widgets['sidebar-2'], 0 );
-		}*/
-
 		$previous_widgets = get_option( 'widget_' . $type, '' );
 		$previously_active_widgets = get_option( 'sidebars_widgets', '' );
 
@@ -208,7 +212,7 @@ function mp_sidebar_item_widgets() {
 
 }
 
-function movedown( $input, $index ) {
+function mp_move_down( $input, $index ) {
 	$new_array = $input;
 
 	if ( count( $new_array ) > $index ) {
@@ -272,7 +276,7 @@ function mp_sidebar_set_conditions_data( $show_on, $key, $counter, $type, $url )
 			}
 			foreach ( $show_on as $show_item ) {
 				if ( '<front>' !== $show_item ) {
-					$iterator = mp_sidebar_rule_iterator( $show_item, $key );
+					$iterator = mp_sidebar_rule_iterator( $show_item, $key, $type );
 					if ( '' !== $iterator['logic'] && '' !== $iterator['show_on'] ) {
 						$data['class']['logic'][] = $iterator['logic'];
 						$data['show_on'] = $iterator['show_on'];
@@ -285,7 +289,7 @@ function mp_sidebar_set_conditions_data( $show_on, $key, $counter, $type, $url )
 				$data['class']['logic'] = 'is_home()';
 				$data['show_on'] = 'sidebar-2';
 			} else {
-				$iterator = mp_sidebar_rule_iterator( $show_item, $key );
+				$iterator = mp_sidebar_rule_iterator( $show_item, $key, $type );
 				if ( '' !== $iterator['logic'] && '' !== $iterator['show_on'] ) {
 					$data['class']['logic'] = $iterator['logic'];
 					$data['show_on'] = $iterator['show_on'];
@@ -313,7 +317,7 @@ function mp_sidebar_set_conditions_data( $show_on, $key, $counter, $type, $url )
 }
 
 
-function mp_sidebar_rule_iterator( $show_on, $key ) {
+function mp_sidebar_rule_iterator( $show_on, $key, $type ) {
 	$url = str_replace( '/%', '', $show_on );
 	$url = str_replace( '%', '', $url );
 	$url = str_replace( 'tag/', '', $url );
@@ -370,7 +374,8 @@ function mp_sidebar_rule_iterator( $show_on, $key ) {
 		} else {
 			// put these in the middle sidebar
 			// it is a category/tag, but not the contents
-			if ( 'sidebar-2' === $key ) {
+			// it can go on the right sidebar if it is a spill
+			if ( 'sidebar-2' === $key || ( 'minnpostspills_widget' === $type && 'sidebar-1' === $key ) ) {
 				if ( false !== $category ) {
 					$data['logic'] = 'is_category(' . $id . ')';
 				} else {
