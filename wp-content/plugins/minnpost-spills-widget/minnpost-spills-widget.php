@@ -50,7 +50,7 @@ class MinnpostSpills {
 
 			add_action( 'cortex.routes', function( RouteCollectionInterface $routes ) {
 
-				$widget_instances = get_option( 'widget_MinnpostSpills_Widget', false );
+				$widget_instances = get_option( 'widget_minnpostspills_widget', false );
 				$instances = array_values( $widget_instances );
 
 				add_filter( 'get_the_archive_title', array( $this, 'set_wp_title' ) );
@@ -110,7 +110,7 @@ class MinnpostSpills {
 		global $template;
 		if ( basename( $template ) === $this->template ) {
 
-			$widget_instances = get_option( 'widget_MinnpostSpills_Widget', false );
+			$widget_instances = get_option( 'widget_minnpostspills_widget', false );
 			$instances = array_values( $widget_instances );
 
 			add_filter( 'get_the_archive_title', array( $this, 'set_wp_title' ) );
@@ -197,10 +197,6 @@ class MinnpostSpills_Widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 
 		extract( $args );
-
-		if ( ! isset( $instance['conditions']['action'] ) ) {
-			return;
-		}
 
 		$title = apply_filters( 'widget_title', $instance['title'] );
 		$url = isset( $instance['url'] ) && '' !== $instance['url'] ? $instance['url'] : '/' . sanitize_title( $instance['title'] ) . '/';
@@ -289,7 +285,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 			$url = '';
 		}
 
-		if ( isset( $instance['widget_categories'] ) ) {
+		if ( isset( $instance['widget_categories'] ) && '' !== $instance['widget_categories'] ) {
 			$categories = $instance['widget_categories'];
 			$category_ids = array();
 			foreach ( $categories as $category ) {
@@ -307,7 +303,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 			$category_ids = false;
 		}
 
-		if ( isset( $instance['widget_terms'] ) ) {
+		if ( isset( $instance['widget_terms'] ) && '' !== $instance['widget_terms'] ) {
 			$terms = $instance['widget_terms'];
 		} else {
 			$terms = false;
@@ -358,7 +354,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 	* This outputs HTML
 	*
 	*/
-	private function get_spill_posts( $categories, $terms ) {
+	private function get_spill_posts( $categories = '', $terms = '' ) {
 
 		if ( ! empty( $categories ) ) {
 			$slugs = array();
@@ -383,7 +379,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 			$the_query = new WP_Query(
 				array(
 					'posts_per_page' => 4,
-					'tag' => $terms,
+					'tag' => $terms ? is_array( $terms ) ? implode( ',', $terms ) : $terms : '',
 					'orderby' => 'date',
 				)
 			);
@@ -391,7 +387,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 		?>
 
-		<?php if ( $the_query->have_posts() ) : ?>
+		<?php if ( isset( $the_query ) && $the_query->have_posts() ) : ?>
 			<!-- the loop -->
 			<?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
 				<article id="<?php the_ID(); ?>" class="m-post m-post-spill">
