@@ -35,6 +35,7 @@ function mp_sidebar_item_widgets() {
 			'sidebar-2' => 'sidebar-2', // do the middle sidebar first
 			'sidebar-1' => 'sidebar-1', // this is the right sidebar
 			'wp_inactive_widgets' => 'wp_inactive_widgets', // we do want to be able to migrate some widgets and keep them inactive
+			'sidebar-3' => 'sidebar-3', // footer boxes
 		);
 
 		foreach ( $sidebars as $key => $value ) {
@@ -159,6 +160,9 @@ function mp_sidebar_item_widgets() {
 				}
 
 				$data = mp_sidebar_set_conditions_data( $widget->show_on, $key, $counter, $type, $widget->url );
+				if ( 'footer' === $widget->show_on ) {
+					$data['show_on'] = 'sidebar-3';
+				}
 
 				if ( ( '' !== $widget->show_on || '' !== $widget->categories || '' !== $widget->tags ) && isset( $data['show_on'] ) && isset( $data['class']['logic'] ) ) {
 					if ( $data['show_on'] === $key && 'wp_inactive_widgets' !== $key ) {
@@ -325,6 +329,20 @@ function mp_sidebar_rule_iterator( $show_on, $key, $type ) {
 	$tag = get_term_by( 'slug', $url, 'post_tag' );
 	$page = get_page_by_path( $url );
 
+	$data = array();
+	$data['logic'] = '';
+	$data['show_on'] = '';
+
+	if ( 'newsletter' === $show_on ) {
+		$data['logic'] = 'is_singular("' . $show_on . '")';
+		$data['show_on'] = 'sidebar-1';
+		return $data;
+	} elseif ( 'newsletter-footer' === $show_on ) {
+		$data['logic'] = 'is_singular("newsletter")';
+		$data['show_on'] = 'sidebar-3';
+		return $data;
+	}
+
 	if ( false !== $category ) {
 		$id = $category->term_id;
 	} elseif ( false !== $tag ) {
@@ -334,10 +352,6 @@ function mp_sidebar_rule_iterator( $show_on, $key, $type ) {
 	} else {
 		return;
 	}
-
-	$data = array();
-	$data['logic'] = '';
-	$data['show_on'] = '';
 
 	if ( false !== $category || false !== $tag ) {
 		if ( false !== strpos( $show_on, '/%' ) ) {
