@@ -208,7 +208,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 		echo str_replace( 'widget MinnpostSpills-widget', 'm-widget m-minnpost-spills-widget', str_replace( '_Widget"', '-widget ' . sanitize_title( $title ) . '"', $before_widget ) );
 
 		if ( isset( $output_function ) && function_exists( $output_function ) ) {
-			$output = $output_function( $before_title, $title, $after_title, $categories, $terms );
+			$output = $output_function( $before_title, $title, $after_title, $content, $categories, $terms );
 		} else {
 			if ( $title ) {
 				$before_title = str_replace( 'widget-title', 'a-widget-title', $before_title );
