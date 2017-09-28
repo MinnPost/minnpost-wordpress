@@ -200,6 +200,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 		$title = apply_filters( 'widget_title', $instance['title'] );
 		$url = isset( $instance['url'] ) && '' !== $instance['url'] ? $instance['url'] : '/' . sanitize_title( $instance['title'] ) . '/';
+		$content = isset( $instance['content'] ) ? '<p>' . $instance['content'] . '</p>' : '';
 		$categories = $instance['widget_categories'];
 		$terms = $instance['widget_terms'];
 		$output_function = isset( $instance['output_function'] ) ? $instance['output_function'] : '';
@@ -214,6 +215,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 				echo $before_title . '<a href="' . $url . '">' . $title . '</a>' . $after_title;
 			}
 			echo '<div class="m-widget-contents">';
+				echo $content;
 				$output = $this->get_spill_posts( $categories, $terms );
 			echo '</div>';
 		}
@@ -243,6 +245,11 @@ class MinnpostSpills_Widget extends WP_Widget {
 			$instance['url'] = $new_instance['url'];
 		} else {
 			$instance['url'] = '';
+		}
+		if ( ! empty( $new_instance['content'] ) ) {
+			$instance['content'] = $new_instance['content'];
+		} else {
+			$instance['content'] = '';
 		}
 		if ( ! empty( $new_instance['widget_categories'] ) ) {
 			$instance['widget_categories'] = $new_instance['widget_categories'];
@@ -283,6 +290,12 @@ class MinnpostSpills_Widget extends WP_Widget {
 			$url = esc_url_raw( $instance['url'] );
 		} else {
 			$url = '';
+		}
+
+		if ( isset( $instance['content'] ) ) {
+			$content = sanitize_text_field( $instance['content'] );
+		} else {
+			$content = '';
 		}
 
 		if ( isset( $instance['widget_categories'] ) && '' !== $instance['widget_categories'] ) {
@@ -329,6 +342,10 @@ class MinnpostSpills_Widget extends WP_Widget {
 		<div>
 			<label for="<?php echo $this->get_field_id( 'url' ); ?>"><?php _e( 'Link URL:' ); ?></label> 
 			<input class="widefat" id="<?php echo $this->get_field_id( 'url' ); ?>" name="<?php echo $this->get_field_name( 'url' ); ?>" type="text" value="<?php echo $url; ?>" />
+		</div>
+		<div>
+			<label for="<?php echo $this->get_field_id( 'content' ); ?>"><?php _e( 'Content:' ); ?></label> 
+			<input class="widefat" id="<?php echo $this->get_field_id( 'content' ); ?>" name="<?php echo $this->get_field_name( 'content' ); ?>" type="text" value="<?php echo $content; ?>" />
 		</div>
 		<div>
 			<label for="<?php echo $this->get_field_id( 'widget_categories' ); ?>"><?php _e( 'Categories:' ); ?></label> 
