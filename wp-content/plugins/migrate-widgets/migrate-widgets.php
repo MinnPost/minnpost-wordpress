@@ -151,7 +151,7 @@ function mp_sidebar_item_widgets() {
 					$migrated_widgets[ $counter ] = array(
 						'title' => $widget->title,
 						'url' => $url,
-						//'content' => $widget_content,
+						'content' => $widget_content,
 						'widget_categories' => $category_ids,
 						'widget_terms' => $tag_names,
 						'output_function' => $output_function,
