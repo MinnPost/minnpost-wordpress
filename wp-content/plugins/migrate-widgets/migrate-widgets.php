@@ -84,6 +84,9 @@ function mp_sidebar_item_widgets() {
 					if ( 'nav_menu' === $widget->type && 'sidebar-1' === $key ) {
 						continue;
 					}
+					if ( 'popular-widget' === $widget->type && 'sidebar-2' === $key ) {
+						continue;
+					}
 				}
 
 				// add this widget to this sidebar
@@ -287,6 +290,9 @@ function mp_sidebar_set_conditions_data( $show_on, $key, $counter, $type, $url )
 			if ( in_array( '<front>', $show_on ) ) {
 				$data['class']['logic'][] = 'is_home()';
 				$data['show_on'] = 'sidebar-2';
+				if ( 'popular-widget' === $type ) {
+					$data['show_on'] = 'sidebar-1';
+				}
 			}
 			foreach ( $show_on as $show_item ) {
 				if ( '<front>' !== $show_item ) {
@@ -302,6 +308,9 @@ function mp_sidebar_set_conditions_data( $show_on, $key, $counter, $type, $url )
 			if ( '<front>' === $show_on ) {
 				$data['class']['logic'] = 'is_home()';
 				$data['show_on'] = 'sidebar-2';
+				if ( 'popular-widget' === $type ) {
+					$data['show_on'] = 'sidebar-1';
+				}
 			} else {
 				$iterator = mp_sidebar_rule_iterator( $show_item, $key, $type );
 				if ( '' !== $iterator['logic'] && '' !== $iterator['show_on'] ) {
