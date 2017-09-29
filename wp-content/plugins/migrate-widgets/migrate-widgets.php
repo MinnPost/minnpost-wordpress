@@ -164,6 +164,7 @@ function mp_sidebar_item_widgets() {
 					$migrated_widgets[ $counter ] = array(
 						'title' => '',
 						'content' => '',
+						'counter' => 'on',
 						'norecent' => 'on',
 						'nocomments' => 'on',
 						'noviewed' => 'on',
