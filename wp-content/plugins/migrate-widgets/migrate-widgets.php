@@ -157,6 +157,16 @@ function mp_sidebar_item_widgets() {
 						'output_function' => $output_function,
 						//'wc_cache' => 'yes', // todo: we need to put this later so it can do all the conditionals first, if we determine we need to cache the data
 					);
+				} elseif ( 'popular-widget' === $type ) {
+					$migrated_widgets[ $counter ] = array(
+						'title' => '',
+						'content' => '',
+						'norecent' => 'on',
+						'nocomments' => 'on',
+						'noviewed' => 'on',
+						'notags' => 'on',
+						//'wc_cache' => 'yes', // todo: we need to put this later so it can do all the conditionals first, if we determine we need to cache the data
+					);
 				}
 
 				$data = mp_sidebar_set_conditions_data( $widget->show_on, $key, $counter, $type, $widget->url );
