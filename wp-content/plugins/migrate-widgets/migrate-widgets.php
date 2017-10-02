@@ -87,6 +87,9 @@ function mp_sidebar_item_widgets() {
 					if ( 'popular-widget' === $widget->type && 'sidebar-2' === $key ) {
 						continue;
 					}
+					if ( 'recent-posts' === $widget->type && 'sidebar-2' === $key ) {
+						continue;
+					}
 				}
 
 				// add this widget to this sidebar
@@ -169,6 +172,13 @@ function mp_sidebar_item_widgets() {
 						'nocomments' => 'on',
 						'noviewed' => 'on',
 						'notags' => 'on',
+						'lastdays' => '7',
+						//'wc_cache' => 'yes', // todo: we need to put this later so it can do all the conditionals first, if we determine we need to cache the data
+					);
+				} elseif ( 'recent-posts' === $type ) {
+					$migrated_widgets[ $counter ] = array(
+						'title' => $widget->title,
+						'number' => '10',
 						//'wc_cache' => 'yes', // todo: we need to put this later so it can do all the conditionals first, if we determine we need to cache the data
 					);
 				}
@@ -176,6 +186,14 @@ function mp_sidebar_item_widgets() {
 				$data = mp_sidebar_set_conditions_data( $widget->show_on, $key, $counter, $type, $widget->url );
 				if ( 'footer' === $widget->show_on ) {
 					$data['show_on'] = 'sidebar-3';
+				}
+
+				if ( '*' === $widget->show_on ) {
+					$data['show_on'] = 'sidebar-1'; // if it shows everywhere, that is only the right sidebar
+				}
+
+				if ( false !== strpos( $widget->show_on, '!' ) ) {
+					$data['show_on'] = 'sidebar-1'; // if it shows almost everywhere, put it on the right
 				}
 
 				if ( ( '' !== $widget->show_on || '' !== $widget->categories || '' !== $widget->tags ) && isset( $data['show_on'] ) && isset( $data['class']['logic'] ) ) {
@@ -243,6 +261,10 @@ function mp_move_down( $input, $index ) {
 
 
 function mp_sidebar_set_conditions_data( $show_on, $key, $counter, $type, $url ) {
+	if ( false !== strpos( $show_on, '!' ) ) {
+		$previous_show_on = $show_on;
+		$show_on = str_replace( '!', '', $show_on ); // remove exclamation point temporarily
+	}
 	$data = array();
 	if ( null === $show_on || '' === $show_on ) {
 		$data = array(
@@ -337,6 +359,11 @@ function mp_sidebar_set_conditions_data( $show_on, $key, $counter, $type, $url )
 		}
 	}
 
+	if ( false !== strpos( $previous_show_on, '!' ) ) {
+		error_log('eyp');
+		$data['class']['logic'] = '! ' . $data['class']['logic'];
+	}
+
 	return $data;
 }
 
@@ -344,6 +371,7 @@ function mp_sidebar_set_conditions_data( $show_on, $key, $counter, $type, $url )
 function mp_sidebar_rule_iterator( $show_on, $key, $type ) {
 	$url = str_replace( '/%', '', $show_on );
 	$url = str_replace( '%', '', $url );
+	$url = str_replace( '!', '', $show_on ); // remove exclamation point temporarily
 	$url = str_replace( 'tag/', '', $url );
 	$category = get_category_by_slug( $url );
 	$tag = get_term_by( 'slug', $url, 'post_tag' );
@@ -423,6 +451,10 @@ function mp_sidebar_rule_iterator( $show_on, $key, $type ) {
 			$data['logic'] = 'is_page(' . $id . ')';
 			$data['show_on'] = $key;
 		}
+	}
+
+	if ( strpos( $show_on, '!' ) ) {
+		$data['logic'] = '! ' . $data['logic'];
 	}
 
 	return $data;
