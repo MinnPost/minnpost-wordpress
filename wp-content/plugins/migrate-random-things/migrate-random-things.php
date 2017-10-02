@@ -459,7 +459,6 @@ class Migrate_Random_Things {
 								$args['menu-item-object-id'] = (int) $is_page['ID'];
 								if ( esc_html( $item->{'menu-item-title'} ) !== $is_page['post_title'] ) {
 									$args['menu-item-title'] = esc_html( $item->{'menu-item-title'} );
-									error_log('fix title so it is ' . esc_html( $item->{'menu-item-title'} ) );
 								}
 							} elseif ( false !== $is_post && 0 !== (int) $is_post['ID'] ) {
 								$args['menu-item-type'] = 'post_type';
