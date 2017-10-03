@@ -87,7 +87,7 @@ function mp_sidebar_item_widgets() {
 					if ( 'popular-widget' === $widget->type && 'sidebar-2' === $key ) {
 						continue;
 					}
-					if ( 'recent-posts' === $widget->type && 'sidebar-2' === $key ) {
+					if ( 'rpwe_widget' === $widget->type && 'sidebar-2' === $key ) {
 						continue;
 					}
 				}
@@ -175,10 +175,12 @@ function mp_sidebar_item_widgets() {
 						'lastdays' => '7',
 						//'wc_cache' => 'yes', // todo: we need to put this later so it can do all the conditionals first, if we determine we need to cache the data
 					);
-				} elseif ( 'recent-posts' === $type ) {
+				} elseif ( 'rpwe_widget' === $type ) {
 					$migrated_widgets[ $counter ] = array(
 						'title' => $widget->title,
-						'number' => '10',
+						'limit' => '10',
+						'styles_default' => '0',
+						'css' => '',
 						//'wc_cache' => 'yes', // todo: we need to put this later so it can do all the conditionals first, if we determine we need to cache the data
 					);
 				}
