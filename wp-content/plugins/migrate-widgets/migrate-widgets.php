@@ -181,6 +181,7 @@ function mp_sidebar_item_widgets() {
 						'limit' => '10',
 						'styles_default' => '0',
 						'css' => '',
+						'date' => '0',
 						//'wc_cache' => 'yes', // todo: we need to put this later so it can do all the conditionals first, if we determine we need to cache the data
 					);
 				}
