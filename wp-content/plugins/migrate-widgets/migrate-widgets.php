@@ -363,7 +363,6 @@ function mp_sidebar_set_conditions_data( $show_on, $key, $counter, $type, $url )
 	}
 
 	if ( false !== strpos( $previous_show_on, '!' ) ) {
-		error_log('eyp');
 		$data['class']['logic'] = '! ' . $data['class']['logic'];
 	}
 
