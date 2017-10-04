@@ -362,7 +362,7 @@ function mp_sidebar_set_conditions_data( $show_on, $key, $counter, $type, $url )
 		}
 	}
 
-	if ( false !== strpos( $previous_show_on, '!' ) ) {
+	if ( isset( $previous_show_on ) && false !== strpos( $previous_show_on, '!' ) ) {
 		$data['class']['logic'] = '! ' . $data['class']['logic'];
 	}
 
