@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @return void
  */
 function widgetopts_ajax_save_settings(){
-	error_log('what now');
     $response = array( 'errors' => array() );
 
 	if( !isset( $_POST['method'] ) ) return;
@@ -47,7 +46,6 @@ function widgetopts_ajax_save_settings(){
 				update_option( 'widgetopts_tabmodule-settings', maybe_serialize( $sanitized ) );
 
 				//reset options
-				error_log('ype');
 				widgetopts_update_option( 'settings', $sanitized );
 			break;
 
