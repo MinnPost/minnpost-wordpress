@@ -86,13 +86,16 @@ class MinnpostSpills {
 							'terms' => $widget_terms,
 						);
 					}
-					$routes->addRoute( new QueryRoute(
-						$title,
-						$query,
-						[
-							'template' => $this->template,
-						]
-					));
+
+					if ( ! empty( $instance['url'] ) && false === get_term_by( 'slug', str_replace( '/', '', $instance['url'] ) ) ) {
+						$routes->addRoute( new QueryRoute(
+							$title,
+							$query,
+							[
+								'template' => $this->template,
+							]
+						));
+					}
 				}
 
 			});
