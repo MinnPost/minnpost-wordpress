@@ -19,6 +19,11 @@ function mp_sidebar_item_widgets() {
 	$migrated_widgets = array();
 	global $wpdb;
 
+	$table_name = $wpdb->prefix . 'sidebars';
+	if ( $table_name !== $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) ) {
+		return;
+	}
+
 	$types = $wpdb->get_results( 'SELECT DISTINCT `type` FROM wp_sidebars WHERE migrated != "1" ORDER BY `type` DESC' );
 
 	$counter = 0;
