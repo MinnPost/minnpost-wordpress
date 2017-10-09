@@ -167,6 +167,10 @@ function wsh_setup_content_filters() {
 		$rawhtml_priority = 1001;
 	}
 	add_filter('the_content', 'wsh_insert_exclusions', $rawhtml_priority);
+
+	//Support GoodLayers themes and their page builder.
+	add_filter('gdlr_the_content', 'wsh_extract_exclusions', 2);
+	add_filter('gdlr_the_content', 'wsh_insert_exclusions', $rawhtml_priority);
 }
 add_action('plugins_loaded', 'wsh_setup_content_filters', 11);
 

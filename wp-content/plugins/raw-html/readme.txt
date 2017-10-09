@@ -2,8 +2,8 @@
 Contributors: whiteshadow
 Tags: posts, formatting, javascript, html, css, code, disable
 Requires at least: 2.8
-Tested up to: 4.6-beta2
-Stable tag: 1.5
+Tested up to: 4.9-beta1
+Stable tag: 1.5.1
 
 Lets you use raw HTML or any other code in your posts. You can also disable smart quotes and other automatic formatting on a per-post basis.
 
@@ -79,6 +79,10 @@ Open to the post editor and click the "Screen Options" button in the top-right p
 
 
 == Changelog ==
+
+= 1.5.1 = 
+* Added limited support for the page builder included with GoodLayers themes (e.g. Mediso).
+* Tested with WP 4.8.2 and 4.9-beta1.
 
 = 1.5 = 
 * Added a way to run shortcodes inside [raw] tags. To enable shortcodes, add the `shortcodes=1` attribute to the tag. Example: `[raw shortcodes=1]some code ... [my-shortcode] ... other code[/raw]`.
