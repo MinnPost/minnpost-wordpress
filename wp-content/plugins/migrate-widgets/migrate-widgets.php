@@ -24,6 +24,8 @@ function mp_sidebar_item_widgets() {
 		return;
 	}
 
+	$batches = $wpdb->get_results( 'SELECT DISTINCT `batch` FROM wp_sidebars WHERE migrated != "1" ORDER BY `batch` ASC' );
+
 	$types = $wpdb->get_results( 'SELECT DISTINCT `type` FROM wp_sidebars WHERE migrated != "1" ORDER BY `type` DESC' );
 
 	$counter = 0;
@@ -31,10 +33,10 @@ function mp_sidebar_item_widgets() {
 		$counter = count( $active_widgets ) + 1;
 	}
 
-	foreach ( $types as $type_object ) {
-		$type = $type_object->type;
+	foreach ( $batches as $batch_object ) {
+		$batch = $batch_object->batch;
 
-		$sidebar_item_widgets = $wpdb->get_results( 'SELECT `title`, `url`, `content`, `type`, `show_on`, `categories`, `tags`, `migrated` FROM wp_sidebars WHERE migrated != "1" and type = "' . $type . '" ORDER BY `id`' );
+		$sidebar_item_widgets = $wpdb->get_results( 'SELECT `title`, `url`, `content`, `type`, `show_on`, `categories`, `tags`, `migrated` FROM wp_sidebars WHERE migrated != "1" and batch = "' . $batch . '" ORDER BY `id`' );
 
 		$sidebars = array(
 			'sidebar-2' => 'sidebar-2', // do the middle sidebar first
@@ -44,13 +46,6 @@ function mp_sidebar_item_widgets() {
 		);
 
 		foreach ( $sidebars as $key => $value ) {
-			/*if ( ! empty( $active_widgets[ $sidebars[ $key ] ] ) ) {
-				$counter = count( $active_widgets[ $sidebars[ $key ] ] ) + 1;
-			} elseif ( ! empty( $migrated_widgets ) ) {
-				$counter = count( $migrated_widgets ) + 1;
-			} else {
-				$counter = 0;
-			}*/
 
 			$original_root = '<img src="https://www.minnpost.com/sites/default/files/images/thumbnails/';
 
