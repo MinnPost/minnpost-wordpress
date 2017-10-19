@@ -1,7 +1,7 @@
 <?php
 /**
- *  WP-SpamShield Compatibility
- *  File Version 1.9.16
+ *	WP-SpamShield Compatibility
+ *	File Version 1.9.18
  */
 
 /* Make sure file remains secure if called directly */
@@ -10,7 +10,7 @@ if( !defined( 'ABSPATH' ) || !defined( 'WPSS_VERSION' ) ) {
 	die( 'ERROR: Direct access to this file is not allowed.' );
 }
 /* Prevents unintentional error display if WP_DEBUG not enabled. */
-if( TRUE !== WPSS_DEBUG && TRUE !== WP_DEBUG ) { @ini_set( 'display_errors', 0 ); @error_reporting( 0 ); }
+if( TRUE !== WP_DEBUG && TRUE !== WPSS_DEBUG ) { @ini_set( 'display_errors', 0 ); @error_reporting( 0 ); }
 
 
 final class WPSS_Compatibility extends WP_SpamShield {
@@ -38,7 +38,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 	 *	@since			...
 	 */
 	static public function is_plugin_active( $plug_bn, $check_network = TRUE ) {
-		if( empty( $plug_bn ) ){ return FALSE; }
+		if( empty( $plug_bn ) || !is_string( $plug_bn ) ) { return FALSE; }
 		$plug_bn = ( FALSE === WPSS_PHP::strpos( $plug_bn, array( '.php', '/', ) ) ) ? $plug_bn.'/'.$plug_bn.'.php' : $plug_bn;
 		global $wpss_conf_active_plugins,$wpss_active_plugins,$wpss_active_network_plugins;
 		/* Quick Check */
@@ -49,19 +49,19 @@ final class WPSS_Compatibility extends WP_SpamShield {
 		/* Check known plugin constants and classes */
 		$plug_cncl = array(
 			/* Compatibility Fixes */
-			'autoptimize/autoptimize.php' => array( 'cn' => 'AUTOPTIMIZE_WP_CONTENT_NAME', 'cl' => 'autoptimizeConfig' ), 'gwolle-gb/gwolle-gb.php' => array( 'cn' => 'GWOLLE_GB_VER', 'cl' => '' ), 'jetpack/jetpack.php' => array( 'cn' => 'JETPACK__VERSION', 'cl' => 'Jetpack' ), 'plugin-organizer/plugin-organizer.php' => array( 'cn' => '', 'cl' => 'PluginOrganizer' ), 'si-contact-form/si-contact-form.php' => array( 'cn' => 'FSCF_VERSION', 'cl' => 'FSCF_Util' ), 'wp-slimstat/wp-slimstat.php' => array( 'cn' => '', 'cl' => 'wp_slimstat' ), 'wordpress-seo/wp-seo.php' => array( 'cn' => 'WPSEO_VERSION', 'cl' => '' ), 'wp-spamfree/wp-spamfree.php' => array( 'cn' => '', 'cl' => 'wpSpamFree' ),
+			'autoptimize/autoptimize.php' => array( 'cn' => 'AUTOPTIMIZE_WP_CONTENT_NAME', 'cl' => 'autoptimizeConfig' ), 'gwolle-gb/gwolle-gb.php' => array( 'cn' => 'GWOLLE_GB_VER', 'cl' => '' ), 'jetpack/jetpack.php' => array( 'cn' => 'JETPACK__VERSION', 'cl' => 'Jetpack' ), 'plugin-organizer/plugin-organizer.php' => array( 'cn' => '', 'cl' => 'PluginOrganizer' ), 'wp-slimstat/wp-slimstat.php' => array( 'cn' => '', 'cl' => 'wp_slimstat' ), 'wordpress-seo/wp-seo.php' => array( 'cn' => 'WPSEO_VERSION', 'cl' => '' ),
 			/* 3rd Party Forms, Membership & Registration */
 			'bbpress/bbpress.php' => array( 'cn' => '', 'cl' => 'bbPress' ), 'buddypress/bp-loader.php' => array( 'cn' => 'BP_PLUGIN_DIR', 'cl' => 'BuddyPress' ), 'contact-form-7/wp-contact-form-7.php' => array( 'cn' => 'WPCF7_VERSION', 'cl' => '' ), 'gravityforms/gravityforms.php' => array( 'cn' => 'GF_MIN_WP_VERSION', 'cl' => 'GFForms' ), 'mailchimp-for-wp/mailchimp-for-wp.php' => array( 'cn' => 'MC4WP_LITE_VERSION', 'cl' => 'MC4WP_Lite' ), 'ninja-forms/ninja-forms.php' => array( 'cn' => 'NF_PLUGIN_VERSION', 'cl' => 'Ninja_Forms' ),
 			/* Cache Plugins */
 			'w3-total-cache/w3-total-cache.php' => array( 'cn' => 'W3TC_VERSION', 'cl' => '' ), 'wp-fastest-cache/wpFastestCache.php' => array( 'cn' => 'WPFC_WP_PLUGIN_DIR', 'cl' => 'WpFastestCache' ), 'wp-fastest-cache-premium/wpFastestCachePremium.php' => array( 'cn' => '', 'cl' => '' ), 'wp-rocket/wp-rocket.php' => array( 'cn' => 'WP_ROCKET_VERSION', 'cl' => '' ),
 			/* Ecommerce Plugins */
-			'affiliates/affiliates.php' => array( 'cn' => 'AFFILIATES_CORE_VERSION', 'cl' => '' ), 'caldera-forms/caldera-core.php' => array( 'cn' => 'CFCORE_VER', 'cl' => '' ), 'download-manager/download-manager.php' => array( 'cn' => 'WPDM_Version', 'cl' => '' ), 'easy-digital-downloads/easy-digital-downloads.php' => array( 'cn' => 'EDD_VERSION', 'cl' => 'Easy_Digital_Downloads' ), 'ecommerce-product-catalog/ecommerce-product-catalog.php' => array( 'cn' => 'AL_BASE_PATH', 'cl' => 'eCommerce_Product_Catalog' ), 'ecwid-shopping-cart/ecwid-shopping-cart.php' => array( 'cn' => 'ECWID_PLUGIN_DIR', 'cl' => '' ), 'edd-invoices/edd-invoices.php' => array( 'cn' => '', 'cl' => '' ), 'edd-recurring/edd-recurring.php' => array( 'cn' => '', 'cl' => '' ), 'edd-software-licensing/edd-software-licenses.php' => array( 'cn' => '', 'cl' => '' ), 'eshop/eshop.php' => array( 'cn' => 'ESHOP_VERSION', 'cl' => '' ), 'events-made-easy/events-manager.php' => array( 'cn' => 'EME_DB_VERSION', 'cl' => '' ), 'events-manager/events-manager.php' => array( 'cn' => '', 'cl' => '' ), 'formidable-paypal/formidable-paypal.php' => array( 'cn' => '', 'cl' => '' ), 'give/give.php' => array( 'cn' => 'GIVE_VERSION', 'cl' => 'Give' ), 'gravity-forms-stripe/gravity-forms-stripe.php' => array( 'cn' => 'GFP_STRIPE_FILE', 'cl' => '' ), 'gravityformsauthorizenet/authorizenet.php' => array( 'cn' => 'GF_AUTHORIZENET_VERSION', 'cl' => 'GF_AuthorizeNet_Bootstrap' ), 'gravityformspayfast/payfast.php' => array( 'cn' => 'GF_PAYFAST_VERSION', 'cl' => 'GF_PayFast_Bootstrap' ), 'gravityformsstripe/stripe.php' => array( 'cn' => 'GF_STRIPE_VERSION', 'cl' => 'GF_Stripe_Bootstrap' ), 'gravityformspaypal/paypal.php' => array( 'cn' => 'GF_PAYPAL_VERSION', 'cl' => 'GF_PayPal_Bootstrap' ), 'ithemes-exchange/init.php' => array( 'cn' => '', 'cl' => 'IT_Exchange' ), 'jigoshop/jigoshop.php' => array( 'cn' => 'JIGOSHOP_VERSION', 'cl' => '' ), 'memberpress/memberpress.php' => array( 'cn' => 'MEPR_VERSION', 'cl' => '' ), 'mollie-payments-for-woocommerce/mollie-payments-for-woocommerce.php' => array( 'cn' => 'M4W_PLUGIN_DIR', 'cl' => 'Mollie_WC_Autoload' ), 'paid-memberships-pro/paid-memberships-pro.php' => array( 'cn' => 'PMPRO_VERSION', 'cl' => '' ), 'paytium/paytium.php' => array( 'cn' => 'PT_VERSION', 'cl' => '' ), 'paytium-edd/paytium-edd.php' => array( 'cn' => '', 'cl' => '' ), 's2member/s2member.php' => array( 'cn' => 'WS_PLUGIN__S2MEMBER_VERSION', 'cl' => '' ), 'shopp/Shopp.php' => array( 'cn' => '', 'cl' => 'ShoppLoader' ), 'simple-membership/simple-wp-membership.php' => array( 'cn' => 'SIMPLE_WP_MEMBERSHIP_VER', 'cl' => '' ), 'stripe/stripe-checkout.php' => array( 'cn' => 'SIMPAY_VERSION', 'cl' => '' ), 'ultimate-product-catalogue/UPCP_Main.php' => array( 'cn' => 'UPCP_CD_PLUGIN_PATH', 'cl' => '' ), 'usc-e-shop/usc-e-shop.php' => array( 'cn' => 'USCES_VERSION', 'cl' => '' ), 'users-ultra/xoousers.php' => array( 'cn' => 'xoousers_url', 'cl' => '' ), 'wc-vendors/class-wc-vendors.php' => array( 'cn' => 'wcv_plugin_dir', 'cl' => 'WC_Vendors' ), 'woocommerce-paypal-pro-payment-gateway/woo-paypal-pro.php' => array( 'cn' => 'WC_PP_PRO_ADDON_VERSION', 'cl' => 'WC_Paypal_Pro_Gateway_Addon' ), 'woocommerce/woocommerce.php' => array( 'cn' => 'WOOCOMMERCE_VERSION', 'cl' => 'WooCommerce' ), 'wordpress-ecommerce/marketpress.php' => array( 'cn' => 'MP_LITE', 'cl' => 'MarketPress' ), 'wordpress-simple-paypal-shopping-cart/wp_shopping_cart.php' => array( 'cn' => 'WP_CART_VERSION', 'cl' => '' ), 'wp-e-commerce/wp-shopping-cart.php' => array( 'cn' => 'WPSC_VERSION', 'cl' => 'WP_eCommerce' ), 'wp-easycart/wpeasycart.php' => array( 'cn' => 'EC_CURRENT_VERSION', 'cl' => '' ), 'wp-shop-original/wp-shop.php' => array( 'cn' => 'WPSHOP_DIR', 'cl' => '' ), 'wp-ultra-simple-paypal-shopping-cart/wp_ultra_simple_shopping_cart.php' => array( 'cn' => 'WUSPSC_VERSION', 'cl' => '' ), 'wppizza/wppizza.php' => array( 'cn' => 'WPPIZZA_VERSION', 'cl' => '' ), 'yith-woocommerce-stripe/init.php' => array( 'cn' => 'YITH_WCSTRIPE_VERSION', 'cl' => '' ),
+			'affiliates/affiliates.php' => array( 'cn' => 'AFFILIATES_CORE_VERSION', 'cl' => '' ), 'caldera-forms/caldera-core.php' => array( 'cn' => 'CFCORE_VER', 'cl' => '' ), 'doneren-met-mollie/doneren-met-mollie.php' => array( 'cn' => 'DMM_VERSION', 'cl' => 'Dmm_Start' ), 'download-manager/download-manager.php' => array( 'cn' => 'WPDM_Version', 'cl' => '' ), 'easy-digital-downloads/easy-digital-downloads.php' => array( 'cn' => 'EDD_VERSION', 'cl' => 'Easy_Digital_Downloads' ), 'ecommerce-product-catalog/ecommerce-product-catalog.php' => array( 'cn' => 'AL_BASE_PATH', 'cl' => 'eCommerce_Product_Catalog' ), 'ecwid-shopping-cart/ecwid-shopping-cart.php' => array( 'cn' => 'ECWID_PLUGIN_DIR', 'cl' => '' ), 'edd-invoices/edd-invoices.php' => array( 'cn' => '', 'cl' => '' ), 'edd-recurring/edd-recurring.php' => array( 'cn' => '', 'cl' => '' ), 'edd-software-licensing/edd-software-licenses.php' => array( 'cn' => '', 'cl' => '' ), 'eshop/eshop.php' => array( 'cn' => 'ESHOP_VERSION', 'cl' => '' ), 'events-made-easy/events-manager.php' => array( 'cn' => 'EME_DB_VERSION', 'cl' => '' ), 'events-manager/events-manager.php' => array( 'cn' => '', 'cl' => '' ), 'formidable-paypal/formidable-paypal.php' => array( 'cn' => '', 'cl' => '' ), 'give/give.php' => array( 'cn' => 'GIVE_VERSION', 'cl' => 'Give' ), 'gravity-forms-stripe/gravity-forms-stripe.php' => array( 'cn' => 'GFP_STRIPE_FILE', 'cl' => '' ), 'gravityformsauthorizenet/authorizenet.php' => array( 'cn' => 'GF_AUTHORIZENET_VERSION', 'cl' => 'GF_AuthorizeNet_Bootstrap' ), 'gravityformspayfast/payfast.php' => array( 'cn' => 'GF_PAYFAST_VERSION', 'cl' => 'GF_PayFast_Bootstrap' ), 'gravityformsstripe/stripe.php' => array( 'cn' => 'GF_STRIPE_VERSION', 'cl' => 'GF_Stripe_Bootstrap' ), 'gravityformspaypal/paypal.php' => array( 'cn' => 'GF_PAYPAL_VERSION', 'cl' => 'GF_PayPal_Bootstrap' ), 'ithemes-exchange/init.php' => array( 'cn' => '', 'cl' => 'IT_Exchange' ), 'jigoshop/jigoshop.php' => array( 'cn' => 'JIGOSHOP_VERSION', 'cl' => '' ), 'memberpress/memberpress.php' => array( 'cn' => 'MEPR_VERSION', 'cl' => '' ), 'mollie-forms/mollie-forms.php' => array( 'cn' => 'RFMP_VERSION', 'cl' => 'RFMP_Start' ), 'mollie-payments-for-woocommerce/mollie-payments-for-woocommerce.php' => array( 'cn' => 'M4W_PLUGIN_DIR', 'cl' => 'Mollie_WC_Plugin' ), 'paid-memberships-pro/paid-memberships-pro.php' => array( 'cn' => 'PMPRO_VERSION', 'cl' => '' ), 'paytium/paytium.php' => array( 'cn' => 'PT_VERSION', 'cl' => '' ), 'paytium-edd/paytium-edd.php' => array( 'cn' => '', 'cl' => '' ), 's2member/s2member.php' => array( 'cn' => 'WS_PLUGIN__S2MEMBER_VERSION', 'cl' => '' ), 'shopp/Shopp.php' => array( 'cn' => '', 'cl' => 'ShoppLoader' ), 'simple-membership/simple-wp-membership.php' => array( 'cn' => 'SIMPLE_WP_MEMBERSHIP_VER', 'cl' => '' ), 'stripe/stripe-checkout.php' => array( 'cn' => 'SIMPAY_VERSION', 'cl' => '' ), 'ultimate-product-catalogue/UPCP_Main.php' => array( 'cn' => 'UPCP_CD_PLUGIN_PATH', 'cl' => '' ), 'usc-e-shop/usc-e-shop.php' => array( 'cn' => 'USCES_VERSION', 'cl' => '' ), 'users-ultra/xoousers.php' => array( 'cn' => 'xoousers_url', 'cl' => '' ), 'wc-vendors/class-wc-vendors.php' => array( 'cn' => 'wcv_plugin_dir', 'cl' => 'WC_Vendors' ), 'woocommerce-paypal-pro-payment-gateway/woo-paypal-pro.php' => array( 'cn' => 'WC_PP_PRO_ADDON_VERSION', 'cl' => 'WC_Paypal_Pro_Gateway_Addon' ), 'woocommerce/woocommerce.php' => array( 'cn' => 'WOOCOMMERCE_VERSION', 'cl' => 'WooCommerce' ), 'wordpress-ecommerce/marketpress.php' => array( 'cn' => 'MP_LITE', 'cl' => 'MarketPress' ), 'wordpress-simple-paypal-shopping-cart/wp_shopping_cart.php' => array( 'cn' => 'WP_CART_VERSION', 'cl' => '' ), 'wp-e-commerce/wp-shopping-cart.php' => array( 'cn' => 'WPSC_VERSION', 'cl' => 'WP_eCommerce' ), 'wp-shop-original/wp-shop.php' => array( 'cn' => 'WPSHOP_DIR', 'cl' => '' ), 'wp-ultra-simple-paypal-shopping-cart/wp_ultra_simple_shopping_cart.php' => array( 'cn' => 'WUSPSC_VERSION', 'cl' => '' ), 'wppizza/wppizza.php' => array( 'cn' => 'WPPIZZA_VERSION', 'cl' => '' ), 'yith-woocommerce-stripe/init.php' => array( 'cn' => 'YITH_WCSTRIPE_VERSION', 'cl' => '' ),
 			/* Security Plugins */
 			'wordfence/wordfence.php' => array( 'cn' => 'WORDFENCE_VERSION', 'cl' => 'wordfence' ), 
 			/* Page Builder Plugins */
 			'beaver-builder-lite-version/fl-builder.php' => array( 'cn' => 'FL_BUILDER_VERSION', 'cl' => 'FLBuilder' ), 'bb-plugin/fl-builder.php' => array( 'cn' => 'FL_BUILDER_VERSION', 'cl' => 'FLBuilder' ),
 			/* Conflicting/Unsupported/Insecure Plugins - Alert to Deactivate and Uninstall */
-			'commentluv/commentluv.php' => array( 'cn' => '', 'cl' => 'commentluv' ), 
+			'commentluv/commentluv.php' => array( 'cn' => '', 'cl' => 'commentluv' ), 'growmap-anti-spambot-plugin/growmap-anti-spambot-plugin.php' => array( 'cn' => '', 'cl' => '' ), 'si-contact-form/si-contact-form.php' => array( 'cn' => 'FSCF_VERSION', 'cl' => 'FSCF_Util' ),
 			/* All others */
 		);
 		if( ( !empty( $plug_cncl[$plug_bn]['cn'] ) && defined( $plug_cncl[$plug_bn]['cn'] ) ) || ( !empty( $plug_cncl[$plug_bn]['cl'] ) && class_exists( $plug_cncl[$plug_bn]['cl'] ) ) ) { $wpss_conf_active_plugins[$plug_bn] = TRUE; return TRUE; }
@@ -71,8 +71,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 		if( TRUE === $check_network && is_multisite() ) {
 			if( empty( $wpss_active_network_plugins ) ) { $wpss_active_network_plugins = rs_wpss_get_active_network_plugins(); }
 			if( WPSS_PHP::in_array( $plug_bn, $wpss_active_network_plugins ) ) { $wpss_conf_active_network_plugins[$plug_bn] = TRUE; return TRUE; }
-		}
-		return FALSE;
+		}; return FALSE;
 	}
 
 	/**
@@ -120,9 +119,11 @@ final class WPSS_Compatibility extends WP_SpamShield {
 			if( !defined( 'WPSS_SOFT_COMPAT_MODE' ) ) { define( 'WPSS_SOFT_COMPAT_MODE', TRUE ); }
 		}
 
-		/**
-		 *	Gwolle Guestbook	- https://wordpress.org/plugins/gwolle-gb/
-		 */
+		/* Contact Form 7 - https://wordpress.org/plugins/contact-form-7/ */
+
+		/* Misc Form Shield */
+   
+		/* Gwolle Guestbook - https://wordpress.org/plugins/gwolle-gb/ */
 		if( self::is_plugin_active( 'gwolle-gb' ) ) {
 			$spamshield_options = parent::get_option();
 			if( empty( $spamshield_options['disable_misc_form_shield'] ) ) {
@@ -144,9 +145,14 @@ final class WPSS_Compatibility extends WP_SpamShield {
 					}
 				}
 			}
+
 		}
 
-		/* Add next... */
+		/* Formidable Forms - https://wordpress.org/plugins/formidable/ */
+
+		/* Submenu pages for supported plugins */
+
+		/* Dequeue with late priority */
 
 	}
 
@@ -156,16 +162,24 @@ final class WPSS_Compatibility extends WP_SpamShield {
 	 *	@since			1.9.15
 	 */
 	static public function unsupported() {
+		/* New User Approve Plugin - https://wordpress.org/plugins/new-user-approve/ */
 
-		/**
-		 *	Simple Comment Editing	- https://wordpress.org/plugins/simple-comment-editing/
-		 */
+		/* Plugin Organizer Plugin ( https://wordpress.org/plugins/plugin-organizer/ ) */
+
+		/* Simple Comment Editing - https://wordpress.org/plugins/simple-comment-editing/ */
 		if( self::is_plugin_active( 'simple-comment-editing/index.php' ) ) {
 			remove_action( 'plugins_loaded', 'sce_instantiate', 10 );
 			add_filter( 'sce_can_edit', '__return_false', WPSS_L0 );
 			add_filter( 'sce_allow_delete', '__return_false', WPSS_L0 );
 			add_filter( 'sce_load_scripts', '__return_false', WPSS_L0 );
 		}
+
+		/* Growmap Anti Spambot Plugin - http://www.growmap.com/growmap-anti-spambot-plugin/ */
+
+		/**
+		 *	Check for plugin conflicts on activation, and mitigate to prevent issues later on.
+		 *	Production: Enable / Debugging: Disable
+		 */
 
 		/* Add next... */
 
@@ -184,7 +198,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 			add_action( 'registration_errors', array( __CLASS__, 'deconflict_nua_02' ), -10 );
 		}
 
-		/* Affiliates Plugin ( https://wordpress.org/plugins/affiliates/ ) */
+		/* Affiliates Plugin - https://wordpress.org/plugins/affiliates/ */
 		if( defined( 'AFFILIATES_CORE_VERSION' ) || class_exists( 'Affiliates_Registration' ) ) {
 			if( class_exists( 'Affiliates_Registration' ) && method_exists( 'Affiliates_Registration', 'update_affiliate_user' ) ) {
 				add_filter( 'user_registration_email', 'rs_wpss_sanitize_new_user_email' );
@@ -194,13 +208,58 @@ final class WPSS_Compatibility extends WP_SpamShield {
 			}
 		}
 
-		/* Easy Digital Downloads ( https://wordpress.org/plugins/easy-digital-downloads/ ) */
+		/* Akismet Plugin - https://wordpress.org/plugins/akismet/ */
+		if( defined( 'AKISMET_VERSION' ) ) {
+			/* Gotta keep 'em honest... */
+			add_filter( 'akismet_spam_count_incr', '__return_zero', WPSS_L0, 1 );
+		}
+
+		/* Easy Digital Downloads - https://wordpress.org/plugins/easy-digital-downloads/ */
 		if( self::is_edd_active() ) {
-			add_action( 'edd_process_verified_download', array( __CLASS__, 'deconflict_edd_01' ), 999 );
+			add_action( 'edd_process_verified_download', array( __CLASS__, 'deconflict_edd_01' ), 1000 );
 		}
 
 		/* Add next... */
 
+	}
+
+	/**
+	 *	Conflict checks during activation
+	 *	Check for plugin conflicts on activation, to prevent issues later on. Apply mitigation.
+	 *	Especially important for PHP 5.5 and below.
+	 *	@hook			action|activate_plugin|WPSS_L0
+	 *	@dependencies	...
+	 *	@since			1.9.xx
+	 */
+
+	/**
+	 *	Plugins Loaded 50
+	 *	Run deconfliction and security protocols
+	 *	@dependencies	...
+	 *	@used by		WP_SpamShield->__construct()
+	 *	@hook			action|plugins_loaded|50
+	 *	@since			1.9.xx
+	 */
+
+	/**
+	 *	Init 50
+	 *	Run deconfliction and security protocols
+	 *	@dependencies	...
+	 *	@used by		WP_SpamShield->__construct()
+	 *	@hook			action|init|50
+	 *	@since			1.9.xx
+	 */
+
+	/**
+	 *	Admin Init 50
+	 *	Run deconfliction and security protocols
+	 *	@dependencies	...
+	 *	@used by		WP_SpamShield->__construct()
+	 *	@hook			action|admin_init|50
+	 *	@since			1.9.xx
+	 */
+	static public function admin_init_50() {
+		/* Nothing to do yet... */
 	}
 
 	static public function deconflict_edd_01() {
@@ -210,7 +269,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 	static public function deconflict_nua_01() {
 		if( class_exists( 'pw_new_user_approve' ) && method_exists( 'pw_new_user_approve', 'create_new_user' ) && has_filter( 'register_post', array( pw_new_user_approve::instance(), 'create_new_user' ) ) ) {
 			remove_action( 'register_post', array( pw_new_user_approve::instance(), 'create_new_user' ), 10 );
-			add_action( 'registration_errors', array( __CLASS__, 'deconflict_nua_01_01' ), 9998, 3 );
+			add_action( 'registration_errors', array( __CLASS__, 'deconflict_nua_01_01' ), ( WPSS_L0 - 2 ), 3 );
 		}
 	}
 
@@ -227,7 +286,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 		if( class_exists( 'pw_new_user_approve' ) && method_exists( 'pw_new_user_approve', 'show_user_pending_message' ) && has_filter( 'registration_errors', array( pw_new_user_approve::instance(), 'show_user_pending_message' ) ) ) {
 			remove_filter( 'registration_errors', array( pw_new_user_approve::instance(), 'show_user_pending_message' ), 10 );
 			if( function_exists( 'login_header' ) && function_exists( 'login_footer' ) ) {
-				add_filter( 'registration_errors', array( __CLASS__, 'deconflict_nua_02_01' ), 9999 );
+				add_filter( 'registration_errors', array( __CLASS__, 'deconflict_nua_02_01' ), ( WPSS_L0 - 1 ) );
 			}
 		}
 	}
@@ -260,13 +319,13 @@ final class WPSS_Compatibility extends WP_SpamShield {
 		$mod_options = array( 'akismet-active' => 'false', 'antispam-answer' => '', 'antispam-question' => '', 'form_ajax' => 'false', 'honeypot' => 'false', 'moderate-entries' => 'true', 'nonce' => 'false', 'form' => array(), );
 		foreach( $mod_options as $k => $v ) {
 			if( 'form' === $k ) {
-				$c = array( __CLASS__, 'deconflict_gwgb_04' );
+				$cb = array( __CLASS__, 'deconflict_gwgb_04' );
 			} else {
-				$c = ( '' === $v || NULL === $v ) ? '__return_empty_string' : '__return_'.$v;
-				add_filter( 'pre_option_'.$pref.$k, $c, 100, 1 );
+				$cb = ( '' === $v || NULL === $v ) ? '__return_empty_string' : '__return_'.$v;
+				add_filter( 'pre_option_'.$pref.$k, $cb, 100, 1 );
 			}
-			add_filter( 'option_'.$pref.$k, $c, 100, 1 );
-			add_filter( 'pre_update_option_'.$pref.$k, $c, 100, 1 );
+			add_filter( 'option_'.$pref.$k, $cb, 100, 1 );
+			add_filter( 'pre_update_option_'.$pref.$k, $cb, 100, 1 );
 		}
 	}
 
@@ -336,23 +395,19 @@ final class WPSS_Compatibility extends WP_SpamShield {
 	 *	@since			...
 	 */
 	static public function footer_js() {
-		if( rs_wpss_is_admin_sproc() ) { return; }
-		$js = '';
+		if( rs_wpss_is_admin_sproc() ) { return; }; $js = '';
 
 		/* Vantage Theme by Appthemes ( https://www.appthemes.com/themes/vantage/ ) */
 		global $wpss_theme_vantage;
 		$v_js = ', #add-review-form';
 		if( !empty( $wpss_theme_vantage ) || ( defined( 'APP_FRAMEWORK_DIR_NAME' ) && defined( 'VA_VERSION' ) ) ) {
-			$wpss_theme_vantage = TRUE;
-			$js .= $v_js;
+			$wpss_theme_vantage = TRUE; $js .= $v_js;
 		} else {
-			$theme				= wp_get_theme();
+			$theme = wp_get_theme();
 			if( !empty( $theme ) && is_object( $theme ) ) {
-				$theme_name		= $theme->get( 'Name' );
-				$theme_author	= $theme->get( 'Author' );
+				$theme_name = $theme->get( 'Name' ); $theme_author = $theme->get( 'Author' );
 				if( 'Vantage' === $theme_name && 'AppThemes' === $theme_author ) {
-					$wpss_theme_vantage = TRUE;
-					$js .= $v_js;
+					$wpss_theme_vantage = TRUE; $js .= $v_js;
 				}
 			}
 		}
@@ -370,13 +425,15 @@ final class WPSS_Compatibility extends WP_SpamShield {
 	 */
 	static public function misc_form_bypass() {
 
-		/* Setup necessary variables */
+		/* Set up necessary variables */
 		$url		= WPSS_THIS_URL;
 		$url_lc		= WPSS_Func::lower( $url );
 		$req_uri	= $_SERVER['REQUEST_URI'];
 		$req_uri_lc	= WPSS_Func::lower( $req_uri );
 		$post_count = count( $_POST );
 		$ip			= parent::get_ip_addr();
+		$ip_dsh		= str_replace( '.', '-', $ip );
+		$ip_dsh_rgx	= rs_wpss_preg_quote( $ip_dsh );
 		$user_agent = rs_wpss_get_user_agent();
 		$referer	= rs_wpss_get_referrer();
 
@@ -387,6 +444,9 @@ final class WPSS_Compatibility extends WP_SpamShield {
 		/* GEOLOCATION */
 		if( $post_count == 6 && isset( $_POST['updatemylocation'], $_POST['log'], $_POST['lat'], $_POST['country'], $_POST['zip'], $_POST['myaddress'] ) ) { return TRUE; }
 
+		/* UpdraftPlus Updraft Central */
+		if( isset( $_GET['action'], $_POST['key_name'], $_POST['udrpc_message'], $_POST['signature'] ) && 'updraft_central' === $_GET['action'] && is_string( $_POST['key_name'] ) && is_string( $_POST['udrpc_message'] ) && is_string( $_POST['signature'] ) && TRUE === WPSS_PHP::strpos_end( $_POST['key_name'], '.central.updraftplus.com' ) && self::is_plugin_active( 'updraftplus/updraftplus.php' ) ) { return TRUE; }
+
 		/* WP Remote */
 		if( defined( 'WPRP_PLUGIN_SLUG' ) && !empty( $_POST['wpr_verify_key'] ) && parent::preg_match( "~\ WP\-Remote$~", $user_agent ) && parent::preg_match( "~\.amazonaws\.com$~", $rev_dns ) ) { return TRUE; }
 
@@ -396,7 +456,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 			if(
 				( $user_agent === 'PayPal IPN ( https://www.paypal.com/ipn )' && parent::preg_match( "~(^|\.)paypal\.com$~", $rev_dns ) ) ||
 				$rev_dns === 'api.stripe.com' ||
-				parent::preg_match( "~(^|\.)(2checkout\.com|authorize\.net|bitpay\.com|mollie\.com|payfast\.co\.za|paylane\.com|simplifycommerce\.com|stripe\.com|wepayapi\.com|worldpay\.com)$~", $rev_dns )
+				parent::preg_match( "~(^|\.)(2checkout\.com|authorize\.net|bitpay\.com|mollie\.(com|nl)|payfast\.co\.za|paylane\.com|simplifycommerce\.com|stripe\.com|wepayapi\.com|worldpay\.com)$~", $rev_dns )
 			) { return TRUE; }
 		}
 
@@ -425,10 +485,18 @@ final class WPSS_Compatibility extends WP_SpamShield {
 			if( !empty( $GLOBALS['wp_query']->query_vars['edd-api'] ) ) { return TRUE; }
 		}
 
+		/* Give – Donation Plugin and Fundraising Platform ( https://wordpress.org/plugins/give/ ) */
+		if( self::is_plugin_active( 'give' ) && !empty( $_GET['payment-id'] ) && function_exists( 'give_get_option' ) && function_exists( 'give_get_settings' ) ) {
+			$failed_page = give_get_option( 'failure_page', 0 );
+			if( !empty( $failed_page ) && is_page( $failed_page ) ) { return TRUE; }
+			$give_options = give_get_settings();
+			if( !empty( $give_options['success_page'] ) && !empty( $_GET['payment-confirmation'] ) && is_page( $give_options['success_page'] ) ) { return TRUE; }
+		}
+
 		/* Gravity Forms PayPal Payments Standard Add-On ( http://www.gravityforms.com/add-ons/paypal/ ) */
 		if( ( defined( 'GF_MIN_WP_VERSION' ) && defined( 'GF_PAYPAL_VERSION' ) ) || ( class_exists( 'GFForms' ) && class_exists( 'GF_PayPal_Bootstrap' ) ) || self::is_plugin_active( 'gravityformspaypal/paypal.php' ) ) {
-			if( ( FALSE !== strpos( $url, 'gf_paypal_ipn' ) || ( !empty( $_GET['page'] ) && 'gf_paypal_ipn' === $_GET['page'] ) ) && isset( $_POST['ipn_track_id'], $_POST['payer_id'], $_POST['receiver_id'], $_POST['txn_id'], $_POST['txn_type'], $_POST['verify_sign'] ) ) { return TRUE; }
-			if( ( FALSE !== strpos( $url, 'gf_paypal_return' ) || !empty( $_GET['gf_paypal_return'] ) ) && isset( $_POST['payer_id'], $_POST['receiver_id'], $_POST['txn_id'], $_POST['txn_type'], $_POST['verify_sign'] ) ) { return TRUE; }
+			if( ( FALSE !== strpos( $req_uri, 'gf_paypal_ipn' ) || ( !empty( $_GET['page'] ) && 'gf_paypal_ipn' === $_GET['page'] ) ) && isset( $_POST['ipn_track_id'], $_POST['payer_id'], $_POST['receiver_id'], $_POST['txn_id'], $_POST['txn_type'], $_POST['verify_sign'] ) ) { return TRUE; }
+			if( ( FALSE !== strpos( $req_uri, 'gf_paypal_return' ) || !empty( $_GET['gf_paypal_return'] ) ) && isset( $_POST['payer_id'], $_POST['receiver_id'], $_POST['txn_id'], $_POST['txn_type'], $_POST['verify_sign'] ) ) { return TRUE; }
 		}
 
 		/* PayPal IPN */
@@ -440,10 +508,27 @@ final class WPSS_Compatibility extends WP_SpamShield {
 			&& $fcrdns === '[Verified]'
 		) { return TRUE; }
 
-		/* Clef - TO DO: Remove after July 7, 2017 - https://jetpack.com/for/clef/ */
-		if( defined( 'CLEF_VERSION' ) ) {
-			if( parent::preg_match( "~^Clef/[0-9](\.[0-9]+)+\ \(https\://getclef\.com\)$~", $user_agent ) && parent::preg_match( "~((^|\.)clef\.io|\.amazonaws\.com)$~", $rev_dns ) ) { return TRUE; }
-		}
+		/**
+		 *	Stripe Webhook Notification
+		 *	@references: https://stripe.com/docs/webhooks | https://stripe.com/docs/ips
+		 */
+		$stripe_whn_ips = array( '54.187.174.169', '54.187.205.235', '54.187.216.72', '54.241.31.99', '54.241.31.102', '54.241.34.107' );
+		if(
+			$user_agent === 'Stripe/1.0 (+https://stripe.com/docs/webhooks)'
+			&& ( WPSS_PHP::in_array( $ip, $stripe_whn_ips ) || parent::preg_match( "~^(api|(api|ip)\-".$ip_dsh_rgx.")\.stripe\.com$~", $rev_dns ) )
+			&& $fcrdns === '[Verified]'
+		) { return TRUE; }; unset( $stripe_whn_ips );
+
+		/**
+		 *	Mollie Webhooks
+		 *	@references: https://stripe.com/docs/webhooks | https://stripe.com/docs/ips
+		 */
+		$mollie_whn_ips = array( '54.187.174.169', '54.187.205.235', '54.187.216.72', '54.241.31.99', '54.241.31.102', '54.241.34.107' );
+		if(
+			$user_agent === 'Stripe/1.0 (+https://stripe.com/docs/webhooks)'
+			&& ( WPSS_PHP::in_array( $ip, $mollie_whn_ips ) || parent::preg_match( "~^(api|(api|ip)\-".$ip_dsh_rgx.")\.mollie\.com$~", $rev_dns ) )
+			&& $fcrdns === '[Verified]'
+		) { return TRUE; }; unset( $mollie_whn_ips );
 
 		/* OA Social Login */
 		if( defined( 'OA_SOCIAL_LOGIN_VERSION' ) ) {
@@ -467,8 +552,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 				&& parent::preg_match( "~\"TopicArn\"\ \:\ \"".preg_quote($_SERVER['HTTP_X_AMZ_SNS_TOPIC_ARN'])."\",~", $_POST['HTTP_RAWDS_POST_DATA'] )
 				&& parent::preg_match( "~\"SigningCertURL\"\ \:\ \"https\://sns\." . preg_quote( $amz_sns_topic_arn_matches[1] ) . "\.amazonaws\.com/SimpleNotificationService\-[a-z0-9]+\.pem\"~", $_POST['HTTP_RAWDS_POST_DATA'] )
 				&& $fcrdns === '[Verified]'
-			) { unset( $_POST['HTTP_RAWDS_POST_DATA'] ); return TRUE; }
-			unset( $_POST['HTTP_RAWDS_POST_DATA'] );
+			) { unset( $_POST['HTTP_RAWDS_POST_DATA'] ); return TRUE; }; unset( $_POST['HTTP_RAWDS_POST_DATA'] );
 		}
 
 		/**
@@ -500,17 +584,17 @@ final class WPSS_Compatibility extends WP_SpamShield {
 		 *	Detect popular e-commerce plugins
 		 */
 		$ecom_plug_constants = array(
-			'AFFILIATES_CORE_VERSION', 'AL_BASE_PATH', 'CFCORE_VER', 'EC_CURRENT_VERSION', 'ECWID_PLUGIN_DIR', 'EDD_VERSION', 'EME_DB_VERSION', 'ESHOP_VERSION', 'GF_AUTHORIZENET_VERSION', 'GF_PAYFAST_VERSION', 'GF_PAYPAL_VERSION', 'GF_STRIPE_VERSION', 'GFP_STRIPE_FILE', 'GIVE_VERSION', 'JIGOSHOP_VERSION', 'MEPR_VERSION', 'MP_LITE', 'PMPRO_VERSION', 'SIMPAY_VERSION', 'SIMPLE_WP_MEMBERSHIP_VER', 'UPCP_CD_PLUGIN_PATH', 'USCES_VERSION', 'WC_PP_PRO_ADDON_VERSION', 'wcv_plugin_dir', 'WOOCOMMERCE_VERSION', 'WC_VERSION', 'WP_CART_VERSION', 'WPDM_Version', 'WPPIZZA_VERSION', 'WPSC_VERSION', 'WPSHOP_DIR', 'WS_PLUGIN__S2MEMBER_VERSION', 'WUSPSC_VERSION', 'xoousers_url', 'uultraxoousers_pro_url', 'YITH_WCSTRIPE_VERSION',
+			'AFFILIATES_CORE_VERSION', 'AL_BASE_PATH', 'CFCORE_VER', 'DMM_VERSION', 'EC_CURRENT_VERSION', 'ECWID_PLUGIN_DIR', 'EDD_VERSION', 'EME_DB_VERSION', 'ESHOP_VERSION', 'GF_AUTHORIZENET_VERSION', 'GF_PAYFAST_VERSION', 'GF_PAYPAL_VERSION', 'GF_STRIPE_VERSION', 'GFP_STRIPE_FILE', 'GIVE_VERSION', 'JIGOSHOP_VERSION', 'M4W_PLUGIN_DIR', 'MEPR_VERSION', 'MP_LITE', 'PMPRO_VERSION', 'RFMP_VERSION', 'SIMPAY_VERSION', 'SIMPLE_WP_MEMBERSHIP_VER', 'UPCP_CD_PLUGIN_PATH', 'USCES_VERSION', 'WC_PP_PRO_ADDON_VERSION', 'wcv_plugin_dir', 'WOOCOMMERCE_VERSION', 'WC_VERSION', 'WP_CART_VERSION', 'WPDM_Version', 'WPPIZZA_VERSION', 'WPSC_VERSION', 'WPSHOP_DIR', 'WS_PLUGIN__S2MEMBER_VERSION', 'WUSPSC_VERSION', 'xoousers_url', 'uultraxoousers_pro_url', 'YITH_WCSTRIPE_VERSION',
 		);
 		foreach( $ecom_plug_constants as $k => $p ) { if( defined( $p ) ) { $wpss_ecom_enabled = TRUE; return TRUE; } }
 		$ecom_plug_classes = array(
-			'Easy_Digital_Downloads', 'eCommerce_Product_Catalog', 'GF_AuthorizeNet_Bootstrap', 'GF_PayFast_Bootstrap', 'GF_PayPal_Bootstrap', 'GF_Stripe_Bootstrap', 'Give', 'IT_Exchange', 'MarketPress', 'ShoppLoader', 'WC_Paypal_Pro_Gateway_Addon', 'WC_Vendors', 'WooCommerce', 'WP_eCommerce',
+			'Dmm_Start', 'Easy_Digital_Downloads', 'eCommerce_Product_Catalog', 'GF_AuthorizeNet_Bootstrap', 'GF_PayFast_Bootstrap', 'GF_PayPal_Bootstrap', 'GF_Stripe_Bootstrap', 'Give', 'IT_Exchange', 'MarketPress', 'Mollie_API_Autoloader', 'Mollie_WC_Autoload', 'Mollie_WC_Plugin', 'RFMP_Start', 'ShoppLoader', 'WC_Paypal_Pro_Gateway_Addon', 'WC_Vendors', 'WooCommerce', 'WP_eCommerce',
 		);
 		foreach( $ecom_plug_classes as $k => $p ) { if( class_exists( $p ) ) { $wpss_ecom_enabled = TRUE; return TRUE; } }
 		$ecom_plugs = array(
-			'affiliates', 'caldera-forms', 'download-manager', 'easy-digital-downloads', 'ecommerce-product-catalog', 'ecwid-shopping-cart', 'edd-invoices', 'edd-recurring', 'edd-software-licensing/edd-software-licenses.php', 'eshop', 'events-made-easy/events-manager.php', 'events-manager', 'formidable-paypal', 'give', 'gravity-forms-stripe', 'gravityformsauthorizenet/authorizenet.php', 'gravityformspayfast/payfast.php', 'gravityformsstripe/stripe.php', 'gravityformspaypal/paypal.php', 'ithemes-exchange/init.php', 'jigoshop', 'memberpress', 'mollie-payments-for-woocommerce', 'paid-memberships-pro', 'paytium', 'paytium-edd', 's2member', 'shopp/Shopp.php', 'simple-membership/simple-wp-membership.php', 'stripe/stripe-checkout.php', 'ultimate-product-catalogue/UPCP_Main.php', 'usc-e-shop', 'users-ultra/xoousers.php', 'wc-vendors/class-wc-vendors.php', 'woocommerce-paypal-pro-payment-gateway/woo-paypal-pro.php', 'woocommerce', 'wordpress-ecommerce/marketpress.php', 'wordpress-simple-paypal-shopping-cart/wp_shopping_cart.php', 'wp-e-commerce/wp-shopping-cart.php', 'wp-easycart/wpeasycart.php', 'wp-shop-original/wp-shop.php', 'wp-ultra-simple-paypal-shopping-cart/wp_ultra_simple_shopping_cart.php', 'wppizza', 'yith-woocommerce-stripe/init.php', 
+			'affiliates', 'caldera-forms', 'doneren-met-mollie', 'download-manager', 'easy-digital-downloads', 'ecommerce-product-catalog', 'ecwid-shopping-cart', 'edd-invoices', 'edd-recurring', 'edd-software-licensing/edd-software-licenses.php', 'eshop', 'events-made-easy/events-manager.php', 'events-manager', 'formidable-paypal', 'formidable-stripe', 'give', 'gravity-forms-stripe', 'gravityformsauthorizenet/authorizenet.php', 'gravityformspayfast/payfast.php', 'gravityformsstripe/stripe.php', 'gravityformspaypal/paypal.php', 'ithemes-exchange/init.php', 'jigoshop', 'memberpress', 'mollie-forms', 'mollie-payments-for-woocommerce', 'paid-memberships-pro', 'paytium', 'paytium-edd', 's2member', 'shopp/Shopp.php', 'simple-membership/simple-wp-membership.php', 'stripe/stripe-checkout.php', 'ultimate-product-catalogue/UPCP_Main.php', 'usc-e-shop', 'users-ultra/xoousers.php', 'wc-vendors/class-wc-vendors.php', 'woocommerce-paypal-pro-payment-gateway/woo-paypal-pro.php', 'woocommerce', 'wordpress-ecommerce/marketpress.php', 'wordpress-simple-paypal-shopping-cart/wp_shopping_cart.php', 'wp-e-commerce/wp-shopping-cart.php', 'wp-shop-original/wp-shop.php', 'wp-ultra-simple-paypal-shopping-cart/wp_ultra_simple_shopping_cart.php', 'wppizza', 'yith-woocommerce-stripe/init.php', 
 		);
-		foreach( $ecom_plugs as $k => $p ) { if( self::is_plugin_active( $p ) ) { $wpss_ecom_enabled = TRUE; return TRUE; } }
+		foreach( $ecom_plugs as $k => $p ) { if( self::is_plugin_active( $p ) ) { return ( $wpss_ecom_enabled = TRUE ); } }
 		/**
 		 *	$ecom_plug_str = array();
 		 *	$ecom_plug_rgx = array();
@@ -550,7 +634,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 	}
 
 	/**
-	 *	Detect JetPack Plugin
+	 *	Detect Jetpack Plugin
 	 *	@dependencies	WPSS_Compatibility::is_plugin_active()
 	 *	@since			1.9.14
 	 */
@@ -595,8 +679,8 @@ final class WPSS_Compatibility extends WP_SpamShield {
 	}
 
 	/**
-	 *	Check for Surrogates
-	 *	- Server Caching, Reverse Poxies, WAFS: Varnish, Cloudflare (Rocket Loader), Sucuri WAF, Incapsula, etc.
+	 *	Check local web hosting environment for signature of surrogates
+	 *	- Server Caching, Reverse Poxies, WAFs: Varnish, Cloudflare (Rocket Loader), Sucuri WAF, Incapsula, etc.
 	 *	- Specific web hosts that use aggressive caching (eg. Varnish or other): WP Engine, Dreamhost, SiteGround, Bluehost, GoDaddy, Lightning Base, Pagely, ...
 	 *	@dependencies	WPSS_Utils::get_ip_dns_params(), WPSS_Utils::get_web_host(), WP_SpamShield::update_option(), WP_SpamShield::is_varnish_active()(), WP_SpamShield::get_option(), ...
 	 *	@since			1.9.9.5
@@ -613,15 +697,13 @@ final class WPSS_Compatibility extends WP_SpamShield {
 		if( empty( $wpss_surrogate ) ) {
 			$wpss_surrogate = parent::get_option( 'surrogate' );
 		}
-		if( empty( $wpss_surrogate ) ) {
-			$wpss_surrogate = FALSE;
-		}
+		if( empty( $wpss_surrogate ) ) { $wpss_surrogate = FALSE; }
 		parent::update_option( array( 'surrogate' => $wpss_surrogate, 'web_host' => $web_host ) );
 		return $wpss_surrogate;
 	}
 
 	/**
-	 *	Varnish detection
+	 *	Varnish cache detection in local web hosting environment
 	 *	@dependencies	WPSS_PHP::extension_loaded(), WP_SpamShield::update_option(), WP_SpamShield::is_plugin_active(),
 	 *	@since			1.9.9.5
 	 */
@@ -632,7 +714,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 		$varnish_env_var		= array( 'HTTP_X_VARNISH', );
 		$varnish_php_const		= array( 'VARNISH_COMPAT_2', 'VARNISH_COMPAT_3', 'VARNISH_CONFIG_COMPAT', 'VARNISH_CONFIG_HOST', 'VARNISH_CONFIG_IDENT', 'VARNISH_CONFIG_PORT', 'VARNISH_CONFIG_SECRET', 'VARNISH_CONFIG_TIMEOUT', 'VARNISH_STATUS_AUTH', 'VARNISH_STATUS_CANT', 'VARNISH_STATUS_CLOSE', 'VARNISH_STATUS_COMMS', 'VARNISH_STATUS_OK', 'VARNISH_STATUS_PARAM', 'VARNISH_STATUS_SYNTAX', 'VARNISH_STATUS_TOOFEW', 'VARNISH_STATUS_TOOMANY', 'VARNISH_STATUS_UNIMPL', 'VARNISH_STATUS_UNKNOWN', );
 		$varnish_plug_const		= array( 'DHDO', 'DHDO_PLUGIN_DIR', 'DREAMSPEED_VERSION', 'VHP_VARNISH_IP', );
-		$varnish_constants		= array_merge( $varnish_php_const, $varnish_plug_const );
+		$varnish_constants		= ( (array) $varnish_php_const + (array) $varnish_plug_const );
 		$varnish_plugs			= array( 'dreamobjects', 'dreamspeed-cdn', 'varnish-http-purge', );
 		$wpss_varnish_active	= WPSS_PHP::extension_loaded( 'varnish' );
 		if( empty( $wpss_varnish_active ) ) {
@@ -655,14 +737,29 @@ final class WPSS_Compatibility extends WP_SpamShield {
 				if( self::is_plugin_active( $p ) ) { $wpss_varnish_active = TRUE; break; }
 			}
 		}
+
+		/* Fetch URL and check headers for 'varnish' */
+
 		if( !empty( $wpss_varnish_active ) ) {
 			$wpss_surrogate	= $wpss_varnish_active = TRUE;
 			parent::update_option( array( 'surrogate' => $wpss_surrogate ) );
 			return TRUE;
 		}
-		$wpss_varnish_active = FALSE;
-		return FALSE;
+		return ( $wpss_varnish_active = FALSE );
 	}
+
+	/**
+	 *	Nginx reverse-proxy/cache detection in local web hosting environment
+	 *	Apache as primary server, and Nginx as the reverse-proxy
+	 *	@dependencies	WPSS_PHP::get_headers(), WPSS_Func::lower(), ...
+	 *	@since			...
+	 */
+
+	/**
+	 *	Server-side cache detection in local web hosting environment
+	 *	@dependencies	...
+	 *	@since			...
+	 */
 
 	/**
 	 *	Litespeed detection
@@ -692,7 +789,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 	 *	Check if Contact Form 7 is doing REST
 	 *	@dependencies	WPSS_Func::lower(), WPSS_Compatibility::is_cf7_active(), rs_wpss_is_doing_rest(), ...
 	 *	@since			1.9.12 as rs_wpss_casetrans()
-	 *  @moved			1.9.14 to WPSS_Compatibility class
+	 *	@moved			1.9.14 to WPSS_Compatibility class
 	 */
 	static public function is_cf7_doing_rest() {
 		$req_uri = WPSS_Func::lower( $_SERVER['REQUEST_URI'] );
@@ -700,7 +797,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 	}
 
 	/**
-	 *	Check if JetPack is doing REST
+	 *	Check if Jetpack is doing REST
 	 *	To check if JP is doing settings, use `WPSS_Compatibility::is_jp_doing_rest( TRUE )`
 	 *	@dependencies	WPSS_Func::lower(), WPSS_Compatibility::is_jp_active(), rs_wpss_is_doing_rest(), ...
 	 *	@since			1.9.14

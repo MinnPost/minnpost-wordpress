@@ -1,13 +1,14 @@
-﻿=== WP-SpamShield Anti-Spam - All-in-One Spam Protection ===
+﻿=== WP-SpamShield ===
 Contributors: RedSand, blackhawkcybersec, rsm-support
 Donate link: https://www.redsandmarketing.com/go/donate/wp-spamshield/
 Tags: anti-spam, antispam, comments, security, spam
 Requires at least: 4.0
 Tested up to: 4.8
+Requires PHP: 5.3
 Stable tag: trunk
 License: GPLv2
 
-All-in-one WordPress spam protection, with NO CAPTCHAs or other inconvenience to site visitors. The #1 most accurate WordPress anti-spam plugin.
+Powerful and user-friendly WordPress anti-spam defense that prevents spam on blog comments, contact forms, registrations, and everything else.
 
 == Description ==
 
@@ -285,6 +286,14 @@ If you have any further questions, please submit them on the main [WP-SpamShield
 
 **A:** The short answer: Yes! WP-SpamShield is 100% compliant with European Cookie and Privacy Laws. The long answer... *[Continue reading FAQ 18 »](https://www.redsandmarketing.com/plugins/wp-spamshield/faqs/?faqs=18#faqs_18)*
 
+= FAQ 19 - Q: I'm a web developer, and something does not seem to be working right in my local testing environment. What might be causing this? =
+
+**A:** When something does not seem to work properly in a local testing environment, but works without issue on a live site, almost 100% of the time it is due to... *[Continue reading FAQ 19 »](https://www.redsandmarketing.com/plugins/wp-spamshield/faqs/?faqs=19#faqs_19)*
+
+= FAQ 20 - Q: How do I upgrade my site's PHP version? =
+
+**A:** Upgrading PHP is not hard at all. Please see this... *[Continue reading FAQ 20 »](https://www.redsandmarketing.com/plugins/wp-spamshield/faqs/?faqs=20#faqs_20)*
+
 == Screenshots ==
 
 1. WP-SpamShield Settings page
@@ -299,6 +308,12 @@ If you have any further questions, please submit them on the main [WP-SpamShield
 10. Widget - WP-SpamShield Counter - Graphic: Style 9
 
 == Changelog ==
+
+= 1.9.18 =
+*released 10/14/17*
+
+* Made various code enhancements and improvements.
+* Maintenance: Updated existing spam filters.
 
 = 1.9.17 =
 *released 07/17/17*
@@ -1092,7 +1107,7 @@ If you have any further questions, please submit them on the main [WP-SpamShield
 For a complete list of changes to the plugin, view the [Changelog](https://www.redsandmarketing.com/plugins/wp-spamshield/changelog/).
 
 == Upgrade Notice ==
-= 1.9.17 =
+= 1.9.18 =
 
-* Made various code enhancements and improvements, removed packaged French translation as it is replaced by language pack, and improved/updated the spam filters. Please see Changelog for details.
+* Made various code enhancements and improvements, and improved/updated the spam filters. Please see Changelog for details.
 

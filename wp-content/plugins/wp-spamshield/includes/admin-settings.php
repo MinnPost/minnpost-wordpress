@@ -1,7 +1,7 @@
 <?php
 /**
- *  WP-SpamShield Admin Settings Page
- *  File Version 1.9.17
+ *	WP-SpamShield Admin Settings Page
+ *	File Version 1.9.18
  */
 
 /* Make sure file remains secure if called directly */
@@ -76,8 +76,7 @@ if( TRUE !== WPSS_DEBUG && TRUE !== WP_DEBUG ) { @ini_set( 'display_errors', 0 )
 				echo '<div class="updated notice is-dismissible"><p><strong>' . __( 'Plugin Contact Form settings saved.', 'wp-spamshield' ) . '</strong></p></div>';
 			}
 			/* Filter Vars */
-			$_GET_RAW = $_GET;
-			$_GET_FIL = array();
+			$_GET_RAW = $_GET; $_GET_FIL = array();
 			if( !empty( $_GET ) && is_array( $_GET ) ) {
 				foreach( $_GET as $k => $v ) { $_GET_FIL[$k] = sanitize_text_field( stripslashes( $_GET[$k] ) ); }
 			}
@@ -127,8 +126,8 @@ if( TRUE !== WPSS_DEBUG && TRUE !== WP_DEBUG ) { @ini_set( 'display_errors', 0 )
 
 			<?php
 			/**
-			 *  TO DO:
-			 *  Detect PHP Version and Memory Issues and Display Warning, with info on how to fix
+			 *	TO DO:
+			 *	Detect PHP Version and Memory Issues and Display Warning, with info on how to fix
 			 */
 
 			/* Start Layout */
@@ -565,7 +564,7 @@ if( TRUE !== WPSS_DEBUG && TRUE !== WP_DEBUG ) { @ini_set( 'display_errors', 0 )
 
 			<?php
 			/**
-			 *  Recommended Partners
+			 *	Recommended Partners
 			 *	@removed 1.9.9.5
 			 */
 			?>
