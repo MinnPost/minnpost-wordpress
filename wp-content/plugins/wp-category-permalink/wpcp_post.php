@@ -52,7 +52,7 @@ abstract class MWCPPost
         }
 
         foreach ( MWCPPost::taxonomies( $post->post_type ) as $info ) {
-            $query_var = $info->query_var;
+            $query_var = $info->name;
             $term_id = 0;
             if ( isset( $permalink_taxa[$query_var] ) ) {
               $term_id = $permalink_taxa[$query_var];

@@ -1,19 +1,19 @@
 <?php
 /*
 Plugin Name: WP Category Permalink
-Plugin URI: http://meowapps.com
+Plugin URI: https://meowapps.com
 Description: Allows manual selection of a 'main' category for each post for better permalinks and SEO. Pro version WILL add support for custom taxonomies.
-Version: 3.2.6
+Version: 3.2.7
 Author: Jordy Meow
-Author URI: http://meowapps.com
+Author URI: https://meowapps.com
 
 Originally developed for two of my websites:
-- Jordy Meow (http://jordymeow.com)
-- Haikyo (http://www.haikyo.org)
+- Jordy Meow (http://offbeatjapan.org)
+- Haikyo (http://haikyo.org)
 */
 
 /**
-*
+*s
 * Post Edit CSS/JS + Update
 *
 */

@@ -3,7 +3,7 @@ Contributors: TigrouMeow, Okonomiyaki3000
 Tags: category, permalink, woocommerce
 Requires at least: 3.5
 Tested up to: 4.7.2
-Stable tag: 3.2.6
+Stable tag: 3.2.7
 
 Allows manual selection of a 'main' category for each post for nicer permalinks and better SEO. Pro version adds custom post type support.
 
@@ -19,6 +19,8 @@ This plugin allows you to select a main category (or taxonomy) for your posts fo
 
 **Breadcrumbs**. They have their own way of working and can't be supported automatically by default because they are created by specific themes or plugins. If you encounter issues with breadcrumbs, please say so in the Support Threads and let's see how we can make it work.
 
+**Compatibility**. It works with any theme or plugin that creates post types and taxonomies but it looks like it doesn't work with the plugin called "Types". You can use "Custom Post Type UI" instead.
+
 Languages: English.
 
 == Installation ==
@@ -28,7 +30,8 @@ Languages: English.
 
 == Frequently Asked Questions ==
 
-Please ask your questions in the forum and I will add them here :)
+= How to get the chosen category using PHP? =
+Have a look at this thread: https://wordpress.org/support/topic/get-primary-category/#post-9055471
 
 == Upgrade Notice ==
 
@@ -40,6 +43,9 @@ Nothing to be careful about here, just update :)
 2. Check your permalinks in the posts list. If a heart is present, it means a category (or taxonomy) has been chosen.
 
 == Changelog ==
+
+= 3.2.7 =
+* Fix: Name instead of Query Var.
 
 = 3.2.6 =
 * Fix: Avoid double trailing slashes.
