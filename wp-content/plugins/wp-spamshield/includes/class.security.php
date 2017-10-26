@@ -1,7 +1,7 @@
 <?php
 /**
  *	WP-SpamShield Security
- *	File Version 1.9.18
+ *	File Version 1.9.19
  */
 
 /* Make sure file remains secure if called directly */
@@ -837,11 +837,14 @@ class WPSS_Security extends WP_SpamShield {
 		if( rs_wpss_is_admin_sproc() || rs_wpss_is_doing_cron() || rs_wpss_is_installing() || rs_wpss_is_cli() || parent::is_customize_preview() ) { return; }
 		if( empty( $_POST ) && !empty( $HTTP_RAW_POST_DATA ) ) { $_POST = array( 'HTTP_RAW_POST_DATA' => $HTTP_RAW_POST_DATA ); }
 		if( !empty( $_POST ) && is_array( $_POST ) ) {
+			$pref = 'PO_';
 			foreach( $_POST as $k => $v ) {
-				if( 0 === strpos( $k, 'PO_' ) && is_array( $v ) ) {
-					foreach( $v as $ak => $av ) {
-						if( 0 === strpos( $av, WPSS_PLUGIN_NAME ) ) { unset( $v[$ak] ); }
-					}; $_POST[$k] = array_values($v);
+				if( 0 === strpos( $k, $pref ) || !empty( $_POST[$pref.'nonce'] ) || ( !empty( $_GET['action'] ) && 0 === strpos( $_GET['action'], $pref ) ) ) {
+					if( is_array( $v ) ) {
+						foreach( $v as $ak => $av ) {
+							if( 0 === strpos( $av, WPSS_PLUGIN_NAME ) ) { unset( $v[$ak] ); }
+						}; $_POST[$k] = ( WPSS_Utils::is_array_num( $v ) ) ? WPSS_Utils::sort_unique( $v ) : $v;
+					}
 				}
 			}
 		}

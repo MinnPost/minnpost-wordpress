@@ -309,6 +309,11 @@ If you have any further questions, please submit them on the main [WP-SpamShield
 
 == Changelog ==
 
+= 1.9.19 =
+*released 10/25/17*
+
+* Added an enhancement to ensure functional integrity and prevent other plugins from accidentally disabling or modifying essential functionality.
+
 = 1.9.18 =
 *released 10/14/17*
 
@@ -1107,7 +1112,7 @@ If you have any further questions, please submit them on the main [WP-SpamShield
 For a complete list of changes to the plugin, view the [Changelog](https://www.redsandmarketing.com/plugins/wp-spamshield/changelog/).
 
 == Upgrade Notice ==
-= 1.9.18 =
+= 1.9.19 =
 
-* Made various code enhancements and improvements, and improved/updated the spam filters. Please see Changelog for details.
+* Added an enhancement to ensure functional integrity and prevent other plugins from accidentally disabling or modifying essential functionality. Please see Changelog for details.
 

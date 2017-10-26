@@ -1,7 +1,7 @@
 <?php
 /**
  *	WP-SpamShield Compatibility
- *	File Version 1.9.18
+ *	File Version 1.9.19
  */
 
 /* Make sure file remains secure if called directly */
@@ -97,10 +97,8 @@ final class WPSS_Compatibility extends WP_SpamShield {
 		 *	When it is detected that the plugin has been upgraded, fire, and run these checks
 		 */
 
-		/* Plugin Organizer Plugin ( https://wordpress.org/plugins/plugin-organizer/ ) */
-		if( self::is_plugin_active( 'plugin-organizer' ) ) {
-			self::deconflict_po_01();
-		}
+		/* Add next... */
+
 	}
 
 	/**
@@ -172,6 +170,11 @@ final class WPSS_Compatibility extends WP_SpamShield {
 			add_filter( 'sce_can_edit', '__return_false', WPSS_L0 );
 			add_filter( 'sce_allow_delete', '__return_false', WPSS_L0 );
 			add_filter( 'sce_load_scripts', '__return_false', WPSS_L0 );
+		}
+
+		/* Plugin Organizer Plugin ( https://wordpress.org/plugins/plugin-organizer/ ) */
+		if( self::is_plugin_active( 'plugin-organizer' ) ) {
+			self::deconflict_po_01();
 		}
 
 		/* Growmap Anti Spambot Plugin - http://www.growmap.com/growmap-anti-spambot-plugin/ */
@@ -301,17 +304,25 @@ final class WPSS_Compatibility extends WP_SpamShield {
 	}
 
 	static public function deconflict_po_01() {
-		/* Make sure WP-SpamShield does not get disabled or hindered */
+		/* Make sure WP-SpamShield does not get disabled or hindered, for security reasons. */
+		if( !is_admin() ) { return; }
+		$pref = 'PO_'; $cb = '__return_zero';
 		$all_options = wp_load_alloptions();
+		$fix_options = array( 'admin_disable_plugins', 'disable_by_role', 'disable_mobile_plugins', 'disable_plugins', 'plugin_order', );
+		$fix_mu	= array( 'PluginOrganizerMU.class.php', );
 		foreach( $all_options  as $option => $value ) {
-			if( 0 === strpos( $option, 'PO_disabled_' ) && is_array( $value ) ) {
-				foreach( $value  as $k => $v ) {
-					if( 0 === strpos( $v, WPSS_PLUGIN_NAME ) ) { unset( $value[$k] ); }
-				}
-				$value = array_values( $value ); update_option( $option, $value );
+			if( 0 === strpos( $option, $pref ) ) {
+				$slug = str_replace( $pref, '', $option );
+				if( 0 === strpos( serialize( $value ), WPSS_PLUGIN_NAME ) || isset( $fix_options[$slug] ) ) { update_option( $option, 0 ); continue; }
 			}
 		}
-		update_option( 'PO_plugin_order', array() );
+		foreach( $fix_options as $i => $v ) {
+			add_filter( 'pre_update_option_'.$pref.$v, $cb, 100, 1 );
+		}
+		foreach( $fix_mu as $i => $v ) {
+			$file = WPMU_PLUGIN_DIR.WPSS_DS.$v; @clearstatcache();
+			if( file_exists( $file ) ) { @unlink( $file ); WPSS_PHP::chmod( $file, 400, TRUE, TRUE ); }
+		}
 	}
 
 	static public function deconflict_gwgb_01() {
