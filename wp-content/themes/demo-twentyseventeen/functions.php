@@ -21,6 +21,17 @@ function minnpost_demo_post_thumbnail_sizes_attr( $attr = array(), $attachment, 
 }
 add_filter( 'wp_get_attachment_image_attributes', 'minnpost_demo_post_thumbnail_sizes_attr', 10 , 3 );
 
+function minnpost_has_post_thumbnail( $post = null ) {
+	if ( isset( $post->id ) ) {
+		$post = $post->id;
+	}
+	if ( get_post_meta( $post, '_thumbnail_id', 'by_url' ) === 'by_url' || ! has_post_thumbnail( $post ) ) {
+		return FALSE;
+	} else {
+		return TRUE;
+	}
+}
+
 
 add_filter( 'wp_get_attachment_image_src', 'gallery_change_src', 10, 4 );
 
@@ -133,11 +144,11 @@ function minnpost_twentyseventeen_widgets_init() {
 }
 add_action( 'widgets_init', 'minnpost_twentyseventeen_widgets_init', 20 );
 
-add_action( 'cmb2_admin_init', 'minnpost_twentyseventeen_post_image_settings' );
+add_action( 'cmb2_admin_init', 'minnpost_twentyseventeen_cmb2_settings' );
 /**
  * Define the metabox and field configurations.
  */
-function minnpost_twentyseventeen_post_image_settings() {
+function minnpost_twentyseventeen_cmb2_settings() {
 
 	$image_settings = new_cmb2_box( array(
 		'id'            => 'image_settings',
@@ -158,9 +169,9 @@ function minnpost_twentyseventeen_post_image_settings() {
 		'show_option_none' => true,
 		'default'          => 'large',
 		'options'          => array(
-			'medium' => __( 'Medium', 'minnpost_twentyseventeen' ),
+			'feature_middle' => __( 'Medium', 'minnpost_twentyseventeen' ),
 			'none'   => __( 'Do not display image', 'minnpost_twentyseventeen' ),
-			'large'     => __( 'Large', 'minnpost_twentyseventeen' ),
+			'feature_large'     => __( 'Large', 'minnpost_twentyseventeen' ),
 		),
 	) );
 
@@ -196,7 +207,48 @@ function minnpost_twentyseventeen_post_image_settings() {
 		'type'             => 'text',
 	) );
 
+
+	/*$category_settings = new_cmb2_box( array(
+		'id'               => 'category_settings',
+		'title'            => __( 'Category Settings', 'minnpost_twentyseventeen' ),
+		'object_types'     => array( 'term', ), // Post type
+		'taxonomies'       => array( 'category' ),
+		'new_term_section' => true,
+		'priority' => 'high'
+	) );
+
+	$category_settings->add_field( array(
+		'name'             => 'Deck',
+		'desc'             => '',
+		'id'               => '_mp_category_settings_deck',
+		'type'             => 'text',
+	) );
+
+	$category_settings->add_field( array(
+		'name'             => 'Byline',
+		'desc'             => '',
+		'id'               => '_mp_category_settings_byline',
+		'type'             => 'text',
+	) );*/
+
 }
+
+/**
+ * Remove default description column from category
+ *
+ */
+function minnpost_twentyseventeen_remove_taxonomy_description($columns)
+{
+ // only edit the columns on the current taxonomy, replace category with your custom taxonomy (don't forget to change in the filter as well)
+ if ( !isset($_GET['taxonomy']) || $_GET['taxonomy'] != 'category' )
+ return $columns;
+
+ // unset the description columns
+ if ( $posts = $columns['description'] ){ unset($columns['description']); }
+ return $columns;
+}
+
+add_filter('manage_edit-category_columns','minnpost_twentyseventeen_remove_taxonomy_description');
 
 function minnpost_twentyseventeen_subtitles() {
         # Get the globals:
@@ -210,3 +262,17 @@ function minnpost_twentyseventeen_subtitles() {
     }
 
 add_action('edit_form_after_title', 'minnpost_twentyseventeen_subtitles');
+
+use Carbon_Fields\Container;
+use Carbon_Fields\Field;
+
+Container::make('term_meta', 'Category Properties')
+    ->show_on_taxonomy('category')
+    ->add_fields(array(
+        Field::make('text', 'crb_deck', 'Deck'),
+        Field::make('rich_text', 'crb_excerpt', 'Excerpt'),
+        Field::make('rich_text', 'crb_sponsorship', 'Sponsorship'),
+        Field::make('image', 'crb_thumbnail', 'Category Thumbnail'),
+        Field::make('image', 'crb_main_image', 'Category Main Image'),
+        Field::make('rich_text', 'crb_body', 'Body'),
+    ));
