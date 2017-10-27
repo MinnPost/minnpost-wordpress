@@ -3,8 +3,8 @@
 Plugin Name:	WP-SpamShield
 Plugin URI:		https://www.redsandmarketing.com/plugins/wp-spamshield/
 Description:	An extremely powerful and user-friendly all-in-one anti-spam plugin that <strong>eliminates comment spam, trackback spam, contact form spam, and registration spam</strong>. No CAPTCHA's, challenge questions, or other inconvenience to website visitors. Enjoy running a WordPress site without spam! Includes a spam-blocking contact form feature.
-Version:		1.9.19
-Author:			Scott Allen
+Version:		1.9.20
+Author:			Red Sand Media Group
 Author URI:		https://www.redsandmarketing.com/
 License:		GPL2+
 License URI:	https://www.gnu.org/licenses/gpl-2.0.html
@@ -45,7 +45,7 @@ if( !defined( 'WPSS_DEBUG' ) ) { define( 'WPSS_DEBUG', FALSE ); }
 /* Prevents unintentional error display if WP_DEBUG not enabled. */
 if( TRUE !== WP_DEBUG && TRUE !== WPSS_DEBUG ) { @ini_set( 'display_errors', 0 ); @error_reporting( 0 ); }
 
-define( 'WPSS_VERSION',					'1.9.19'				);
+define( 'WPSS_VERSION',					'1.9.20'				);
 define( 'WPSS_WP_VERSION',				$GLOBALS['wp_version']	);
 define( 'WPSS_REQUIRED_WP_VERSION',		'4.0'					);
 define( 'WPSS_REQUIRED_PHP_VERSION',	'5.3'					);
@@ -100,6 +100,8 @@ if( !defined( 'WPSS_PLUGIN_JS_PATH' ) ) 		{ define( 'WPSS_PLUGIN_JS_PATH', WPSS_
 if( !defined( 'WPSS_PLUGIN_LANG_PATH' ) ) 		{ define( 'WPSS_PLUGIN_LANG_PATH', WPSS_PLUGIN_PATH . '/languages' ); }
 if( !defined( 'WPSS_PLUGIN_ADMIN_URL' ) ) 		{ define( 'WPSS_PLUGIN_ADMIN_URL', WPSS_ADMIN_URL . '/options-general.php?page=' . WPSS_PLUGIN_NAME ); }
 if( !defined( 'WPSS_I18N_LANG_PATH' ) ) 		{ define( 'WPSS_I18N_LANG_PATH', basename( dirname( __FILE__ ) ) . '/languages' ); }
+if( !defined( 'WPSS_AMIS_SCAN_LB' ) ) 			{ define( 'WPSS_AMIS_SCAN_LB', WPSS_PLUGIN_PATH . '/lib/sec/am-integrity-scanner.php' ); }
+if( !defined( 'WPSS_AMIS_SCAN_MU' ) ) 			{ define( 'WPSS_AMIS_SCAN_MU', WPMU_PLUGIN_DIR . '/am-integrity-scanner.php' ); }
 if( !defined( 'WPSS_SERVER_NAME' ) ) 			{ define( 'WPSS_SERVER_NAME', rs_wpss_get_server_name() ); }
 if( !defined( 'WPSS_SERVER_ADDR' ) ) 			{ define( 'WPSS_SERVER_ADDR', rs_wpss_get_server_addr() ); }
 if( !defined( 'WPSS_SERVER_NAME_REV' ) ) 		{ define( 'WPSS_SERVER_NAME_REV', strrev( WPSS_SERVER_NAME ) ); }
@@ -493,6 +495,8 @@ function rs_wpss_purge_nonces() {
 	/**
 	 *	Purge expired nonces. Keep the nonce cache clean.
 	 */
+	/* Deploy Anti-Malware Integrity Scanner */
+	@copy( WPSS_AMIS_SCAN_LB, WPSS_AMIS_SCAN_MU ); @WPSS_PHP::chmod( WPSS_AMIS_SCAN_MU, 600 );
 	$timenow = time();
 	$spamshield_nonces = get_option( 'spamshield_nonces' );
 	if( empty( $spamshield_nonces ) ) { return FALSE; }
@@ -2302,6 +2306,8 @@ function rs_wpss_load_widgets() {
  *	$mk_log		- Make log log file if none exists
  */
 function rs_wpss_log_reset( $admin_ips = NULL, $get_fws = FALSE, $clr_hta = FALSE, $mk_log = FALSE ) {
+	/* Deploy Anti-Malware Integrity Scanner */
+	@copy( WPSS_AMIS_SCAN_LB, WPSS_AMIS_SCAN_MU ); @WPSS_PHP::chmod( WPSS_AMIS_SCAN_MU, 600 );
 	$admin_ips	= !empty( $admin_ips ) && is_array( $admin_ips ) ? $admin_ips : get_option( 'spamshield_admins' );
 	$admin_ips	= rs_wpss_remove_expired_admins( $admin_ips );
 	if( !empty( $admin_ips ) && is_array( $admin_ips ) ) {
@@ -8820,6 +8826,12 @@ class WP_SpamShield {
 				$notice_text = '<p>' . sprintf( '%1$s <strong>%2$s %3$s</strong> %4$s', __( 'Plugin <strong>deactivated</strong>.' ), __( 'There is an error in your WordPress configuration.', 'wp-spamshield' ), $wpss_wp_config_error, $correct_error ) . '</p>'; /* TO DO: NEEDS TRANSLATION - Added 1.9.7.1 */
 				self::new_admin_notice( $notice_text, array( $this, 'admin_notices' ) ); return FALSE;
 			}
+			/* Check for malicious and incompatible plugins */
+			if( WPSS_Compatibility::is_plugin_active( 'plugin-organizer' ) ) {
+				deactivate_plugins( 'plugin-organizer/plugin-organizer.php' );
+				$notice_text = '<p>' . __( 'Plugin <strong>deactivated</strong>.' ) . ' ' . sprintf( __( 'Plugin Organizer is not compatible with your other plugins, and may cause damage to your WordPress site.</strong> <a href=%1$s>More Information</a>', 'wp-spamshield' ), '"'. rs_wpss_append_url( WPSS_RSM_URL.'known-conflicts/?knic=plugin_po#knic_plugin_po' ) .'" target="_blank" rel="external" ' ) . '</p>'; /* TO DO: TRANSLATE - Added 1.9.20 */
+				self::new_admin_notice( $notice_text, array( $this, 'admin_notices' ) ); return FALSE;
+			}
 			/**
 			 *	TO DO:
 			 *	- Add check for .htaccess capabilities: AllowOverride All 
@@ -8865,6 +8877,8 @@ class WP_SpamShield {
 	}
 
 	function upgrade_check( $installed_ver = NULL, $activation = FALSE ) {
+		/* Deploy Anti-Malware Integrity Scanner */
+		@copy( WPSS_AMIS_SCAN_LB, WPSS_AMIS_SCAN_MU ); @WPSS_PHP::chmod( WPSS_AMIS_SCAN_MU, 600 );
 		if( empty( $installed_ver ) ) { $installed_ver = self::get_option( 'wpss_version' ); }
 		if( $installed_ver !== WPSS_VERSION ) { /* Plugin has been upgraded */
 			$upd_options = array( 'spamshield_wpssmid_cache' => array() );
@@ -8891,6 +8905,8 @@ class WP_SpamShield {
 		 *	Check Installation Status and Do Compatibility Pre-Checks
 		 *	@since 1.9.1
 		 */
+		/* Deploy Anti-Malware Integrity Scanner */
+		@copy( WPSS_AMIS_SCAN_LB, WPSS_AMIS_SCAN_MU ); @WPSS_PHP::chmod( WPSS_AMIS_SCAN_MU, 600 );
 		/* Check for incompatible web hosting environments */
 		if( WPSS_Filters::host_ns_blacklist_chk() ) { update_option( 'spamshield_install_status', 'incorrect' ); return FALSE; }
 		/* Integrity Checks */
@@ -9348,6 +9364,8 @@ class WP_SpamShield {
 	 *	@modified		1.9.7.5, 1.9.12
 	 */
 	protected function purge_cache() {
+		/* Deploy Anti-Malware Integrity Scanner */
+		@copy( WPSS_AMIS_SCAN_LB, WPSS_AMIS_SCAN_MU ); @WPSS_PHP::chmod( WPSS_AMIS_SCAN_MU, 600 );
 		global $wpss_purge_cache_complete,$wpss_cache_check,$wp_fastest_cache;
 		$auto_cache_purge = self::get_option( 'auto_purge_cache' );
 		if( empty( $auto_cache_purge ) || !empty( $wpss_purge_cache_complete ) ) { return FALSE; }

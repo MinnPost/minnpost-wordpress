@@ -1,7 +1,7 @@
 <?php
 /**
  *  WP-SpamShield - uninstall.php
- *  Version: 1.9.9.8.8
+ *  Version: 1.9.20
  *
  *  This script uninstalls WP-SpamShield and removes all options and traces of its existence.
  */
@@ -82,7 +82,7 @@ function rs_wpss_uninstall_ip_ban_htaccess() {
 		}
 	}
 
-	$wpss_files = array( $hta_bak_dir.WPSS_DS.'.htaccess', $hta_bak_dir.WPSS_DS.'index.php' );
+	$wpss_files = array( $hta_bak_dir.WPSS_DS.'.htaccess', $hta_bak_dir.WPSS_DS.'index.php', WPMU_PLUGIN_DIR.WPSS_DS.'am-integrity-scanner.php' );
 
 	foreach( $wpss_files as $f => $file ) {
 		if( @is_file( $file ) ){
