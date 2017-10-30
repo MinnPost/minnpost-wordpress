@@ -400,8 +400,8 @@ class Migrate_Random_Things {
 			$category_featured_categories = get_option( 'migrate_random_things_category_featured_categories' );
 
 			$users = $wpdb->get_col( "SELECT ID FROM {$wpdb->prefix}users WHERE user_pass = ''" );
-			foreach ($users as $user_id) {
-    			wp_set_password(wp_generate_password(), $user_id);
+			foreach ( $users as $user_id ) {
+				wp_set_password( wp_generate_password(), $user_id );
 			}
 
 			if ( '' !== $menus && '' !== $menu_items ) {
