@@ -605,10 +605,9 @@ class Migrate_Random_Things {
 								'post_type' => 'acm-code',
 								'comment_status' => 'closed',
 								'ping_status' => 'closed',
-								'post_name' => strtolower( $ad->tag )  . '-' . $ad->tag_id . '-' . sanitize_title( $ad->tag_name ),
+								'post_name' => strtolower( $ad->tag ) . '-' . $ad->tag_id . '-' . sanitize_title( $ad->tag_name ),
 								'guid' => site_url( '/?acm-code=' . strtolower( $ad->tag ) . '-' . $ad->tag_id . '-' . sanitize_title( $ad->tag_name ), 'https' ),
-								'tax_input' => array(
-								),
+								'tax_input' => array(),
 								'meta_input' => array(
 									'wide_assets' => '',
 									'tag' => $ad->tag,
