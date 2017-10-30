@@ -3,7 +3,7 @@
 Plugin Name:	WP-SpamShield
 Plugin URI:		https://www.redsandmarketing.com/plugins/wp-spamshield/
 Description:	An extremely powerful and user-friendly all-in-one anti-spam plugin that <strong>eliminates comment spam, trackback spam, contact form spam, and registration spam</strong>. No CAPTCHA's, challenge questions, or other inconvenience to website visitors. Enjoy running a WordPress site without spam! Includes a spam-blocking contact form feature.
-Version:		1.9.20
+Version:		1.9.21
 Author:			Red Sand Media Group
 Author URI:		https://www.redsandmarketing.com/
 License:		GPL2+
@@ -45,7 +45,7 @@ if( !defined( 'WPSS_DEBUG' ) ) { define( 'WPSS_DEBUG', FALSE ); }
 /* Prevents unintentional error display if WP_DEBUG not enabled. */
 if( TRUE !== WP_DEBUG && TRUE !== WPSS_DEBUG ) { @ini_set( 'display_errors', 0 ); @error_reporting( 0 ); }
 
-define( 'WPSS_VERSION',					'1.9.20'				);
+define( 'WPSS_VERSION',					'1.9.21'				);
 define( 'WPSS_WP_VERSION',				$GLOBALS['wp_version']	);
 define( 'WPSS_REQUIRED_WP_VERSION',		'4.0'					);
 define( 'WPSS_REQUIRED_PHP_VERSION',	'5.3'					);
@@ -8826,15 +8826,14 @@ class WP_SpamShield {
 				$notice_text = '<p>' . sprintf( '%1$s <strong>%2$s %3$s</strong> %4$s', __( 'Plugin <strong>deactivated</strong>.' ), __( 'There is an error in your WordPress configuration.', 'wp-spamshield' ), $wpss_wp_config_error, $correct_error ) . '</p>'; /* TO DO: NEEDS TRANSLATION - Added 1.9.7.1 */
 				self::new_admin_notice( $notice_text, array( $this, 'admin_notices' ) ); return FALSE;
 			}
-			/* Check for malicious and incompatible plugins */
+			/* Check for incompatible plugins */
 			if( WPSS_Compatibility::is_plugin_active( 'plugin-organizer' ) ) {
-				deactivate_plugins( 'plugin-organizer/plugin-organizer.php' );
-				$notice_text = '<p>' . __( 'Plugin <strong>deactivated</strong>.' ) . ' ' . sprintf( __( 'Plugin Organizer is not compatible with your other plugins, and may cause damage to your WordPress site.</strong> <a href=%1$s>More Information</a>', 'wp-spamshield' ), '"'. rs_wpss_append_url( WPSS_RSM_URL.'known-conflicts/?knic=plugin_po#knic_plugin_po' ) .'" target="_blank" rel="external" ' ) . '</p>'; /* TO DO: TRANSLATE - Added 1.9.20 */
+				$notice_text = '<p>' . sprintf( __( '<strong>Plugin Organizer is not compatible with WP-SpamShield, and should be deactivated to prevent issues.</strong> <a href=%1$s>More Information</a>', 'wp-spamshield' ), '"'. rs_wpss_append_url( WPSS_RSM_URL.'known-conflicts/?knic=plugin_po#knic_plugin_po' ) .'" target="_blank" rel="external" ' ) . '</p><p>' . sprintf( __( 'You can deactivate and manage plugins <a href=%1$s>here</a>.', 'wp-spamshield' ), '"'. WPSS_ADMIN_URL.'/plugins.php' .'" ' ) . '</p>'; /* TO DO: TRANSLATE - Added 1.9.20 */
 				self::new_admin_notice( $notice_text, array( $this, 'admin_notices' ) ); return FALSE;
 			}
 			/**
 			 *	TO DO:
-			 *	- Add check for .htaccess capabilities: AllowOverride All 
+			 *	- Add check for .htaccess capabilities: AllowOverride All
 			 */
 			/* Make sure user's site has .htaccess capability & is not on standalone Nginx, in order to prevent issues */
 			global $is_apache, $is_IIS, $is_iis7, $is_nginx;

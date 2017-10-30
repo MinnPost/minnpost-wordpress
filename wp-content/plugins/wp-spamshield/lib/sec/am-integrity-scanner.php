@@ -3,7 +3,7 @@
 Plugin Name:	WP-SpamShield Anti-Malware & Functional Integrity Scanner
 Plugin URI:		https://www.redsandmarketing.com/plugins/wp-spamshield/
 Description:	This checks for malicious plugin files and ensures plugin functional integrity.
-Version:		1.9.20
+Version:		1.9.21
 Author:			Red Sand Media Group and Blackhawk Cybersecurity
 Author URI:		https://www.redsandmarketing.com/plugins/wp-spamshield/
 License:		GPL2+
@@ -33,9 +33,11 @@ $pl_files = wpss_mu_scandir( WP_PLUGIN_DIR );
 
 /**
  *	Malicious Signatures
+ *	Scans for fake malware plugin "X-WP-SPAM-SHIELD-PRO" (which is in no way associate with the real WP-SpamShield).
+ *	More Info: https://www.redsandmarketing.com/blog/malware-alert-x-wp-spam-shield-pro-fake-plugin/
  */
-$mal_keys	= array( 'lugin-organi', 'luginorgani', 'amshield-pro', 'x-wp-spam' );
-$mal_rgx	= "~lugin-*organi~i";
+$mal_keys	= array( 'spam-shield-pro', 'x-wp-spam-shield' );
+$mal_rgx	= "~((x\-*)?wp\-*)?spam\-*shield\-*pro~i";
 
 foreach( $mu_files as $i => $file ) {
 	if( $file === basename( __FILE__ ) ) { continue; }

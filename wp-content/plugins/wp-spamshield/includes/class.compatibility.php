@@ -1,7 +1,7 @@
 <?php
 /**
  *	WP-SpamShield Compatibility
- *	File Version 1.9.20
+ *	File Version 1.9.21
  */
 
 /* Make sure file remains secure if called directly */
@@ -49,7 +49,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 		/* Check known plugin constants and classes */
 		$plug_cncl = array(
 			/* Compatibility Fixes */
-			'autoptimize/autoptimize.php' => array( 'cn' => 'AUTOPTIMIZE_WP_CONTENT_NAME', 'cl' => 'autoptimizeConfig' ), 'gwolle-gb/gwolle-gb.php' => array( 'cn' => 'GWOLLE_GB_VER', 'cl' => '' ), 'jetpack/jetpack.php' => array( 'cn' => 'JETPACK__VERSION', 'cl' => 'Jetpack' ), 'plugin-organizer/plugin-organizer.php' => array( 'cn' => '', 'cl' => 'PluginOrganizer' ), 'wp-slimstat/wp-slimstat.php' => array( 'cn' => '', 'cl' => 'wp_slimstat' ), 'wordpress-seo/wp-seo.php' => array( 'cn' => 'WPSEO_VERSION', 'cl' => '' ),
+			'autoptimize/autoptimize.php' => array( 'cn' => 'AUTOPTIMIZE_WP_CONTENT_NAME', 'cl' => 'autoptimizeConfig' ), 'gwolle-gb/gwolle-gb.php' => array( 'cn' => 'GWOLLE_GB_VER', 'cl' => '' ), 'jetpack/jetpack.php' => array( 'cn' => 'JETPACK__VERSION', 'cl' => 'Jetpack' ), 'wp-slimstat/wp-slimstat.php' => array( 'cn' => '', 'cl' => 'wp_slimstat' ), 'wordpress-seo/wp-seo.php' => array( 'cn' => 'WPSEO_VERSION', 'cl' => '' ),
 			/* 3rd Party Forms, Membership & Registration */
 			'bbpress/bbpress.php' => array( 'cn' => '', 'cl' => 'bbPress' ), 'buddypress/bp-loader.php' => array( 'cn' => 'BP_PLUGIN_DIR', 'cl' => 'BuddyPress' ), 'contact-form-7/wp-contact-form-7.php' => array( 'cn' => 'WPCF7_VERSION', 'cl' => '' ), 'gravityforms/gravityforms.php' => array( 'cn' => 'GF_MIN_WP_VERSION', 'cl' => 'GFForms' ), 'mailchimp-for-wp/mailchimp-for-wp.php' => array( 'cn' => 'MC4WP_LITE_VERSION', 'cl' => 'MC4WP_Lite' ), 'ninja-forms/ninja-forms.php' => array( 'cn' => 'NF_PLUGIN_VERSION', 'cl' => 'Ninja_Forms' ),
 			/* Cache Plugins */
@@ -61,7 +61,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 			/* Page Builder Plugins */
 			'beaver-builder-lite-version/fl-builder.php' => array( 'cn' => 'FL_BUILDER_VERSION', 'cl' => 'FLBuilder' ), 'bb-plugin/fl-builder.php' => array( 'cn' => 'FL_BUILDER_VERSION', 'cl' => 'FLBuilder' ),
 			/* Conflicting/Unsupported/Insecure Plugins - Alert to Deactivate and Uninstall */
-			'commentluv/commentluv.php' => array( 'cn' => '', 'cl' => 'commentluv' ), 'growmap-anti-spambot-plugin/growmap-anti-spambot-plugin.php' => array( 'cn' => '', 'cl' => '' ), 'si-contact-form/si-contact-form.php' => array( 'cn' => 'FSCF_VERSION', 'cl' => 'FSCF_Util' ),
+			'commentluv/commentluv.php' => array( 'cn' => '', 'cl' => 'commentluv' ), 'growmap-anti-spambot-plugin/growmap-anti-spambot-plugin.php' => array( 'cn' => '', 'cl' => '' ), 'plugin-organizer/plugin-organizer.php' => array( 'cn' => '', 'cl' => 'PluginOrganizer' ), 'si-contact-form/si-contact-form.php' => array( 'cn' => 'FSCF_VERSION', 'cl' => 'FSCF_Util' ),
 			/* All others */
 		);
 		if( ( !empty( $plug_cncl[$plug_bn]['cn'] ) && defined( $plug_cncl[$plug_bn]['cn'] ) ) || ( !empty( $plug_cncl[$plug_bn]['cl'] ) && class_exists( $plug_cncl[$plug_bn]['cl'] ) ) ) { $wpss_conf_active_plugins[$plug_bn] = TRUE; return TRUE; }
@@ -162,8 +162,6 @@ final class WPSS_Compatibility extends WP_SpamShield {
 	static public function unsupported() {
 		/* New User Approve Plugin - https://wordpress.org/plugins/new-user-approve/ */
 
-		/* Plugin Organizer Plugin ( https://wordpress.org/plugins/plugin-organizer/ ) */
-
 		/* Simple Comment Editing - https://wordpress.org/plugins/simple-comment-editing/ */
 		if( self::is_plugin_active( 'simple-comment-editing/index.php' ) ) {
 			remove_action( 'plugins_loaded', 'sce_instantiate', 10 );
@@ -174,10 +172,7 @@ final class WPSS_Compatibility extends WP_SpamShield {
 
 		/* Plugin Organizer Plugin ( https://wordpress.org/plugins/plugin-organizer/ ) */
 		if( is_admin() ) {
-			if ( !function_exists( 'get_plugins' ) ) { include_once ABSPATH.'wp-admin/includes/plugin.php'; }
-			$plugins = get_plugins();
-			$mu_plugins = get_mu_plugins();
-			if( self::is_plugin_active( 'plugin-organizer' ) || isset( $plugins['plugin-organizer/plugin-organizer.php'] ) ) {
+			if( self::is_plugin_active( 'plugin-organizer' ) ) {
 				self::deconflict_po_01();
 			}
 		}
@@ -188,7 +183,6 @@ final class WPSS_Compatibility extends WP_SpamShield {
 		 *	Check for plugin conflicts on activation, and mitigate to prevent issues later on.
 		 *	Production: Enable / Debugging: Disable
 		 */
-		add_action( 'activate_plugin', array( __CLASS__, 'deconflict_po_02' ), WPSS_F0, 2 );
 
 		/* Add next... */
 
@@ -310,12 +304,14 @@ final class WPSS_Compatibility extends WP_SpamShield {
 	}
 
 	static public function deconflict_po_01() {
-		/* Make sure WP-SpamShield does not get disabled or hindered, for security reasons. */
+		/**
+		 *	Make sure WP-SpamShield does not get disabled or hindered, for security reasons.
+		 *	There is an activation notice warning users not to use the two together, but this is here for fallback mitigation.
+		 */
 		if( !is_admin() ) { return; }
 		$pref = 'PO_'; $cb = '__return_zero';
 		$all_options = wp_load_alloptions();
 		$fix_options = array( 'admin_disable_plugins', 'disable_by_role', 'disable_mobile_plugins', 'disable_plugins', 'plugin_order', );
-		$fix_mu	= array( 'PluginOrganizerMU.class.php', );
 		foreach( $all_options  as $option => $value ) {
 			if( 0 === strpos( $option, $pref ) ) {
 				$slug = str_replace( $pref, '', $option );
@@ -325,28 +321,6 @@ final class WPSS_Compatibility extends WP_SpamShield {
 		foreach( $fix_options as $i => $v ) {
 			add_filter( 'pre_update_option_'.$pref.$v, $cb, 100, 1 );
 		}
-		foreach( $fix_mu as $i => $v ) {
-			$files = array( WPMU_PLUGIN_DIR.WPSS_DS.$v, WPMU_PLUGIN_DIR.WPSS_DS.'plugin-organizer/lib/'.$v ); @clearstatcache();
-			foreach( $files as $i => $file ) {
-				if( file_exists( $file ) ) { WPSS_PHP::chmod( $file, 400, TRUE, TRUE ); @unlink( $file ); }
-			}
-		}
-		if ( !function_exists( 'deactivate_plugins' ) ) { include_once ABSPATH.'wp-admin/includes/plugin.php'; }
-		deactivate_plugins( 'plugin-organizer/plugin-organizer.php' );
-	}
-
-	static public function deconflict_po_02( $plugin, $network_wide ) {
-		if( !parent::preg_match( "~plugin\-*organizer~i", $user_agent ) ) { return; }
-		$fix_mu	= array( 'PluginOrganizerMU.class.php', );
-		foreach( $fix_mu as $i => $v ) {
-			$files = array( WPMU_PLUGIN_DIR.WPSS_DS.$v, WPMU_PLUGIN_DIR.WPSS_DS.'plugin-organizer/lib/'.$v ); @clearstatcache();
-			foreach( $files as $i => $file ) {
-				if( file_exists( $file ) ) { WPSS_PHP::chmod( $file, 400, TRUE, TRUE ); @unlink( $file ); }
-			}
-		}
-		$args = array( 'error' => 'true', 'plugin' => $plugin, 'paged' => '1', 's' => '', '_error_nonce' => wp_create_nonce( 'plugin-activation-error_'.$plugin ) );
-		$url = add_query_arg( $args, WPSS_ADMIN_URL.'/plugins.php' ); 
-		wp_redirect( $url ); exit;
 	}
 
 	static public function deconflict_gwgb_01() {

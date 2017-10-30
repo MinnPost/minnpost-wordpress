@@ -309,10 +309,16 @@ If you have any further questions, please submit them on the main [WP-SpamShield
 
 == Changelog ==
 
+= 1.9.21 =
+*released 10/27/17*
+
+* Made various code enhancements and improvements.
+* Removed "Plugin Organizer" from the anti-malware module, since it was updated and removed the malware code in version 9.2.4.
+
 = 1.9.20 =
 *released 10/27/17*
 
-* Added an anti-malware measure to prevent the "Plugin Organizer" malware plugin from disabling WP-SpamShield. All WordPress site owners should immediately remove the WordPress plugin called "Plugin Organizer". As of version 9.2.3 it has added malicious code that intentionally disables WP-SpamShield, and prevents site owners from re-activating it, even when "Plugin Organizer" is deactivated. [More information »](https://www.redsandmarketing.com/blog/malware-alert-plugin-organizer-wordpress/)
+* Added an anti-malware module to prevent the "Plugin Organizer" malware plugin from disabling WP-SpamShield, and to scan for and remove the fake malware plugin "X-WP-SPAM-SHIELD-PRO" (which is in no way associated with the real WP-SpamShield). We recommend that WordPress site owners remove the WordPress plugin called "Plugin Organizer". As of version 9.2.3 it has added malware code that intentionally disables WP-SpamShield, and prevents site owners from re-activating it, even when "Plugin Organizer" is deactivated, leaving sites unprotected. [More information »](https://www.redsandmarketing.com/blog/malware-alert-plugin-organizer-wordpress/)
 
 = 1.9.19 =
 *released 10/25/17*
@@ -1117,7 +1123,7 @@ If you have any further questions, please submit them on the main [WP-SpamShield
 For a complete list of changes to the plugin, view the [Changelog](https://www.redsandmarketing.com/plugins/wp-spamshield/changelog/).
 
 == Upgrade Notice ==
-= 1.9.20 =
+= 1.9.21 =
 
-* Added an anti-malware measure to prevent the "Plugin Organizer" malware plugin from disabling WP-SpamShield. All WordPress site owners should immediately remove the WordPress plugin called "Plugin Organizer". As of version 9.2.3 it has added malicious code that intentionally disables WP-SpamShield, and prevents site owners from re-activating it, even when "Plugin Organizer" is deactivated. [More information](https://www.redsandmarketing.com/blog/malware-alert-plugin-organizer-wordpress/) Please see Changelog for details.
+* Made various code enhancements and improvements. Please see Changelog for details.
 
