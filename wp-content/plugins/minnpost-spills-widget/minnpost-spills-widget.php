@@ -58,6 +58,7 @@ class MinnpostSpills {
 
 				$perspectives = get_category_by_slug( 'perspectives' );
 				$featured_columns = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
+				$featured_columns[] = $perspectives->term_id;
 
 				foreach ( $widget_instances as $instance ) {
 
@@ -81,7 +82,7 @@ class MinnpostSpills {
 							array(
 								'taxonomy' => 'category',
 								'field' => 'term_id',
-								'terms' => $featured_columns,
+								'terms' => array_values( $featured_columns ),
 								'operator' => 'NOT IN',
 							),
 						);
@@ -102,7 +103,7 @@ class MinnpostSpills {
 							array(
 								'taxonomy' => 'category',
 								'field' => 'term_id',
-								'terms' => $featured_columns,
+								'terms' => array_values( $featured_columns ),
 								'operator' => 'NOT IN',
 							),
 						);
@@ -399,6 +400,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 		$perspectives = get_category_by_slug( 'perspectives' );
 		$featured_columns = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
+		$featured_columns[] = $perspectives->term_id;
 
 		if ( ! empty( $categories ) ) {
 			$slugs = array();
@@ -414,7 +416,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 				array(
 					'posts_per_page' => 4,
 					'category_name' => $slugs ? implode( ',', $slugs ) : '',
-					'category__not_in' => array( $featured_columns ), // the perspectives featured columns
+					'category__not_in' => array_values( $featured_columns ), // the perspectives featured columns
 					'orderby' => 'date',
 				)
 			);
@@ -425,7 +427,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 				array(
 					'posts_per_page' => 4,
 					'tag' => $terms ? is_array( $terms ) ? implode( ',', $terms ) : $terms : '',
-					'category__not_in' => array( $featured_columns ), // the perspectives featured columns
+					'category__not_in' => array_values( $featured_columns ), // the perspectives featured columns
 					'orderby' => 'date',
 				)
 			);
