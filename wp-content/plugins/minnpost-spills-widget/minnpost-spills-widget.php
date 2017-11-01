@@ -56,6 +56,9 @@ class MinnpostSpills {
 				add_filter( 'get_the_archive_title', array( $this, 'set_wp_title' ) );
 				add_filter( 'pre_get_document_title', array( $this, 'set_wp_title' ) );
 
+				$perspectives = get_category_by_slug( 'perspectives' );
+				$featured_columns = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
+
 				foreach ( $widget_instances as $instance ) {
 
 					$title = sanitize_title( $instance['title'] );
@@ -77,8 +80,8 @@ class MinnpostSpills {
 							),
 							array(
 								'taxonomy' => 'category',
-								'field' => 'name',
-								'terms' => 'perspectives',
+								'field' => 'term_id',
+								'terms' => $featured_columns,
 								'operator' => 'NOT IN',
 							),
 						);
@@ -98,8 +101,8 @@ class MinnpostSpills {
 							),
 							array(
 								'taxonomy' => 'category',
-								'field' => 'name',
-								'terms' => 'perspectives',
+								'field' => 'term_id',
+								'terms' => $featured_columns,
 								'operator' => 'NOT IN',
 							),
 						);
@@ -395,6 +398,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 	private function get_spill_posts( $categories = '', $terms = '' ) {
 
 		$perspectives = get_category_by_slug( 'perspectives' );
+		$featured_columns = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
 
 		if ( ! empty( $categories ) ) {
 			$slugs = array();
@@ -410,7 +414,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 				array(
 					'posts_per_page' => 4,
 					'category_name' => $slugs ? implode( ',', $slugs ) : '',
-					'category__not_in' => array( $perspectives->term_id ), // the perspectives category
+					'category__not_in' => array( $featured_columns ), // the perspectives featured columns
 					'orderby' => 'date',
 				)
 			);
@@ -421,7 +425,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 				array(
 					'posts_per_page' => 4,
 					'tag' => $terms ? is_array( $terms ) ? implode( ',', $terms ) : $terms : '',
-					'category__not_in' => array( $perspectives->term_id ), // the perspectives category
+					'category__not_in' => array( $featured_columns ), // the perspectives featured columns
 					'orderby' => 'date',
 				)
 			);
