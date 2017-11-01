@@ -58,7 +58,9 @@ class MinnpostSpills {
 
 				$perspectives = get_category_by_slug( 'perspectives' );
 				$featured_columns = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
+				$fonm = get_category_by_slug( 'other-nonprofit-media' );
 				$featured_columns[] = $perspectives->term_id;
+				$featured_columns[] = $fonm->term_id;
 
 				foreach ( $widget_instances as $instance ) {
 
@@ -400,7 +402,9 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 		$perspectives = get_category_by_slug( 'perspectives' );
 		$featured_columns = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
+		$fonm = get_category_by_slug( 'other-nonprofit-media' );
 		$featured_columns[] = $perspectives->term_id;
+		$featured_columns[] = $fonm->term_id;
 
 		if ( ! empty( $categories ) ) {
 			$slugs = array();
