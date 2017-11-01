@@ -69,9 +69,18 @@ class MinnpostSpills {
 					);
 					if ( ! empty( $match['widget_categories'] ) ) {
 						$query['tax_query'][] = array(
-							'taxonomy' => 'category',
-							'field' => 'slug',
-							'terms' => $match['widget_categories'],
+							'relation' => 'AND',
+							array(
+								'taxonomy' => 'category',
+								'field' => 'term_id',
+								'terms' => $match['widget_categories'],
+							),
+							array(
+								'taxonomy' => 'category',
+								'field' => 'name',
+								'terms' => 'perspectives',
+								'operator' => 'NOT IN',
+							),
 						);
 					}
 					if ( ! empty( $match['widget_terms'] ) ) {
@@ -81,9 +90,18 @@ class MinnpostSpills {
 							$widget_terms = $match['widget_terms'];
 						}
 						$query['tax_query'][] = array(
-							'taxonomy' => 'post_tag',
-							'field' => 'name',
-							'terms' => $widget_terms,
+							'relation' => 'AND',
+							array(
+								'taxonomy' => 'post_tag',
+								'field' => 'name',
+								'terms' => $widget_terms,
+							),
+							array(
+								'taxonomy' => 'category',
+								'field' => 'name',
+								'terms' => 'perspectives',
+								'operator' => 'NOT IN',
+							),
 						);
 					}
 
@@ -376,6 +394,8 @@ class MinnpostSpills_Widget extends WP_Widget {
 	*/
 	private function get_spill_posts( $categories = '', $terms = '' ) {
 
+		$perspectives = get_category_by_slug( 'perspectives' );
+
 		if ( ! empty( $categories ) ) {
 			$slugs = array();
 			foreach ( $categories as $category ) {
@@ -390,6 +410,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 				array(
 					'posts_per_page' => 4,
 					'category_name' => $slugs ? implode( ',', $slugs ) : '',
+					'category__not_in' => array( $perspectives->term_id ), // the perspectives category
 					'orderby' => 'date',
 				)
 			);
@@ -400,6 +421,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 				array(
 					'posts_per_page' => 4,
 					'tag' => $terms ? is_array( $terms ) ? implode( ',', $terms ) : $terms : '',
+					'category__not_in' => array( $perspectives->term_id ), // the perspectives category
 					'orderby' => 'date',
 				)
 			);
