@@ -29,7 +29,7 @@ if( !class_exists( 'widgetopts_settings_elementor' ) ){
 	    <li class="widgetopts-module-card widgetopts-module-card-no-settings <?php echo ( $widget_options['elementor'] == 'activate' ) ? 'widgetopts-module-type-enabled' : 'widgetopts-module-type-disabled'; ?>" id="widgetopts-module-card-elementor" data-module-id="elementor">
 			<div class="widgetopts-module-card-content">
 				<h2><?php _e( 'Elementor Pagebuilder Support', 'widget-options' );?></h2>
-				<!-- <div class="widgetopts-pro-label"><span class="dashicons dashicons-unlock"></span></div> -->
+				<div class="widgetopts-pro-label" style="background: transparent;color: #777;"><?php _e( 'BETA', 'widget-options' );?></div>
 				<p class="widgetopts-module-desc">
 					<?php _e( 'Extends widget options functionality to Elementor Pagebuilder Plugin.', 'widget-options' );?>
 				</p>
@@ -50,7 +50,7 @@ if( !class_exists( 'widgetopts_settings_elementor' ) ){
 				<span class="dashicons widgetopts-dashicons widgetopts-no-top dashicons-editor-kitchensink"></span>
 				<h3 class="widgetopts-modal-header"><?php _e( 'Elementor Pagebuilder Support', 'widget-options' );?></h3>
 				<p>
-					<?php _e( 'This feature will unlock <strong>Widget Options</strong> section on every <a href="https://elementor.com/?ref=1139" target="_blank">Elementor</a>(affiliate link) widgets that will extend functionalities and will let you control each widgets even more.', 'widget-options' );?>
+					<?php _e( 'This feature will unlock <strong>Widget Options</strong> section on every Elementor widgets that will extend functionalities and will let you control each widgets even more.', 'widget-options' );?>
 				</p>
 				<h4><?php _e( 'Limitations', 'widget-options' );?></h4>
 				<p><?php _e( 'Widget Options feature that is already available on Elementor settings will not be applied since this will be a redundant option. Thanks!', 'widget-options' );?></p>

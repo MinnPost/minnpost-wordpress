@@ -17,7 +17,7 @@ if( !function_exists( 'widgetopts_elementor_section' ) ){
             global $widget_options;
 
             //filter the elements first to avoid conflicts that can cause pagebuilder not to load
-            if ( !in_array( $element->get_name(), array( 'global-settings', 'section', 'page-settings',  ) ) ) {
+            if ( !in_array( $element->get_name(), array( 'global-settings', 'section', 'page-settings', 'oew-blog-grid' ) ) ) {
 
                 //create array of section_id to set Widget Options Section to single section to avoid issues
                 $widgetopts_elementor_section_id = apply_filters( 'widgetopts_elementor_section_id', array(
@@ -69,38 +69,55 @@ if( !function_exists( 'widgetopts_elementor_section' ) ){
                         [
                             'tab'   => Elementor\Controls_Manager::TAB_ADVANCED,
                             'label' => __( 'Widget Options', 'widget-options' ),
+                        ],
+                        [
+                            'overwrite'         => true
                         ]
                     );
 
-                    $element->start_controls_tabs( 'widgetopts_content_tabs' );
+                    $element->start_controls_tabs( 'widgetopts_content_tabs',[
+                        'overwrite'         => true
+                    ] );
+
                         if( isset( $widget_options['visibility'] ) && 'activate' == $widget_options['visibility'] ){
                             widgetopts_elementor_tab_visibility( $element, $section_id, $args );
                         }
 
-                        if( 'activate' == $widget_options['logic'] ){
+                        if( 'activate' == $widget_options['logic'] || ( isset( $widget_options['sliding'] ) && 'activate' == $widget_options['sliding'] && in_array( $element->get_name(), array( 'button', 'button_plus', 'eael-creative-button', 'cta' ) ) ) ){
                             widgetopts_elementor_tab_settings( $element, $section_id, $args );
                         }
 
                         //upsell pro
                         if( !is_plugin_active( 'extended-widget-options/plugin.php' ) ){
-                            $element->start_controls_tab( 'widgetopts_tab_upsell', [ 'label' => __( '<i class="fa fa-plus"></i>', 'widget-options' ) ] );
+                            $element->start_controls_tab( 
+                                'widgetopts_tab_upsell', 
+                                [ 
+                                    'label' => __( '<i class="fa fa-plus"></i>', 'widget-options' ) 
+                                ],
+                                [
+                                    'overwrite'         => true
+                                ] 
+                            );
                             $element->add_control(
                     			'widgetopts_pro',
                     			[
                     				'type' => Elementor\Controls_Manager::RAW_HTML,
                     				'raw' => '<div class="elementor-panel-nerd-box">
-                    						<i class="elementor-panel-nerd-box-icon eicon-hypster"></i>
+                    						<i class="elementor-panel-nerd-box-icon fa fa-lock"></i>
                     						<div class="elementor-panel-nerd-box-title">' .
                     							__( 'Unlock All Widget Options', 'widget-options' ) .
                     						'</div>
                     						<div class="elementor-panel-nerd-box-message">' .
-                    							__( 'Upgrade to Extended Widget Options to unlock all options to easily control and manage each Elementor widgets.', 'widget-options' ) .
+                    							__( 'Upgrade to Extended Widget Options to unlock all options to easily control and manage each Elementor widget.', 'widget-options' ) .
                     						'</div>
                     						<a href="http://widget-options.com/?utm_source=elementor&utm_medium=upgrade&utm_campaign=upgradebtn" class="elementor-panel-nerd-box-link elementor-button elementor-button-default elementor-go-pro" target="_blank">' .
                     							__( 'Upgrade Now!', 'widget-options' ) .
                     						'</a>
                     						</div>',
-                    			]
+                    			],
+                                [
+                                    'overwrite'         => true
+                                ]
                     		);
                             $element->end_controls_tab();
                         }
@@ -124,7 +141,15 @@ if( !function_exists( 'widgetopts_elementor_tab_visibility' ) ){
 
         // print_r( $get_terms['community-category'] );
 
-        $element->start_controls_tab( 'widgetopts_tab_visibility', [ 'label' => __( '<i class="fa fa-eye"></i>', 'widget-options' ) ] );
+        $element->start_controls_tab( 
+            'widgetopts_tab_visibility', 
+            [ 
+                'label' => __( '<i class="fa fa-eye"></i>', 'widget-options' ) 
+            ],
+            [
+                'overwrite'         => true
+            ] 
+        );
 
         $element->add_control(
             'widgetopts_visibility',
@@ -137,6 +162,9 @@ if( !function_exists( 'widgetopts_elementor_tab_visibility' ) ){
                                             'hide' => __( 'Hide on Selected Pages' )
                                         ],
                     // 'separator'     => 'none'
+                ],
+                [
+                    'overwrite'         => true
                 ]
             );
 
@@ -158,6 +186,9 @@ if( !function_exists( 'widgetopts_elementor_tab_visibility' ) ){
                             'options'           => $pages_array,
                             'render_type'       => 'none',
                             'description'       => __( 'Click on the field to search and select pages', 'widget-options' )
+                        ],
+                        [
+                            'overwrite'         => true
                         ]
                     );
                 }
@@ -179,6 +210,9 @@ if( !function_exists( 'widgetopts_elementor_tab_visibility' ) ){
                             'options'           => $types_array,
                             'render_type'       => 'none',
                             'description'       => __( 'Click on the field to search and select custom post types', 'widget-options' )
+                        ],
+                        [
+                            'overwrite'         => true
                         ]
                     );
                 }
@@ -203,6 +237,9 @@ if( !function_exists( 'widgetopts_elementor_tab_visibility' ) ){
                             'options'           => $cat_array,
                             'render_type'       => 'none',
                             'description'       => __( 'Click on the field to search and select categories', 'widget-options' )
+                        ],
+                        [
+                            'overwrite'         => true
                         ]
                     );
                 }
@@ -224,6 +261,9 @@ if( !function_exists( 'widgetopts_elementor_tab_visibility' ) ){
                             'options'           => $tax_array,
                             'render_type'       => 'none',
                             'description'       => __( 'Click on the field to search and select taxonomies', 'widget-options' )
+                        ],
+                        [
+                            'overwrite'         => true
                         ]
                     );
                 }
@@ -247,6 +287,9 @@ if( !function_exists( 'widgetopts_elementor_tab_visibility' ) ){
                         ],
                         'render_type'       => 'none',
                         'description'       => __( 'Click on the field to search and select miscellaneous pages', 'widget-options' )
+                    ],
+                    [
+                        'overwrite'         => true
                     ]
                 );
             }
@@ -258,7 +301,31 @@ if( !function_exists( 'widgetopts_elementor_tab_settings' ) ){
     function widgetopts_elementor_tab_settings( $element, $section_id, $args ){
         global $widget_options;
 
-        $element->start_controls_tab( 'widgetopts_tab_settings', [ 'label' => __( '<i class="fa fa-gear"></i>', 'widget-options' ) ] );
+        $element->start_controls_tab( 
+            'widgetopts_tab_settings', 
+            [ 
+                'label' => __( '<i class="fa fa-gear"></i>', 'widget-options' ) 
+            ],
+            [
+                'overwrite'         => true
+            ] 
+        );
+
+        if( is_plugin_active( 'sliding-widget-options/plugin.php' ) && 'activate' == $widget_options['sliding'] && in_array( $element->get_name(), array( 'button', 'button_plus', 'eael-creative-button', 'cta' ) ) ){
+            $element->add_control(
+                'widgetopts_open_sliding',
+                [
+                    'label'          => __( 'Open Pop-up or Sliding Widgets', 'widget-options' ),
+                    'type'           => Elementor\Controls_Manager::SWITCHER,
+                    'return_value'   => 'on',
+                    'default'        => '',
+                    'separator'      => 'none'
+                ],
+                [
+                    'overwrite'         => true
+                ]
+            );
+        }
 
         if( 'activate' == $widget_options['logic'] ){
             $element->add_control(
@@ -268,6 +335,9 @@ if( !function_exists( 'widgetopts_elementor_tab_settings' ) ){
                     'label'         => __( 'Display Widget Logic', 'widget-options' ),
                     'description'   => __( 'Add your PHP Conditional Tags. Please note that this will be EVAL\'d directly.', 'widget-options' ),
                     // 'separator'     => 'none',
+                ],
+                [
+                    'overwrite'         => true
                 ]
             );
         }
