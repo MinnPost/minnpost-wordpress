@@ -1301,7 +1301,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 		$root = $root . '-role-manager';
 
 		$admin_bar->add_node( array(
-			'id'     => $root . '-roles-title',
+			'id'     => $root . '-title',
 			'parent' => $root,
 			'title'  => VAA_View_Admin_As_Form::do_icon( 'dashicons-id-alt' ) . __( 'Role manager', VIEW_ADMIN_AS_DOMAIN ),
 			'href'   => false,
