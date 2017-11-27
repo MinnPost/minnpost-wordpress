@@ -71,7 +71,7 @@ class AAL_Activity_Log_List_Table extends WP_List_Table {
 		return 'AND (' . implode( ' OR ', $where ) . ') AND (' . implode( ' OR ', $where_caps ) . ')';
 	}
 	
-	protected function _get_action_label( $action ) {
+	public function get_action_label( $action ) {
 		return ucwords( str_replace( '_', ' ', __( $action, 'aryo-activity-log' ) ) );
 	}
 
@@ -141,7 +141,7 @@ class AAL_Activity_Log_List_Table extends WP_List_Table {
 		
 		switch ( $column_name ) {
 			case 'action' :
-				$return = $this->_get_action_label( $item->action );
+				$return = $this->get_action_label( $item->action );
 				break;
 			case 'date' :
 				$return  = sprintf( '<strong>' . __( '%s ago', 'aryo-activity-log' ) . '</strong>', human_time_diff( $item->hist_time, current_time( 'timestamp' ) ) );
@@ -241,9 +241,9 @@ class AAL_Activity_Log_List_Table extends WP_List_Table {
 	}
 	
 	public function display_tablenav( $which ) {
-		if ( 'top' == $which )
+		if ( 'top' == $which ) {
 			$this->search_box( __( 'Search', 'aryo-activity-log' ), 'aal-search' );
-			wp_nonce_field( 'bulk-' . $this->_args['plural'] );
+		}
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
 			<?php
@@ -254,9 +254,52 @@ class AAL_Activity_Log_List_Table extends WP_List_Table {
 		</div>
 		<?php
 	}
+	
+	public function extra_tablenav_footer() {
+		/**
+		 * Filter list of record actions
+		 *
+		 * @return array Array items should represent action_id => 'Action Title'
+		 */
+		$actions = apply_filters( 'aal_record_actions', array() );
+		?>
+			<?php if ( count( $actions ) > 1 ) : ?>
+			<div class="alignleft actions recordactions">
+				<select name="aal-record-action">
+					<option value=""><?php echo esc_attr__( 'Export File Format', 'aryo-activity-log' ); ?></option>
+					<?php foreach ( $actions as $action_key => $action_title ) : ?>
+					<option value="<?php echo esc_attr( $action_key ); ?>"><?php echo esc_html( $action_title ); ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+			<?php else : 
+				$action_title = reset( $actions );
+				$action_key = key( $actions );
+			?>
+			<input type="hidden" name="aal-record-action" value="<?php echo esc_attr( $action_key ); ?>">
+			<?php endif; ?>
+			
+			<button type="submit" name="aal-record-actions-submit" id="record-actions-submit" class="button button-primary" value="1">
+				<?php 
+				// Is result filtering enabled?
+				if ( array_key_exists( 'aal-filter', $_GET ) ) {
+					echo sprintf( esc_html__( 'Export filtered records as %s', 'aryo-activity-log' ), $action_title );
+				} else {
+					echo sprintf( esc_html__( 'Export as %s', 'aryo-activity-log' ), $action_title );
+				}
+				?>
+			</button>
+			
+			<?php wp_nonce_field( 'aal_actions_nonce', 'aal_actions_nonce' ); ?>
+		<?php
+	}
 
 	public function extra_tablenav( $which ) {
 		global $wpdb;
+		
+		if ( 'bottom' === $which ) {
+			$this->extra_tablenav_footer();
+		}
 
 		if ( 'top' !== $which )
 			return;
@@ -298,7 +341,7 @@ class AAL_Activity_Log_List_Table extends WP_List_Table {
 				printf( '<option value="%s"%s>%s</option>', $key, selected( $_REQUEST['dateshow'], $key, false ), $value );
 			echo '</select>';
 
-			submit_button( __( 'Filter', 'aryo-activity-log' ), 'button', false, false, array( 'id' => 'activity-query-submit' ) );
+			submit_button( __( 'Filter', 'aryo-activity-log' ), 'button', 'aal-filter', false, array( 'id' => 'activity-query-submit' ) );
 		}
 
 		if ( $users ) {
@@ -374,7 +417,7 @@ class AAL_Activity_Log_List_Table extends WP_List_Table {
 
 			$output = array();
 			foreach ( $actions as $type )
-				$output[] = sprintf( '<option value="%s"%s>%s</option>', $type->action, selected( $_REQUEST['showaction'], $type->action, false ), $this->_get_action_label( $type->action ) );
+				$output[] = sprintf( '<option value="%s"%s>%s</option>', $type->action, selected( $_REQUEST['showaction'], $type->action, false ), $this->get_action_label( $type->action ) );
 
 			echo '<select name="showaction" id="hs-filter-showaction">';
 			printf( '<option value="">%s</option>', __( 'All Actions', 'aryo-activity-log' ) );
