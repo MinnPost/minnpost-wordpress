@@ -4,7 +4,7 @@ Donate link: https://redirection.me/donation/
 Tags: redirect, htaccess, 301, 404, seo, permalink, apache, nginx, post, admin
 Requires at least: 4.4
 Tested up to: 4.9
-Stable tag: 2.10
+Stable tag: 2.10.1
 Requires PHP: 5.4
 License: GPLv3
 
@@ -17,6 +17,8 @@ Redirection is the most popular redirect manager for WordPress. With it you can 
 Redirection is designed to be used on sites with a few redirects to sites with thousands of redirects.
 
 It has been a WordPress plugin for over 10 years and has been recommended countless times. And it's free!
+
+Full documentation can be found at [https://redirection.me](https://redirection.me)
 
 = Redirect manager =
 
