@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Spills
 Description: This plugin creates a sidebar widget and endpoint URL that is able to display posts from a group of categories and/or tags
-Version: 0.0.3
+Version: 0.0.4
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-spills
@@ -22,7 +22,7 @@ class MinnpostSpills {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.3';
+		$this->version = '0.0.4';
 
 		$this->load_admin();
 
@@ -68,31 +68,42 @@ class MinnpostSpills {
 				$featured_columns[] = $perspectives->term_id;
 				$featured_columns[] = $fonm->term_id;
 
-				$url = parse_url( $_SERVER['REQUEST_URI'] );
-				$url = str_replace( '/', '', $url['path'] );
+				$url_array = explode( '/', parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
+				$url = $url_array[1];
+
+				if ( isset( $url_array[2] ) && 'page' === $url_array[2] ) {
+					$page = $url_array[3];
+				} else {
+					$page = 1;
+				}
 
 				foreach ( $widget_instances as $instance ) {
 
 					$title = sanitize_title( str_replace( '/', '', $instance['title'] ) );
 
-					if ( $title !== $url ) {
+					if ( $title !== $url || ! is_array( $instance ) ) {
 						continue;
 					}
 
+					$key = array_search( $instance['title'], array_column( $instances, 'title' ), true );
+					$match = $instances[ $key ];
+
 					$query = array(
 						'is_spill' => true,
+						'posts_per_page' => 10,
+						'paged' => $page,
 						'post_type' => 'post',
 						'tax_query' => array(
 							'relation' => 'OR',
 						),
 					);
-					if ( ! empty( $instance['widget_categories'] ) ) {
+					if ( ! empty( $match['widget_categories'] ) ) {
 						$query['tax_query'][] = array(
 							'relation' => 'AND',
 							array(
 								'taxonomy' => 'category',
 								'field' => 'term_id',
-								'terms' => $instance['widget_categories'],
+								'terms' => $match['widget_categories'],
 							),
 							array(
 								'taxonomy' => 'category',
@@ -102,11 +113,11 @@ class MinnpostSpills {
 							),
 						);
 					}
-					if ( ! empty( $instance['widget_terms'] ) ) {
-						if ( ! is_array( $instance['widget_terms'] ) ) {
-							$widget_terms = explode( ',', $instance['widget_terms'] );
+					if ( ! empty( $match['widget_terms'] ) ) {
+						if ( ! is_array( $match['widget_terms'] ) ) {
+							$widget_terms = explode( ',', $match['widget_terms'] );
 						} else {
-							$widget_terms = $instance['widget_terms'];
+							$widget_terms = $match['widget_terms'];
 						}
 						$query['tax_query'][] = array(
 							'relation' => 'AND',
@@ -126,7 +137,7 @@ class MinnpostSpills {
 
 					if ( empty( $instance['url'] ) || ( ! empty( $instance['url'] ) && false === get_term_by( 'slug', str_replace( '/', '', $instance['url'] ) ) ) ) {
 						$routes->addRoute( new QueryRoute(
-							$title,
+							$title . '[/page/{page:\d+}]',
 							$query,
 							[
 								'template' => $this->template,
@@ -134,7 +145,6 @@ class MinnpostSpills {
 						));
 					}
 				}
-
 			});
 		}
 	}
@@ -154,8 +164,8 @@ class MinnpostSpills {
 			$widget_instances = get_option( 'widget_minnpostspills_widget', false );
 			$instances = array_values( $widget_instances );
 
-			$url = parse_url( $_SERVER['REQUEST_URI'] );
-			$url = str_replace( '/', '', $url['path'] );
+			$url_array = explode( '/', parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
+			$url = $url_array[1];
 
 			foreach ( $widget_instances as $instance ) {
 				$slug = sanitize_title( str_replace( '/', '', $instance['title'] ) );
