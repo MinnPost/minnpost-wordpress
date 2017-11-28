@@ -28,17 +28,23 @@ class MinnpostSpills {
 
 		$this->template = 'minnpost-spill.php';
 
-		//$this->config();
-		//$this->schedule();
-
 		// register the widget
 		add_action( 'widgets_init', function() {
 			register_widget( 'MinnpostSpills_Widget' );
 		});
 
+		// set is_home() to false on spill pages
+		add_action( 'pre_get_posts', array( $this, 'set_home_to_false' ), 10 );
+
 		// handle the permalinks
 		$this->init();
 
+	}
+
+	public function set_home_to_false( $query ) {
+		if ( ! is_admin() && isset( $query->query['is_spill'] ) && true === $query->query['is_spill'] ) {
+			$query->is_home = false;
+		}
 	}
 
 	private function init() {
@@ -74,6 +80,7 @@ class MinnpostSpills {
 					}
 
 					$query = array(
+						'is_spill' => true,
 						'post_type' => 'post',
 						'tax_query' => array(
 							'relation' => 'OR',
