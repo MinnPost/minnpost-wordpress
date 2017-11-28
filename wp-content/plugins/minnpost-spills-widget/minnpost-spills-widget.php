@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Spills
 Description: This plugin creates a sidebar widget and endpoint URL that is able to display posts from a group of categories and/or tags
-Version: 0.0.1
+Version: 0.0.3
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-spills
@@ -22,7 +22,7 @@ class MinnpostSpills {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.2';
+		$this->version = '0.0.3';
 
 		$this->load_admin();
 
@@ -62,24 +62,30 @@ class MinnpostSpills {
 				$featured_columns[] = $perspectives->term_id;
 				$featured_columns[] = $fonm->term_id;
 
+				$url = parse_url( $_SERVER['REQUEST_URI'] );
+				$url = str_replace( '/', '', $url['path'] );
+
 				foreach ( $widget_instances as $instance ) {
 
-					$title = sanitize_title( $instance['title'] );
-					$key = array_search( $instance['title'], array_column( $instances, 'title' ), true );
-					$match = $instances[ $key ];
+					$title = sanitize_title( str_replace( '/', '', $instance['title'] ) );
+
+					if ( $title !== $url ) {
+						continue;
+					}
+
 					$query = array(
 						'post_type' => 'post',
 						'tax_query' => array(
 							'relation' => 'OR',
 						),
 					);
-					if ( ! empty( $match['widget_categories'] ) ) {
+					if ( ! empty( $instance['widget_categories'] ) ) {
 						$query['tax_query'][] = array(
 							'relation' => 'AND',
 							array(
 								'taxonomy' => 'category',
 								'field' => 'term_id',
-								'terms' => $match['widget_categories'],
+								'terms' => $instance['widget_categories'],
 							),
 							array(
 								'taxonomy' => 'category',
@@ -89,11 +95,11 @@ class MinnpostSpills {
 							),
 						);
 					}
-					if ( ! empty( $match['widget_terms'] ) ) {
-						if ( ! is_array( $match['widget_terms'] ) ) {
-							$widget_terms = explode( ',', $match['widget_terms'] );
+					if ( ! empty( $instance['widget_terms'] ) ) {
+						if ( ! is_array( $instance['widget_terms'] ) ) {
+							$widget_terms = explode( ',', $instance['widget_terms'] );
 						} else {
-							$widget_terms = $match['widget_terms'];
+							$widget_terms = $instance['widget_terms'];
 						}
 						$query['tax_query'][] = array(
 							'relation' => 'AND',
@@ -111,7 +117,7 @@ class MinnpostSpills {
 						);
 					}
 
-					if ( ! empty( $instance['url'] ) && false === get_term_by( 'slug', str_replace( '/', '', $instance['url'] ) ) ) {
+					if ( empty( $instance['url'] ) || ( ! empty( $instance['url'] ) && false === get_term_by( 'slug', str_replace( '/', '', $instance['url'] ) ) ) ) {
 						$routes->addRoute( new QueryRoute(
 							$title,
 							$query,
@@ -135,18 +141,17 @@ class MinnpostSpills {
 
 	public function set_wp_title( $title ) {
 		global $template;
+		global $wp;
 		if ( basename( $template ) === $this->template ) {
 
 			$widget_instances = get_option( 'widget_minnpostspills_widget', false );
 			$instances = array_values( $widget_instances );
 
-			add_filter( 'get_the_archive_title', array( $this, 'set_wp_title' ) );
-			add_filter( 'pre_get_document_title', array( $this, 'set_wp_title' ) );
-
-			$url = str_replace( '/', '', $_SERVER['REQUEST_URI'] );
+			$url = parse_url( $_SERVER['REQUEST_URI'] );
+			$url = str_replace( '/', '', $url['path'] );
 
 			foreach ( $widget_instances as $instance ) {
-				$slug = sanitize_title( $instance['title'] );
+				$slug = sanitize_title( str_replace( '/', '', $instance['title'] ) );
 				if ( $slug === $url ) {
 					$key = array_search( $instance['title'], array_column( $instances, 'title' ), true );
 					$match = $instances[ $key ];
@@ -226,7 +231,8 @@ class MinnpostSpills_Widget extends WP_Widget {
 		extract( $args );
 
 		$title = apply_filters( 'widget_title', $instance['title'] );
-		$url = isset( $instance['url'] ) && '' !== $instance['url'] ? $instance['url'] : '/' . sanitize_title( $instance['title'] ) . '/';
+		$slug = str_replace( '/', '', $instance['title'] );
+		$url = isset( $instance['url'] ) && '' !== $instance['url'] ? $instance['url'] : '/' . sanitize_title( $slug ) . '/';
 		$content = isset( $instance['content'] ) ? $instance['content'] : '';
 		$categories = $instance['widget_categories'];
 		$terms = $instance['widget_terms'];
