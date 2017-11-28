@@ -60,7 +60,7 @@ class MinnpostSpills {
 				$instances = array_values( $widget_instances );
 
 				add_filter( 'get_the_archive_title', array( $this, 'set_wp_title' ) );
-				add_filter( 'pre_get_document_title', array( $this, 'set_wp_title' ) );
+				add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
 
 				$perspectives = get_category_by_slug( 'perspectives' );
 				$featured_columns = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
@@ -172,7 +172,11 @@ class MinnpostSpills {
 				if ( $slug === $url ) {
 					$key = array_search( $instance['title'], array_column( $instances, 'title' ), true );
 					$match = $instances[ $key ];
-					return $match['title'];
+					if ( 'document_title_parts' === current_filter() ) {
+						$title['title'] = $match['title'];
+					} else {
+						return $match['title'];
+					}
 				}
 			}
 			return $title;
