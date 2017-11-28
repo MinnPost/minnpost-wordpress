@@ -33,7 +33,7 @@ class MinnpostSpills {
 			register_widget( 'MinnpostSpills_Widget' );
 		});
 
-		// set is_home() to false on spill pages
+		// set is_home() to false and is_archive() to true on spill pages
 		add_action( 'pre_get_posts', array( $this, 'set_home_to_false' ), 10 );
 
 		// handle the permalinks
@@ -44,6 +44,7 @@ class MinnpostSpills {
 	public function set_home_to_false( $query ) {
 		if ( ! is_admin() && isset( $query->query['is_spill'] ) && true === $query->query['is_spill'] ) {
 			$query->is_home = false;
+			$query->is_archive = true;
 		}
 	}
 
