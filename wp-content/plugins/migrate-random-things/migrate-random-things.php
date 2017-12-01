@@ -840,6 +840,11 @@ class Migrate_Random_Things {
 						'method' => 'is_category',
 						'value' => true,
 					);
+				} elseif ( 'article' === $checker['content_type'] ) {
+					$conditional[] = array(
+						'method' => 'is_single',
+						'value' => true,
+					);
 				}
 			} else {
 				foreach ( $checker as $key => $value ) {
