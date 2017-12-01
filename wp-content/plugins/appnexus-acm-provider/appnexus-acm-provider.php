@@ -123,6 +123,83 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 				'enable_ui_mapping' => true,
 			),
 			array(
+				'tag'       => 'x100',
+				'url_vars'  => array(
+					'tag'       => 'x100',
+				),
+				'enable_ui_mapping' => true,
+			),
+			array(
+				'tag'       => 'x101',
+				'url_vars'  => array(
+					'tag'       => 'x101',
+				),
+				'enable_ui_mapping' => true,
+			),
+			array(
+				'tag'       => 'x102',
+				'url_vars'  => array(
+					'tag'       => 'x102',
+				),
+				'enable_ui_mapping' => true,
+			),
+			array(
+				'tag'       => 'x103',
+				'url_vars'  => array(
+					'tag'       => 'x103',
+				),
+				'enable_ui_mapping' => true,
+			),
+			array(
+				'tag'       => 'x104',
+				'url_vars'  => array(
+					'tag'       => 'x104',
+				),
+				'enable_ui_mapping' => true,
+			),
+			array(
+				'tag'       => 'x105',
+				'url_vars'  => array(
+					'tag'       => 'x105',
+				),
+				'enable_ui_mapping' => true,
+			),
+			array(
+				'tag'       => 'x106',
+				'url_vars'  => array(
+					'tag'       => 'x106',
+				),
+				'enable_ui_mapping' => true,
+			),
+			array(
+				'tag'       => 'x107',
+				'url_vars'  => array(
+					'tag'       => 'x107',
+				),
+				'enable_ui_mapping' => true,
+			),
+			array(
+				'tag'       => 'x108',
+				'url_vars'  => array(
+					'tag'       => 'x108',
+				),
+				'enable_ui_mapping' => true,
+			),
+			array(
+				'tag'       => 'x109',
+				'url_vars'  => array(
+					'tag'       => 'x109',
+				),
+				'enable_ui_mapping' => true,
+			),
+			array(
+				'tag'       => 'x110',
+				'url_vars'  => array(
+					'tag'       => 'x110',
+				),
+				'enable_ui_mapping' => true,
+			),
+			array(
 				'tag'       => 'Middle',
 				'url_vars'  => array(
 					'tag'       => 'Middle',
@@ -192,7 +269,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 			),
 		);
 
-		add_filter( 'the_content', array( $this, 'insert_inline_ad' ) );
+		add_filter( 'the_content', array( $this, 'insert_inline_ad' ), 10 );
 
 		add_filter( 'acm_ad_code_args', array( $this, 'filter_ad_code_args' ) );
 		add_filter( 'acm_output_html', array( $this, 'filter_output_html' ), 10, 2 );
@@ -296,10 +373,14 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 		if ( ! in_the_loop() || ! is_main_query() ) {
 			return $content;
 		}
+		if ( ! is_single() ) {
+			return $content;
+		}
 		// abort if this is not a normal post
 		// we should change this to a list of post types
 		global $wp_query;
 		if ( 'post' !== $wp_query->queried_object->post_type ) {
+			error_log('stop3');
 			return $content;
 		}
 
@@ -307,6 +388,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 		* Abort if this post has the option set to not add ads.
 		*/
 		if ( 'on' === get_post_meta( $wp_query->queried_object->ID, 'scaip_prevent_shortcode_addition', true ) ) {
+			error_log('stop4');
 			return $content;
 		}
 
@@ -314,6 +396,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 		* Check that there isn't a line starting with `[ad`. If there is, abort! The content must be passed to the shortcode parser without adding more shortcodes. The user may have set a shortcode manually or set the `[ad no]` shortcode.
 		*/
 		if ( preg_match( '/^\[ad/m', $content ) ) {
+			error_log('stop5');
 			return $content;
 		}
 
@@ -323,37 +406,79 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 		$bottom_offset = get_option( 'appnexus_acm_provider_auto_embed_bottom_offset', 400 );
 		$tag_id = get_option( 'appnexus_acm_provider_auto_embed_position', 'Middle' );
 
+		$start_embeds_after = get_option( 'appnexus_acm_provider_start_embeds_after', 1000 );
+		$repeat_embeds_every = get_option( 'appnexus_acm_provider_repeat_embeds_every', 1000 );
+		$embeds_until = get_option( 'appnexus_acm_provider_embeds_until', 400 );
+		$auto_embeds_name = get_option( 'appnexus_acm_provider_auto_embeds_name', 'x100' );
+
 		$end = strlen( $content );
 		$position = $end;
 
-		// if the body is longer than the minimum ad spot find a break.
-		// otherwise place the ad at the end
-		if ( $position > $top_offset ) {
-			// find the break point
-			$breakpoints = array(
-				'</p>' => 4,
-				'<br />' => 6,
-				'<br/>' => 5,
-				'<br>' => 4,
-				'<!--pagebreak-->' => 0,
-				'<p>' => 0,
-			);
+		$scaip_period = get_option( 'scaip_settings_period', 3 );
+		$scaip_repetitions = get_option( 'scaip_settings_repetitions', 10 );
+		$scaip_minimum_paragraphs = get_option( 'scaip_settings_min_paragraphs', 6 );
 
-			// We use strpos on the reversed needle and haystack for speed.
-			foreach ( $breakpoints as $point => $offset ) {
-				$length = stripos( $content, $point, $top_offset );
-				if ( false !== $length ) {
-					$position = min( $position, $length + $offset );
+		$paragraph_positions = array();
+		$last_position = -1;
+		$paragraph_end = '</p>';
+
+		// if we don't have an <p> tags, let's skip the ads
+		if ( ! stripos( $content, $paragraph_end ) ) {
+			error_log('stop6');
+			return $content;
+		}
+
+		while ( stripos( $content, $paragraph_end, $last_position + 1 ) !== false ) {
+			// Get the position of the end of the next $paragraph_end.
+			$last_position = stripos( $content, $paragraph_end, $last_position + 1 ) + 3; // what does the 3 mean?
+			$paragraph_positions[] = $last_position;
+		}
+
+		// If the total number of paragraphs is bigger than the minimum number of paragraphs
+		// It is assumed that $scaip_minimum_paragraphs > $scaip_period * $scaip_repetitions
+		if ( count( $paragraph_positions ) >= $scaip_minimum_paragraphs ) {
+			// How many shortcodes have been added?
+			$n = 0;
+			// Safety check number: stores the position of the last insertion.
+			$previous_position = 0;
+			$i = 0;
+			while ( $i < count( $paragraph_positions ) && $n <= $scaip_repetitions ) {
+				// Modulo math to only output shortcode after $scaip_period closing paragraph tags.
+				// +1 because of zero-based indexing.
+				if ( 0 === ( $i + 1 ) % $scaip_period && isset( $paragraph_positions[ $i ] ) ) {
+					// make a shortcode using the number of the shorcode that will be added.
+					// Using "" here so we can interpolate the variable.
+					//$shortcode = "[ad number=$n ]";
+					//$shortcode = '<p style="background: #f00;">x' . ( 100 + (int) $n ) . '</p>';
+					$shortcode = $this->get_code_to_insert( 'x' . ( 100 + (int) $n ) );
+					$position = $paragraph_positions[ $i ] + 1;
+					// Safety check:
+					// If the position we're adding the shortcode is at a lower point in the story than the position we're adding,
+					// Then something has gone wrong and we should insert no more shortcodes.
+					if ( $position > $previous_position ) {
+						$content = substr_replace( $content, $shortcode, $paragraph_positions[ $i ] + 1, 0 );
+						// Increase the saved last position.
+						$previous_position = $position;
+						// Increment number of shortcodes added to the post.
+						$n++;
+					}
+					// Increase the position of later shortcodes by the length of the current shortcode.
+					foreach ( $paragraph_positions as $j => $pp ) {
+						if ( $j > $i ) {
+							$paragraph_positions[ $j ] = $pp + strlen( $shortcode );
+						}
+					}
 				}
+				$i++;
 			}
 		}
+		return $content;
 
-		// If the position is at or near the end of the article.
-		if ( $position > $end - $bottom_offset ) {
-			$position = $end;
-		}
+	}
 
-		// get the code for the ad
+	public function get_code_to_insert( $tag_id ) {
+		// get the code to insert
+		global $ad_code_manager;
 		$matching_ad_code = $ad_code_manager->get_matching_ad_code( $tag_id );
 		if ( ! empty( $matching_ad_code ) ) {
 			$output_html = '
@@ -362,7 +487,6 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 				</div>
 			';
 		}
-
 		// use the function we already have for the placeholder ad
 		if ( function_exists( 'minnpost_no_ad_users' ) ) {
 			if ( ! isset( $output_html ) ) {
@@ -370,10 +494,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 			}
 			$output_html = minnpost_no_ad_users( $output_html, $tag_id );
 		}
-
-		// put it into the post's content
-		$content = substr_replace( $content, $output_html, $position, 0 );
-		return $content;
+		return $output_html;
 	}
 
 
@@ -545,6 +666,46 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 				'args' => array(
 					'type' => 'text',
 					'desc' => __( 'How many characters from the bottom of the story to put the ad.', 'appnexus-acm-provider' ),
+				),
+			),
+			'start_embeds_after' => array(
+				'title' => __( 'Start embed ads after', 'appnexus-acm-provider' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'How many characters from the top of the story to start embed ads.', 'appnexus-acm-provider' ),
+				),
+			),
+			'repeat_embeds_every' => array(
+				'title' => __( 'Repeat embed ads every', 'appnexus-acm-provider' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'Repeat embed ads this many characters in a story.', 'appnexus-acm-provider' ),
+				),
+			),
+			'embeds_until' => array(
+				'title' => __( 'Embed ads until', 'appnexus-acm-provider' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'Stop embedding ads this many characters from the end of the story.', 'appnexus-acm-provider' ),
+				),
+			),
+			'auto_embeds_name' => array(
+				'title' => __( 'Auto embed ad name', 'appnexus-acm-provider' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'This is the beginning of the auto increment.', 'appnexus-acm-provider' ),
 				),
 			),
 		);
