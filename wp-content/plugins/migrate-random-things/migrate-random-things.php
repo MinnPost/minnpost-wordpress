@@ -562,12 +562,19 @@ class Migrate_Random_Things {
 								if ( is_array( $conditional ) ) {
 									foreach ( $conditional as $condition ) {
 										//error_log( 'value is ' . $condition['value'] );
+										if ( true === $condition['value'] ) {
+											$arguments = array(
+												0 => '',
+											);
+										} else {
+											$arguments = array(
+												$condition['value'],
+											);
+										}
 										$new_conditional[] = array(
 											array(
 												'function' => $condition['method'],
-												'arguments' => array(
-													$condition['value'],
-												),
+												'arguments' => $arguments,
 											),
 										);
 									}
