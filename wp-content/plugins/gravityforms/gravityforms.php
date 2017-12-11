@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: http://www.gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.2.1
+Version: 2.2.5
 Author: rocketgenius
 Author URI: http://www.rocketgenius.com
 Text Domain: gravityforms
@@ -132,7 +132,7 @@ define( 'GF_SUPPORTED_WP_VERSION', version_compare( get_bloginfo( 'version' ), G
  *
  * @var string GF_MIN_WP_VERSION_SUPPORT_TERMS The version number
  */
-define( 'GF_MIN_WP_VERSION_SUPPORT_TERMS', '4.6' );
+define( 'GF_MIN_WP_VERSION_SUPPORT_TERMS', '4.7' );
 
 
 if ( ! defined( 'GRAVITY_MANAGER_URL' ) ) {
@@ -153,6 +153,7 @@ if ( ! defined( 'GRAVITY_MANAGER_PROXY_URL' ) ) {
 	define( 'GRAVITY_MANAGER_PROXY_URL', 'http://proxy.gravityplugins.com' );
 }
 
+require_once( plugin_dir_path( __FILE__ ) . 'currency.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'common.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'forms_model.php' );
 require_once( plugin_dir_path( __FILE__ ) . 'widget.php' );
@@ -162,7 +163,6 @@ require_once( plugin_dir_path( __FILE__ ) . 'includes/fields/class-gf-fields.php
 require_once( plugin_dir_path( __FILE__ ) . 'includes/class-gf-download.php' );
 
 // Load Logging if Logging Add-On is not active.
-require_once ABSPATH . 'wp-admin/includes/plugin.php';
 if ( ! GFCommon::is_logging_plugin_active() ) {
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/logging/logging.php' );
 }
@@ -209,7 +209,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.2.1';
+	public static $version = '2.2.5';
 
 	/**
 	 * Runs after Gravity Forms is loaded.
@@ -627,9 +627,9 @@ class GFForms {
 	 *
 	 * @uses   GFCommon::check_update()
 	 *
-	 * @param object $update_plugins_option The GFAutoUpgrade object.
+	 * @param GFAutoUpgrade $update_plugins_option The GFAutoUpgrade object.
 	 *
-	 * @return object The GFAutoUpgrade object.
+	 * @return GFAutoUpgrade The GFAutoUpgrade object.
 	 */
 	public static function check_update( $update_plugins_option ) {
 		if ( ! class_exists( 'GFCommon' ) ) {
@@ -787,6 +787,7 @@ class GFForms {
 				'media-views',
 				'buttons',
 				'wp-pointer',
+				'gform_chosen'
 			),
 			'gf_edit_forms_notification' => array(
 				'thickbox',
@@ -796,7 +797,7 @@ class GFForms {
 				'buttons',
 			),
 			'gf_new_form'                => array( 'thickbox' ),
-			'gf_entries'                 => array( 'thickbox' ),
+			'gf_entries'                 => array( 'thickbox', 'gform_chosen' ),
 			'gf_settings'                => array(),
 			'gf_export'                  => array(),
 			'gf_help'                    => array(),
@@ -859,7 +860,8 @@ class GFForms {
 				'wp-plupload',
 				'wpdialogs-popup',
 				'wplink',
-				'wp-pointer'
+				'wp-pointer',
+				'gform_chosen'
 			),
 			'gf_edit_forms_notification' => array(
 				'editor',
@@ -901,11 +903,13 @@ class GFForms {
 				'gform_json',
 				'gform_field_filter',
 				'plupload-all',
-				'postbox'
+				'postbox',
+				'gform_chosen'
 			),
 			'gf_settings'                => array(),
 			'gf_export'                  => array( 'gform_form_admin', 'jquery-ui-datepicker', 'gform_field_filter' ),
 			'gf_help'                    => array(),
+			'gf_system_status'           => array( 'gform_system_report_clipboard' )
 		);
 
 		self::no_conflict_mode( $wp_scripts, $wp_required_scripts, $gf_required_scripts, 'scripts' );
@@ -920,10 +924,10 @@ class GFForms {
 	 * @used-by GFForms::no_conflict_mode_style()
 	 * @used-by GFForms::no_conflict_mode_script()
 	 *
-	 * @param object $wp_objects          WP_Scripts object.
-	 * @param array  $wp_required_objects Scripts required by WordPress Core.
-	 * @param array  $gf_required_objects Scripts required by Gravity Forms.
-	 * @param string $type                Determines if scripts or styles are being run through the function.
+	 * @param WP_Scripts $wp_objects          WP_Scripts object.
+	 * @param array      $wp_required_objects Scripts required by WordPress Core.
+	 * @param array      $gf_required_objects Scripts required by Gravity Forms.
+	 * @param string     $type                Determines if scripts or styles are being run through the function.
 	 */
 	private static function no_conflict_mode( &$wp_objects, $wp_required_objects, $gf_required_objects, $type = 'scripts' ) {
 
@@ -1209,7 +1213,7 @@ class GFForms {
 
 		// Gravity Forms pages
 		$current_page = trim( strtolower( self::get( 'page' ) ) );
-		$gf_pages     = array( 'gf_edit_forms', 'gf_new_form', 'gf_entries', 'gf_settings', 'gf_export', 'gf_help' );
+		$gf_pages     = array( 'gf_edit_forms', 'gf_new_form', 'gf_entries', 'gf_settings', 'gf_export', 'gf_help', 'gf_addons', 'gf_system_status' );
 
 		return in_array( $current_page, $gf_pages );
 	}
@@ -1377,8 +1381,6 @@ class GFForms {
 			$parent = array( 'name' => 'gf_settings', 'callback' => array( 'GFForms', 'settings_page' ) );
 		} else if ( GFCommon::current_user_can_any( 'gravityforms_export_entries' ) ) {
 			$parent = array( 'name' => 'gf_export', 'callback' => array( 'GFForms', 'export_page' ) );
-		} else if ( GFCommon::current_user_can_any( 'gravityforms_view_updates' ) ) {
-			$parent = array( 'name' => 'gf_update', 'callback' => array( 'GFForms', 'update_page' ) );
 		} else if ( GFCommon::current_user_can_any( 'gravityforms_view_addons' ) ) {
 			$parent = array( 'name' => 'gf_addons', 'callback' => array( 'GFForms', 'addons_page' ) );
 		} else if ( GFCommon::current_user_can_any( 'gravityforms_system_status' ) ) {
@@ -1824,6 +1826,10 @@ class GFForms {
 				<tbody class="list:user user-list">
 				<?php
 				foreach ( $forms as $form ) {
+					if ( $form['is_trash'] ) {
+						continue;
+					}
+
 					$date_display = GFCommon::format_date( $form['last_lead_date'] );
 					if ( ! empty( $form['total_leads'] ) ) {
 						?>
@@ -1949,7 +1955,8 @@ class GFForms {
 		wp_register_script( 'gform_form_admin', $base_url . "/js/form_admin{$min}.js", array(
 			'jquery',
 			'jquery-ui-autocomplete',
-			'gform_placeholder'
+			'gform_placeholder',
+			'gform_gravityforms',
 		), $version );
 		wp_register_script( 'gform_form_editor', $base_url . "/js/form_editor{$min}.js", array(
 			'jquery',
@@ -2270,12 +2277,8 @@ class GFForms {
 			return 'import_form';
 		}
 
-		if ( rgget( 'page' ) == 'gf_update' ) {
-			return 'updates';
-		}
-
 		if ( rgget( 'page' ) == 'gf_system_status' ) {
-			return 'system_status';
+			return rgget( 'subview' ) === 'updates' ? 'updates' : 'system_status';
 		}
 
 		return false;
@@ -4068,17 +4071,7 @@ class GFForms {
 
 		$wp_admin_bar->add_node( $args );
 
-		$current_user_id = get_current_user_id();
-		$recent_form_ids = get_user_meta( $current_user_id, 'gform_recent_forms', true );
-
-		if ( empty( $recent_form_ids ) ) {
-			$all_form_ids    = GFFormsModel::get_form_ids();
-			$all_form_ids    = array_reverse( $all_form_ids );
-			$recent_form_ids = array_slice( $all_form_ids, 0, 10 );
-			if ( $recent_form_ids ) {
-				update_user_meta( $current_user_id, 'gform_recent_forms', $recent_form_ids );
-			}
-		}
+		$recent_form_ids = GFFormsModel::get_recent_forms();
 
 		if ( $recent_form_ids ) {
 			$forms = GFFormsModel::get_form_meta_by_id( $recent_form_ids );
@@ -4498,11 +4491,11 @@ class GFForms {
 				'tooltip' => __( 'Whether or not to display the form description.', 'gravityforms' )
 			),
 			array(
-				'label'   => __( 'Enable AJAX', 'gravityforms' ),
+				'label'   => __( 'Enable Ajax', 'gravityforms' ),
 				'attr'    => 'ajax',
 				'section' => 'standard',
 				'type'    => 'checkbox',
-				'tooltip' => __( 'Specify whether or not to use AJAX to submit the form.', 'gravityforms' )
+				'tooltip' => __( 'Specify whether or not to use Ajax to submit the form.', 'gravityforms' )
 			),
 			array(
 				'label'   => 'Tabindex',
@@ -4638,8 +4631,8 @@ class GFForms {
 	 * @used-by Filter: screen_settings
 	 * @used    GFEntryList::get_screen_options_markup()
 	 *
-	 * @param string $status The current screen settings
-	 * @param object $args   WP_Screen object
+	 * @param string    $status The current screen settings
+	 * @param WP_Screen $args   WP_Screen object
 	 *
 	 * @return string $return The filtered screen settings
 	 */
@@ -5116,7 +5109,7 @@ if ( ! function_exists( 'rgblank' ) ) {
 	 * @return bool True if empty.  False otherwise.
 	 */
 	function rgblank( $text ) {
-		return empty( $text ) && strval( $text ) != '0';
+		return empty( $text ) && ! is_array( $text ) && strval( $text ) != '0';
 	}
 }
 
@@ -5173,7 +5166,7 @@ if ( ! function_exists( 'gf_apply_filters' ) ) {
 	 * @since  Unknown
 	 * @access public
 	 *
-	 * @param string $filter The name of the filter.
+	 * @param string|array $filter The name of the filter.
 	 * @param mixed  $value  The value to filter.
 	 *
 	 * @return mixed The filtered value.

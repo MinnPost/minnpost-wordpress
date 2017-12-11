@@ -615,7 +615,7 @@ class GFFormsModel {
 
 		$lead_date_results = $wpdb->get_results( $sql, ARRAY_A );
 
-		$sql = "SELECT id, title, '' as last_lead_date, 0 as unread_count
+		$sql = "SELECT id, title, is_trash, '' as last_lead_date, 0 as unread_count
                 FROM $form_table_name
                 WHERE is_active=1
                 ORDER BY title";
@@ -1406,12 +1406,11 @@ class GFFormsModel {
 		$wpdb->query( $sql );
 	}
 
-
-
-
-
-
-
+	/**
+	 * Delete the views for the specified form.
+	 *
+	 * @param int $form_id The form ID.
+	 */
 	public static function delete_views( $form_id ) {
 		global $wpdb;
 
@@ -1421,7 +1420,7 @@ class GFFormsModel {
 		$sql = $wpdb->prepare( "DELETE FROM $form_view_table WHERE form_id=%d", $form_id );
 		$wpdb->query( $sql );
 
-        /**
+		/**
          * Fires after form views are deleted
          *
          * @param int $form_id The ID of the form that views were deleted from
@@ -1784,6 +1783,16 @@ class GFFormsModel {
 		}
 
 		$file_path = self::get_physical_file_path( $url );
+
+		/**
+		 * Allow the file path to be overridden so files stored outside the /wp-content/uploads/gravity_forms/ directory can be deleted.
+		 *
+		 * @since 2.2.3.1
+		 *
+		 * @param string $file_path The path of the file to be deleted.
+		 * @param string $url       The URL of the file to be deleted.
+		 */
+		$file_path = apply_filters( 'gform_file_path_pre_delete_file', $file_path, $url );
 
 		if ( file_exists( $file_path ) ) {
 			unlink( $file_path );
@@ -2439,6 +2448,18 @@ class GFFormsModel {
 		return null;
 	}
 
+    /**
+	 * Determines if the field value matches the conditional logic rule value.
+	 *
+	 * @param mixed         $field_value  The field value to be checked.
+	 * @param mixed         $target_value The conditional logic rule value.
+	 * @param string        $operation    The conditional logic rule operator.
+	 * @param null|GF_Field $source_field The field the rule is based on.
+	 * @param null|array    $rule         The conditional logic rule properties.
+	 * @param null|array    $form         The current form.
+	 *
+	 * @return bool
+	 */
 	public static function is_value_match( $field_value, $target_value, $operation = 'is', $source_field = null, $rule = null, $form = null ) {
 
 		$is_match = false;
@@ -2448,7 +2469,7 @@ class GFFormsModel {
 				$field_value = GFCommon::prepare_post_category_value( $field_value, $source_field, 'conditional_logic' );
 			} elseif ( $source_field->type == 'multiselect' && ! empty( $field_value ) && ! is_array( $field_value ) ) {
 				// Convert the comma-delimited string into an array.
-				$field_value = explode( ',', $field_value );
+				$field_value = $source_field->to_array( $field_value );
 			} elseif ( $source_field->get_input_type() != 'checkbox' && is_array( $field_value ) && $source_field->id != $rule['fieldId'] && is_array( $source_field->get_entry_inputs() ) ) {
 				// Get the specific input value from the full field value.
 				$field_value = rgar( $field_value, $rule['fieldId'] );
@@ -2496,7 +2517,7 @@ class GFFormsModel {
 			return GFCommon::clean_number( $text, $number_format );
 		}
 
-		return $text;
+		return 0;
 	}
 
 	public static function matches_operation( $val1, $val2, $operation ) {
@@ -2530,7 +2551,7 @@ class GFFormsModel {
 				break;
 
 			case 'contains' :
-				return ! empty( $val2 ) && strpos( $val1, $val2 ) !== false;
+				return ! rgblank( $val2 ) && strpos( $val1, $val2 ) !== false;
 				break;
 
 			case 'starts_with' :
@@ -2865,7 +2886,7 @@ class GFFormsModel {
 
 	public static function get_parameter_value( $name, $field_values, $field ) {
 		$value = stripslashes_deep( rgget( $name ) );
-		if ( empty( $value ) ) {
+		if ( rgblank( $value ) ) {
 			$value = rgget( $name, $field_values );
 		}
 
@@ -2990,6 +3011,9 @@ class GFFormsModel {
 		$images                          = array();
 
 		foreach ( $form['fields'] as $field ) {
+			if ( self::is_field_hidden( $form, $field, array(), $lead ) ) {
+				continue;
+			}
 
 			if ( $field->type == 'post_category' ) {
 				$field = GFCommon::add_categories_as_choices( $field, '' );
@@ -4089,7 +4113,7 @@ class GFFormsModel {
 		$id = $wpdb->get_var( $sql, 0, 0 );
 
 		if ( empty( $id ) ) {
-			$wpdb->query( $wpdb->prepare( "INSERT INTO $table_name(form_id, date_created, ip) values(%d, utc_timestamp(), %s)", $form_id, $ip ) );
+			$wpdb->query( $wpdb->prepare( "INSERT INTO $table_name(form_id, date_created, ip) values(%d, utc_timestamp(), %s)", $form_id, '' ) );
 		} else {
 			$wpdb->query( $wpdb->prepare( "UPDATE $table_name SET count = count+1 WHERE id=%d", $id ) );
 		}
@@ -4723,7 +4747,7 @@ class GFFormsModel {
 		if ( ! $field instanceof GF_Field ) {
 			$field = GF_Fields::create( $field );
 		}
-		$field_label = ( IS_ADMIN || RG_CURRENT_PAGE == 'select_columns.php' || RG_CURRENT_PAGE == 'print-entry.php' || rgget( 'gf_page', $_GET ) == 'select_columns' || rgget( 'gf_page', $_GET ) == 'print-entry' ) && ! empty( $field->adminLabel ) && $allow_admin_label ? $field->adminLabel : $field->label;
+		$field_label = ( GFForms::get_page() || RG_CURRENT_PAGE == 'select_columns.php' || RG_CURRENT_PAGE == 'print-entry.php' || rgget( 'gf_page', $_GET ) == 'select_columns' || rgget( 'gf_page', $_GET ) == 'print-entry' ) && ! empty( $field->adminLabel ) && $allow_admin_label ? $field->adminLabel : $field->label;
 		$input       = self::get_input( $field, $input_id );
 		if ( self::get_input_type( $field ) == 'checkbox' && $input != null ) {
 			return $input['label'];
@@ -4807,7 +4831,7 @@ class GFFormsModel {
 			$field_id = intval( $field_id );
 		} //removing floating part of field (i.e 1.3 -> 1) to return field by input id
 
-		if ( ! is_array( $form['fields'] ) ) {
+		if ( ! isset( $form['fields'] ) || ! isset( $form['id'] ) || ! is_array( $form['fields'] ) ) {
 			return null;
 		}
 
@@ -6084,7 +6108,7 @@ class GFFormsModel {
 		}
 
 		$current_user_id = get_current_user_id();
-		$recent_form_ids = get_user_meta( $current_user_id, 'gform_recent_forms', true );
+		$recent_form_ids = self::get_recent_forms( $current_user_id );
 
 		$i = array_search( $form_id, $recent_form_ids );
 
@@ -6101,6 +6125,34 @@ class GFFormsModel {
 		}
 
 		update_user_meta( $current_user_id, 'gform_recent_forms', $recent_form_ids );
+	}
+
+	/**
+	 * Get the recent forms list for the current user.
+	 *
+	 * @since 2.2.1.14
+	 *
+	 * @param int $current_user_id The ID of the currently logged in user.
+	 *
+	 * @return array
+	 */
+	public static function get_recent_forms( $current_user_id = 0 ) {
+		if ( ! $current_user_id ) {
+			$current_user_id = get_current_user_id();
+		}
+
+		$recent_form_ids = get_user_meta( $current_user_id, 'gform_recent_forms', true );
+
+		if ( empty( $recent_form_ids ) ) {
+			$all_form_ids    = self::get_form_ids();
+			$all_form_ids    = array_reverse( $all_form_ids );
+			$recent_form_ids = array_slice( $all_form_ids, 0, 10 );
+			if ( $recent_form_ids ) {
+				update_user_meta( $current_user_id, 'gform_recent_forms', $recent_form_ids );
+			}
+		}
+
+		return $recent_form_ids;
 	}
 }
 
@@ -6140,7 +6192,7 @@ function gform_get_meta_values_for_entries( $entry_ids, $meta_keys ) {
 	$meta_key_select_array = array();
 
 	foreach ( $meta_keys as $meta_key ) {
-		$meta_key_select_array[] = "max(case when meta_key = '$meta_key' then meta_value end) as $meta_key";
+		$meta_key_select_array[] = "max(case when meta_key = '$meta_key' then meta_value end) as `$meta_key`";
 	}
 
 	$entry_ids_str = join( ',', $entry_ids );

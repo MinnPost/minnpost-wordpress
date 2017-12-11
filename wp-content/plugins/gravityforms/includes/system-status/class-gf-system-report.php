@@ -69,30 +69,26 @@ class GF_System_Report {
 
 			});
 
+			function gfDoAction(actionCode, confirmMessage) {
+
+				if (confirmMessage && !confirm(confirmMessage)) {
+					// User canceled action;
+					return;
+				}
+
+				jQuery('#gf_action').val(actionCode);
+				jQuery('#gf_system_report_form').submit();
+			}
 		</script>
+
+		<form method="post" id="gf_system_report_form">
+			<input type="hidden" name="gf_action" id="gf_action"/>
 		<?php
+
+		wp_nonce_field( 'gf_sytem_report_action', 'gf_sytem_report_action' );
 
 		// Loop through system report sections.
 		foreach ( $sections as $i => $section ) {
-			?>
-			<script type="text/javascript">
-
-				function gfDoAction(actionCode, confirmMessage) {
-
-					if ( confirmMessage && ! confirm( confirmMessage ) ){
-						// User canceled action;
-						return;
-					}
-
-					jQuery('#gf_action').val(actionCode);
-					jQuery('#gf_system_report_form').submit();
-				}
-
-			</script>
-			<form method="post" id="gf_system_report_form">
-				<input type="hidden" name="gf_action" id="gf_action" />
-			<?php
-			wp_nonce_field( 'gf_sytem_report_action', 'gf_sytem_report_action' );
 
 			// Display section title.
 			echo '<h3><span>' . $section['title'] . '</span></h3>';
@@ -138,10 +134,10 @@ class GF_System_Report {
 			// Add horizontal divider.
 			echo $i !== count( $sections ) - 1 ? '<div class="hr-divider"></div>' : '';
 
-			// Close form.
-			echo '</form>';
-
 		}
+
+		// Close form.
+		echo '</form>';
 
 		// Display page footer.
 		GF_System_Status::page_footer();
@@ -188,6 +184,8 @@ class GF_System_Report {
 			}
 
 		}
+
+		$system_report_text = str_replace( array( '()', '../' ), array( '', '[DT]' ), $system_report_text );
 
 		return $system_report_text;
 
@@ -263,6 +261,8 @@ class GF_System_Report {
 
 		global $wpdb, $wp_version;
 
+		$wp_cron_disabled  = defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON;
+		$alternate_wp_cron = defined( 'ALTERNATE_WP_CRON' ) && ALTERNATE_WP_CRON;
 
 		// Prepare system report.
 		$system_report = array(
@@ -357,6 +357,24 @@ class GF_System_Report {
 								'value'        => WP_DEBUG_LOG ? __( 'Yes', 'gravityforms' ) : __( 'No', 'gravityforms' ),
 								'value_export' => WP_DEBUG_LOG ? 'Yes' : 'No',
 							),
+							array(
+								'label'        => esc_html__( 'WordPress Script Debug Mode', 'gravityforms' ),
+								'label_export' => 'WordPress Script Debug Mode',
+								'value'        => SCRIPT_DEBUG ? __( 'Yes', 'gravityforms' ) : __( 'No', 'gravityforms' ),
+								'value_export' => SCRIPT_DEBUG ? 'Yes' : 'No',
+							),
+							array(
+								'label'        => esc_html__( 'WordPress Cron', 'gravityforms' ),
+								'label_export' => 'WordPress Cron',
+								'value'        => ! $wp_cron_disabled ? __( 'Yes', 'gravityforms' ) : __( 'No', 'gravityforms' ),
+								'value_export' => ! $wp_cron_disabled ? 'Yes' : 'No',
+							),
+							array(
+								'label'        => esc_html__( 'WordPress Alternate Cron', 'gravityforms' ),
+								'label_export' => 'WordPress Alternate Cron',
+								'value'        => $alternate_wp_cron ? __( 'Yes', 'gravityforms' ) : __( 'No', 'gravityforms' ),
+								'value_export' => $alternate_wp_cron ? 'Yes' : 'No',
+							),
 						),
 					),
 					array(
@@ -405,9 +423,9 @@ class GF_System_Report {
 								'label_export'       => 'Version',
 								'value'              => esc_html( phpversion() ),
 								'type'               => 'version_check',
-								'version_compare'    => '>',
-								'minimum_version'    => '5.0.0',
-								'validation_message' => esc_html__( 'Gravity Forms requires PHP 5 or above.', 'gravityforms' ),
+								'version_compare'    => '>=',
+								'minimum_version'    => '5.6',
+								'validation_message' => esc_html__( 'Gravity Forms requires PHP 5.6 or above.', 'gravityforms' ),
 							),
 							array(
 								'label'        => esc_html__( 'Memory Limit', 'gravityforms' ) . ' (memory_limit)',
@@ -442,8 +460,8 @@ class GF_System_Report {
 							array(
 								'label'        => esc_html__( 'cURL Enabled', 'gravityforms' ),
 								'label_export' => 'cURL Enabled',
-								'value'        => function_exists( 'curl_init' ) ? __( 'Yes', 'gravityforms' ) . ' (' . __( 'version', 'gravityforms' ) . ' ' . curl_version()['version'] . ')' : __( 'No', 'gravityforms' ),
-								'value_export' => function_exists( 'curl_init' ) ? 'Yes' . ' (' . __( 'version', 'gravityforms' ) . ' ' . curl_version()['version'] . ')' : 'No',
+								'value'        => function_exists( 'curl_init' ) ? __( 'Yes', 'gravityforms' ) . ' (' . __( 'version', 'gravityforms' ) . ' ' . rgar( curl_version(), 'version' ) . ')' : __( 'No', 'gravityforms' ),
+								'value_export' => function_exists( 'curl_init' ) ? 'Yes' . ' (' . __( 'version', 'gravityforms' ) . ' ' . rgar( curl_version(), 'version' ) . ')' : 'No',
 							),
 							array(
 								'label'        => esc_html__( 'OpenSSL', 'gravityforms' ),
@@ -638,6 +656,11 @@ class GF_System_Report {
 
 		$is_writable = wp_is_writable( $upload_path );
 
+		$disable_css      = get_option( 'rg_gforms_disable_css' );
+		$enable_html5     = get_option( 'rg_gforms_enable_html5' );
+		$no_conflict_mode = get_option( 'gform_enable_noconflict' );
+		$updates          = get_option( 'gform_enable_background_updates' );
+
 		// Prepare versions array.
 		$gravityforms = array(
 			array(
@@ -664,6 +687,35 @@ class GF_System_Report {
 				'value_export'       => $is_writable ? 'Writable' : 'Not writable',
 				'is_valid'           => $is_writable,
 				'validation_message' => $is_writable ? '' : esc_html__( 'File uploads, entry exports, and logging will not function properly.', 'gravityforms' ),
+			),
+			array(
+				'label'        => esc_html__( 'Output CSS', 'gravityforms' ),
+				'label_export' => 'Output CSS',
+				'value'        => ! $disable_css ? __( 'Yes', 'gravityforms' ) : __( 'No', 'gravityforms' ),
+				'value_export' => ! $disable_css ? 'Yes' : 'No',
+			),
+			array(
+				'label'        => esc_html__( 'Output HTML5', 'gravityforms' ),
+				'label_export' => 'Output HTML5',
+				'value'        => $enable_html5 ? __( 'Yes', 'gravityforms' ) : __( 'No', 'gravityforms' ),
+				'value_export' => $enable_html5 ? 'Yes' : 'No',
+			),
+			array(
+				'label'        => esc_html__( 'No-Conflict Mode', 'gravityforms' ),
+				'label_export' => 'No-Conflict Mode',
+				'value'        => $no_conflict_mode ? __( 'Yes', 'gravityforms' ) : __( 'No', 'gravityforms' ),
+				'value_export' => $no_conflict_mode ? 'Yes' : 'No',
+			),
+			array(
+				'label'        => esc_html__( 'Currency', 'gravityforms' ),
+				'label_export' => 'Currency',
+				'value'        => get_option( 'rg_gforms_currency' ),
+			),
+			array(
+				'label'        => esc_html__( 'Background updates', 'gravityforms' ),
+				'label_export' => 'Background updates',
+				'value'        => $updates ? __( 'Yes', 'gravityforms' ) : __( 'No', 'gravityforms' ),
+				'value_export' => $updates ? 'Yes' : 'No',
 			),
 		);
 
@@ -886,7 +938,7 @@ class GF_System_Report {
 		$active_plugins = array();
 
 		// Get Gravity Forms version info.
-		$version_info = GFCommon::get_version_info( false );
+		$version_info = GFCommon::get_version_info();
 
 		// Prepare active plugins.
 		foreach ( get_plugins() as $plugin_path => $plugin ) {
