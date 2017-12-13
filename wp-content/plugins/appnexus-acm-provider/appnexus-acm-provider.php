@@ -389,10 +389,9 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 		}
 
 		/*
-		* Check that there isn't a line starting with `[ad`. If there is, abort! The content must be passed to the shortcode parser without adding more shortcodes. The user may have set a shortcode manually or set the `[ad no]` shortcode.
+		* Check that there isn't a line starting with `[cms_ad`. If there is, stop the automatic short code adding.
 		*/
-		if ( preg_match( '/^\[ad/m', $content ) ) {
-			error_log('stop5');
+		if ( preg_match( '/^\[cms_ad/m', $content ) ) {
 			return $content;
 		}
 
@@ -444,8 +443,8 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 				if ( 0 === ( $i + 1 ) % $scaip_period && isset( $paragraph_positions[ $i ] ) ) {
 					// make a shortcode using the number of the shorcode that will be added.
 					// Using "" here so we can interpolate the variable.
-					//$shortcode = "[ad number=$n ]";
 					$shortcode = $this->get_code_to_insert( 'x' . ( 100 + (int) $n ) );
+					//$shortcode = "[cms_ad:$n]";
 					$position = $paragraph_positions[ $i ] + 1;
 					// Safety check:
 					// If the position we're adding the shortcode is at a lower point in the story than the position we're adding,
