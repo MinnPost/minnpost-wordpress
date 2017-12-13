@@ -420,7 +420,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 
 		// if we don't have an <p> tags, let's skip the ads
 		if ( ! stripos( $content, $paragraph_end ) ) {
-			error_log('stop6');
+			//error_log('stop6');
 			return $content;
 		}
 
@@ -445,7 +445,6 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 					// make a shortcode using the number of the shorcode that will be added.
 					// Using "" here so we can interpolate the variable.
 					//$shortcode = "[ad number=$n ]";
-					//$shortcode = '<p style="background: #f00;">x' . ( 100 + (int) $n ) . '</p>';
 					$shortcode = $this->get_code_to_insert( 'x' . ( 100 + (int) $n ) );
 					$position = $paragraph_positions[ $i ] + 1;
 					// Safety check:
@@ -482,6 +481,16 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 					<script>OAS_AD("' . $tag_id . '");</script>
 				</div>
 			';
+			if ( 4 === strlen( $tag_id ) && 0 === strpos( $tag_id, 'x10' ) ) {
+				$output_html = '
+					<div class="appnexus-ad ad-' . sanitize_title( $tag_id ) . '">
+						<code><!--
+						OAS_AD("' . $tag_id . '");
+						//-->
+						</code>
+					</div>
+				';
+			}
 		}
 		// use the function we already have for the placeholder ad
 		if ( function_exists( 'acm_no_ad_users' ) ) {
