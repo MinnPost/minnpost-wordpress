@@ -315,40 +315,8 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 		$ad_tags = $ad_code_manager->ad_tag_ids;
 		$output_script = '';
 		switch ( $tag_id ) {
-			case 'appnexus_head':
-				$tags = array();
-				foreach ( (array) $ad_tags as $tag ) {
-					if ( 'appnexus_head' !== $tag['tag'] ) {
-						$matching_ad_code = $ad_code_manager->get_matching_ad_code( $tag['tag'] );
-						if ( ! empty( $matching_ad_code ) ) {
-							array_push( $tags, $tag['tag'] );
-						}
-					}
-				}
-				$output_script = "
-				<!-- OAS HEADER SETUP begin -->
-				<script>
-				  /* <![CDATA[ */
-				  // Configuration
-				  var OAS_url = '" . $this->default_url . "';
-				  var OAS_sitepage = 'MP' + window.location.pathname;
-				  var OAS_listpos = '" . implode( ',', $tags ) . "';
-				  var OAS_query = '';
-				  var OAS_target = '_top';
-				  
-				  var OAS_rns = (Math.random() + \"\").substring(2, 11);
-				  document.write('<scr' + 'ipt src=\"' + OAS_url + 'adstream_mjx.ads/' + OAS_sitepage + '/1' + OAS_rns + '@' + OAS_listpos + '?' + OAS_query + '\">' + '<\/script>');
-				  
-				  function OAS_AD(pos) {
-				    if (typeof OAS_RICH != 'undefined') {
-				      OAS_RICH(pos);
-				    }
-				  }
-				  /* ]]> */
-				</script>  
-				<!-- OAS HEADER SETUP end --> 
-				";
-
+			case 'appnexus_head': // need to get rid of this somehow anyway
+				$output_script = '';
 				break;
 			default:
 				$matching_ad_code = $ad_code_manager->get_matching_ad_code( $tag_id );
@@ -409,7 +377,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 		$end = strlen( $content );
 		$position = $end;
 
-		$scaip_period = get_option( 'scaip_settings_period', 3 );
+		$scaip_period = get_option( 'scaip_settings_period', 4 );
 		$scaip_repetitions = get_option( 'scaip_settings_repetitions', 10 );
 		$scaip_minimum_paragraphs = get_option( 'scaip_settings_min_paragraphs', 6 );
 
@@ -475,12 +443,14 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 		global $ad_code_manager;
 		$matching_ad_code = $ad_code_manager->get_matching_ad_code( $tag_id );
 		if ( ! empty( $matching_ad_code ) ) {
-			$output_html = '
-				<div class="appnexus-ad ad-' . sanitize_title( $tag_id ) . '">
-					<script>OAS_AD("' . $tag_id . '");</script>
-				</div>
-			';
-			if ( 4 === strlen( $tag_id ) && 0 === strpos( $tag_id, 'x10' ) ) {
+
+			$output_html = '<iframe src="' . $this->default_url . 'adstream_sx.ads/MP' . strtok( $_SERVER['REQUEST_URI'], '?' ) . '1' . mt_rand() . '@' . $tag_id . '" frameborder="0"></iframe>';
+
+			$output_html = apply_filters( 'easy_lazy_loader_html', $output_html );
+
+			$output_html = '<div class="appnexus-ad ad-' . sanitize_title( $tag_id ) . '">' . $output_html . '</div>';
+
+			/*if ( 4 === strlen( $tag_id ) && 0 === strpos( $tag_id, 'x10' ) ) {
 				$output_html = '
 					<div class="appnexus-ad ad-' . sanitize_title( $tag_id ) . '">
 						<code><!--
@@ -489,7 +459,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 						</code>
 					</div>
 				';
-			}
+			}*/
 		}
 		// use the function we already have for the placeholder ad
 		if ( function_exists( 'acm_no_ad_users' ) ) {
