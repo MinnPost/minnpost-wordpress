@@ -353,11 +353,7 @@ class Appnexus_Async_ACM_Provider extends ACM_Provider {
 			default:
 				$matching_ad_code = $ad_code_manager->get_matching_ad_code( $tag_id );
 				if ( ! empty( $matching_ad_code ) ) {
-					$output_script = '
-						<div class="appnexus-ad ad-' . sanitize_title( $tag_id ) . '">
-							<script>OAS_AD("' . $tag_id . '");</script>
-						</div>
-					';
+					$output_script = $this->get_code_to_insert( $tag_id );
 				}
 		} // End switch().
 
