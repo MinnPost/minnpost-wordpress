@@ -869,6 +869,19 @@ class Migrate_Random_Things {
 								'value' => rtrim( $path[1], '*' ),
 							);
 						}
+					} elseif ( false !== strpos( $value, '/*' ) ) {
+						$path = rtrim( $value, '/*' );
+						if ( is_object( get_category_by_slug( $path ) ) ) {
+							$conditional[] = array(
+								'method' => 'has_category',
+								'value' => $path,
+							);
+						} elseif ( is_object( get_page_by_path( $path ) ) ) {
+							$conditional[] = array(
+								'method' => 'is_page',
+								'value' => $path,
+							);
+						}
 					} elseif ( false !== strpos( $value, '*' ) ) {
 						if ( '*' === $value ) {
 							return $conditional;
@@ -877,6 +890,10 @@ class Migrate_Random_Things {
 						if ( is_object( get_category_by_slug( $path ) ) ) {
 							$conditional[] = array(
 								'method' => 'is_category',
+								'value' => $path,
+							);
+							$conditional[] = array(
+								'method' => 'has_category',
 								'value' => $path,
 							);
 						} elseif ( is_object( get_page_by_path( $path ) ) ) {
