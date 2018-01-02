@@ -263,16 +263,3 @@ function minnpost_twentyseventeen_subtitles() {
 
 add_action('edit_form_after_title', 'minnpost_twentyseventeen_subtitles');
 
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
-
-Container::make('term_meta', 'Category Properties')
-    ->show_on_taxonomy('category')
-    ->add_fields(array(
-        Field::make('text', 'crb_deck', 'Deck'),
-        Field::make('rich_text', 'crb_excerpt', 'Excerpt'),
-        Field::make('rich_text', 'crb_sponsorship', 'Sponsorship'),
-        Field::make('image', 'crb_thumbnail', 'Category Thumbnail'),
-        Field::make('image', 'crb_main_image', 'Category Main Image'),
-        Field::make('rich_text', 'crb_body', 'Body'),
-    ));
