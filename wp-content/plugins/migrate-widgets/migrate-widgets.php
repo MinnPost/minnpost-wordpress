@@ -24,6 +24,14 @@ function mp_sidebar_item_widgets() {
 		return;
 	}
 
+	$column = $wpdb->get_results( $wpdb->prepare(
+		"SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND COLUMN_NAME = %s ",
+		DB_NAME, $table_name, 'migrated'
+	) );
+	if ( empty( $column ) ) {
+		return;
+	}
+
 	$batches = $wpdb->get_results( 'SELECT DISTINCT `batch` FROM wp_sidebars WHERE migrated != "1" ORDER BY `batch` ASC' );
 
 	$types = $wpdb->get_results( 'SELECT DISTINCT `type` FROM wp_sidebars WHERE migrated != "1" ORDER BY `type` DESC' );
