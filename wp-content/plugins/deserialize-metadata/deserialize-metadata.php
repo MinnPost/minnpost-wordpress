@@ -279,6 +279,9 @@ class Deserialize_Metadata {
 		$select_callback = array( $this, 'display_select' );
 		add_settings_section( $page, null, null, $page );
 
+		// temp uncomment for testing when we don't want to wait for schedule to run
+		//$this->get_posts_with_serialized_metadata();
+
 		$settings = array(
 			'wp_imported_field' => array(
 				'title' => __( 'Imported Field', 'deserialize-metadata' ),
@@ -584,7 +587,9 @@ class Deserialize_Metadata {
 				'post_type' => $config['post_type'],
 				'post_status' => $config['post_status'],
 				'posts_per_page' => (int) $config['posts_per_page'],
-				'offset' => (int) $offset,
+				//'offset' => (int) $offset,
+				'orderby' => 'ID',
+				'order' => 'DESC',
 				'meta_query' => array(
 					array(
 						'key' => $key,
@@ -593,14 +598,17 @@ class Deserialize_Metadata {
 			);
 			$query = new WP_Query( $args );
 			if ( $query->have_posts() ) {
+				$count = $offset;
 				while ( $query->have_posts() ) {
 					$query->the_post();
 					$post_id = $query->post->ID;
 					$metadata = get_post_meta( $post_id, $key, true );
 					$this->create_fields( $post_id, $metadata, $maps );
 					$this->delete_combined_field( $post_id, $key );
+					$count++;
 				}
-				update_option( 'deserialize_metadata_last_post_checked', $config['posts_per_page'] + $offset );
+				//error_log( 'new offset is ' . $config['posts_per_page'] + $count );
+				update_option( 'deserialize_metadata_last_post_checked', $config['posts_per_page'] + $count );
 			}
 		}
 
@@ -620,7 +628,7 @@ class Deserialize_Metadata {
 						// check to see if it has a value
 						$pre_existing_value = get_post_meta( $post_id, $maps[ $key ]['wp_column'], true );
 						if ( ! empty( $pre_existing_value ) ) {
-							error_log( 'meta field already exists on this post. the existing value is ' . $pre_existing_value . '. compare with new value of ' . $value );
+							//error_log( 'meta field already exists on this post. the existing value is ' . $pre_existing_value . '. compare with new value of ' . $value );
 						} else {
 							add_post_meta( $post_id, $maps[ $key ]['wp_column'], $value, $maps[ $key ]['unique'] );
 						}
@@ -628,7 +636,7 @@ class Deserialize_Metadata {
 						$pre_existing_post = get_post( $post_id, 'ARRAY_A' );
 						$pre_existing_value = $pre_existing_post[ $maps[ $key ]['wp_column'] ];
 						if ( ! empty( $pre_existing_value ) ) {
-							error_log( 'the field already exists on this post. the value is ' . $pre_existing_value . '. compare with new value of ' . $value );
+							//error_log( 'the field already exists on this post. the value is ' . $pre_existing_value . '. compare with new value of ' . $value );
 						} else {
 							$post = array(
 								'ID' => $post_id,
