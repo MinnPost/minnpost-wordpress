@@ -409,7 +409,7 @@ class Migrate_Random_Things {
 					$menu_rows = $wpdb->get_results( 'SELECT * FROM ' . $menus . ' ORDER BY id' );
 					foreach ( $menu_rows as $menu ) {
 						// order by parent, then id so we get all the items without a parent before we try to add their children
-						$items = $wpdb->get_results( 'SELECT `id`, `menu-item-title`, `menu-item-url`, `menu-item-status`, `menu-item-parent`, `menu-item-parent-id` FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" ORDER BY `menu-item-parent`, id' );
+						$items = $wpdb->get_results( 'SELECT `id`, `menu-item-title`, `menu-item-url`, `menu-item-status`, `menu-item-parent`, `menu-item-parent-id`, `menu-item-access` FROM ' . $menu_items . ' WHERE `menu-name` = "' . $menu->name . '" ORDER BY `menu-item-parent`, id' );
 						$menu_exists = wp_get_nav_menu_object( $menu->name );
 
 						// If it doesn't exist, let's create it.
@@ -452,20 +452,23 @@ class Migrate_Random_Things {
 
 							// we need to figure out if it is a category, page, etc before we create it
 							$is_term = get_term_by( 'slug', sanitize_title( $item->{'menu-item-title'} ), 'category', 'ARRAY_A' );
-							$is_page = get_page_by_path( sanitize_title( $item->{'menu-item-title'} ), 'ARRAY_A', 'page' );
+							$is_page = get_page_by_path( $item->{'menu-item-url'}, 'ARRAY_A', 'page' );
+							if ( null === $is_page ) {
+								$is_page = get_page_by_path( sanitize_title( $item->{'menu-item-title'} ), 'ARRAY_A', 'page' );
+							}
 							$is_post = get_page_by_path( sanitize_title( $item->{'menu-item-title'} ), 'ARRAY_A', 'post' );
 							if ( false !== $is_term && 0 !== (int) $is_term['term_id'] ) {
 								$args['menu-item-type'] = 'taxonomy';
 								$args['menu-item-object'] = 'category';
 								$args['menu-item-object-id'] = (int) $is_term['term_id'];
-							} elseif ( false !== $is_page && 0 !== (int) $is_page['ID'] ) {
+							} elseif ( null !== $is_page && 0 !== (int) $is_page['ID'] ) {
 								$args['menu-item-type'] = 'post_type';
 								$args['menu-item-object'] = 'page';
 								$args['menu-item-object-id'] = (int) $is_page['ID'];
 								if ( esc_html( $item->{'menu-item-title'} ) !== $is_page['post_title'] ) {
 									$args['menu-item-title'] = esc_html( $item->{'menu-item-title'} );
 								}
-							} elseif ( false !== $is_post && 0 !== (int) $is_post['ID'] ) {
+							} elseif ( null !== $is_post && 0 !== (int) $is_post['ID'] ) {
 								$args['menu-item-type'] = 'post_type';
 								$args['menu-item-object'] = 'post';
 								$args['menu-item-object-id'] = (int) $is_post['ID'];
@@ -474,9 +477,17 @@ class Migrate_Random_Things {
 								$args['menu-item-title'] = esc_html( $item->{'menu-item-title'} );
 								$args['menu-item-type'] = 'custom';
 								$args['menu-item-url'] = $url;
+								if ( $url === home_url( '/' ) . 'wp_logout_url()' ) {
+									$args['menu-item-url'] = site_url( '/wp-login.php?action=logout' );
+								}
 							}
 
 							$menu_item_id = wp_update_nav_menu_item( $menu_id, 0, $args );
+
+							$access = $item->{'menu-item-access'};
+							if ( null !== $access ) {
+								update_post_meta( $menu_item_id, '_nav_menu_role', $access );
+							}
 
 							//error_log('item id is ' . print_r( $menu_item_id, true ) );
 							if ( ! is_object( $menu_item_id ) ) {
