@@ -315,6 +315,23 @@ class Merge_Serialized_Fields {
 							continue;
 						}
 						$merged_array = array_merge( $merged_array, maybe_unserialize( $value ) );
+						if ( array_key_exists( 'comment_moderator', $merged_array ) ) {
+							if ( array_key_exists( 'administrator', $merged_array ) ) {
+								unset( $merged_array['comment_moderator'] );
+							}
+							if ( array_key_exists( 'editor', $merged_array ) ) {
+								unset( $merged_array['comment_moderator'] );
+							}
+							if ( array_key_exists( 'business', $merged_array ) ) {
+								unset( $merged_array['comment_moderator'] );
+							}
+							if ( array_key_exists( 'contributor', $merged_array ) ) {
+								unset( $merged_array['comment_moderator'] );
+							}
+							if ( array_key_exists( 'author', $merged_array ) ) {
+								unset( $merged_array['comment_moderator'] );
+							}
+						}
 					}
 					//error_log( 'merged value is ' . serialize( $merged_array ), true );
 					$merged_serialized = serialize( $merged_array );
