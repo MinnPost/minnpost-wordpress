@@ -26,6 +26,10 @@ function red_set_options( array $settings = array() ) {
 	$options = red_get_options();
 	$monitor_types = array();
 
+	if ( isset( $settings['rest_api'] ) && in_array( intval( $settings['rest_api'], 10 ), array( 0, 1, 2 ) ) ) {
+		$options['rest_api'] = intval( $settings['rest_api'] );
+	}
+
 	if ( isset( $settings['monitor_types'] ) && is_array( $settings['monitor_types'] ) ) {
 		$allowed = red_get_post_types( false );
 
@@ -143,6 +147,7 @@ function red_get_options() {
 		'redirect_cache'      => 1,   // 1 hour
 		'ip_logging'          => 1,   // Full IP logging
 		'last_group_id'       => 0,
+		'rest_api'            => false,
 	) );
 
 	foreach ( $defaults as $key => $value ) {
@@ -157,4 +162,22 @@ function red_get_options() {
 	}
 
 	return $options;
+}
+
+function red_get_rest_api() {
+	$options = red_get_options();
+	$protocol = isset( $_SERVER['REQUEST_SCHEME'] ) ? $_SERVER['REQUEST_SCHEME'] : 'http';
+
+	if ( isset( $_SERVER['HTTPS'] ) ) {
+		$protocol = 'https';
+	}
+
+	$url = get_rest_url();
+	if ( $options['rest_api'] === 1 ) {
+		$url = home_url( '/index.php?rest_route=/' );
+	} elseif ( $options['rest_api'] === 2 ) {
+		$url = admin_url( 'admin-ajax.php?action=red_proxy&rest_path=' );
+	}
+
+	return str_replace( 'http://', $protocol.'://', $url );
 }
