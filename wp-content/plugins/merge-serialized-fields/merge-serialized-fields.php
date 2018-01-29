@@ -293,24 +293,24 @@ class Merge_Serialized_Fields {
 				if ( ( count( $merge_rows ) - 1 ) === $key ) {
 					update_option( 'merge_serialized_fields_last_row_checked', count( $merge_rows ) + $last_row_checked );
 				}
-				if ( ! is_array( $merge_row->$config['group_by'] ) ) {
-					$id = $merge_row->$config['group_by'];
+				if ( ! is_array( $merge_row->{$config['group_by']} ) ) {
+					$id = $merge_row->{$config['group_by']};
 				}
 
 				$merge_items = $wpdb->get_results( 'SELECT ' . $config['primary_key'] . ', ' . $config['wp_field_to_merge'] . ' FROM ' . $config['wp_table'] . ' WHERE ' . $config['wp_filter_field'] . ' = "' . $config['wp_filter_field_value'] . '" AND ' . $config['group_by'] . ' = "' . $id . '"', OBJECT );
 				if ( count( $merge_items ) > 1 ) {
 					$merged_array = [];
 					foreach ( $merge_items as $key => $value ) {
-						$last_item_checked = $value->$config['primary_key'];
+						$last_item_checked = $value->{$config['primary_key']};
 						if ( 0 === $key ) {
-							$id_to_update = $value->$config['primary_key'];
+							$id_to_update = $value->{$config['primary_key']};
 						}
 						//error_log( 'key is ' . $key . ' and count is ' . ( count( $merge_items ) - 1 ) . ' and id is ' . $last_item_checked );
 						if ( ( count( $merge_items ) - 1 ) === $key ) {
 							//error_log( 'new value should be ' .  ( $last_row_checked + $last_item_checked ) );
 							update_option( 'merge_serialized_fields_last_row_checked', ( $last_row_checked + $last_item_checked ) );
 						}
-						$value = $value->$config['wp_field_to_merge'];
+						$value = $value->{$config['wp_field_to_merge']};
 						if ( ! is_array( maybe_unserialize( $value ) ) ) {
 							continue;
 						}
