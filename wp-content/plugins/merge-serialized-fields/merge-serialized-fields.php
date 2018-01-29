@@ -116,6 +116,9 @@ class Merge_Serialized_Fields {
 		$select_callback = array( $this, 'display_select' );
 		add_settings_section( $page, null, null, $page );
 
+		// temp uncomment for testing when we don't want to wait for schedule to run
+		//$this->get_fields_to_merge();
+
 		$settings = array(
 			'wp_field_to_merge' => array(
 				'title' => __( 'Field Name', 'merge-serialized-fields' ),
@@ -281,6 +284,7 @@ class Merge_Serialized_Fields {
 			global $wpdb;
 			$offset = '';
 			$last_row_checked = get_option( 'merge_serialized_fields_last_row_checked', '0' );
+			//$last_row_checked = 0;
 			if ( '0' !== $last_row_checked ) {
 				$offset = ' OFFSET ' . $last_row_checked;
 			}
