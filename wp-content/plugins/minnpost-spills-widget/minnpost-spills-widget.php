@@ -474,8 +474,10 @@ class MinnpostSpills_Widget extends WP_Widget {
 					<?php
 					$url_array = explode( '/',get_permalink() );
 					$category = $url_array[3];
+					if ( is_object( get_category_by_slug( $category ) ) ) {
 					?>
 					<p class="a-post-category a-spill-item-category"><?php echo get_category_by_slug( $category )->name; ?></p>
+					<?php } ?>
 					<p class="a-post-title a-spill-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></p>
 				</article>
 			<?php endwhile; ?>
