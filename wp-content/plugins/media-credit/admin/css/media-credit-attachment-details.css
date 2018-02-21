@@ -2,11 +2,11 @@ label[data-setting="mediaCreditText"] input[type="text"]::-webkit-input-placehol
   opacity: 0.3;
 }
 
-label[data-setting="mediaCreditText"] input[type="text"]::-moz-placeholder {
+label[data-setting="mediaCreditText"] input[type="text"]:-ms-input-placeholder {
   opacity: 0.3;
 }
 
-label[data-setting="mediaCreditText"] input[type="text"]:-ms-input-placeholder {
+label[data-setting="mediaCreditText"] input[type="text"]::-ms-input-placeholder {
   opacity: 0.3;
 }
 
