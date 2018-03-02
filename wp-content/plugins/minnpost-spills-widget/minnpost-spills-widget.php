@@ -64,10 +64,14 @@ class MinnpostSpills {
 				add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
 
 				$perspectives = get_category_by_slug( 'perspectives' );
-				$featured_columns = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
+				if ( is_object( $perspectives ) ) {
+					$featured_columns = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
+				}
 				$fonm = get_category_by_slug( 'other-nonprofit-media' );
-				$featured_columns[] = $perspectives->term_id;
-				$featured_columns[] = $fonm->term_id;
+				if ( is_object( $fonm ) ) {
+					$featured_columns[] = $perspectives->term_id;
+					$featured_columns[] = $fonm->term_id;
+				}
 
 				$url_array = explode( '/', parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
 				$url = $url_array[1];
