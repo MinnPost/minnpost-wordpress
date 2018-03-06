@@ -649,7 +649,9 @@ if ( ! class_exists( 'EasyLazyLoader' ) ) {
 						}
 						// use transparent as placeholder if applicable
 						else if ( 'default' === $placeholder_type && !is_string( $width ) && !is_string( $height ) ) {
-							$placeholder_url_used = self::create_placeholder( $placeholder_color, (int) $width, (int) $height );
+							if ( isset( $placeholder_color ) ) {
+								$placeholder_url_used = self::create_placeholder( $placeholder_color, (int) $width, (int) $height );
+							}
 						}
 					}
 
