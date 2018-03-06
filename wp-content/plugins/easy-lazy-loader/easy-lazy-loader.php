@@ -611,8 +611,8 @@ if ( ! class_exists( 'EasyLazyLoader' ) ) {
 			$replace = array();
 
 			foreach ( $matches[0] as $imgHTML ) {
-				preg_match( '/width=["|\']([^("|\')]+)["|\']/i', $imgHTML, $width_match );
-				preg_match( '/height=["|\']([^("|\')]+)["|\']/i', $imgHTML, $height_match );
+				preg_match( '/ width=["|\']([^("|\')]+)["|\']/i', $imgHTML, $width_match );
+				preg_match( '/ height=["|\']([^("|\')]+)["|\']/i', $imgHTML, $height_match );
 				$width = !empty( $width_match ) && isset( $width_match[1] ) ? intval( $width_match[1] ) : '2';
 				$height = !empty( $height_match ) && isset( $height_match[1] ) ? intval( $height_match[1] ) : '1';
 				
