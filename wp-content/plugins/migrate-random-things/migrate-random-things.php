@@ -434,6 +434,10 @@ class Migrate_Random_Things {
 								$url = home_url( $url );
 							}
 
+							if ( '/' === $url ) {
+								$url = home_url();
+							}
+
 							$parent_id = 0;
 							$parent_title = $item->{'menu-item-parent'};
 							if ( null !== $parent_title ) {
@@ -452,23 +456,29 @@ class Migrate_Random_Things {
 
 							// we need to figure out if it is a category, page, etc before we create it
 							$is_term = get_term_by( 'slug', sanitize_title( $item->{'menu-item-title'} ), 'category', 'ARRAY_A' );
-							$is_page = get_page_by_path( $item->{'menu-item-url'}, 'ARRAY_A', 'page' );
+							$is_page = get_page_by_path( $url, 'ARRAY_A', 'page' );
 							if ( null === $is_page ) {
-								$is_page = get_page_by_path( sanitize_title( $item->{'menu-item-title'} ), 'ARRAY_A', 'page' );
+								$sanitized = sanitize_title( $item->{'menu-item-title'} );
+								if ( '' !== $sanitized ) {
+									$is_page = get_page_by_path( $sanitized, 'ARRAY_A', 'page' );
+									if ( 'draft' === $is_page->post_status ) {
+										$is_page = null;
+									}
+								}
 							}
 							$is_post = get_page_by_path( sanitize_title( $item->{'menu-item-title'} ), 'ARRAY_A', 'post' );
-							if ( false !== $is_term && 0 !== (int) $is_term['term_id'] ) {
+							if ( false !== $is_term && isset( $is_term['term_id'] ) && 0 !== (int) $is_term['term_id'] ) {
 								$args['menu-item-type'] = 'taxonomy';
 								$args['menu-item-object'] = 'category';
 								$args['menu-item-object-id'] = (int) $is_term['term_id'];
-							} elseif ( null !== $is_page && 0 !== (int) $is_page['ID'] ) {
+							} elseif ( null !== $is_page && isset( $is_page['ID'] ) && 0 !== (int) $is_page['ID'] ) {
 								$args['menu-item-type'] = 'post_type';
 								$args['menu-item-object'] = 'page';
 								$args['menu-item-object-id'] = (int) $is_page['ID'];
 								if ( esc_html( $item->{'menu-item-title'} ) !== $is_page['post_title'] ) {
 									$args['menu-item-title'] = esc_html( $item->{'menu-item-title'} );
 								}
-							} elseif ( null !== $is_post && 0 !== (int) $is_post['ID'] ) {
+							} elseif ( null !== $is_post && isset( $is_post['ID'] ) && 0 !== (int) $is_post['ID'] ) {
 								$args['menu-item-type'] = 'post_type';
 								$args['menu-item-object'] = 'post';
 								$args['menu-item-object-id'] = (int) $is_post['ID'];
@@ -489,7 +499,6 @@ class Migrate_Random_Things {
 								update_post_meta( $menu_item_id, '_nav_menu_role', $access );
 							}
 
-							//error_log('item id is ' . print_r( $menu_item_id, true ) );
 							if ( ! is_object( $menu_item_id ) ) {
 
 								$update = $wpdb->query( 'UPDATE ' . $menu_items . ' SET `menu-item-parent-id` = ' . $menu_item_id . ' WHERE `menu-item-parent` = "' . $item->{'menu-item-title'} . '"' );
