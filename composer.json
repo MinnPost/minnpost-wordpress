@@ -1,0 +1,16 @@
+{
+    "name": "minnpost/minnpost-wordpress",
+    "description": "MinnPost.com in WordPress",
+    "type": "project",
+    "minimum-stability": "dev",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Jonathan Stegall",
+            "email": "jstegall@minnpost.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^2.5@dev"
+    }
+}
