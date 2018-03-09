@@ -62,7 +62,7 @@ JETPACK_DEV_DEBUG=true
 4. Create a `.env` file in the directory above WordPress filling in the settings above. If using Laravel Valet, this is annoying, but works.
 5. Install WordPress
     - `wp core download`
-    - `wp core install`:  `wp core install --url=<url> --title<site title> --admin_user<minnposttech> --admin_email<adminemail>`
+    - `wp core install`:  `wp core install --url=<url> --title<site title> --admin_user<minnposttech> --admin_email<adminemail> --admin_password=<password> --skip-email`
 
 ## Codeship setup
 
@@ -99,7 +99,7 @@ rsync -av ~/clone/ {user@server:path-to-public-root/}
 3. For each deploy location (ex dev, stage, www), create a `.env` file in the directory above the public root, filling in the settings above.
 4. For each deploy location, run these commands to create the basic WordPress structure:
     - `wp core download`
-    - `wp core install`:  `wp core install --url=<url> --title<site title> --admin_user<minnposttech> --admin_email<adminemail>`
+    - `wp core install`:  `wp core install --url=<url> --title<site title> --admin_user<minnposttech> --admin_email<adminemail> --admin_password=<password> --skip-email`
 
 
 ## Deploying to server
