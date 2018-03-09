@@ -34,3 +34,4 @@ wp-content/themes/twenty*
 wp-content/plugins/wp-spamshield/data
 
 /vendor/
+.env
