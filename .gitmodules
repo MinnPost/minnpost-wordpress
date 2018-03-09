@@ -1,3 +1,7 @@
 [submodule "wp-content/themes/minnpost-largo"]
 	path = wp-content/themes/minnpost-largo
 	url = https://github.com/MinnPost/minnpost-largo.git
+[submodule "wp-content/themes/largo"]
+	path = wp-content/themes/largo
+	url = https://github.com/INN/largo.git
+	branch = 1.0
