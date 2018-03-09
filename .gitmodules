@@ -1,0 +1,3 @@
+[submodule "wp-content/themes/minnpost-largo"]
+	path = wp-content/themes/minnpost-largo
+	url = https://github.com/MinnPost/minnpost-largo.git
