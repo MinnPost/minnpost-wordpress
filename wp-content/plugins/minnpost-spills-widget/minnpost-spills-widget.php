@@ -51,7 +51,7 @@ class MinnpostSpills {
 	private function init() {
 		if ( ! is_admin() ) {
 			if ( ! class_exists( 'Brain\Cortex' ) ) {
-				require_once( 'vendor/autoload.php' );
+				require_once( plugin_dir_path( __FILE__ ) . 'vendor/autoload.php' );
 			}
 			Brain\Cortex::boot();
 
@@ -64,8 +64,9 @@ class MinnpostSpills {
 				add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
 
 				$perspectives = get_category_by_slug( 'perspectives' );
+				$featured_columns = array();
 				if ( is_object( $perspectives ) ) {
-					$featured_columns = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
+					$featured_columns[] = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
 				}
 				$fonm = get_category_by_slug( 'other-nonprofit-media' );
 				if ( is_object( $fonm ) ) {

@@ -84,6 +84,7 @@ $table_prefix  = getenv( 'DB_PREFIX' );
  */
 define('WP_DEBUG', getenv( 'WP_DEBUG' ) );
 define( 'JETPACK_DEV_DEBUG', getenv( 'JETPACK_DEV_DEBUG' ) );
+define( 'SCRIPT_DEBUG', getenv( 'SCRIPT_DEBUG' ) );
 
 /* That's all, stop editing! Happy blogging. */
 

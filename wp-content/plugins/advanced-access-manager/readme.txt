@@ -3,7 +3,7 @@ Contributors: vasyltech
 Tags: access, role, user, capability, page access, post access, comments, security, login redirect, brute force attack, double authentication, membership, backend lockdown, wp-admin, 404, activity tracking
 Requires at least: 3.8
 Tested up to: 4.9.4
-Stable tag: 5.1
+Stable tag: 5.1.1
 
 The most powerful access management plugin for WordPress websites.
 
@@ -60,6 +60,12 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 11. Improve your website security
 
 == Changelog ==
+
+= 5.1.1 =
+* Fixed the issue with Multisite Network notification
+* Fixed the minor bug with login message for "Redirect to login form"
+* Deleted redundant AAM_Core_Log class
+* Improved and refactored AAM Core Login functionality for upcoming REST API control extension
 
 = 5.1 =
 * Fixed sever minor bugs reported by users

@@ -200,6 +200,46 @@ class Migrate_Random_Things {
 					'desc' => __( 'The name of the meta field that has the categories that should be featured on a category', 'migrate-random-things' ),
 				),
 			),
+			'single_field_to_serialize' => array(
+				'title' => __( 'Single Meta Field to Serialize', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'The name of the meta field that should be serialized', 'migrate-random-things' ),
+				),
+			),
+			'single_field_to_serialize_table' => array(
+				'title' => __( 'Table of Single Meta Field to Serialize', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'Where the meta field is found', 'migrate-random-things' ),
+				),
+			),
+			'single_field_to_serialize_separator' => array(
+				'title' => __( 'Separator of Single Meta Field to Serialize', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'Value separator for the field', 'migrate-random-things' ),
+				),
+			),
+			'single_field_to_serialize_id_field' => array(
+				'title' => __( 'ID field of Single Meta Field to Serialize', 'migrate-random-things' ),
+				'callback' => $input_callback,
+				'page' => $page,
+				'section' => $section,
+				'args' => array(
+					'type' => 'text',
+					'desc' => __( 'ID for the database table', 'migrate-random-things' ),
+				),
+			),
 
 			/*'wp_filter_field_value' => array(
 				'title' => __( 'Field Value(s)', 'migrate-random-things' ),
@@ -398,6 +438,11 @@ class Migrate_Random_Things {
 			$newsletter_more_posts_import = get_option( 'migrate_random_things_newsletter_more_posts_import_field', '' );
 
 			$category_featured_categories = get_option( 'migrate_random_things_category_featured_categories' );
+
+			$single_field_to_serialize = get_option( 'migrate_random_things_single_field_to_serialize', '' );
+			$single_field_to_serialize_table = get_option( 'migrate_random_things_single_field_to_serialize_table', '' );
+			$single_field_to_serialize_separator = get_option( 'migrate_random_things_single_field_to_serialize_separator', '' );
+			$single_field_to_serialize_id_field = get_option( 'migrate_random_things_single_field_to_serialize_id_field', '' );
 
 			$users = $wpdb->get_col( "SELECT ID FROM {$wpdb->prefix}users WHERE user_pass = ''" );
 			foreach ( $users as $user_id ) {
@@ -686,6 +731,13 @@ class Migrate_Random_Things {
 					$result = $this->serialize_category_meta( $category_row->meta_id, $category_row->term_id, $category_row->meta_value );
 				}
 			} // End if().
+
+			if ( '' !== $single_field_to_serialize && '' !== $single_field_to_serialize_separator && '' !== $single_field_to_serialize_table ) {
+				$field_rows = $wpdb->get_results( 'SELECT * FROM ' . $single_field_to_serialize_table . ' WHERE meta_key = "' . $single_field_to_serialize . '"' );
+				foreach ( $field_rows as $field_row ) {
+					$result = $this->serialize_meta_field( $field_row, $single_field_to_serialize, $single_field_to_serialize_table, $single_field_to_serialize_separator, $single_field_to_serialize_id_field );
+				}
+			} // End if().
 		} // End foreach().
 
 	}
@@ -724,6 +776,18 @@ class Migrate_Random_Things {
 		$array = explode( ',', $csv );
 		update_term_meta( $term_id, $category_featured_categories, $array );
 		//delete_term_meta( $term_id, $category_featured_categories );
+	}
+
+	private function serialize_meta_field( $field_row, $field_name, $table, $separator, $single_field_to_serialize_id_field ) {
+		$value = maybe_unserialize( $field_row->meta_value );
+		if ( ! is_array( $value ) ) {
+			$array = explode( $separator, $value );
+			$serialized = serialize( $array );
+			$query = 'UPDATE ' . $table . ' SET `meta_value` = \'' . $serialized . '\' WHERE ' . $single_field_to_serialize_id_field . ' = "' . $field_row->{$single_field_to_serialize_id_field} . '"';
+			global $wpdb;
+			$update = $wpdb->query( $query );
+			return $update;
+		}
 	}
 
 	/**

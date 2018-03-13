@@ -52,6 +52,7 @@ GF_LICENSE_KEY={gravityformslicensekey}
 # debug modes - always set these to false on production
 WP_DEBUG=true
 JETPACK_DEV_DEBUG=true
+SCRIPT_DEBUG=true
 ```
 
 ## Local setup
