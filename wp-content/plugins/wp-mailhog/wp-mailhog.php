@@ -27,6 +27,6 @@ function bish_configMH( $phpmailer ) {
 	// $phpmailer->Password = 'yourpassword';
 	// The encryption system to use - ssl (deprecated) or tls
 	// $phpmailer->SMTPSecure = 'tls';
-	$phpmailer->From = 'site_adm@wp.local';
-	$phpmailer->FromName = 'WP DEV';
+	$phpmailer->From = get_option( 'site_email_from', get_option( 'admin_email' ) );
+	$phpmailer->FromName = get_option( 'site_email_from_name', get_option( 'blogname' ) );
 }
