@@ -3,7 +3,7 @@ Contributors: vasyltech
 Tags: access, role, user, capability, page access, post access, comments, security, login redirect, brute force attack, double authentication, membership, backend lockdown, wp-admin, 404, activity tracking
 Requires at least: 3.8
 Tested up to: 4.9.4
-Stable tag: 5.1.1
+Stable tag: 5.2
 
 The most powerful access management plugin for WordPress websites.
 
@@ -29,6 +29,7 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 * [free] Manage temporary user accounts. Create and manage temporary user accounts. Find out more from [How to create temporary WordPress user account](https://aamplugin.com/help/how-to-create-temporary-wordpress-user-account);
 * [free] Backend Lockdown. Restrict access to your website backend side for any user or role. Find out more from [How to lockdown WordPress backend](https://aamplugin.com/help/how-to-lockdown-wordpress-backend) article;
 * [free] Secure Login Widget & Shortcode. Drop AJAX login widget or shortcode anywhere on your website. Find out more from [How does AAM Secure Login works](https://aamplugin.com/help/how-does-aam-secure-login-works) article;
+* [free] JWT Authentication. Authenticate user through WordPress API and use received JWT token for further requests. Fid out more from [Hot to authenticate WordPress user with JWT token](https://aamplugin.com/help/how-to-authenticate-wordpress-user-with-jwt-token)
 * [limited] Content Access. Very granular access to unlimited number of post, page or custom post type ([19 different options](https://aamplugin.com/help#posts-and-pages)). With premium [Plus Package](https://aamplugin.com/extension/plus-package) extension also manage access to hierarchical taxonomies or setup the default access to all post types and taxonomies. Find out more from [How to manage access to the WordPress content](https://aamplugin.com/help/how-to-manage-access-to-the-wordpress-content) article;
 * [free] Content Filter. Filter or replace parts of your content with AAM shortcodes. Find out more from [How to filter WordPress post content](https://aamplugin.com/help/how-to-filter-wordpress-post-content) article;
 * [free] Login/Logout Redirects. Define custom login and logout redirect for any user or role;
@@ -60,6 +61,13 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 11. Improve your website security
 
 == Changelog ==
+
+= 5.2 =
+* Fixed the bug with user lock functionality
+* Dropped support for PHP 5.2.x version. Minimum required version is 5.3.0
+* Merged ConfigPress extension to the core
+* Added JWT Authentication
+* Added Register link to the Secure Login Widget
 
 = 5.1.1 =
 * Fixed the issue with Multisite Network notification
