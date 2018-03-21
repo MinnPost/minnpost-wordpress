@@ -49,6 +49,10 @@ FORM_PROCESSOR_MC_MAILCHIMP_API_KEY={mcapikey}
 # gravityforms settings
 GF_LICENSE_KEY={gravityformslicensekey}
 
+# site url settings - no trailing slash
+WP_HOME = {homepageurl}
+WP_SITEURL = {siteurl}
+
 # debug modes - always set these to false on production
 WP_DEBUG=true
 JETPACK_DEV_DEBUG=true
