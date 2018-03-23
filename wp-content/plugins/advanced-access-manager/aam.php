@@ -3,7 +3,7 @@
 /**
   Plugin Name: Advanced Access Manager
   Description: All you need to manage access to your WordPress website
-  Version: 5.2
+  Version: 5.2.1
   Author: Vasyl Martyniuk <vasyl@vasyltech.com>
   Author URI: https://vasyltech.com
 
@@ -115,7 +115,7 @@ class AAM {
             
             //JWT Authentication
             if (AAM_Core_Config::get('jwt-authentication', false)) {
-                AAM_Core_JWTAuth::bootstrap();
+                AAM_Core_JwtAuth::bootstrap();
             }
         }
     }

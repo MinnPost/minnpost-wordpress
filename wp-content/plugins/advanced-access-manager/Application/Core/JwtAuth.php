@@ -13,12 +13,12 @@
  * @package AAM
  * @author Vasyl Martyniuk <vasyl@vasyltech.com>
  */
-class AAM_Core_JWTAuth {
+class AAM_Core_JwtAuth {
 
     /**
      * Single instance of itself
      * 
-     * @var AAM_Core_JWTAuth 
+     * @var AAM_Core_JwtAuth 
      * 
      * @access protected
      * @static
@@ -167,7 +167,7 @@ class AAM_Core_JWTAuth {
     /**
      * Get single instance of itself
      * 
-     * @return AAM_Core_JWTAuth
+     * @return AAM_Core_JwtAuth
      * 
      * @access public
      * @static
@@ -183,7 +183,7 @@ class AAM_Core_JWTAuth {
     /**
      * Bootstrap AAM JWT Authentication feature
      * 
-     * @return AAM_Core_JWTAuth
+     * @return AAM_Core_JwtAuth
      * 
      * @access public
      * @static

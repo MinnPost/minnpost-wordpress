@@ -3,7 +3,7 @@ Contributors: vasyltech
 Tags: access, role, user, capability, page access, post access, comments, security, login redirect, brute force attack, double authentication, membership, backend lockdown, wp-admin, 404, activity tracking
 Requires at least: 3.8
 Tested up to: 4.9.4
-Stable tag: 5.2
+Stable tag: 5.2.1
 
 The most powerful access management plugin for WordPress websites.
 
@@ -61,6 +61,9 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 11. Improve your website security
 
 == Changelog ==
+
+= 5.2.1 =
+* Fixed bug with Linux incompatibility
 
 = 5.2 =
 * Fixed the bug with user lock functionality
