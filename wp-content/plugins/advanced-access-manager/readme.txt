@@ -1,9 +1,9 @@
 === Advanced Access Manager ===
 Contributors: vasyltech
-Tags: access, role, user, capability, page access, post access, comments, security, login redirect, brute force attack, double authentication, membership, backend lockdown, wp-admin, 404, activity tracking
+Tags: access, role, user, capability, page access, post access, content access, comments, security, login redirect, membership, backend lockdown, wp-admin, 404, rest api, xml rpc
 Requires at least: 3.8
 Tested up to: 4.9.4
-Stable tag: 5.2.1
+Stable tag: 5.2.5
 
 The most powerful access management plugin for WordPress websites.
 
@@ -16,8 +16,9 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 = Few Quick Facts =
 
 * Bullet-proven plugin with over a 1 million downloads where all features are well-tested and [documented](https://aamplugin.com/help). Very low amount of support tickets in comparison to similar plugins;
-* AAM contains the most powerful and flexible set of features to manage access to your WordPress website;
-* No ads or other promotional crap. The UI is clean and well crafted so you can focus only on what is important;
+* AAM contains the most powerful and flexible set of features to manage access to your WordPress website and most of them are absolutely free;
+* It is the only plugin in the world that gives you the ability to manage access to your website content for any role, individual user and visitors or even define the default access to all posts, pages, custom post types, categories and custom taxonomies;
+* No ads or other promotional crap. The UI is clean and well crafted so you can focus only on what matters;
 * Some features are limited or available only with [premium extensions](https://aamplugin.com/store). AAM functionality is transparent and you will absolute know when you need to purchase our premium features;
 * No need to be a "paid" customer to get help. Request support via email or start chat with Google Hangout;
 * YES, we have some bad reviews however most of them where posted years ago and are unrelated to current AAM version. AAM is very powerful tool that can lock you out if mistake made.
@@ -29,6 +30,8 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 * [free] Manage temporary user accounts. Create and manage temporary user accounts. Find out more from [How to create temporary WordPress user account](https://aamplugin.com/help/how-to-create-temporary-wordpress-user-account);
 * [free] Backend Lockdown. Restrict access to your website backend side for any user or role. Find out more from [How to lockdown WordPress backend](https://aamplugin.com/help/how-to-lockdown-wordpress-backend) article;
 * [free] Secure Login Widget & Shortcode. Drop AJAX login widget or shortcode anywhere on your website. Find out more from [How does AAM Secure Login works](https://aamplugin.com/help/how-does-aam-secure-login-works) article;
+* [free] Ability to enable/disable REST API and XML-RPC.
+* [free] Manage access to REST API individual endpoints for any role, user or visitor.
 * [free] JWT Authentication. Authenticate user through WordPress API and use received JWT token for further requests. Fid out more from [Hot to authenticate WordPress user with JWT token](https://aamplugin.com/help/how-to-authenticate-wordpress-user-with-jwt-token)
 * [limited] Content Access. Very granular access to unlimited number of post, page or custom post type ([19 different options](https://aamplugin.com/help#posts-and-pages)). With premium [Plus Package](https://aamplugin.com/extension/plus-package) extension also manage access to hierarchical taxonomies or setup the default access to all post types and taxonomies. Find out more from [How to manage access to the WordPress content](https://aamplugin.com/help/how-to-manage-access-to-the-wordpress-content) article;
 * [free] Content Filter. Filter or replace parts of your content with AAM shortcodes. Find out more from [How to filter WordPress post content](https://aamplugin.com/help/how-to-filter-wordpress-post-content) article;
@@ -61,6 +64,12 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 11. Improve your website security
 
 == Changelog ==
+
+= 5.2.5 =
+* Fixed the bug with JWT authentication
+* Added the ability to enable/disable XML-RPC
+* Added the ability to enable/disable REST API
+* Added the ability to manage access to the individual REST API endpoints
 
 = 5.2.1 =
 * Fixed bug with Linux incompatibility

@@ -37,7 +37,7 @@ class AAM_Core_JwtAuth {
         add_action('rest_api_init', array($this, 'registerAPI'));
 
         //register authentication hook
-        add_filter('determine_current_user', array($this, 'determineCurrentUser'), 1);
+        add_filter('determine_current_user', array($this, 'determineCurrentUser'), 999);
 
         //load firebase vendor
         require AAM_BASEDIR . '/vendor/autoload.php';
@@ -151,7 +151,7 @@ class AAM_Core_JwtAuth {
                 $claims = Firebase\JWT\JWT::decode(
                         $token, $key, array_keys(Firebase\JWT\JWT::$supported_algs)
                 );
-
+                
                 if (isset($claims->userId)) {
                     $result = $claims->userId;
                 }

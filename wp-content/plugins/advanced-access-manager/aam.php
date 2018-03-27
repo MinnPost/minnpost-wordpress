@@ -3,7 +3,7 @@
 /**
   Plugin Name: Advanced Access Manager
   Description: All you need to manage access to your WordPress website
-  Version: 5.2.1
+  Version: 5.2.5
   Author: Vasyl Martyniuk <vasyl@vasyltech.com>
   Author URI: https://vasyltech.com
 
@@ -107,6 +107,9 @@ class AAM {
         if (is_null(self::$_instance)) {
             //load AAM core config
             AAM_Core_Config::bootstrap();
+            
+            //load WP Core hooks
+            AAM_Core_Wp::bootstrap();
             
             //login control
             if (AAM_Core_Config::get('secure-login', true)) {
