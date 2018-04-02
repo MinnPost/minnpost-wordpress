@@ -5,7 +5,7 @@
  * Description: Custom written plugin for your sponsor needs on your WordPress site.
  * Author: Jonathan Atkinson
  * Author URI: http://cr3ativ.com/
- * Version: 1.2.2
+ * Version: 1.3.0
  */
 
 /* Place custom code below this line. */

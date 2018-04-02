@@ -2,8 +2,8 @@
 Contributors: Cr3ativ
 Tags: sponsors, events
 Requires at least: 3.0.1
-Tested up to: 4.7.3
-Stable tag: 1.2.2
+Tested up to: 4.9
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,9 +45,9 @@ Here is [the demo](http://mythemepreviews.com/plugins/sponsors/ "the demo").
 
 To display sponsors on any post or page using the text based short code, copy/paste this short code into the desired area and just change the information to what you want it to display.  For example:
 
-[sponsor_level category="all" orderby=“title” order=“desc” columns="4" image="yes" title="yes" link="yes" bio="yes"]
+[sponsor_level category="all" orderby="DESC" columns="4" image="yes" title="yes" link="yes" bio="yes"]
 
-The above short code will display all sponsors in DESC order by title as a 4 column layout with the featured image, sponsor name and the content.  The featured image and sponsor name will be linked.
+The above short code will display all sponsors in DESC order as a 4 column layout with the featured image, sponsor name and the content.  The featured image and sponsor name will be linked.
 
 Here is what each part of that short code means:
 
@@ -55,9 +55,7 @@ sponsor_level - this is required to request the short code to work
 
 category - this would be the sponsor level.  You would type in the ‘slug’ name of the sponsor level you created.  To determine the ‘slug’ name, click ‘Sponsor Level’ under the Sponsor menu option and you will see all the levels you have created, the level you would type in here is what is shown (exactly shown) in the ‘slug’ column.  If you want all sponsors, just skip this step.
 
-orderby - Title (title), Date (date) the sponsor was created or using Random sort (rand).
-
-order - ASC or DESC
+orderby - type ‘asc’ to order by the sponsors by the first created (post date) - meaning the first sponsor you created will appear first, type ‘desc’ to order by last created (post date) - meaning the last sponsor you created will appear first, type ‘rand’ to order by random (each time the page refreshes the order will change) or type ‘menu_order’ if you have placed numerical values in the Page Attributes ‘Order’ to order specific to your needs.  If you choose ‘menu_order’, they numerical system will be desc meaning 5, 4, 3, 2, 1 order.
 
 columns - you can enter ‘1’, ‘2’, ‘3’ or ‘4’ here
 
@@ -78,9 +76,7 @@ The Cr3ativ Sponsor plugin comes not only with a useful widget to display sponso
 
 Title - Title that will appear above the widget
 
-Order by - Title, Date the sponsor was created or using Random sort.
-
-Sorting Method - ASC or DESC
+orderby - choose ‘Asc’ to order by the sponsors by the first created (post date) - meaning the first sponsor you created will appear first, choose ‘Desc’ to order by last created (post date) - meaning the last sponsor you created will appear first, choose ‘Random’ to order by random (each time the page refreshes the order will change) or choose ‘Page Attributes "Order"’ if you have placed numerical values in the Page Attributes ‘Order’ to order specific to your needs.  If you choose ‘Page Attributes "Order”, they numerical system will be desc meaning 5, 4, 3, 2, 1 order.
 
 How many to show? - Enter # of sponsors you would like to show.  Enter something like 999999 to show all.
 
@@ -114,8 +110,11 @@ Styling for these page templates are included in the includes directory under :
 
 == Changelog ==
 
+= 1.3.0 =
+* Updated plugin to be compatible with WP 4.9, PHP 7.  Removed deprecated and php notices. 
+
 = 1.2.2 =
-* Updated cr3ativ-sponsor.php and /includes sponsor-widget.php to update the sorting methods to only include Date, Title or Random.  The sorting was working correctly. 
+* Updated sponsor 
 
 = 1.2.0 =
 * Updated sponsor-widget.php, cr3ativ-sponsor.php and /includes/css/cr3ativsponsor.css to correct issue with Google’s AdBlock blocking the images and info by replacing the div class names to add a prefix in front of each class and id.  Also added an attribute to the shortcode and widget to allow users to specify how many to show.  Enter 999999 to show all sponsors for that category.

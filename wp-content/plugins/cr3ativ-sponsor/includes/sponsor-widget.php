@@ -1,11 +1,27 @@
 <?php 
 
-class cr3ativ_sponsor extends WP_Widget {
+// Register and load the widget
+function cr3sponsor_load_widget() {
+    register_widget( 'cr3sponsor_widget' );
+}
+add_action( 'widgets_init', 'cr3sponsor_load_widget' );
+
+class cr3sponsor_widget extends WP_Widget {
 
 	// constructor
-	function __construct() {
-        parent::__construct(false, $name = __('Sponsor Loop', 'cr3at_sponsor') );
-    }
+function __construct() {
+parent::__construct(
+ 
+// Base ID of your widget
+'cr3sponsor_widget', 
+ 
+// Widget name will appear in UI
+__('Sponsor Loop', 'cr3at_sponsor'), 
+ 
+// Widget description
+array( 'description' => __( 'Show your sponsors in a widget ready area.', 'cr3at_sponsor' ), ) 
+);
+}
 
 	// widget form creation
 	function form($instance) { 
@@ -91,15 +107,16 @@ class cr3ativ_sponsor extends WP_Widget {
 	function update($new_instance, $old_instance) {
       $instance = $old_instance;
       // Fields
-      $instance['title'] = strip_tags($new_instance['title']);
-      $instance['orderby'] = $new_instance['orderby'];
-      $instance['order'] = $new_instance['order'];
-      $instance['sponsorlogo'] = $new_instance['sponsorlogo'];
-      $instance['sponsorname'] = $new_instance['sponsorname'];
-      $instance['sponsorlink'] = $new_instance['sponsorlink'];
-      $instance['sponsorbio'] = $new_instance['sponsorbio'];
-      $instance['itemstodisplay'] = $new_instance['itemstodisplay'];
-      $instance['cr3ativsponsor_level'] = strip_tags($new_instance['cr3ativsponsor_level']);
+$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+$instance['orderby'] = ( ! empty( $new_instance['orderby'] ) ) ? strip_tags( $new_instance['orderby'] ) : '';
+$instance['order'] = ( ! empty( $new_instance['order'] ) ) ? strip_tags( $new_instance['order'] ) : '';
+$instance['sponsorlogo'] = ( ! empty( $new_instance['sponsorlogo'] ) ) ? strip_tags( $new_instance['sponsorlogo'] ) : '';
+$instance['sponsorname'] = ( ! empty( $new_instance['sponsorname'] ) ) ? strip_tags( $new_instance['sponsorname'] ) : '';
+$instance['sponsorlink'] = ( ! empty( $new_instance['sponsorlink'] ) ) ? strip_tags( $new_instance['sponsorlink'] ) : '';
+$instance['sponsorbio'] = ( ! empty( $new_instance['sponsorbio'] ) ) ? strip_tags( $new_instance['sponsorbio'] ) : '';
+$instance['itemstodisplay'] = ( ! empty( $new_instance['itemstodisplay'] ) ) ? strip_tags( $new_instance['itemstodisplay'] ) : '';
+$instance['cr3ativsponsor_level'] = ( ! empty( $new_instance['cr3ativsponsor_level'] ) ) ? strip_tags( $new_instance['cr3ativsponsor_level'] ) : '';
+        
      return $instance;
 }
 
@@ -203,7 +220,5 @@ global $post;
 }
 }
 
-// register widget
-add_action('widgets_init', create_function('', 'return register_widget("cr3ativ_sponsor");'));
 
 ?>
