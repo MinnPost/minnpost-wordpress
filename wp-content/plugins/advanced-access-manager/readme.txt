@@ -1,9 +1,9 @@
 === Advanced Access Manager ===
 Contributors: vasyltech
 Tags: access, role, user, capability, page access, post access, content access, comments, security, login redirect, membership, backend lockdown, wp-admin, 404, rest api, xml rpc
-Requires at least: 3.8
-Tested up to: 4.9.4
-Stable tag: 5.2.5
+Requires at least: 4.0
+Tested up to: 4.9.5
+Stable tag: 5.2.6
 
 The most powerful access management plugin for WordPress websites.
 
@@ -64,6 +64,13 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 11. Improve your website security
 
 == Changelog ==
+
+= 5.2.6 =
+* Dropped support for WordPress versions 3.x. Min supported version is 4.0
+* Fixed bug with Admin Menu access control to Posts list
+* Fixed bug in AAM Core API for get plugins data call
+* Fixed bug with visitors cache auto-flush
+* Minor improvements to the AAM UI
 
 = 5.2.5 =
 * Fixed the bug with JWT authentication
