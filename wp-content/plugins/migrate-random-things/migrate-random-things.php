@@ -475,13 +475,6 @@ class Migrate_Random_Things {
 							}
 
 							$url = $item->{'menu-item-url'};
-							if ( 0 !== strpos( $url, 'http' ) ) {
-								$url = home_url( $url );
-							}
-
-							if ( '/' === $url ) {
-								$url = home_url();
-							}
 
 							$parent_id = 0;
 							$parent_title = $item->{'menu-item-parent'};
@@ -500,22 +493,67 @@ class Migrate_Random_Things {
 							);
 
 							// we need to figure out if it is a category, page, etc before we create it
-							$is_term = get_term_by( 'slug', sanitize_title( $item->{'menu-item-title'} ), 'category', 'ARRAY_A' );
+							$is_category = get_term_by( 'slug', $url, 'category', 'ARRAY_A' );
+							if ( false === $is_category ) {
+								$sanitized = sanitize_title( $item->{'menu-item-title'} );
+								if ( '' !== $sanitized ) {
+									$is_category = get_term_by( 'slug', $sanitized, 'category', 'ARRAY_A' );
+								}
+							}
+
+							$is_tag = get_term_by( 'slug', $url, 'post_tag', 'ARRAY_A' );
+							if ( false === $is_tag ) {
+								if ( 0 !== strpos( $url, 'http' ) ) {
+									$slug = substr( strrchr( rtrim( $url, '/' ), '/' ), 1 );
+									if ( '' !== $slug ) {
+										$is_tag = get_term_by( 'slug', $slug, 'post_tag', 'ARRAY_A' );
+									}
+								}
+							}
+							if ( false === $is_tag ) {
+								$sanitized = sanitize_title( $item->{'menu-item-title'} );
+								if ( '' !== $sanitized ) {
+									$is_tag = get_term_by( 'slug', $sanitized, 'post_tag', 'ARRAY_A' );
+								}
+							}
+
 							$is_page = get_page_by_path( $url, 'ARRAY_A', 'page' );
 							if ( null === $is_page ) {
 								$sanitized = sanitize_title( $item->{'menu-item-title'} );
 								if ( '' !== $sanitized ) {
 									$is_page = get_page_by_path( $sanitized, 'ARRAY_A', 'page' );
-									if ( 'draft' === $is_page->post_status ) {
+									if ( is_object( $is_page ) && 'draft' === $is_page->post_status ) {
 										$is_page = null;
 									}
 								}
 							}
-							$is_post = get_page_by_path( sanitize_title( $item->{'menu-item-title'} ), 'ARRAY_A', 'post' );
-							if ( false !== $is_term && isset( $is_term['term_id'] ) && 0 !== (int) $is_term['term_id'] ) {
+
+							$is_post = get_page_by_path( $url, 'ARRAY_A', 'post' );
+							if ( null === $is_post ) {
+								if ( 0 !== strpos( $url, 'http' ) ) {
+									$slug = substr( $url, strrpos( $url, '/' ) + 1 );
+									if ( '' !== $slug ) {
+										$is_post = get_page_by_path( $slug, 'ARRAY_A', 'post' );
+										if ( is_object( $is_post ) && 'draft' === $is_post->post_status ) {
+											$is_post = null;
+										}
+									}
+								}
+							}
+							if ( null === $is_post ) {
+								$sanitized = sanitize_title( $item->{'menu-item-title'} );
+								if ( '' !== $sanitized ) {
+									$is_post = get_page_by_path( $sanitized, 'ARRAY_A', 'post' );
+									if ( is_object( $is_post ) && 'draft' === $is_post->post_status ) {
+										$is_post = null;
+									}
+								}
+							}
+
+							if ( false !== $is_category && isset( $is_category['term_id'] ) && 0 !== (int) $is_category['term_id'] ) {
 								$args['menu-item-type'] = 'taxonomy';
 								$args['menu-item-object'] = 'category';
-								$args['menu-item-object-id'] = (int) $is_term['term_id'];
+								$args['menu-item-object-id'] = (int) $is_category['term_id'];
 							} elseif ( null !== $is_page && isset( $is_page['ID'] ) && 0 !== (int) $is_page['ID'] ) {
 								$args['menu-item-type'] = 'post_type';
 								$args['menu-item-object'] = 'page';
@@ -527,13 +565,34 @@ class Migrate_Random_Things {
 								$args['menu-item-type'] = 'post_type';
 								$args['menu-item-object'] = 'post';
 								$args['menu-item-object-id'] = (int) $is_post['ID'];
+							} elseif ( false !== $is_tag && isset( $is_tag['term_id'] ) && 0 !== (int) $is_tag['term_id'] ) {
+								$args['menu-item-type'] = 'taxonomy';
+								$args['menu-item-object'] = 'post_tag';
+								$args['menu-item-object-id'] = (int) $is_tag['term_id'];
 							} else {
 								// otherwise it is a custom link
 								$args['menu-item-title'] = esc_html( $item->{'menu-item-title'} );
 								$args['menu-item-type'] = 'custom';
+								// this would put the site url in front of custom, internal links. but i think it is ultimately unhelpful.
+								/*if ( 0 !== strpos( $url, 'http' ) ) {
+									$url = site_url( $url );
+								}*/
+								if ( 0 !== strpos( $url, 'http' ) ) {
+									$url = '/' . $url;
+								}
+								// the homepage should not try to look for a page because we don't have one
+								if ( '<front>' === $url || '/front' === $url || 'front' === $url ) {
+									//$url = home_url();
+									$url = '/';
+								}
 								$args['menu-item-url'] = $url;
-								if ( $url === home_url( '/' ) . 'wp_logout_url()' ) {
+								// same for this one
+								/*
+								if ( $url === site_url( '/' ) . 'wp_logout_url()' ) {
 									$args['menu-item-url'] = site_url( '/wp-login.php?action=logout' );
+								}*/
+								if ( 'wp_logout_url()' === $url ) {
+									$args['menu-item-url'] = '/wp-login.php?action=logout';
 								}
 							}
 
