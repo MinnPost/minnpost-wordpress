@@ -91,7 +91,7 @@ class Migrate_Random_Things {
 	public function show_admin_page() {
 		?>
 		<div class="wrap">
-			<h1><?php _e( get_admin_page_title() , 'migrate-random-things' ); ?></h1>
+			<h1><?php _e( get_admin_page_title(), 'migrate-random-things' ); ?></h1>
 			<div id="main">
 				<form method="post" action="options.php">
 					<?php
@@ -110,9 +110,9 @@ class Migrate_Random_Things {
 	*
 	*/
 	public function admin_settings_form() {
-		$page = 'migrate-random-things';
-		$section = 'migrate-random-things';
-		$input_callback = array( $this, 'display_input_field' );
+		$page            = 'migrate-random-things';
+		$section         = 'migrate-random-things';
+		$input_callback  = array( $this, 'display_input_field' );
 		$select_callback = array( $this, 'display_select' );
 		add_settings_section( $page, null, null, $page );
 
@@ -120,122 +120,122 @@ class Migrate_Random_Things {
 		//$this->get_things_to_migrate();
 
 		$settings = array(
-			'menu_table' => array(
-				'title' => __( 'Menu Table Name', 'migrate-random-things' ),
+			'menu_table'                          => array(
+				'title'    => __( 'Menu Table Name', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'The name of the table for menus', 'migrate-random-things' ),
 				),
 			),
-			'menu_items_table' => array(
-				'title' => __( 'Menu Items Table', 'migrate-random-things' ),
+			'menu_items_table'                    => array(
+				'title'    => __( 'Menu Items Table', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'The name of the table with the individual menu items.', 'migrate-random-things' ),
 				),
 			),
-			'ads_table' => array(
-				'title' => __( 'Ads Table', 'migrate-random-things' ),
+			'ads_table'                           => array(
+				'title'    => __( 'Ads Table', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'The name of the table with the advertisement data.', 'migrate-random-things' ),
 				),
 			),
-			'newsletter_top_posts_import_field' => array(
-				'title' => __( 'Newsletter Top Posts Import Field', 'migrate-random-things' ),
+			'newsletter_top_posts_import_field'   => array(
+				'title'    => __( 'Newsletter Top Posts Import Field', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'The name of the meta field with imported newsletter post data', 'migrate-random-things' ),
 				),
 			),
-			'newsletter_more_posts_import_field' => array(
-				'title' => __( 'Newsletter More Posts Import Field', 'migrate-random-things' ),
+			'newsletter_more_posts_import_field'  => array(
+				'title'    => __( 'Newsletter More Posts Import Field', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'The name of the meta field with imported newsletter post data', 'migrate-random-things' ),
 				),
 			),
-			'newsletter_top_posts_field' => array(
-				'title' => __( 'Newsletter Top Posts Field', 'migrate-random-things' ),
+			'newsletter_top_posts_field'          => array(
+				'title'    => __( 'Newsletter Top Posts Field', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'The name of the meta field with top posts for newsletter', 'migrate-random-things' ),
 				),
 			),
-			'newsletter_more_posts_field' => array(
-				'title' => __( 'Newsletter More Posts Field', 'migrate-random-things' ),
+			'newsletter_more_posts_field'         => array(
+				'title'    => __( 'Newsletter More Posts Field', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'The name of the meta field with more posts for newsletter', 'migrate-random-things' ),
 				),
 			),
-			'category_featured_categories' => array(
-				'title' => __( 'Featured Categories for Categories Field', 'migrate-random-things' ),
+			'category_featured_categories'        => array(
+				'title'    => __( 'Featured Categories for Categories Field', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'The name of the meta field that has the categories that should be featured on a category', 'migrate-random-things' ),
 				),
 			),
-			'single_field_to_serialize' => array(
-				'title' => __( 'Single Meta Field to Serialize', 'migrate-random-things' ),
+			'single_field_to_serialize'           => array(
+				'title'    => __( 'Single Meta Field to Serialize', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'The name of the meta field that should be serialized', 'migrate-random-things' ),
 				),
 			),
-			'single_field_to_serialize_table' => array(
-				'title' => __( 'Table of Single Meta Field to Serialize', 'migrate-random-things' ),
+			'single_field_to_serialize_table'     => array(
+				'title'    => __( 'Table of Single Meta Field to Serialize', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'Where the meta field is found', 'migrate-random-things' ),
 				),
 			),
 			'single_field_to_serialize_separator' => array(
-				'title' => __( 'Separator of Single Meta Field to Serialize', 'migrate-random-things' ),
+				'title'    => __( 'Separator of Single Meta Field to Serialize', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'Value separator for the field', 'migrate-random-things' ),
 				),
 			),
-			'single_field_to_serialize_id_field' => array(
-				'title' => __( 'ID field of Single Meta Field to Serialize', 'migrate-random-things' ),
+			'single_field_to_serialize_id_field'  => array(
+				'title'    => __( 'ID field of Single Meta Field to Serialize', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'ID for the database table', 'migrate-random-things' ),
 				),
@@ -291,47 +291,47 @@ class Migrate_Random_Things {
 					'desc' => __( 'Maximum items the query should load per run', 'migrate-random-things' ),
 				),
 			),*/
-			'schedule_number' => array(
-				'title' => __( 'Run schedule every', 'migrate-random-things' ),
+			'schedule_number'                     => array(
+				'title'    => __( 'Run schedule every', 'migrate-random-things' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'number',
 					'desc' => '',
 				),
 			),
-			'schedule_unit' => array(
-				'title' => __( 'Time unit', 'migrate-random-things' ),
+			'schedule_unit'                       => array(
+				'title'    => __( 'Time unit', 'migrate-random-things' ),
 				'callback' => $select_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
-					'type' => 'select',
-					'desc' => '',
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
+					'type'  => 'select',
+					'desc'  => '',
 					'items' => array(
 						'minutes' => __( 'Minutes', 'migrate-random-things' ),
-						'hours' => __( 'Hours', 'migrate-random-things' ),
-						'days' => __( 'Days', 'migrate-random-things' ),
+						'hours'   => __( 'Hours', 'migrate-random-things' ),
+						'days'    => __( 'Days', 'migrate-random-things' ),
 					),
 				),
 			),
 		);
 
 		foreach ( $settings as $key => $attributes ) {
-			$id = 'migrate_random_things_' . $key;
-			$name = 'migrate_random_things_' . $key;
-			$title = $attributes['title'];
+			$id       = 'migrate_random_things_' . $key;
+			$name     = 'migrate_random_things_' . $key;
+			$title    = $attributes['title'];
 			$callback = $attributes['callback'];
-			$page = $attributes['page'];
-			$section = $attributes['section'];
-			$args = array_merge(
+			$page     = $attributes['page'];
+			$section  = $attributes['section'];
+			$args     = array_merge(
 				$attributes['args'],
 				array(
-					'title' => $title,
-					'id' => $id,
+					'title'     => $title,
+					'id'        => $id,
 					'label_for' => $id,
-					'name' => $name,
+					'name'      => $name,
 				)
 			);
 			add_settings_field( $id, $title, $callback, $page, $section, $args );
@@ -352,7 +352,7 @@ class Migrate_Random_Things {
 		}
 
 		$schedule_number = get_option( 'migrate_random_things' . $name . '_schedule_number', '' );
-		$schedule_unit = get_option( 'migrate_random_things' . $name . '_schedule_unit', '' );
+		$schedule_unit   = get_option( 'migrate_random_things' . $name . '_schedule_unit', '' );
 
 		switch ( $schedule_unit ) {
 			case 'minutes':
@@ -380,12 +380,12 @@ class Migrate_Random_Things {
 	* @param array $args
 	*/
 	public function display_input_field( $args ) {
-		$type   = $args['type'];
-		$id     = $args['label_for'];
-		$name   = $args['name'];
-		$desc   = $args['desc'];
+		$type = $args['type'];
+		$id   = $args['label_for'];
+		$name = $args['name'];
+		$desc = $args['desc'];
 		if ( ! isset( $args['constant'] ) || ! defined( $args['constant'] ) ) {
-			$value  = esc_attr( get_option( $id, '' ) );
+			$value = esc_attr( get_option( $id, '' ) );
 			echo '<input type="' . $type . '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
 			class="regular-text code" />';
 			if ( '' !== $desc ) {
@@ -402,9 +402,9 @@ class Migrate_Random_Things {
 	* @param array $args
 	*/
 	public function display_select( $args ) {
-		$name = $args['name'];
-		$id = $args['label_for'];
-		$desc = $args['desc'];
+		$name          = $args['name'];
+		$id            = $args['label_for'];
+		$desc          = $args['desc'];
 		$current_value = get_option( $name );
 		echo '<select name="' . $name . '" id="' . $id . '"><option value="">' . __( 'Choose an option', 'migrate-random-things' ) . '</option>';
 		foreach ( $args['items'] as $key => $value ) {
@@ -429,20 +429,20 @@ class Migrate_Random_Things {
 		foreach ( $this->config as $config ) {
 			global $wpdb;
 
-			$menus = get_option( 'migrate_random_things_menu_table', '' );
+			$menus      = get_option( 'migrate_random_things_menu_table', '' );
 			$menu_items = get_option( 'migrate_random_things_menu_items_table', '' );
 
 			$ads_table = get_option( 'migrate_random_things_ads_table', '' );
 
-			$newsletter_top_posts_import = get_option( 'migrate_random_things_newsletter_top_posts_import_field', '' );
+			$newsletter_top_posts_import  = get_option( 'migrate_random_things_newsletter_top_posts_import_field', '' );
 			$newsletter_more_posts_import = get_option( 'migrate_random_things_newsletter_more_posts_import_field', '' );
 
 			$category_featured_categories = get_option( 'migrate_random_things_category_featured_categories' );
 
-			$single_field_to_serialize = get_option( 'migrate_random_things_single_field_to_serialize', '' );
-			$single_field_to_serialize_table = get_option( 'migrate_random_things_single_field_to_serialize_table', '' );
+			$single_field_to_serialize           = get_option( 'migrate_random_things_single_field_to_serialize', '' );
+			$single_field_to_serialize_table     = get_option( 'migrate_random_things_single_field_to_serialize_table', '' );
 			$single_field_to_serialize_separator = get_option( 'migrate_random_things_single_field_to_serialize_separator', '' );
-			$single_field_to_serialize_id_field = get_option( 'migrate_random_things_single_field_to_serialize_id_field', '' );
+			$single_field_to_serialize_id_field  = get_option( 'migrate_random_things_single_field_to_serialize_id_field', '' );
 
 			$users = $wpdb->get_col( "SELECT ID FROM {$wpdb->prefix}users WHERE user_pass = ''" );
 			foreach ( $users as $user_id ) {
@@ -461,7 +461,7 @@ class Migrate_Random_Things {
 						if ( ! $menu_exists ) {
 							$menu_id = wp_create_nav_menu( $menu->name );
 						} elseif ( is_object( $menu_exists ) ) {
-							$menu_id = $menu_exists->term_id;
+							$menu_id        = $menu_exists->term_id;
 							$existing_items = wp_get_nav_menu_items( $menu->name );
 						}
 
@@ -476,7 +476,7 @@ class Migrate_Random_Things {
 
 							$url = $item->{'menu-item-url'};
 
-							$parent_id = 0;
+							$parent_id    = 0;
 							$parent_title = $item->{'menu-item-parent'};
 							if ( null !== $parent_title ) {
 								$parent_id = $item->{'menu-item-parent-id'};
@@ -489,7 +489,7 @@ class Migrate_Random_Things {
 
 							$args = array(
 								'menu-item-parent-id' => $parent_id,
-								'menu-item-status' => $item->{'menu-item-status'},
+								'menu-item-status'    => $item->{'menu-item-status'},
 							);
 
 							if ( '/' !== $url ) {
@@ -561,26 +561,26 @@ class Migrate_Random_Things {
 							}
 
 							if ( false !== $is_category && isset( $is_category['term_id'] ) && 0 !== (int) $is_category['term_id'] ) {
-								$args['menu-item-type'] = 'taxonomy';
-								$args['menu-item-object'] = 'category';
+								$args['menu-item-type']      = 'taxonomy';
+								$args['menu-item-object']    = 'category';
 								$args['menu-item-object-id'] = (int) $is_category['term_id'];
 							} elseif ( null !== $is_page && isset( $is_page['ID'] ) && 0 !== (int) $is_page['ID'] ) {
-								$args['menu-item-type'] = 'post_type';
-								$args['menu-item-object'] = 'page';
+								$args['menu-item-type']      = 'post_type';
+								$args['menu-item-object']    = 'page';
 								$args['menu-item-object-id'] = (int) $is_page['ID'];
 								if ( esc_html( $item->{'menu-item-title'} ) !== $is_page['post_title'] ) {
 									$args['menu-item-title'] = esc_html( $item->{'menu-item-title'} );
 								}
 							} elseif ( null !== $is_post && isset( $is_post['ID'] ) && 0 !== (int) $is_post['ID'] ) {
-								$args['menu-item-type'] = 'post_type';
-								$args['menu-item-object'] = 'post';
+								$args['menu-item-type']      = 'post_type';
+								$args['menu-item-object']    = 'post';
 								$args['menu-item-object-id'] = (int) $is_post['ID'];
 								if ( esc_html( $item->{'menu-item-title'} ) !== $is_post['post_title'] ) {
 									$args['menu-item-title'] = esc_html( $item->{'menu-item-title'} );
 								}
 							} elseif ( false !== $is_tag && isset( $is_tag['term_id'] ) && 0 !== (int) $is_tag['term_id'] ) {
-								$args['menu-item-type'] = 'taxonomy';
-								$args['menu-item-object'] = 'post_tag';
+								$args['menu-item-type']      = 'taxonomy';
+								$args['menu-item-object']    = 'post_tag';
 								$args['menu-item-object-id'] = (int) $is_tag['term_id'];
 								if ( esc_html( $item->{'menu-item-title'} ) !== $is_tag['name'] ) {
 									$args['menu-item-title'] = esc_html( $item->{'menu-item-title'} );
@@ -588,7 +588,7 @@ class Migrate_Random_Things {
 							} else {
 								// otherwise it is a custom link
 								$args['menu-item-title'] = esc_html( $item->{'menu-item-title'} );
-								$args['menu-item-type'] = 'custom';
+								$args['menu-item-type']  = 'custom';
 								// this would put the site url in front of custom, internal links. but i think it is ultimately unhelpful.
 								/*if ( 0 !== strpos( $url, 'http' ) ) {
 									$url = site_url( $url );
@@ -653,10 +653,10 @@ class Migrate_Random_Things {
 							$result = $wpdb->update(
 								$ads_table,
 								array(
-									'priority' => abs( $ad->priority ),
+									'priority'   => abs( $ad->priority ),
 									'conditions' => print_r( maybe_unserialize( $ad->conditions ), true ),
-									'result' => print_r( maybe_unserialize( $ad->result ), true ),
-									'stage' => 1,
+									'result'     => print_r( maybe_unserialize( $ad->result ), true ),
+									'stage'      => 1,
 								),
 								array(
 									'id' => $ad->id,
@@ -664,25 +664,25 @@ class Migrate_Random_Things {
 							);
 						}
 						if ( false !== strpos( $ad->conditions, 'Array' ) ) {
-							$array = $this->print_r_reverse( $ad->conditions );
+							$array       = $this->print_r_reverse( $ad->conditions );
 							$conditional = array();
 							if ( false !== strpos( $ad->tag_id, 'sitewide' ) ) {
 								$conditional = 'None';
-								$result = $wpdb->update(
+								$result      = $wpdb->update(
 									$ads_table,
 									array(
-										'priority' => abs( $ad->priority ),
+										'priority'   => abs( $ad->priority ),
 										'conditions' => '',
-										'stage' => 2,
+										'stage'      => 2,
 									),
 									array(
 										'id' => $ad->id,
 									)
 								);
 							} elseif ( isset( $array['node']['values'] ) ) {
-								$checker = array(
+								$checker     = array(
 									'content_type' => current( array_keys( $array['node']['values'] ) ),
-									'full' => $array,
+									'full'         => $array,
 								);
 								$conditional = $this->get_conditional( $checker );
 							} elseif ( isset( $array['path']['values'] ) ) {
@@ -722,7 +722,7 @@ class Migrate_Random_Things {
 										$ads_table,
 										array(
 											'conditions' => $new_conditions,
-											'stage' => 2,
+											'stage'      => 2,
 										),
 										array(
 											'id' => $ad->id,
@@ -742,22 +742,22 @@ class Migrate_Random_Things {
 							}
 
 							$content = array(
-								'post_author' => 1,
-								'post_title' => $ad->tag . '-' . $ad->tag_id . '-' . $ad->tag_name,
-								'post_status' => 'publish',
-								'post_type' => 'acm-code',
+								'post_author'    => 1,
+								'post_title'     => $ad->tag . '-' . $ad->tag_id . '-' . $ad->tag_name,
+								'post_status'    => 'publish',
+								'post_type'      => 'acm-code',
 								'comment_status' => 'closed',
-								'ping_status' => 'closed',
-								'post_name' => strtolower( $ad->tag ) . '-' . $ad->tag_id . '-' . sanitize_title( $ad->tag_name ),
-								'guid' => site_url( '/?acm-code=' . strtolower( $ad->tag ) . '-' . $ad->tag_id . '-' . sanitize_title( $ad->tag_name ), 'https' ),
-								'tax_input' => array(),
-								'meta_input' => array(
-									'wide_assets' => '',
-									'tag' => $ad->tag,
-									'tag_id' => $ad->tag_id,
-									'tag_name' => $ad->tag_name,
-									'priority' => $ad->priority,
-									'operator' => 'OR',
+								'ping_status'    => 'closed',
+								'post_name'      => strtolower( $ad->tag ) . '-' . $ad->tag_id . '-' . sanitize_title( $ad->tag_name ),
+								'guid'           => site_url( '/?acm-code=' . strtolower( $ad->tag ) . '-' . $ad->tag_id . '-' . sanitize_title( $ad->tag_name ), 'https' ),
+								'tax_input'      => array(),
+								'meta_input'     => array(
+									'wide_assets'  => '',
+									'tag'          => $ad->tag,
+									'tag_id'       => $ad->tag_id,
+									'tag_name'     => $ad->tag_name,
+									'priority'     => $ad->priority,
+									'operator'     => 'OR',
 									'conditionals' => $conditionals,
 								),
 							);
@@ -815,10 +815,10 @@ class Migrate_Random_Things {
 
 	private function serialize_newsletter_posts( $meta_id, $post_id, $csv, $location ) {
 
-		$newsletter_top_posts_import = get_option( 'migrate_random_things_newsletter_top_posts_import_field', '' );
+		$newsletter_top_posts_import  = get_option( 'migrate_random_things_newsletter_top_posts_import_field', '' );
 		$newsletter_more_posts_import = get_option( 'migrate_random_things_newsletter_more_posts_import_field', '' );
 
-		$newsletter_top_posts = get_option( 'migrate_random_things_newsletter_top_posts_field', '' );
+		$newsletter_top_posts  = get_option( 'migrate_random_things_newsletter_top_posts_field', '' );
 		$newsletter_more_posts = get_option( 'migrate_random_things_newsletter_more_posts_field', '' );
 
 		global $wpdb;
@@ -852,9 +852,9 @@ class Migrate_Random_Things {
 	private function serialize_meta_field( $field_row, $field_name, $table, $separator, $single_field_to_serialize_id_field ) {
 		$value = maybe_unserialize( $field_row->meta_value );
 		if ( ! is_array( $value ) ) {
-			$array = explode( $separator, $value );
+			$array      = explode( $separator, $value );
 			$serialized = serialize( $array );
-			$query = 'UPDATE ' . $table . ' SET `meta_value` = \'' . $serialized . '\' WHERE ' . $single_field_to_serialize_id_field . ' = "' . $field_row->{$single_field_to_serialize_id_field} . '"';
+			$query      = 'UPDATE ' . $table . ' SET `meta_value` = \'' . $serialized . '\' WHERE ' . $single_field_to_serialize_id_field . ' = "' . $field_row->{$single_field_to_serialize_id_field} . '"';
 			global $wpdb;
 			$update = $wpdb->query( $query );
 			return $update;
@@ -876,32 +876,32 @@ class Migrate_Random_Things {
 
 		if ( false !== strpos( $wp_filter_field_value, ',' ) ) {
 			$wp_filter_field_values = explode( ',', $wp_filter_field_value );
-			$this->config = array();
+			$this->config           = array();
 			foreach ( $wp_filter_field_values as $key => $value ) {
 				$this->config[ $key ] = array(
-					'wp_field_to_merge' => get_option( 'migrate_random_things_wp_field_to_merge', '' ),
-					'wp_filter_field' => get_option( 'migrate_random_things_wp_filter_field', '' ),
+					'wp_field_to_merge'     => get_option( 'migrate_random_things_wp_field_to_merge', '' ),
+					'wp_filter_field'       => get_option( 'migrate_random_things_wp_filter_field', '' ),
 					'wp_filter_field_value' => $value,
-					'wp_table' => get_option( 'migrate_random_things_wp_table', '' ),
-					'group_by' => get_option( 'migrate_random_things_group_by', '' ),
-					'primary_key' => get_option( 'migrate_random_things_primary_key', '' ),
-					'items_per_load' => get_option( 'migrate_random_things_items_per_load', '' ),
-					'schedule_number' => get_option( 'migrate_random_things_schedule_number', '' ),
-					'schedule_unit' => get_option( 'migrate_random_things_schedule_unit', '' ),
+					'wp_table'              => get_option( 'migrate_random_things_wp_table', '' ),
+					'group_by'              => get_option( 'migrate_random_things_group_by', '' ),
+					'primary_key'           => get_option( 'migrate_random_things_primary_key', '' ),
+					'items_per_load'        => get_option( 'migrate_random_things_items_per_load', '' ),
+					'schedule_number'       => get_option( 'migrate_random_things_schedule_number', '' ),
+					'schedule_unit'         => get_option( 'migrate_random_things_schedule_unit', '' ),
 				);
 			}
 		} else {
 			$this->config = array(
 				0 => array(
-					'wp_field_to_merge' => get_option( 'migrate_random_things_wp_field_to_merge', '' ),
-					'wp_filter_field' => get_option( 'migrate_random_things_wp_filter_field', '' ),
+					'wp_field_to_merge'     => get_option( 'migrate_random_things_wp_field_to_merge', '' ),
+					'wp_filter_field'       => get_option( 'migrate_random_things_wp_filter_field', '' ),
 					'wp_filter_field_value' => get_option( 'migrate_random_things_wp_filter_field_value', '' ),
-					'wp_table' => get_option( 'migrate_random_things_wp_table', '' ),
-					'group_by' => get_option( 'migrate_random_things_group_by', '' ),
-					'primary_key' => get_option( 'migrate_random_things_primary_key', '' ),
-					'items_per_load' => get_option( 'migrate_random_things_items_per_load', '' ),
-					'schedule_number' => get_option( 'migrate_random_things_schedule_number', '' ),
-					'schedule_unit' => get_option( 'migrate_random_things_schedule_unit', '' ),
+					'wp_table'              => get_option( 'migrate_random_things_wp_table', '' ),
+					'group_by'              => get_option( 'migrate_random_things_group_by', '' ),
+					'primary_key'           => get_option( 'migrate_random_things_primary_key', '' ),
+					'items_per_load'        => get_option( 'migrate_random_things_items_per_load', '' ),
+					'schedule_number'       => get_option( 'migrate_random_things_schedule_number', '' ),
+					'schedule_unit'         => get_option( 'migrate_random_things_schedule_unit', '' ),
 				),
 			);
 		}
@@ -953,9 +953,9 @@ class Migrate_Random_Things {
 			if ( preg_match( '/(\s{5,})\(/', $lines[1], $match ) ) {
 				// this is a tested array/recursive call to this function
 				// take a set of spaces off the beginning
-				$spaces = $match[1];
+				$spaces        = $match[1];
 				$spaces_length = strlen( $spaces );
-				$lines_total = count( $lines );
+				$lines_total   = count( $lines );
 				for ( $i = 0; $i < $lines_total; $i++ ) {
 					if ( substr( $lines[ $i ], 0, $spaces_length ) == $spaces ) {
 						$lines[ $i ] = substr( $lines[ $i ], $spaces_length );
@@ -968,15 +968,15 @@ class Migrate_Random_Things {
 			$in = implode( "\n", $lines );
 			// make sure we only match stuff with 4 preceding spaces (stuff for this array and not a nested one)
 			preg_match_all( '/^\s{4}\[(.+?)\] \=\> /m', $in, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER );
-			$pos = array();
+			$pos          = array();
 			$previous_key = '';
-			$in_length = strlen( $in );
+			$in_length    = strlen( $in );
 			// store the following in $pos:
 			// array with key = key of the parsed array's item
 			// value = array(start position in $in, $end position in $in)
 			foreach ( $matches as $match ) {
-				$key = $match[1][0];
-				$start = $match[0][1] + strlen( $match[0][0] );
+				$key         = $match[1][0];
+				$start       = $match[0][1] + strlen( $match[0][0] );
 				$pos[ $key ] = array( $start, $in_length );
 				if ( '' !== $previous_key ) {
 					$pos[ $previous_key ][1] = $match[0][1] - 1;
@@ -1000,12 +1000,12 @@ class Migrate_Random_Things {
 				if ( 'section' === $checker['content_type'] ) {
 					$conditional[] = array(
 						'method' => 'is_category',
-						'value' => true,
+						'value'  => true,
 					);
 				} elseif ( 'article' === $checker['content_type'] ) {
 					$conditional[] = array(
 						'method' => 'is_single',
-						'value' => true,
+						'value'  => true,
 					);
 				}
 			} else {
@@ -1013,15 +1013,15 @@ class Migrate_Random_Things {
 					if ( '<front>' === $value ) {
 						$conditional[] = array(
 							'method' => 'is_home',
-							'value' => true,
+							'value'  => true,
 						);
 					} elseif ( false !== strpos( $value, '/' ) ) {
-						$path = explode( '/', $value );
+						$path   = explode( '/', $value );
 						$parent = $path[0];
 						if ( isset( $path[1] ) ) {
 							$conditional[] = array(
 								'method' => 'is_page',
-								'value' => rtrim( $path[1], '*' ),
+								'value'  => rtrim( $path[1], '*' ),
 							);
 						}
 					} elseif ( false !== strpos( $value, '/*' ) ) {
@@ -1029,12 +1029,12 @@ class Migrate_Random_Things {
 						if ( is_object( get_category_by_slug( $path ) ) ) {
 							$conditional[] = array(
 								'method' => 'has_category',
-								'value' => $path,
+								'value'  => $path,
 							);
 						} elseif ( is_object( get_page_by_path( $path ) ) ) {
 							$conditional[] = array(
 								'method' => 'is_page',
-								'value' => $path,
+								'value'  => $path,
 							);
 						}
 					} elseif ( false !== strpos( $value, '*' ) ) {
@@ -1045,16 +1045,16 @@ class Migrate_Random_Things {
 						if ( is_object( get_category_by_slug( $path ) ) ) {
 							$conditional[] = array(
 								'method' => 'is_category',
-								'value' => $path,
+								'value'  => $path,
 							);
 							$conditional[] = array(
 								'method' => 'has_category',
-								'value' => $path,
+								'value'  => $path,
 							);
 						} elseif ( is_object( get_page_by_path( $path ) ) ) {
 							$conditional[] = array(
 								'method' => 'is_page',
-								'value' => $path,
+								'value'  => $path,
 							);
 						}
 					} else {
