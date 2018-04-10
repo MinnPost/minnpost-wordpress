@@ -7,7 +7,6 @@
 *.swp
 *.pyc
 Thumbs.db
-.htaccess
 
 # generated
 sitemap.xml
