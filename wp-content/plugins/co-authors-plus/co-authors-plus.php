@@ -3,7 +3,7 @@
 Plugin Name: Co-Authors Plus
 Plugin URI: http://wordpress.org/extend/plugins/co-authors-plus/
 Description: Allows multiple authors to be assigned to a post. This plugin is an extended version of the Co-Authors plugin developed by Weston Ruter.
-Version: 3.2.2
+Version: 3.3.0
 Author: Mohammad Jangda, Daniel Bachhuber, Automattic
 Copyright: 2008-2015 Shared and distributed between Mohammad Jangda, Daniel Bachhuber, Weston Ruter
 
@@ -32,7 +32,7 @@ Co-author - in the context of a single post, a guest author or user assigned to 
 Author - user with the role of author
 */
 
-define( 'COAUTHORS_PLUS_VERSION', '3.2.2' );
+define( 'COAUTHORS_PLUS_VERSION', '3.3.0' );
 
 require_once( dirname( __FILE__ ) . '/template-tags.php' );
 require_once( dirname( __FILE__ ) . '/deprecated.php' );
@@ -1224,7 +1224,7 @@ class CoAuthors_Plus {
 	/**
 	 * Modify get_users() to search display_name instead of user_nicename
 	 */
-	function action_pre_user_query( &$user_query ) {
+	function action_pre_user_query( $user_query ) {
 
 		if ( is_object( $user_query ) ) {
 			$user_query->query_where = str_replace( 'user_nicename LIKE', 'display_name LIKE', $user_query->query_where );
@@ -1409,7 +1409,7 @@ class CoAuthors_Plus {
 		if ( false !== ( $term = wp_cache_get( $cache_key, 'co-authors-plus' ) ) ) {
 			return $term;
 		}
-		
+
 		// use linked user for accurate post count
 		if ( ! empty ( $coauthor->linked_account ) ) {
 			$term = get_term_by( 'slug', 'cap-' . $coauthor->linked_account, $this->coauthor_taxonomy );
