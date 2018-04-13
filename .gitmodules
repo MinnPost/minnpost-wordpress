@@ -26,6 +26,9 @@
 [submodule "wp-content/plugins/object-sync-for-salesforce"]
 	path = wp-content/plugins/object-sync-for-salesforce
 	url = https://github.com/MinnPost/object-sync-for-salesforce.git
+[submodule "wp-content/plugins/staff-user-post-list"]
+	path = wp-content/plugins/staff-user-post-list
+	url = https://github.com/MinnPost/staff-user-post-list.git
 [submodule "wp-content/plugins/user-account-management"]
 	path = wp-content/plugins/user-account-management
 	url = https://github.com/MinnPost/user-account-management.git
