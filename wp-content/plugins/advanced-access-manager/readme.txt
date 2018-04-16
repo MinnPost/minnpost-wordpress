@@ -3,7 +3,7 @@ Contributors: vasyltech
 Tags: access, role, user, capability, page access, post access, content access, comments, security, login redirect, membership, backend lockdown, wp-admin, 404, rest api, xml rpc
 Requires at least: 4.0
 Tested up to: 4.9.5
-Stable tag: 5.2.6
+Stable tag: 5.2.7
 
 The most powerful access management plugin for WordPress websites.
 
@@ -18,10 +18,11 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 * Bullet-proven plugin with over a 1 million downloads where all features are well-tested and [documented](https://aamplugin.com/help). Very low amount of support tickets in comparison to similar plugins;
 * AAM contains the most powerful and flexible set of features to manage access to your WordPress website and most of them are absolutely free;
 * It is the only plugin in the world that gives you the ability to manage access to your website content for any role, individual user and visitors or even define the default access to all posts, pages, custom post types, categories and custom taxonomies;
+* AAM is developer oriented plugin. It has countless number of hooks, integrated with WordPress RESTful API and has numerous abstract layers to simplify programmatic access management;
 * No ads or other promotional crap. The UI is clean and well crafted so you can focus only on what matters;
-* Some features are limited or available only with [premium extensions](https://aamplugin.com/store). AAM functionality is transparent and you will absolute know when you need to purchase our premium features;
 * No need to be a "paid" customer to get help. Request support via email or start chat with Google Hangout;
-* YES, we have some bad reviews however most of them where posted years ago and are unrelated to current AAM version. AAM is very powerful tool that can lock you out if mistake made.
+* Some features are limited or available only with [premium extensions](https://aamplugin.com/store). AAM functionality is transparent and you will absolute know when you need to purchase our premium features;
+* There are some bad reviews however most of them where posted years ago and are unrelated to current AAM version; or were posted by users that did not bother reading the bullet-point above.
 
 = The most popular features =
 
@@ -64,6 +65,11 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 11. Improve your website security
 
 == Changelog ==
+
+= 5.2.7 =
+* Fixed bug with REST API Routes list
+* Improved REST API response messages
+* Added support for WordPress RESTful API for posts, categories, comments and users.
 
 = 5.2.6 =
 * Dropped support for WordPress versions 3.x. Min supported version is 4.0
