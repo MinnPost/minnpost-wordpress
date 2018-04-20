@@ -74,6 +74,10 @@ class MinnpostSpills {
 					$featured_columns[] = $fonm->term_id;
 				}
 
+				$featured_columns = array_reduce( $featured_columns, function ( $a, $b ) {
+					return array_merge( $a, (array) $b );
+				}, []);
+
 				$url_array = explode( '/', parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
 				$url = $url_array[1];
 
