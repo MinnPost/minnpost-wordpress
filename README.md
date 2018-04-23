@@ -57,6 +57,10 @@ WP_SITEURL = {siteurl}
 WP_DEBUG=true
 JETPACK_DEV_DEBUG=true
 SCRIPT_DEBUG=true
+
+# payment processor stuff
+PAYMENT_PROCESSOR_URL={paymentprocessorurl}
+
 ```
 
 ## Local setup
