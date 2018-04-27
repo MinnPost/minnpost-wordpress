@@ -34,7 +34,7 @@ abstract class MWCPUI
         if ( $post->ID )
           $options['current'] = MWCPPost::getPermalinkMeta( $post->ID );
         $MWCP_Admin = new MWCP_Admin();
-        $selector = $MWCP_Admin->is_pro() ? '[id^="taxonomy-"].categorydiv' : '#taxonomy-category';
+        $selector = '[id^="taxonomy-"].categorydiv';
 
         ?>
         <script type="text/javascript">
@@ -63,8 +63,6 @@ abstract class MWCPUI
     {
         global $post_type;
         global $MWCP_Admin;
-        if ( $post_type != 'post' && !$MWCP_Admin->is_pro() )
-            return $columns;
         $option = 'manageedit-' . $post_type . 'columnshidden';
         $hidden_columns = (array) get_user_option( $option );
         $query = array(

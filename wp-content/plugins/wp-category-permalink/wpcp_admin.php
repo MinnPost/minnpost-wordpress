@@ -1,11 +1,11 @@
 <?php
 
-include "common/meow_admin.php";
+include "common/admin.php";
 
-class MWCP_Admin extends Meow_Admin {
+class MWCP_Admin extends MeowApps_Admin {
 
 	public function __construct() {
-		parent::__construct( 'wpcp', 'category-permalink' );
+		parent::__construct( 'wpcp', __FILE__, 'category-permalink' );
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'app_menu' ) );
 			add_action( 'admin_notices', array( $this, 'admin_notices' ) );
@@ -37,7 +37,6 @@ class MWCP_Admin extends Meow_Admin {
 	}
 
 	function admin_settings() {
-		$pro_status = get_option( 'wpcp_pro_status' );
 		?>
 		<div class="wrap">
 			<?php echo $this->display_title( "WP Category Permalink" );  ?>
@@ -47,7 +46,7 @@ class MWCP_Admin extends Meow_Admin {
 				<div class="meow-box meow-col meow-span_2_of_2">
 					<h3>How to use</h3>
 					<div class="inside">
-						<?php echo _e( 'For this plugin to work, don\'t forget that you need to use a Permalink Structure that includes <b>%category%</b> (such as "/%category%/%postname%"). This %category% will be handled by the plugin. In the Pro version, the plugin will also handle it for your custom post types and taxonomies (such as in gallery plugins, WooCommerce, etc). More information about Permalinks and about the Pro version here: <a target="_blank" href="https://meowapps.com/wp-category-permalink/">WP Category Permalink</a>.', 'meow-gallery' ) ?>
+						<?php echo _e( 'For this plugin to work, don\'t forget that you need to use a Permalink Structure that includes <b>%category%</b> (such as "/%category%/%postname%"). This %category% will be handled by the plugin. It can also handle custom post types and taxonomies (such as in gallery plugins, WooCommerce, etc).', 'category-permalink' ) ?>
 					</div>
 				</div>
 			</div>
@@ -71,12 +70,10 @@ class MWCP_Admin extends Meow_Admin {
 
 					<div class="meow-col meow-span_1_of_2">
 
-						<?php $this->display_serialkey_box( "https://meowapps.com/wp-category-permalink/" ); ?>
-
 						<div class="meow-box">
 							<h3>Permalinks</h3>
 							<div class="inside">
-								<p>The permalinks listed below are the ones based on custom post type and taxonomy created by your theme on another plugins. They are handled in the Pro version.</p>
+								<p>The permalinks listed below are the ones based on custom post type and taxonomy created by your theme on another plugins.</p>
 								<?php
 
 									$fields = array();
@@ -122,8 +119,8 @@ class MWCP_Admin extends Meow_Admin {
     $value = get_option( 'wpcp_hide_permalink', null );
 		$html = '<input type="checkbox" id="wpcp_hide_permalink" name="wpcp_hide_permalink" value="1" ' .
 			checked( 1, get_option( 'wpcp_hide_permalink' ), false ) . '/>';
-    $html .= '<label> '  . __( 'Hide Permalinks', 'wp-category-permalink' ) . '</label><br>';
-		$html .= '<small class="description">'  . __( 'In the listing of posts (or any other post type), don\'t display the permalink below the title.', 'wp-category-permalink' ) . '</small>';
+    $html .= '<label> '  . __( 'Hide Permalinks', 'category-permalink' ) . '</label><br>';
+		$html .= '<small class="description">'  . __( 'In the listing of posts (or any other post type), don\'t display the permalink below the title.', 'category-permalink' ) . '</small>';
     echo $html;
   }
 

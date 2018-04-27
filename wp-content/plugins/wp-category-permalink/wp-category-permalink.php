@@ -2,14 +2,14 @@
 /*
 Plugin Name: WP Category Permalink
 Plugin URI: https://meowapps.com
-Description: Allows manual selection of a 'main' category for each post for better permalinks and SEO. Pro version WILL add support for custom taxonomies.
-Version: 3.2.7
+Description: Allows manual selection of a 'main' category for each post for better permalinks and SEO.
+Version: 3.3.0
 Author: Jordy Meow
 Author URI: https://meowapps.com
 
 Originally developed for two of my websites:
-- Jordy Meow (http://offbeatjapan.org)
-- Haikyo (http://haikyo.org)
+- Jordy Meow (https://offbeatjapan.org)
+- Haikyo (https://haikyo.org)
 */
 
 /**
@@ -43,8 +43,7 @@ add_action( 'transition_post_status', array('MWCPPost', 'transition_post_status'
 add_filter( 'post_link_category', array('MWCPPost', 'post_link_category'), 10, 3 );
 
 // Pro only, handle custom post types and their custom taxonomies
-if ( $MWCP_Admin->is_pro() )
-	add_filter( 'post_type_link', array('MWCPPost', 'post_type_link'), 10, 4 );
+add_filter( 'post_type_link', array('MWCPPost', 'post_type_link'), 10, 4 );
 
 // Disable the WPSEO v3.1+ Primary Category feature.
 add_filter( 'wpseo_primary_term_taxonomies', '__return_empty_array' );

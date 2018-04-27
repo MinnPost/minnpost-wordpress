@@ -31,7 +31,7 @@ abstract class MWCPPost
         // A list of the only post types we are concerned with.
         $post_types = MWCPPost::post_types();
 
-        if ( !$MWCP_Admin->is_pro() || !isset( $post_types[$post->post_type] ) )
+        if ( !isset( $post_types[$post->post_type] ) )
           return $url;
 
         // Find and replace these values in the permalink_structure
