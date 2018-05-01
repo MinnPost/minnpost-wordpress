@@ -5,7 +5,7 @@ Plugin URI: https://wordpress.org/plugins/merge-serialized-fields/
 Description:
 Version: 0.0.2
 Author: Jonathan Stegall
-Author URI: http://code.minnpost.com
+Author URI: https://code.minnpost.com
 License: GPL2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: merge-serialized-fields

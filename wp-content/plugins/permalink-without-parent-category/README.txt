@@ -1,6 +1,6 @@
 === Permalink Without Parent Category ===
 Contributors: jonathanstegall, minnpost
-Donate link: http://code.minnpost.com/
+Donate link: https://code.minnpost.com/
 Tags: permalinks, categories
 Requires at least: 4.5.3
 Tested up to: 4.5.3

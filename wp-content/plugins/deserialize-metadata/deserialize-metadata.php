@@ -5,7 +5,7 @@ Plugin URI: https://wordpress.org/plugins/deserialize-metadata/
 Description: When migrating from another system (i.e. Drupal), WordPress can require data that is currently serialized to be unserialized and stored in its own WordPress-specific tables/columns. This plugin can look for such data, and deserialize and store it, based on the plugin settings.
 Version: 0.0.7
 Author: Jonathan Stegall
-Author URI: http://code.minnpost.com
+Author URI: https://code.minnpost.com
 License: GPL2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: deserialize-metadata

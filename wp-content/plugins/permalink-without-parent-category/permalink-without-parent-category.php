@@ -4,7 +4,7 @@ Plugin Name: Permalink Without Parent Category
 Description: This allows posts that use %category% in the permalink pattern to only show the child category, not the parent.
 Version: 0.0.1
 Author: Jonathan Stegall
-Author URI: http://code.minnpost.com
+Author URI: https://code.minnpost.com
 License: GPL2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: permalink-without-parent-category
