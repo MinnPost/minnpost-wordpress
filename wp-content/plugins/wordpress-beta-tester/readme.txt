@@ -3,7 +3,7 @@ Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
 Tested up to: 4.9
 Requires at least: 3.0.5
-Stable Tag: 1.2.0
+Stable Tag: 1.2.2
 License: GPLv2
 License URI: http://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -13,9 +13,9 @@ Allows you to easily upgrade to Beta releases.
 == Description ==
 This plugin provides an easy way to get involved with Beta testing WordPress.
 
-Once installed it will enable you to upgrade your blog to the latest Beta or Release candidate at the click of a button using the built in upgrader.
+Once installed it will enable you to upgrade your website to the latest Beta or Release candidate at the click of a button using the built in upgrader.
 
-By default once enabled it switches your blog onto the point release development track.
+By default once enabled it switches your website onto the point release development track.
 
 For the more adventurous there is the option to switch to the bleeding edge (trunk) of development.
 
@@ -24,6 +24,9 @@ Don't forget to backup before you start!
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Changelog ==
+
+= 1.2.2 =
+* change wording from blog to website
 
 = 1.2.0 =
 * Escape output

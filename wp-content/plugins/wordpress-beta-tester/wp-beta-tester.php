@@ -4,7 +4,7 @@
 	Plugin URI: https://wordpress.org/plugins/wordpress-beta-tester/
 	Description: Allows you to easily upgrade to Beta releases.
 	Author: Peter Westwood
-	Version: 1.2.0
+	Version: 1.2.2
 	Network: true
 	Author URI: http://blog.ftwr.co.uk/
 	Text Domain: wordpress-beta-tester
@@ -199,7 +199,7 @@ class wp_beta_tester {
 				</div>
 			<?php endif; ?>
 			<div class="updated fade">
-				<p><?php esc_html( printf( __( '%sPlease note:%s Once you have switched your blog to one of these beta versions of software, it will not always be possible to downgrade, as the database structure may be updated during the development of a major release.', 'wordpress-beta-tester' ), '<strong>', '</strong>' ) ); ?></p>
+				<p><?php esc_html( printf( __( '%sPlease note:%s Once you have switched your website to one of these beta versions of software, it will not always be possible to downgrade, as the database structure may be updated during the development of a major release.', 'wordpress-beta-tester' ), '<strong>', '</strong>' ) ); ?></p>
 			</div>
 			<?php if ( 'development' !== $preferred->response ) : ?>
 				<div class="updated fade">
@@ -220,7 +220,7 @@ class wp_beta_tester {
 				<form method="post" action="<?php esc_attr_e( $action ); ?>">
 					<?php settings_fields( 'wp_beta_tester_options' ); ?>
 					<fieldset>
-						<legend><?php esc_html_e( 'Please select the update stream you would like this blog to use:', 'wordpress-beta-tester' ); ?></legend>
+						<legend><?php esc_html_e( 'Please select the update stream you would like this website to use:', 'wordpress-beta-tester' ); ?></legend>
 						<?php $stream = get_site_option( 'wp_beta_tester_stream', 'point' ); ?>
 						<table class="form-table">
 							<tr>
