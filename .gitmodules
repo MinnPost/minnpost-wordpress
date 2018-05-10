@@ -8,9 +8,6 @@
 [submodule "wp-content/plugins/appnexus-acm-provider"]
 	path = wp-content/plugins/appnexus-acm-provider
 	url = https://github.com/MinnPost/appnexus-acm-provider.git
-[submodule "wp-content/plugins/blocked-content-template"]
-	path = wp-content/plugins/blocked-content-template
-	url = https://github.com/MinnPost/blocked-content-template.git
 [submodule "wp-content/plugins/form-processor-mailchimp"]
 	path = wp-content/plugins/form-processor-mailchimp
 	url = https://github.com/MinnPost/form-processor-mailchimp.git
