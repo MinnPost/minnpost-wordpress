@@ -3,7 +3,7 @@
 Plugin Name: Merge Serialized Fields
 Plugin URI: https://wordpress.org/plugins/merge-serialized-fields/
 Description:
-Version: 0.0.2
+Version: 0.0.3
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 License: GPL2+
@@ -31,7 +31,7 @@ class Merge_Serialized_Fields {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.2';
+		$this->version = '0.0.3';
 
 		$this->load_admin();
 
@@ -110,9 +110,10 @@ class Merge_Serialized_Fields {
 	*
 	*/
 	public function admin_settings_form() {
-		$page = 'merge-serialized-fields';
+		$page    = 'merge-serialized-fields';
 		$section = 'merge-serialized-fields';
-		$input_callback = array( $this, 'display_input_field' );
+
+		$input_callback  = array( $this, 'display_input_field' );
 		$select_callback = array( $this, 'display_select' );
 		add_settings_section( $page, null, null, $page );
 
@@ -120,7 +121,7 @@ class Merge_Serialized_Fields {
 		//$this->get_fields_to_merge();
 
 		$settings = array(
-			'wp_field_to_merge' => array(
+			'wp_field_to_merge'     => array(
 				'title' => __( 'Field Name', 'merge-serialized-fields' ),
 				'callback' => $input_callback,
 				'page' => $page,
@@ -130,7 +131,7 @@ class Merge_Serialized_Fields {
 					'desc' => __( 'The name of the field to merge in the database', 'merge-serialized-fields' ),
 				),
 			),
-			'wp_filter_field' => array(
+			'wp_filter_field'       => array(
 				'title' => __( 'Field Name', 'merge-serialized-fields' ),
 				'callback' => $input_callback,
 				'page' => $page,
@@ -150,7 +151,7 @@ class Merge_Serialized_Fields {
 					'desc' => __( 'The value of the filter field. This is useful if you want to merge a meta key, such as wp_capabilities. You can comma separate to use multiple fields.', 'merge-serialized-fields' ),
 				),
 			),
-			'wp_table' => array(
+			'wp_table'              => array(
 				'title' => __( 'WordPress Database Table', 'merge-serialized-fields' ),
 				'callback' => $input_callback,
 				'page' => $page,
@@ -160,7 +161,7 @@ class Merge_Serialized_Fields {
 					'desc' => __( 'What table contains the field you want to merge?', 'merge-serialized-fields' ),
 				),
 			),
-			'group_by' => array(
+			'group_by'              => array(
 				'title' => __( 'Field to Group By', 'merge-serialized-fields' ),
 				'callback' => $input_callback,
 				'page' => $page,
@@ -170,7 +171,7 @@ class Merge_Serialized_Fields {
 					'desc' => __( 'What field do you want to use to group the items? This could be a user ID, for example.', 'merge-serialized-fields' ),
 				),
 			),
-			'primary_key' => array(
+			'primary_key'           => array(
 				'title' => __( 'Table Primary Key', 'merge-serialized-fields' ),
 				'callback' => $input_callback,
 				'page' => $page,
@@ -180,8 +181,8 @@ class Merge_Serialized_Fields {
 					'desc' => __( 'Use this if the table has a primary key, so the query can set which field to merge, and delete the rest.', 'merge-serialized-fields' ),
 				),
 			),
-			'items_per_load' => array(
-				'title' => __( 'Items Per Load' , 'merge-serialized-fields' ),
+			'items_per_load'        => array(
+				'title' => __( 'Items Per Load', 'merge-serialized-fields' ),
 				'callback' => $input_callback,
 				'page' => $page,
 				'section' => $section,
@@ -190,18 +191,39 @@ class Merge_Serialized_Fields {
 					'desc' => __( 'Maximum items the query should load per run', 'merge-serialized-fields' ),
 				),
 			),
-			'schedule' => array(
-				'title' => __( 'Schedule', 'merge-serialized-fields' ),
+			'schedule_number'       => array(
+				'title'    => __( 'Run schedule every', 'merge-serialized-fields' ),
+				'callback' => $input_callback,
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
+					'type' => 'number',
+					'desc' => '',
+				),
+			),
+			'schedule_unit'         => array(
+				'title'    => __( 'Time unit', 'merge-serialized-fields' ),
 				'callback' => $select_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
-					'desc' => __( 'How often the plugin should find and process data', 'merge-serialized-fields' ),
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
+					'type'  => 'select',
+					'desc'  => '',
 					'items' => array(
-						'hourly' => __( 'Hourly', 'merge-serialized-fields' ),
-						'twicedaily' => __( 'Twice Daily', 'merge-serialized-fields' ),
-						'daily' => __( 'Daily', 'merge-serialized-fields' ),
-					), // values from https://codex.wordpress.org/Function_Reference/wp_schedule_event
+						'minutes' => __( 'Minutes', 'merge-serialized-fields' ),
+						'hours'   => __( 'Hours', 'merge-serialized-fields' ),
+						'days'    => __( 'Days', 'merge-serialized-fields' ),
+					),
+				),
+			),
+			'last_row_checked'      => array(
+				'title'    => __( 'Current offset ID', 'merge-serialized-fields' ),
+				'callback' => $input_callback,
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
+					'type' => 'number',
+					'desc' => '',
 				),
 			),
 		);
@@ -225,6 +247,40 @@ class Merge_Serialized_Fields {
 			add_settings_field( $id, $title, $callback, $page, $section, $args );
 			register_setting( $section, $id );
 		}
+
+	}
+
+	/**
+	* Convert the schedule frequency from the admin settings into an array
+	* interval must be in seconds for the class to use it
+	*
+	*/
+	public function get_schedule_frequency_key( $name = '' ) {
+
+		if ( '' !== $name ) {
+			$name = '_' . $name;
+		}
+
+		$schedule_number = get_option( 'merge_serialized_fields' . $name . '_schedule_number', '' );
+		$schedule_unit   = get_option( 'merge_serialized_fields' . $name . '_schedule_unit', '' );
+
+		switch ( $schedule_unit ) {
+			case 'minutes':
+				$seconds = 60;
+				break;
+			case 'hours':
+				$seconds = 3600;
+				break;
+			case 'days':
+				$seconds = 86400;
+				break;
+			default:
+				$seconds = 0;
+		}
+
+		$key = $schedule_unit . '_' . $schedule_number;
+
+		return $key;
 
 	}
 
@@ -376,7 +432,9 @@ class Merge_Serialized_Fields {
 					'group_by' => get_option( 'merge_serialized_fields_group_by', '' ),
 					'primary_key' => get_option( 'merge_serialized_fields_primary_key', '' ),
 					'items_per_load' => get_option( 'merge_serialized_fields_items_per_load', '' ),
-					'schedule' => get_option( 'merge_serialized_fields_schedule', '' ),
+					//'schedule' => get_option( 'merge_serialized_fields_schedule', '' ),
+					'schedule_number'       => get_option( 'merge_serialized_fields_schedule_number', '' ),
+					'schedule_unit'         => get_option( 'merge_serialized_fields_schedule_unit', '' ),
 				);
 			}
 		} else {
@@ -389,7 +447,9 @@ class Merge_Serialized_Fields {
 					'group_by' => get_option( 'merge_serialized_fields_group_by', '' ),
 					'primary_key' => get_option( 'merge_serialized_fields_primary_key', '' ),
 					'items_per_load' => get_option( 'merge_serialized_fields_items_per_load', '' ),
-					'schedule' => get_option( 'merge_serialized_fields_schedule', '' ),
+					//'schedule' => get_option( 'merge_serialized_fields_schedule', '' ),
+					'schedule_number'       => get_option( 'merge_serialized_fields_schedule_number', '' ),
+					'schedule_unit'         => get_option( 'merge_serialized_fields_schedule_unit', '' ),
 				),
 			);
 		}
@@ -402,11 +462,21 @@ class Merge_Serialized_Fields {
 	 * @return void
 	 */
 	public function schedule() {
+
 		foreach ( $this->config as $key => $value ) {
+			// this would need to change to allow different schedules
+			$schedule_frequency = $this->get_schedule_frequency_key();
+
 			if ( ! wp_next_scheduled( 'merge_serialized_event' ) ) {
-				wp_schedule_event( time(), $value['schedule'], 'merge_serialized_event' );
+				wp_schedule_event( time(), $schedule_frequency, 'merge_serialized_event' );
 			}
-			add_action( 'merge_serialized_event', array( $this, 'get_fields_to_merge' ) );
+
+			add_action( 'merge_serialized_event',
+				array(
+					$this,
+					'get_fields_to_merge',
+				)
+			);
 		}
 	}
 
