@@ -91,7 +91,9 @@ $table_prefix = getenv( 'DB_PREFIX' );
  * @link https://codex.wordpress.org/Debugging_in_WordPress
  */
 define( 'WP_DEBUG', getenv( 'WP_DEBUG' ) );
-define( 'JETPACK_DEV_DEBUG', getenv( 'JETPACK_DEV_DEBUG' ) );
+if ( 'true' === getenv( 'JETPACK_DEV_DEBUG' ) ) {
+	define( 'JETPACK_DEV_DEBUG', getenv( 'JETPACK_DEV_DEBUG' ) );
+}
 define( 'SCRIPT_DEBUG', getenv( 'SCRIPT_DEBUG' ) );
 
 /* That's all, stop editing! Happy blogging. */
