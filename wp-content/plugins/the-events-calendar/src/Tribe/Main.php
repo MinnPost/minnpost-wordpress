@@ -32,9 +32,9 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		const VENUE_POST_TYPE     = 'tribe_venue';
 		const ORGANIZER_POST_TYPE = 'tribe_organizer';
 
-		const VERSION             = '4.6.15';
+		const VERSION             = '4.6.16';
 		const MIN_ADDON_VERSION   = '4.4';
-		const MIN_COMMON_VERSION  = '4.7.12';
+		const MIN_COMMON_VERSION  = '4.7.13';
 
 		const WP_PLUGIN_URL       = 'https://wordpress.org/extend/plugins/the-events-calendar/';
 
@@ -413,6 +413,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			tribe_singleton( 'events-aggregator.records', 'Tribe__Events__Aggregator__Records', array( 'hook' ) );
 			tribe_register_provider( 'Tribe__Events__Aggregator__REST__V1__Service_Provider' );
 			tribe_register_provider( 'Tribe__Events__Aggregator__CLI__Service_Provider' );
+			tribe_register_provider( 'Tribe__Events__Aggregator__Processes__Service_Provider' );
 
 			// Shortcodes
 			tribe_singleton( 'tec.shortcodes.event-details', 'Tribe__Events__Shortcode__Event_Details', array( 'hook' ) );
