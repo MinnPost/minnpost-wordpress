@@ -29,9 +29,9 @@
 [submodule "wp-content/plugins/user-account-management"]
 	path = wp-content/plugins/user-account-management
 	url = https://github.com/MinnPost/user-account-management.git
+[submodule "wp-content/plugins/wp-analytics-tracking-generator"]
+	path = wp-content/plugins/wp-analytics-tracking-generator
+	url = https://github.com/MinnPost/wp-analytics-tracking-generator.git
 [submodule "wp-content/plugins/wp-post-image-watermarks"]
 	path = wp-content/plugins/wp-post-image-watermarks
 	url = https://github.com/MinnPost/wp-post-image-watermarks.git
-[submodule "wp-content/plugins/wp-analytics-tracking-generator"]
-	path = wp-content/plugins/wp-analytics-tracking-generator
-	url = /Users/jstegall/Sites/minnpost-wordpress/wp-content/plugins/wp-analytics-tracking-generator
