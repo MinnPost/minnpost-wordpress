@@ -2,8 +2,8 @@
 Contributors: vasyltech
 Tags: access, role, user, capability, page access, post access, content access, comments, security, login redirect, membership, backend lockdown, wp-admin, 404, rest api, xml rpc
 Requires at least: 4.0
-Tested up to: 4.9.5
-Stable tag: 5.2.7
+Tested up to: 4.9.6
+Stable tag: 5.3
 
 The most powerful access management plugin for WordPress websites.
 
@@ -65,6 +65,18 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 11. Improve your website security
 
 == Changelog ==
+
+= 5.3 =
+* Fixed the bug with ConfigPress settings when array is defined
+* Fixed the bug with jwt authentication
+* Fixed the bug with infinite logout loop when user is locked
+* Refactored internal functionality to make it fully compatible with WP REST API
+* Split Posts & Pages access control on Backend, Frontend and API sections
+* Cleaned up posts and pages access settings
+* Refactored internal AAM cache to make it more flexible and faster
+* Added "API Access Control" option
+* Added ability to change user role after certain period of time
+* Removed ability to lock Dashboard menu
 
 = 5.2.7 =
 * Fixed bug with REST API Routes list
