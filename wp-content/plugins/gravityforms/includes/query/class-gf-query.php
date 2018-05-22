@@ -113,13 +113,13 @@ class GF_Query {
 	/**
 	 * GF_Query constructor.
 	 *
-	 * @param int|array $form_ids
-	 * @param array     $search_criteria
-	 * @param null      $sorting
-	 * @param null      $paging
+	 * @param null|int|array $form_ids
+	 * @param null|array     $search_criteria
+	 * @param null|array     $sorting
+	 * @param null|array     $paging
 	 */
-	public function __construct( $form_ids = array(), $search_criteria = array(), $sorting = null, $paging = null ) {
-		if ( ! empty( $search_criteria ) || ! empty( $form_ids ) || ! empty( $sorting ) || ! empty( $paging ) ) {
+	public function __construct( $form_ids = null, $search_criteria = null, $sorting = null, $paging = null ) {
+		if ( ! is_null( $search_criteria ) || ! is_null( $form_ids ) || ! empty( $sorting ) || ! empty( $paging ) ) {
 			$this->parse( $form_ids, $search_criteria, $sorting, $paging );
 		}
 	}

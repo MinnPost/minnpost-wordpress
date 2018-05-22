@@ -77,7 +77,11 @@ class GFFormsModel {
 	 * @return string
 	 */
 	public static function get_database_version() {
-		return get_option( 'gf_db_version' );
+		static $db_version = null;
+		if ( empty( $db_version ) ) {
+			$db_version = get_option( 'gf_db_version' );
+		}
+		return $db_version;
 	}
 
 	/**
@@ -2336,7 +2340,17 @@ class GFFormsModel {
 				continue;
 			}
 
-			$read_value_from_post = $is_new_lead || ! isset( $entry[ 'date_created' ] );
+			/**
+			 * Specify whether to fetch values from the $_POST when evaluating a field's conditional logic. Defaults to true
+			 * for new entries and false for existing entries.
+			 *
+			 * @since 2.3.1.11
+			 *
+			 * @param bool  $read_value_from_post Should value be fetched from $_POST?
+			 * @param array $form                The current form object.
+			 * @param array $entry               The current entry object.
+			 */
+			$read_value_from_post = gf_apply_filters( array( 'gform_use_post_value_for_conditional_logic_save_entry', $form['id'] ), $is_new_lead || ! isset( $entry[ 'date_created' ] ), $form, $entry );
 
 			// Only save fields that are not hidden (except when updating an entry)
 			if ( $is_entry_detail || ! GFFormsModel::is_field_hidden( $form, $field, array(), $read_value_from_post ? null : $entry ) ) {

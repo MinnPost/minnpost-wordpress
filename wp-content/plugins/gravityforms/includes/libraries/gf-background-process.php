@@ -345,7 +345,7 @@ if ( ! class_exists( 'GF_Background_Process' ) ) {
 		 *
 		 * @return $this
 		 */
-		protected function unlock_process() {
+		public function unlock_process() {
 			delete_site_option( $this->identifier . '_process_lock' );
 
 			return $this;
@@ -633,6 +633,15 @@ if ( ! class_exists( 'GF_Background_Process' ) ) {
 		}
 
 		/**
+		 * Clears all scheduled events.
+		 *
+		 * @since 2.3.1.x
+		 */
+		public function clear_scheduled_events() {
+			wp_clear_scheduled_hook( $this->cron_hook_identifier );
+		}
+
+		/**
 		 * Cancel Process
 		 *
 		 * Stop processing queue items, clear cronjob and delete batch.
@@ -644,8 +653,7 @@ if ( ! class_exists( 'GF_Background_Process' ) ) {
 				$batch = $this->get_batch();
 
 				$this->delete( $batch->key );
-
-				wp_clear_scheduled_hook( $this->cron_hook_identifier );
+				$this->clear_scheduled_events();
 			}
 
 		}
