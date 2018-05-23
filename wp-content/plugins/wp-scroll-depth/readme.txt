@@ -2,8 +2,8 @@
 Contributors: firebrandllc, lonkoenig
 Tags: Scroll Depth, Analytics, Events, Scroll
 Requires at least: 3.2.1
-Tested up to: 4.9
-Stable tag: 1.4.1
+Tested up to: 4.9.6
+Stable tag: 1.4.2
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
@@ -88,6 +88,10 @@ If you don't see these events, make sure your Google Analytics is properly set u
 1. Google Analytics page scroll percentages.
 
 == Changelog ==
+
+= 1.4.2 =
+- Tested with WordPress 4.9.6
+- Added privacy policy data collection information
 
 = 1.4.1 =
 - Tested with WordPress 4.9

@@ -3,14 +3,14 @@
 Plugin Name: WP Scroll Depth
 Plugin URI: http://firebrand.net/
 Description: Load the jQuery plugin, "Scroll Depth" by Rob Flaherty. This creates scrolling events for Google Analytics.
-Version: 1.4.1
+Version: 1.4.2
 Author: Lon Koenig (Firebrand LLC)
 Author URI: http://firebrand.net/
 License: MIT
 */
 
 /*  
-Copyright (c) 2015-2017 Firebrand LLC
+Copyright (c) 2015-2018 Firebrand LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -110,6 +110,7 @@ function(data) {
 			),
 			
 		),
+		'plugin_name' => 'WP Scroll Depth',
 		'pageslug' => 'wp-scrolldepth-admin',
 		'menuslug' => 'wp-scrolldepth-admin-m1',
 		'admin_group' => 'wp_scroll_depth_group',
@@ -183,5 +184,6 @@ if ( !is_admin() ) {
 } else { // only need to load admin if we're looking at admin panel
 
 	require_once(plugin_dir_path( __FILE__ ) . 'admin.php'); // back-end admin panels
+	require_once(plugin_dir_path( __FILE__ ) . 'privacy.php'); // admin privacy information
 
 }
