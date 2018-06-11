@@ -3,7 +3,7 @@ Contributors: vasyltech
 Tags: access, role, user, capability, page access, post access, content access, comments, security, login redirect, membership, backend lockdown, wp-admin, 404, rest api, xml rpc
 Requires at least: 4.0
 Tested up to: 4.9.6
-Stable tag: 5.3.1
+Stable tag: 5.3.2
 
 The most powerful access management plugin for WordPress websites.
 
@@ -65,6 +65,12 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 11. Improve your website security
 
 == Changelog ==
+
+= 5.3.2 =
+* Fixed the bug that triggers PHP warnings when blocked user is trying to login
+* Fixed the bug with get current post method in the core API
+* WARNING Experimental approach! to the post access that enormously improve AAM performance 
+* Added custom capability "edit_permalink" that control ability to edit post permalink
 
 = 5.3.1 =
 * Fixed bug with deprecated cache object to keep it backward compatible
