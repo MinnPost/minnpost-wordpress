@@ -81,11 +81,7 @@ class AAM_Core_Config {
      * @static
      */
     protected static function normalize($setting) {
-        return str_replace(
-                array('{ABSPATH}'),
-                array(ABSPATH),
-                $setting
-        );
+        return str_replace(array('{ABSPATH}'), array(ABSPATH), $setting);
     }
     
     /**

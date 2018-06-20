@@ -2,6 +2,10 @@
 
 == Changelog ==
 
+= [4.7.16] 2018-06-20 =
+* Fix - Fixed a PHP warning related to the RSS feed in the Help page [108398]
+* Tweak - Add notices related to PHP minimum versions [107852]
+
 = [4.7.15] 2018-06-04 =
 * Add - Method to parse the Global ID string [104379]
 * Add - Load tribe-common script to prevent undefined function errors with tribe-dropdowns [107610]

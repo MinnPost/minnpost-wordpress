@@ -311,11 +311,27 @@ class AAM_Backend_Filter {
                 $roleLevel = AAM_Core_API::maxLevel($role['capabilities']);
                 if ($userLevel < $roleLevel) {
                     unset($roles[$id]);
+                } elseif ($userLevel == $roleLevel && $this->filterSameLevel()) {
+                    unset($roles[$id]);
                 }
             }
         }
         
         return $roles;
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    protected function filterSameLevel() {
+        $response = false;
+        
+        if (AAM_Core_API::capabilityExists('manage_same_user_level')) {
+            $response = !AAM::getUser()->hasCapability('manage_same_user_level');
+        }
+        
+        return $response;
     }
     
     /**
@@ -336,7 +352,10 @@ class AAM_Backend_Filter {
         $roles   = AAM_Core_API::getRoles();
         
         foreach($roles->role_objects as $id => $role) {
-            if (AAM_Core_API::maxLevel($role->capabilities) > $max) {
+            $roleMax = AAM_Core_API::maxLevel($role->capabilities);
+            if ($roleMax > $max ) {
+                $exclude[] = $id;
+            } elseif ($roleMax == $max && $this->filterSameLevel()) {
                 $exclude[] = $id;
             }
         }
@@ -358,9 +377,13 @@ class AAM_Backend_Filter {
         $roles = AAM_Core_API::getRoles();
         
         foreach($roles->role_objects as $id => $role) {
-            if (isset($views[$id]) 
-                    && AAM_Core_API::maxLevel($role->capabilities) > $max) {
-                unset($views[$id]);
+            $roleMax = AAM_Core_API::maxLevel($role->capabilities);
+            if (isset($views[$id])) {
+                if ($roleMax > $max) {
+                    unset($views[$id]);
+                } elseif ($roleMax == $max && $this->filterSameLevel()) {
+                    unset($views[$id]);
+                }
             }
         }
         

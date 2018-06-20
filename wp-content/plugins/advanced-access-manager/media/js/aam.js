@@ -468,6 +468,7 @@
             //in case interface needed to be reloaded
             aam.addHook('refresh', function () {
                 $('#role-list').DataTable().ajax.url(aamLocal.ajaxurl).load();
+                aam.fetchContent('main');
             });
 
         })(jQuery);

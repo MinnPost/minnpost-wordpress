@@ -3,7 +3,7 @@ Contributors: vasyltech
 Tags: access, role, user, capability, page access, post access, content access, comments, security, login redirect, membership, backend lockdown, wp-admin, 404, rest api, xml rpc
 Requires at least: 4.0
 Tested up to: 4.9.6
-Stable tag: 5.3.2
+Stable tag: 5.3.3
 
 The most powerful access management plugin for WordPress websites.
 
@@ -65,6 +65,13 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 11. Improve your website security
 
 == Changelog ==
+
+= 5.3.3 =
+* Fixed couple bugs with secure login widget rendering
+* Fixed the bug with AAM UI refresh triggered by aam extensions
+* Fixed the bug with send remote request and array of cookies
+* Added ability to hide login navigations links in the secure login widget with feature.secureLogin.ui.showNav configPress option
+* Added new custom capability "manage_same_user_level"
 
 = 5.3.2 =
 * Fixed the bug that triggers PHP warnings when blocked user is trying to login

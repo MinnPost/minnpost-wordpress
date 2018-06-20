@@ -123,7 +123,7 @@ class AAM_Extension_Repository {
         if (file_exists($config)) {
             $conf = require $config;
             $load = empty($cache[$conf['id']]['status']) || ($cache[$conf['id']]['status'] != self::STATUS_INACTIVE);
-        } else { // TODO - Remove May 2018
+        } else { // TODO - Remove May 2019
             AAM_Core_Console::add(AAM_Backend_View_Helper::preparePhrase(
                 sprintf(
                     __('The [%s] file is missing. Update extension to the latest version. %sRead more.%s', AAM_KEY),
