@@ -3,7 +3,7 @@ Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
 Tested up to: 4.9
 Requires at least: 3.0.5
-Stable Tag: 1.2.2
+Stable Tag: 1.2.3
 License: GPLv2
 License URI: http://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -24,6 +24,12 @@ Don't forget to backup before you start!
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Changelog ==
+
+= 1.2.3 =
+* updated a few strings and correct typos
+* run through WPCS linter
+* fixed translation strings to include HTML in context and properly escape with `wp_kses_post()`
+* fixed link to settings page under Multisite
 
 = 1.2.2 =
 * change wording from blog to website
