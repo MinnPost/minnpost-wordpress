@@ -125,49 +125,6 @@ class AAM_Backend_Manager {
                 'AAM requires PHP version 5.3.0 or higher to function properly'
             );
         }
-        
-        // TODO: Remove Jun 2019
-        $htpasswd = AAM_Core_Config::get('htpasswd');
-        if (!empty($htpasswd)) {
-            AAM_Core_Console::add(
-                'On ConfigPress tab, change all options that start with [htpasswd...] to [feature.metabox.htpasswd...]', 'b', 'b'
-            );
-        }
-        
-        $export = AAM_Core_Config::get('export', null);
-        if (!empty($export)) {
-            AAM_Core_Console::add(
-                'On ConfigPress tab, change all options that start with [export...] to [feature.export...]', 'b', 'b'
-            );
-        }
-        
-        $defcat = AAM_Core_Config::get('default.category', null);
-        if (!empty($defcat)) {
-            AAM_Core_Console::add(
-                'On ConfigPress tab, change [default.category] option to [feature.post.defaultTerm]', 'b', 'b'
-            );
-        }
-        
-        $dir = AAM_Core_Config::get('extention.directory', null);
-        if (!empty($dir)) {
-            AAM_Core_Console::add(
-                'On ConfigPress tab, change all options that start with [extention...] to [core.extention...]', 'b', 'b'
-            );
-        }
-        
-        $tmpl = AAM_Core_Config::get('login.shortcode', null);
-        if (!empty($tmpl)) {
-            AAM_Core_Console::add(
-                'On ConfigPress tab, change all options that start with [login.shortcode....] option to [feature.secureLogin.shortcode...]', 'b', 'b'
-            );
-        }
-        
-        $login = AAM_Core_Config::get('login.widget', null);
-        if (!empty($login)) {
-            AAM_Core_Console::add(
-                'On ConfigPress tab, change all options that start with [login.widget...] to [feature.secureLogin.widget...]', 'b', 'b'
-            );
-        }
     }
     
     /**

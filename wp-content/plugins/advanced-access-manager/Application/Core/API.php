@@ -294,10 +294,20 @@ final class AAM_Core_API {
                     "{$area}.access.deny.redirectRule", __('Access Denied', AAM_KEY)
                 );
             }
-
-            do_action('aam-access-rejected-action', $area, $args);
-
-            self::redirect($redirect, $args);
+            
+            $doRedirect = true;
+            
+            if ($type == 'page') {
+                $page = self::getCurrentPost();
+                $doRedirect = (empty($page) || ($page->ID != $redirect));
+            } elseif ($type == 'url') {
+                $doRedirect = strpos($redirect, $_SERVER['REQUEST_URI']) === false;
+            }
+            
+            if ($doRedirect) {
+                do_action('aam-access-rejected-action', $area, $args);
+                self::redirect($redirect, $args);
+            }
         } else {
             wp_die(-1);
         }

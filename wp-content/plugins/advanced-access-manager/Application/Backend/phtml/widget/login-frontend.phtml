@@ -18,13 +18,13 @@
 
         <div id="<?php echo $this->get_field_id('loginform'); ?>">
             <p>
-                <label for="user_login"><?php __('Username or Email Address', AAM_KEY); ?><br>
+                <label for="user_login"><?php echo __('Username or Email Address', AAM_KEY); ?><br>
                     <input id="<?php echo $this->get_field_id('log'); ?>" class="input login-input" value="" size="20" type="text" />
                 </label>
             </p>
 
             <p>
-                <label for="user_pass"><?php __('Password', AAM_KEY); ?><br>
+                <label for="user_pass"><?php echo __('Password', AAM_KEY); ?><br>
                     <input id="<?php echo $this->get_field_id('pwd'); ?>" class="input login-input" value="" size="20" type="password" />
                 </label>
             </p>

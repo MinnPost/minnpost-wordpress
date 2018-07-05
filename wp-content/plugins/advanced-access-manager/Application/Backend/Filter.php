@@ -37,6 +37,7 @@ class AAM_Backend_Filter {
         
         //manager WordPress metaboxes
         add_action("in_admin_header", array($this, 'metaboxes'), 999);
+        add_action("widgets_admin_page", array($this, 'metaboxes'), 999);
         
         //control admin area
         add_action('admin_notices', array($this, 'adminNotices'), -1);
@@ -51,6 +52,7 @@ class AAM_Backend_Filter {
         add_filter('post_row_actions', array($this, 'postRowActions'), 10, 2);
 
         //default category filder
+        // TODO - THIS HAS TO GO TO THE PLUS PACKAGE EXTENSION
         add_filter('pre_option_default_category', array($this, 'filterDefaultCategory'));
         
         add_action('pre_post_update', array($this, 'prePostUpdate'), 10, 2);
@@ -64,14 +66,12 @@ class AAM_Backend_Filter {
         
         // Check if user has ability to perform certain task based on provided
         // capability and meta data
-        if (AAM_Core_Config::get('core.settings.backendAccessControl', true)) {
-            add_filter(
-                'user_has_cap', 
-                array(AAM_Shared_Manager::getInstance(), 'userHasCap'), 
-                999, 
-                3
-            );
-        }
+        add_filter(
+            'user_has_cap', 
+            array(AAM_Shared_Manager::getInstance(), 'userHasCap'), 
+            999, 
+            3
+        );
         
         AAM_Backend_Authorization::bootstrap(); //bootstrap backend authorization
     }
@@ -110,9 +110,13 @@ class AAM_Backend_Filter {
         } else {
             $screen = '';
         }
-
+        
         if (AAM_Core_Request::get('init') != 'metabox') {
-            AAM::getUser()->getObject('metabox')->filterBackend($screen);
+            if ($screen != 'widgets') {
+                AAM::getUser()->getObject('metabox')->filterBackend($screen);
+            } else {
+                AAM::getUser()->getObject('metabox')->filterAppearanceWidgets();
+            }
         }
     }
     
