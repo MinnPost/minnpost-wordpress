@@ -68,8 +68,6 @@ define( 'GF_LICENSE_KEY', getenv( 'GF_LICENSE_KEY' ) );
 define( 'WP_HOME', getenv( 'WP_HOME' ) );
 define( 'WP_SITEURL', getenv( 'WP_SITEURL' ) );
 
-define( 'CONCATENATE_SCRIPTS', false );
-
 /**#@-*/
 
 /**
