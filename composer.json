@@ -13,6 +13,7 @@
     "require": {
         "vlucas/phpdotenv": "^2.5@dev",
         "wp-cli/wp-cli" : "^1.5.1",
-        "psy/psysh" : "~0.8"
+        "psy/psysh" : "~0.8",
+        "aaemnnosttv/wp-cli-dotenv-command": "^1.0"
     }
 }
