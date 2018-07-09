@@ -18,12 +18,13 @@
  * @package WordPress
  */
 require_once( __DIR__ . '/vendor/autoload.php' );
-( new \Dotenv\Dotenv( __DIR__ . '/../' ) )->load();
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
+$dotenv->load();
 
-define( 'DB_NAME', getenv( 'DB_NAME' ) );
-define( 'DB_USER', getenv( 'DB_USER' ) );
-define( 'DB_PASSWORD', getenv( 'DB_PASSWORD' ) );
-define( 'DB_HOST', getenv( 'DB_HOST' ) );
+define( 'DB_NAME', $_ENV['DB_NAME'] );
+define( 'DB_USER', $_ENV['DB_USER'] );
+define( 'DB_PASSWORD', $_ENV['DB_PASSWORD'] );
+define( 'DB_HOST', $_ENV['DB_HOST'] );
 
 /** Database Charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
@@ -43,30 +44,30 @@ define( 'FS_METHOD', 'direct' );
  *
  * @since 2.6.0
  */
-define( 'AUTH_KEY', getenv( 'AUTH_KEY' ) );
-define( 'SECURE_AUTH_KEY', getenv( 'SECURE_AUTH_KEY' ) );
-define( 'LOGGED_IN_KEY', getenv( 'LOGGED_IN_KEY' ) );
-define( 'NONCE_KEY', getenv( 'NONCE_KEY' ) );
-define( 'AUTH_SALT', getenv( 'AUTH_SALT' ) );
-define( 'SECURE_AUTH_SALT', getenv( 'SECURE_AUTH_SALT' ) );
-define( 'LOGGED_IN_SALT', getenv( 'LOGGED_IN_SALT' ) );
-define( 'NONCE_SALT', getenv( 'NONCE_SALT' ) );
+define( 'AUTH_KEY', $_ENV['AUTH_KEY'] );
+define( 'SECURE_AUTH_KEY', $_ENV['SECURE_AUTH_KEY'] );
+define( 'LOGGED_IN_KEY', $_ENV['LOGGED_IN_KEY'] );
+define( 'NONCE_KEY', $_ENV['NONCE_KEY'] );
+define( 'AUTH_SALT', $_ENV['AUTH_SALT'] );
+define( 'SECURE_AUTH_SALT', $_ENV['SECURE_AUTH_SALT'] );
+define( 'LOGGED_IN_SALT', $_ENV['LOGGED_IN_SALT'] );
+define( 'NONCE_SALT', $_ENV['NONCE_SALT'] );
 
-define( 'OBJECT_SYNC_SF_SALESFORCE_CONSUMER_KEY', getenv( 'OBJECT_SYNC_SF_SALESFORCE_CONSUMER_KEY' ) );
-define( 'OBJECT_SYNC_SF_SALESFORCE_CONSUMER_SECRET', getenv( 'OBJECT_SYNC_SF_SALESFORCE_CONSUMER_SECRET' ) );
-define( 'OBJECT_SYNC_SF_SALESFORCE_CALLBACK_URL', getenv( 'OBJECT_SYNC_SF_SALESFORCE_CALLBACK_URL' ) );
-define( 'OBJECT_SYNC_SF_SALESFORCE_LOGIN_BASE_URL', getenv( 'OBJECT_SYNC_SF_SALESFORCE_LOGIN_BASE_URL' ) );
-define( 'OBJECT_SYNC_SF_SALESFORCE_API_VERSION', getenv( 'OBJECT_SYNC_SF_SALESFORCE_API_VERSION' ) );
-define( 'OBJECT_SYNC_SF_SALESFORCE_AUTHORIZE_URL_PATH', getenv( 'OBJECT_SYNC_SF_SALESFORCE_AUTHORIZE_URL_PATH' ) );
-define( 'OBJECT_SYNC_SF_SALESFORCE_TOKEN_URL_PATH', getenv( 'OBJECT_SYNC_SF_SALESFORCE_TOKEN_URL_PATH' ) );
+define( 'OBJECT_SYNC_SF_SALESFORCE_CONSUMER_KEY', $_ENV['OBJECT_SYNC_SF_SALESFORCE_CONSUMER_KEY'] );
+define( 'OBJECT_SYNC_SF_SALESFORCE_CONSUMER_SECRET', $_ENV['OBJECT_SYNC_SF_SALESFORCE_CONSUMER_SECRET'] );
+define( 'OBJECT_SYNC_SF_SALESFORCE_CALLBACK_URL', $_ENV['OBJECT_SYNC_SF_SALESFORCE_CALLBACK_URL'] );
+define( 'OBJECT_SYNC_SF_SALESFORCE_LOGIN_BASE_URL', $_ENV['OBJECT_SYNC_SF_SALESFORCE_LOGIN_BASE_URL'] );
+define( 'OBJECT_SYNC_SF_SALESFORCE_API_VERSION', $_ENV['OBJECT_SYNC_SF_SALESFORCE_API_VERSION'] );
+define( 'OBJECT_SYNC_SF_SALESFORCE_AUTHORIZE_URL_PATH', $_ENV['OBJECT_SYNC_SF_SALESFORCE_AUTHORIZE_URL_PATH'] );
+define( 'OBJECT_SYNC_SF_SALESFORCE_TOKEN_URL_PATH', $_ENV['OBJECT_SYNC_SF_SALESFORCE_TOKEN_URL_PATH'] );
 
-define( 'PAYMENT_PROCESSOR_URL', getenv( 'PAYMENT_PROCESSOR_URL' ) );
+define( 'PAYMENT_PROCESSOR_URL', $_ENV['PAYMENT_PROCESSOR_URL'] );
 
-define( 'FORM_PROCESSOR_MC_MAILCHIMP_API_KEY', getenv( 'FORM_PROCESSOR_MC_MAILCHIMP_API_KEY' ) );
-define( 'GF_LICENSE_KEY', getenv( 'GF_LICENSE_KEY' ) );
+define( 'FORM_PROCESSOR_MC_MAILCHIMP_API_KEY', $_ENV['FORM_PROCESSOR_MC_MAILCHIMP_API_KEY'] );
+define( 'GF_LICENSE_KEY', $_ENV['GF_LICENSE_KEY'] );
 
-define( 'WP_HOME', getenv( 'WP_HOME' ) );
-define( 'WP_SITEURL', getenv( 'WP_SITEURL' ) );
+define( 'WP_HOME', $_ENV['WP_HOME'] );
+define( 'WP_SITEURL', $_ENV['WP_SITEURL'] );
 
 /**#@-*/
 
@@ -76,7 +77,7 @@ define( 'WP_SITEURL', getenv( 'WP_SITEURL' ) );
  * You can have multiple installations in one database if you give each
  * a unique prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix = getenv( 'DB_PREFIX' );
+$table_prefix = $_ENV['DB_PREFIX'];
 
 /**
  * For developers: WordPress debugging mode.
@@ -90,14 +91,14 @@ $table_prefix = getenv( 'DB_PREFIX' );
  *
  * @link https://codex.wordpress.org/Debugging_in_WordPress
  */
-if ( 'true' === getenv( 'WP_DEBUG' ) ) {
-	define( 'WP_DEBUG', getenv( 'WP_DEBUG' ) );
+if ( 'true' === $_ENV['WP_DEBUG'] ) {
+	define( 'WP_DEBUG', $_ENV['WP_DEBUG'] );
 }
-if ( 'true' === getenv( 'JETPACK_DEV_DEBUG' ) ) {
-	define( 'JETPACK_DEV_DEBUG', getenv( 'JETPACK_DEV_DEBUG' ) );
+if ( 'true' === $_ENV['JETPACK_DEV_DEBUG'] ) {
+	define( 'JETPACK_DEV_DEBUG', $_ENV['JETPACK_DEV_DEBUG'] );
 }
-if ( 'true' === getenv( 'SCRIPT_DEBUG' ) ) {
-	define( 'SCRIPT_DEBUG', getenv( 'SCRIPT_DEBUG' ) );
+if ( 'true' === $_ENV['SCRIPT_DEBUG'] ) {
+	define( 'SCRIPT_DEBUG', $_ENV['SCRIPT_DEBUG'] );
 }
 
 /* That's all, stop editing! Happy blogging. */
