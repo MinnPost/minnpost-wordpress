@@ -340,11 +340,14 @@ class Merge_Serialized_Fields {
 			global $wpdb;
 			$offset           = '';
 			$last_row_checked = get_option( 'merge_serialized_fields_last_row_checked', '0' );
-			//$last_row_checked = 0;
+			$last_row_checked = 0;
 			if ( '0' !== $last_row_checked ) {
 				$offset = ' OFFSET ' . $last_row_checked;
 			}
-			$merge_rows = $wpdb->get_results( 'SELECT ' . $config['group_by'] . ' FROM ' . $config['wp_table'] . ' WHERE ' . $config['wp_filter_field'] . ' = "' . $config['wp_filter_field_value'] . '" LIMIT ' . $config['items_per_load'] . $offset, OBJECT );
+			$merge_rows = $wpdb->get_results( 'SELECT ' . $config['group_by'] . ', count(' . $config['group_by'] . ') as meta_count FROM ' . $config['wp_table'] . ' WHERE ' . $config['wp_filter_field'] . ' = "' . $config['wp_filter_field_value'] . '" GROUP BY ' . $config['group_by'] . ' HAVING meta_count > 1 LIMIT ' . $config['items_per_load'] . $offset, OBJECT );
+
+			//error_log( 'rows query is ' . 'SELECT ' . $config['group_by'] . ', count(' . $config['group_by'] . ') as meta_count FROM ' . $config['wp_table'] . ' WHERE ' . $config['wp_filter_field'] . ' = "' . $config['wp_filter_field_value'] . '" GROUP BY ' . $config['group_by'] . ' HAVING meta_count > 1 LIMIT ' . $config['items_per_load'] . $offset );
+
 			foreach ( $merge_rows as $key => $merge_row ) {
 				if ( ( count( $merge_rows ) - 1 ) === $key ) {
 					update_option( 'merge_serialized_fields_last_row_checked', count( $merge_rows ) + $last_row_checked );
@@ -354,6 +357,9 @@ class Merge_Serialized_Fields {
 				}
 
 				$merge_items = $wpdb->get_results( 'SELECT ' . $config['primary_key'] . ', ' . $config['wp_field_to_merge'] . ' FROM ' . $config['wp_table'] . ' WHERE ' . $config['wp_filter_field'] . ' = "' . $config['wp_filter_field_value'] . '" AND ' . $config['group_by'] . ' = "' . $id . '"', OBJECT );
+
+				//error_log( 'items query is ' . 'SELECT ' . $config['primary_key'] . ', ' . $config['wp_field_to_merge'] . ' FROM ' . $config['wp_table'] . ' WHERE ' . $config['wp_filter_field'] . ' = "' . $config['wp_filter_field_value'] . '" AND ' . $config['group_by'] . ' = "' . $id . '"' );
+
 				if ( count( $merge_items ) > 1 ) {
 					$merged_array = [];
 					foreach ( $merge_items as $key => $value ) {
