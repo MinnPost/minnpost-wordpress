@@ -634,7 +634,7 @@ class Deserialize_Metadata {
 						}
 					} elseif ( 'wp_posts' === $maps[ $key ]['wp_table'] && '' !== $value && null !== $value ) { // if it belongs in the post table
 						$pre_existing_post = get_post( $post_id, 'ARRAY_A' );
-						$pre_existing_value = $pre_existing_post[ $maps[ $key ]['wp_column'] ];
+						$pre_existing_value = isset( $pre_existing_post[ $maps[ $key ]['wp_column'] ] ) ? $pre_existing_post[ $maps[ $key ]['wp_column'] ] : '';
 						if ( ! empty( $pre_existing_value ) ) {
 							//error_log( 'the field already exists on this post. the value is ' . $pre_existing_value . '. compare with new value of ' . $value );
 						} else {
