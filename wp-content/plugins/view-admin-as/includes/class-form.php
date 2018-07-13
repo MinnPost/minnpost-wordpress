@@ -16,8 +16,8 @@ if ( ! defined( 'VIEW_ADMIN_AS_DIR' ) ) {
  * @author  Jory Hogeveen <info@keraweb.nl>
  * @package View_Admin_As
  * @since   1.7.2
- * @since   1.8    Moved to the includes folder.
- * @version 1.8
+ * @since   1.8.0  Moved to the includes folder.
+ * @version 1.8.0
  */
 class VAA_View_Admin_As_Form
 {
@@ -25,8 +25,8 @@ class VAA_View_Admin_As_Form
 	 * Generate a view type title and it's view related data.
 	 * The data is used in javascript to switch a view.
 	 *
-	 * @since   1.7
-	 * @since   1.7.2  Moved to this class from admin bar class.
+	 * @since   1.7.0
+	 * @since   1.7.2  Moved from `VAA_View_Admin_As_Admin_Bar`.
 	 * @access  public
 	 * @static
 	 *
@@ -56,7 +56,7 @@ class VAA_View_Admin_As_Form
 	 * Get multiple form elements in one call.
 	 * Note: Method calls are limited to one parameter!
 	 *
-	 * @since   1.8
+	 * @since   1.8.0
 	 * @access  public
 	 * @static
 	 *
@@ -81,8 +81,8 @@ class VAA_View_Admin_As_Form
 	 * Generate button HTML for node.
 	 *
 	 * @since   1.6.1
-	 * @since   1.6.2  Added $element option.
-	 * @since   1.7.2  Moved to this class from admin bar class.
+	 * @since   1.6.2  Added `$element` option.
+	 * @since   1.7.2  Moved from `VAA_View_Admin_As_Admin_Bar`.
 	 * @access  public
 	 * @static
 	 *
@@ -130,7 +130,7 @@ class VAA_View_Admin_As_Form
 	 *
 	 * @since   1.6.1
 	 * @since   1.6.3  Automatic show/hide description option.
-	 * @since   1.7.2  Moved to this class from admin bar class.
+	 * @since   1.7.2  Moved from `VAA_View_Admin_As_Admin_Bar`.
 	 * @access  public
 	 * @static
 	 *
@@ -188,7 +188,7 @@ class VAA_View_Admin_As_Form
 	 *
 	 * @since   1.6.1
 	 * @since   1.6.3  Automatic show/hide description option + removable option.
-	 * @since   1.7.2  Moved to this class from admin bar class.
+	 * @since   1.7.2  Moved from `VAA_View_Admin_As_Admin_Bar`.
 	 * @access  public
 	 * @static
 	 *
@@ -256,7 +256,7 @@ class VAA_View_Admin_As_Form
 	 *
 	 * @since   1.6.1
 	 * @since   1.6.3  Automatic show/hide description option.
-	 * @since   1.7.2  Moved to this class from admin bar class.
+	 * @since   1.7.2  Moved from `VAA_View_Admin_As_Admin_Bar`.
 	 * @access  public
 	 * @static
 	 *
@@ -272,6 +272,7 @@ class VAA_View_Admin_As_Form
 	 *         Array of radio options data.
 	 *         @type  array {
 	 *             @type  string  $compare        (required)
+	 *             @type  string  $value          (optional) Alias for compare.
 	 *             @type  string  $label          (optional)
 	 *             @type  string  $description    (optional)
 	 *             @type  string  $help           (optional)
@@ -287,6 +288,11 @@ class VAA_View_Admin_As_Form
 		$html = '';
 
 		if ( ! empty( $args['values'] ) ) {
+
+			$args['values'] = self::parse_multi_values( $args['values'], array(
+				'label' => '', // No default label.
+			) );
+
 			foreach ( $args['values'] as $val ) {
 
 				$id = esc_attr( ( ( ! empty( $args['id'] ) ) ? $args['id'] : $args['name'] ) . '-' . $val['compare'] );
@@ -339,7 +345,7 @@ class VAA_View_Admin_As_Form
 	 *
 	 * @since   1.6.1
 	 * @since   1.6.3  Automatic show/hide description option.
-	 * @since   1.7.2  Moved to this class from admin bar class.
+	 * @since   1.7.2  Moved from `VAA_View_Admin_As_Admin_Bar`.
 	 * @access  public
 	 * @static
 	 *
@@ -398,18 +404,16 @@ class VAA_View_Admin_As_Form
 
 			$html .= '<select ' . $attr . '>';
 
+			$args['values'] = self::parse_multi_values( $args['values'] );
+
 			foreach ( $args['values'] as $val ) {
 
-				if ( empty( $val['compare'] ) ) {
-					$val['compare'] = ( ! empty( $val['value'] ) ) ? $val['value'] : false;
-				}
-				$label = ( ! empty( $val['label'] ) ) ? $val['label'] : $val['compare'];
 				$selected = selected( $args['value'], $val['compare'], false );
 
 				$val['attr']['value'] = $val['compare'];
 				$attr = self::parse_to_html_attr( $val['attr'] );
 
-				$html .= '<option ' . $attr . ' ' . $selected . '>' . $label . '</option>';
+				$html .= '<option ' . $attr . ' ' . $selected . '>' . $val['label'] . '</option>';
 
 			}
 			$html .= '</select>';
@@ -424,9 +428,9 @@ class VAA_View_Admin_As_Form
 	 * Returns icon html for WP admin bar.
 	 *
 	 * @since   1.6.1
-	 * @since   1.6.3  Added second $attr parameter.
-	 * @since   1.7.2  Moved to this class from admin bar class.
-	 * @since   1.7.3  Added third $content parameter.
+	 * @since   1.6.3  Added second `$attr` parameter.
+	 * @since   1.7.2  Moved from `VAA_View_Admin_As_Admin_Bar`.
+	 * @since   1.7.3  Added third `$content` parameter.
 	 * @since   1.7.6  Support SVG and file icons + Base64 encoded strings (just like WP admin menu's).
 	 * @static
 	 *
@@ -465,8 +469,8 @@ class VAA_View_Admin_As_Form
 	 * Returns label html for WP admin bar.
 	 *
 	 * @since   1.6.1
-	 * @since   1.6.3  Added third $attr parameter.
-	 * @since   1.7.2  Moved to this class from admin bar class.
+	 * @since   1.6.3  Added third `$attr` parameter.
+	 * @since   1.7.2  Moved from `VAA_View_Admin_As_Admin_Bar`.
 	 * @static
 	 *
 	 * @param   string|array  $label  The label. Also accepts an array with a `label` key.
@@ -490,9 +494,9 @@ class VAA_View_Admin_As_Form
 	 * Returns description html for WP admin bar.
 	 *
 	 * @since   1.6.1
-	 * @since   1.6.3  Added second $attr parameter.
-	 * @since   1.7.2  Moved to this class from admin bar class.
-	 * @since   1.7.5  Third parameter: element type.
+	 * @since   1.6.3  Added second `$attr` parameter.
+	 * @since   1.7.2  Moved from `VAA_View_Admin_As_Admin_Bar`.
+	 * @since   1.7.5  Added third `$elem` parameter.
 	 * @static
 	 *
 	 * @param   string|array  $text  The description text. Also accepts an array with a `description` key.
@@ -632,9 +636,9 @@ class VAA_View_Admin_As_Form
 	/**
 	 * Update auto show/hide trigger and target attributes to enable auto show/hide functionality.
 	 *
-	 * @since   1.7
-	 * @since   1.7.2   Moved to this class from admin bar class.
-	 * @since   1.7.3   Renamed from `enable_auto_showhide_desc` + allow multiple values for trigger.
+	 * @since   1.7.0
+	 * @since   1.7.2   Moved from `VAA_View_Admin_As_Admin_Bar`.
+	 * @since   1.7.3   Renamed from `enable_auto_showhide_desc()` + allow multiple values for trigger.
 	 * @static
 	 *
 	 * @param   string  $target        The target element.
@@ -722,8 +726,8 @@ class VAA_View_Admin_As_Form
 	 * Converts an array of attributes to a HTML string format starting with a space.
 	 *
 	 * @since   1.6.1
-	 * @since   1.7     Renamed from `parse_attr_to_html`
-	 * @since   1.7.2   Support array values. (Example: CSS classes). Moved to this class from admin bar class.
+	 * @since   1.7.0   Renamed from `parse_attr_to_html()`
+	 * @since   1.7.2   Support array values. (Example: CSS classes). Moved from `VAA_View_Admin_As_Admin_Bar`.
 	 * @static
 	 *
 	 * @param   array   $array  Array to parse. (attribute => value pairs)
@@ -741,6 +745,44 @@ class VAA_View_Admin_As_Form
 			$str = implode( ' ', $array );
 		}
 		return $str;
+	}
+
+	/**
+	 * Parse multi-value arrays for radio and select options.
+	 * Makes sure `compare`, `value` and `label` keys exists.
+	 *
+	 * @since   1.8.1
+	 * @static
+	 *
+	 * @param   array  $values    The values.
+	 * @param   array  $defaults  The default value keys.
+	 * @return  array[]
+	 */
+	public static function parse_multi_values( $values, $defaults = array() ) {
+		$defaults = array_merge( array(
+			'value' => false,
+		), $defaults );
+
+		foreach ( (array) $values as $key => $val ) {
+			if ( ! is_array( $val ) ) {
+				$val = array(
+					'value' => $key,
+					'label' => $val,
+				);
+			}
+
+			if ( empty( $val['compare'] ) ) {
+				$val['compare'] = ( ! empty( $val['value'] ) ) ? $val['value'] : $defaults['value'];
+			}
+
+			if ( empty( $val['label'] ) ) {
+				$val['label'] = ( isset( $defaults['label'] ) ) ? $defaults['label'] : $val['compare'];
+			}
+
+			$values[ $key ] = $val;
+		}
+
+		return $values;
 	}
 
 } // End class VAA_View_Admin_As_Form.

@@ -15,8 +15,8 @@ if ( ! defined( 'VIEW_ADMIN_AS_DIR' ) ) {
  *
  * @author  Jory Hogeveen <info@keraweb.nl>
  * @package View_Admin_As
- * @since   1.7
- * @version 1.8
+ * @since   1.7.0
+ * @version 1.8.0
  * @uses    \VAA_View_Admin_As_Module Extends class
  */
 final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
@@ -24,7 +24,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * The single instance of the class.
 	 *
-	 * @since  1.7
+	 * @since  1.7.0
 	 * @static
 	 * @var    \VAA_View_Admin_As_Role_Manager
 	 */
@@ -41,7 +41,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * Option key.
 	 *
-	 * @since  1.7
+	 * @since  1.7.0
 	 * @var    string
 	 */
 	protected $optionKey = 'vaa_role_manager';
@@ -49,7 +49,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * The WP_Roles object.
 	 *
-	 * @since  1.7
+	 * @since  1.7.0
 	 * @var    \WP_Roles
 	 */
 	public $wp_roles = null;
@@ -58,7 +58,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	 * Protected roles.
 	 * These roles cannot be removed.
 	 *
-	 * @since  1.7
+	 * @since  1.7.0
 	 * @var    string[]
 	 */
 	private $protected_roles = array();
@@ -67,7 +67,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	 * Construct function.
 	 * Protected to make sure it isn't declared elsewhere.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  protected
 	 * @param   \VAA_View_Admin_As  $vaa  The main VAA object.
 	 */
@@ -78,7 +78,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 		/**
 		 * Only allow module for admin users.
 		 *
-		 * @since  1.7
+		 * @since  1.7.0
 		 */
 		if ( is_network_admin() || ! VAA_API::is_super_admin() ) {
 			return;
@@ -96,7 +96,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 		/**
 		 * Checks if the management part of module should be enabled.
 		 *
-		 * @since  1.7
+		 * @since  1.7.0
 		 */
 		$this->set_enable( (bool) $this->get_optionData( 'enable' ), false );
 
@@ -109,7 +109,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * Init function for global functions (not user dependent).
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  private
 	 * @global  \WP_Roles  $wp_roles
 	 * @return  void
@@ -146,7 +146,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * init function to store data from the main class and enable functionality based on the current view.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @return  void
 	 */
@@ -176,7 +176,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * Data update handler (Ajax probably), called from main handler.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @param   null   $null  Null.
 	 * @param   array  $data  The ajax data for this module.
@@ -206,7 +206,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 			return $success;
 		}
 
-		// @since  1.7.3  Export
+		// @since  1.7.3  Export.
 		if ( VAA_API::array_has( $data, 'export_roles', array( 'validation' => 'is_array' ) ) ) {
 			$content = $this->export_roles( $data['export_roles'] );
 			if ( is_array( $content ) ) {
@@ -220,7 +220,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 			}
 		}
 
-		// @since  1.7.3  Import
+		// @since  1.7.3  Import.
 		if ( VAA_API::array_has( $data, 'import_roles', array( 'validation' => 'is_array' ) ) ) {
 			// $content format: array( 'text' => **text**, 'errors' => **error array** ).
 			$content = $this->import_roles( $data['import_roles'] );
@@ -332,7 +332,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	 * Save a role.
 	 * Can also add a new role when it doesn't exist.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @param   string  $role          The role name (ID).
 	 * @param   array   $capabilities  The new role capabilities.
@@ -387,7 +387,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * Update a role with new capabilities.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @param   \WP_Role  $role          The role object.
 	 * @param   array     $capabilities  The new role capabilities.
@@ -465,7 +465,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * Clone a role.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @param   string  $role      The role name.
 	 * @param   string  $new_role  The new role name.
@@ -486,7 +486,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	 *
 	 * @todo Check https://core.trac.wordpress.org/ticket/40320.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @param   string  $role      The source role slug/ID.
 	 * @param   string  $new_name  The new role label.
@@ -517,7 +517,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * Delete a role from the database.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @param   string  $role             The role name.
 	 * @param   string  $migrate_to_role  Migrate users to a other role?
@@ -700,7 +700,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * Add admin bar module setting items.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @see     'vaa_admin_bar_modules' action
 	 *
@@ -738,7 +738,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * Add admin bar menu's.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @see     'vaa_admin_bar_menu' action
 	 *
@@ -812,7 +812,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * Add admin bar menu bulk actions.
 	 *
-	 * @since   1.7  Separated the tools from the main function.
+	 * @since   1.7.0  Separated the tools from the main function.
 	 * @access  public
 	 * @see     \VAA_View_Admin_As_Role_Manager::admin_bar_menu()
 	 *
@@ -847,7 +847,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 		}
 
 		/**
-		 * @since  1.7  Apply current view capabilities to role.
+		 * @since  1.7.0  Apply current view capabilities to role.
 		 */
 		$icon = 'dashicons-hidden';
 		if ( $this->store->get_view() ) {
@@ -1005,7 +1005,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 		) );
 
 		/**
-		 * @since  1.7  Clone role.
+		 * @since  1.7.0  Clone role.
 		 */
 		$admin_bar->add_group( array(
 			'id'     => $root . '-clone',
@@ -1082,7 +1082,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 		) );
 
 		/**
-		 * @since  1.5  Export actions.
+		 * @since  1.5.0  Export actions.
 		 */
 		$role_export_options = $role_select_options;
 		$all_roles_option['__all__'] = array(
@@ -1174,7 +1174,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 		) );
 
 		/**
-		 * @since  1.5  Import actions.
+		 * @since  1.5.0  Import actions.
 		 */
 		$admin_bar->add_group( array(
 			'id'     => $root . '-import',
@@ -1332,7 +1332,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 		) );
 
 		/**
-		 * @since  1.7  Delete role.
+		 * @since  1.7.0  Delete role.
 		 */
 		$role_delete_options = array_diff_key( $role_select_options, $this->protected_roles );
 		$admin_bar->add_group( array(
@@ -1434,7 +1434,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	/**
 	 * Add admin bar items to the capability node.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @see     'vaa_admin_bar_caps_manager_before' action
 	 *
@@ -1562,7 +1562,7 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 	 *
 	 * Ensures only one instance of this class is loaded or can be loaded.
 	 *
-	 * @since   1.5
+	 * @since   1.5.0
 	 * @access  public
 	 * @static
 	 * @param   \VAA_View_Admin_As  $caller  The referrer class.

@@ -15,15 +15,15 @@ if ( ! defined( 'VIEW_ADMIN_AS_DIR' ) ) {
  *
  * @author  Jory Hogeveen <info@keraweb.nl>
  * @package View_Admin_As
- * @since   1.6
- * @version 1.8
+ * @since   1.6.0
+ * @version 1.8.0
  */
 final class VAA_API
 {
 	/**
 	 * Check if a user has full access to this plugin.
 	 *
-	 * @since   1.8
+	 * @since   1.8.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -58,7 +58,7 @@ final class VAA_API
 		 * Note: Single site only!
 		 * Note: is_super_admin() is always checked!
 		 *
-		 * @since  1.8
+		 * @since  1.8.0
 		 * @param  array     $caps  The default capabilities.
 		 * @param  \WP_User  $user  The user that is being validated.
 		 * @return array
@@ -83,7 +83,7 @@ final class VAA_API
 	 * @see  \VAA_View_Admin_As_Store::cur_user_has_full_access()
 	 *
 	 * @since   1.6.3
-	 * @since   1.8    Check full access.
+	 * @since   1.8.0  Check full access.
 	 * @access  public
 	 * @static
 	 * @api
@@ -104,9 +104,9 @@ final class VAA_API
 	 * It will validate the original user while in a view and no parameter is passed.
 	 *
 	 * @since   1.5.3
-	 * @since   1.6    Moved to this class from main class
+	 * @since   1.6.0  Moved from `VAA_View_Admin_As`.
 	 * @since   1.6.3  Improve is_super_admin() check
-	 * @since   1.8    Enhance code to reflect VAA_API::is_super_admin() changes.
+	 * @since   1.8.0  Enhance code to reflect VAA_API::is_super_admin() changes.
 	 * @access  public
 	 * @static
 	 * @api
@@ -140,7 +140,7 @@ final class VAA_API
 	 * Get the superior admin ID's (filter since 1.5.2)
 	 *
 	 * @since   1.5.3
-	 * @since   1.6    Moved to this class from main class
+	 * @since   1.6.0  Moved from `VAA_View_Admin_As`.
 	 * @access  public
 	 * @static
 	 * @api
@@ -238,7 +238,7 @@ final class VAA_API
 	 * Is any toolbar showing?
 	 * Do not use this before the `init` hook.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -257,7 +257,7 @@ final class VAA_API
 	 * Is our custom toolbar showing?
 	 * Do not use this before the `init` hook.
 	 *
-	 * @since   1.6
+	 * @since   1.6.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -293,7 +293,7 @@ final class VAA_API
 	/**
 	 * Check if a view type is enabled. Pass an array to check multiple view types.
 	 *
-	 * @since   1.8
+	 * @since   1.8.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -320,7 +320,7 @@ final class VAA_API
 	/**
 	 * Generate a VAA action link.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -357,7 +357,7 @@ final class VAA_API
 	/**
 	 * Appends the "reset-view" parameter to the current URL.
 	 *
-	 * @since   1.6
+	 * @since   1.6.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -378,7 +378,7 @@ final class VAA_API
 	/**
 	 * Removes the "reset-view" or "reset-all-views" parameter to the current URL.
 	 *
-	 * @since   1.6
+	 * @since   1.6.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -394,8 +394,8 @@ final class VAA_API
 	/**
 	 * Get full array or array key(s).
 	 *
-	 * @since   1.5
-	 * @since   1.6    Moved to this class from main class.
+	 * @since   1.5.0
+	 * @since   1.6.0  Moved from `VAA_View_Admin_As`.
 	 * @since   1.7.5  Option to pass an array of keys. Will always return an array (even if not found) + third require_all option.
 	 * @access  public
 	 * @static
@@ -435,8 +435,8 @@ final class VAA_API
 	/**
 	 * Set full array or array key.
 	 *
-	 * @since   1.5
-	 * @since   1.6    Moved to this class from main class.
+	 * @since   1.5.0
+	 * @since   1.6.0  Moved from `VAA_View_Admin_As`.
 	 * @access  public
 	 * @static
 	 * @api
@@ -474,7 +474,7 @@ final class VAA_API
 	 * Check if two arrays are the same.
 	 * Does NOT support recursive arrays!
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -555,7 +555,7 @@ final class VAA_API
 	/**
 	 * Check if an array has a key and optional compare or validate the value.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -595,8 +595,8 @@ final class VAA_API
 	/**
 	 * Does a string starts with a given string?
 	 *
-	 * @since   1.4
-	 * @since   1.7  Moved from VAA_View_Admin_As_Role_Defaults.
+	 * @since   1.4.0
+	 * @since   1.7.0  Moved from `VAA_View_Admin_As_Role_Defaults`.
 	 * @access  public
 	 * @static
 	 * @api
@@ -613,8 +613,8 @@ final class VAA_API
 	/**
 	 * Does a string ends with a given string?
 	 *
-	 * @since   1.4
-	 * @since   1.7  Moved from VAA_View_Admin_As_Role_Defaults.
+	 * @since   1.4.0
+	 * @since   1.7.0  Moved from `VAA_View_Admin_As_Role_Defaults`.
 	 * @access  public
 	 * @static
 	 * @api
@@ -734,7 +734,7 @@ final class VAA_API
 	 * AJAX request validator. Verifies caller and nonce.
 	 * Returns the requested data.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -755,7 +755,7 @@ final class VAA_API
 	 * Normal request validator. Verifies caller and nonce.
 	 * Returns the requested data.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -776,7 +776,7 @@ final class VAA_API
 	 * Request validator. Verifies caller and nonce.
 	 * Returns the requested data.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -800,7 +800,7 @@ final class VAA_API
 	/**
 	 * AJAX request check.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -819,7 +819,7 @@ final class VAA_API
 	/**
 	 * Normal request check.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @static
 	 * @api
@@ -838,7 +838,7 @@ final class VAA_API
 	/**
 	 * Check if there is a request made.
 	 *
-	 * @since   1.7
+	 * @since   1.7.0
 	 * @access  public
 	 * @static
 	 * @api
