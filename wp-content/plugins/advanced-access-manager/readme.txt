@@ -3,7 +3,7 @@ Contributors: vasyltech
 Tags: access, role, user, capability, page access, post access, content access, comments, security, login redirect, membership, backend lockdown, wp-admin, 404, rest api, xml rpc
 Requires at least: 4.0
 Tested up to: 4.9.6
-Stable tag: 5.3.4
+Stable tag: 5.3.5
 
 The most powerful access management plugin for WordPress websites.
 
@@ -65,6 +65,13 @@ https://www.youtube.com/watch?v=yiOhjaacNJc
 11. Improve your website security
 
 == Changelog ==
+
+= 5.3.5 =
+* Fixed bug with post LIST & LIST TO OTHERS when access is set to term in odd order
+* Fixed bug that potentially did not filter posts during search
+* Added notification to the UI that extension folder does not exist or is not writable
+* Added XML-RPC endpoint control
+* Added ability to filter list of users by roles on the Users/Roles Manager panel
 
 = 5.3.4 =
 * Fixed incompatibility issue with plugins that use "plugins_loaded" hook for post manipulations
