@@ -1,0 +1,104 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: factory_forms\n"
+"POT-Creation-Date: 2017-11-09 10:37+0300\n"
+"PO-Revision-Date: 2017-11-09 18:37+0300\n"
+"Last-Translator: \n"
+"Language-Team: Alex Kovalev <alex.kovalevv@gmail.com>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.8\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: controls/checkbox.php:125
+msgid "On"
+msgstr "On"
+
+#: controls/checkbox.php:128
+msgid "Off"
+msgstr "Off"
+
+#: controls/dropdown.php:126 controls/list.php:89 controls/list.php:127
+msgid "The list is empty."
+msgstr "La liste est vide."
+
+#: controls/dropdown.php:258 controls/dropdown.php:330
+msgid "- empty -"
+msgstr "- vide -"
+
+#: controls/font.php:73 controls/google-font.php:41
+msgid "(use default website font)"
+msgstr "(utiliser la police de site par défaut)"
+
+#: controls/font.php:76
+msgid "Sans Serif:"
+msgstr "Sans Serif:"
+
+#: controls/font.php:127
+msgid "Serif:"
+msgstr "Serif:"
+
+#: controls/font.php:177
+msgid "Monospaced:"
+msgstr "Monospaced:"
+
+#: controls/google-font.php:44
+msgid "Standard:"
+msgstr "Standard:"
+
+#: controls/google-font.php:53
+msgid "Google Fonts:"
+msgstr "Google Fonts:"
+
+#: controls/google-font.php:94
+msgid "Unable to retrieve the list of Google Fonts."
+msgstr "Impossible de récupérer la liste des polices Google."
+
+#: controls/google-font.php:101
+msgid "Invalide response from the Google Fonts API."
+msgstr "Réponse invalidée de l'API Google Fonts."
+
+#: controls/google-font.php:110
+msgid "Unexpected error. The list of Google Fonts are empty."
+msgstr "Erreur inattendue. La liste des polices Google est vide."
+
+#: controls/gradient.php:59
+msgid "vertical"
+msgstr "verticale"
+
+#: controls/gradient.php:60
+msgid "horizontal"
+msgstr "horizontale"
+
+#: controls/holders/more-link.php:47
+msgid "hide extra options"
+msgstr "masquer les options supplémentaires"
+
+#: controls/paddings-editor.php:53
+msgid "Select a side and move the slider to set up:"
+msgstr "Sélectionnez un côté et déplacez le curseur pour configurer:"
+
+#: controls/pattern.php:90
+msgid "Change color"
+msgstr "Changer de couleur"
+
+#: controls/pattern.php:92
+msgid "re-color"
+msgstr "re-color"
+
+#: controls/pattern.php:99
+msgid "Select color:"
+msgstr "Sélectionnez couleur:"
+
+#: controls/pattern.php:102
+msgid "Changing the color may takes a minute or more. Please be patient."
+msgstr ""
+"Changer la couleur peut prendre une minute ou plus. S'll vous plaît "
+"soyez patient."

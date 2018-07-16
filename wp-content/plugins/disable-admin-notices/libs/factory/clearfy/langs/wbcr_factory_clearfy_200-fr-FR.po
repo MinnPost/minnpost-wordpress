@@ -1,0 +1,129 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: clearfy\n"
+"POT-Creation-Date: 2017-11-09 10:35+0300\n"
+"PO-Revision-Date: 2017-11-09 13:50+0100\n"
+"Last-Translator: alex.kovalevv@gmail.com <alex.kovalevv@gmail.com>\n"
+"Language-Team: Alex Kovalev <alex.kovalevv@gmail.com>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.4\n"
+"X-Poedit-Basepath: ..\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: pages/more-features.php:29
+msgid "More features (<b>free</b>)"
+msgstr "Plus de fonctionnalités (<b>gratuit</b>)"
+
+#: pages/more-features.php:36
+msgid "install the ultimate version of the plugin for free!"
+msgstr "installez la version ultime du plugin gratuitement!"
+
+#: pages/more-features.php:47
+msgid "Code cleaning"
+msgstr "Nettoyage du code"
+
+#: pages/more-features.php:49
+msgid "Clears the source code of the page from unused code."
+msgstr "Efface le code source de la page du code inutilisé."
+
+#: pages/more-features.php:56
+msgid "Improve SEO"
+msgstr "Améliorer le référencement"
+
+#: pages/more-features.php:58
+msgid ""
+"Removes duplicate pages, closes external links, changes the headers of the "
+"server."
+msgstr ""
+"Supprime les pages en double, ferme les liens externes, modifie les en-têtes "
+"du serveur."
+
+#: pages/more-features.php:65
+msgid "Site ptotection"
+msgstr "Protection du site"
+
+#: pages/more-features.php:67
+msgid "Enables and disables features that improve the protection of your site."
+msgstr ""
+"Active et désactive les fonctionnalités qui améliorent la protection de "
+"votre site."
+
+#: pages/more-features.php:74
+msgid "Disable comments"
+msgstr "Désactiver les commentaires"
+
+#: pages/more-features.php:76
+msgid "Disables comments on the entire site or on specific pages."
+msgstr ""
+"Désactive les commentaires sur l'intégralité du site ou sur des pages "
+"spécifiques."
+
+#: pages/more-features.php:83
+msgid "Manage updates"
+msgstr "Gérer les mises à jour"
+
+#: pages/more-features.php:85
+msgid ""
+"Enables or disables automatically updates for plugins, themes and core. It "
+"is also possible\n"
+"\t\t\t\t\t\t\tto disable all updates."
+msgstr ""
+"Active ou désactive automatiquement les mises à jour pour les plugins, les "
+"thèmes et le core. C'est aussi possible\n"
+"\t\t\t\t\t\t\tdésactiver toutes les mises à jour."
+
+#: pages/more-features.php:93
+msgid "Manage widgets"
+msgstr "Gérer les widgets"
+
+#: pages/more-features.php:95
+msgid "Allows you to remove unused widgets."
+msgstr "Vous permet de supprimer les widgets inutilisés."
+
+#: pages/more-features.php:102
+msgid "Speed Optimization"
+msgstr "Optimisation de la vitesse"
+
+#: pages/more-features.php:104
+msgid ""
+"Increases performance by disabling unused functions and reducing the number "
+"of requests."
+msgstr ""
+"Augmente les performances en désactivant les fonctions inutilisées et en "
+"réduisant le nombre de requêtes."
+
+#: pages/more-features.php:111
+msgid "Site privacy"
+msgstr "Confidentialité du site"
+
+#: pages/more-features.php:113
+msgid ""
+"Allows you to hide the version of the site and plugins. Allows you to hide "
+"your\n"
+"\t\t\t\t\t\t\tWordPress."
+msgstr ""
+"Vous permet de masquer la version du site et des plugins. Vous permet de "
+"cacher votre\n"
+"\t\t\t\t\t\t\tWordPress."
+
+#: pages/more-features.php:121
+msgid "Easy setup"
+msgstr "Configuration facile"
+
+#: pages/more-features.php:123
+msgid ""
+"In quick mode, you can easily configure the plugin according to your needs."
+msgstr ""
+"En mode rapide, vous pouvez facilement configurer le plugin en fonction de "
+"vos besoins."
+
+#: pages/more-features.php:130
+msgid "Get the ultimate plugin 100% FREE"
+msgstr "Obtenez le plugin ultime 100% GRATUIT"
