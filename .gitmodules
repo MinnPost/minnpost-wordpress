@@ -37,4 +37,4 @@
 	url = https://github.com/MinnPost/wp-post-image-watermarks.git
 [submodule "wp-content/plugins/raw-html-pro"]
 	path = wp-content/plugins/raw-html-pro
-	url = https://github.com/MinnPost/raw-html-pro.git
+	url=git@github.com:minnposttech/raw-html-pro.git
