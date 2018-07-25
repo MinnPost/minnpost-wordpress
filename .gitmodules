@@ -38,3 +38,6 @@
 [submodule "wp-content/plugins/raw-html-pro"]
 	path = wp-content/plugins/raw-html-pro
 	url = git@github.com:MinnPost/raw-html-pro.git
+[submodule "wp-content/plugins/cmb2-field-post-search-ajax"]
+	path = wp-content/plugins/cmb2-field-post-search-ajax
+	url = https://github.com/MinnPost/cmb2-field-post-search-ajax.git
