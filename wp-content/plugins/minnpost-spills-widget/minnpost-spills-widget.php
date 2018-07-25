@@ -43,7 +43,7 @@ class MinnpostSpills {
 
 	public function set_home_to_false( $query ) {
 		if ( ! is_admin() && isset( $query->query['is_spill'] ) && true === $query->query['is_spill'] ) {
-			$query->is_home = false;
+			$query->is_home    = false;
 			$query->is_archive = true;
 		}
 	}
@@ -58,12 +58,12 @@ class MinnpostSpills {
 			add_action( 'cortex.routes', function( RouteCollectionInterface $routes ) {
 
 				$widget_instances = get_option( 'widget_minnpostspills_widget', false );
-				$instances = array_values( $widget_instances );
+				$instances        = array_values( $widget_instances );
 
 				add_filter( 'get_the_archive_title', array( $this, 'set_wp_title' ) );
 				add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
 
-				$perspectives = get_category_by_slug( 'perspectives' );
+				$perspectives     = get_category_by_slug( 'perspectives' );
 				$featured_columns = array();
 				if ( is_object( $perspectives ) ) {
 					$featured_columns[] = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
@@ -79,7 +79,7 @@ class MinnpostSpills {
 				}, []);
 
 				$url_array = explode( '/', parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
-				$url = $url_array[1];
+				$url       = $url_array[1];
 
 				if ( isset( $url_array[2] ) && 'page' === $url_array[2] ) {
 					$page = $url_array[3];
@@ -95,15 +95,15 @@ class MinnpostSpills {
 						continue;
 					}
 
-					$key = array_search( $instance['title'], array_column( $instances, 'title' ), true );
+					$key   = array_search( $instance['title'], array_column( $instances, 'title' ), true );
 					$match = $instances[ $key ];
 
 					$query = array(
-						'is_spill' => true,
+						'is_spill'       => true,
 						'posts_per_page' => 10,
-						'paged' => $page,
-						'post_type' => 'post',
-						'tax_query' => array(
+						'paged'          => $page,
+						'post_type'      => 'post',
+						'tax_query'      => array(
 							'relation' => 'OR',
 						),
 					);
@@ -112,13 +112,13 @@ class MinnpostSpills {
 							'relation' => 'AND',
 							array(
 								'taxonomy' => 'category',
-								'field' => 'term_id',
-								'terms' => $match['widget_categories'],
+								'field'    => 'term_id',
+								'terms'    => $match['widget_categories'],
 							),
 							array(
 								'taxonomy' => 'category',
-								'field' => 'term_id',
-								'terms' => array_values( $featured_columns ),
+								'field'    => 'term_id',
+								'terms'    => array_values( $featured_columns ),
 								'operator' => 'NOT IN',
 							),
 						);
@@ -133,13 +133,13 @@ class MinnpostSpills {
 							'relation' => 'AND',
 							array(
 								'taxonomy' => 'post_tag',
-								'field' => 'name',
-								'terms' => $widget_terms,
+								'field'    => 'name',
+								'terms'    => $widget_terms,
 							),
 							array(
 								'taxonomy' => 'category',
-								'field' => 'term_id',
-								'terms' => array_values( $featured_columns ),
+								'field'    => 'term_id',
+								'terms'    => array_values( $featured_columns ),
 								'operator' => 'NOT IN',
 							),
 						);
@@ -172,15 +172,15 @@ class MinnpostSpills {
 		if ( basename( $template ) === $this->template ) {
 
 			$widget_instances = get_option( 'widget_minnpostspills_widget', false );
-			$instances = array_values( $widget_instances );
+			$instances        = array_values( $widget_instances );
 
 			$url_array = explode( '/', parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
-			$url = $url_array[1];
+			$url       = $url_array[1];
 
 			foreach ( $widget_instances as $instance ) {
 				$slug = sanitize_title( str_replace( '/', '', $instance['title'] ) );
 				if ( $slug === $url ) {
-					$key = array_search( $instance['title'], array_column( $instances, 'title' ), true );
+					$key   = array_search( $instance['title'], array_column( $instances, 'title' ), true );
 					$match = $instances[ $key ];
 					if ( 'document_title_parts' === current_filter() ) {
 						$title['title'] = $match['title'];
@@ -228,7 +228,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 	 * add script to admin page
 	 */
 	function add_script_config() {
-	?>
+		?>
 		<script>
 		function setSuggest() {
 			jQuery('.mp-spills-terms').suggest(
@@ -243,10 +243,10 @@ class MinnpostSpills_Widget extends WP_Widget {
 			setSuggest();
 		});
 		$(document).on('widget-updated widget-added', function() {
-		   setSuggest(); 
+			setSuggest(); 
 		});
 		</script>
-	<?php
+		<?php
 	}
 
 	/**
@@ -261,12 +261,12 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 		extract( $args );
 
-		$title = apply_filters( 'widget_title', $instance['title'] );
-		$slug = str_replace( '/', '', $instance['title'] );
-		$url = isset( $instance['url'] ) && '' !== $instance['url'] ? $instance['url'] : '/' . sanitize_title( $slug ) . '/';
-		$content = isset( $instance['content'] ) ? $instance['content'] : '';
-		$categories = $instance['widget_categories'];
-		$terms = $instance['widget_terms'];
+		$title           = apply_filters( 'widget_title', $instance['title'] );
+		$slug            = str_replace( '/', '', $instance['title'] );
+		$url             = isset( $instance['url'] ) && '' !== $instance['url'] ? $instance['url'] : '/' . sanitize_title( $slug ) . '/';
+		$content         = isset( $instance['content'] ) ? $instance['content'] : '';
+		$categories      = $instance['widget_categories'];
+		$terms           = $instance['widget_terms'];
 		$output_function = isset( $instance['output_function'] ) ? $instance['output_function'] : '';
 
 		echo str_replace( 'widget MinnpostSpills-widget', 'm-widget m-minnpost-spills-widget', str_replace( '_Widget"', '-widget ' . sanitize_title( $title ) . '"', $before_widget ) );
@@ -363,7 +363,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 		}
 
 		if ( isset( $instance['widget_categories'] ) && '' !== $instance['widget_categories'] ) {
-			$categories = $instance['widget_categories'];
+			$categories   = $instance['widget_categories'];
 			$category_ids = array();
 			foreach ( $categories as $category ) {
 				if ( isset( $category ) && ! is_numeric( $category ) ) {
@@ -376,7 +376,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 				}
 			}
 		} else {
-			$categories = false;
+			$categories   = false;
 			$category_ids = false;
 		}
 
@@ -437,9 +437,9 @@ class MinnpostSpills_Widget extends WP_Widget {
 	*/
 	private function get_spill_posts( $categories = '', $terms = '' ) {
 
-		$perspectives = get_category_by_slug( 'perspectives' );
-		$featured_columns = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
-		$fonm = get_category_by_slug( 'other-nonprofit-media' );
+		$perspectives       = get_category_by_slug( 'perspectives' );
+		$featured_columns   = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
+		$fonm               = get_category_by_slug( 'other-nonprofit-media' );
 		$featured_columns[] = $perspectives->term_id;
 		$featured_columns[] = $fonm->term_id;
 
@@ -448,17 +448,17 @@ class MinnpostSpills_Widget extends WP_Widget {
 			foreach ( $categories as $category ) {
 				if ( is_numeric( $category ) ) {
 					$category = get_term_by( 'id', $category, 'category' );
-					$slugs[] = $category->slug;
+					$slugs[]  = $category->slug;
 				} else {
 					$slugs[] = $category;
 				}
 			}
 			$the_query = new WP_Query(
 				array(
-					'posts_per_page' => 4,
-					'category_name' => $slugs ? implode( ',', $slugs ) : '',
+					'posts_per_page'   => 4,
+					'category_name'    => $slugs ? implode( ',', $slugs ) : '',
 					'category__not_in' => array_values( $featured_columns ), // the perspectives featured columns
-					'orderby' => 'date',
+					'orderby'          => 'date',
 				)
 			);
 		}
@@ -466,10 +466,10 @@ class MinnpostSpills_Widget extends WP_Widget {
 		if ( ! empty( $terms ) ) {
 			$the_query = new WP_Query(
 				array(
-					'posts_per_page' => 4,
-					'tag' => $terms ? is_array( $terms ) ? implode( ',', $terms ) : $terms : '',
+					'posts_per_page'   => 4,
+					'tag'              => $terms ? is_array( $terms ) ? implode( ',', $terms ) : $terms : '',
 					'category__not_in' => array_values( $featured_columns ), // the perspectives featured columns
-					'orderby' => 'date',
+					'orderby'          => 'date',
 				)
 			);
 		}
@@ -481,10 +481,10 @@ class MinnpostSpills_Widget extends WP_Widget {
 			<?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
 				<article id="<?php the_ID(); ?>" class="m-post m-post-spill">
 					<?php
-					$url_array = explode( '/',get_permalink() );
-					$category = $url_array[3];
+					$url_array = explode( '/', get_permalink() );
+					$category  = $url_array[3];
 					if ( is_object( get_category_by_slug( $category ) ) ) {
-					?>
+						?>
 					<p class="a-post-category a-spill-item-category"><?php echo get_category_by_slug( $category )->name; ?></p>
 					<?php } ?>
 					<p class="a-post-title a-spill-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></p>
@@ -512,7 +512,7 @@ if ( class_exists( 'Walker_Category_Checklist' ) ) {
 
 		function __construct( $name = '', $id = '' ) {
 			$this->name = $name;
-			$this->id = $id;
+			$this->id   = $id;
 		}
 
 		function start_el( &$output, $cat, $depth = 0, $args = array(), $id = 0 ) {
@@ -520,8 +520,8 @@ if ( class_exists( 'Walker_Category_Checklist' ) ) {
 			if ( empty( $taxonomy ) ) {
 				$taxonomy = 'category';
 			}
-			$class = in_array( $cat->slug, $popular_cats ) ? ' class="popular-category"' : '';
-			$id = $this->id . '-' . $cat->slug;
+			$class   = in_array( $cat->slug, $popular_cats ) ? ' class="popular-category"' : '';
+			$id      = $this->id . '-' . $cat->slug;
 			$checked = checked( in_array( $cat->term_id, $selected_cats ), true, false );
 			$output .= "\n<li id='{$taxonomy}-{$cat->slug}'$class>"
 				. '<label class="selectit"><input value="'
