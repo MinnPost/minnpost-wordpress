@@ -453,14 +453,20 @@ class MinnpostSpills_Widget extends WP_Widget {
 					$slugs[] = $category;
 				}
 			}
-			$the_query = new WP_Query(
-				array(
-					'posts_per_page'   => 4,
-					'category_name'    => $slugs ? implode( ',', $slugs ) : '',
-					'category__not_in' => array_values( $featured_columns ), // the perspectives featured columns
-					'orderby'          => 'date',
-				)
+
+			$args = array(
+				'posts_per_page'   => 4,
+				'category_name'    => $slugs ? implode( ',', $slugs ) : '',
+				'category__not_in' => array_values( $featured_columns ), // the perspectives featured columns
+				'orderby'          => 'date',
 			);
+
+			if ( class_exists( 'EP_WP_Query_Integration' ) ) {
+				$args['ep_integrate'] = true;
+			}
+
+			$the_query = new WP_Query( $args );
+
 		}
 
 		if ( ! empty( $terms ) ) {
