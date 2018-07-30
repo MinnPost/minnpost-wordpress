@@ -55,10 +55,10 @@ class Deserialize_Metadata {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.7';
-		$this->config = array();
+		$this->version   = '0.0.8';
+		$this->config    = array();
 		$this->wp_tables = array(
-			'wp_posts' => 'wp_posts',
+			'wp_posts'    => 'wp_posts',
 			'wp_postmeta' => 'wp_postmeta',
 		);
 
@@ -109,8 +109,8 @@ class Deserialize_Metadata {
 	* @return array $links
 	*/
 	public function plugin_action_links( $links, $file ) {
-		if ( $file === plugin_basename( __FILE__ ) ) {
-			$settings = '<a href="' . get_admin_url() . 'options-general.php?page=deserialize-metadata">' . __('Settings', 'deserialize-metadata' ) . '</a>';
+		if ( plugin_basename( __FILE__ ) === $file ) {
+			$settings = '<a href="' . get_admin_url() . 'options-general.php?page=deserialize-metadata">' . __( 'Settings', 'deserialize-metadata' ) . '</a>';
 			// make the 'Settings' link appear first
 			array_unshift( $links, $settings );
 		}
@@ -129,7 +129,7 @@ class Deserialize_Metadata {
 			<div id="main">
 				<form method="post" action="options.php">
 					<?php
-					settings_fields( 'deserialize-metadata' )  . do_settings_sections( 'deserialize-metadata' );
+					settings_fields( 'deserialize-metadata' ) . do_settings_sections( 'deserialize-metadata' );
 					$deserialize_maps = get_option( 'deserialize_metadata_maps', '' );
 					?>
 
@@ -151,7 +151,8 @@ class Deserialize_Metadata {
 						<tbody>
 							<?php
 							if ( isset( $deserialize_maps ) && '' !== $deserialize_maps ) {
-								foreach ( $deserialize_maps as $key => $value ) { ?>
+								foreach ( $deserialize_maps as $key => $value ) {
+									?>
 									<tr class="repeating">
 										<td class="column-map_key">
 											<input name="deserialize_metadata_maps[<?php echo $key; ?>][map_key]" type="text" value="<?php echo $value['map_key']; ?>" />
@@ -166,7 +167,7 @@ class Deserialize_Metadata {
 													} else {
 														$selected = '';
 													}
-												?>
+													?>
 													<option value="<?php echo $wp_key; ?>"<?php echo $selected; ?>><?php echo $wp_value; ?></option>
 												<?php } ?>
 											</select>
@@ -188,9 +189,10 @@ class Deserialize_Metadata {
 											<a href="#" class="delete-this"><?php _e( 'Delete', 'deserialize-metadata' ); ?></a>
 										</td>
 									</tr>
-								<?php
+									<?php
 								}
-							} else { ?>
+							} else {
+								?>
 								<tr class="repeating">
 									<td class="column-map_key">
 										<input name="deserialize_metadata_maps[0][map_key]" type="text" value="" />
@@ -200,7 +202,7 @@ class Deserialize_Metadata {
 											<option value=""><?php _e( 'Choose table', 'deserialize-metadata' ); ?></option>
 											<?php
 											foreach ( $this->wp_tables as $key => $value ) {
-											?>
+												?>
 												<option value="<?php echo $key; ?>"><?php echo $value; ?></option>
 											<?php } ?>
 										</select>
@@ -213,7 +215,7 @@ class Deserialize_Metadata {
 									</td>
 									<td>&nbsp;</td>
 								</tr>
-							<?php
+								<?php
 							}
 							?>
 							<tr>
@@ -273,9 +275,9 @@ class Deserialize_Metadata {
 	*
 	*/
 	public function admin_settings_form() {
-		$page = 'deserialize-metadata';
-		$section = 'deserialize-metadata';
-		$input_callback = array( $this, 'display_input_field' );
+		$page            = 'deserialize-metadata';
+		$section         = 'deserialize-metadata';
+		$input_callback  = array( $this, 'display_input_field' );
 		$select_callback = array( $this, 'display_select' );
 		add_settings_section( $page, null, null, $page );
 
@@ -284,86 +286,86 @@ class Deserialize_Metadata {
 
 		$settings = array(
 			'wp_imported_field' => array(
-				'title' => __( 'Imported Field', 'deserialize-metadata' ),
+				'title'    => __( 'Imported Field', 'deserialize-metadata' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'The name of the imported field in the database', 'deserialize-metadata' ),
 				),
 			),
-			'post_type' => array(
-				'title' => __( 'Post Type', 'deserialize-metadata' ),
+			'post_type'         => array(
+				'title'    => __( 'Post Type', 'deserialize-metadata' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'What type of post uses this metadata?', 'deserialize-metadata' ),
 				),
 			),
-			'post_status' => array(
-				'title' => __( 'Post Status', 'deserialize-metadata' ),
+			'post_status'       => array(
+				'title'    => __( 'Post Status', 'deserialize-metadata' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'Post statuses to match', 'deserialize-metadata' ),
 				),
 			),
-			'posts_per_page' => array(
-				'title' => __( 'Posts Per Page' , 'deserialize-metadata' ),
+			'posts_per_page'    => array(
+				'title'    => __( 'Posts Per Page', 'deserialize-metadata' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'text',
 					'desc' => __( 'Maximum posts the query should load', 'deserialize-metadata' ),
 				),
 			),
-			'schedule_number' => array(
-				'title' => __( 'Run schedule every', 'deserialize-metadata' ),
+			'schedule_number'   => array(
+				'title'    => __( 'Run schedule every', 'deserialize-metadata' ),
 				'callback' => $input_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
 					'type' => 'number',
 					'desc' => '',
 				),
 			),
-			'schedule_unit' => array(
-				'title' => __( 'Time unit', 'deserialize-metadata' ),
+			'schedule_unit'     => array(
+				'title'    => __( 'Time unit', 'deserialize-metadata' ),
 				'callback' => $select_callback,
-				'page' => $page,
-				'section' => $section,
-				'args' => array(
-					'type' => 'select',
-					'desc' => '',
+				'page'     => $page,
+				'section'  => $section,
+				'args'     => array(
+					'type'  => 'select',
+					'desc'  => '',
 					'items' => array(
 						'minutes' => __( 'Minutes', 'deserialize-metadata' ),
-						'hours' => __( 'Hours', 'deserialize-metadata' ),
-						'days' => __( 'Days', 'deserialize-metadata' ),
+						'hours'   => __( 'Hours', 'deserialize-metadata' ),
+						'days'    => __( 'Days', 'deserialize-metadata' ),
 					),
 				),
 			),
 		);
 
 		foreach ( $settings as $key => $attributes ) {
-			$id = 'deserialize_metadata_' . $key;
-			$name = 'deserialize_metadata_' . $key;
-			$title = $attributes['title'];
+			$id       = 'deserialize_metadata_' . $key;
+			$name     = 'deserialize_metadata_' . $key;
+			$title    = $attributes['title'];
 			$callback = $attributes['callback'];
-			$page = $attributes['page'];
-			$section = $attributes['section'];
-			$args = array_merge(
+			$page     = $attributes['page'];
+			$section  = $attributes['section'];
+			$args     = array_merge(
 				$attributes['args'],
 				array(
-					'title' => $title,
-					'id' => $id,
+					'title'     => $title,
+					'id'        => $id,
 					'label_for' => $id,
-					'name' => $name,
+					'name'      => $name,
 				)
 			);
 			add_settings_field( $id, $title, $callback, $page, $section, $args );
@@ -387,7 +389,11 @@ class Deserialize_Metadata {
 
 		// create an option in the core schedules array for each one the plugin defines
 		$schedule_number = get_option( 'deserialize_metadata' . $name . '_schedule_number', '' );
-		$schedule_unit = get_option( 'deserialize_metadata' . $name . '_schedule_unit', '' );
+		$schedule_unit   = get_option( 'deserialize_metadata' . $name . '_schedule_unit', '' );
+
+		if ( '' === $schedule_number || '' === $schedule_unit ) {
+			return $schedules;
+		}
 
 		switch ( $schedule_unit ) {
 			case 'minutes':
@@ -407,7 +413,7 @@ class Deserialize_Metadata {
 
 		$schedules[ $key ] = array(
 			'interval' => $seconds * $schedule_number,
-			'display' => 'Every ' . $schedule_number . ' ' . $schedule_unit,
+			'display'  => 'Every ' . $schedule_number . ' ' . $schedule_unit,
 		);
 
 		$this->schedule_frequency = $key;
@@ -428,7 +434,11 @@ class Deserialize_Metadata {
 		}
 
 		$schedule_number = get_option( 'deserialize_metadata' . $name . '_schedule_number', '' );
-		$schedule_unit = get_option( 'deserialize_metadata' . $name . '_schedule_unit', '' );
+		$schedule_unit   = get_option( 'deserialize_metadata' . $name . '_schedule_unit', '' );
+
+		if ( '' === $schedule_number || '' === $schedule_unit ) {
+			return '';
+		}
 
 		switch ( $schedule_unit ) {
 			case 'minutes':
@@ -456,13 +466,13 @@ class Deserialize_Metadata {
 	* @param array $args
 	*/
 	public function display_input_field( $args ) {
-		$type   = $args['type'];
-		$id     = $args['label_for'];
-		$name   = $args['name'];
-		$desc   = $args['desc'];
+		$type = $args['type'];
+		$id   = $args['label_for'];
+		$name = $args['name'];
+		$desc = $args['desc'];
 		if ( ! isset( $args['constant'] ) || ! defined( $args['constant'] ) ) {
-			$value  = esc_attr( get_option( $id, '' ) );
-			echo '<input type="' . $type. '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
+			$value = esc_attr( get_option( $id, '' ) );
+			echo '<input type="' . $type . '" value="' . $value . '" name="' . $name . '" id="' . $id . '"
 			class="regular-text code" />';
 			if ( '' !== $desc ) {
 				echo '<p class="description">' . $desc . '</p>';
@@ -478,9 +488,9 @@ class Deserialize_Metadata {
 	* @param array $args
 	*/
 	public function display_select( $args ) {
-		$name = $args['name'];
-		$id = $args['label_for'];
-		$desc = $args['desc'];
+		$name          = $args['name'];
+		$id            = $args['label_for'];
+		$desc          = $args['desc'];
 		$current_value = get_option( $name );
 		echo '<select name="' . $name . '" id="' . $id . '"><option value="">' . __( 'Choose an option', 'deserialize-metadata' ) . '</option>';
 		foreach ( $args['items'] as $key => $value ) {
@@ -505,13 +515,16 @@ class Deserialize_Metadata {
 	private function config() {
 
 		$maps = get_option( 'deserialize_metadata_maps', '' );
+		if ( '' === $maps ) {
+			return;
+		}
 		$config_maps = array();
 		foreach ( $maps as $key => $map ) {
-			$key = $map['map_key'];
+			$key                   = $map['map_key'];
 			$config_maps[ "$key" ] = array(
-				'wp_table' => $map['wp_table'],
+				'wp_table'  => $map['wp_table'],
 				'wp_column' => $map['wp_column'],
-				'unique' => isset( $map['unique'] ) ? $map['unique'] : 0,
+				'unique'    => isset( $map['unique'] ) ? $map['unique'] : 0,
 			);
 		}
 
@@ -520,12 +533,12 @@ class Deserialize_Metadata {
 		$this->config = array(
 			0 => array(
 				'wp_imported_field' => get_option( 'deserialize_metadata_wp_imported_field', '' ),
-				'post_type' => get_option( 'deserialize_metadata_post_type', '' ),
-				'post_status' => get_option( 'deserialize_metadata_post_status', '' ),
-				'posts_per_page' => get_option( 'deserialize_metadata_posts_per_page', '' ),
-				'schedule_number' => get_option( 'deserialize_metadata_schedule_number', '' ),
-				'schedule_unit' => get_option( 'deserialize_metadata_schedule_unit', '' ),
-				'maps' => $config_maps,
+				'post_type'         => get_option( 'deserialize_metadata_post_type', '' ),
+				'post_status'       => get_option( 'deserialize_metadata_post_status', '' ),
+				'posts_per_page'    => get_option( 'deserialize_metadata_posts_per_page', '' ),
+				'schedule_number'   => get_option( 'deserialize_metadata_schedule_number', '' ),
+				'schedule_unit'     => get_option( 'deserialize_metadata_schedule_unit', '' ),
+				'maps'              => $config_maps,
 			),
 		);
 
@@ -581,27 +594,27 @@ class Deserialize_Metadata {
 	public function get_posts_with_serialized_metadata() {
 		foreach ( $this->config as $config ) {
 			$offset = get_option( 'deserialize_metadata_last_post_checked', '0' );
-			$key = $config['wp_imported_field'];
-			$maps = $config['maps'];
-			$args = array(
-				'post_type' => $config['post_type'],
-				'post_status' => $config['post_status'],
+			$key    = $config['wp_imported_field'];
+			$maps   = $config['maps'];
+			$args   = array(
+				'post_type'      => $config['post_type'],
+				'post_status'    => $config['post_status'],
 				'posts_per_page' => (int) $config['posts_per_page'],
-				//'offset' => (int) $offset,
-				'orderby' => 'ID',
-				'order' => 'DESC',
-				'meta_query' => array(
+				//'offset'       => (int) $offset,
+				'orderby'        => 'ID',
+				'order'          => 'DESC',
+				'meta_query'     => array(
 					array(
 						'key' => $key,
 					),
 				),
 			);
-			$query = new WP_Query( $args );
+			$query  = new WP_Query( $args );
 			if ( $query->have_posts() ) {
 				$count = $offset;
 				while ( $query->have_posts() ) {
 					$query->the_post();
-					$post_id = $query->post->ID;
+					$post_id  = $query->post->ID;
 					$metadata = get_post_meta( $post_id, $key, true );
 					$this->create_fields( $post_id, $metadata, $maps );
 					$this->delete_combined_field( $post_id, $key );
@@ -633,13 +646,13 @@ class Deserialize_Metadata {
 							add_post_meta( $post_id, $maps[ $key ]['wp_column'], $value, $maps[ $key ]['unique'] );
 						}
 					} elseif ( 'wp_posts' === $maps[ $key ]['wp_table'] && '' !== $value && null !== $value ) { // if it belongs in the post table
-						$pre_existing_post = get_post( $post_id, 'ARRAY_A' );
+						$pre_existing_post  = get_post( $post_id, 'ARRAY_A' );
 						$pre_existing_value = isset( $pre_existing_post[ $maps[ $key ]['wp_column'] ] ) ? $pre_existing_post[ $maps[ $key ]['wp_column'] ] : '';
 						if ( ! empty( $pre_existing_value ) ) {
 							//error_log( 'the field already exists on this post. the value is ' . $pre_existing_value . '. compare with new value of ' . $value );
 						} else {
 							$post = array(
-								'ID' => $post_id,
+								'ID'                       => $post_id,
 								$maps[ $key ]['wp_column'] => $value,
 							);
 							wp_update_post( $post );
