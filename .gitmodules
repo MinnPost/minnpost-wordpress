@@ -1,6 +1,7 @@
 [submodule "wp-content/themes/minnpost-largo"]
 	path = wp-content/themes/minnpost-largo
 	url = https://github.com/MinnPost/minnpost-largo.git
+	branch = master
 [submodule "wp-content/themes/largo"]
 	path = wp-content/themes/largo
 	url = https://github.com/INN/largo.git
@@ -8,36 +9,48 @@
 [submodule "wp-content/plugins/appnexus-acm-provider"]
 	path = wp-content/plugins/appnexus-acm-provider
 	url = https://github.com/MinnPost/appnexus-acm-provider.git
+	branch = master
 [submodule "wp-content/plugins/form-processor-mailchimp"]
 	path = wp-content/plugins/form-processor-mailchimp
 	url = https://github.com/MinnPost/form-processor-mailchimp.git
+	branch = master
 [submodule "wp-content/plugins/minnpost-form-processor-mailchimp"]
 	path = wp-content/plugins/minnpost-form-processor-mailchimp
 	url = https://github.com/MinnPost/minnpost-form-processor-mailchimp.git
+	branch = master
 [submodule "wp-content/plugins/minnpost-membership"]
 	path = wp-content/plugins/minnpost-membership
 	url = https://github.com/MinnPost/minnpost-membership.git
+	branch = master
 [submodule "wp-content/plugins/minnpost-wordpress-salesforce-plugin"]
 	path = wp-content/plugins/minnpost-wordpress-salesforce-plugin
 	url = https://github.com/MinnPost/minnpost-wordpress-salesforce-plugin.git
+	branch = master
 [submodule "wp-content/plugins/object-sync-for-salesforce"]
 	path = wp-content/plugins/object-sync-for-salesforce
 	url = https://github.com/MinnPost/object-sync-for-salesforce.git
+	branch = master
 [submodule "wp-content/plugins/staff-user-post-list"]
 	path = wp-content/plugins/staff-user-post-list
 	url = https://github.com/MinnPost/staff-user-post-list.git
+	branch = master
 [submodule "wp-content/plugins/user-account-management"]
 	path = wp-content/plugins/user-account-management
 	url = https://github.com/MinnPost/user-account-management.git
+	branch = master
 [submodule "wp-content/plugins/wp-analytics-tracking-generator"]
 	path = wp-content/plugins/wp-analytics-tracking-generator
 	url = https://github.com/MinnPost/wp-analytics-tracking-generator.git
+	branch = master
 [submodule "wp-content/plugins/wp-post-image-watermarks"]
 	path = wp-content/plugins/wp-post-image-watermarks
 	url = https://github.com/MinnPost/wp-post-image-watermarks.git
+	branch = master
 [submodule "wp-content/plugins/raw-html-pro"]
 	path = wp-content/plugins/raw-html-pro
 	url = git@github.com:MinnPost/raw-html-pro.git
+	branch = master
 [submodule "wp-content/plugins/cmb2-field-post-search-ajax"]
 	path = wp-content/plugins/cmb2-field-post-search-ajax
 	url = https://github.com/MinnPost/cmb2-field-post-search-ajax.git
+	branch = master
