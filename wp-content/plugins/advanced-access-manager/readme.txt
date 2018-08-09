@@ -1,9 +1,9 @@
 === Advanced Access Manager ===
 Contributors: vasyltech
-Tags: access-control, membership, access, user role, restricted content
+Tags: access control, membership, backend menu, user role, restricted content
 Requires at least: 4.0
 Tested up to: 4.9.7
-Stable tag: 5.4
+Stable tag: 5.4.1
 
 All you need to manage access to you WordPress websites on frontend, backend and API levels for any role, user or visitors.
 
@@ -75,6 +75,12 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 11. Improve your website security
 
 == Changelog ==
+
+= 5.4.1 =
+* Fixed the bug reported by Doug Davis where newly created posts get locked if default access settings are defined
+* Fixed the bug with post visibility when /%category%/%postname%/ permalink is defined
+* Fixed the but with default category not been selected when redefined with ConfigPress
+* Improved AAM performance by caching post visibility results
 
 = 5.4 =
 * Fixed bug with Api Access Control option that when disabled, still denies API Routes
