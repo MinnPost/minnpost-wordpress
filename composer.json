@@ -12,7 +12,7 @@
     ],
     "require": {
         "vlucas/phpdotenv": "^2.5@dev",
-        "wp-cli/wp-cli" : "^1.5.1",
+        "wp-cli/wp-cli" : "^2.0.0",
         "psy/psysh" : "~0.9",
         "aaemnnosttv/wp-cli-dotenv-command": "^2.0"
     }
