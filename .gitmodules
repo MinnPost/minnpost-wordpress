@@ -54,3 +54,7 @@
 	path = wp-content/plugins/cmb2-field-post-search-ajax
 	url = https://github.com/MinnPost/cmb2-field-post-search-ajax.git
 	branch = master
+[submodule "wp-content/plugins/wp-message-inserter-plugin"]
+	path = wp-content/plugins/wp-message-inserter-plugin
+	url = https://github.com/MinnPost/wp-message-inserter-plugin
+	branch = master

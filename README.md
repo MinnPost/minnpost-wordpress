@@ -100,6 +100,8 @@ cd ../minnpost-spills-widget
 composer install --no-dev --prefer-dist --no-interaction
 cd ../object-sync-for-salesforce
 composer install --no-dev --prefer-dist --no-interaction
+cd ../wp-message-inserter-plugin
+composer install --no-dev --prefer-dist --no-interaction
 cd ../../themes/minnpost-largo
 composer install --no-dev --prefer-dist --no-interaction
 cd ~/
