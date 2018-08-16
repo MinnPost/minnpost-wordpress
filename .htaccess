@@ -1,3 +1,8 @@
+# Prevent direct access to certain files
+<FilesMatch ^((composer|package)\.json$)$>
+    Deny from all
+</FilesMatch> 
+
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
 RewriteEngine On
