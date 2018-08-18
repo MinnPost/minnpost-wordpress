@@ -82,6 +82,9 @@ define( 'WP_REDIS_DATABASE', $_ENV['WP_REDIS_DATABASE'] );
 define( 'EP_INDEX_PREFIX', $_ENV['EP_INDEX_PREFIX'] );
 define( 'EP_HOST', $_ENV['EP_HOST'] );
 
+// analytics
+define( 'WP_ANALYTICS_TRACKING_ID', $_ENV['WP_ANALYTICS_TRACKING_ID'] );
+
 /**#@-*/
 
 /**
