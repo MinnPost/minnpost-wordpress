@@ -75,6 +75,9 @@ define( 'FORM_PROCESSOR_MC_MAILCHIMP_API_KEY', $_ENV['FORM_PROCESSOR_MC_MAILCHIM
 // gravity forms
 define( 'GF_LICENSE_KEY', $_ENV['GF_LICENSE_KEY'] );
 
+// redis
+define( 'WP_REDIS_DATABASE', $_ENV['WP_REDIS_DATABASE'] );
+
 // ElasticPress
 define( 'EP_INDEX_PREFIX', $_ENV['EP_INDEX_PREFIX'] );
 define( 'EP_HOST', $_ENV['EP_HOST'] );
