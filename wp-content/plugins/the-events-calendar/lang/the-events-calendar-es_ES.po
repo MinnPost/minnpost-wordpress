@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-07-20 07:15:05+0000\n"
+"PO-Revision-Date: 2018-08-20 17:54:08+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -41,11 +41,11 @@ msgstr "Búsqueda y navegació de vistas de %s"
 
 #: src/admin-views/privacy.php:63
 msgid "If you have extended our plugin(s) to send data to a third-party service such as Eventbrite, Google Maps, or PayPal, user information may be passed to these external services. These services may be located abroad."
-msgstr ""
+msgstr "Si has extendido nuestro(s) plugin(s) para enviar datos a servicios de terceros como Eventbrite, Google Maps o PayPal, la información del usuario puede ser enviada a estos servicios externos. Estos servicios pueden estar ubicados en el extranjero."
 
 #: src/admin-views/privacy.php:61
 msgid "Modern Tribe does not send any user data outside of your website by default."
-msgstr ""
+msgstr "Por defecto, Modern Tribe no envía datos de usuarios fuera de tu sitio."
 
 #: src/admin-views/privacy.php:59
 msgid "Where We Send Your Data"
@@ -53,11 +53,11 @@ msgstr "Donde enviamos tu información"
 
 #: src/admin-views/privacy.php:57
 msgid "Certain data may be exported or removed upon users’ requests via the existing Exporter or Eraser. Please note, however, that several “edge cases” exist in which we are unable to perfect the gathering and export of all data for your end users. We suggest running a search in your local database, as well as within the WordPress Dashboard, in order to identify all data collected and stored for your specific user requests."
-msgstr ""
+msgstr "Ciertos datos pueden exportarse o eliminarse a petición de los usuarios a través del Exportar o Borrar. Ten en cuenta, sin embargo, que existen varios \"casos límite\" en los que no podemos perfeccionar la recopilación y exportación de todos los datos para tus usuarios finales. Sugerimos ejecutar una búsqueda en tu base de datos local, así como en el escritorio de WordPress, para identificar todos los datos recopilados y almacenados para solicitudes de usuarios específicos."
 
 #: src/admin-views/privacy.php:55
 msgid "All information (data) is retained in the local database indefinitely, unless otherwise deleted."
-msgstr ""
+msgstr "Toda la información (datos) es almacenada en la base de datos local de forma indefinida, salvo que sea eliminada."
 
 #: src/admin-views/privacy.php:53
 msgid "How Long You Retain this Data"
@@ -65,27 +65,27 @@ msgstr "Durante cuánto tiempo retienes esta Información"
 
 #: src/admin-views/privacy.php:51
 msgid "These API keys may include the following third party services: Google Maps, Facebook, Meetup, PayPal, and Eventbrite (API key, auth URL and Client Secret)."
-msgstr ""
+msgstr "Estas claves API pueden incluir los siguientes servicios de terceros: Gooble Maps, Facebook, Meetup, PayPal y Eventbrite (clave API, URL de autenticación y contraseña del cliente)."
 
 #: src/admin-views/privacy.php:49
 msgid "We make use of certain API keys, in order to provide specific features."
-msgstr ""
+msgstr "Hacemos uso de ciertas claves API para proporcionar características específicas."
 
 #: src/admin-views/privacy.php:45
 msgid "The Events Calendar suite offers the use of third-party API keys. The primary functions are to enhance the features we've built in, some of which use Google Maps, PayPal, Eventbrite, Meetup, and Facebook. These API keys are not supplied by Modern Tribe."
-msgstr ""
+msgstr "La Suite Events Calendar ofrece el uso de claves de API de terceros. Las funciones primarias son mejorar las características que hemos incorporado, algunas de las cuales utilizan Google Maps, Paypal, eventbrite, Meetup, y Facebook. Estas claves API no son proporcionadas por Modern Tribe."
 
 #: src/admin-views/privacy.php:43
 msgid "API Keys"
-msgstr ""
+msgstr "Claves API"
 
 #: src/admin-views/privacy.php:41
 msgid "When purchasing Eventbrite Tickets, attendee, purchaser, and order information are stored and managed by Eventbrite."
-msgstr ""
+msgstr "Al comprar entradas de Eventbrite, la información de los asistentes, compradores y pedidos será almacenada y administrada por Eventbrite."
 
 #: src/admin-views/privacy.php:39
 msgid "Please note that to create new events through the Community Events submission form, a user must hold a website account on this domain. This information is retained in the local database. It is also possible to create events anonymously, if the site owner has this option enabled."
-msgstr ""
+msgstr "Tenga en cuenta que para crear nuevos eventos a través del formulario de envío de eventos comunitarios, un usuario debe tener una cuenta de sitio web en este dominio. Esta información se conserva en la base de datos local. También es posible crear eventos de forma anónima, si el propietario del sitio tiene activada esta opción."
 
 #: src/admin-views/privacy.php:36
 msgid "Eventbrite Ticket information: name, description, cost, type, quantity"
@@ -93,19 +93,19 @@ msgstr ""
 
 #: src/admin-views/privacy.php:35
 msgid "Import origin data (URL from where events are being imported—such as Eventbrite, MeetUp, other compatible URL sources, and more, which can include similar or same data as listed above)"
-msgstr ""
+msgstr "Importar datos de origen (URL desde donde se importan los eventos, como Eventbrite, Meetup, otros orígenes de URL compatibles y más, que pueden incluir datos similares o iguales que se enumeran anteriormente)"
 
 #: src/admin-views/privacy.php:34
 msgid "All data present within a CSV or ICS file and external URLs (for events, venues, organizers, and tickets)"
-msgstr ""
+msgstr "Todos los datos presentes dentro de un archivo CSV o ICS y URLs externas (para eventos, lugares, organizadores y entradas)"
 
 #: src/admin-views/privacy.php:31
 msgid "Importing Events, Venues, and Organizers:"
-msgstr ""
+msgstr "Importación de eventos, lugares de encuentro y organizadores:"
 
 #: src/admin-views/privacy.php:28
 msgid "Event information: website, cost, description, date, time, image"
-msgstr ""
+msgstr "Información del evento: sitio web, precio, descripción, fecha, hora, imagen"
 
 #: src/admin-views/privacy.php:27
 msgid "Organizer information: name, phone, website, email"
@@ -117,7 +117,7 @@ msgstr ""
 
 #: src/admin-views/privacy.php:23
 msgid "If you create, submit, import, save, or publish Event, Venue, or Organizer information, such information is retained in the local database:"
-msgstr ""
+msgstr "Si crea, envía, importa, guarda o publica información de eventos, lugares o organizador, dicha información se conserva en la base de datos local:"
 
 #: src/admin-views/privacy.php:22 src/admin-views/privacy.php:47
 msgid "Suggested text:"
@@ -129,11 +129,11 @@ msgstr ""
 
 #: src/admin-views/privacy.php:20
 msgid "Event, Venue, and Organizer Information"
-msgstr ""
+msgstr "Evento, lugar de encuentro e información de la organización"
 
 #: src/admin-views/privacy.php:18
 msgid "What personal data we collect and why we collect it"
-msgstr ""
+msgstr "Qué información personal recopilamos y para qué"
 
 #: src/admin-views/privacy.php:16
 msgid "This information is only for guidance and not to be considered as legal advice."
@@ -141,11 +141,11 @@ msgstr ""
 
 #: src/admin-views/privacy.php:16
 msgid "Disclaimer:"
-msgstr ""
+msgstr "Cláusula de exención de responsabilidad:"
 
 #: src/admin-views/privacy.php:15
 msgid "You should include the information below in the correct sections of you privacy policy."
-msgstr ""
+msgstr "Debes incluir la siguiente información en las secciones correctas de tu política de privacidad."
 
 #: src/admin-views/privacy.php:14
 msgid "This information serves as a guide on what sections need to be modified due to usage of The Events Calendar and its Add-ons."
@@ -157,15 +157,15 @@ msgstr "Hola,"
 
 #: src/admin-views/aggregator/settings.php:531
 msgid "The default event category for events imported via Eventbrite"
-msgstr ""
+msgstr "Categoría por defecto para eventos importados a través de Eventbrite"
 
 #: src/admin-views/aggregator/settings.php:519
 msgid "The default post status for events imported via Eventbrite"
-msgstr ""
+msgstr "Estado de la entrada por defecto para eventos importados a través de Eventbrite"
 
 #: src/admin-views/aggregator/settings.php:513
 msgid "Eventbrite Import Settings"
-msgstr ""
+msgstr "Ajustes de importación de Eventbrite"
 
 #: src/admin-views/aggregator/settings.php:26
 msgid "None"
@@ -173,7 +173,7 @@ msgstr "Ninguno"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:13
 msgid "Import from Eventbrite"
-msgstr ""
+msgstr "Importar de Eventbrite"
 
 #: src/admin-views/aggregator/banners/eventbrite-upsell.php:17
 msgid "Learn more"
@@ -181,7 +181,7 @@ msgstr "Leer más"
 
 #: src/admin-views/aggregator/banners/eventbrite-upsell.php:14
 msgid "Do more with Eventbrite Tickets"
-msgstr ""
+msgstr "Haz más con Eventbrite Tickets"
 
 #: src/Tribe/Main.php:4513
 msgid "Search for %s by month. Please use the format %s."
@@ -193,79 +193,79 @@ msgstr "Buscar %s por fecha. Por favor, usa el formato %s."
 
 #: src/Tribe/Main.php:4476 src/Tribe/Main.php:4477
 msgid "2 digit month dot 4 digit year"
-msgstr ""
+msgstr "mes de 2 cifras punto año de 4 cifras"
 
 #: src/Tribe/Main.php:4475
 msgid "4 digit year dot 2 digit month"
-msgstr ""
+msgstr "año de 4 cifras punto mes de 2 cifras"
 
 #: src/Tribe/Main.php:4474
 msgid "2 digit month hyphen 4 digit year"
-msgstr ""
+msgstr "mes de 2 cifras guión año de 4 cifras"
 
 #: src/Tribe/Main.php:4471 src/Tribe/Main.php:4472 src/Tribe/Main.php:4473
 msgid "1 digit month hyphen 4 digit year"
-msgstr ""
+msgstr "mes de 1 cifra guión año de 4 cifras"
 
 #: src/Tribe/Main.php:4468 src/Tribe/Main.php:4470
 msgid "2 digit month slash 4 digit year"
-msgstr ""
+msgstr "mes de 2 cifras barra año de 4 cifras"
 
 #: src/Tribe/Main.php:4467 src/Tribe/Main.php:4469
 msgid "1 digit month slash 4 digit year"
-msgstr ""
+msgstr "mes de 1 cifra barra año de 4 cifras"
 
 #: src/Tribe/Main.php:4466
 msgid "4 digit year hyphen 2 digit month"
-msgstr ""
+msgstr "año de 4 cifras guión mes de 2 cifras"
 
 #: src/Tribe/Main.php:4462
 msgid "2 digit day dot 2 digit month dot 4 digit year"
-msgstr ""
+msgstr "día de 2 cifras punto mes de 2 cifras punto año de 4 cifras"
 
 #: src/Tribe/Main.php:4461
 msgid "2 digit month dot 2 digit day dot 4 digit year"
-msgstr ""
+msgstr "mes de 2 cifras punto día de 2 cifras punto año de 4 cifras"
 
 #: src/Tribe/Main.php:4460
 msgid "4 digit year dot 2 digit month dot 2 digit day"
-msgstr ""
+msgstr "año de 4 cifras punto mes de 2 cifras punto día de 2 cifras"
 
 #: src/Tribe/Main.php:4459
 msgid "2 digit day hyphen 2 digit month hyphen 4 digit year"
-msgstr ""
+msgstr "día de 2 cifras guión mes de 2 cifras guión año de 4 cifras"
 
 #: src/Tribe/Main.php:4458
 msgid "1 digit day hyphen 1 digit month hyphen 4 digit year"
-msgstr ""
+msgstr "día de 1 cifra guión mes de 1 cifra guión año de 4 cifras"
 
 #: src/Tribe/Main.php:4457
 msgid "1 digit month hyphen 2 digit day hyphen 4 digit year"
-msgstr ""
+msgstr "mes de 1 cifra guión día de 2 cifras guión año de 4 cifras"
 
 #: src/Tribe/Main.php:4456
 msgid "1 digit month hyphen 1 digit day hyphen 4 digit year"
-msgstr ""
+msgstr "mes de 1 cifra guión día de 1 cifra guión año de 4 cifras"
 
 #: src/Tribe/Main.php:4455
 msgid "2 digit day slash 2 digit month slash 4 digit year"
-msgstr ""
+msgstr "día de 2 cifras barra mes de 2 cifras barra año de 4 cifras"
 
 #: src/Tribe/Main.php:4454
 msgid "1 digit day slash 1 digit month slash 4 digit year"
-msgstr ""
+msgstr "día de 1 cifra barra mes de 1 cifra barra año de 4 cifras"
 
 #: src/Tribe/Main.php:4453
 msgid "2 digit month slash 2 digit day slash 4 digit year"
-msgstr ""
+msgstr "mes de 2 cifras barra día de 2 cifras barra año de 4 cifras\t"
 
 #: src/Tribe/Main.php:4452
 msgid "1 digit month slash 1 digit day slash 4 digit year"
-msgstr ""
+msgstr "mes de 1 cifra barra día de 1 cifra barra año de 4 cifras"
 
 #: src/Tribe/Main.php:4451
 msgid "4 digit year hyphen 2 digit month hyphen 2 digit day"
-msgstr ""
+msgstr "año de 4 cifras barra mes de 2 cifras barra días de dos cifras"
 
 #: src/Tribe/Main.php:4430
 msgid "Search for %s by Keyword."
@@ -273,23 +273,23 @@ msgstr "Buscar %s por palabra clave."
 
 #: src/Tribe/API.php:826 src/Tribe/API.php:837
 msgid "An event having a post meta value of `%s` minutes is not valid. Make sure it is from 0 to 59."
-msgstr ""
+msgstr "Un evento que tenga un valor post meta de `%s` minutos no es válido. Asegúrate de que sea de 0 a 59."
 
 #: src/Tribe/API.php:796
 msgid "An event having a post meta value of `%s` hour (24-hour) is not valid. Make sure it is from 0 to 23."
-msgstr ""
+msgstr "Un evento que tenga un valor post meta de `%s` hora (24 horas) no es válido. Asegúrate de que sea de 0 a 23."
 
 #: src/Tribe/API.php:789
 msgid "An event having a post meta value of `%s` hour (12-hour) is not valid. Make sure it is from 1 to 12."
-msgstr ""
+msgstr "Un evento que tenga un valor post meta de `%s` hora (12 horas) no es válido. Asegúrate de que sea de 1 a 12."
 
 #: src/Tribe/API.php:772
 msgid "An event having a post meta value of `%s` hour (am/pm) is not valid. Make sure it is from 1 to 12."
-msgstr ""
+msgstr "Un evento que tenga un valor post meta de `%s` hora (AM/PM) no es válido. Asegúrate de que sea de 1 a 12."
 
 #: src/Tribe/API.php:744
 msgid "An event having a post meta value of `%s` meridian is not valid. Make sure it is either `am` or `pm`, or remove it entirely if using the 24-hour format."
-msgstr ""
+msgstr "Un evento que tenga un valor post meta del meridiano `%s` no es válido. Asegúrate de que sea ' AM ' o ' PM ', o quítalo por completo si utilizas el formato de 24 horas."
 
 #: common/src/Tribe/Admin/Notice/Php_Version.php:101
 msgid "Starting March 2019, %1$s will no longer work with versions prior to PHP 5.4. Currently your site is using PHP version %2$s. For best results, we recommend using PHP 5.6 or above."
@@ -358,7 +358,7 @@ msgstr "Event Aggregator no está conectado a Eventbrite"
 
 #: src/admin-views/aggregator/origins/refine.php:32
 msgid "Use the filters to narrow down which events are fetched from Eventbrite."
-msgstr ""
+msgstr "Usa los filtros para limitar los eventos que se han obtenido a partir de tu archivo ICS."
 
 #: src/admin-views/aggregator/origins/meetup.php:154
 msgid "Invalid Meetup URL"
@@ -374,11 +374,11 @@ msgstr "URL de Eventbrite no válida"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:153
 msgid "eventbrite.com/e/example-12345"
-msgstr ""
+msgstr "eventbrite.com/e/example-12345"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:127
 msgid "Import from Eventbrite.com url"
-msgstr ""
+msgstr "Importar desde URL de eventbrite.com"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:116
 msgid "Import events directly from your connected Eventbrite.com account or from a public Eventbrite.com url."
@@ -390,15 +390,15 @@ msgstr "Selecciona el origen"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:114
 msgid "Import Source"
-msgstr ""
+msgstr "Origen de importación"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:44
 msgid "Log into Eventbrite"
-msgstr ""
+msgstr "Inicia sesión en Eventbrite"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:38
 msgid "Please log in to enable event imports from Eventbrite."
-msgstr ""
+msgstr "Por favor, accede para activar la importación de eventos desde Eventbrite"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:15
 #: src/admin-views/aggregator/origins/eventbrite.php:121
@@ -411,7 +411,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/Abstract.php:190
 msgid "Please provide a Eventbrite URL when importing from Eventbrite."
-msgstr ""
+msgstr "Proporciona una URL de Eventbrite cuando importes desde Eventbrite."
 
 #: src/Tribe/Aggregator/Service.php:693
 msgid "Successfully fetched Eventbrite Token"
@@ -419,62 +419,62 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Service.php:677
 msgid "No upcoming Eventbrite events found."
-msgstr ""
+msgstr "No se encontraron eventos de Eventbrite próximos."
 
 #: src/Tribe/Aggregator/Service.php:676
 msgid "Events cannot be imported because Eventbrite has returned an error. This could mean that the event ID does not exist, the event or source is marked as Private, or the event or source has been otherwise restricted by Eventbrite. You can <a href=\"https://theeventscalendar.com/knowledgebase/import-errors/\" target=\"_blank\">read more about Eventbrite restrictions in our knowledgebase</a>."
-msgstr ""
+msgstr "Los eventos no se pueden importar porque Eventbrite ha devuelto un error. Esto podría significar que el identificador de evento no existe, el evento o la fuente está marcada como privado, o el evento o la fuente ha sido restringido por Eventbrite. Puedes <a href=\"https://theeventscalendar.com/knowledgebase/import-errors/\" target=\"_blank\">leer más acerca de las restricciones de Eventbrite en nuestra base de conocimientos</a> ."
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/State.php:78
 msgid "The new status message slug, to allow for localized messages."
-msgstr ""
+msgstr "El nuevo slug de estado de mensaje, para permitir mensajes localizados."
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/State.php:73
 msgid "The new status message for the user, not localized."
-msgstr ""
+msgstr "El nuevo mensaje de estado para el usuario, no localizado."
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/State.php:68
 msgid "The new status of the import."
-msgstr ""
+msgstr "El nuevo estado de la importación."
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/Batch.php:138
 msgid "The current interval, in seconds, between the end of a batch process and the start of the next; as set on the server."
-msgstr ""
+msgstr "El intervalo actual, en segundos, entre el final de un proceso por lotes y el inicio de la siguiente; como se establece en el servidor."
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/Batch.php:132
 #: src/Tribe/Aggregator/REST/V1/Endpoints/State.php:84
 msgid "The percentage of import completed."
-msgstr ""
+msgstr "El porcentaje de importación completado."
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/Batch.php:126
 msgid "The current status of the import."
-msgstr ""
+msgstr "El estado actual de la importación."
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/Batch.php:120
 #: src/Tribe/Aggregator/REST/V1/Endpoints/State.php:62
 msgid "The hash of the next expected batch, as previously provided by the client"
-msgstr ""
+msgstr "El hash del siguiente lote esperado, como lo proporcionó previamente el cliente"
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/Batch.php:114
 #: src/Tribe/Aggregator/REST/V1/Endpoints/State.php:56
 msgid "The import unique ID as provided by Event Aggregator service"
-msgstr ""
+msgstr "Identificador único de importación proporcionado por el servicio de agregadores de eventos"
 
 #: src/Tribe/Aggregator/Errors.php:66
 msgid "There is an JSON error with the Event Aggregator server. Please try your import again later."
-msgstr ""
+msgstr "Hay un error JSON con el servidor del agregador de eventos. Por favor, inténtalo de nuevo más tarde."
 
 #: src/Tribe/Aggregator/CLI/Service_Provider.php:22
 msgid "If required the commands will use the API keys and licenses set for the current site."
-msgstr ""
+msgstr "Si es necesario, los comandos usarán las claves API y las licencias establecidas para el sitio actual."
 
 #: src/Tribe/Aggregator/CLI/Service_Provider.php:21
 msgid "Create, run and manage Event Aggregator imports."
-msgstr ""
+msgstr "Crear, ejecutar y administrar importaciones de agregadores de eventos."
 
 #: src/Tribe/Admin/Notice/Timezones.php:76
 msgid "When using The Events Calendar, we recommend that you choose a city in your timezone and avoid using a UTC timezone offset. Choosing a UTC timezone may cause problems when importing events or with Day Light Savings time. %1$s"
-msgstr ""
+msgstr "Cuando utilices The Events Calendar, te recomendamos que elijas una ciudad en tu zona horaria y evites usar un desfase de huso horario UTC. La elección de una zona horaria UTC puede causar problemas al importar eventos o con los cambios de hora. %1$s"
 
 #: src/Tribe/Admin/Notice/Timezones.php:74
 msgid "Read more"
@@ -483,7 +483,7 @@ msgstr "Leer más"
 #: src/Tribe/Admin/Notice/Marketing.php:52
 msgctxt "2018 user survey"
 msgid "<strong>The Events Calendar Annual Survey:</strong> share your feedback with our team—%1$s!"
-msgstr ""
+msgstr "<strong>The Events Calendar Annual Survey:</strong> comparte tus comentarios con nuestro equipo —¡%1$s!"
 
 #: src/Tribe/Admin/Notice/Marketing.php:48
 msgctxt "2018 user survey"
@@ -1105,15 +1105,15 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:119
 msgid "The event category term ID is missing or does not exist."
-msgstr ""
+msgstr "Falta el ID de término de categoría de evento o no existe."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:113
 msgid "Deletes an event category and returns its data"
-msgstr ""
+msgstr "Elimina una categoría de evento y devuelve sus datos"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:105
 msgid "The user is not authorized to create event categories"
-msgstr ""
+msgstr "El usuario no tiene autorización para crear categorías de eventos"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:102
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:151
@@ -1121,15 +1121,15 @@ msgstr ""
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:96
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:141
 msgid "A required parameter is missing or an input parameter is in the wrong format"
-msgstr ""
+msgstr "Falta un parámetro requerido o un parámetro introducido está en un formato incorrecto"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:96
 msgid "Returns the data of the created event category"
-msgstr ""
+msgstr "Devuelve los datos de la categoría del evento creado."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:90
 msgid "Returns the data of the updated event category"
-msgstr ""
+msgstr "Devuelve los datos de la categoría de evento actualizada"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:81
 msgid "An event category with the specified term ID does not exist."
@@ -1348,12 +1348,12 @@ msgstr "Estado del evento"
 #: src/Tribe/Linked_Posts.php:1126
 msgctxt "The \"Create or Find {post type name}\" label for custom linked post types that are *not* Venues or Organizers"
 msgid "Create or Find %s"
-msgstr ""
+msgstr "Crear o buscar %s"
 
 #: src/Tribe/Linked_Posts.php:1117
 msgctxt "The \"Find a {post type name}\" label for custom linked post types that are *not* Venues or Organizers"
 msgid "Find %1$s %2$s"
-msgstr ""
+msgstr "Encontrar %1$s %2$s"
 
 #: src/Tribe/Linked_Posts.php:1108
 msgid "Find a Venue"
@@ -1366,12 +1366,12 @@ msgstr ""
 #: src/Tribe/Linked_Posts.php:1100
 msgctxt "\"Create or Find Venue\", but when the word \"Venue\" is customized to something else."
 msgid "Create or Find %s"
-msgstr ""
+msgstr "Crear o buscar %s"
 
 #: src/Tribe/Linked_Posts.php:1091
 msgctxt "\"Find a Venue\", but when the word \"Venue\" is customized to something else."
 msgid "Find %1$s %2$s"
-msgstr ""
+msgstr "Encontrar %1$s %2$s"
 
 #: src/Tribe/Linked_Posts.php:1080
 msgid "Find an Organizer"
@@ -1384,12 +1384,12 @@ msgstr ""
 #: src/Tribe/Linked_Posts.php:1072
 msgctxt "\"Create or Find Organizer\", but when the word \"Organizer\" is customized to something else."
 msgid "Create or Find %s"
-msgstr ""
+msgstr "Crear o buscar %s"
 
 #: src/Tribe/Linked_Posts.php:1063
 msgctxt "\"Find an Organizer\", but when the word \"Organizer\" is customized to something else."
 msgid "Find %1$s %2$s"
-msgstr ""
+msgstr "Encontrar %1$s %2$s"
 
 #: src/Tribe/Aggregator/Tabs/Abstract.php:145
 msgid "A record already exists with these settings, %1$s."
@@ -1423,11 +1423,11 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Service.php:668
 msgid "the UID part of the iCalendar Specification"
-msgstr ""
+msgstr "la parte UID de la especificación iCalendar"
 
 #: src/Tribe/Aggregator/Page.php:87
 msgid "A warning was generated while fetching the results from your import:"
-msgstr ""
+msgstr "Se generó una advertencia al obtener los resultados de tu importación:"
 
 #: common/src/admin-views/tribe-options-help.php:20
 msgid "Check out our %s for developers."
@@ -1471,7 +1471,7 @@ msgstr ""
 
 #: common/src/Tribe/Languages/Locations.php:57
 msgid "&Aring;land Islands"
-msgstr ""
+msgstr "Islas Âland"
 
 #: common/src/Tribe/Documentation/Swagger/Term_Definition_Provider.php:57
 msgid "A list of links to the term own, archive and parent REST URL"
@@ -2032,7 +2032,7 @@ msgstr "Una o más de las variables de consulta especificadas tiene un formato i
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:117
 msgid "The venue with the specified ID is not accessible."
-msgstr ""
+msgstr "El lugar con el identificador especificado no es accesible."
 
 #: src/Tribe/REST/V1/Endpoints/Swagger_Documentation.php:126
 msgid "Returns the documentation for The Events Calendar REST API in Swagger consumable format."
@@ -3661,8 +3661,8 @@ msgstr "Evento %d: %s"
 #: src/Tribe/Ignored_Events.php:907
 msgid "Migration: %d Legacy Ignored Post failed to be migrated."
 msgid_plural "Migration: %d Legacy Ignored Posts failed to be migrated."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Migración:%d publicación omitida heredada no se pudo migrar."
+msgstr[1] "Migración:%d publicaciones omitida heredada no se pudieron migrar."
 
 #: src/Tribe/Ignored_Events.php:895
 msgid "Migration: %d Legacy Ignored Post was migrated but %d failed. To see the migrated event you will first need to refresh this screen."
@@ -3775,8 +3775,8 @@ msgstr[1] "%s entradas movidas a la papelera"
 #: src/Tribe/Ignored_Events.php:133
 msgid "post moved to Ignored."
 msgid_plural "posts moved to Ignored."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "publicación movida a Ignorado."
+msgstr[1] "publicaciones movidas a Ignorado."
 
 #: src/Tribe/Ignored_Events.php:52 src/Tribe/Ignored_Events.php:397
 msgid "Ignored events do not show on the calendar but can be updated with future imports"
@@ -3951,8 +3951,8 @@ msgstr "Ver los organizadores de su evento"
 #: src/Tribe/Aggregator/Tabs/New.php:348
 msgid "%1$d new organizer was imported."
 msgid_plural "%1$d new organizers were imported."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1$d nuevo organizador fue importado."
+msgstr[1] "%1$d nuevos organizadores fueron importados."
 
 #: src/Tribe/Aggregator/Tabs/New.php:340
 msgid "View your event venues"
@@ -4776,7 +4776,7 @@ msgstr ""
 
 #: common/src/admin-views/app-shop.php:26
 msgid "Buy This Add-On"
-msgstr ""
+msgstr "Comprar este complemento"
 
 #: common/src/admin-views/app-shop.php:5
 msgid "Browse All Add-Ons"
@@ -6661,7 +6661,7 @@ msgstr "Sahara Occidental"
 
 #: common/src/Tribe/Languages/Locations.php:293
 msgid "Wallis and Futuna Islands"
-msgstr ""
+msgstr "Wallis y Futuna"
 
 #: common/src/Tribe/Languages/Locations.php:292
 msgid "Virgin Islands (U.S.)"
@@ -6717,7 +6717,7 @@ msgstr "Tuvalu"
 
 #: common/src/Tribe/Languages/Locations.php:279
 msgid "Turks and Caicos Islands"
-msgstr ""
+msgstr "Islas Turcas y Caicos"
 
 #: common/src/Tribe/Languages/Locations.php:278
 msgid "Turkmenistan"
@@ -6753,7 +6753,7 @@ msgstr "Tailandia"
 
 #: common/src/Tribe/Languages/Locations.php:270
 msgid "Tanzania, United Republic of"
-msgstr ""
+msgstr "Tanzania, República Unida de"
 
 #: common/src/Tribe/Languages/Locations.php:269
 msgid "Tajikistan"
@@ -6781,7 +6781,7 @@ msgstr "Swazilandia"
 
 #: common/src/Tribe/Languages/Locations.php:263
 msgid "Svalbard and Jan Mayen Islands"
-msgstr ""
+msgstr "Islas Svalbard y Jan Mayen"
 
 #: common/src/Tribe/Languages/Locations.php:262
 msgid "Suriname"
@@ -6793,7 +6793,7 @@ msgstr "Sudán"
 
 #: common/src/Tribe/Languages/Locations.php:241
 msgid "Saint Pierre and Miquelon"
-msgstr ""
+msgstr "San Pedro y Miquelón"
 
 #: common/src/Tribe/Languages/Locations.php:260
 msgid "Sri Lanka"
@@ -6861,7 +6861,7 @@ msgstr "Samoa"
 
 #: common/src/Tribe/Languages/Locations.php:242
 msgid "Saint Vincent and The Grenadines"
-msgstr ""
+msgstr "San Vicente y las Granadinas"
 
 #: common/src/Tribe/Languages/Locations.php:240
 msgid "Saint Lucia"
@@ -6869,7 +6869,7 @@ msgstr "Santa Lucia"
 
 #: common/src/Tribe/Languages/Locations.php:239
 msgid "Saint Kitts and Nevis"
-msgstr ""
+msgstr "San Cristóbal y Nevis"
 
 #: common/src/Tribe/Languages/Locations.php:236
 msgid "Rwanda"
@@ -7021,11 +7021,11 @@ msgstr "Monaco"
 
 #: common/src/Tribe/Languages/Locations.php:199
 msgid "Moldova, Republic of"
-msgstr ""
+msgstr "Moldavia, República de"
 
 #: common/src/Tribe/Languages/Locations.php:198
 msgid "Micronesia, Federated States of"
-msgstr ""
+msgstr "Micronesia, Estados Federados de"
 
 #: common/src/Tribe/Languages/Locations.php:197
 msgid "Mexico"
@@ -7133,7 +7133,7 @@ msgstr "República de Corea"
 
 #: common/src/Tribe/Languages/Locations.php:171
 msgid "Korea, Democratic People's Republic of"
-msgstr ""
+msgstr "Korea, República Popular Democrática de"
 
 #: common/src/Tribe/Languages/Locations.php:170
 msgid "Kiribati"
@@ -7697,7 +7697,7 @@ msgstr "No hay %s anteriores."
 
 #: src/Tribe/Template_Factory.php:304 src/Tribe/Template_Factory.php:309
 msgid "No matching %1$s listed under %2$s. Please try viewing the full calendar for a complete list of %3$s."
-msgstr "No hay %1$s así listado en %2$s. Favor de ver el calendario por una lista de %3$s."
+msgstr "No hay %1$s en %2$s. Accede al calendario completo para ver una lista de %3$s."
 
 #: src/Tribe/Template_Factory.php:302
 msgid "No upcoming %1$s listed under %2$s. Check out upcoming %3$s for this category or view the full calendar."
