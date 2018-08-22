@@ -3,7 +3,7 @@ Contributors: vasyltech
 Tags: access control, membership, backend menu, user role, restricted content
 Requires at least: 4.0
 Tested up to: 4.9.7
-Stable tag: 5.4.1
+Stable tag: 5.4.2
 
 All you need to manage access to you WordPress websites on frontend, backend and API levels for any role, user or visitors.
 
@@ -75,6 +75,13 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 11. Improve your website security
 
 == Changelog ==
+
+= 5.4.2 =
+* Fixed the bug that was causing an error with legacy "teaser" data
+* Fixed the bug with aam_manage_admin_toolbar capability been named incorrectly
+* Clearing all AAM settings when plugin is uninstalled
+* Highlighted post, term or type that has explicit access settings defined on Posts & Terms tab
+* Improved JWT authentication feature to allow use it for stand-alone embedded to WP apps
 
 = 5.4.1 =
 * Fixed the bug reported by Doug Davis where newly created posts get locked if default access settings are defined
