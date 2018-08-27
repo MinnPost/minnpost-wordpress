@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc67925a9c06adc1fe7f7739840c19e1",
+    "content-hash": "6c650d1fd71238f78ec1eba6a1de18fc",
     "packages": [
         {
             "name": "aaemnnosttv/wp-cli-dotenv-command",
@@ -224,12 +224,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "7f96481c80ecfe0fd8d37506064d3a25ed9cad23"
+                "reference": "1973b6633a20c439ce2f9dd15168c6ee7a95952d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/7f96481c80ecfe0fd8d37506064d3a25ed9cad23",
-                "reference": "7f96481c80ecfe0fd8d37506064d3a25ed9cad23",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1973b6633a20c439ce2f9dd15168c6ee7a95952d",
+                "reference": "1973b6633a20c439ce2f9dd15168c6ee7a95952d",
                 "shasum": ""
             },
             "require": {
@@ -267,7 +267,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2018-07-22T19:42:51+00:00"
+            "time": "2018-08-16T22:18:50+00:00"
         },
         {
             "name": "psy/psysh",
@@ -443,12 +443,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "1ed8ba31403db259af03c7559f000beadd287314"
+                "reference": "8ca04d87a73d209b918f352f72f8ebba3fcb61c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/1ed8ba31403db259af03c7559f000beadd287314",
-                "reference": "1ed8ba31403db259af03c7559f000beadd287314",
+                "url": "https://api.github.com/repos/symfony/console/zipball/8ca04d87a73d209b918f352f72f8ebba3fcb61c4",
+                "reference": "8ca04d87a73d209b918f352f72f8ebba3fcb61c4",
                 "shasum": ""
             },
             "require": {
@@ -504,7 +504,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26T11:25:51+00:00"
+            "time": "2018-08-21T12:03:16+00:00"
         },
         {
             "name": "symfony/contracts",
@@ -512,12 +512,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/contracts.git",
-                "reference": "316e2120250017445eef76c1b9a80ee863f90d6e"
+                "reference": "109a6decc39e5831500bb51ad27fd97ef157614b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/contracts/zipball/316e2120250017445eef76c1b9a80ee863f90d6e",
-                "reference": "316e2120250017445eef76c1b9a80ee863f90d6e",
+                "url": "https://api.github.com/repos/symfony/contracts/zipball/109a6decc39e5831500bb51ad27fd97ef157614b",
+                "reference": "109a6decc39e5831500bb51ad27fd97ef157614b",
                 "shasum": ""
             },
             "require": {
@@ -561,7 +561,7 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2018-07-13T17:06:58+00:00"
+            "time": "2018-07-14T08:12:57+00:00"
         },
         {
             "name": "symfony/finder",
@@ -732,12 +732,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "b077f7ebc4dcbe610782cfab879af3e34682e2e7"
+                "reference": "43cb977a809b25c3597850fd8cf8806a0e947a02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/b077f7ebc4dcbe610782cfab879af3e34682e2e7",
-                "reference": "b077f7ebc4dcbe610782cfab879af3e34682e2e7",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/43cb977a809b25c3597850fd8cf8806a0e947a02",
+                "reference": "43cb977a809b25c3597850fd8cf8806a0e947a02",
                 "shasum": ""
             },
             "require": {
@@ -799,7 +799,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2018-08-03T11:20:06+00:00"
+            "time": "2018-08-21T12:03:16+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -807,12 +807,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/phpdotenv.git",
-                "reference": "8abb4f9aa89ddea9d52112c65bbe8d0125e2fa8e"
+                "reference": "54d599d414f8cf3f6129e287acaf44b610486aa1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/8abb4f9aa89ddea9d52112c65bbe8d0125e2fa8e",
-                "reference": "8abb4f9aa89ddea9d52112c65bbe8d0125e2fa8e",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/54d599d414f8cf3f6129e287acaf44b610486aa1",
+                "reference": "54d599d414f8cf3f6129e287acaf44b610486aa1",
                 "shasum": ""
             },
             "require": {
@@ -849,7 +849,7 @@
                 "env",
                 "environment"
             ],
-            "time": "2018-07-29T20:33:41+00:00"
+            "time": "2018-08-22T19:34:05+00:00"
         },
         {
             "name": "wp-cli/mustangostang-spyc",
@@ -955,12 +955,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli.git",
-                "reference": "45f1dec1b8f11f857425f51dd739e5fb6110b795"
+                "reference": "5c2f8f8b3632d06dd2aca88b0e494c01e960c556"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/45f1dec1b8f11f857425f51dd739e5fb6110b795",
-                "reference": "45f1dec1b8f11f857425f51dd739e5fb6110b795",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/5c2f8f8b3632d06dd2aca88b0e494c01e960c556",
+                "reference": "5c2f8f8b3632d06dd2aca88b0e494c01e960c556",
                 "shasum": ""
             },
             "require": {
@@ -978,7 +978,7 @@
                 "wp-cli/entity-command": "^1.2 || ^2",
                 "wp-cli/extension-command": "^1.1 || ^2",
                 "wp-cli/package-command": "^1 || ^2",
-                "wp-cli/wp-cli-tests": "^2"
+                "wp-cli/wp-cli-tests": "^2.0.8"
             },
             "bin": [
                 "bin/wp",
@@ -1005,7 +1005,7 @@
                 "cli",
                 "wordpress"
             ],
-            "time": "2018-08-10T08:25:04+00:00"
+            "time": "2018-08-24T02:02:34+00:00"
         }
     ],
     "packages-dev": [],
