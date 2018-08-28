@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-06-07 21:03:38+0000\n"
+"PO-Revision-Date: 2018-08-27 20:13:42+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,7 +29,7 @@ msgstr ""
 
 #: src/views/modules/bar.php:48
 msgid "View %s As"
-msgstr ""
+msgstr "Visualizza come %s"
 
 #: src/views/modules/bar.php:43
 msgid "%s Views Navigation"
@@ -101,7 +101,7 @@ msgstr ""
 
 #: src/admin-views/privacy.php:31
 msgid "Importing Events, Venues, and Organizers:"
-msgstr ""
+msgstr "Importa eventi, sedi e organizzatori:"
 
 #: src/admin-views/privacy.php:28
 msgid "Event information: website, cost, description, date, time, image"
@@ -374,7 +374,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/origins/eventbrite.php:153
 msgid "eventbrite.com/e/example-12345"
-msgstr ""
+msgstr "eventbrite.com/e/example-12345"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:127
 msgid "Import from Eventbrite.com url"
@@ -499,7 +499,7 @@ msgstr ""
 #: src/Tribe/REST/V1/Endpoints/Archive_Organizer.php:67
 #: src/Tribe/REST/V1/Endpoints/Archive_Venue.php:64
 msgid "The requested page was not found."
-msgstr ""
+msgstr "La pagina richiesta non è stata trovata"
 
 #: src/Tribe/Aggregator/Settings.php:491
 msgid "one month"
@@ -534,40 +534,40 @@ msgstr ""
 #: src/admin-views/tribe-options-general.php:177
 #: src/admin-views/tribe-options-general.php:194
 msgid "3 years"
-msgstr ""
+msgstr "3 anni"
 
 #: src/admin-views/tribe-options-general.php:176
 #: src/admin-views/tribe-options-general.php:193
 msgid "2 years"
-msgstr ""
+msgstr "2 anni"
 
 #: src/admin-views/tribe-options-general.php:175
 #: src/admin-views/tribe-options-general.php:192
 msgid "1 year"
-msgstr ""
+msgstr "1 anno"
 
 #: src/admin-views/tribe-options-general.php:174
 #: src/admin-views/tribe-options-general.php:191
 msgid "9 months"
-msgstr ""
+msgstr "9 mesi"
 
 #: src/admin-views/tribe-options-general.php:173
 #: src/admin-views/tribe-options-general.php:190
 msgid "6 months"
-msgstr ""
+msgstr "6 mesi"
 
 #: src/admin-views/tribe-options-general.php:172
 #: src/admin-views/tribe-options-general.php:189
 msgid "3 months"
-msgstr ""
+msgstr "3 mesi"
 
 #: src/admin-views/tribe-options-general.php:166
 msgid "This option allows you to automatically move past events to trash."
-msgstr ""
+msgstr "Questa opzione ti permette di cestinare automaticamente gli eventi passati."
 
 #: src/admin-views/tribe-options-general.php:165
 msgid "Move to trash events older than"
-msgstr ""
+msgstr "Cestina eventi più vecchi di"
 
 #: src/admin-views/tribe-options-general.php:53
 msgid "Instantly updates the calendar view when searching for or filtering events."
@@ -579,7 +579,7 @@ msgstr ""
 
 #: src/admin-views/events-meta-box.php:129
 msgid "Time Zone:"
-msgstr ""
+msgstr "Fuso orario:"
 
 #: src/Tribe/Gutenberg.php:84
 msgid "Looks like you are using Gutenberg on this WordPress installation. %1$s"
@@ -601,7 +601,7 @@ msgstr ""
 
 #: src/admin-views/tribe-options-general.php:31
 msgid "The number of events per page on the List, Photo, and Map Views. Does not affect other views."
-msgstr ""
+msgstr "Il numero di eventi per pagina sulla vista Elenco, Foto e Mappa. Non influisce su altre visualizzazioni."
 
 #: src/admin-views/tribe-options-general.php:28
 msgid "The number of events per page on the List View. Does not affect other views."

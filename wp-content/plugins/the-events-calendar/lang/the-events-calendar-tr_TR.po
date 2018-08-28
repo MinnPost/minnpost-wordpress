@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-01-18 21:37:29+0000\n"
+"PO-Revision-Date: 2018-08-26 11:36:54+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -5775,7 +5775,7 @@ msgstr ""
 
 #: src/admin-views/tribe-options-timezones.php:48
 msgid "Show time zone"
-msgstr ""
+msgstr "Zaman dilimini göster"
 
 #: src/admin-views/tribe-options-timezones.php:43
 msgid "Use the site-wide time zone everywhere"
@@ -5787,7 +5787,7 @@ msgstr ""
 
 #: src/admin-views/tribe-options-timezones.php:38
 msgid "Time zone mode"
-msgstr ""
+msgstr "Zaman dilimi modu"
 
 #: src/admin-views/tribe-options-timezones.php:30
 msgid "Time Zone Settings"
@@ -8411,7 +8411,7 @@ msgstr "Ücretsiz"
 #: src/Tribe/Cost_Utils.php:120
 msgctxt "Cost range separator"
 msgid " – "
-msgstr ""
+msgstr " - "
 
 #: common/src/Tribe/App_Shop.php:50 common/src/Tribe/App_Shop.php:51
 #: common/src/Tribe/App_Shop.php:72
@@ -8476,11 +8476,11 @@ msgstr "%d%% tamamlandı"
 
 #: src/Tribe/Admin/Timezone_Updater.php:78
 msgid "Update complete: time zone data has been added to all events in the database."
-msgstr ""
+msgstr "Güncelleme tamamlandı: zaman dilimi bilgisi veritabanındaki tüm etkinliklere eklendi."
 
 #: src/Tribe/Admin/Timezone_Updater.php:77
 msgid "Please wait while time zone data is added to your events."
-msgstr ""
+msgstr "Zaman dilimi bilgisi etkinliklerinize eklenirken lütfen bekleyiniz."
 
 #: src/Tribe/Admin/Bar/Default_Configurator.php:62
 #: src/Tribe/Linked_Posts/Chooser_Meta_Box.php:211 src/Tribe/Main.php:1762
