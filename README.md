@@ -53,13 +53,23 @@ GF_LICENSE_KEY={gravityformslicensekey}
 WP_HOME = {homepageurl}
 WP_SITEURL = {siteurl}
 
+# redis
+WP_REDIS_DATABASE={redis index number}
+
+# elasticpress
+EP_HOST='{hostname for Elasticpress}'
+EP_INDEX_PREFIX='{prefix for Elasticpress}-'
+
+# analytics
+WP_ANALYTICS_TRACKING_ID='{Google Analytics tracking code}'
+
 # debug modes - always set these to false on production
 WP_DEBUG=true
 JETPACK_DEV_DEBUG=true
 SCRIPT_DEBUG=true
 
 # payment processor stuff
-PAYMENT_PROCESSOR_URL={paymentprocessorurl}
+PAYMENT_PROCESSOR_URL='{paymentprocessorurl}'
 
 ```
 
