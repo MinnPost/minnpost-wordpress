@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Spills
 Description: This plugin creates a sidebar widget and endpoint URL that is able to display posts from a group of categories and/or tags
-Version: 0.0.4
+Version: 0.0.5
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-spills
@@ -443,41 +443,72 @@ class MinnpostSpills_Widget extends WP_Widget {
 		$featured_columns[] = $perspectives->term_id;
 		$featured_columns[] = $fonm->term_id;
 
-		if ( ! empty( $categories ) ) {
-			$slugs = array();
+		if ( ! empty( $categories ) && is_array( $categories ) ) {
+			$category_ids = array();
 			foreach ( $categories as $category ) {
 				if ( is_numeric( $category ) ) {
-					$category = get_term_by( 'id', $category, 'category' );
-					$slugs[]  = $category->slug;
+					$category_ids[] = $category;
 				} else {
-					$slugs[] = $category;
+					$category_object = get_category_by_slug( $category );
+					$category_ids[]  = $category_object->term_id;
 				}
 			}
-
 			$args = array(
+				'category__in' => $category_ids,
+			);
+		}
+
+		if ( ! empty( $terms ) ) {
+			$term_ids = array();
+			if ( is_array( $terms ) ) {
+				foreach ( $terms as $term ) {
+					$term_object = get_term_by( 'name', $term, 'post_tag' );
+					$term_ids[]  = $term_object->term_id;
+				}
+			} else {
+				$terms_array = explode( ',', $terms );
+				foreach ( $terms_array as $term ) {
+					$term_object = get_term_by( 'name', $term, 'post_tag' );
+					$term_ids[]  = $term_object->term_id;
+				}
+			}
+			$args = array(
+				'tag__in' => $term_ids,
+			);
+		}
+
+		if ( isset( $term_ids ) && isset( $category_ids ) ) {
+			unset( $args );
+			$args['tax_query'] = array(
+				'relation' => 'OR',
+				array(
+					'taxonomy' => 'category',
+					'field'    => 'term_id',
+					'terms'    => $category_ids,
+				),
+				array(
+					'taxonomy' => 'post_tag',
+					'field'    => 'term_id',
+					'terms'    => $term_ids,
+					'operator' => 'IN',
+				),
+			);
+		}
+
+		if ( isset( $args ) ) {
+			$default_args = array(
 				'posts_per_page'   => 4,
-				'category_name'    => $slugs ? implode( ',', $slugs ) : '',
 				'category__not_in' => array_values( $featured_columns ), // the perspectives featured columns
 				'orderby'          => 'date',
+				'order'            => 'DESC',
 			);
 
+			$args = array_merge( $default_args, $args );
 			if ( class_exists( 'EP_WP_Query_Integration' ) ) {
 				$args['ep_integrate'] = true;
 			}
 
 			$the_query = new WP_Query( $args );
-
-		}
-
-		if ( ! empty( $terms ) ) {
-			$the_query = new WP_Query(
-				array(
-					'posts_per_page'   => 4,
-					'tag'              => $terms ? is_array( $terms ) ? implode( ',', $terms ) : $terms : '',
-					'category__not_in' => array_values( $featured_columns ), // the perspectives featured columns
-					'orderby'          => 'date',
-				)
-			);
 		}
 
 		?>
@@ -487,11 +518,17 @@ class MinnpostSpills_Widget extends WP_Widget {
 			<?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
 				<article id="<?php the_ID(); ?>" class="m-post m-post-spill">
 					<?php
-					$url_array = explode( '/', get_permalink() );
-					$category  = $url_array[3];
-					if ( is_object( get_category_by_slug( $category ) ) ) {
+					if ( function_exists( 'minnpost_get_permalink_category_id' ) ) {
+						$category_id = minnpost_get_permalink_category_id( get_the_ID() );
+						$category    = get_category( $category_id );
+					} else {
+						$url_array = explode( '/', get_permalink() );
+						$slug      = $url_array[3];
+						$category  = get_category_by_slug( $category );
+					}
+					if ( is_object( $category ) ) {
 						?>
-					<p class="a-post-category a-spill-item-category"><?php echo get_category_by_slug( $category )->name; ?></p>
+					<p class="a-post-category a-spill-item-category"><?php echo $category->name; ?></p>
 					<?php } ?>
 					<p class="a-post-title a-spill-item-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></p>
 				</article>
