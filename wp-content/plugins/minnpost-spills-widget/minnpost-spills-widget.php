@@ -478,7 +478,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 		}
 
 		if ( isset( $term_ids ) && isset( $category_ids ) ) {
-			unset( $args );
+			$args              = array();
 			$args['tax_query'] = array(
 				'relation' => 'OR',
 				array(
@@ -490,7 +490,6 @@ class MinnpostSpills_Widget extends WP_Widget {
 					'taxonomy' => 'post_tag',
 					'field'    => 'term_id',
 					'terms'    => $term_ids,
-					'operator' => 'IN',
 				),
 			);
 		}
