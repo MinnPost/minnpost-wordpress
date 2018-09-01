@@ -66,8 +66,8 @@ class Deserialize_Metadata {
 
 		add_filter( 'cron_schedules', array( $this, 'set_schedule_frequency' ) );
 
-		$this->config();
-		$this->schedule();
+		add_action( 'plugins_loaded', array( $this, 'config' ) );
+		add_action( 'plugins_loaded', array( $this, 'schedule' ) );
 
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
@@ -512,7 +512,7 @@ class Deserialize_Metadata {
 	 *
 	 * @return void
 	 */
-	private function config() {
+	public function config() {
 
 		$maps = get_option( 'deserialize_metadata_maps', '' );
 		if ( '' === $maps ) {
@@ -541,6 +541,7 @@ class Deserialize_Metadata {
 				'maps'              => $config_maps,
 			),
 		);
+		return $this->config;
 
 	}
 
@@ -592,39 +593,25 @@ class Deserialize_Metadata {
 	 * @return void
 	 */
 	public function get_posts_with_serialized_metadata() {
+		global $wpdb;
 		foreach ( $this->config as $config ) {
-			$offset = get_option( 'deserialize_metadata_last_post_checked', '0' );
-			$key    = $config['wp_imported_field'];
-			$maps   = $config['maps'];
-			$args   = array(
-				'post_type'      => $config['post_type'],
-				'post_status'    => $config['post_status'],
-				'posts_per_page' => (int) $config['posts_per_page'],
-				//'offset'       => (int) $offset,
-				'orderby'        => 'ID',
-				'order'          => 'DESC',
-				'meta_query'     => array(
-					array(
-						'key' => $key,
-					),
-				),
-			);
-			$query  = new WP_Query( $args );
-			if ( $query->have_posts() ) {
-				$count = $offset;
-				while ( $query->have_posts() ) {
-					$query->the_post();
-					$post_id  = $query->post->ID;
-					$metadata = get_post_meta( $post_id, $key, true );
-					$this->create_fields( $post_id, $metadata, $maps );
-					$this->delete_combined_field( $post_id, $key );
-					$count++;
-				}
-				//error_log( 'new offset is ' . $config['posts_per_page'] + $count );
-				update_option( 'deserialize_metadata_last_post_checked', $config['posts_per_page'] + $count );
-			}
-		}
+			$offset         = get_option( 'deserialize_metadata_last_post_checked', '0' );
+			$key            = $config['wp_imported_field'];
+			$maps           = $config['maps'];
+			$posts_per_page = (int) $config['posts_per_page'];
 
+			$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}postmeta WHERE meta_key = '$key' ORDER BY post_id DESC LIMIT $posts_per_page OFFSET $offset", OBJECT );
+
+			$count = 0;
+			foreach ( $results as $result ) {
+				$post_id  = $result->post_id;
+				$metadata = get_post_meta( $post_id, $key, true );
+				$this->create_fields( $post_id, $metadata, $maps );
+				$this->delete_combined_field( $post_id, $key );
+				$count++;
+			}
+			update_option( 'deserialize_metadata_last_post_checked', $config['posts_per_page'] + $count );
+		}
 	}
 
 	/**
@@ -643,7 +630,7 @@ class Deserialize_Metadata {
 						if ( ! empty( $pre_existing_value ) ) {
 							//error_log( 'meta field already exists on this post. the existing value is ' . $pre_existing_value . '. compare with new value of ' . $value );
 						} else {
-							add_post_meta( $post_id, $maps[ $key ]['wp_column'], $value, $maps[ $key ]['unique'] );
+							update_post_meta( $post_id, $maps[ $key ]['wp_column'], $value, $maps[ $key ]['unique'] );
 						}
 					} elseif ( 'wp_posts' === $maps[ $key ]['wp_table'] && '' !== $value && null !== $value ) { // if it belongs in the post table
 						$pre_existing_post  = get_post( $post_id, 'ARRAY_A' );
