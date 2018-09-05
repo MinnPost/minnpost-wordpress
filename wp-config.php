@@ -76,7 +76,11 @@ define( 'FORM_PROCESSOR_MC_MAILCHIMP_API_KEY', $_ENV['FORM_PROCESSOR_MC_MAILCHIM
 define( 'GF_LICENSE_KEY', $_ENV['GF_LICENSE_KEY'] );
 
 // redis
-define( 'WP_REDIS_DATABASE', $_ENV['WP_REDIS_DATABASE'] );
+$redis_server = array(
+	'host'     => '127.0.0.1',
+	'port'     => 6379,
+	'database' => $_ENV['WP_REDIS_DATABASE'], // Optionally use a specific numeric Redis database. Default is 0.
+);
 
 // ElasticPress
 define( 'EP_INDEX_PREFIX', $_ENV['EP_INDEX_PREFIX'] );
