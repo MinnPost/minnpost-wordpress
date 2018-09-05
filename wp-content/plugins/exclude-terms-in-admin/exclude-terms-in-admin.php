@@ -66,7 +66,7 @@ class Exclude_Terms_Admin {
 	*/
 	function list_terms_exclusions( $exclusions, $args ) {
 		global $pagenow;
-		$user_can_see = current_user_can( $this->see_hidden_capability ) && 'true' === WP_DEBUG;
+		$user_can_see = current_user_can( $this->see_hidden_capability );
 		if ( in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) && ! $user_can_see ) {
 			$exclusions .= " AND t.name NOT IN ( $this->hidden_terms )";
 		}
