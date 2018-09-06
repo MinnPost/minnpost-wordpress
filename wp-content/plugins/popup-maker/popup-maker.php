@@ -4,7 +4,7 @@
  * Plugin URI: https://wppopupmaker.com/?utm_campaign=PluginInfo&utm_source=plugin-header&utm_medium=plugin-uri
  * Description: Easily create & style popups with any content. Theme editor to quickly style your popups. Add forms, social media boxes, videos & more.
  * Author: WP Popup Maker
- * Version: 1.7.29
+ * Version: 1.7.30
  * Author URI: https://wppopupmaker.com/?utm_campaign=PluginInfo&utm_source=plugin-header&utm_medium=author-uri
  * Text Domain: popup-maker
  *
@@ -93,7 +93,7 @@ class Popup_Maker {
 	/**
 	 * @var string Plugin Version
 	 */
-	public static $VER = '1.7.29';
+	public static $VER = '1.7.30';
 
 	/**
 	 * @var int DB Version
@@ -361,6 +361,24 @@ class Popup_Maker {
 		PUM_Shortcode_Popup::init();
 		PUM_Shortcode_PopupTrigger::init();
 		PUM_Shortcode_PopupClose::init();
+
+		/**
+		 * Here we check for previous FS optin.
+		 * If no test has been performed we initialize Freemius one last time to check optin status.
+		 */
+		$has_opted_in = get_option( 'pum_previously_opted_using_freemius' );
+		if ( false === $has_opted_in ) {
+			PUM_Freemius::instance();
+			update_option( 'pum_previously_opted_using_freemius', PUM_Freemius::instance()->fs()->is_registered() ? 1 : 0 );
+		} else if ( 1 === $has_opted_in ) {
+			/**
+			 * The user has previously opted via Freemius. Lets show custom messages in the new optin requests.
+			 */
+		} else {
+			/**
+			 * The user never opted via Freemius. Show default optin request.
+			 */
+		}
 	}
 
 	/**
@@ -378,11 +396,6 @@ class Popup_Maker {
  * Initialize the plugin.
  */
 Popup_Maker::instance();
-
-/**
- * Initiate Freemius
- */
-PUM_Freemius::instance();
 
 /**
  * The code that runs during plugin activation.

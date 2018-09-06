@@ -230,7 +230,7 @@ class PUM_Model_Popup extends PUM_Model_Post {
 	 * @return bool
 	 */
 	public function has_cookie( $event ) {
-		$cookies = $this->get_triggers();
+		$cookies = $this->get_cookies();
 
 		foreach ( $cookies as $cookie ) {
 			if ( $cookie['event'] == $event ) {
@@ -523,6 +523,10 @@ class PUM_Model_Popup extends PUM_Model_Post {
 
 		if ( $this->get_setting( 'overlay_disabled' ) ) {
 			$classes['overlay'][] = 'pum-overlay-disabled';
+		}
+
+		if ( $this->get_setting( 'disable_accessibility' ) ) {
+			$classes['overlay'][] = 'pum-accessibility-disabled';
 		}
 
 		// Add a class for each trigger type.
