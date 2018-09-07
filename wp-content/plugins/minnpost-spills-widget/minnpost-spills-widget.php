@@ -108,52 +108,26 @@ class MinnpostSpills {
 					$key   = array_search( $instance['title'], array_column( $instances, 'title' ), true );
 					$match = $instances[ $key ];
 
-					$query = array(
+					$spill_args = array(
 						'is_spill'       => true,
 						'posts_per_page' => 10,
 						'paged'          => $page,
 						'post_type'      => 'post',
-						'tax_query'      => array(
-							'relation' => 'OR',
-						),
 					);
-					if ( ! empty( $match['widget_categories'] ) ) {
-						$query['tax_query'][] = array(
-							'relation' => 'AND',
-							array(
-								'taxonomy' => 'category',
-								'field'    => 'term_id',
-								'terms'    => $match['widget_categories'],
-							),
-							array(
-								'taxonomy' => 'category',
-								'field'    => 'term_id',
-								'terms'    => array_values( $featured_columns ),
-								'operator' => 'NOT IN',
-							),
-						);
+
+					$widget_terms = array();
+					if ( ! is_array( $match['widget_terms'] ) ) {
+						$widget_terms = explode( ',', $match['widget_terms'] );
+					} else {
+						$widget_terms = $match['widget_terms'];
 					}
-					if ( ! empty( $match['widget_terms'] ) ) {
-						if ( ! is_array( $match['widget_terms'] ) ) {
-							$widget_terms = explode( ',', $match['widget_terms'] );
-						} else {
-							$widget_terms = $match['widget_terms'];
-						}
-						$query['tax_query'][] = array(
-							'relation' => 'AND',
-							array(
-								'taxonomy' => 'post_tag',
-								'field'    => 'name',
-								'terms'    => $widget_terms,
-							),
-							array(
-								'taxonomy' => 'category',
-								'field'    => 'term_id',
-								'terms'    => array_values( $featured_columns ),
-								'operator' => 'NOT IN',
-							),
-						);
+
+					if ( file_exists( __DIR__ . '/includes/minnpost-spill-query.php' ) ) {
+						require_once __DIR__ . '/includes/minnpost-spill-query.php';
 					}
+					$args = minnpost_spill_get_query_args( $match['widget_categories'], $widget_terms );
+
+					$query = array_merge( $args, $spill_args );
 
 					if ( empty( $instance['url'] ) || ( ! empty( $instance['url'] ) && false === get_term_by( 'slug', str_replace( '/', '', $instance['url'] ) ) ) ) {
 						$routes->addRoute( new QueryRoute(
@@ -459,84 +433,19 @@ class MinnpostSpills_Widget extends WP_Widget {
 	*/
 	private function get_spill_posts( $categories = '', $terms = '' ) {
 
-		$perspectives       = get_category_by_slug( 'perspectives' );
-		$featured_columns   = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
-		$fonm               = get_category_by_slug( 'other-nonprofit-media' );
-		$featured_columns[] = $perspectives->term_id;
-		$featured_columns[] = $fonm->term_id;
-
-		if ( ! empty( $categories ) && is_array( $categories ) ) {
-			$category_ids = array();
-			foreach ( $categories as $category ) {
-				if ( is_numeric( $category ) ) {
-					$category_ids[] = $category;
-				} else {
-					$category_object = get_category_by_slug( $category );
-					$category_ids[]  = $category_object->term_id;
-				}
-			}
-			$args = array(
-				'category__in' => $category_ids,
-			);
+		if ( file_exists( __DIR__ . '/includes/minnpost-spill-query.php' ) ) {
+			require_once __DIR__ . '/includes/minnpost-spill-query.php';
 		}
-
-		if ( ! empty( $terms ) ) {
-			$term_ids = array();
-			if ( is_array( $terms ) ) {
-				foreach ( $terms as $term ) {
-					$term_object = get_term_by( 'name', $term, 'post_tag' );
-					$term_ids[]  = $term_object->term_id;
-				}
-			} else {
-				$terms_array = explode( ',', $terms );
-				foreach ( $terms_array as $term ) {
-					$term_object = get_term_by( 'name', $term, 'post_tag' );
-					$term_ids[]  = $term_object->term_id;
-				}
-			}
-			$args = array(
-				'tag__in' => $term_ids,
-			);
-		}
-
-		if ( isset( $term_ids ) && isset( $category_ids ) ) {
-			$args              = array();
-			$args['tax_query'] = array(
-				'relation' => 'OR',
-				array(
-					'taxonomy' => 'category',
-					'field'    => 'term_id',
-					'terms'    => $category_ids,
-				),
-				array(
-					'taxonomy' => 'post_tag',
-					'field'    => 'term_id',
-					'terms'    => $term_ids,
-				),
-			);
-		}
-
-		if ( isset( $args ) ) {
-			$default_args = array(
-				'posts_per_page'   => 4,
-				'category__not_in' => array_values( $featured_columns ), // the perspectives featured columns
-				'orderby'          => 'date',
-				'order'            => 'DESC',
-			);
-
-			$args = array_merge( $default_args, $args );
-			if ( class_exists( 'EP_WP_Query_Integration' ) ) {
-				$args['ep_integrate'] = true;
-			}
-
-			$the_query = new WP_Query( $args );
-		}
-
+		$args      = minnpost_spill_get_query_args( $categories, $terms );
+		$the_query = new WP_Query( $args );
 		?>
 
 		<?php if ( isset( $the_query ) && $the_query->have_posts() ) : ?>
 			<!-- the loop -->
-			<?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
+			<?php
+			while ( $the_query->have_posts() ) :
+				$the_query->the_post();
+				?>
 				<article id="<?php the_ID(); ?>" class="m-post m-post-spill">
 					<?php
 					if ( function_exists( 'minnpost_get_permalink_category_id' ) ) {
