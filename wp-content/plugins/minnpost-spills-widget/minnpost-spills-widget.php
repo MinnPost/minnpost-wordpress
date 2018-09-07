@@ -41,6 +41,12 @@ class MinnpostSpills {
 
 	}
 
+	/**
+	 * Set is_home() to false and is_archive() to true on spill pages
+	 *
+	 * @param object $query
+	 *
+	 */
 	public function set_home_to_false( $query ) {
 		if ( ! is_admin() && isset( $query->query['is_spill'] ) && true === $query->query['is_spill'] ) {
 			$query->is_home    = false;
@@ -48,6 +54,10 @@ class MinnpostSpills {
 		}
 	}
 
+	/**
+	 * Create the public URLs for the spill landing pages
+	 *
+	 */
 	private function init() {
 		if ( ! is_admin() ) {
 			if ( ! class_exists( 'Brain\Cortex' ) ) {
@@ -159,6 +169,10 @@ class MinnpostSpills {
 		}
 	}
 
+	/**
+	 * Make sure the admin template is loaded so we can use the category checklist in the settings
+	 *
+	 */
 	private function load_admin() {
 		if ( is_admin() ) {
 			// This is required to be sure Walker_Category_Checklist class is available
@@ -166,6 +180,13 @@ class MinnpostSpills {
 		}
 	}
 
+	/**
+	 * Set the wp_title for the spill pages
+	 *
+	 * @param string $title
+	 * @return string $title
+	 *
+	 */
 	public function set_wp_title( $title ) {
 		global $template;
 		global $wp;
@@ -199,6 +220,7 @@ class MinnpostSpills {
 // Instantiate our class
 $minnpost_spills = new MinnpostSpills();
 
+// widget class
 class MinnpostSpills_Widget extends WP_Widget {
 
 	public function __construct() {
@@ -225,7 +247,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 	}
 
 	/**
-	 * add script to admin page
+	 * add autosuggest script to admin page
 	 */
 	function add_script_config() {
 		?>
