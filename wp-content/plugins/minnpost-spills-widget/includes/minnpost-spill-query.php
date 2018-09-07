@@ -54,18 +54,20 @@ function minnpost_spill_get_query_args( $categories = '', $terms = '' ) {
 				'terms'    => array_values( $featured_columns ),
 				'operator' => 'NOT IN',
 			),
-			'relation' => 'OR',
 			array(
-				'taxonomy' => 'category',
-				'field'    => 'term_id',
-				'terms'    => $category_ids,
-				'operator' => 'IN',
-			),
-			array(
-				'taxonomy' => 'post_tag',
-				'field'    => 'term_id',
-				'terms'    => $term_ids,
-				'operator' => 'IN',
+				'relation' => 'OR',
+				array(
+					'taxonomy' => 'category',
+					'field'    => 'term_id',
+					'terms'    => $category_ids,
+					'operator' => 'IN',
+				),
+				array(
+					'taxonomy' => 'post_tag',
+					'field'    => 'term_id',
+					'terms'    => $term_ids,
+					'operator' => 'IN',
+				),
 			),
 		);
 	} elseif ( isset( $term_ids ) ) {
