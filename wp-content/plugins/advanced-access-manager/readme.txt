@@ -3,7 +3,7 @@ Contributors: vasyltech
 Tags: access control, membership, backend menu, user role, restricted content
 Requires at least: 4.0
 Tested up to: 4.9.7
-Stable tag: 5.4.2
+Stable tag: 5.4.3
 
 All you need to manage access to you WordPress websites on frontend, backend and API levels for any role, user or visitors.
 
@@ -75,6 +75,24 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 11. Improve your website security
 
 == Changelog ==
+
+= 5.4.3 =
+* Fixed the bug with Posts & Terms feature that hides it when Manage Frontend & Backend Access are disabled however API is enabled
+* Fixed the bug that cached objects while managing them on AAM page. That was causing inconsistency sometimes
+* Fixed the bug with content shortcode that was defining incorrectly if wrapped content should be hidden or not for specific user
+* Fixed the bug with AAM not being able to apply translations for other languages
+* Added new option "Support AAM Extensions" that allows to enables/disables Extensions feature
+* Added new option "Get Started Feature" that toggle the Get Started tab
+* Added new option "AAM Cron Job" that enables/disables the internal AAM cron job
+* Added Get Started tab with some basic introduction to AAM plugin
+* Added ability to set "hard" user login time
+* Added ability to sort posts and terms list by title
+* Enhanced JWT authentication with ability to set also cookie that contains JWT token or define signing algorithm
+* Refactored Metaboxes & Widget feature so initialization process is handled with client side
+* Refactored Admin Toolbar feature so initialization process is handled with client side
+* Improved the Post & Terms feature by enabling to manage more post types out-of-box
+* Improved the Import/Export feature that eliminates issues with incompatible AAM versions
+* Refactored internal implementation to make it compatible with strict and secure environments like WordPress VIP
 
 = 5.4.2 =
 * Fixed the bug that was causing an error with legacy "teaser" data
