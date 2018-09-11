@@ -1,5 +1,17 @@
 <?php
-// if uninstall not called from WordPress exit
+/**
+ * XMLSF_MULTISITE_UNINSTALL
+ *
+ * Set this constant in wp-config.php if you want to allow looping over each site
+ * in the network to run XMLSitemapFeed_Uninstall->uninstall() defined in uninstall.php
+ *
+ * Be careful: There is NO batch-processing so it does not scale on large networks!
+ *
+ * example:
+ * define('XMLSF_MULTISITE_UNINSTALL', true);
+ */
+
+// exit if uninstall not called from WordPress
 if ( !defined('WP_UNINSTALL_PLUGIN') )
     exit();
 
@@ -39,21 +51,24 @@ class XMLSitemapFeed_Uninstall {
 	 */
 	function uninstall($blog_id = false) {
 		// delete all taxonomy terms
-		register_taxonomy( 'gn-genre', null );
+		//register_taxonomy( 'gn-genre', null );
 
-		$terms = get_terms( 'gn-genre', array('hide_empty' => false) );
+		//$terms = get_terms( 'gn-genre', array('hide_empty' => false) );
 
-		if ( is_array($terms) )
-			foreach ( $terms as $term )
-				wp_delete_term(	$term->term_id, 'gn-genre' );
+		//if ( is_array($terms) )
+		//	foreach ( $terms as $term )
+		//		wp_delete_term(	$term->term_id, 'gn-genre' );
 
 		// remove plugin settings
+		delete_option('xmlsf_static_files');
 		delete_option('xmlsf_version');
 		delete_option('xmlsf_sitemaps');
 		delete_option('xmlsf_post_types');
 		delete_option('xmlsf_taxonomies');
+		delete_option('xmlsf_taxonomy_settings');
 		delete_option('xmlsf_news_sitemap');
 		delete_option('xmlsf_ping');
+		delete_option('xmlsf_pong');
 		delete_option('xmlsf_robots');
 		delete_option('xmlsf_urls');
 		delete_option('xmlsf_custom_sitemaps');

@@ -3,7 +3,7 @@ Contributors: vasyltech
 Tags: access control, membership, backend menu, user role, restricted content
 Requires at least: 4.0
 Tested up to: 4.9.7
-Stable tag: 5.4.3
+Stable tag: 5.4.3.1
 
 All you need to manage access to you WordPress websites on frontend, backend and API levels for any role, user or visitors.
 
@@ -75,6 +75,9 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 11. Improve your website security
 
 == Changelog ==
+
+= 5.4.3.1 =
+* Quick fix for the bug that is related to Posts & Terms
 
 = 5.4.3 =
 * Fixed the bug with Posts & Terms feature that hides it when Manage Frontend & Backend Access are disabled however API is enabled

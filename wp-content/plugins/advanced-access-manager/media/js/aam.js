@@ -1849,7 +1849,7 @@
                         subject: getAAM().getSubject().type,
                         subjectId: getAAM().getSubject().id,
                         param: param,
-                        value: (value ? 1 : 0),
+                        value: value,
                         object: object,
                         objectId: object_id
                     },
@@ -1922,7 +1922,7 @@
                         _this.attr('class', 'aam-row-action icon-spin4 animate-spin');
                         save(
                             _this.data('property'),
-                            (checked ? true : false),
+                            (checked ? 1 : 0),
                             object,
                             id,
                             function(response) {
