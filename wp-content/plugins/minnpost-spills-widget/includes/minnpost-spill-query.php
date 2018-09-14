@@ -95,7 +95,6 @@ function minnpost_spill_get_query_args( $categories = '', $terms = '' ) {
 				'terms'    => array_values( $featured_columns ),
 				'operator' => 'NOT IN',
 			),
-			'relation' => 'OR',
 			array(
 				'taxonomy' => 'category',
 				'field'    => 'term_id',
