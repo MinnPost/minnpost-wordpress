@@ -456,7 +456,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 						$slug      = $url_array[3];
 						$category  = get_category_by_slug( $category );
 					}
-					if ( is_object( $category ) ) {
+					if ( is_object( $category ) && ! is_wp_error( $category ) ) {
 						?>
 					<p class="a-post-category a-spill-item-category"><?php echo $category->name; ?></p>
 					<?php } ?>
