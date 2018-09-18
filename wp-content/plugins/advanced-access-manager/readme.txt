@@ -3,7 +3,7 @@ Contributors: vasyltech
 Tags: access control, membership, backend menu, user role, restricted content
 Requires at least: 4.0
 Tested up to: 4.9.7
-Stable tag: 5.4.3.1
+Stable tag: 5.4.3.2
 
 All you need to manage access to you WordPress websites on frontend, backend and API levels for any role, user or visitors.
 
@@ -75,6 +75,14 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 11. Improve your website security
 
 == Changelog ==
+
+= 5.4.3.2 =
+* Fixed bug that incorrectly checks post author property
+* Fixed bug that does not allow to assign roles that contain apostrophe
+* Fixed bug with incorrectly handled AAM Console messages that contain HTML
+* Added ability to order roles by name
+* Added ability to order users by display name
+* Improved Users/Roles Manager UI
 
 = 5.4.3.1 =
 * Quick fix for the bug that is related to Posts & Terms

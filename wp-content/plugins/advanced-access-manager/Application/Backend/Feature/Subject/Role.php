@@ -77,12 +77,18 @@ class AAM_Backend_Feature_Subject_Role {
         
         if (current_user_can('aam_edit_roles')) {
             $actions[] = 'edit';
+        } else {
+            $actions[] = 'no-edit';
         }
         if (current_user_can('aam_create_roles')) {
             $actions[] = 'clone';
+        } else {
+            $actions[] = 'no-clone';
         }
         if (current_user_can('aam_delete_roles') && !$count) {
             $actions[] = 'delete';
+        } else {
+            $actions[] = 'no-delete';
         }
         
         return $actions;
@@ -138,7 +144,7 @@ class AAM_Backend_Feature_Subject_Role {
             $name    = sanitize_text_field(filter_input(INPUT_POST, 'name'));
             $expire  = filter_input(INPUT_POST, 'expire');
             $roles   = AAM_Core_API::getRoles();
-            $role_id = strtolower($name);
+            $role_id = sanitize_key(strtolower($name));
 
             //if inherited role is set get capabilities from it
             $parent = $roles->get_role(trim(filter_input(INPUT_POST, 'inherit')));

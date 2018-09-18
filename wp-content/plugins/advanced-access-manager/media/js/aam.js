@@ -138,7 +138,7 @@
             //initialize the role list table
             $('#role-list').DataTable({
                 autoWidth: false,
-                ordering: false,
+                ordering: true,
                 dom: 'ftrip',
                 pagingType: 'simple',
                 processing: true,
@@ -155,7 +155,8 @@
                     }
                 },
                 columnDefs: [
-                    {visible: false, targets: [0, 1, 4, 5]}
+                    {visible: false, targets: [0, 1, 4, 5]},
+                    {orderable: false, targets: [0, 1, 3, 4, 5]}
                 ],
                 language: {
                     search: '_INPUT_',
@@ -269,6 +270,14 @@
                                     }));
                                 }
                                 break;
+                                
+                            case 'no-edit':
+                                if (!getAAM().isUI()) {
+                                    $(container).append($('<i/>', {
+                                        'class': 'aam-row-action icon-pencil text-muted'
+                                    }));
+                                }
+                                break;
 
                             case 'clone':
                                 if (!getAAM().isUI()) {
@@ -282,6 +291,14 @@
                                     }).attr({
                                         'data-toggle': "tooltip",
                                         'title': getAAM().__('Clone Role')
+                                    }));
+                                }
+                                break;
+                                
+                            case 'no-clone':
+                                if (!getAAM().isUI()) {
+                                    $(container).append($('<i/>', {
+                                        'class': 'aam-row-action icon-clone text-muted'
                                     }));
                                 }
                                 break;
@@ -303,6 +320,14 @@
                                     }).attr({
                                         'data-toggle': "tooltip",
                                         'title': getAAM().__('Delete Role')
+                                    }));
+                                }
+                                break;
+                                
+                            case 'no-delete':
+                                if (!getAAM().isUI()) {
+                                    $(container).append($('<i/>', {
+                                        'class': 'aam-row-action icon-trash-empty text-muted'
                                     }));
                                 }
                                 break;
@@ -333,8 +358,8 @@
                         $('td:eq(0) strong', this).replaceWith(
                             '<span>' + $('td:eq(0) strong', this).text() + '</span>'
                         );
-                        $('.text-muted', this).attr('disabled', false);
-                        $('.text-muted', this).toggleClass('text-muted text-info');
+                        $('.icon-cog.text-muted', this).attr('disabled', false);
+                        $('.icon-cog.text-muted', this).toggleClass('text-muted text-info');
                     }
                 });
             } );
@@ -624,7 +649,7 @@
             //initialize the user list table
             $('#user-list').DataTable({
                 autoWidth: false,
-                ordering: false,
+                ordering: true,
                 dom: 'ftrip',
                 stateSave: true,
                 pagingType: 'simple',
@@ -644,7 +669,8 @@
                     }
                 },
                 columnDefs: [
-                    {visible: false, targets: [0, 1, 4, 5]}
+                    {visible: false, targets: [0, 1, 4, 5]},
+                    {orderable: false, targets: [0, 1, 3, 4, 5]}
                 ],
                 language: {
                     search: '_INPUT_',
@@ -789,6 +815,14 @@
                                 }
                                 break;
                                 
+                            case 'no-ttl':
+                                if (!getAAM().isUI()) {
+                                    $(container).append($('<i/>', {
+                                        'class': 'aam-row-action icon-clock text-muted'
+                                    }));
+                                }
+                                break;
+                                
                             case 'edit':
                                 if (!getAAM().isUI()) {
                                     $(container).append($('<i/>', {
@@ -800,6 +834,14 @@
                                     }).attr({
                                         'data-toggle': "tooltip",
                                         'title': getAAM().__('Edit User')
+                                    }));
+                                }
+                                break;
+                                
+                            case 'no-edit':
+                                if (!getAAM().isUI()) {
+                                    $(container).append($('<i/>', {
+                                        'class': 'aam-row-action icon-pencil text-muted'
                                     }));
                                 }
                                 break;
@@ -839,6 +881,14 @@
                                     }).attr({
                                         'data-toggle': "tooltip",
                                         'title': getAAM().__('Switch To User')
+                                    }));
+                                }
+                                break;
+                                
+                            case 'no-switch':
+                                if (!getAAM().isUI()) {
+                                    $(container).append($('<i/>', {
+                                        'class': 'aam-row-action icon-switch text-muted'
                                     }));
                                 }
                                 break;
