@@ -29,7 +29,7 @@ Tested with WordPress 3. Works with wp-pagenavi
 if ( ! function_exists( 'remove_page_from_query_string' ) ) :
 	add_filter( 'request', 'remove_page_from_query_string' );
 	function remove_page_from_query_string( $query_string ) {
-		if ( isset( $query_string['name'] ) && 'page' === $query_string['name'] && isset( $query_string['page'] ) ) {
+		if ( isset( $query_string['name'] ) && 'page' === $query_string['name'] && isset( $query_string['page'] ) && 1 !== $query_string['page'] ) {
 			unset( $query_string['name'] );
 			// 'page' in the query_string might look like '/2', so explode it out
 			$page_part             = explode( '/', $query_string['page'] );
