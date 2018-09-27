@@ -1413,7 +1413,8 @@ class GFCommon {
 							}
 							$product_name .= implode( ', ', $options ) . ')';
 						}
-						$subtotal = floatval( $product['quantity'] ) * $price;
+						$quantity = self::to_number( $product['quantity'], $lead['currency'] );
+						$subtotal = $quantity * $price;
 						$total += $subtotal;
 
 						$field_data .= "{$product_name}: " . self::to_money( $subtotal, $lead['currency'] ) . "\n\n";
@@ -1507,7 +1508,8 @@ class GFCommon {
 								$field_data .= '<li style="padding:4px 0 4px 0">' . $option['option_label'] . '</li>';
 							}
 						}
-						$subtotal = floatval( $product['quantity'] ) * $price;
+						$quantity = self::to_number( $product['quantity'], $lead['currency'] );
+						$subtotal = $quantity * $price;
 						$total += $subtotal;
 
 						$field_data .= '</ul>
@@ -1781,7 +1783,7 @@ class GFCommon {
 		 * @param array $from         The current form object.
 		 */
 		$enable_cc = gf_apply_filters( array( 'gform_notification_enable_cc', $form['id'], $notification['id'] ), false, $notification, $form );
-		
+
 		// Set CC if enabled.
 		$cc = $enable_cc ? GFCommon::replace_variables( rgar( $notification, 'cc' ), $form, $lead, false, false, true, 'html', $data ) : null;
 
@@ -3693,7 +3695,8 @@ Content-Type: text/html;
 					$price += self::to_number( $option['price'] );
 				}
 			}
-			$subtotal = floatval( $product['quantity'] ) * $price;
+			$quantity = self::to_number( $product['quantity'], GFCommon::get_currency() );
+			$subtotal = $quantity * $price;
 			$total += $subtotal;
 
 		}

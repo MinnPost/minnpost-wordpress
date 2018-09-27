@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: https://www.gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.3.3
+Version: 2.3.4
 Author: rocketgenius
 Author URI: https://www.rocketgenius.com
 License: GPL-2.0+
@@ -215,7 +215,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.3.3';
+	public static $version = '2.3.4';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -2089,7 +2089,7 @@ class GFForms {
 		wp_register_style( 'gform_shortcode_ui', $base_url . "/css/shortcode-ui{$min}.css", array(), $version );
 		wp_register_style( 'gform_font_awesome', $base_url . "/css/font-awesome{$min}.css", null, $version );
 		wp_register_style( 'gform_tooltip', $base_url . "/css/tooltip{$min}.css", array( 'gform_font_awesome' ), $version );
-		
+
 		wp_register_style( 'gforms_reset_css', $base_url . "/css/formreset{$min}.css", null, $version );
 		wp_register_style( 'gforms_datepicker_css', $base_url . "/css/datepicker{$min}.css", null, $version );
 		wp_register_style( 'gforms_formsmain_css', $base_url . "/css/formsmain{$min}.css", null, $version );

@@ -2039,6 +2039,16 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 		}
 	}
 
+	/**
+	 * Retrieves the ID of the entry associated with the supplied subscription or transaction ID.
+	 *
+	 * @since 2.3.3.9 Updated to search the _gf_addon_payment_transaction table if the ID was not found in the entry table.
+	 * @since unknown
+	 *
+	 * @param string $transaction_id The subscription or transaction ID.
+	 *
+	 * @return bool|string
+	 */
 	public function get_entry_by_transaction_id( $transaction_id ) {
 		global $wpdb;
 
@@ -2046,6 +2056,11 @@ abstract class GFPaymentAddOn extends GFFeedAddOn {
 
 		$sql      = $wpdb->prepare( "SELECT id FROM {$entry_table_name} WHERE transaction_id = %s", $transaction_id );
 		$entry_id = $wpdb->get_var( $sql );
+
+		if ( ! $entry_id ) {
+			$sql      = $wpdb->prepare( "SELECT lead_id FROM {$wpdb->prefix}gf_addon_payment_transaction WHERE transaction_id = %s", $transaction_id );
+			$entry_id = $wpdb->get_var( $sql );
+		}
 
 		return $entry_id ? $entry_id : false;
 	}

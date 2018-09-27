@@ -1365,6 +1365,8 @@ class GFAPI {
 				$result['confirmation_message'] = $confirmation_message;
 				$result['confirmation_type'] = 'message';
 			}
+
+			$result['entry_id'] = rgars( $submission_details, 'lead/id' );
 		}
 
 		if ( isset( $submission_details['resume_token'] ) ) {

@@ -573,7 +573,7 @@ abstract class GFAddOn {
 		);
 
 		// Add error message.
-		if ( $this->is_form_list() || $this->is_entry_list() || $this->is_form_settings() || $this->is_plugin_settings() ) {
+		if ( $this->is_form_list() || $this->is_entry_list() || $this->is_form_settings() || $this->is_plugin_settings() || GFForms::get_page() === 'system_status' ) {
 			GFCommon::add_error_message( $error_message );
 		}
 

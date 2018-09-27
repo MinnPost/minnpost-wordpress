@@ -33,7 +33,8 @@ class GFExport {
 		$forms['version'] = GFForms::$version;
 		$forms_json       = json_encode( $forms );
 
-		$filename = 'gravityforms-export-' . date( 'Y-m-d' ) . '.json';
+		$filename = apply_filters( 'gform_form_export_filename', 'gravityforms-export-' . date( 'Y-m-d' ) ) . '.json';
+		$filename = sanitize_file_name( $filename );
 		header( 'Content-Description: File Transfer' );
 		header( "Content-Disposition: attachment; filename=$filename" );
 		header( 'Content-Type: application/json; charset=' . get_option( 'blog_charset' ), true );
@@ -290,7 +291,7 @@ class GFExport {
 				} else {
 					$form_text = $count > 1 ? __( 'forms', 'gravityforms' ) : __( 'form', 'gravityforms' );
 					$edit_link = $count == 1 ? "<a href='admin.php?page=gf_edit_forms&id={$forms[0]['id']}'>" . __( 'Edit Form', 'gravityforms' ) . '</a>' : '';
-					GFCommon::add_message( sprintf( __( "Gravity Forms imported %d {$form_text} successfully", 'gravityforms' ), $count ) . ". $edit_link" );
+					GFCommon::add_message( sprintf( __( "Gravity Forms imported %d %s successfully", 'gravityforms' ), $count, $form_text ) . ". $edit_link" );
 				}
 
 			}

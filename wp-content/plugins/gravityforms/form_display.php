@@ -731,7 +731,7 @@ class GFFormDisplay {
 		$partial_entry = $submitted_values = $review_page_done = false;
 		if ( isset( $_GET['gf_token'] ) ) {
 			$incomplete_submission_info = GFFormsModel::get_incomplete_submission_values( $_GET['gf_token'] );
-			if ( $incomplete_submission_info['form_id'] == $form_id ) {
+			if ( rgar( $incomplete_submission_info, 'form_id' ) == $form_id ) {
 				$submission_details_json                  = $incomplete_submission_info['submission'];
 				$submission_details                       = json_decode( $submission_details_json, true );
 				$partial_entry                            = $submission_details['partial_entry'];
@@ -927,6 +927,32 @@ class GFFormDisplay {
 				}
 				$form_string .= '
                         </div>';
+			}
+
+			// If Save and Continue token was provided but expired/invalid, display error message.
+			if ( isset( $_GET['gf_token'] ) && ! is_array( $incomplete_submission_info ) ) {
+
+				/**
+				 * Modify the error message displayed when an expired/invalid Save and Continue link is used.
+				 *
+				 * @since 2.4
+				 *
+				 * @param string $message Save & Continue expired/invalid link error message.
+				 * @param array  $form    The current Form object.
+				 */
+				$savecontinue_expired_message = gf_apply_filters( array(
+					'gform_savecontinue_expired_message',
+					$form['id'],
+				), esc_html__( 'Save and Continue link used is expired or invalid.', 'gravityforms' ), $form );
+
+				// If message is not empty, add to form string.
+				if ( ! empty( $savecontinue_expired_message ) ) {
+					$form_string .= sprintf(
+						'<div class="validation_error">%s</div>',
+						$savecontinue_expired_message
+					);
+				}
+
 			}
 
 			/* If the form was submitted, has multiple pages and is invalid, set the current page to the first page with an invalid field. */
@@ -1434,6 +1460,16 @@ class GFFormDisplay {
 			GFFormsModel::purge_expired_incomplete_submissions();
 		}
 
+		/**
+		 * Fires during submission before the confirmation is processed.
+		 *
+		 * @since 2.3.3.10
+		 *
+		 * @param array @lead   The entry array.
+		 * @param array @form   The Form array.
+		 */
+		do_action( 'gform_pre_handle_confirmation', $lead, $form );
+
 		//display confirmation message or redirect to confirmation page
 		return self::handle_confirmation( $form, $lead, $ajax );
 	}
@@ -1674,8 +1710,8 @@ class GFFormDisplay {
 				continue;
 			}
 
-			// don't validate adminOnly fields.
-			if ( $field->is_administrative() ) {
+			// Don't validate fields with a visibility of administrative or hidden.
+			if ( $field->is_administrative() || $field->visibility === 'hidden' ) {
 				continue;
 			}
 
@@ -2238,20 +2274,11 @@ class GFFormDisplay {
 
 		}
 
-		$button_conditional_script = '';
-
 		//adding form button conditional logic if enabled
 		if ( isset( $form['button']['conditionalLogic'] ) ) {
 			$logics .= '0: ' . GFCommon::json_encode( array( 'field' => $form['button']['conditionalLogic'], 'section' => null ) ) . ',';
 			$dependents .= '0: ' . GFCommon::json_encode( array( 0 ) ) . ',';
 			$fields_with_logic[] = 0;
-
-			$button_conditional_script = "jQuery('#gform_{$form['id']}').submit(" .
-				'function(event, isButtonPress){' .
-				'    var visibleButton = jQuery(".gform_next_button:visible, .gform_button:visible, .gform_image_button:visible");' .
-				'    return visibleButton.length > 0 || isButtonPress == true;' .
-				'}' .
-				');';
 		}
 
 		if ( ! empty( $logics ) ) {
@@ -2279,7 +2306,6 @@ class GFFormDisplay {
 			"gf_apply_rules({$form['id']}, " . json_encode( $fields_with_logic ) . ', true);' .
 			"jQuery('#gform_wrapper_{$form['id']}').show();" .
 			"jQuery(document).trigger('gform_post_conditional_logic', [{$form['id']}, null, true]);" .
-			$button_conditional_script .
 
 			'} );' .
 

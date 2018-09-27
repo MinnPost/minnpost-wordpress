@@ -831,6 +831,13 @@ if ( class_exists( 'GFForms' ) ) {
 				$response = $this->get_error_response( $result );
 				$status   = $this->get_error_status( $result );
 			} else {
+				if ( ! $this->current_user_can_any( array(
+					'gravityforms_view_entries',
+					'gravityforms_edit_entries',
+				) ) ) {
+					unset( $result['entry_id'] );
+				}
+
 				$status   = 200;
 				$response = $result;
 			}

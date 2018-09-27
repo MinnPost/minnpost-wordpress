@@ -571,7 +571,7 @@ class GFLogging extends GFAddOn {
 
 		if ( ! file_exists( $log_dir ) ) {
 			wp_mkdir_p( $log_dir );
-			touch( $log_dir . 'index.html' );
+			@touch( $log_dir . 'index.html' );
 		}
 
 		$plugin_setting = $this->get_plugin_setting( $plugin_name );

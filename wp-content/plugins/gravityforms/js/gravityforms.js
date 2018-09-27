@@ -1846,25 +1846,30 @@ jQuery( document ).on( 'submit.gravityforms', '.gform_wrapper form', function( e
 		formID = formWrapper.attr( 'id' ).split( '_' )[ 2 ],
 		hasPages = formWrapper.find( '.gform_page' ).length > 0,
 		sourcePage = formWrapper.find( 'input[name^="gform_source_page_number_"]' ).val(),
-		targetPage = formWrapper.find( 'input[name^="gform_target_page_number_"]' ).val();
+		targetPage = formWrapper.find( 'input[name^="gform_target_page_number_"]' ).val(),
+		submitButton;
 	
-	// If this is a single page form, return.
-	if ( ! hasPages ) {
-		return;
-	}
-	
-	// Get visible page.
-	var visiblePage = formWrapper.find( '.gform_page:visible' );
-	
-	// Get page submit button.
-	var submitButton = visiblePage.find( '.gform_page_footer .gform_next_button' );
-	if ( submitButton.length === 0 ) {
-		submitButton = visiblePage.find( '.gform_page_footer .gform_button' )
+	if ( hasPages ) {
+		// Get visible page.
+		var visiblePage = formWrapper.find( '.gform_page:visible' );
+
+		// Get page submit button.
+		submitButton = visiblePage.find( '.gform_page_footer .gform_next_button' );
+		if ( submitButton.length === 0 ) {
+			submitButton = visiblePage.find( '.gform_page_footer .gform_button' );
+		}
+	} else {
+		submitButton = formWrapper.find( '.gform_footer .gform_button' );
 	}
 
+	var isSubmit = targetPage === '0',
+		isNextSubmit = ! isSubmit && ( targetPage > sourcePage ),
+		isSave = jQuery('#gform_save_' + formID).val() === '1';
+
 	// If submit button is not visible and target page is the next/final page, do not submit.
-	if ( ! submitButton.is( ':visible' ) && targetPage > sourcePage ) {
+	if ( ! isSave && ! submitButton.is( ':visible' ) && ( isSubmit || isNextSubmit ) ) {
 		window[ 'gf_submitting_' + formID ] = false;
+		formWrapper.find( '.gform_ajax_spinner' ).remove();
 		event.preventDefault();
 	}
 	

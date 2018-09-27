@@ -234,6 +234,16 @@ class GFEntryDetail {
 		$form     = self::get_current_form();
 		$form_id  = absint( $form['id'] );
 
+		/**
+		 * Fires before the entry detail page is shown or any processing is handled.
+		 *
+		 * @param array $form The form object for the entry.
+		 * @param array $lead The entry object.
+		 *
+		 * @since 2.3.3.9
+		 */
+		gf_do_action( array( 'gform_pre_entry_detail', $form['id'] ), $form, $lead );
+
 		$total_count = self::get_total_count();
 		$position    = rgget( 'pos' ) ? rgget( 'pos' ) : 0;
 		$prev_pos    = ! rgblank( $position ) && $position > 0 ? $position - 1 : false;
@@ -1051,7 +1061,9 @@ class GFEntryDetail {
 														<?php
 													}
 												}
-												$subtotal = floatval( $product['quantity'] ) * $price;
+												$quantity = GFCommon::to_number( $product['quantity'], $lead['currency'] );
+
+												$subtotal = $quantity * $price;
 												$total += $subtotal;
 												?>
 											</ul>

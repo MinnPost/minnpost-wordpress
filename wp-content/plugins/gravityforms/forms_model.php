@@ -1374,6 +1374,18 @@ class GFFormsModel {
 				 * @param string $previous_value The previous property value before the update
 				 */
 				do_action( "gform_update_{$property_name}", $lead_id, $property_value, $previous_value );
+
+				/**
+				 * Fired after an entry property is updated.
+				 *
+				 * @param int    $lead_id        The Entry ID.
+				 * @param string $property_name  The property that was updated.
+				 * @param string $property_value The new value of the property that was updated.
+				 * @param string $previous_value The previous property value before the update.
+				 *
+				 * @since 2.3.3.9
+				 */
+				do_action( "gform_post_update_entry_property", $lead_id, $property_name, $property_value, $previous_value );
 			}
 		}
 
@@ -3025,16 +3037,40 @@ class GFFormsModel {
 			}
 		}
 
-		if ( empty( $resume_token ) ) {
-			$resume_token = self::get_uuid();
+		$is_new = empty( $resume_token );
 
+		if ( $is_new ) {
+			$resume_token = self::get_uuid();
+		}
+
+		/**
+		 * Allows the incomplete submission to be overridden before it is saved to the database.
+		 *
+		 * @since 2.3.3.1
+		 *
+		 * @param string $submission_json {
+		 *    JSON encoded associative array containing this incomplete submission.
+		 *
+		 *    @type array      $submitted_values The submitted values.
+		 *    @type array      $partial_entry    The partial entry created from the submitted values.
+		 *    @type null|array $field_values     The dynamic population field values.
+		 *    @type int        $page_number      The forms current page number.
+		 *    @type array      $files            The uploaded file properties.
+		 *    @type string     $gform_unique_id  The unique id for this submission.
+		 * }
+		 * @param string $resume_token The unique token which can be used to resume this incomplete submission at a later date/time.
+		 * @param array  $form         The form which this incomplete submission was created for.
+		 */
+		$submission_json = apply_filters( 'gform_incomplete_submission_pre_save', json_encode( $submission ), $resume_token, $form );
+
+		if ( $is_new ) {
 			$result = $wpdb->insert(
 				$table,
 				array(
 					'uuid'         => $resume_token,
 					'form_id'      => $form['id'],
 					'date_created' => current_time( 'mysql', true ),
-					'submission'   => json_encode( $submission ),
+					'submission'   => $submission_json,
 					'ip'           => $ip,
 					'source_url'   => $source_url,
 				),
@@ -3053,7 +3089,7 @@ class GFFormsModel {
 				array(
 					'form_id'      => $form['id'],
 					'date_created' => current_time( 'mysql', true ),
-					'submission'   => json_encode( $submission ),
+					'submission'   => $submission_json,
 					'ip'           => $ip,
 					'source_url'   => $source_url,
 				),
@@ -3065,7 +3101,8 @@ class GFFormsModel {
 					'%s',
 					'%s',
 				),
-				array( '%s' ) );
+				array( '%s' )
+			);
 		}
 
         /**
@@ -3126,14 +3163,38 @@ class GFFormsModel {
 
 	}
 
-	public static function get_incomplete_submission_values( $token ) {
+	public static function get_incomplete_submission_values( $resume_token ) {
 		global $wpdb;
 
 		self::purge_expired_incomplete_submissions();
 
-		$table  = version_compare( self::get_database_version(), '2.3-dev-1', '<' ) ? self::get_incomplete_submissions_table_name() : self::get_draft_submissions_table_name();
-		$sql   = $wpdb->prepare( "SELECT date_created, form_id, submission, source_url FROM {$table} WHERE uuid = %s", $token );
+		$table = version_compare( self::get_database_version(), '2.3-dev-1', '<' ) ? self::get_incomplete_submissions_table_name() : self::get_draft_submissions_table_name();
+		$sql   = $wpdb->prepare( "SELECT date_created, form_id, submission, source_url FROM {$table} WHERE uuid = %s", $resume_token );
 		$row   = $wpdb->get_row( $sql, ARRAY_A );
+
+		if ( ! empty( $row ) ) {
+			$form = self::get_form_meta( $row['form_id'] );
+
+			/**
+			 * Allows the incomplete submission to be overridden after it is retrieved from the database but before it used to populate the form.
+			 *
+			 * @since 2.3.3.1
+			 *
+			 * @param string $submission_json {
+			 *    JSON encoded associative array containing the incomplete submission being resumed.
+			 *
+			 *    @type array      $submitted_values The submitted values.
+			 *    @type array      $partial_entry    The partial entry created from the submitted values.
+			 *    @type null|array $field_values     The dynamic population field values.
+			 *    @type int        $page_number      The forms current page number.
+			 *    @type array      $files            The uploaded file properties.
+			 *    @type string     $gform_unique_id  The unique id for this submission.
+			 * }
+			 * @param string $resume_token The unique token which was used to resume this incomplete submission.
+			 * @param array  $form         The form which this incomplete submission was created for.
+			 */
+			$row['submission'] = apply_filters( 'gform_incomplete_submission_post_get', $row['submission'], $resume_token, $form );
+		}
 
 		return $row;
 	}
@@ -4361,7 +4422,7 @@ class GFFormsModel {
 	public static function set_permissions( $path ) {
 		$permission = apply_filters( 'gform_file_permission', 0644, $path );
 		if ( $permission ) {
-			chmod( $path, $permission );
+			@chmod( $path, $permission );
 		}
 	}
 

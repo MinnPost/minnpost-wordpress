@@ -16,6 +16,10 @@ if ( ! class_exists( 'GF_Query_Literal' ) ) {
 	require_once( 'class-gf-query-literal.php' );
 }
 
+if ( ! class_exists( 'GF_Query_JSON_Literal' ) ) {
+	require_once( 'class-gf-query-json-literal.php' );
+}
+
 if ( ! class_exists( 'GF_Query_Series' ) ) {
 	require_once( 'class-gf-query-series.php' );
 }
@@ -210,7 +214,7 @@ class GF_Query {
 		$start_date = rgar( $search_criteria, 'start_date' );
 		$end_date = rgar( $search_criteria, 'end_date' );
 
-		if ( ! empty( $start_date ) || ! empty( $end_date ) ) {
+		if ( ! empty( $start_date ) ) {
 
 			$start_date           = new DateTime( $search_criteria['start_date'] );
 			$start_datetime_str = $start_date->format( 'Y-m-d H:i:s' );
@@ -223,7 +227,14 @@ class GF_Query {
 
 			$start_date_str_utc = get_gmt_from_date( $start_date_str );
 
+			$property_conditions[] = new GF_Query_Condition(
+				new GF_Query_Column( 'date_created', $form_id ),
+				GF_Query_Condition::GTE,
+				new GF_Query_Literal( $start_date_str_utc )
+			);
+		}
 
+		if ( ! empty( $end_date ) ) {
 			$end_date         = new DateTime( $search_criteria['end_date'] );
 			$end_datetime_str = $end_date->format( 'Y-m-d H:i:s' );
 			$end_date_str     = $end_date->format( 'Y-m-d' );
@@ -237,20 +248,11 @@ class GF_Query {
 
 			$end_date_str_utc = get_gmt_from_date( $end_date_str );
 
-			if ( ! empty( $start_date ) ) {
-				$property_conditions[] = new GF_Query_Condition(
-					new GF_Query_Column( 'date_created', $form_id ),
-					GF_Query_Condition::GTE,
-					new GF_Query_Literal( $start_date_str_utc )
-				);
-			}
-			if ( ! empty( $end_date ) ) {
-				$property_conditions[] = new GF_Query_Condition(
-					new GF_Query_Column( 'date_created', $form_id ),
-					GF_Query_Condition::LTE,
-					new GF_Query_Literal( $end_date_str_utc )
-				);
-			}
+			$property_conditions[] = new GF_Query_Condition(
+				new GF_Query_Column( 'date_created', $form_id ),
+				GF_Query_Condition::LTE,
+				new GF_Query_Literal( $end_date_str_utc )
+			);
 		}
 
 		if ( ! empty( $property_conditions ) ) {
@@ -320,7 +322,7 @@ class GF_Query {
 
 				if ( is_array( $value ) ) {
 					foreach ( $value as &$v ) {
-						$v = new GF_Query_Literal( $v );
+						$v = $field && $field->storageType == 'json' ? new GF_Query_JSON_Literal( (string) $v ) : new GF_Query_Literal( $v );
 					}
 					$value = new GF_Query_Series( $value );
 
@@ -357,10 +359,12 @@ class GF_Query {
 					continue;
 				}
 
+				$literal = $field && $field->storageType == 'json' ? new GF_Query_JSON_Literal( (string) $value ) : new GF_Query_Literal( (string) $value );
+
 				$filters[] = new GF_Query_Condition(
 					new GF_Query_Column( $key, $form_id ),
 					$operator,
-					new GF_Query_Literal( (string) $value )
+					$literal
 				);
 
 			}
@@ -643,7 +647,7 @@ class GF_Query {
 
 		$results = $this->query();
 
-		$this->total_found = $wpdb->get_var( 'SELECT FOUND_ROWS()' );
+		$this->total_found = (int) $wpdb->get_var( 'SELECT FOUND_ROWS()' );
 
 		/**
 		 * Inititalize them all.
@@ -686,7 +690,7 @@ class GF_Query {
 
 		$results = $this->query();
 
-		$this->total_found = $wpdb->get_var( 'SELECT FOUND_ROWS()' );
+		$this->total_found = (int) $wpdb->get_var( 'SELECT FOUND_ROWS()' );
 
 		$ids = array();
 
