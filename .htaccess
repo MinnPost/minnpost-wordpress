@@ -17,28 +17,28 @@ AddType image/svg+xml .svg
 	ExpiresDefault A0
 
 	# images
-	ExpiresByType image/jpg "access plus 1 year"
-	ExpiresByType image/jpeg "access plus 1 year"
-	ExpiresByType image/gif "access plus 1 year"
-	ExpiresByType image/png "access plus 1 year"
-	ExpiresByType image/x-icon "access plus 1 year"
+	ExpiresByType image/jpg                "access plus 1 year"
+	ExpiresByType image/jpeg               "access plus 1 year"
+	ExpiresByType image/gif                "access plus 1 year"
+	ExpiresByType image/png                "access plus 1 year"
+	ExpiresByType image/x-icon             "access plus 1 year"
+    # media
+	ExpiresByType application/pdf               "access 1 month"
+	ExpiresByType application/x-shockwave-flash "access 1 month"
 
 	# fonts
 	ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
-	ExpiresByType application/x-font-ttf "access plus 1 year"
-	ExpiresByType application/x-font-opentype "access plus 1 year"
-	ExpiresByType application/x-font-woff "access plus 1 year"
-	ExpiresByType image/svg+xml "access plus 1 year"
+	ExpiresByType application/x-font-ttf        "access plus 1 year"
+	ExpiresByType application/x-font-opentype   "access plus 1 year"
+	ExpiresByType application/x-font-woff       "access plus 1 year"
+	ExpiresByType image/svg+xml                 "access plus 1 year"
 
 	# code
-	ExpiresByType text/css "access 1 month"
-	ExpiresByType text/html "access 1 month"
+	ExpiresByType text/css               "access 1 month"
+	ExpiresByType text/html              "access 1 month"
 	ExpiresByType application/javascript "access 1 month"
-	ExpiresByType text/x-javascript "access 1 month"
+	ExpiresByType text/x-javascript      "access 1 month"
 
-	# media
-	ExpiresByType application/pdf "access 1 month"
-	ExpiresByType application/x-shockwave-flash "access 1 month"
 </IfModule>
 # END EXPIRES CACHING #
 
