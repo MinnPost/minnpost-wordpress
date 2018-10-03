@@ -22,6 +22,8 @@ AddType image/svg+xml .svg
 	ExpiresByType image/gif                "access plus 1 year"
 	ExpiresByType image/png                "access plus 1 year"
 	ExpiresByType image/x-icon             "access plus 1 year"
+    ExpiresByType image/vnd.microsoft.icon "access plus 1 year"
+
     # media
 	ExpiresByType application/pdf               "access 1 month"
 	ExpiresByType application/x-shockwave-flash "access 1 month"
@@ -38,6 +40,11 @@ AddType image/svg+xml .svg
 	ExpiresByType text/html              "access 1 month"
 	ExpiresByType application/javascript "access 1 month"
 	ExpiresByType text/x-javascript      "access 1 month"
+
+	# data
+	ExpiresByType application/atom+xml "access plus 1 hour"
+    ExpiresByType application/rdf+xml  "access plus 1 hour"
+    ExpiresByType application/rss+xml  "access plus 1 hour"
 
 </IfModule>
 # END EXPIRES CACHING #
