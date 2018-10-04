@@ -37,7 +37,6 @@ AddType image/svg+xml .svg
 
 	# code
 	ExpiresByType text/css               "access 1 month"
-	ExpiresByType text/html              "access 1 month"
 	ExpiresByType application/javascript "access 1 month"
 	ExpiresByType text/x-javascript      "access 1 month"
 
@@ -62,9 +61,6 @@ AddType image/svg+xml .svg
 	</FilesMatch>
 	<FilesMatch "\.(js)$">
 		Header set Cache-Control "private"
-	</FilesMatch>
-	<FilesMatch "\.(x?html?|php)$">
-		Header set Cache-Control "private, must-revalidate"
 	</FilesMatch>
 </IfModule>
 # END Cache-Control Headers
