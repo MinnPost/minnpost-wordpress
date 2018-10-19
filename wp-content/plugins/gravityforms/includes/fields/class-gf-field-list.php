@@ -723,7 +723,8 @@ class GF_Field_List extends GF_Field {
 	 */
 	public function sanitize_settings() {
 		parent::sanitize_settings();
-		$this->maxRows = absint( $this->maxRows );
+		$this->maxRows       = absint( $this->maxRows );
+		$this->enableColumns = (bool) $this->enableColumns;
 	}
 
 	/**

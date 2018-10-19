@@ -872,7 +872,9 @@ function LoadFieldSettings(){
 
     jQuery("#field_custom_field_name").val(field.postCustomFieldName);
 
-    jQuery("#field_columns_enabled").prop("checked", field.enableColumns ? true : false);
+    jQuery( '#field_columns_enabled' )
+	    .prop( 'checked', Boolean( field.enableColumns ) )
+	    .prop( 'disabled', has_entry( field.id ) );
 
     LoadFieldChoices(field);
 

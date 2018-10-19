@@ -120,10 +120,10 @@ class AAM_Core_JwtAuth {
      * @access public
      * @throws Exception
      */
-    public function generateJWT($userId) {
+    public function generateJWT($userId, $container = 'header') {
         $key       = AAM_Core_Config::get('authentication.jwt.secret', SECURE_AUTH_KEY);
         $expire    = AAM_Core_Config::get('authentication.jwt.expires', 86400);
-        $container = AAM_Core_Config::get('authentication.jwt.container', 'header');
+        $container = AAM_Core_Config::get('authentication.jwt.container', $container);
         $alg       = AAM_Core_Config::get('authentication.jwt.algorithm', 'HS256');
         
         if ($key) {
@@ -139,10 +139,11 @@ class AAM_Core_JwtAuth {
                 setcookie(
                     'aam-jwt', 
                     $token, 
-                    time() + $expire, // 3 hours
+                    time() + $expire,
                     '/', 
                     parse_url(get_bloginfo('url'), PHP_URL_HOST), 
-                    is_ssl()
+                    is_ssl(),
+                    AAM_Core_Config::get('authentication.jwt.cookie.httpOnly', false)
                 );
             }
         } else {

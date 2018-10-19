@@ -1,4 +1,15 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.3.5
+	- Added the "gform_entry_pre_handle_confirmation" filter to allow the entry to be modified before the confirmation is processed.
+	- Added the "gform_disable_custom_field_names_query" filter providing a way to prevent the postmeta table query from running to improve form editor performance on some sites.
+	- Fixed an issue which prevented the previous button working on the last page of a ten page form.
+	- Fixed issue with submit button that prevented forms from being submitted in some situations.
+	- Fixed an issue with the replacement of merge tags in the confirmation redirect URL.
+	- Fixed an issue where a PHP notice could occur and List field values could be omitted from the entry export if the enable columns setting was changed after entries have been received.
+	- AF: Fixed field map styles.
+	- AF: Fixed generic mapping setting custom value input disappearing when value left empty, missing merge tags UI.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.3.4
 	- Added security enhancement.
 	- Added the "gform_pre_handle_confirmation" action.

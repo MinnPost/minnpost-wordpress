@@ -1465,10 +1465,20 @@ class GFFormDisplay {
 		 *
 		 * @since 2.3.3.10
 		 *
-		 * @param array @lead   The entry array.
-		 * @param array @form   The Form array.
+		 * @param array $lead The entry array.
+		 * @param array $form The Form array.
 		 */
 		do_action( 'gform_pre_handle_confirmation', $lead, $form );
+
+		/**
+		 * Allows the entry to be modified before the confirmation is processed.
+		 *
+		 * @since 2.3.4.2
+		 *
+		 * @param array $lead The entry array.
+		 * @param array $form The Form array.
+		 */
+		$lead = apply_filters( 'gform_entry_pre_handle_confirmation', $lead, $form );
 
 		//display confirmation message or redirect to confirmation page
 		return self::handle_confirmation( $form, $lead, $ajax );
@@ -1556,7 +1566,7 @@ class GFFormDisplay {
 				$url = get_permalink( $form['confirmation']['pageId'] );
 
 			} else {
-				$url = GFCommon::replace_variables( trim( $form['confirmation']['url'] ), $form, $lead, false, true, true, 'text' );
+				$url = GFCommon::replace_variables( trim( $form['confirmation']['url'] ), $form, $lead, false, false, true, 'text' );
 			}
 
 			$url_info = parse_url( $url );
@@ -1655,8 +1665,9 @@ class GFFormDisplay {
 	}
 
 	private static function get_js_redirect_confirmation( $url, $ajax ) {
-		$url = esc_url_raw( $url );
-		$confirmation = "<script type=\"text/javascript\">" . apply_filters( 'gform_cdata_open', '' ) . " function gformRedirect(){document.location.href='$url';}";
+		// JSON_HEX_TAG is available on PHP >= 5.3. It will prevent payloads such as <!--<script> from causing an error on redirection.
+		$url =  defined( 'JSON_HEX_TAG' ) ? json_encode( $url, JSON_HEX_TAG ) : json_encode( $url );
+		$confirmation = "<script type=\"text/javascript\">" . apply_filters( 'gform_cdata_open', '' ) . " function gformRedirect(){document.location.href={$url};}";
 		if ( ! $ajax ) {
 			$confirmation .= 'gformRedirect();';
 		}

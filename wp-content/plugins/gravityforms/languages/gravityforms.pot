@@ -1,9 +1,9 @@
 # Copyright 2009-2018 Rocketgenius, Inc.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms 2.3.4\n"
+"Project-Id-Version: Gravity Forms 2.3.5\n"
 "Report-Msgid-Bugs-To: https://www.gravtiyforms.com\n"
-"POT-Creation-Date: 2018-09-26 17:56:38+00:00\n"
+"POT-Creation-Date: 2018-10-18 16:22:08+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -59,8 +59,8 @@ msgstr ""
 msgid "Embed URL"
 msgstr ""
 
-#: common.php:576 entry_detail.php:1281 entry_list.php:828 export.php:921
-#: forms_model.php:5196 select_columns.php:184
+#: common.php:576 entry_detail.php:1281 entry_list.php:828 export.php:938
+#: forms_model.php:5218 select_columns.php:184
 msgid "Entry Id"
 msgstr ""
 
@@ -85,7 +85,7 @@ msgstr ""
 msgid "HTTP Referer URL"
 msgstr ""
 
-#: common.php:584 export.php:929
+#: common.php:584 export.php:946
 msgid "Post Id"
 msgstr ""
 
@@ -288,7 +288,7 @@ msgid "Update"
 msgstr ""
 
 #: common.php:4461 form_display.php:264 form_display.php:1020
-#: form_display.php:2868 js.php:533
+#: form_display.php:2879 js.php:533
 msgid "Previous"
 msgstr ""
 
@@ -514,7 +514,7 @@ msgstr ""
 msgid "Entry ID"
 msgstr ""
 
-#: common.php:4990 export.php:922 forms_model.php:5202
+#: common.php:4990 export.php:939 forms_model.php:5224
 #: includes/addon/class-gf-addon.php:2715 select_columns.php:185
 msgid "Entry Date"
 msgstr ""
@@ -531,15 +531,15 @@ msgstr ""
 msgid "Source URL"
 msgstr ""
 
-#: common.php:5018 export.php:927 forms_model.php:5208 select_columns.php:188
+#: common.php:5018 export.php:944 forms_model.php:5230 select_columns.php:188
 msgid "Payment Status"
 msgstr ""
 
-#: common.php:5056 export.php:926 forms_model.php:5214 select_columns.php:191
+#: common.php:5056 export.php:943 forms_model.php:5236 select_columns.php:191
 msgid "Payment Date"
 msgstr ""
 
-#: common.php:5062 export.php:925 forms_model.php:5217
+#: common.php:5062 export.php:942 forms_model.php:5239
 #: includes/addon/class-gf-payment-addon.php:2267
 #: includes/addon/class-gf-payment-addon.php:2272 select_columns.php:190
 msgid "Payment Amount"
@@ -549,7 +549,7 @@ msgstr ""
 msgid "Transaction ID"
 msgstr ""
 
-#: common.php:5070 entry_detail.php:1289 forms_model.php:5220
+#: common.php:5070 entry_detail.php:1289 forms_model.php:5242
 #: select_columns.php:192
 msgid "User"
 msgstr ""
@@ -861,7 +861,7 @@ msgstr ""
 msgid "Subscription Id"
 msgstr ""
 
-#: entry_detail.php:1206 export.php:924 forms_model.php:5211
+#: entry_detail.php:1206 export.php:941 forms_model.php:5233
 #: select_columns.php:189
 msgid "Transaction Id"
 msgstr ""
@@ -879,7 +879,7 @@ msgstr ""
 msgid "Submitted on"
 msgstr ""
 
-#: entry_detail.php:1284 export.php:931 forms_model.php:5199
+#: entry_detail.php:1284 export.php:948 forms_model.php:5221
 #: includes/addon/class-gf-addon.php:2716 select_columns.php:186
 msgid "User IP"
 msgstr ""
@@ -1282,7 +1282,7 @@ msgstr ""
 msgid "Gravity Forms imported %d %s successfully"
 msgstr ""
 
-#: export.php:301 export.php:1033
+#: export.php:301 export.php:1050
 msgid "Import Forms"
 msgstr ""
 
@@ -1300,7 +1300,7 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-#: export.php:339 export.php:1030
+#: export.php:339 export.php:1047
 msgid "Export Forms"
 msgstr ""
 
@@ -1330,7 +1330,7 @@ msgstr ""
 msgid "Download Export File"
 msgstr ""
 
-#: export.php:411 export.php:1026
+#: export.php:411 export.php:1043
 msgid "Export Entries"
 msgstr ""
 
@@ -1396,20 +1396,20 @@ msgstr ""
 msgid "Exporting entries. Progress:"
 msgstr ""
 
-#: export.php:920
+#: export.php:937
 msgid "Created By (User Id)"
 msgstr ""
 
-#: export.php:923 forms_model.php:5205 includes/addon/class-gf-addon.php:2717
+#: export.php:940 forms_model.php:5227 includes/addon/class-gf-addon.php:2717
 #: select_columns.php:187
 msgid "Source Url"
 msgstr ""
 
-#: export.php:930
+#: export.php:947
 msgid "User Agent"
 msgstr ""
 
-#: export.php:1157
+#: export.php:1174
 msgid "The PHP readfile function is not available, please contact the web host."
 msgstr ""
 
@@ -2803,19 +2803,19 @@ msgstr ""
 msgid "Minimum Strength"
 msgstr ""
 
-#: form_detail.php:1583 form_display.php:2531
+#: form_detail.php:1583 form_display.php:2542
 msgid "Short"
 msgstr ""
 
-#: form_detail.php:1584 form_display.php:2531
+#: form_detail.php:1584 form_display.php:2542
 msgid "Bad"
 msgstr ""
 
-#: form_detail.php:1585 form_display.php:2531
+#: form_detail.php:1585 form_display.php:2542
 msgid "Good"
 msgstr ""
 
-#: form_detail.php:1586 form_display.php:2531
+#: form_detail.php:1586 form_display.php:2542
 msgid "Strong"
 msgstr ""
 
@@ -3432,7 +3432,7 @@ msgstr ""
 msgid "New submission from"
 msgstr ""
 
-#: form_detail.php:3005 forms_model.php:5426 includes/api.php:430
+#: form_detail.php:3005 forms_model.php:5448 includes/api.php:430
 msgid "Default Confirmation"
 msgstr ""
 
@@ -3464,7 +3464,7 @@ msgstr ""
 msgid "Errors have been highlighted below."
 msgstr ""
 
-#: form_display.php:1019 form_display.php:2867
+#: form_display.php:1019 form_display.php:2878
 msgid "Previous Page"
 msgstr ""
 
@@ -3478,7 +3478,7 @@ msgstr ""
 msgid "This field is for validation purposes and should be left unchanged."
 msgstr ""
 
-#: form_display.php:1732 includes/addon/class-gf-addon.php:3771
+#: form_display.php:1743 includes/addon/class-gf-addon.php:3771
 #: includes/fields/class-gf-field-calculation.php:32
 #: includes/fields/class-gf-field-hiddenproduct.php:28
 #: includes/fields/class-gf-field-radio.php:42
@@ -3487,92 +3487,92 @@ msgstr ""
 msgid "This field is required."
 msgstr ""
 
-#: form_display.php:1741
+#: form_display.php:1752
 msgid "This date has already been taken. Please select a new date."
 msgstr ""
 
-#: form_display.php:1745
+#: form_display.php:1756
 msgid ""
 "This field requires a unique entry and the values you entered have already "
 "been used."
 msgstr ""
 
-#: form_display.php:1746
+#: form_display.php:1757
 msgid "This field requires a unique entry and '%s' has already been used"
 msgstr ""
 
-#: form_display.php:1755
+#: form_display.php:1766
 msgid "Please enter a valid value."
 msgstr ""
 
-#: form_display.php:1755
+#: form_display.php:1766
 msgid "Invalid selection. Please select one of the available choices."
 msgstr ""
 
-#: form_display.php:1777
+#: form_display.php:1788
 msgid "At least one field must be filled out"
 msgstr ""
 
-#: form_display.php:2460
+#: form_display.php:2471
 msgid "No results matched"
 msgstr ""
 
-#: form_display.php:2514 form_display.php:3072
+#: form_display.php:2525 form_display.php:3083
 msgid "of"
 msgstr ""
 
-#: form_display.php:2514
+#: form_display.php:2525
 msgid "max characters"
 msgstr ""
 
-#: form_display.php:2531 includes/fields/class-gf-field-password.php:86
+#: form_display.php:2542 includes/fields/class-gf-field-password.php:86
 msgid "Strength indicator"
 msgstr ""
 
-#: form_display.php:2531
+#: form_display.php:2542
 msgid "Mismatch"
 msgstr ""
 
-#: form_display.php:2873
+#: form_display.php:2884
 msgid "Next Page"
 msgstr ""
 
-#: form_display.php:2874
+#: form_display.php:2885
 #: includes/wizard/steps/class-gf-installation-wizard-step.php:102 js.php:531
 msgid "Next"
 msgstr ""
 
-#: form_display.php:3024
+#: form_display.php:3035
 msgid ""
 "This page is unsecured. Do not enter a real credit card number! Use this "
 "field only for testing purposes. "
 msgstr ""
 
-#: form_display.php:3072
+#: form_display.php:3083
 msgid "Step"
 msgstr ""
 
-#: form_display.php:3162
+#: form_display.php:3173
 msgid "Sorry. This form is no longer accepting new submissions."
 msgstr ""
 
-#: form_display.php:3179
+#: form_display.php:3190
 msgid "This form is not yet available."
 msgstr ""
 
-#: form_display.php:3181
+#: form_display.php:3192
 msgid "Sorry. This form is no longer available."
 msgstr ""
 
-#: form_display.php:3315
+#: form_display.php:3326
 msgid "Send Link"
 msgstr ""
 
-#: form_display.php:3316 includes/fields/class-gf-field-email.php:50
+#: form_display.php:3327 includes/fields/class-gf-field-email.php:50
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: form_display.php:3317
+#: form_display.php:3328
 msgid "email address"
 msgstr ""
 

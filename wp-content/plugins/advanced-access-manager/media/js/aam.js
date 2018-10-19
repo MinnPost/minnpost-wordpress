@@ -185,7 +185,9 @@
                 },
                 createdRow: function (row, data) {
                     if (isCurrent(data[0])) {
-                        $('td:eq(0)', row).html('<strong class="aam-highlight">' + data[2] + '</strong>');
+                        $('td:eq(0)', row).html(
+                            '<strong class="aam-highlight">' + data[2] + '</strong>'
+                        );
                     } else {
                         $('td:eq(0)', row).html('<span>' + data[2] + '</span>');
                     }
@@ -532,8 +534,6 @@
                         highlight.replaceWith($('<span/>').text(highlight.text()));
                     }
                 });
-                //show post & pages access control groups that belong to backend
-                $('.aam-backend-post-access').show();
             });
 
             //in case interface needed to be reloaded
@@ -888,7 +888,7 @@
                             case 'no-switch':
                                 if (!getAAM().isUI()) {
                                     $(container).append($('<i/>', {
-                                        'class': 'aam-row-action icon-switch text-muted'
+                                        'class': 'aam-row-action icon-exchange text-muted'
                                     }));
                                 }
                                 break;
@@ -1029,8 +1029,6 @@
                         highlight.replaceWith('<span>' + highlight.text() + '</span>');
                     }
                 });
-                //show post & pages access control groups that belong to backend
-                $('.aam-backend-post-access').show();
             });
 
             //in case interface needed to be reloaded
@@ -1073,8 +1071,6 @@
                             );
                         });
                     }
-                    //hide post & pages access control groups that belong to backend
-                    $('.aam-backend-post-access').hide();
                 });
             });
 
@@ -1134,24 +1130,28 @@
              * @returns {undefined}
              */
             function save(items, status, successCallback) {
-                $.ajax(getLocal().ajaxurl, {
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        action: 'aam',
-                        sub_action: 'Main_Menu.save',
-                        subject: getAAM().getSubject().type,
-                        subjectId: getAAM().getSubject().id,
-                        _ajax_nonce: getLocal().nonce,
-                        items: items,
-                        status: status
-                    },
-                    success: function(response) {
-                        successCallback(response);
-                    },
-                    error: function () {
-                        getAAM().notification('danger', getAAM().__('Application Error'));
-                    }
+                getAAM().queueRequest(function() {
+                    $.ajax(getLocal().ajaxurl, {
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: 'aam',
+                            sub_action: 'Main_Menu.save',
+                            subject: getAAM().getSubject().type,
+                            subjectId: getAAM().getSubject().id,
+                            _ajax_nonce: getLocal().nonce,
+                            items: items,
+                            status: status
+                        },
+                        success: function(response) {
+                            successCallback(response);
+                        },
+                        error: function () {
+                            getAAM().notification(
+                                'danger', getAAM().__('Application Error')
+                            );
+                        }
+                    });
                 });
             }
 
@@ -1257,50 +1257,28 @@
              * @returns {undefined}
              */
             function save(items, status, successCallback) {
-                $.ajax(getLocal().ajaxurl, {
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        action: 'aam',
-                        sub_action: 'Main_Toolbar.save',
-                        subject: getAAM().getSubject().type,
-                        subjectId: getAAM().getSubject().id,
-                        _ajax_nonce: getLocal().nonce,
-                        items: items,
-                        status: status
-                    },
-                    success: function(response) {
-                        successCallback(response);
-                    },
-                    error: function () {
-                        getAAM().notification('danger', getAAM().__('Application Error'));
-                    }
-                });
-            }
-
-            /**
-             * 
-             * @returns {undefined}
-             */
-            function getContent() {
-                $.ajax(getLocal().ajaxurl, {
-                    type: 'POST',
-                    dataType: 'html',
-                    data: {
-                        action: 'aam',
-                        sub_action: 'Main_Toolbar.getContent',
-                        _ajax_nonce: getLocal().nonce,
-                        subject: getAAM().getSubject().type,
-                        subjectId: getAAM().getSubject().id
-                    },
-                    success: function (response) {
-                        $('#toolbar-content').replaceWith(response);
-                        $('#toolbar-content').addClass('active');
-                        initialize();
-                    },
-                    error: function () {
-                        getAAM().notification('danger', getAAM().__('Application error'));
-                    }
+                getAAM().queueRequest(function() {
+                    $.ajax(getLocal().ajaxurl, {
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: 'aam',
+                            sub_action: 'Main_Toolbar.save',
+                            subject: getAAM().getSubject().type,
+                            subjectId: getAAM().getSubject().id,
+                            _ajax_nonce: getLocal().nonce,
+                            items: items,
+                            status: status
+                        },
+                        success: function(response) {
+                            successCallback(response);
+                        },
+                        error: function () {
+                            getAAM().notification(
+                                'danger', getAAM().__('Application Error')
+                            );
+                        }
+                    });
                 });
             }
 
@@ -1355,27 +1333,6 @@
                         });
                     });
                     
-                    //init refresh list button
-                    $('#refresh-toolbar-list').bind('click', function () {
-                        var url = getLocal().url.site;
-                            url += (url.indexOf('?') === -1 ? '?' : '&') + 'init=toolbar';
-                            
-                        $.ajax(url, {
-                            type: 'GET',
-                            beforeSend: function () {
-                                $('i', '#refresh-toolbar-list').attr(
-                                    'class', 'icon-spin4 animate-spin'
-                                );
-                            },
-                            complete: function () {
-                                getContent();
-                                $('i', '#refresh-toolbar-list').attr(
-                                    'class', 'icon-arrows-cw'
-                                );
-                            }
-                        });
-                    });
-
                     //reset button
                     $('#toolbar-reset').bind('click', function () {
                         getAAM().reset('toolbar', $(this));
@@ -1598,7 +1555,8 @@
                     } else {
                         if (granted) {
                             getAAM().notification(
-                                'danger', getAAM().__('WordPress core does not allow to grant this capability')
+                                'danger', 
+                                getAAM().__('WordPress core does not allow to grant this capability')
                             );
                             $(btn).attr('class', 'aam-row-action text-muted icon-check-empty');
                         } else {
@@ -1672,6 +1630,12 @@
                                             $('#edit-capability-modal').modal('show');
                                         }));
                                         break;
+                                        
+                                    case 'no-edit':
+                                        $(container).append($('<i/>', {
+                                            'class': 'aam-row-action icon-pencil text-muted'
+                                        }));
+                                        break;
 
                                     case 'delete':
                                         $(container).append($('<i/>', {
@@ -1684,6 +1648,12 @@
                                             $('#capability-id').val(data[0]);
                                             $('#delete-capability-btn').attr('data-cap', data[0]);
                                             $('#delete-capability-modal').modal('show');
+                                        }));
+                                        break;
+                                        
+                                    case 'no-delete':
+                                        $(container).append($('<i/>', {
+                                            'class': 'aam-row-action icon-trash-empty text-muted'
                                         }));
                                         break;
 
@@ -1889,36 +1859,40 @@
              * @param {*} successCallback 
              */
             function save(param, value, object, object_id, successCallback) {
-                $.ajax(getLocal().ajaxurl, {
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        action: 'aam',
-                        sub_action: 'Main_Post.save',
-                        _ajax_nonce: getLocal().nonce,
-                        subject: getAAM().getSubject().type,
-                        subjectId: getAAM().getSubject().id,
-                        param: param,
-                        value: value,
-                        object: object,
-                        objectId: object_id
-                    },
-                    success: function (response) {
-                        if (response.status === 'failure') {
-                            getAAM().notification('danger', response.error);
-                        } else {
-                            $('#post-overwritten').removeClass('hidden');
-                            //add some specific attributes to reset button
-                            $('#post-reset').attr({
-                                'data-type': object,
-                                'data-id': object_id
-                            });
+                getAAM().queueRequest(function() {
+                    $.ajax(getLocal().ajaxurl, {
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: 'aam',
+                            sub_action: 'Main_Post.save',
+                            _ajax_nonce: getLocal().nonce,
+                            subject: getAAM().getSubject().type,
+                            subjectId: getAAM().getSubject().id,
+                            param: param,
+                            value: value,
+                            object: object,
+                            objectId: object_id
+                        },
+                        success: function (response) {
+                            if (response.status === 'failure') {
+                                getAAM().notification('danger', response.error);
+                            } else {
+                                $('#post-overwritten').removeClass('hidden');
+                                //add some specific attributes to reset button
+                                $('#post-reset').attr({
+                                    'data-type': object,
+                                    'data-id': object_id
+                                });
+                            }
+                            successCallback(response);
+                        },
+                        error: function () {
+                            getAAM().notification(
+                                'danger', getAAM().__('Application error')
+                            );
                         }
-                        successCallback(response);
-                    },
-                    error: function () {
-                        getAAM().notification('danger', getAAM().__('Application error'));
-                    }
+                    });
                 });
             }
 
@@ -1968,11 +1942,12 @@
                     $(this).unbind('click').bind('click', function () {
                         var _this   = $(this);
                         var checked = !_this.hasClass('icon-check');
+                        var value   = (checked ? 1 : 0);
 
                         _this.attr('class', 'aam-row-action icon-spin4 animate-spin');
                         save(
                             _this.data('property'),
-                            (checked ? 1 : 0),
+                            value,
                             object,
                             id,
                             function(response) {
@@ -1989,8 +1964,29 @@
                                 }
                             }
                         );
+                
+                        if ($(this).data('trigger') && value) {
+                            $('#' + $(this).data('trigger')).trigger('click');
+                        }
                     });
                 });
+                
+                $('.advanced-post-option').each(function() {
+                    $(this).bind('click', function() {
+                        var container = $(this).attr('href');
+                        var option = objectAccess.access[$(this).data('ref')];
+                        var field  = $($('.extended-post-access-btn', container).data('field'));
+
+                        //add attributes to the .extended-post-access-btn
+                        $('.extended-post-access-btn', container).attr({
+                            'data-ref': $(this).attr('data-ref'),
+                            'data-preview': $(this).attr('data-preview')
+                        });
+
+                        //set field value
+                        field.val(option);
+                    });
+                 });
 
                 $.ajax(getLocal().ajaxurl, {
                     type: 'POST',
@@ -2253,6 +2249,12 @@
                                             'title': getAAM().__('Edit')
                                         }));
                                         break;
+                                        
+                                    case 'no-edit' :
+                                        $(container).append($('<i/>', {
+                                            'class': 'aam-row-action text-muted icon-pencil'
+                                        }));
+                                        break;
 
                                     default:
                                         getAAM().triggerHook('post-action', {
@@ -2330,23 +2332,6 @@
                             $('#load-post-object').val()
                         );
                     }
-                    
-                    $('.advanced-post-option').each(function() {
-                       $(this).bind('click', function() {
-                           var container = $(this).attr('href');
-                           var option = objectAccess.access[$(this).data('ref')];
-                           var field  = $($('.extended-post-access-btn', container).data('field'));
-                           
-                           //add attributes to the .extended-post-access-btn
-                           $('.extended-post-access-btn', container).attr({
-                               'data-ref': $(this).data('ref'),
-                               'data-preview': $(this).data('preview')
-                           });
-                           
-                           //set field value
-                           field.val(option);
-                       });
-                    });
                     
                     $('.extended-post-access-btn').each(function() {
                         $(this).bind('click', function() {
@@ -2668,21 +2653,25 @@
              * @returns {undefined}
              */
             function save(param, value) {
-                $.ajax(getLocal().ajaxurl, {
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        action: 'aam',
-                        sub_action: 'Main_404Redirect.save',
-                        _ajax_nonce: getLocal().nonce,
-                        subject: getAAM().getSubject().type,
-                        subjectId: getAAM().getSubject().id,
-                        param: param,
-                        value: value
-                    },
-                    error: function () {
-                        getAAM().notification('danger', getAAM().__('Application error'));
-                    }
+                getAAM().queueRequest(function() {
+                    $.ajax(getLocal().ajaxurl, {
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: 'aam',
+                            sub_action: 'Main_404Redirect.save',
+                            _ajax_nonce: getLocal().nonce,
+                            subject: getAAM().getSubject().type,
+                            subjectId: getAAM().getSubject().id,
+                            param: param,
+                            value: value
+                        },
+                        error: function () {
+                            getAAM().notification(
+                                'danger', getAAM().__('Application error')
+                            );
+                        }
+                    });
                 });
             }
 
@@ -2738,37 +2727,43 @@
              * @param {type} btn
              * @returns {undefined}
              */
-            function save(type, route, method, value, btn) {
-                //show indicator
-                $(btn).attr('class', 'aam-row-action icon-spin4 animate-spin');
+            function save(type, route, method, btn) {
+                var value = $(btn).hasClass('icon-check-empty') ? 1 : 0;
                 
-                $.ajax(getLocal().ajaxurl, {
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        action: 'aam',
-                        sub_action: 'Main_Route.save',
-                        _ajax_nonce: getLocal().nonce,
-                        subject: getAAM().getSubject().type,
-                        subjectId: getAAM().getSubject().id,
-                        type: type,
-                        route: route,
-                        method: method,
-                        value: value
-                    },
-                    success: function (response) {
-                        if (response.status === 'failure') {
-                            getAAM().notification('danger', response.error);
+                getAAM().queueRequest(function() {
+                    //show indicator
+                    $(btn).attr('class', 'aam-row-action icon-spin4 animate-spin');
+
+                    $.ajax(getLocal().ajaxurl, {
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: 'aam',
+                            sub_action: 'Main_Route.save',
+                            _ajax_nonce: getLocal().nonce,
+                            subject: getAAM().getSubject().type,
+                            subjectId: getAAM().getSubject().id,
+                            type: type,
+                            route: route,
+                            method: method,
+                            value: value
+                        },
+                        success: function (response) {
+                            if (response.status === 'failure') {
+                                getAAM().notification('danger', response.error);
+                                updateBtn(btn, value ? 0 : 1);
+                            } else {
+                                $('#aam-route-overwrite').removeClass('hidden');
+                                updateBtn(btn, value);
+                            }
+                        },
+                        error: function () {
                             updateBtn(btn, value ? 0 : 1);
-                        } else {
-                            $('#aam-route-overwrite').removeClass('hidden');
-                            updateBtn(btn, value);
+                            getAAM().notification(
+                                'danger', getAAM().__('Application error')
+                            );
                         }
-                    },
-                    error: function () {
-                        updateBtn(btn, value ? 0 : 1);
-                        getAAM().notification('danger', getAAM().__('Application error'));
-                    }
+                    });
                 });
             }
             
@@ -2843,7 +2838,7 @@
                                         $(container).append($('<i/>', {
                                             'class': 'aam-row-action text-muted icon-check-empty'
                                         }).bind('click', function () {
-                                            save(data[0], data[2], data[1], 1, this);
+                                            save(data[0], data[2], data[1], this);
                                         }));
                                         break;
 
@@ -2851,7 +2846,7 @@
                                         $(container).append($('<i/>', {
                                             'class': 'aam-row-action text-danger icon-check'
                                         }).bind('click', function () {
-                                            save(data[0], data[2], data[1], 0, this);
+                                            save(data[0], data[2], data[1], this);
                                         }));
                                         break;
 
@@ -2925,26 +2920,32 @@
              * @returns {undefined}
              */
             function updateStatus(data) {
-                $.ajax(getLocal().ajaxurl, {
-                    type: 'POST',
-                    dataType: 'json',
-                    data: data,
-                    success: function (response) {
-                        if (response.status === 'success') {
+                getAAM().queueRequest(function() {
+                    $.ajax(getLocal().ajaxurl, {
+                        type: 'POST',
+                        dataType: 'json',
+                        data: data,
+                        success: function (response) {
+                            if (response.status === 'success') {
+                                getAAM().notification(
+                                    'success', 
+                                    getAAM().__('Extension status was updated successfully')
+                                );
+                            } else {
+                                getAAM().notification(
+                                    'danger', getAAM().__(response.error)
+                                );
+                            }
+                        },
+                        error: function () {
                             getAAM().notification(
-                                'success', 
-                                getAAM().__('Extension status was updated successfully')
+                                'danger', getAAM().__('Application error')
                             );
-                        } else {
-                            getAAM().notification('danger', getAAM().__(response.error));
+                        },
+                        complete: function () {
+                            getAAM().fetchContent('extensions');
                         }
-                    },
-                    error: function () {
-                        getAAM().notification('danger', getAAM().__('Application error'));
-                    },
-                    complete: function () {
-                        getAAM().fetchContent('extensions');
-                    }
+                    });
                 });
             }
 
@@ -3129,23 +3130,26 @@
              * 
              * @param {type} param
              * @param {type} value
-             * @param {type} reload
              * @returns {undefined}
              */
             function save(param, value) {
-                $.ajax(getLocal().ajaxurl, {
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        action: 'aam',
-                        sub_action: 'Settings_Manager.save',
-                        _ajax_nonce: getLocal().nonce,
-                        param: param,
-                        value: value
-                    },
-                    error: function () {
-                        getAAM().notification('danger', getAAM().__('Application Error'));
-                    }
+                getAAM().queueRequest(function() {
+                    $.ajax(getLocal().ajaxurl, {
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            action: 'aam',
+                            sub_action: 'Settings_Manager.save',
+                            _ajax_nonce: getLocal().nonce,
+                            param: param,
+                            value: value
+                        },
+                        error: function () {
+                            getAAM().notification(
+                                'danger', getAAM().__('Application Error')
+                            );
+                        }
+                    });
                 });
             }
             
@@ -3174,7 +3178,7 @@
                             dataType: 'json',
                             data: {
                                 action: 'aam',
-                                sub_action: 'Settings_Tools.clear',
+                                sub_action: 'clearSettings',
                                 _ajax_nonce: getLocal().nonce
                             },
                             beforeSend: function() {
@@ -3208,7 +3212,7 @@
                             dataType: 'json',
                             data: {
                                 action: 'aam',
-                                sub_action: 'Settings_Tools.clearCache',
+                                sub_action: 'clearCache',
                                 _ajax_nonce: getLocal().nonce
                             },
                             beforeSend: function() {
@@ -3233,103 +3237,6 @@
                                 $('#clear-cache').text(getAAM().__('Clear'));
                             }
                         });
-                    });
-
-                    $('#export-aam').bind('click', function () {
-                        $.ajax(getLocal().ajaxurl, {
-                            type: 'POST',
-                            dataType: 'json',
-                            data: {
-                                action: 'aam',
-                                sub_action: 'Settings_Tools.export',
-                                _ajax_nonce: getLocal().nonce
-                            },
-                            beforeSend: function () {
-                                $('#export-aam').prop('disabled', true);
-                                $('#export-aam').attr('data-lable', $('#export-aam').text());
-                                $('#export-aam').text(getAAM().__('Wait...'));
-                            },
-                            success: function(response) {
-                                if (response.status === 'success') {
-                                    download(
-                                        'data:text/plain;base64,' + response.content,
-                                        'aam-export.json',
-                                        'text/plain'
-                                    );
-                                }
-                            },
-                            error: function () {
-                                getAAM().notification('danger', getAAM().__('Application Error'));
-                            },
-                            complete: function () {
-                                $('#export-aam').prop('disabled', false);
-                                $('#export-aam').text($('#export-aam').attr('data-lable'));
-                            }
-                        });
-                    });
-
-                    $('#import-aam').bind('click', function () {
-                        if (typeof FileReader !== 'undefined') { 
-                            $('#aam-import-file').trigger('click');
-                        } else {
-                            getAAM().notification('danger', 'Your browser does not support FileReader functionality');
-                        }
-                    });
-
-                    $('#aam-import-file').bind('change', function () {
-                        var file = $(this)[0].files[0];
-                        var json = null;
-
-                        var reader = new FileReader();
-                        reader.onload = function(e) {
-                            json = reader.result;
-
-                            try {
-                                //validate the content
-                                var loaded = JSON.parse(json);
-                                if (loaded.plugin && loaded.plugin === 'advanced-access-manager') {
-                                    $.ajax(getLocal().ajaxurl, {
-                                        type: 'POST',
-                                        dataType: 'json',
-                                        data: {
-                                            action: 'aam',
-                                            sub_action: 'Settings_Tools.import',
-                                            _ajax_nonce: getLocal().nonce,
-                                            json: json
-                                        },
-                                        beforeSend: function () {
-                                            $('#import-aam').prop('disabled', true);
-                                            $('#import-aam').attr('data-lable', $('#import-aam').text());
-                                            $('#import-aam').text(getAAM().__('Wait...'));
-                                        },
-                                        success: function(response) {
-                                            if (response.status === 'success') {
-                                                getAAM().notification(
-                                                    'success', 
-                                                    'All settings were imported successfully'
-                                                );
-                                                location.reload();
-                                            } else {
-                                                getAAM().notification('danger', response.reason);
-                                            }
-                                        },
-                                        error: function () {
-                                            getAAM().notification('danger', getAAM().__('Application Error'));
-                                        },
-                                        complete: function () {
-                                            $('#import-aam').prop('disabled', false);
-                                            $('#import-aam').text($('#import-aam').attr('data-lable'));
-                                        }
-                                    });
-                                } else {
-                                    throw 'Invalid format'; 
-                                }
-                            } catch (e) {
-                                getAAM().notification('danger', 'Invalid file format');
-                            }
-                        };
-                        reader.readAsText(file);
-
                     });
                 }
             }
@@ -3390,7 +3297,44 @@
          * Content filters
          */
         this.filters = {};
+        
+        /**
+         * Request queue
+         */
+        this.queue = {
+            requests: [],
+            processing: false
+        };
+        
+        /**
+         * 
+         * @type AAM
+         */
+        var _this = this;
+        
+        $(document).ajaxComplete(function() {
+            _this.queue.processing = false;
+            
+            if (_this.queue.requests.length > 0) {
+                _this.queue.processing = true;
+                _this.queue.requests.shift().call(_this);
+            }
+        });
     }
+    
+    /**
+     * 
+     * @param {type} request
+     * @returns {undefined}
+     */
+    AAM.prototype.queueRequest = function(request) {
+        this.queue.requests.push(request);
+        
+        if (this.queue.processing === false) {
+            this.queue.processing = true;
+            this.queue.requests.shift().call(this);
+        }
+    };
     
     /**
      * 
@@ -3428,18 +3372,26 @@
         var object   = window.location.search.match(/&oid\=([^&]*)/);
         var type     = window.location.search.match(/&otype\=([^&]*)/);
         
+        var data = {
+            action: 'aamc',
+            _ajax_nonce: getLocal().nonce,
+            uiType: view,
+            subject: this.getSubject().type,
+            subjectId: this.getSubject().id,
+            oid: object ? object[1] : null,
+            otype: type ? type[1] : null
+        };
+        
+        if (!getAAM().isUI() && (typeof aamEnvData !== 'undefined')) {
+            data.menu = aamEnvData.menu;
+            data.submenu = aamEnvData.submenu;
+            data.toolbar = aamEnvData.toolbar;
+        }
+        
         $.ajax(getLocal().url.site, {
             type: 'POST',
             dataType: 'html',
-            data: {
-                action: 'aamc',
-                _ajax_nonce: getLocal().nonce,
-                uiType: view,
-                subject: this.getSubject().type,
-                subjectId: this.getSubject().id,
-                oid: object ? object[1] : null,
-                otype: type ? type[1] : null
-            },
+            data: data,
             beforeSend: function () {
                 if ($('#aam-initial-load').length === 0) {
                     $('#aam-content').html(
@@ -3656,14 +3608,14 @@
         return (getLocal().translation[label] ? getLocal().translation[label] : label);
     };
 
-/**
- * 
- * @param {type} type
- * @param {type} id
- * @param {type} name
- * @param {type} level
- * @returns {undefined}
- */
+    /**
+     * 
+     * @param {type} type
+     * @param {type} id
+     * @param {type} name
+     * @param {type} level
+     * @returns {undefined}
+     */
     AAM.prototype.setSubject = function (type, id, name, level) {
         this.subject = {
             type: type,
@@ -3730,65 +3682,74 @@
      * @param {type} value
      * @param {type} object
      * @param {type} object_id
-     * @param {type} successCallback
+     * @param {type} callback
      * @returns {undefined}
      */
-    AAM.prototype.save = function(param, value, object, object_id, successCallback) {
-        $.ajax(getLocal().ajaxurl, {
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                action: 'aam',
-                sub_action: 'save',
-                _ajax_nonce: getLocal().nonce,
-                subject: this.getSubject().type,
-                subjectId: this.getSubject().id,
-                param: param,
-                value: value,
-                object: object,
-                objectId: object_id
-            },
-            success: function (response) {
-                if (typeof successCallback === 'function') {
-                    successCallback(response);
+    AAM.prototype.save = function(param, value, object, object_id, callback) {
+        getAAM().queueRequest(function() {
+            $.ajax(getLocal().ajaxurl, {
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'aam',
+                    sub_action: 'save',
+                    _ajax_nonce: getLocal().nonce,
+                    subject: this.getSubject().type,
+                    subjectId: this.getSubject().id,
+                    param: param,
+                    value: value,
+                    object: object,
+                    objectId: object_id
+                },
+                success: function (response) {
+                    if (typeof callback === 'function') {
+                        callback(response);
+                    }
+                },
+                error: function () {
+                    getAAM().notification(
+                        'danger', getAAM().__('Application error')
+                    );
                 }
-            },
-            error: function () {
-                getAAM().notification('danger', getAAM().__('Application error'));
-            }
+            });
         });
     };
 
     /**
      * 
      * @param {type} object
+     * @param {type} btn
      * @returns {undefined}
      */
     AAM.prototype.reset = function(object, btn) {
-        $.ajax(getLocal().ajaxurl, {
-            type: 'POST',
-            data: {
-                action: 'aam',
-                sub_action: 'reset',
-                _ajax_nonce: getLocal().nonce,
-                subject: this.getSubject().type,
-                subjectId: this.getSubject().id,
-                object: object
-            },
-            beforeSend: function() {
-                var label = btn.text();
-                btn.attr('data-original-label', label);
-                btn.text(getAAM().__('Resetting...'));
-            },
-            success: function () {
-                getAAM().fetchContent('main');
-            },
-            error: function () {
-                getAAM().notification('danger', getAAM().__('Application error'));
-            },
-            complete: function() {
-                btn.text(btn.attr('data-original-label'));
-            }
+        getAAM().queueRequest(function() {
+            $.ajax(getLocal().ajaxurl, {
+                type: 'POST',
+                data: {
+                    action: 'aam',
+                    sub_action: 'reset',
+                    _ajax_nonce: getLocal().nonce,
+                    subject: this.getSubject().type,
+                    subjectId: this.getSubject().id,
+                    object: object
+                },
+                beforeSend: function() {
+                    var label = btn.text();
+                    btn.attr('data-original-label', label);
+                    btn.text(getAAM().__('Resetting...'));
+                },
+                success: function () {
+                    getAAM().fetchContent('main');
+                },
+                error: function () {
+                    getAAM().notification(
+                        'danger', getAAM().__('Application error')
+                    );
+                },
+                complete: function() {
+                    btn.text(btn.attr('data-original-label'));
+                }
+            });
         });
     };
     

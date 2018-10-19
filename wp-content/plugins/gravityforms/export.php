@@ -829,8 +829,14 @@ class GFExport {
 						$list = empty( $value ) ? array() : $value;
 
 						foreach ( $list as $row ) {
-							$row_values = array_values( $row );
-							$row_str    = implode( '|', $row_values );
+							if ( is_array( $row ) ) {
+								// Entry from a multi-column list field.
+								$row_values = array_values( $row );
+								$row_str    = implode( '|', $row_values );
+							} else {
+								// Entry from a standard list field.
+								$row_str = $row;
+							}
 
 							if ( strpos( $row_str, '=' ) === 0 ) {
 								// Prevent Excel formulas
@@ -847,7 +853,18 @@ class GFExport {
 						}
 					} else {
 						if ( is_array( $value ) ) {
-							$value = implode( '|', $value );
+							if ( ! empty( $value[0] ) && is_array( $value[0] ) ) {
+								// Entry from a multi-column list field.
+								$values = array();
+								foreach ( $value as $item ) {
+									$values[] = implode( '|', array_values( $item ) );
+								}
+
+								$value = implode( ',', $values );
+							} else {
+								// Entry from a standard list field.
+								$value = implode( '|', $value );
+							}
 						}
 
 						if ( strpos( $value, '=' ) === 0 ) {

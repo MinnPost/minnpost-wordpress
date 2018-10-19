@@ -91,6 +91,10 @@ class AAM_Core_Login {
                 }
             }
             
+            if (AAM::api()->getConfig('core.settings.setJwtCookieAfterLogin', false)) {
+                AAM_Core_JwtAuth::getInstance()->generateJWT($user->ID, 'cookie');
+            }
+            
             if ($this->aamLogin === false) {
                 $redirect = $this->getLoginRedirect($user);
                 
@@ -133,7 +137,7 @@ class AAM_Core_Login {
     public function authenticateUser($user) {
         if (is_a($user, 'WP_User')) {
             // First check if user is blocked
-            if ($user->user_status === 1) {
+            if (intval($user->user_status) === 1) {
                 $user = new WP_Error();
 
                 $message  = '[ERROR]: User is locked. Please contact your website ';
@@ -274,10 +278,8 @@ class AAM_Core_Login {
             'redirect' => AAM_Core_Request::post('redirect')
         );
 
-        $log = sanitize_user(AAM_Core_Request::post('log'));
-
         try {
-            $user = wp_signon($credentials, $this->checkUserSSL($log));
+            $user = wp_signon($credentials);
 
             if (is_wp_error($user)) {
                 Throw new Exception($user->get_error_message());
@@ -291,7 +293,6 @@ class AAM_Core_Login {
             $response['status'] = 'success';
             $response['user']   = $user;
         } catch (Exception $ex) {
-            $response['error']  = $user;
             $response['reason'] = $ex->getMessage();
         }
 
@@ -319,29 +320,6 @@ class AAM_Core_Login {
         }
         
         return $normalized;
-    }
-
-    /**
-     * Check user SSL status
-     * 
-     * @param string $log
-     * 
-     * @return boolean
-     * 
-     * @access protected
-     */
-    protected function checkUserSSL($log) {
-        $secure = false;
-        $user = get_user_by((strpos($log, '@') ? 'email' : 'login'), $log);
-
-        if ($user) {
-            if (!force_ssl_admin() && get_user_option('use_ssl', $user->ID)) {
-                $secure = true;
-                force_ssl_admin(true);
-            }
-        }
-
-        return $secure;
     }
 
     /**

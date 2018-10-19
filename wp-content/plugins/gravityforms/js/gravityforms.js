@@ -812,7 +812,7 @@ function gformDeleteListItem( deleteButton, max ) {
 
     gformToggleIcons( $container, max );
     gformAdjustClasses( $container );
- 
+
     gform.doAction( 'gform_list_post_item_delete', $container );
 
 }
@@ -1387,33 +1387,33 @@ function gformValidateFileSize( field, max_file_size ) {
 	} else {
 		validation_element = jQuery( field ).siblings( '.validation_message' );
 	}
-	
-	
+
+
 	// If file API is not supported within browser, return.
 	if ( ! window.FileReader || ! window.File || ! window.FileList || ! window.Blob ) {
 		return;
 	}
-	
+
 	// Get selected file.
 	var file = field.files[0];
-	
+
 	// If selected file is larger than maximum file size, set validation message and unset file selection.
 	if ( file && file.size > max_file_size ) {
 
 		// Set validation message.
 		validation_element.text( file.name + " - " + gform_gravityforms.strings.file_exceeds_limit );
-		
+
 		// Unset file selection.
 		var input = jQuery( field );
 		input.replaceWith( input.val( '' ).clone( true ) );
 
 	} else {
-		
+
 		// Reset validation message.
 		validation_element.text( '' );
-		
+
 	}
-	
+
 }
 
 //----------------------------------------
@@ -1845,34 +1845,34 @@ jQuery( document ).on( 'submit.gravityforms', '.gform_wrapper form', function( e
 	var formWrapper = jQuery( this ).closest( '.gform_wrapper' ),
 		formID = formWrapper.attr( 'id' ).split( '_' )[ 2 ],
 		hasPages = formWrapper.find( '.gform_page' ).length > 0,
-		sourcePage = formWrapper.find( 'input[name^="gform_source_page_number_"]' ).val(),
-		targetPage = formWrapper.find( 'input[name^="gform_target_page_number_"]' ).val(),
+		sourcePage = parseInt( formWrapper.find( 'input[name^="gform_source_page_number_"]' ).val() ),
+		targetPage = parseInt( formWrapper.find( 'input[name^="gform_target_page_number_"]' ).val() ),
+		isSubmit = targetPage === 0,
+		isNextSubmit = ! isSubmit && ( targetPage > sourcePage ),
+		isSave = jQuery( '#gform_save_' + formID ).val() === '1',
 		submitButton;
-	
-	if ( hasPages ) {
-		// Get visible page.
-		var visiblePage = formWrapper.find( '.gform_page:visible' );
 
-		// Get page submit button.
-		submitButton = visiblePage.find( '.gform_page_footer .gform_next_button' );
-		if ( submitButton.length === 0 ) {
-			submitButton = visiblePage.find( '.gform_page_footer .gform_button' );
-		}
+	// Get the next or submit button.
+	if ( hasPages ) {
+		// Get the visible page.
+		var visiblePage = formWrapper.find( '.gform_page:visible' ),
+			buttonType = isNextSubmit ? 'next' : 'submit';
+
+		submitButton = visiblePage.find( '.gform_page_footer [id^="gform_' + buttonType + '_button_"]' );
 	} else {
-		submitButton = formWrapper.find( '.gform_footer .gform_button' );
+		submitButton = formWrapper.find( '#gform_submit_button_' + formID );
 	}
 
-	var isSubmit = targetPage === '0',
-		isNextSubmit = ! isSubmit && ( targetPage > sourcePage ),
-		isSave = jQuery('#gform_save_' + formID).val() === '1';
+	var isButtonHidden = ! submitButton.is(':visible'),
+		abortSubmission = ! isSave && ( isSubmit || isNextSubmit ) && isButtonHidden;
 
-	// If submit button is not visible and target page is the next/final page, do not submit.
-	if ( ! isSave && ! submitButton.is( ':visible' ) && ( isSubmit || isNextSubmit ) ) {
+	// If we are not saving or returning to an earlier page and the next/submit button is hidden abort the submission.
+	if ( abortSubmission ) {
 		window[ 'gf_submitting_' + formID ] = false;
 		formWrapper.find( '.gform_ajax_spinner' ).remove();
 		event.preventDefault();
 	}
-	
+
 } );
 
 

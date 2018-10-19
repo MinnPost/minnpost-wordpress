@@ -1,9 +1,9 @@
 === Advanced Access Manager ===
-Contributors: vasyltech
+Contributors: vasyltech,noelalvarez
 Tags: access control, membership, backend menu, user role, restricted content
 Requires at least: 4.0
 Tested up to: 4.9.7
-Stable tag: 5.4.3.2
+Stable tag: 5.5
 
 All you need to manage access to you WordPress websites on frontend, backend and API levels for any role, user or visitors.
 
@@ -53,6 +53,7 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 * [paid] Manage access based on IP address or referred domain. Manage access to your website for all visitors based on referred host or IP address. Find out more from [How to manage access to WordPress website by IP address](https://aamplugin.com/help/how-to-manage-access-to-wordpress-website-by-ip-address) article;
 * [paid] Monetize access to you content. Start selling access to your website content with premium [E-Commerce](https://aamplugin.com/extension/ecommerce) extension. Find out more from [How to monetize access to the WordPress content](https://aamplugin.com/help/how-to-monetize-access-to-the-wordpress-content) article;
 * [free] Multisite support. Sync access settings across your network or even restrict none-members from accessing one of your sites. Find out more from [AAM and WordPress Multisite support](https://aamplugin.com/help/aam-and-wordpress-multisite-support);
+* [free] Multiple role support. Finally AAM supports multiple roles per user [WordPress access control for users with multiple roles](https://aamplugin.com/article/wordpress-access-control-for-users-with-multiple-roles)
 * [and even more...] Check our [help page](https://aamplugin.com/help) to learn more about AAM
 
 == Installation ==
@@ -75,6 +76,22 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 11. Improve your website security
 
 == Changelog ==
+
+= 5.5 =
+* Fixed the bug with EDIT BY OTHERS option
+* Fixed UI bug when managing access to AAM page itself
+* Fixed the bug reported by https://github.com/KenAer
+* Fixed the bug with creating new post when default access is denied to EDIT
+* Fixed the bug with editing page that is in draft state
+* Fixed multiple bugs with AAM export/import feature
+* Fixed the bug with blocked user being able to login again
+* Slightly improved extension installation feedback
+* Improved UI
+* Enhanced JWT token feature
+* Improved the way Backend Menu and Toolbar features work
+* Added multiple-roles support
+* Refactored Import/Export features
+* Removed Settings->Tools tab
 
 = 5.4.3.2 =
 * Fixed bug that incorrectly checks post author property

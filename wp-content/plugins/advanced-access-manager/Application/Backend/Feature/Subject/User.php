@@ -32,7 +32,8 @@ class AAM_Backend_Feature_Subject_User {
             'data'            => array(),
         );
         
-        if (current_user_can('list_users')) { 
+        // TODO: The list_users is legacy and can be removed in Oct 2021
+        if (current_user_can('aam_manage_users') || current_user_can('list_users')) { 
             //get total number of users
             $total  = count_users();
             $result = $this->query();

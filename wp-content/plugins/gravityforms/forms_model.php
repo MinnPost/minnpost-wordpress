@@ -3433,7 +3433,29 @@ class GFFormsModel {
 		return $post_data;
 	}
 
+	/**
+	 * Retrieves the custom field names (meta keys) for the custom field select in the form editor.
+	 *
+	 * @since unknown
+	 *
+	 * @return array
+	 */
 	public static function get_custom_field_names() {
+		$form_id = absint( rgget( 'id' ) );
+
+		/**
+		 * Allow the postmeta query which retrieves the custom field names (meta keys) to be disabled.
+		 *
+		 * @since 2.3.4.1
+		 *
+		 * @param bool $disable_query Indicates if the custom field names query should be disabled. Default is false.
+		 */
+		$disable_query = gf_apply_filters( array( 'gform_disable_custom_field_names_query', $form_id ), false );
+
+		if ( $disable_query ) {
+			return array();
+		}
+
 		global $wpdb;
 		$sql = "SELECT DISTINCT meta_key
 			FROM $wpdb->postmeta

@@ -25,7 +25,8 @@ class AAM_Backend_Feature_Subject_Role {
      * @access public
      */
     public function getTable() {
-        if (current_user_can('aam_list_roles')) {
+        // TODO: The aam_list_roles is legacy and can be removed in Oct 2021
+        if (current_user_can('aam_manage_roles') || current_user_can('aam_list_roles')) {
             //retrieve list of users
             $count = count_users();
             $stats = $count['avail_roles'];
