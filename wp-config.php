@@ -89,6 +89,10 @@ define( 'EP_HOST', $_ENV['EP_HOST'] );
 // analytics
 define( 'WP_ANALYTICS_TRACKING_ID', $_ENV['WP_ANALYTICS_TRACKING_ID'] );
 
+// minify merge refresh
+define( 'MMR_CACHE_DIR', $_ENV['MMR_CACHE_DIR'] );
+define( 'MMR_CACHE_URL', $_ENV['MMR_CACHE_URL'] );
+
 /**#@-*/
 
 /**
@@ -120,6 +124,10 @@ if ( 'true' === $_ENV['JETPACK_DEV_DEBUG'] ) {
 if ( 'true' === $_ENV['SCRIPT_DEBUG'] ) {
 	define( 'SCRIPT_DEBUG', $_ENV['SCRIPT_DEBUG'] );
 }
+
+define( 'WP_DEBUG_LOG', true );
+define( 'BSD_CORAL_LIVE_URL', 'https://www.minnpost.com' );
+
 
 /* That's all, stop editing! Happy blogging. */
 
