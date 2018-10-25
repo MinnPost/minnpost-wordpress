@@ -55,7 +55,6 @@ class XMLSF_Admin_Sitemap
     public function settings_page()
     {
 		// SECTIONS & SETTINGS
-
 		// post_types
 		add_settings_section( 'xml_sitemap_post_types_section', /*'<a name="xmlsf"></a>'.__('XML Sitemap','xml-sitemap-feed')*/ '', '', 'xmlsf_post_types' );
 		$post_types = apply_filters( 'xmlsf_post_types', get_post_types( array( 'public' => true ) /*,'objects'*/) );
@@ -78,8 +77,6 @@ class XMLSF_Admin_Sitemap
 			add_settings_field( 'xmlsf_taxonomies', __('Include taxonomies','xml-sitemap-feed'), array($this,'taxonomies_field'), 'xmlsf_taxonomies', 'xml_sitemap_taxonomies_section' );
 
 		add_settings_section( 'xml_sitemap_advanced_section', /*'<a name="xmlsf"></a>'.__('XML Sitemap','xml-sitemap-feed')*/ '', '', 'xmlsf_advanced' );
-		// custom domains
-		add_settings_field( 'xmlsf_domains', __('Allowed domains','xml-sitemap-feed'), array($this,'domains_settings_field'), 'xmlsf_advanced', 'xml_sitemap_advanced_section' );
 		// custom urls
 		add_settings_field( 'xmlsf_urls', __('External web pages','xml-sitemap-feed'), array($this,'urls_settings_field'), 'xmlsf_advanced', 'xml_sitemap_advanced_section' );
 		// custom sitemaps
@@ -88,6 +85,7 @@ class XMLSF_Admin_Sitemap
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'post_types';
 
 		$options = (array) get_option( 'xmlsf_sitemaps' );
+		$url = trailingslashit(get_bloginfo('url')) . ( xmlsf()->plain_permalinks() ? '?feed=sitemap' : $options['sitemap'] );
 
 		include XMLSF_DIR . '/views/admin/page-sitemap.php';
     }
@@ -105,8 +103,6 @@ class XMLSF_Admin_Sitemap
 		// taxonomies
 		register_setting( 'xmlsf_taxonomies', 'xmlsf_taxonomy_settings', array('XMLSF_Admin_Sitemap_Sanitize','taxonomy_settings') );
 		register_setting( 'xmlsf_taxonomies', 'xmlsf_taxonomies', array('XMLSF_Admin_Sitemap_Sanitize','taxonomies') );
-		// custom domains
-		register_setting( 'xmlsf_advanced', 'xmlsf_domains', array('XMLSF_Admin_Sitemap_Sanitize','domains_settings') );
 		// custom urls
 		register_setting( 'xmlsf_advanced', 'xmlsf_urls', array('XMLSF_Admin_Sitemap_Sanitize','custom_urls_settings') );
 		// custom sitemaps
@@ -134,7 +130,6 @@ class XMLSF_Admin_Sitemap
 
 		ob_start();
 		include XMLSF_DIR . '/views/admin/help-tab-post-types.php';
-		include XMLSF_DIR . '/views/admin/help-tab-support.php';
 		$content = ob_get_clean();
 
 		$screen->add_help_tab( array(
@@ -152,9 +147,6 @@ class XMLSF_Admin_Sitemap
 			'title'   => __( 'Taxonomies', 'xml-sitemap-feed' ),
 			'content' => $content,
 		) );
-
-		// default domain
-		$default = parse_url( home_url(), PHP_URL_HOST );
 
 		ob_start();
 		include XMLSF_DIR . '/views/admin/help-tab-advanced.php';
@@ -225,19 +217,6 @@ class XMLSF_Admin_Sitemap
 
 		// The actual fields for data entry
 		include XMLSF_DIR . '/views/admin/field-sitemap-urls.php';
-	}
-
-	/**
-	 * Domain settings field
-	 */
-
-	public function domains_settings_field()
-	{
-		$domains = get_option('xmlsf_domains');
-		if ( !is_array($domains) ) $domains = array();
-
-		// The actual fields for data entry
-		include XMLSF_DIR . '/views/admin/field-sitemap-domains.php';
 	}
 
 }
