@@ -451,10 +451,13 @@ function gformCalculateProductPrice(form_id, productFieldId){
 	}
 
     price = price * quantity;
-    price = Math.round(price * 100) / 100;
+
+	price = gformRoundPrice(price) ;
+
 
     return price;
 }
+
 
 function gformGetProductQuantity(formId, productFieldId) {
 
@@ -626,6 +629,14 @@ function gformGetPrice(text){
          return currency.toNumber(val[1]);
 
     return 0;
+}
+
+function gformRoundPrice(price){
+
+	var currency = new Currency(gf_global.gf_currency_config);
+    var roundedPrice = currency.numberFormat( price, currency.currency['decimals'], '.', '' );
+
+    return parseFloat( roundedPrice );
 }
 
 function gformRegisterPriceField(item){

@@ -260,6 +260,10 @@ Class GFNotification {
 
 			ToggleConditionalLogic(true, 'notification');
 
+			jQuery(document).on('input propertychange', '.gfield_routing_email', function () {
+				SetRoutingEmail(jQuery(this));
+			});
+
 			jQuery(document).on('change', '.gfield_routing_value_dropdown', function () {
 				SetRoutingValueDropDown(jQuery(this));
 			});
@@ -300,6 +304,11 @@ Class GFNotification {
 		var current_notification = <?php echo GFCommon::json_encode( $notification ) ?>;
 		var entry_meta = <?php echo GFCommon::json_encode( $entry_meta ) ?>;
 
+		function SetRoutingEmail(element) {
+			// Parsing ID to get routing Index
+			var index = element.attr('id').replace('routing_email_', '');
+			SetRouting(index);
+		}
 
 		function SetRoutingValueDropDown(element) {
 			// Parsing ID to get routing Index
@@ -320,7 +329,7 @@ Class GFNotification {
 				var endsWithSelected = routings[i].operator == 'ends_with' ? "selected='selected'" : '';
 				var email = routings[i]["email"] ? routings[i]["email"] : '';
 
-				str += "<div style='width:99%'>" + <?php echo json_encode( esc_html__( 'Send to', 'gravityforms' ) ); ?> + " <input type='text' id='routing_email_" + i + "' value='" + email + "' onkeyup='SetRouting(" + i + ");'/>";
+				str += "<div style='width:99%'>" + <?php echo json_encode( esc_html__( 'Send to', 'gravityforms' ) ); ?> + " <input type='text' id='routing_email_" + i + "' value='" + email + "' class='gfield_routing_email' />";
 				str += " " + <?php echo json_encode( esc_html__( 'if', 'gravityforms' ) ); ?> + " " + GetRoutingFields(i, routings[i].fieldId) + "&nbsp;";
 				str += "<select id='routing_operator_" + i + "' onchange='SetRouting(" + i + ");' class='gform_routing_operator'>";
 				str += "<option value='is' " + isSelected + ">" + <?php echo json_encode( esc_html__( 'is', 'gravityforms' ) ); ?> + "</option>";
@@ -921,7 +930,7 @@ Class GFNotification {
 							?>
 							<div style='width:99%' <?php echo $class ?>>
 								<?php esc_html_e( 'Send to', 'gravityforms' ) ?>
-								<input type="text" id="routing_email_<?php echo $i ?>" value="<?php echo esc_attr( rgar( $routing, 'email' ) ); ?>" onkeyup="SetRouting(<?php echo $i ?>);" />
+								<input type="text" id="routing_email_<?php echo $i ?>" value="<?php echo esc_attr( rgar( $routing, 'email' ) ); ?>" class='gfield_routing_email' />
 								<?php esc_html_e( 'if', 'gravityforms' ) ?>
 								<select id="routing_field_id_<?php echo $i ?>" class='gfield_routing_select' onchange='jQuery("#routing_value_<?php echo $i ?>").replaceWith(GetRoutingValues(<?php echo $i ?>, jQuery(this).val())); SetRouting(<?php echo $i ?>); '><?php echo self::get_routing_fields( $form, rgar( $routing, 'fieldId' ) ) ?></select>
 								<select id="routing_operator_<?php echo $i ?>" onchange="SetRouting(<?php echo $i ?>)" class="gform_routing_operator">

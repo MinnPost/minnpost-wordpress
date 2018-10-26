@@ -1,9 +1,9 @@
 # Copyright 2009-2018 Rocketgenius, Inc.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Forms 2.3.5\n"
+"Project-Id-Version: Gravity Forms 2.3.6\n"
 "Report-Msgid-Bugs-To: https://www.gravtiyforms.com\n"
-"POT-Creation-Date: 2018-10-18 16:22:08+00:00\n"
+"POT-Creation-Date: 2018-10-26 15:39:03+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -267,13 +267,13 @@ msgstr ""
 
 #: common.php:4457 form_list.php:164 form_list.php:622 form_settings.php:1120
 #: form_settings.php:2410 includes/addon/class-gf-feed-addon.php:1953
-#: js.php:268 js.php:328 notification.php:602 notification.php:1857
+#: js.php:268 js.php:328 notification.php:611 notification.php:1866
 msgid "Active"
 msgstr ""
 
 #: common.php:4458 form_list.php:160 form_list.php:622 form_settings.php:1116
 #: form_settings.php:2410 includes/addon/class-gf-feed-addon.php:1953
-#: js.php:268 js.php:332 notification.php:598 notification.php:1857
+#: js.php:268 js.php:332 notification.php:607 notification.php:1866
 msgid "Inactive"
 msgstr ""
 
@@ -322,7 +322,7 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: common.php:4469 notification.php:445
+#: common.php:4469 notification.php:454
 msgid "Loading..."
 msgstr ""
 
@@ -354,38 +354,38 @@ msgstr ""
 msgid "of the following match:"
 msgstr ""
 
-#: common.php:4479 includes/addon/class-gf-addon.php:4018 notification.php:326
-#: notification.php:928
+#: common.php:4479 includes/addon/class-gf-addon.php:4018 notification.php:335
+#: notification.php:937
 msgid "is"
 msgstr ""
 
-#: common.php:4480 includes/addon/class-gf-addon.php:4022 notification.php:327
-#: notification.php:929
+#: common.php:4480 includes/addon/class-gf-addon.php:4022 notification.php:336
+#: notification.php:938
 msgid "is not"
 msgstr ""
 
-#: common.php:4481 includes/addon/class-gf-addon.php:4026 notification.php:328
-#: notification.php:930
+#: common.php:4481 includes/addon/class-gf-addon.php:4026 notification.php:337
+#: notification.php:939
 msgid "greater than"
 msgstr ""
 
-#: common.php:4482 includes/addon/class-gf-addon.php:4030 notification.php:329
-#: notification.php:931
+#: common.php:4482 includes/addon/class-gf-addon.php:4030 notification.php:338
+#: notification.php:940
 msgid "less than"
 msgstr ""
 
-#: common.php:4483 includes/addon/class-gf-addon.php:4034 notification.php:330
-#: notification.php:932
+#: common.php:4483 includes/addon/class-gf-addon.php:4034 notification.php:339
+#: notification.php:941
 msgid "contains"
 msgstr ""
 
-#: common.php:4484 includes/addon/class-gf-addon.php:4038 notification.php:331
-#: notification.php:933
+#: common.php:4484 includes/addon/class-gf-addon.php:4038 notification.php:340
+#: notification.php:942
 msgid "starts with"
 msgstr ""
 
-#: common.php:4485 includes/addon/class-gf-addon.php:4042 notification.php:332
-#: notification.php:934
+#: common.php:4485 includes/addon/class-gf-addon.php:4042 notification.php:341
+#: notification.php:943
 msgid "ends with"
 msgstr ""
 
@@ -746,7 +746,7 @@ msgid "Entry"
 msgstr ""
 
 #: entry_detail.php:50 form_settings.php:1681 notification.php:237
-#: notification.php:585 notification.php:589
+#: notification.php:594 notification.php:598
 msgid "Notifications"
 msgstr ""
 
@@ -817,7 +817,7 @@ msgstr ""
 
 #: entry_detail.php:769 form_detail.php:1507 form_settings.php:2431
 #: includes/addon/class-gf-feed-addon.php:1340
-#: includes/addon/class-gf-feed-addon.php:1387 notification.php:1884
+#: includes/addon/class-gf-feed-addon.php:1387 notification.php:1893
 msgid "Delete"
 msgstr ""
 
@@ -928,7 +928,7 @@ msgstr ""
 
 #: entry_detail.php:1370 form_settings.php:2429 gravityforms.php:3993
 #: gravityforms.php:4310 includes/addon/class-gf-feed-addon.php:1385
-#: notification.php:1882
+#: notification.php:1891
 msgid "Edit"
 msgstr ""
 
@@ -942,7 +942,7 @@ msgstr ""
 msgid "Configure Notifications"
 msgstr ""
 
-#: entry_detail.php:1429 entry_list.php:2061 notification.php:813
+#: entry_detail.php:1429 entry_list.php:2061 notification.php:822
 msgid "Send To"
 msgstr ""
 
@@ -1369,7 +1369,7 @@ msgstr ""
 
 #: export.php:560 form_settings.php:1504
 #: includes/addon/class-gf-payment-addon.php:2311
-#: includes/addon/class-gf-payment-addon.php:2313 notification.php:1154
+#: includes/addon/class-gf-payment-addon.php:2313 notification.php:1163
 #: tooltips.php:111 tooltips.php:127 tooltips.php:150
 msgid "Conditional Logic"
 msgstr ""
@@ -3605,7 +3605,7 @@ msgid ""
 msgstr ""
 
 #: form_list.php:193 form_list.php:197
-#: includes/addon/class-gf-feed-addon.php:1387 notification.php:1884
+#: includes/addon/class-gf-feed-addon.php:1387 notification.php:1893
 msgid "'Cancel' to stop, 'OK' to delete."
 msgstr ""
 
@@ -3630,7 +3630,7 @@ msgstr ""
 
 #: form_list.php:209 form_settings.php:1104
 #: includes/addon/class-gf-feed-addon.php:1060
-#: includes/addon/class-gf-feed-addon.php:1194 notification.php:590
+#: includes/addon/class-gf-feed-addon.php:1194 notification.php:599
 msgid "Add New"
 msgstr ""
 
@@ -3708,7 +3708,7 @@ msgid "Select form"
 msgstr ""
 
 #: form_list.php:701 form_settings.php:2430
-#: includes/addon/class-gf-feed-addon.php:1386 notification.php:1883
+#: includes/addon/class-gf-feed-addon.php:1386 notification.php:1892
 msgid "Duplicate"
 msgstr ""
 
@@ -4037,7 +4037,7 @@ msgstr ""
 msgid "Redirect"
 msgstr ""
 
-#: form_settings.php:1416 notification.php:1111
+#: form_settings.php:1416 notification.php:1120
 msgid "Message"
 msgstr ""
 
@@ -4128,11 +4128,11 @@ msgstr ""
 #: includes/addon/class-gf-payment-addon.php:2185
 #: includes/addon/class-gf-payment-addon.php:2189
 #: includes/fields/class-gf-field-name.php:39 js.php:552 js.php:729
-#: notification.php:731 notification.php:1710
+#: notification.php:740 notification.php:1719
 msgid "Name"
 msgstr ""
 
-#: form_settings.php:2429 notification.php:1882
+#: form_settings.php:2429 notification.php:1891
 msgid "Edit this item"
 msgstr ""
 
@@ -4620,7 +4620,7 @@ msgid "Field"
 msgstr ""
 
 #: includes/addon/class-gf-addon.php:2699
-#: includes/addon/class-gf-addon.php:3016 notification.php:826
+#: includes/addon/class-gf-addon.php:3016 notification.php:835
 msgid "Select a Field"
 msgstr ""
 
@@ -7916,7 +7916,7 @@ msgstr ""
 msgid "Your emails do not match."
 msgstr ""
 
-#: includes/fields/class-gf-field-email.php:92 js.php:898 notification.php:821
+#: includes/fields/class-gf-field-email.php:92 js.php:898 notification.php:830
 msgid "Enter Email"
 msgstr ""
 
@@ -8430,8 +8430,8 @@ msgstr ""
 msgid "WordPress Environment"
 msgstr ""
 
-#: includes/system-status/class-gf-system-report.php:441 notification.php:1204
-#: notification.php:1934
+#: includes/system-status/class-gf-system-report.php:441 notification.php:1213
+#: notification.php:1943
 msgid "WordPress"
 msgstr ""
 
@@ -9450,187 +9450,187 @@ msgid ""
 "below."
 msgstr ""
 
-#: notification.php:273
+#: notification.php:277
 msgid "Save & Continue Link"
 msgstr ""
 
-#: notification.php:274
+#: notification.php:278
 msgid "Save & Continue Token"
 msgstr ""
 
-#: notification.php:323 notification.php:923
+#: notification.php:332 notification.php:932
 msgid "Send to"
 msgstr ""
 
-#: notification.php:324 notification.php:925
+#: notification.php:333 notification.php:934
 msgid "if"
 msgstr ""
 
-#: notification.php:474 notification.php:1505
+#: notification.php:483 notification.php:1514
 msgid "Enter value"
 msgstr ""
 
-#: notification.php:539
+#: notification.php:548
 msgid "Save Notification"
 msgstr ""
 
-#: notification.php:539
+#: notification.php:548
 msgid "Update Notification"
 msgstr ""
 
-#: notification.php:614
+#: notification.php:623
 msgid "Ajax error while updating notification"
 msgstr ""
 
-#: notification.php:668
+#: notification.php:677
 msgid "Notification deleted."
 msgstr ""
 
-#: notification.php:670
+#: notification.php:679
 msgid "There was an issue deleting this notification."
 msgstr ""
 
-#: notification.php:676
+#: notification.php:685
 msgid "Notification duplicated."
 msgstr ""
 
-#: notification.php:678
+#: notification.php:687
 msgid "There was an issue duplicating this notification."
 msgstr ""
 
-#: notification.php:756
+#: notification.php:765
 msgid "Email Service"
 msgstr ""
 
-#: notification.php:781 notification.php:1715
+#: notification.php:790 notification.php:1724
 msgid "Event"
 msgstr ""
 
-#: notification.php:831
+#: notification.php:840
 msgid "Configure Routing"
 msgstr ""
 
-#: notification.php:846
+#: notification.php:855
 msgid "Send to Email"
 msgstr ""
 
-#: notification.php:854
+#: notification.php:863
 msgid "Please enter a valid email address"
 msgstr ""
 
-#: notification.php:865
+#: notification.php:874
 msgid "Send to Field"
 msgstr ""
 
-#: notification.php:871
+#: notification.php:880
 msgid "Select an email field"
 msgstr ""
 
-#: notification.php:885
+#: notification.php:894
 msgid ""
 "Your form does not have an email field. Add an email field to your form and "
 "try again."
 msgstr ""
 
-#: notification.php:905
+#: notification.php:914
 msgid ""
 "To use notification routing, your form must have a field supported by "
 "conditional logic."
 msgstr ""
 
-#: notification.php:949
+#: notification.php:958
 msgid "Please enter a valid email address for all highlighted routing rules above."
 msgstr ""
 
-#: notification.php:965 tooltips.php:26
+#: notification.php:974 tooltips.php:26
 msgid "From Name"
 msgstr ""
 
-#: notification.php:979
+#: notification.php:988
 msgid "From Email"
 msgstr ""
 
-#: notification.php:998 tooltips.php:27
+#: notification.php:1007 tooltips.php:27
 msgid "Reply To"
 msgstr ""
 
-#: notification.php:1007
+#: notification.php:1016
 msgid "Please enter a valid email address or merge tag in the Reply To field."
 msgstr ""
 
-#: notification.php:1035
+#: notification.php:1044
 msgid "CC"
 msgstr ""
 
-#: notification.php:1044
+#: notification.php:1053
 msgid "Please enter a valid email address or merge tag in the CC field."
 msgstr ""
 
-#: notification.php:1064
+#: notification.php:1073
 msgid "BCC"
 msgstr ""
 
-#: notification.php:1073
+#: notification.php:1082
 msgid "Please enter a valid email address or merge tag in the BCC field."
 msgstr ""
 
-#: notification.php:1088 notification.php:1711
+#: notification.php:1097 notification.php:1720
 msgid "Subject"
 msgstr ""
 
-#: notification.php:1096
+#: notification.php:1105
 msgid "Please enter a subject for the notification email"
 msgstr ""
 
-#: notification.php:1123
+#: notification.php:1132
 msgid "Please enter a message for the notification email"
 msgstr ""
 
-#: notification.php:1134
+#: notification.php:1143
 msgid "Auto-formatting"
 msgstr ""
 
-#: notification.php:1141
+#: notification.php:1150
 msgid "Disable auto-formatting"
 msgstr ""
 
-#: notification.php:1159
+#: notification.php:1168
 msgid "Enable conditional logic"
 msgstr ""
 
-#: notification.php:1231
+#: notification.php:1240
 msgid "Form is submitted"
 msgstr ""
 
-#: notification.php:1233
+#: notification.php:1242
 msgid "Form is saved"
 msgstr ""
 
-#: notification.php:1234
+#: notification.php:1243
 msgid "Save and continue email is requested"
 msgstr ""
 
-#: notification.php:1719
+#: notification.php:1728
 msgid "Service"
 msgstr ""
 
-#: notification.php:1883
+#: notification.php:1892
 msgid "Duplicate this notification"
 msgstr ""
 
-#: notification.php:1884
+#: notification.php:1893
 msgid "Delete this notification"
 msgstr ""
 
-#: notification.php:1884
+#: notification.php:1893
 msgid "WARNING: You are about to delete this notification."
 msgstr ""
 
-#: notification.php:1939
+#: notification.php:1948
 msgid "Undefined Service"
 msgstr ""
 
-#: notification.php:1970
+#: notification.php:1979
 msgid "This form doesn't have any notifications. Let's go %screate one%s."
 msgstr ""
 

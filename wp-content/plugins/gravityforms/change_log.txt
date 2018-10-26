@@ -1,4 +1,9 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.3.6
+	- Fixed an issue with the notification routing email setting being lost on save when the email was pasted.
+	- Fixed issue with product total when setting currency to 3 digit decimals.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.3.5
 	- Added the "gform_entry_pre_handle_confirmation" filter to allow the entry to be modified before the confirmation is processed.
 	- Added the "gform_disable_custom_field_names_query" filter providing a way to prevent the postmeta table query from running to improve form editor performance on some sites.
