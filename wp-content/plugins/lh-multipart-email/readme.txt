@@ -1,5 +1,5 @@
 === LH Multipart Email ===
-Contributors: shawfactor
+Contributors: shawfactor, y0uri
 Donate link: http://lhero.org/plugins/lh-multipart-email/
 Tags: email, text email, html email, spam, spamassassin
 Requires at least: 3.1
@@ -55,3 +55,6 @@ Initial release.
 
 **1.01 July 25, 2017**  
 Class check.
+
+**1.10 October 17, 2018**  
+Singleton and bulk mail support, props y0uri.
