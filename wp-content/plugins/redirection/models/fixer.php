@@ -37,7 +37,7 @@ class Red_Fixer {
 			array(
 				'name' => __( 'Post monitor group', 'redirection' ),
 				'id' => 'monitor',
-				'message' => $valid_monitor === false ? __( 'Post monitor group is invalid', 'redirection' ) : __( 'Post monitor group is valid' ),
+				'message' => $valid_monitor === false ? __( 'Post monitor group is invalid', 'redirection' ) : __( 'Post monitor group is valid', 'redirection' ),
 				'status' => $valid_monitor === false ? 'problem' : 'good',
 			),
 			$this->get_http_settings(),
@@ -47,8 +47,8 @@ class Red_Fixer {
 	}
 
 	private function get_http_settings() {
-		$site = parse_url( get_site_url(), PHP_URL_SCHEME );
-		$home = parse_url( get_home_url(), PHP_URL_SCHEME );
+		$site = wp_parse_url( get_site_url(), PHP_URL_SCHEME );
+		$home = wp_parse_url( get_home_url(), PHP_URL_SCHEME );
 
 		$message = __( 'Site and home are consistent', 'redirection' );
 		if ( $site !== $home ) {
@@ -180,7 +180,7 @@ class Red_Fixer {
 
 	private function normalize_url( $url ) {
 		if ( substr( $url, 0, 4 ) !== 'http' ) {
-			$parts = parse_url( get_site_url() );
+			$parts = wp_parse_url( get_site_url() );
 			$url = ( isset( $parts['scheme'] ) ? $parts['scheme'] : 'http' ) . '://' . $parts['host'] . $url;
 		}
 
