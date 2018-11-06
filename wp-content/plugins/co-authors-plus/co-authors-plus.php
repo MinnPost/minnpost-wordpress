@@ -110,7 +110,7 @@ class CoAuthors_Plus {
 		add_filter( 'wp_get_object_terms', array( $this, 'filter_wp_get_object_terms' ), 10, 4 );
 
 		// Make sure we've correctly set data on guest author pages
-		add_filter( 'posts_selection', array( $this, 'fix_author_page' ) ); // use posts_selection since it's after WP_Query has built the request and before it's queried any posts
+		add_action( 'posts_selection', array( $this, 'fix_author_page' ) ); // use posts_selection since it's after WP_Query has built the request and before it's queried any posts
 		add_action( 'the_post', array( $this, 'fix_author_page' ) );
 
 		// Support for Edit Flow's calendar and story budget
@@ -621,8 +621,12 @@ class CoAuthors_Plus {
 		global $wpdb;
 
 		if ( $query->is_author() ) {
+			$post_type = $query->query_vars['post_type'];
+      		if ( 'any' === $post_type ) {
+      			$post_type = get_post_types( array( 'exclude_from_search' => false ) );
+      		}
 
-			if ( ! empty( $query->query_vars['post_type'] ) && ! is_object_in_taxonomy( $query->query_vars['post_type'], $this->coauthor_taxonomy ) ) {
+			if ( ! empty( $post_type ) && ! is_object_in_taxonomy( $post_type, $this->coauthor_taxonomy ) ) {
 				return $join;
 			}
 
@@ -657,8 +661,12 @@ class CoAuthors_Plus {
 		global $wpdb;
 
 		if ( $query->is_author() ) {
+			$post_type = $query->query_vars['post_type'];
+			if ( 'any' === $post_type ) { 
+				$post_type = get_post_types( array( 'exclude_from_search' => false ) );
+			}
 
-			if ( ! empty( $query->query_vars['post_type'] ) && ! is_object_in_taxonomy( $query->query_vars['post_type'], $this->coauthor_taxonomy ) ) {
+			if ( ! empty( $post_type ) && ! is_object_in_taxonomy( $post_type, $this->coauthor_taxonomy ) ) {
 				return $where;
 			}
 
@@ -712,7 +720,7 @@ class CoAuthors_Plus {
 
 					$maybe_both_query = $maybe_both ? '$0 OR' : '';
 
-					$where = preg_replace( '/\s\b(?:' . $wpdb->posts . '\.)?post_author\s*IN\s*(.*' . $id . '.)/', ' (' . $maybe_both_query . ' ' . $terms_implode . ')', $where, -1 ); #' . $wpdb->postmeta . '.meta_id IS NOT NULL AND
+					$where = preg_replace( '/\s\b(?:' . $wpdb->posts . '\.)?post_author\s*IN\s*(.*' . $id . '(?:.*private\')?.)/', ' (' . $maybe_both_query . ' ' . $terms_implode . ')', $where, -1 ); #' . $wpdb->postmeta . '.meta_id IS NOT NULL AND
 
 				} else {
 					$where = preg_replace( '/(\b(?:' . $wpdb->posts . '\.)?post_author\s*=\s*(' . $id . '))/', '(' . $maybe_both_query . ' ' . $terms_implode . ')', $where, -1 ); #' . $wpdb->postmeta . '.meta_id IS NOT NULL AND
@@ -731,7 +739,7 @@ class CoAuthors_Plus {
 						$current_user_query = $wpdb->term_taxonomy . '.taxonomy = \'' . $this->coauthor_taxonomy . '\' AND ' . $wpdb->term_taxonomy . '.term_id = \'' . $current_coauthor_term->term_id . '\'';
 						$this->having_terms .= ' ' . $wpdb->term_taxonomy . '.term_id = \'' . $current_coauthor_term->term_id . '\' OR ';
 
-						$where = preg_replace( '/(\b(?:' . $wpdb->posts . '\.)?post_author\s*=\s*(' . get_current_user_id() . '))/', $current_user_query, $where, - 1 ); #' . $wpdb->postmeta . '.meta_id IS NOT NULL AND}
+						$where = preg_replace( '/(\b(?:' . $wpdb->posts . '\.)?post_author\s*=\s*(' . get_current_user_id() . ')( |\)))/', $current_user_query, $where, -1 ); #' . $wpdb->postmeta . '.meta_id IS NOT NULL AND}
 					}
 				}
 
@@ -749,8 +757,11 @@ class CoAuthors_Plus {
 		global $wpdb;
 
 		if ( $query->is_author() ) {
-
-			if ( ! empty( $query->query_vars['post_type'] ) && ! is_object_in_taxonomy( $query->query_vars['post_type'], $this->coauthor_taxonomy ) ) {
+			$post_type = $query->query_vars['post_type'];
+			if ( 'any' === $post_type ) {
+				$post_type = get_post_types( array( 'exclude_from_search' => false ) );
+			}
+			if ( ! empty( $post_type ) && ! is_object_in_taxonomy( $post_type, $this->coauthor_taxonomy ) ) {
 				return $groupby;
 			}
 
@@ -868,8 +879,13 @@ class CoAuthors_Plus {
 		}
 
 		// A co-author is always required
+		// If no coauthor is provided AND no coauthors are currently set, assign to current user - retain old ones otherwise.
 		if ( empty( $coauthors ) ) {
-			$coauthors = array( $current_user->user_login );
+			if( empty( $existing_coauthors ) ) {
+				$coauthors = array( $current_user->user_login );
+			} else {
+				$coauthors = $existing_coauthors;
+			}
 		}
 
 		// Set the co-authors
@@ -940,15 +956,17 @@ class CoAuthors_Plus {
 			wp_delete_term( $delete_user->user_login, $this->coauthor_taxonomy );
 		}
 
-		// Get the deleted user data by user id.
-		$user_data = get_user_by( 'id', $delete_id );
+		if ( $this->is_guest_authors_enabled() ) {
+			// Get the deleted user data by user id.
+			$user_data = get_user_by( 'id', $delete_id );
+		
+			// Get the associated user.
+			$associated_user = $this->guest_authors->get_guest_author_by( 'linked_account', $user_data->data->user_login );
 
-		// Get the associated user.
-		$associated_user = $this->guest_authors->get_guest_author_by( 'linked_account', $user_data->data->user_login );
-
-		if ( isset( $associated_user->ID ) ) {
-			// Delete associated guest user.
-			$this->guest_authors->delete( $associated_user->ID );
+			if ( isset( $associated_user->ID ) ) {
+				// Delete associated guest user.
+				$this->guest_authors->delete( $associated_user->ID );
+			}
 		}
 	}
 
@@ -1067,8 +1085,11 @@ class CoAuthors_Plus {
 	 * the query_var is changed.
 	 *
 	 * Also, we have to do some hacky WP_Query modification for guest authors
+	 *
+	 * @param string $selection The assembled selection query
+	 * @void
 	 */
-	public function fix_author_page() {
+	public function fix_author_page( $selection ) {
 
 		if ( ! is_author() ) {
 			return;
@@ -1642,6 +1663,31 @@ class CoAuthors_Plus {
 		$author = $this->get_coauthor_by( 'user_nicename', $author_slug );
 		
 		return sprintf( __( 'Author: %s' ), $author->display_name );
+	}	
+
+	/**
+	 * Get the post count for the guest author
+	 *
+	 * @param object $guest_author guest-author object.
+	 * @return int post count for the guest author
+	 */
+	public function get_guest_author_post_count( $guest_author ) {
+		if ( ! is_object( $guest_author ) ) {
+			return;
+		}
+
+		$term       = $this->get_author_term( $guest_author );
+		$guest_term = get_term_by( 'slug', 'cap-' . $guest_author->user_nicename, $this->coauthor_taxonomy );
+
+		if ( is_object( $guest_term )
+			&& ! empty( $guest_author->linked_account )
+			&& $guest_term->count ) {
+			return count_user_posts( get_user_by( 'login', $guest_author->linked_account )->ID );
+		} elseif ( $term ) {
+			return $term->count;
+		} else {
+			return 0;
+		}
 	}
 
 }
