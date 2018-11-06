@@ -3,7 +3,7 @@ Contributors: vasyltech,noelalvarez
 Tags: access control, membership, backend menu, user role, restricted content
 Requires at least: 4.0
 Tested up to: 4.9.7
-Stable tag: 5.5.1
+Stable tag: 5.5.2
 
 All you need to manage access to you WordPress websites on frontend, backend and API levels for any role, user or visitors.
 
@@ -76,6 +76,10 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 11. Improve your website security
 
 == Changelog ==
+
+= 5.5.2 =
+* Improved performance for website with large amount of posts/pages
+* Prepared few changes forward for the upcoming AAM 5.6 release
 
 = 5.5.1 =
 * Fixed the bug with exporting AAM settings when roles, configpress was added by default
