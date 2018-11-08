@@ -20,7 +20,7 @@ class WPCOM_Liveblog_Entry_Extend {
 	 *
 	 * @var array
 	 */
-	protected static $features = 'commands, emojis, hashtags, authors';
+	protected static $features = 'commands, emojis, authors';
 
 	/**
 	 * Called by WPCOM_Liveblog::load(),
@@ -43,6 +43,8 @@ class WPCOM_Liveblog_Entry_Extend {
 		// We pass these features into a filter to allow other plugins,
 		// themes, etc. to enable or disable any of the features.
 		self::$features = apply_filters( 'liveblog_features', self::$features );
+
+		//error_log( 'features is ' . print_r( self::$features, true ) );
 
 		// This is the autocomplete prefix regex.
 		$regex_prefix = '~(?:(?<!\S)|>?)((?:';
