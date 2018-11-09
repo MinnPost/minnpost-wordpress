@@ -44,8 +44,6 @@ class WPCOM_Liveblog_Entry_Extend {
 		// themes, etc. to enable or disable any of the features.
 		self::$features = apply_filters( 'liveblog_features', self::$features );
 
-		//error_log( 'features is ' . print_r( self::$features, true ) );
-
 		// This is the autocomplete prefix regex.
 		$regex_prefix = '~(?:(?<!\S)|>?)((?:';
 
