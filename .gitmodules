@@ -58,3 +58,8 @@
 	path = wp-content/plugins/wp-message-inserter-plugin
 	url = https://github.com/MinnPost/wp-message-inserter-plugin
 	branch = master
+
+[submodule "wp-content/plugins/wp-lozad-lazyload"]
+	path = wp-content/plugins/wp-lozad-lazyload
+	url = https://github.com/MinnPost/wp-lozad-lazyload
+	branch = master
