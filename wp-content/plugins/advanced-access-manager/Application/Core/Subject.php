@@ -238,7 +238,7 @@ abstract class AAM_Core_Subject {
         $id = (is_scalar($id) ? $id : 'none'); //prevent from any surprises
         
         //check if there is an object with specified ID
-        if (!isset($this->_objects[$type][$id])) {
+        if (!isset($this->_objects[$type][$id]) || ($type === 'cache')) {
             $classname = 'AAM_Core_Object_' . ucfirst($type);
             
             if (class_exists($classname)) {
