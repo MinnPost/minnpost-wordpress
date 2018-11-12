@@ -124,8 +124,9 @@ if ( 'true' === $_ENV['JETPACK_DEV_DEBUG'] ) {
 if ( 'true' === $_ENV['SCRIPT_DEBUG'] ) {
 	define( 'SCRIPT_DEBUG', $_ENV['SCRIPT_DEBUG'] );
 }
-
-define( 'WP_DEBUG_LOG', true );
+if ( 'true' === $_ENV['DEBUG_LOG'] ) {
+	define( 'WP_DEBUG_LOG', $_ENV['DEBUG_LOG'] );
+}
 define( 'BSD_CORAL_LIVE_URL', 'https://www.minnpost.com' );
 
 
