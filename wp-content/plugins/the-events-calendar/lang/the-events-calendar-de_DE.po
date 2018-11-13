@@ -8531,7 +8531,39 @@ msgstr "Vereinigte Staaten"
 
 #: src/Tribe/Venue.php:386
 msgid "Unnamed Venue"
-msgstr "Unbenannter Veranstaltungsort" %d) erstellt."
+msgstr "Unbenannter Veranstaltungsort"nts__Importer__Admin_Page.php:205
+#: src/functions/template-tags/venue.php:76
+msgid "Venues"
+msgstr "Veranstaltungsorte"
+
+#: src/Tribe/List_Widget.php:239
+msgid "Upcoming Events"
+msgstr "Anstehende Veranstaltungen"
+
+#: src/Tribe/List_Widget.php:38
+msgid "Events List"
+msgstr "Veranstaltungsliste"
+
+#: src/Tribe/List_Widget.php:30
+msgid "A widget that displays upcoming events."
+msgstr "Ein Widget, das die bevorstehenden Veranstaltungen anzeigt."
+
+#: common/src/Tribe/Settings.php:643
+#: src/deprecated/Tribe__Events__Importer__Options.php:55
+msgid "Settings saved."
+msgstr "Die Einstellungen wurden gespeichert."
+
+#: src/Tribe/Importer/File_Uploader.php:36
+msgid "Could not save %s."
+msgstr "Konnte %s nicht speichern."
+
+#: src/Tribe/Importer/File_Uploader.php:28
+msgid "Temporary file not found. Could not save %s."
+msgstr "Temporäre Datei nicht gefunden. Konnte %s nicht speichern."
+
+#: src/Tribe/Importer/File_Importer.php:231
+msgid "%s (post ID %d) created."
+msgstr "%s (Post ID %d) erstellt."
 
 #: src/Tribe/Importer/File_Importer.php:226
 msgid "%s (post ID %d) updated."

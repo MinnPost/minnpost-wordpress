@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-10-14 22:55:58+0000\n"
+"PO-Revision-Date: 2018-11-11 18:00:39+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3903,7 +3903,7 @@ msgstr "La tua licenza di Event Aggregator è scaduta."
 
 #: src/Tribe/Aggregator/Tabs/New.php:512
 msgid "Learn More"
-msgstr "Ulteriori informazioni..."
+msgstr "Ulteriori informazioni"
 
 #: src/Tribe/Aggregator/Tabs/New.php:507 src/Tribe/Aggregator/Tabs/New.php:514
 #: src/admin-views/aggregator/banners/eventbrite-upsell.php:19

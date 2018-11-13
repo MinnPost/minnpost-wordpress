@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2017-01-29 05:45:29+0000\n"
+"PO-Revision-Date: 2018-10-25 07:32:51+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -37,7 +37,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:123
 msgid "click here"
-msgstr ""
+msgstr "klikkaa tästä"
 
 #: src/admin-views/aggregator/settings.php:121
 msgid "If you want to stop and clear current asynchronous import processes %1$s."
@@ -61,7 +61,7 @@ msgstr ""
 
 #: src/Tribe/Google/Maps_API_Key.php:77
 msgid "Read More"
-msgstr ""
+msgstr "Lue lisää"
 
 #: src/Tribe/Google/Maps_API_Key.php:72
 msgid "The Events Calendar comes with an API key for basic maps functionality. If you’d like to use more advanced features like custom map pins or dynamic map loads, you’ll need to get your own %1$s. %2$s."
@@ -136,7 +136,7 @@ msgstr ""
 
 #: src/views/modules/bar.php:68
 msgid "%s Search"
-msgstr ""
+msgstr "%s Haku"
 
 #: src/views/modules/bar.php:48
 msgid "View %s As"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: src/admin-views/privacy.php:61
 msgid "Modern Tribe does not send any user data outside of your website by default."
-msgstr ""
+msgstr "Modern Tribe ei oletuksena lähetä mitään käyttäjädataa verkkosivusi ulkopuolelle."
 
 #: src/admin-views/privacy.php:59
 msgid "Where We Send Your Data"
@@ -232,7 +232,7 @@ msgstr ""
 
 #: src/admin-views/privacy.php:22 src/admin-views/privacy.php:47
 msgid "Suggested text:"
-msgstr ""
+msgstr "Ehdotettu teksti:"
 
 #: src/admin-views/privacy.php:21
 msgid "Through the usage of The Events Calendar, Events Calendar PRO, The Events Calendar Filter Bar, Eventbrite Tickets, and Community Events plugins, as well as our Event Aggregator Import service (contained within The Events Calendar plugin), information may be collected and stored within your website’s database."
@@ -296,11 +296,11 @@ msgstr ""
 
 #: src/Tribe/Main.php:4117
 msgid "Search for %s by month. Please use the format %s."
-msgstr ""
+msgstr "Etsi %s kuukaudelta. Ole hyvä ja käytä formaattia %s."
 
 #: src/Tribe/Main.php:4112
 msgid "Search for %s by Date. Please use the format %s."
-msgstr ""
+msgstr "Etsi %s päivältä. Ole hyvä ja käytä formaattia %s."
 
 #: src/Tribe/Main.php:4080 src/Tribe/Main.php:4081
 msgid "2 digit month dot 4 digit year"
@@ -380,7 +380,7 @@ msgstr ""
 
 #: src/Tribe/Main.php:4034
 msgid "Search for %s by Keyword."
-msgstr ""
+msgstr "Etsi %s avainsanalla."
 
 #: src/Tribe/API.php:826 src/Tribe/API.php:837
 msgid "An event having a post meta value of `%s` minutes is not valid. Make sure it is from 0 to 59."
@@ -493,7 +493,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/origins/eventbrite.php:115
 msgid "Select Source"
-msgstr ""
+msgstr "Valitse lähde"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:114
 msgid "Import Source"
@@ -585,7 +585,7 @@ msgstr ""
 
 #: src/Tribe/Admin/Notice/Timezones.php:74
 msgid "Read more"
-msgstr ""
+msgstr "Lue lisää"
 
 #: src/Tribe/Admin/Notice/Marketing.php:52
 msgctxt "2018 user survey"
@@ -606,95 +606,95 @@ msgstr ""
 #: src/Tribe/REST/V1/Endpoints/Archive_Organizer.php:67
 #: src/Tribe/REST/V1/Endpoints/Archive_Venue.php:64
 msgid "The requested page was not found."
-msgstr ""
+msgstr "Etsimääsi sivua ei löytynyt."
 
 #: src/Tribe/Aggregator/Settings.php:407
 msgid "one month"
-msgstr ""
+msgstr "yksi kuukausi"
 
 #: src/Tribe/Aggregator/Settings.php:395
 msgid "one week"
-msgstr ""
+msgstr "yksi viikko"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:577
 msgctxt "when the retry will happen, a date"
 msgid "retrying at %s"
-msgstr ""
+msgstr "yritetään uudelleen %s kuluttua"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:574
 msgctxt "in human readable time"
 msgid "retrying in about %s"
-msgstr ""
+msgstr "yritetään uudelleen noin %s kuluttua"
 
 #: common/vendor/a5hleyrich/wp-background-processing/classes/wp-background-process.php:425
 msgid "Every %d Minutes"
-msgstr ""
+msgstr "%d minuutin välein"
 
 #: src/admin-views/tribe-options-general.php:190
 msgid "This option allows you to bulk delete past events. Be careful and backup your database before removing your events as there is no way to reverse the changes."
-msgstr ""
+msgstr "Tämä vaihtoehto antaa sinun poistaa kerralla viime tapahtumat. Ole varovainen ja varmuuskopioi tietokantasi ennen tapahtumien poistoa, koska sen jälkeen tietoja ei ole enää mahdollista palauttaa."
 
 #: src/admin-views/tribe-options-general.php:189
 msgid "Permanently delete events older than"
-msgstr ""
+msgstr "Poista pysyvästi tapahtumat, jotka ovat vanhempia kuin"
 
 #: src/admin-views/tribe-options-general.php:184
 #: src/admin-views/tribe-options-general.php:201
 msgid "3 years"
-msgstr ""
+msgstr "3 vuotta"
 
 #: src/admin-views/tribe-options-general.php:183
 #: src/admin-views/tribe-options-general.php:200
 msgid "2 years"
-msgstr ""
+msgstr "2 vuotta"
 
 #: src/admin-views/tribe-options-general.php:182
 #: src/admin-views/tribe-options-general.php:199
 msgid "1 year"
-msgstr ""
+msgstr "1 vuosi"
 
 #: src/admin-views/tribe-options-general.php:181
 #: src/admin-views/tribe-options-general.php:198
 msgid "9 months"
-msgstr ""
+msgstr "9 kuukautta"
 
 #: src/admin-views/tribe-options-general.php:180
 #: src/admin-views/tribe-options-general.php:197
 msgid "6 months"
-msgstr ""
+msgstr "6 kuukautta"
 
 #: src/admin-views/tribe-options-general.php:179
 #: src/admin-views/tribe-options-general.php:196
 msgid "3 months"
-msgstr ""
+msgstr "3 kuukautta"
 
 #: src/admin-views/tribe-options-general.php:173
 msgid "This option allows you to automatically move past events to trash."
-msgstr ""
+msgstr "Tämä valinta antaa sinun automaattisesti siirtää menneet tapahtumat roskakoriin."
 
 #: src/admin-views/tribe-options-general.php:172
 msgid "Move to trash events older than"
-msgstr ""
+msgstr "Siirrä roskakoriin tapahtumat jotka ovat vanhempia kuin"
 
 #: src/admin-views/tribe-options-general.php:53
 msgid "Instantly updates the calendar view when searching for or filtering events."
-msgstr ""
+msgstr "Välittömästi päivitä kalenterinäkymä kun haet tai suodatat tapahtumia."
 
 #: src/admin-views/tribe-options-general.php:52
 msgid "Enable live refresh"
-msgstr ""
+msgstr "Ota käyttöön live-päivitys"
 
 #: src/admin-views/events-meta-box.php:129
 msgid "Time Zone:"
-msgstr ""
+msgstr "Aikavyöhyke"
 
 #: src/Tribe/Gutenberg.php:84
 msgid "Looks like you are using Gutenberg on this WordPress installation. %1$s"
-msgstr ""
+msgstr "Näyttää siltä että käytät Gutengergia tässä WordPress asennuksessa. %1$s"
 
 #: src/Tribe/Gutenberg.php:82
 msgid "Download our Events Gutenberg extension and start using the block editor on your events!"
-msgstr ""
+msgstr "Lataa Events Gutenberg laajennus ja aloita käyttämään lohkoeditoria tapahtumissasi!"
 
 #: src/Tribe/Front_Page_View.php:238
 #: src/deprecated/Tribe__Events__Customizer__Front_Page_View.php:55
@@ -708,16 +708,16 @@ msgstr ""
 
 #: src/admin-views/tribe-options-general.php:31
 msgid "The number of events per page on the List, Photo, and Map Views. Does not affect other views."
-msgstr ""
+msgstr "Tapahtumien lukumäärä per sivu listaus- (List View), kuva- (Photo), ja karttanäkymissä (Map View). Ei vaikuta muihin näkymiin."
 
 #: src/admin-views/tribe-options-general.php:28
 msgid "The number of events per page on the List View. Does not affect other views."
-msgstr ""
+msgstr "Tapahtumien lukumäärä per sivu List View sivulla. Ei vaikuta muihin näkymiin."
 
 #: src/Tribe/Rewrite.php:265
 msgctxt "The \"/page/\" URL string component."
 msgid "page"
-msgstr ""
+msgstr "sivu"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Organizer.php:143
 msgid "An organizer with the specified event does not exist."
@@ -741,7 +741,7 @@ msgstr ""
 
 #: common/src/Tribe/Validate.php:184
 msgid "%s must not be empty"
-msgstr ""
+msgstr "%s ei saa olla tyhjä"
 
 #: src/functions/template-tags/general.php:1345
 msgid "Calendar powered by %s"
@@ -791,7 +791,7 @@ msgstr ""
 #: src/Tribe/iCal.php:438
 msgctxt "iCal feed description"
 msgid "Events for %s"
-msgstr ""
+msgstr "Tapahtumat %s"
 
 #: src/Tribe/REST/V1/Messages.php:45
 msgid "The requested event term archive page does not exist"
@@ -1012,7 +1012,7 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Endpoints/Single_Organizer.php:284
 msgid "The organizer e-mail address"
-msgstr ""
+msgstr "Järjestäjän sähköpostiosoite"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Organizer.php:255
 msgid "The organizer description"
@@ -1124,7 +1124,7 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:263
 msgid "The event time zone"
-msgstr ""
+msgstr "Tapahtuman aikavyöhyke"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:250
 msgid "The event excerpt"
@@ -1443,12 +1443,12 @@ msgstr ""
 #: src/Tribe/Linked_Posts.php:1255
 msgctxt "The \"Create or Find {post type name}\" label for custom linked post types that are *not* Venues or Organizers"
 msgid "Create or Find %s"
-msgstr ""
+msgstr "Luo tai etsi %s"
 
 #: src/Tribe/Linked_Posts.php:1246
 msgctxt "The \"Find a {post type name}\" label for custom linked post types that are *not* Venues or Organizers"
 msgid "Find %1$s %2$s"
-msgstr ""
+msgstr "Hae %1$s %2$s"
 
 #: src/Tribe/Linked_Posts.php:1237
 msgid "Find a Venue"
@@ -1456,17 +1456,17 @@ msgstr ""
 
 #: src/Tribe/Linked_Posts.php:1236
 msgid "Create or Find a Venue"
-msgstr ""
+msgstr "Luo tai etsi tapahtumapaikka"
 
 #: src/Tribe/Linked_Posts.php:1229
 msgctxt "\"Create or Find Venue\", but when the word \"Venue\" is customized to something else."
 msgid "Create or Find %s"
-msgstr ""
+msgstr "Luo tai etsi %s"
 
 #: src/Tribe/Linked_Posts.php:1220
 msgctxt "\"Find a Venue\", but when the word \"Venue\" is customized to something else."
 msgid "Find %1$s %2$s"
-msgstr ""
+msgstr "Hae %1$s %2$s"
 
 #: src/Tribe/Linked_Posts.php:1209
 msgid "Find an Organizer"
@@ -1474,17 +1474,17 @@ msgstr ""
 
 #: src/Tribe/Linked_Posts.php:1208
 msgid "Create or Find an Organizer"
-msgstr ""
+msgstr "Luo tai etsi järjestäjä"
 
 #: src/Tribe/Linked_Posts.php:1201
 msgctxt "\"Create or Find Organizer\", but when the word \"Organizer\" is customized to something else."
 msgid "Create or Find %s"
-msgstr ""
+msgstr "Luo tai etsi %s"
 
 #: src/Tribe/Linked_Posts.php:1192
 msgctxt "\"Find an Organizer\", but when the word \"Organizer\" is customized to something else."
 msgid "Find %1$s %2$s"
-msgstr ""
+msgstr "Hae %1$s %2$s"
 
 #: src/Tribe/Aggregator/Tabs/Abstract.php:136
 msgid "A record already exists with these settings, %1$s."
@@ -1542,15 +1542,15 @@ msgstr ""
 
 #: common/src/Tribe/Languages/Locations.php:252
 msgid "Sint Maarten"
-msgstr ""
+msgstr "Sint Maarten"
 
 #: common/src/Tribe/Languages/Locations.php:245
 msgid "S&atilde;o Tom&eacute; and Pr&iacute;ncipe"
-msgstr ""
+msgstr "São Tomé ja Príncipe"
 
 #: common/src/Tribe/Languages/Locations.php:238
 msgid "Saint Helena"
-msgstr ""
+msgstr "Saint Helena"
 
 #: common/src/Tribe/Languages/Locations.php:237
 msgid "Saint Barth&eacute;lemy"
@@ -1558,7 +1558,7 @@ msgstr ""
 
 #: common/src/Tribe/Languages/Locations.php:113
 msgid "Cura&ccedil;ao"
-msgstr ""
+msgstr "Cura&ccedil;ao"
 
 #: common/src/Tribe/Languages/Locations.php:103
 msgid "Collectivity of Saint Martin"
@@ -1575,110 +1575,110 @@ msgstr ""
 #: src/admin-views/create-organizer-fields.php:19
 #: src/admin-views/organizer-meta-box.php:45
 msgid "The e-mail address will be obfuscated on this site to avoid it getting harvested by spammers."
-msgstr ""
+msgstr "Sähköpostiosoite sekoitetaan tällä sivustolla, jotta roskapostittajat eivät voisi kerätä sitä."
 
 #: src/Tribe/Main.php:999
 msgid "edit Events settings."
-msgstr ""
+msgstr "muokkaa tapahtumien asetuksia."
 
 #: src/Tribe/Main.php:990
 msgid "Edit the %s slug"
-msgstr ""
+msgstr "Muokkaa %s polkua"
 
 #: src/Tribe/Linked_Posts.php:1178
 msgctxt "Indefinite article for the phrase \"Find a {post type name}\" when the {post type name} starts with a vowel, e.g. \"Find an Organizer\"."
 msgid "an"
-msgstr ""
+msgstr " "
 
 #: src/Tribe/Linked_Posts.php:1171
 msgctxt "Indefinite article for the phrase \"Find a {post type name}. Will be replaced with \"an\" if the {post type name} starts with a vowel."
 msgid "a"
-msgstr ""
+msgstr " "
 
 #. translators: %s: post title
 #: src/Tribe/Ignored_Events.php:396
 msgid "Hide and Ignore &#8220;%s&#8221;"
-msgstr ""
+msgstr "Piilota ja ohita &#8220;%s&#8221;"
 
 #: common/src/Tribe/Main.php:251
 msgid "Clear Selection."
-msgstr ""
+msgstr "Tyhjennä valinta."
 
 #: common/src/Tribe/Main.php:250
 msgid "Select all pages"
-msgstr ""
+msgstr "Valitse kaikki sivut"
 
 #: common/src/Tribe/Main.php:249
 msgid "All items on this page were selected. "
-msgstr ""
+msgstr "Kaikki tämän sivun kohteet on valittu."
 
 #: src/admin-views/aggregator/tabs/import-form.php:101
 msgid "Add more sources"
-msgstr ""
+msgstr "Lisää uusia lähteitä"
 
 #: src/Tribe/Aggregator/Service.php:202
 msgid "Event Aggregator server has blocked your request. Please try your import again later or contact support to know why."
-msgstr ""
+msgstr "Tapahtumapalvelin on estänyt pyyntösi. Yritä tuontia myöhemmin uudelleen tai pyydä lisätietoja tuesta."
 
 #: src/Tribe/Customizer/General_Theme.php:311
 msgid "Featured Highlight Color"
-msgstr ""
+msgstr "Nostetun korostusväri"
 
 #: src/Tribe/Aggregator/Service.php:230
 msgid "The response from the Event Aggregator server was badly formed and could not be understood. Please try again."
-msgstr ""
+msgstr "Tapahtumapalvelimen vastaus oli virheellisesti muotoiltu, eikä sitä voitu tulkita. Yritä uudelleen."
 
 #: src/Tribe/Integrations/WPML/Defaults.php:117
 msgid "The Events Calendar could not write WPML default config file: please create the file manually."
-msgstr ""
+msgstr "Events Calendar ei pystynyt muokkaamaan WPML:n määritystiedostoa: luo tiedosto manuaalisesti."
 
 #: common/src/Tribe/Plugins_API.php:94
 msgid "Accept user-submitted events on your site! With Community Events, you can accept public submissions or require account sign-on. Settings give you the options to save as a draft or publish automatically, enable categories and tags, and choose whether users can edit/manage their own events or simply submit. Best of all - setup is easy! Just activate, configure the options, and off you go."
-msgstr ""
+msgstr "Hyväksy käyttäjien lisäämiä tapahtumia sivustollesi! Community Eventsin avulla voit hyväksyä julkisia lisäyksiä tai vaatia sisäänkirjautumista. Asetusten avulla voit mahdollistaa tapahtuman automaattisen julkaisun tai sen tallentamisen luonnokseksi, mahdollistaa kategoriat ja tagit ja valita voivatko käyttäjät muokata/hallita lisäämiään tapahtumiaan tai vain lisätä tapahtumia. Mikä parasta - käyttöönotto on helppoa! Riittää, että aktivoit, määrität asetukset ja sitten kaikki on valmista."
 
 #: common/src/Tribe/Plugins_API.php:60
 msgid "Event Tickets provides a simple way for visitors to RSVP to your events. As a standalone plugin, it enables you to add RSVP functionality to posts or pages. When paired with The Events Calendar, you can add that same RSVP functionality directly to your event listings."
-msgstr ""
+msgstr "Event Tickets tarjoaa helpon tavan vastata tapahtumien osallistumispyyntöihin. Tämä erillinen lisäosa lisää vastauspyyntötoiminnon artikkeleihin tai sivuihin. Kun käytät sitä yhdessä Events Calendarin kanssa, voit lisätä saman toiminnon tapahtumiisi."
 
 #: common/src/Tribe/Plugins_API.php:28
 msgid "Create an events calendar and manage it with ease. The Events Calendar plugin provides professional-level quality and features backed by a team you can trust."
-msgstr ""
+msgstr "Luo helposti ylläpidettävä tapahtumakalenteri. The Events Calendar -lisäosa on suunniteltu todella huolellisesti ja sen takana on ammattimainen kehitystiimi."
 
 #: common/src/Tribe/PUE/Checker.php:1095
 msgid "There is a new version of %1$s available. %2$s"
-msgstr ""
+msgstr "Uusi %1$s versio saatavilla. %2$s"
 
 #: common/src/Tribe/PUE/Checker.php:1084
 msgid "Update now to version %s."
-msgstr ""
+msgstr "Päivitä nyt versioon %s."
 
 #: common/src/Tribe/Ajax/Dropdown.php:243
 msgid "The \"%s\" source is invalid and cannot be reached on \"%s\" instance."
-msgstr ""
+msgstr "\"%s\" lähde on virheellinen eikä siihen saada yhteyttä \"%s\" istunnossa."
 
 #: common/src/Tribe/Ajax/Dropdown.php:193
 msgid "Empty data set for this dropdown"
-msgstr ""
+msgstr "Tyhjä datajoukko tässä pudotusvalikossa"
 
 #: common/src/Tribe/Ajax/Dropdown.php:180
 msgid "Missing data source for this dropdown"
-msgstr ""
+msgstr "Pudotusvalikon datajoukko puuttuu"
 
 #: common/src/Tribe/Ajax/Dropdown.php:38
 msgid "Cannot look for Terms without a taxonomy"
-msgstr ""
+msgstr "Termejä ei voi hakea ilman taksonomiaa"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:24
 msgid "The event WordPress post ID"
-msgstr ""
+msgstr "Tapahtuman WordPress-artikkelin tunnus"
 
 #: src/Tribe/Aggregator/Record/Abstract.php:350
 msgid "Something went wrong while inserting the record in the database."
-msgstr ""
+msgstr "Jokin meni pieleen lisättäessä tallennetta tietokantaan."
 
 #: common/src/Tribe/PUE/Notices.php:340
 msgid "You can always check the status of your licenses by logging in to %1$syour account on theeventscalendar.com%2$s."
-msgstr ""
+msgstr "Voit tarkistaa lisenssiesi tilan kirjautumalla %1$stilillesi osoitteessa theeventscalendar.com%2$s."
 
 #: common/src/Tribe/PUE/Notices.php:225
 msgid "It looks like you're using %1$s, but the license key is invalid. Please download the latest version %2$sfrom your account%3$s."
@@ -1688,11 +1688,11 @@ msgstr[1] ""
 
 #: common/src/Tribe/PUE/Checker.php:976
 msgid "Please refresh the page and try your request again."
-msgstr ""
+msgstr "Päivitä sivu ja yritä uudestaan."
 
 #: common/src/Tribe/Documentation/Swagger/Image_Definition_Provider.php:29
 msgid "The image WordPress post ID"
-msgstr ""
+msgstr "Kuvan WordPress-artikkelin tunnus"
 
 #: common/src/Tribe/Plugins_API.php:129
 msgid "Take your image widgets to the next level with Image Widget Plus! We've taken the simple functionality of our basic Image Widget and amped it up with several popular feature requests - multiple image support, slideshow, lightbox, and random image - all backed by a full year of premium support."
@@ -1700,11 +1700,11 @@ msgstr ""
 
 #: common/src/Tribe/Plugins_API.php:125
 msgid "Image Widget Plus"
-msgstr ""
+msgstr "Image Widget Plus"
 
 #: src/admin-views/aggregator/settings.php:614
 msgid "Other URLs"
-msgstr ""
+msgstr "Muut URLit"
 
 #: src/admin-views/aggregator/settings.php:481
 msgid "Fetch source event's settings (e.g. Show Google Maps Link or Sticky in Month View) when importing from another site using The Events Calendar."
@@ -1712,7 +1712,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:480
 msgid "Import Event Settings"
-msgstr ""
+msgstr "Tuo tapahtuma-asetukset"
 
 #: src/admin-views/aggregator/settings.php:469
 msgid "When importing from a website that uses The Events Calendar, the REST API will attempt to fetch events this far in the future. That website's hosting resources may impact the success of imports. Selecting a shorter time period may improve results."
@@ -1805,16 +1805,16 @@ msgstr ""
 #: src/admin-views/aggregator/fields/schedule.php:50
 #: src/admin-views/aggregator/fields/schedule.php:68
 msgid "at approximately"
-msgstr ""
+msgstr "noin"
 
 #: src/admin-views/aggregator/origins/limit.php:19
 #: src/admin-views/aggregator/origins/url.php:89
 msgid "Event Aggregator will try to fetch events starting within the next %s from the current date or the specified date;"
-msgstr ""
+msgstr "Tapahtumakerääjä yrittää hakea tapahtumia, jotka alkavat %s nykyisestä tai määritetystä päivämäärästä."
 
 #: src/admin-views/aggregator/origins/url.php:83
 msgid "example.com/"
-msgstr ""
+msgstr "esimerkki.com/"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:41
 msgid "The event creation date in the site time zone"
@@ -1826,15 +1826,15 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:69
 msgid "The event name"
-msgstr ""
+msgstr "Tapahtuman nimi"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:73
 msgid "The event long description"
-msgstr ""
+msgstr "Tapahtuman pidempi kuvaus"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:77
 msgid "The event short description"
-msgstr ""
+msgstr "Tapahtuman lyhyt kuvaus"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:85
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:81
@@ -1888,7 +1888,7 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:142
 msgid "The event cost details"
-msgstr ""
+msgstr "Tapahtuman kustannusten lisätiedot"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:147
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:299
@@ -1917,28 +1917,28 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:171
 msgid "The event categories"
-msgstr ""
+msgstr "Tapahtumakategoriat"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:176
 msgid "The event tags"
-msgstr ""
+msgstr "Tapahtuman tunnisteet"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:181
 msgid "The event venue"
-msgstr ""
+msgstr "Tapahtumapaikka"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:186
 msgid "The event organizers"
-msgstr ""
+msgstr "Tapahtumajärjestäjät"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:24
 msgid "The organizer WordPress post ID"
-msgstr ""
+msgstr "Järjestäjän WordPress-artikkelin tunnus"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:33
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:33
 msgid "An Array containing the lineage of where this organizer comes from, this should not change after the organizer is created."
-msgstr ""
+msgstr "Muuttuja joka sisältää tiedon siitä, mistä tämä järjestäjä tulee. Tätä ei pidä muuttaa sen jälkeen kun järjestäjä on luotu."
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:37
 msgid "The organizer author WordPress post ID"
@@ -1958,38 +1958,38 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:61
 msgid "The URL to the organizer page"
-msgstr ""
+msgstr "Järjestäjäsivun osoite"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:65
 #: src/Tribe/REST/V1/Endpoints/Single_Organizer.php:248
 msgid "The organizer name"
-msgstr ""
+msgstr "Järjestäjän nimi"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:69
 msgid "The organizer long description"
-msgstr ""
+msgstr "Järjestäjän pitkä kuvaus"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:73
 msgid "The organizer short description"
-msgstr ""
+msgstr "Järjestäjän lyhyt kuvaus"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:86
 #: src/Tribe/REST/V1/Endpoints/Single_Organizer.php:270
 msgid "The organizer phone number"
-msgstr ""
+msgstr "Järjestäjän puhelinnumero"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:90
 #: src/Tribe/REST/V1/Endpoints/Single_Organizer.php:277
 msgid "The organizer website"
-msgstr ""
+msgstr "Järjestäjän verkkosivusto"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:94
 msgid "The organizer email address"
-msgstr ""
+msgstr "Järjestäjän sähköpostiosoite"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:28
 msgid "The venue ID used to globally identify in Event Aggregator"
-msgstr ""
+msgstr "Tapahtuman ID, jota käytetään tunnistamiseen globaalisti Tapahtumakerääjässä"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:41
 msgid "The venue creation date in the site time zone"
@@ -2005,53 +2005,53 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:61
 msgid "The URL to the venue page"
-msgstr ""
+msgstr "Tapahtumapaikan kotisivu"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:65
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:227
 msgid "The venue name"
-msgstr ""
+msgstr "Tapahtumapaikan nimi"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:73
 msgid "The venue short description"
-msgstr ""
+msgstr "Tapahtumapaikan lyhyt kuvaus"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:86
 msgid "Whether the map should be shown for the venue or not"
-msgstr ""
+msgstr "Näytetäänkö tapahtumapaikan kartta vai ei"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:90
 msgid "Whether the map link should be shown for the venue or not"
-msgstr ""
+msgstr "Näytetäänkö tapahtumapaikan kartan linkki vai ei"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:94
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:260
 msgid "The venue address"
-msgstr ""
+msgstr "Tapahtumapaikan osoite"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:98
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:267
 msgid "The venue city"
-msgstr ""
+msgstr "Tapahtumapaikan kaupunki"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:102
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:274
 msgid "The venue country"
-msgstr ""
+msgstr "Tapahtumapaikan maa"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:118
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:302
 msgid "The venue phone number"
-msgstr ""
+msgstr "Tapahtumapaikan puhelinnumero"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:122
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:316
 msgid "The venue website URL"
-msgstr ""
+msgstr "Tapahtumapaikan kotisivu"
 
 #: src/Tribe/REST/V1/EA_Messages.php:9
 msgid "Event Aggregator cannot import events from this site."
-msgstr ""
+msgstr "Tapahtumakerääjä ei voi tuoda tapahtumia tältä sivustolta."
 
 #: src/Tribe/REST/V1/EA_Messages.php:11
 msgid "The Events Calendar is API is not providing the site origin correctly."
@@ -2131,15 +2131,15 @@ msgstr ""
 
 #: src/admin-views/aggregator/fields/schedule.php:3
 msgid "Schedule:"
-msgstr ""
+msgstr "Aikataulu:"
 
 #: src/admin-views/aggregator/fields/schedule.php:32
 msgid "Import runs daily at approximately"
-msgstr ""
+msgstr "Tuonti ajetaan keskimääräisesti päivittäin"
 
 #: src/admin-views/aggregator/fields/schedule.php:38
 msgid "Import runs weekly on"
-msgstr ""
+msgstr "Tuonti ajetaan viikottain"
 
 #: src/admin-views/aggregator/fields/schedule.php:56
 msgid "Import runs monthly on day"
@@ -2159,7 +2159,7 @@ msgstr ""
 
 #: src/Tribe/REST/V1/EA_Messages.php:39
 msgid "Learn more."
-msgstr ""
+msgstr "Lue lisää."
 
 #: src/Tribe/REST/V1/Messages.php:19
 msgid "The 'per_page' parameter must be a positive integer greater than 1"
@@ -2199,30 +2199,30 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:69
 msgid "The venue long description"
-msgstr ""
+msgstr "Tapahtumapaikan pitkä kuvaus"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:106
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:281
 msgid "The venue province"
-msgstr ""
+msgstr "Tapahtumapaikan lääni"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:110
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:288
 msgid "The venue state"
-msgstr ""
+msgstr "Tapahtumapaikan osavaltio"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:114
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:295
 msgid "The venue ZIP code"
-msgstr ""
+msgstr "Tapahtumapaikan postinumero"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:126
 msgid "The venue state or province"
-msgstr ""
+msgstr "Tapahtumapaikan osavaltio tai lääni"
 
 #: src/Tribe/REST/V1/EA_Messages.php:10
 msgid "Event Aggregator cannot import events because this site is running an outdated version of The Events Calendar."
-msgstr ""
+msgstr "Tapahtumakerääjä ei voi tuoda tapahtumia, koska tämä sivusto käyttää vanhentunutta versiota The Events Calendarista."
 
 #: src/Tribe/REST/V1/EA_Messages.php:12
 msgid "Events could not be imported. Event Aggregator does not yet support events from that URL. We have noted your request and will review it for support in the future."
@@ -2279,51 +2279,51 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Settings.php:386 src/Tribe/Aggregator/Settings.php:387
 msgid "24 hours"
-msgstr ""
+msgstr "24 tuntia"
 
 #: src/Tribe/Aggregator/Settings.php:390 src/Tribe/Aggregator/Settings.php:391
 msgid "72 hours"
-msgstr ""
+msgstr "72 tuntia"
 
 #: src/Tribe/Aggregator/Settings.php:394
 msgid "One week"
-msgstr ""
+msgstr "Viikko"
 
 #: src/Tribe/Aggregator/Service.php:686
 msgid "The requested source does not have any upcoming and published events matching the search criteria."
-msgstr ""
+msgstr "Ei tulevia ja julkaistuja tapahtumia, jotka vastaavat hakuehtoja."
 
 #: src/Tribe/Aggregator/Settings.php:398
 msgid "Two weeks"
-msgstr ""
+msgstr "Kaksi viikkoa"
 
 #: src/Tribe/Aggregator/Settings.php:399
 msgid "two weeks"
-msgstr ""
+msgstr "kaksi viikkoa"
 
 #: src/Tribe/Aggregator/Settings.php:402
 msgid "Three weeks"
-msgstr ""
+msgstr "Kolme viikkoa"
 
 #: src/Tribe/Aggregator/Settings.php:406
 msgid "One month"
-msgstr ""
+msgstr "Kuukausi"
 
 #: src/Tribe/Aggregator/Settings.php:410
 msgid "Two months"
-msgstr ""
+msgstr "Kaksi kuukautta"
 
 #: src/Tribe/Aggregator/Settings.php:411
 msgid "two months"
-msgstr ""
+msgstr "kaksi kuukautta"
 
 #: src/Tribe/Aggregator/Settings.php:414
 msgid "Three months"
-msgstr ""
+msgstr "Kolme kuukautta"
 
 #: src/Tribe/Aggregator/Settings.php:415
 msgid "three months"
-msgstr ""
+msgstr "kolme kuukautta"
 
 #: src/Tribe/Aggregator/Tabs/New.php:334
 msgid "%1$d new event tag was created."
@@ -2341,7 +2341,7 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:33
 msgid "An Array containing the lineage of where this event comes from, this should not change after the event is created."
-msgstr ""
+msgstr "Muuttuja joka sisältää tiedon siitä, mistä tämä tapahtuma tulee. Tätä ei pidä muuttaa sen jälkeen kun tapahtuma on luotu."
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:37
 msgid "The event author WordPress post ID"
@@ -2357,7 +2357,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Settings.php:403
 msgid "three weeks"
-msgstr ""
+msgstr "kolme viikkoa"
 
 #: src/Tribe/Aggregator/Service.php:672
 msgid "Events could not be imported. The URL provided did not have events in the proper format."
@@ -2366,7 +2366,7 @@ msgstr ""
 #: src/Tribe/Venue.php:234
 msgctxt "Metabox title"
 msgid "Location"
-msgstr ""
+msgstr "Sijainti"
 
 #: src/admin-views/aggregator/settings.php:61
 msgid "Import events but preserve local changes to event fields."
@@ -2379,25 +2379,25 @@ msgstr ""
 #: src/functions/template-tags/loop.php:218
 msgctxt "day_view"
 msgid "%1$s for %2$s"
-msgstr ""
+msgstr "%1$s - %2$s"
 
 #: src/functions/template-tags/loop.php:209
 msgctxt "month view"
 msgid "%1$s for %2$s"
-msgstr ""
+msgstr "%1$s - %2$s"
 
 #: src/admin-views/tribe-options-display.php:199
 msgid "Change the default 3 events per day in month view. To impose no limit, you may specify -1. Please note there may be performance issues if you allow too many events per day. <a href=\"%s\">Read more</a>."
-msgstr ""
+msgstr "Vaihda oletus kolmeen tapahtumaan päivää kohti kuukausinäkymässä. Jos et halua asettaa rajaa, määritä arvoksi -1. Huomaathan, että liian monen päivittäisen tapahtuman salliminen voi johtaa suorituskykongelmiin. <a href=\"%s\">Lue lisää</a>."
 
 #: src/Tribe/Main.php:765
 msgctxt "all events slug"
 msgid "all"
-msgstr ""
+msgstr "kaikki"
 
 #: common/src/Tribe/Validate.php:248
 msgid "%s must be a whole number."
-msgstr ""
+msgstr "%s on oltava kokonaisluku."
 
 #: common/src/Tribe/Documentation/Swagger/Term_Definition_Provider.php:52
 msgid "The URL to the term archive page"
@@ -2489,7 +2489,7 @@ msgstr ""
 
 #: common/src/Tribe/Documentation/Swagger/Date_Details_Definition_Provider.php:28
 msgid "The date month"
-msgstr ""
+msgstr "Pvm kk"
 
 #: common/src/Tribe/Documentation/Swagger/Date_Details_Definition_Provider.php:24
 msgid "The date year"
@@ -2497,7 +2497,7 @@ msgstr ""
 
 #: common/src/Tribe/Documentation/Swagger/Cost_Details_Definition_Provider.php:34
 msgid "A sorted array of all the numeric values for the cost"
-msgstr ""
+msgstr "Kustannusten numeeristen arvojen lajiteltu joukko"
 
 #: common/src/Tribe/Documentation/Swagger/Cost_Details_Definition_Provider.php:28
 msgid "The position of the currency symbol in the cost string"
@@ -2509,66 +2509,66 @@ msgstr ""
 
 #: src/Tribe/Main.php:4038
 msgid "Keyword"
-msgstr ""
+msgstr "Avainsana"
 
 #: src/functions/template-tags/loop.php:177
 msgctxt "featured events title"
 msgid "Featured %s"
-msgstr ""
+msgstr "Kiinnostavat %s"
 
 #: src/admin-views/widget-admin-list.php:35
 msgctxt "events list widget setting"
 msgid "Limit to featured events only"
-msgstr ""
+msgstr "Rajaa vain kiinnostaviin tapahtumiin"
 
 #: src/admin-views/events-meta-box.php:99
 msgctxt "Start Date Time \"to\" End Date Time"
 msgid "to"
-msgstr ""
+msgstr "-"
 
 #: src/admin-views/aggregator/fields/schedule.php:79
 #: src/admin-views/events-meta-box.php:97
 #: src/admin-views/events-meta-box.php:112
 msgid "HH:MM"
-msgstr ""
+msgstr "HH:MM"
 
 #: src/admin-views/events-meta-box.php:72
 msgid "Start/End:"
-msgstr ""
+msgstr "Alkaa/Päättyy:"
 
 #: src/admin-views/event-sidebar-options.php:33
 msgid "Featured events are highlighted on the front end in views, archives, and widgets."
-msgstr ""
+msgstr "Suositellut tapahtumat ovat korostettuna näkymien vimpainten ja arkistojen etusivulla"
 
 #: src/Tribe/Importer/Column_Mapper.php:75
 #: src/admin-views/event-sidebar-options.php:31
 msgid "Feature Event"
-msgstr ""
+msgstr "Suositeltu tapahtuma"
 
 #: src/admin-views/create-venue-fields.php:257
 msgid "Show Google Map Link?"
-msgstr ""
+msgstr "Näytä Google Maps linkki?"
 
 #: src/admin-views/create-venue-fields.php:239
 msgid "Show Google Map?"
-msgstr ""
+msgstr "Näytä Google Map -kartta?"
 
 #: src/admin-views/create-venue-fields.php:203
 msgid "Venue URL"
-msgstr ""
+msgstr "Tapahtumapaikan URL -osoite"
 
 #: src/admin-views/create-venue-fields.php:175
 msgid "Venue Zip Code"
-msgstr ""
+msgstr "Tapahtumapaikan postinumero"
 
 #: src/admin-views/create-venue-fields.php:146
 #: src/admin-views/create-venue-fields.php:153
 msgid "Venue State"
-msgstr ""
+msgstr "Tapahtumapaikan osavaltio / lääni"
 
 #: src/admin-views/aggregator/settings.php:108
 msgid "Stop all Event Aggregator imports from running. Existing imported events will not be affected. Imports via CSV file will still be available."
-msgstr ""
+msgstr "Estä kaikkien Event Aggregator -tuontien suorittaminen. Tämä ei vaikuta olemassa oleviin tapahtumiin. Tuonti CSV-tiedoston kautta on edelleen käytettävissä."
 
 #: src/admin-views/aggregator/settings.php:107
 msgid "Disable Event Aggregator imports"
@@ -2576,157 +2576,157 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:102
 msgid "Event Aggregator Control"
-msgstr ""
+msgstr "Tapahtumakerääjän hallinta"
 
 #: src/Tribe/iCal.php:141
 msgid "Export Events"
-msgstr ""
+msgstr "Vie tapahtumat"
 
 #: src/Tribe/Main.php:764
 msgctxt "featured events slug"
 msgid "featured"
-msgstr ""
+msgstr "Suositeltu"
 
 #: src/Tribe/Linked_Posts.php:1134
 msgid "Create: <b><%= term %></b>"
-msgstr ""
+msgstr "Luo: <b><%= term %></b>"
 
 #: src/Tribe/Linked_Posts/Chooser_Meta_Box.php:280
 msgid "Delete this"
-msgstr ""
+msgstr "Poista"
 
 #: src/Tribe/Event_Tickets/Attendees_Report.php:38
 msgid "Event Date:"
-msgstr ""
+msgstr "Tapahtuman päivämäärä:"
 
 #: src/Tribe/Customizer/Widget.php:132
 msgid "Show Featured Event Images"
-msgstr ""
+msgstr "Näytä esiinnostettujen tapahtumien kuvat"
 
 #: src/Tribe/Customizer/Widget.php:113
 msgid "Calendar Date Bar Color"
-msgstr ""
+msgstr "Kalenterin päivämääräpalkin väri"
 
 #: src/Tribe/Customizer/Widget.php:91
 msgid "Calendar Header Color"
-msgstr ""
+msgstr "Kalenterin otsakkeen väri"
 
 #: src/Tribe/Customizer/Widget.php:59
 msgid "Widgets"
-msgstr ""
+msgstr "Vimpaimet"
 
 #: src/Tribe/Customizer/Single_Event.php:132
 msgid "Details Background Color"
-msgstr ""
+msgstr "Lisätietojen taustan väri"
 
 #: src/Tribe/Customizer/Single_Event.php:110
 msgid "Post Title Color"
-msgstr ""
+msgstr "Julkaise otsikon väri"
 
 #: src/Tribe/Customizer/Single_Event.php:78
 msgid "Single Event"
-msgstr ""
+msgstr "Yksittäinen tapahtuma"
 
 #: src/Tribe/Customizer/Month_Week_View.php:202
 msgid "Calendar Highlight Color"
-msgstr ""
+msgstr "Kalenterin korosteen väri"
 
 #: src/Tribe/Customizer/Month_Week_View.php:180
 msgid "Calendar Table Color"
-msgstr ""
+msgstr "Kalenterin taulukon väri"
 
 #: src/Tribe/Customizer/Month_Week_View.php:149
 #: src/Tribe/Customizer/Single_Event.php:79 src/Tribe/Customizer/Widget.php:60
 msgid "Options selected here will override what was selected in the \"General Theme\" and \"Global Elements\" sections"
-msgstr ""
+msgstr "Tässä valitut asetukset kumoavat ne, jotka on valittu yleisissä teema-asetuksissa ja globaaleissa elementeissä"
 
 #: src/Tribe/Customizer/Month_Week_View.php:148
 msgid "Month View"
-msgstr ""
+msgstr "Kuukausinäkymä"
 
 #: src/Tribe/Customizer/Global_Elements.php:213
 msgid "Map Pin"
-msgstr ""
+msgstr "Karttamerkki"
 
 #: src/Tribe/Customizer/Global_Elements.php:189
 msgid "Button Color"
-msgstr ""
+msgstr "Painikkeen väri"
 
 #: src/Tribe/Customizer/Global_Elements.php:167
 msgid "Filter Bar Color"
-msgstr ""
+msgstr "Suodatinpalkin väri"
 
 #: src/Tribe/Customizer/Global_Elements.php:145
 msgid "Link Color"
-msgstr ""
+msgstr "Linkin väri"
 
 #: src/Tribe/Customizer/Global_Elements.php:114
 msgid "Options selected here will override what was selected in the \"General Theme\" section"
-msgstr ""
+msgstr "Tässä valitut asetukset kumoavat sen, mitä on valittu ”Yleinen teema” -osiossa"
 
 #: src/Tribe/Customizer/Global_Elements.php:113
 msgid "Global Elements"
-msgstr ""
+msgstr "Yleiset elementit"
 
 #: src/Tribe/Customizer/General_Theme.php:402
 msgid "Custom"
-msgstr ""
+msgstr "Mukautettu"
 
 #: src/Tribe/Customizer/General_Theme.php:396
 msgid "Sunshine"
-msgstr ""
+msgstr "Auringonvalo"
 
 #: src/Tribe/Customizer/General_Theme.php:390
 msgid "Skyfall"
-msgstr ""
+msgstr "Skyfall"
 
 #: src/Tribe/Customizer/General_Theme.php:384
 msgid "Malachite"
-msgstr ""
+msgstr "Malakiitti"
 
 #: src/Tribe/Customizer/General_Theme.php:378
 msgid "Lagoon"
-msgstr ""
+msgstr "Lagoon"
 
 #: src/Tribe/Customizer/General_Theme.php:372
 msgid "Evergreen"
-msgstr ""
+msgstr "Ainavihreä"
 
 #: src/Tribe/Customizer/General_Theme.php:366
 msgid "Default"
-msgstr ""
+msgstr "Oletusarvo"
 
 #: src/Tribe/Customizer/General_Theme.php:360
 msgid "Deep Sea"
-msgstr ""
+msgstr "Syvämeri"
 
 #: src/Tribe/Customizer/General_Theme.php:354
 msgid "Blue Steel"
-msgstr ""
+msgstr "Sininen teräs"
 
 #: src/Tribe/Customizer/General_Theme.php:334
 msgid "If the Featured highlight color is set to Custom, the following color will be used:"
-msgstr ""
+msgstr "Jos esiinnostettujen tapahtumien korostusväri on asetettu mukautetuksi, käytetään seuraavaa väriä:"
 
 #: src/Tribe/Customizer/General_Theme.php:291
 msgid "Accent Color"
-msgstr ""
+msgstr "Korostusväri"
 
 #: src/Tribe/Customizer/General_Theme.php:260
 msgid "Global configurations for the styling of The Events Calendar"
-msgstr ""
+msgstr "Tapahtumakalenterin tyylin yleiset määritykset"
 
 #: src/Tribe/Customizer/General_Theme.php:259
 msgid "General Theme"
-msgstr ""
+msgstr "Yleinen teema"
 
 #: src/Tribe/Customizer/Day_List_View.php:115
 msgid "Price Background Color"
-msgstr ""
+msgstr "Hinnan taustaväri"
 
 #: src/Tribe/Customizer/Day_List_View.php:83
 msgid "List-style Views"
-msgstr ""
+msgstr "Listatyylin näkymät"
 
 #: src/Tribe/Customizer/Day_List_View.php:75
 msgid "These settings impact all list-style views, including List View and Day View."
@@ -2738,250 +2738,250 @@ msgstr ""
 
 #: src/Tribe/Assets.php:742 src/deprecated/Tribe__Events__Asset__Dynamic.php:77
 msgid "This event is all day starting on %%startdatenoyear%% and ending on %%enddatewithyear%%."
-msgstr ""
+msgstr "Tapahtuma kestää koko päivän alkaen %%startdatenoyear%% ja loppuen %%enddatewithyear%%."
 
 #: src/Tribe/Assets.php:741 src/deprecated/Tribe__Events__Asset__Dynamic.php:76
 msgid "This event starts at %%starttime%% on %%startdatenoyear%% and ends on %%enddatewithyear%%"
-msgstr ""
+msgstr "Tämä tapahtuma alkaa %%starttime%% %%startdatenoyear%% ja loppuu %%enddatewithyear%%"
 
 #: src/Tribe/Assets.php:740 src/deprecated/Tribe__Events__Asset__Dynamic.php:75
 msgid "This event starts at %%starttime%% on %%startdatenoyear%% and ends at %%endtime%% on %%enddatewithyear%%"
-msgstr ""
+msgstr "Tämä tapahtuma alkaa %%starttime%% %%startdatenoyear%% ja loppuu %%endtime%% %%enddatewithyear%%"
 
 #: src/Tribe/Assets.php:739 src/deprecated/Tribe__Events__Asset__Dynamic.php:74
 msgid "This event is all day on %%startdatewithyear%%."
-msgstr ""
+msgstr "Tämä tapahtuma kestää koko päivän %%startdatewithyear%%."
 
 #: src/Tribe/Assets.php:738 src/deprecated/Tribe__Events__Asset__Dynamic.php:73
 msgid "This event is at %%starttime%% on %%startdatewithyear%%."
-msgstr ""
+msgstr "Tämän tapahtuman ajankohta on klo %%starttime%% %%startdatewithyear%%."
 
 #: src/Tribe/Assets.php:737 src/deprecated/Tribe__Events__Asset__Dynamic.php:72
 msgid "This event is from %%starttime%% to %%endtime%% on %%startdatewithyear%%."
-msgstr ""
+msgstr "Tämän tapahtuman ajankohta on klo %%starttime%%–%%endtime%% %%startdatewithyear%%."
 
 #: src/Tribe/Assets.php:734 src/deprecated/Tribe__Events__Asset__Dynamic.php:69
 msgid "Dec"
-msgstr ""
+msgstr "joulu"
 
 #: src/Tribe/Assets.php:733 src/deprecated/Tribe__Events__Asset__Dynamic.php:68
 msgid "Nov"
-msgstr ""
+msgstr "marras"
 
 #: src/Tribe/Assets.php:732 src/deprecated/Tribe__Events__Asset__Dynamic.php:67
 msgid "Oct"
-msgstr ""
+msgstr "loka"
 
 #: src/Tribe/Assets.php:731 src/deprecated/Tribe__Events__Asset__Dynamic.php:66
 msgid "Sep"
-msgstr ""
+msgstr "syys"
 
 #: src/Tribe/Assets.php:730 src/deprecated/Tribe__Events__Asset__Dynamic.php:65
 msgid "Aug"
-msgstr ""
+msgstr "elo"
 
 #: src/Tribe/Assets.php:729 src/deprecated/Tribe__Events__Asset__Dynamic.php:64
 msgid "Jul"
-msgstr ""
+msgstr "heinä"
 
 #: src/Tribe/Assets.php:728 src/deprecated/Tribe__Events__Asset__Dynamic.php:63
 msgid "Jun"
-msgstr ""
+msgstr "kesä"
 
 #: src/Tribe/Assets.php:726 src/deprecated/Tribe__Events__Asset__Dynamic.php:61
 msgid "Apr"
-msgstr ""
+msgstr "huhti"
 
 #: src/Tribe/Assets.php:725 src/deprecated/Tribe__Events__Asset__Dynamic.php:60
 msgid "Mar"
-msgstr ""
+msgstr "maalis"
 
 #: src/Tribe/Assets.php:724 src/deprecated/Tribe__Events__Asset__Dynamic.php:59
 msgid "Feb"
-msgstr ""
+msgstr "helmi"
 
 #: src/Tribe/Assets.php:723 src/deprecated/Tribe__Events__Asset__Dynamic.php:58
 msgid "Jan"
-msgstr ""
+msgstr "tammi"
 
 #: src/Tribe/Assets.php:720 src/deprecated/Tribe__Events__Asset__Dynamic.php:55
 msgid "December"
-msgstr ""
+msgstr "joulukuu"
 
 #: src/Tribe/Assets.php:719 src/deprecated/Tribe__Events__Asset__Dynamic.php:54
 msgid "November"
-msgstr ""
+msgstr "marraskuu"
 
 #: src/Tribe/Assets.php:718 src/deprecated/Tribe__Events__Asset__Dynamic.php:53
 msgid "October"
-msgstr ""
+msgstr "lokakuu"
 
 #: src/Tribe/Assets.php:717 src/deprecated/Tribe__Events__Asset__Dynamic.php:52
 msgid "September"
-msgstr ""
+msgstr "elokuu"
 
 #: src/Tribe/Assets.php:716 src/deprecated/Tribe__Events__Asset__Dynamic.php:51
 msgid "August"
-msgstr ""
+msgstr "elokuu"
 
 #: src/Tribe/Assets.php:715 src/deprecated/Tribe__Events__Asset__Dynamic.php:50
 msgid "July"
-msgstr ""
+msgstr "heinäkuu"
 
 #: src/Tribe/Assets.php:714 src/deprecated/Tribe__Events__Asset__Dynamic.php:49
 msgid "June"
-msgstr ""
+msgstr "kesäkuu"
 
 #: src/Tribe/Assets.php:713 src/Tribe/Assets.php:727
 #: src/deprecated/Tribe__Events__Asset__Dynamic.php:48
 #: src/deprecated/Tribe__Events__Asset__Dynamic.php:62
 msgid "May"
-msgstr ""
+msgstr "toukokuu"
 
 #: src/Tribe/Assets.php:712 src/deprecated/Tribe__Events__Asset__Dynamic.php:47
 msgid "April"
-msgstr ""
+msgstr "huhtikuu"
 
 #: src/Tribe/Assets.php:711 src/deprecated/Tribe__Events__Asset__Dynamic.php:46
 msgid "March"
-msgstr ""
+msgstr "maaliskuu"
 
 #: src/Tribe/Assets.php:710 src/deprecated/Tribe__Events__Asset__Dynamic.php:45
 msgid "February"
-msgstr ""
+msgstr "helmikuu"
 
 #: src/Tribe/Assets.php:709 src/deprecated/Tribe__Events__Asset__Dynamic.php:44
 msgid "January"
-msgstr ""
+msgstr "tammikuu"
 
 #: src/Tribe/Assets.php:706 src/deprecated/Tribe__Events__Asset__Dynamic.php:41
 msgid "Sat"
-msgstr ""
+msgstr "La"
 
 #: src/Tribe/Assets.php:705 src/deprecated/Tribe__Events__Asset__Dynamic.php:40
 msgid "Fri"
-msgstr ""
+msgstr "Pe"
 
 #: src/Tribe/Assets.php:704 src/deprecated/Tribe__Events__Asset__Dynamic.php:39
 msgid "Thu"
-msgstr ""
+msgstr "To"
 
 #: src/Tribe/Assets.php:703 src/deprecated/Tribe__Events__Asset__Dynamic.php:38
 msgid "Wed"
-msgstr ""
+msgstr "Ke"
 
 #: src/Tribe/Assets.php:702 src/deprecated/Tribe__Events__Asset__Dynamic.php:37
 msgid "Tue"
-msgstr ""
+msgstr "Ti"
 
 #: src/Tribe/Assets.php:701 src/deprecated/Tribe__Events__Asset__Dynamic.php:36
 msgid "Mon"
-msgstr ""
+msgstr "Ma"
 
 #: src/Tribe/Assets.php:700 src/deprecated/Tribe__Events__Asset__Dynamic.php:35
 msgid "Sun"
-msgstr ""
+msgstr "Su"
 
 #: src/Tribe/Assets.php:697 src/deprecated/Tribe__Events__Asset__Dynamic.php:32
 msgid "Saturday"
-msgstr ""
+msgstr "Lauantai"
 
 #: src/Tribe/Assets.php:696 src/deprecated/Tribe__Events__Asset__Dynamic.php:31
 msgid "Friday"
-msgstr ""
+msgstr "Perjantai"
 
 #: src/Tribe/Assets.php:695 src/deprecated/Tribe__Events__Asset__Dynamic.php:30
 msgid "Thursday"
-msgstr ""
+msgstr "Torstai"
 
 #: src/Tribe/Assets.php:694 src/deprecated/Tribe__Events__Asset__Dynamic.php:29
 msgid "Wednesday"
-msgstr ""
+msgstr "Keskiviikko"
 
 #: src/Tribe/Assets.php:693 src/deprecated/Tribe__Events__Asset__Dynamic.php:28
 msgid "Tuesday"
-msgstr ""
+msgstr "Tiistai"
 
 #: src/Tribe/Assets.php:692 src/deprecated/Tribe__Events__Asset__Dynamic.php:27
 msgid "Monday"
-msgstr ""
+msgstr "Maanantai"
 
 #: src/Tribe/Assets.php:691 src/deprecated/Tribe__Events__Asset__Dynamic.php:26
 msgid "Sunday"
-msgstr ""
+msgstr "Sunnuntai"
 
 #: src/deprecated/Tribe__Events__Admin__Front_Page_View.php:20
 msgctxt "Static front page setting"
 msgid "Main %s Page"
-msgstr ""
+msgstr "Tapahtumien pääsivu"
 
 #: common/src/Tribe/Settings.php:281 common/src/Tribe/Settings.php:282
 msgid "Events Help"
-msgstr ""
+msgstr "Tapahtumien ohje"
 
 #: common/src/Tribe/PUE/Checker.php:1670
 msgid "Expired license. Consult your network administrator."
-msgstr ""
+msgstr "Vanhentunut lisenssi. Kysy lisätietoja verkonvalvojalta."
 
 #: common/src/Tribe/PUE/Checker.php:1669
 msgid "No license entered. Consult your network administrator."
-msgstr ""
+msgstr "Ei lisenssiä. Kysy lisätietoja verkonvalvojalta."
 
 #: common/src/Tribe/PUE/Checker.php:1668
 msgid "A valid license has been entered by your network administrator."
-msgstr ""
+msgstr "Verkon ylläpitäjä on antanut voimassaolevan lisenssin."
 
 #: common/src/Tribe/PUE/Checker.php:550
 msgid "Site License Key"
-msgstr ""
+msgstr "Sivuston lisenssiavain"
 
 #: common/src/Tribe/PUE/Checker.php:539
 msgid "Check this box if you wish to override the network license key with your own"
-msgstr ""
+msgstr "Valitse tämä ruutu, jos haluat korvata verkkolisenssin avaimen omalla"
 
 #: common/src/Tribe/PUE/Checker.php:538
 msgid "Override network license key"
-msgstr ""
+msgstr "Ohita verkon lisenssiavain"
 
 #: common/src/Tribe/PUE/Checker.php:529 common/src/Tribe/PUE/Checker.php:563
 msgid "License Key Status:"
-msgstr ""
+msgstr "Aktivointiavaimen status:"
 
 #: common/src/Tribe/Customizer.php:643
 msgid "Use the following panel of your customizer to change the styling of your Calendar and Event pages."
-msgstr ""
+msgstr "Voit muokata kalenteri- ja tapahtumasivujen tyyliä WordPressin Mukauta-toiminnon seuraavassa kohdassa."
 
 #: common/src/admin-views/app-shop.php:31
 msgid "Installed"
-msgstr ""
+msgstr "Asennettu"
 
 #: common/src/admin-views/app-shop.php:29
 msgid "Installed Add-Ons"
-msgstr ""
+msgstr "Asennetut lisäosat"
 
 #: common/src/Tribe/Extension.php:368
 msgid "Unable to run Tribe Extensions. Your website host is running PHP 5.2 or older, and has likely disabled or misconfigured debug_backtrace(). You, or your website host, will need to upgrade PHP or properly configure debug_backtrace() for Tribe Extensions to work."
-msgstr ""
+msgstr "Emme voi suorittaa Tribe Extensions -lisäosia. Sivustosi käyttää PHP 5.2:sta tai vanhempaa ja on oletettavasti poistanut käytöstä tai määrittänyt virheelilsesti kohteen debug_backtrace(). Teidän tai sivustonne ylläpitäjän on päivitettävä PHP tai määriteltävä debug_backtrace() oikein Tribe Extensions -lisäosia varten."
 
 #: common/src/Tribe/Extension.php:144
 msgid "Tutorial"
-msgstr ""
+msgstr "Opastus"
 
 #: common/src/Tribe/Admin/Notice/Php_Version.php:60
 #: common/src/Tribe/Admin/Notice/Plugin_Download.php:92
 msgctxt "the final separator in a list of two or more items"
 msgid " and "
-msgstr ""
+msgstr " ja "
 
 #: common/src/Tribe/Admin/Notice/Php_Version.php:59
 #: common/src/Tribe/Admin/Notice/Plugin_Download.php:91
 msgctxt "separator used in a list of items"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: common/src/Tribe/Admin/Notice/Plugin_Download.php:75
 msgid "To begin using %1$s, please install and activate the latest version of %2$s."
-msgstr ""
+msgstr "Jotta voit aloittaa %1$s käytön, asenna ja aktivoi viimeisin versio %2$sstä."
 
 #: src/Tribe/Aggregator/Service.php:718
 msgid "Unknown service message"
@@ -2989,15 +2989,15 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Record/List_Table.php:540
 msgid "Unknown"
-msgstr ""
+msgstr "Tuntematon"
 
 #: src/Tribe/Aggregator/Record/Abstract.php:1193
 msgid "When this import was last scheduled to run, the daily limit for your Event Aggregator license had already been reached."
-msgstr ""
+msgstr "Kun tämä tuonti oli viimeksi ajoitettu käynnistymään, Event Aggregatorin lisenssisi tuontien päivittäinen yläraja oli jo saavutettu."
 
 #: src/admin-views/aggregator/origins/refine.php:5
 msgid "Location"
-msgstr ""
+msgstr "Sijainti"
 
 #: src/admin-views/admin-welcome-message.php:26
 msgid "Stay in touch with The Events Calendar team. We send out periodic updates, key developer notices, and even the occasional discount."
@@ -3005,16 +3005,16 @@ msgstr ""
 
 #: src/admin-views/admin-welcome-message.php:20
 msgid "Your ratings help us bring The Events Calendar to more users. More happy users mean more support, more features, and more of everything you know and love about The Events Calendar. We couldn't do this without your support."
-msgstr ""
+msgstr "Arvostelusi auttaa meitä tuomaan Events Calendar *tapahtumakalenterin useammille käyttäjille. Kun saamme lisää tyytyväisiä käyttäjiä saamme enemmän tukea, enemmän ominaisuuksia, ja enemmän kaikkea mistä pidät Events Calendarissa. Emme olisi pystyneet tekemään tätä ilman tukeasi."
 
 #: src/views/single-event.php:28
 msgctxt "%s Events plural label"
 msgid "All %s"
-msgstr ""
+msgstr "Kaikki %s"
 
 #: src/admin-views/widget-admin-list.php:40
 msgid "Generate JSON-LD data"
-msgstr ""
+msgstr "Luo JSON-LD data"
 
 #: src/admin-views/tribe-options-addons-api.php:99
 msgid "Some features and add-ons require you to enter an API key or log into a third-party website so that The Events Calendar can communicate with an outside source."
@@ -3022,7 +3022,7 @@ msgstr ""
 
 #: src/admin-views/tribe-options-addons-api.php:25
 msgid "%s to view your Meetup API Key"
-msgstr ""
+msgstr "%s nähdäksesi Meetupin API-avaimen"
 
 #: src/admin-views/tribe-options-addons-api.php:24
 msgid "Meetup API Key"
@@ -3034,7 +3034,7 @@ msgstr ""
 
 #: src/admin-views/tribe-options-addons-api.php:53
 msgid "Disconnect"
-msgstr ""
+msgstr "Ei yhdistetty"
 
 #: src/admin-views/aggregator/tabs/import-form.php:304
 msgid "Events will be imported with the time zone defined by the source. If no time zone is specified, events will be assigned your site's default time zone ( see"
@@ -3042,29 +3042,29 @@ msgstr ""
 
 #: src/admin-views/aggregator/tabs/import-form.php:231
 msgid "Category:"
-msgstr ""
+msgstr "Kategoria:"
 
 #: src/admin-views/aggregator/tabs/import-form.php:219
 msgid "Status:"
-msgstr ""
+msgstr "Tila:"
 
 #: src/admin-views/aggregator/tabs/import-form.php:199
 #: src/admin-views/aggregator/tabs/import-form.php:211
 msgid "Start Time"
-msgstr ""
+msgstr "Aloitusaika"
 
 #: src/admin-views/aggregator/tabs/import-form.php:195
 #: src/admin-views/aggregator/tabs/import-form.php:207
 msgid "Select All"
-msgstr ""
+msgstr "Valitse kaikki"
 
 #: src/admin-views/aggregator/tabs/import-form.php:185
 msgid "The following preview does not necessarily contain all of the data from your CSV file. The data displayed below is meant as a guide to help you map your CSV file's columns to the appropriate Event fields."
-msgstr ""
+msgstr "Seuraava esikatselu ei välttämättä sisällä kaikkia CSV-tiedoston tietoja. Näytettävät tiedot on tarkoitettu auttamaan CSV-tiedoston tietojen sijoittamista tarkoituksenmukaisiin tapahtumakenttiin."
 
 #: src/admin-views/aggregator/tabs/import-form.php:179
 msgid "Column Mapping:"
-msgstr ""
+msgstr "Sarakkeiden kartoitus:"
 
 #: src/admin-views/aggregator/tabs/import-form.php:176
 msgid "This is a preview of the type of content you will be getting in during the import based on what is on the calendar now."
@@ -3076,27 +3076,27 @@ msgstr ""
 
 #: src/admin-views/aggregator/tabs/import-form.php:163
 msgid "Select the Event Field that best matches your CSV file column. The contents of that column will then be mapped to the specified event field when the event is created."
-msgstr ""
+msgstr "Valitse tapahtumakenttä joka osuu parhaiten yksiin CSV-tiedostosi sarakkeen kanssa. Sen sarakkeen tiedot tuodaan määrittelemääsi tapahtumakenttään, kun tapahtuma luodaan."
 
 #: src/admin-views/aggregator/tabs/import-form.php:161
 msgid "These settings will also apply to events imported in the future via this scheduled import."
-msgstr ""
+msgstr "Nämä asetukset pätevät myös kaikkiin tapahtumiin, jotka tulevaisuudessa tuodaan tämän ajoitetun viennin kautta."
 
 #: src/admin-views/aggregator/tabs/import-form.php:160
 msgid "Choose a status for the event(s) to be imported with and/or define an Event Category to automatically assign. An assigned category will be added to the event in addition to any Event Categories from the import source."
-msgstr ""
+msgstr "Valitse tila tuotaville tapahtumille ja/tai määritä automaattisesti valittava Tapahtumakategoria. Asetettu kategoria lisätään tapahtumaan jo lähteessä määritettyjen tietojen lisäksi."
 
 #: src/admin-views/aggregator/tabs/import-form.php:104
 msgid "Access more event sources and automatic imports!"
-msgstr ""
+msgstr "Ota käyttöön uusia lähteitä ja automaattisia tuonteja!"
 
 #: src/admin-views/aggregator/tabs/import-form.php:105
 msgid "Buy Event Aggregator"
-msgstr ""
+msgstr "Osta Event Aggregator"
 
 #: src/admin-views/aggregator/tabs/import-form.php:40
 msgid "Choose where you are importing from."
-msgstr ""
+msgstr "Valitse lähde mistä haluat tuoda tiedot"
 
 #: src/admin-views/aggregator/tabs/import-form.php:39
 msgid "Select Origin"
@@ -3104,7 +3104,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/tabs/import-form.php:38
 msgid "Import Origin:"
-msgstr ""
+msgstr "Tuo alkuperäinen:"
 
 #: src/admin-views/aggregator/tabs/import-form.php:25
 msgid "No Additional Categories"
@@ -3112,15 +3112,15 @@ msgstr ""
 
 #: src/admin-views/aggregator/status.php:197
 msgid "Enter your API key"
-msgstr ""
+msgstr "Syötä API-avaimesi"
 
 #: src/admin-views/aggregator/status.php:195
 msgid "You have not entered a Meetup API key"
-msgstr ""
+msgstr "Et ole määritellyt Meetupin API-avainta"
 
 #: src/admin-views/aggregator/status.php:191
 msgid "API key entered"
-msgstr ""
+msgstr "API-avain syötetty"
 
 #: src/admin-views/aggregator/status.php:176
 msgid "The service has disabled oAuth. Some types of events may not import."
@@ -3128,7 +3128,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/status.php:156
 msgid "Third Party Accounts"
-msgstr ""
+msgstr "Kolmannen osapuolen tilit"
 
 #: src/admin-views/aggregator/status.php:144
 msgid "Scheduler Status"
@@ -3140,34 +3140,34 @@ msgstr ""
 
 #: src/admin-views/aggregator/status.php:137
 msgid "Scheduled imports may not run reliably"
-msgstr ""
+msgstr "Ajastetut tuonnit ei välttämättä toimi luotettavasti"
 
 #: src/admin-views/aggregator/status.php:136
 msgid "WP Cron not enabled"
-msgstr ""
+msgstr "WP Cron ei ole käytössä"
 
 #: src/admin-views/aggregator/status.php:124
 msgid "Server Connection"
-msgstr ""
+msgstr "Palvelimen yhteys"
 
 #. translators: %s: Event Aggregator Server URL
 #: src/admin-views/aggregator/status.php:118
 msgid "Connected to %s"
-msgstr ""
+msgstr "Yhdistetty kohteeseen %s"
 
 #: src/admin-views/aggregator/status.php:112
 msgid "The server is responding with an error:"
-msgstr ""
+msgstr "Palvelin vastaa virheellä:"
 
 #: src/admin-views/aggregator/status.php:103
 msgid "The server is not currently responding"
-msgstr ""
+msgstr "Palvelin ei vastaa tällä hetkellä"
 
 #. translators: %s: Event Aggregator Server URL
 #: src/admin-views/aggregator/status.php:102
 #: src/admin-views/aggregator/status.php:110
 msgid "Not connected to %s"
-msgstr ""
+msgstr "Ei yhdistetty kohteeseen %s"
 
 #: src/admin-views/aggregator/status.php:88
 msgid "Import Services"
@@ -3175,7 +3175,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/status.php:77
 msgid "Current usage"
-msgstr ""
+msgstr "Tämänhetkinen käyttö"
 
 #: src/admin-views/aggregator/status.php:70
 msgid "%1$d import used out of %2$d available today"
@@ -3185,65 +3185,65 @@ msgstr[1] ""
 
 #: src/admin-views/aggregator/status.php:66
 msgid "You are approaching your daily import limit. You may want to adjust your Scheduled Import frequencies."
-msgstr ""
+msgstr "Lähestyt päivittäisten tuontien ylärajaa. Sinun saattaisi kannattaa muokata ajastettujen tuontien aikaväliä."
 
 #: src/admin-views/aggregator/status.php:63
 msgid "You have reached your daily import limit. Scheduled imports will be paused until tomorrow."
-msgstr ""
+msgstr "Olet saavuttanut päivittäisten tuontien ylärajan. Ajastetut tuonnit keskeytetään huomiseen saakka."
 
 #: src/admin-views/aggregator/status.php:36
 msgid "Check your license key"
-msgstr ""
+msgstr "Tarkista lisenssiavaimesi"
 
 #: src/admin-views/aggregator/status.php:35
 msgid "Your license is invalid"
-msgstr ""
+msgstr "Lisenssisi ei kelpaa"
 
 #: src/admin-views/aggregator/status.php:32
 msgid "Buy Event Aggregator to access more event sources and automatic imports!"
-msgstr ""
+msgstr "Osta Event Aggregator saadaksesi enemmän tapahtumia lähteistä ja automaattiset tuonnit!"
 
 #: src/admin-views/aggregator/status.php:30
 msgid "You do not have a license"
-msgstr ""
+msgstr "Sinulla ei ole lisenssiä"
 
 #: src/admin-views/aggregator/status.php:23
 msgid "Your license is valid"
-msgstr ""
+msgstr "Lisenssisi on voimassa"
 
 #: src/admin-views/aggregator/status.php:14
 msgid "License &amp; Usage"
-msgstr ""
+msgstr "Lisenssi & käyttö"
 
 #: src/admin-views/admin-update-message.php:55
 #: src/admin-views/aggregator/settings.php:699
 #: src/admin-views/aggregator/settings.php:739
 msgid "Imports"
-msgstr ""
+msgstr "Tuonnit"
 
 #: src/admin-views/aggregator/settings.php:686
 msgid "Check out Event Aggregator."
-msgstr ""
+msgstr "Tutustu Event Aggregatoriin."
 
 #: src/admin-views/aggregator/settings.php:685
 msgid "Use the options below to configure your imports. Looking for more ways to import events from other websites?"
-msgstr ""
+msgstr "Alla olevien vaihtoehtojen avulla voit määrittää tietojen tuonnit. Etsitkö uusia tapoja tuoda tapahtumia muilta sivustoilta?"
 
 #: src/admin-views/aggregator/settings.php:590
 msgid "Global"
-msgstr ""
+msgstr "Yleinen"
 
 #: src/admin-views/aggregator/settings.php:586
 msgid "Update Authority"
-msgstr ""
+msgstr "Päivitysvaltuutus"
 
 #: src/admin-views/aggregator/settings.php:665
 msgid "Help page"
-msgstr ""
+msgstr "Ohjesivu"
 
 #: src/admin-views/aggregator/settings.php:661
 msgid "Use the options below to configure your imports. Global Import Settings apply to all imports, but you can also override the global settings by adjusting the origin-specific options. Check your Event Aggregator Service Status on the %1$s."
-msgstr ""
+msgstr "Alla olevilla asetuksilla voit mukauttaa tuontejasi. Tuonnin yleisasetukset vaikuttavat kaikkiin tuonteihin mutta voit myös ohittaa yleissäännöt muuttamalla lähteestä riippuvia asetuksia. Tarkista Event Aggregator -palvelun tila kohteessa %1$s."
 
 #: src/admin-views/aggregator/settings.php:401
 msgid "The default event category for events imported via Meetup"
@@ -3263,35 +3263,35 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:345
 msgid "The default event category for events imported via Google Calendar"
-msgstr ""
+msgstr "Oletuskategoria tapahtumille, jotka on tuotu Google Kalenterista"
 
 #: src/admin-views/aggregator/settings.php:333
 msgid "The default post status for events imported via Google Calendar"
-msgstr ""
+msgstr "Oletustila tapahtumille, jotka on tuotu Google Kalenterista"
 
 #: src/admin-views/aggregator/settings.php:327
 msgid "Google Calendar Import Settings"
-msgstr ""
+msgstr "Google Kalenterin tuontiasetukset"
 
 #: src/admin-views/aggregator/settings.php:301
 msgid "The default event category for events imported via .ics files"
-msgstr ""
+msgstr "Oletuskategoria tapahtumille, jotka on tuotu .ics-tiedostoista"
 
 #: src/admin-views/aggregator/settings.php:289
 msgid "The default post status for events imported via .ics files"
-msgstr ""
+msgstr "Oletustila tapahtumille, jotka on tuotu .ics-tiedostoista"
 
 #: src/admin-views/aggregator/settings.php:283
 msgid "ICS File Import Settings"
-msgstr ""
+msgstr "ICS-tiedoston tuontiasetukset"
 
 #: src/admin-views/aggregator/settings.php:257
 msgid "The default event category for events imported via iCalendar"
-msgstr ""
+msgstr "Oletuskategoria tapahtumille jotka on tuotu iCalendarin kautta"
 
 #: src/admin-views/aggregator/settings.php:245
 msgid "The default post status for events imported via iCalendar"
-msgstr ""
+msgstr "Oletustila tapahtumille, jotka on tuotu iCalendarin kautta"
 
 #: src/admin-views/aggregator/settings.php:239
 msgid "iCalendar Import Settings"
@@ -3315,23 +3315,23 @@ msgstr ""
 #: src/admin-views/aggregator/settings.php:456
 #: src/admin-views/aggregator/settings.php:524
 msgid "Show Google Map"
-msgstr ""
+msgstr "Näytä Google Kartat"
 
 #: src/admin-views/aggregator/settings.php:148
 msgid "The default event category for events"
-msgstr ""
+msgstr "Oletuskategoria kaikille tapahtumille"
 
 #: src/admin-views/aggregator/settings.php:136
 msgid "The default post status for events"
-msgstr ""
+msgstr "Tapahtumien oletustila"
 
 #: src/admin-views/aggregator/settings.php:130
 msgid "Global Import Settings"
-msgstr ""
+msgstr "Yleiset tuontiasetukset"
 
 #: src/admin-views/aggregator/settings.php:88
 msgid "The default event category for events imported via CSV"
-msgstr ""
+msgstr "Oletuskategoria tapahtumille, jotka on tuotu CSV-tiedostoista"
 
 #: src/admin-views/aggregator/settings.php:87
 #: src/admin-views/aggregator/settings.php:147
@@ -3342,11 +3342,11 @@ msgstr ""
 #: src/admin-views/aggregator/settings.php:444
 #: src/admin-views/aggregator/settings.php:512
 msgid "Default Event Category"
-msgstr ""
+msgstr "Oletus kategoria tapahtumille"
 
 #: src/admin-views/aggregator/settings.php:76
 msgid "The default post status for events imported via CSV"
-msgstr ""
+msgstr "Oletustila tapahtumille, jotka on tuotu CSV-tiedostoista"
 
 #: src/admin-views/aggregator/settings.php:75
 #: src/admin-views/aggregator/settings.php:135
@@ -3357,11 +3357,11 @@ msgstr ""
 #: src/admin-views/aggregator/settings.php:432
 #: src/admin-views/aggregator/settings.php:500
 msgid "Default Status"
-msgstr ""
+msgstr "Oletustila"
 
 #: src/admin-views/aggregator/settings.php:60
 msgid "Do not re-import events. Changes made locally will be preserved."
-msgstr ""
+msgstr "Älä tuo tapahtumia uudestaan. Paikallisesti tehdyt muutokset säilytetään"
 
 #: src/admin-views/aggregator/settings.php:59
 msgid "Overwrite my event with any changes from the original source."
@@ -3369,28 +3369,28 @@ msgstr ""
 
 #: src/admin-views/aggregator/settings.php:49
 msgid "You can make changes to imported events via The Events Calendar and see those changes reflected on your site’s calendar. The owner of the original event source (e.g. the iCalendar feed or Meetup group) might also make changes to their event. If you choose to re-import an altered event (manually or via a scheduled import), any changes made at the source or on your calendar will need to be addressed."
-msgstr ""
+msgstr "The Events Calendar sallii tehdä muutoksia tuotuihin tapahtumiin ja muutokset on nähtävissä sivustosi kalenterissa. Myös alkuperäisen tapahtumalähteen haltija (esim iCalendar syöte tai Facebook ryhmä) voi tehdä muutoksia tapahtumaan. Jos päätät tuoda muutetun tapahtuman uudelleen (manuaalisesti tai ajoitetun tuonnin kautta), kaikki muutokset, jotka on tehty lähteessä tai kalenterissasi täytyy tarkistaa."
 
 #: src/admin-views/aggregator/settings.php:44
 #: src/admin-views/aggregator/settings.php:54
 msgid "Event Update Authority"
-msgstr ""
+msgstr "Tapahtumapäivitysten valtuutus"
 
 #: src/admin-views/aggregator/settings.php:35
 msgid "No"
-msgstr ""
+msgstr "Ei"
 
 #: src/admin-views/aggregator/settings.php:17
 msgid "No default category"
-msgstr ""
+msgstr "Ei oletuskategoriaa"
 
 #: src/admin-views/aggregator/settings.php:7
 msgid "Use global import settings"
-msgstr ""
+msgstr "Käytä yleisiä tuontiasetuksia"
 
 #: src/admin-views/aggregator/origins/refine.php:98
 msgid "Events on or after"
-msgstr ""
+msgstr "Tapahtumat alkaen"
 
 #: src/admin-views/aggregator/origins/refine.php:64
 msgid "Refine:"
@@ -3411,11 +3411,11 @@ msgstr ""
 #: src/admin-views/aggregator/origins/refine.php:9
 msgctxt "Radius with abbreviation"
 msgid "Radius (%s)"
-msgstr ""
+msgstr "Säde (%s)"
 
 #: src/admin-views/aggregator/origins/refine.php:3
 msgid "Keyword(s)"
-msgstr ""
+msgstr "Avainsana(t)"
 
 #: src/admin-views/aggregator/origins/meetup.php:139
 msgid "Enter the url for a Meetup group, page, or individual. You can also enter the url of a single Meetup event."
@@ -3423,11 +3423,11 @@ msgstr ""
 
 #: src/admin-views/aggregator/origins/meetup.php:138
 msgid "meetup.com/example"
-msgstr ""
+msgstr "meetup.com/example"
 
 #: src/admin-views/aggregator/origins/meetup.php:61
 msgid "Save"
-msgstr ""
+msgstr "Tallenna"
 
 #: src/admin-views/aggregator/origins/meetup.php:59
 msgid "Meetup API Key:"
@@ -3443,11 +3443,11 @@ msgstr ""
 
 #: src/admin-views/aggregator/origins/meetup.php:7
 msgid "One-time imports include all currently listed events, while scheduled imports automatically grab new events and updates from Meetup on a set schedule. Single events can be added via a one-time import."
-msgstr ""
+msgstr "Kertaluontoiset tuonnit kattavat kaikki listatut tapahtumat kun taas ajoitetut tuonnit ottavat sisään uusia päivityksiä ja tapahtumia Meetup:sta määritetyn aikataulun mukaan. Yksittäisiä tapahtumia voi lisätä kertaluonteisen tuonnin avulla."
 
 #: src/admin-views/aggregator/origins/ics.php:10
 msgid "Upload an ICS File"
-msgstr ""
+msgstr "Lataa ICS-tiedosto"
 
 #: src/admin-views/aggregator/origins/ics.php:7
 msgid "Select your ICS file from the WordPress media library. You may need to first upload the file from your computer to the library."
@@ -3455,19 +3455,19 @@ msgstr ""
 
 #: src/admin-views/aggregator/origins/ics.php:6
 msgid "Choose File"
-msgstr ""
+msgstr "Valitse tiedosto"
 
 #: src/admin-views/aggregator/origins/ical.php:84
 msgid "Enter the url for the iCalendar feed you wish to import, e.g. https://central.wordcamp.org/calendar.ics"
-msgstr ""
+msgstr "Kirjoita iCalendar syötteen url-osoite josta haluat tuoda tapahtumia, esim. https://central.wordcamp.org/calendar.ics"
 
 #: src/admin-views/aggregator/origins/ical.php:83
 msgid "example.com/url.ics"
-msgstr ""
+msgstr "example.com/url.ics"
 
 #: src/admin-views/aggregator/origins/gcal.php:89
 msgid "Copy the provided url into this field to import the events into your WordPress site."
-msgstr ""
+msgstr "Kopioi annettu URL-osoite tähän kenttään, jos haluat tuoda tapahtumia WordPress-sivustoosi."
 
 #: src/admin-views/aggregator/origins/gcal.php:88
 msgid "Scroll down to Calendar Address and click the iCal button (note: if your calendar is private, you'll need to click the iCal button next to the Private Address header instead)."
@@ -3492,7 +3492,7 @@ msgstr ""
 #: src/admin-views/aggregator/origins/gcal.php:7
 #: src/admin-views/aggregator/origins/ical.php:7
 msgid "One-time imports include all events in the current feed, while scheduled imports automatically grab new events and updates from the feed on a set schedule."
-msgstr ""
+msgstr "Kertaluontoiset tuonnit kattavat kaikki tapahtumat tässä syötteessä kun taas ajoitetut tuonnit ottavat sisään uusia päivityksiä ja tapahtumia syötteestä määritetyn aikataulun mukaan."
 
 #: src/deprecated/facebook.php:114
 msgid "Enter the url for a Facebook group or page. You can also enter the url of a single Facebook event."
@@ -3500,7 +3500,7 @@ msgstr ""
 
 #: src/deprecated/facebook.php:113
 msgid "facebook.com/example"
-msgstr ""
+msgstr "facebook.com/esimerkki"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:68
 #: src/admin-views/aggregator/origins/gcal.php:36
@@ -3508,7 +3508,7 @@ msgstr ""
 #: src/admin-views/aggregator/origins/meetup.php:91
 #: src/admin-views/aggregator/origins/url.php:36 src/deprecated/facebook.php:66
 msgid "One-Time Import"
-msgstr ""
+msgstr "Kertaluontoinen tuonti"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:57
 #: src/admin-views/aggregator/origins/eventbrite.php:69
@@ -3522,11 +3522,11 @@ msgstr ""
 #: src/admin-views/aggregator/origins/url.php:37 src/deprecated/facebook.php:55
 #: src/deprecated/facebook.php:67
 msgid "Scheduled Import"
-msgstr ""
+msgstr "Ajastettu tuonti"
 
 #: src/deprecated/facebook.php:42
 msgid "Log into Facebook"
-msgstr ""
+msgstr "Kirjaudu Facebookiin"
 
 #: src/deprecated/facebook.php:36
 msgid "Please log in to enable event imports from Facebook."
@@ -3557,7 +3557,7 @@ msgstr ""
 #: src/admin-views/aggregator/origins/meetup.php:6
 #: src/admin-views/aggregator/origins/url.php:6 src/deprecated/facebook.php:9
 msgid "Select Import Type"
-msgstr ""
+msgstr "Valitse tuonnin tyyppi"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:154
 msgid "Enter an Eventbrite event URL, e.g. https://www.eventbrite.com/e/example-12345"
@@ -3572,21 +3572,21 @@ msgstr ""
 #: src/admin-views/aggregator/origins/url.php:119
 #: src/deprecated/facebook.php:140
 msgid "Preview"
-msgstr ""
+msgstr "Esikatselu"
 
 #: src/admin-views/aggregator/origins/csv.php:68
 #: src/admin-views/aggregator/origins/ics.php:35
 msgid "No file chosen"
-msgstr ""
+msgstr "Ei tiedostoa valittuna"
 
 #: src/admin-views/aggregator/origins/csv.php:43
 msgid "Upload a CSV File"
-msgstr ""
+msgstr "Lataa CSV-tiedosto"
 
 #: src/admin-views/aggregator/origins/csv.php:42
 #: src/admin-views/aggregator/origins/ics.php:9
 msgid "Upload"
-msgstr ""
+msgstr "Lataa"
 
 #: src/admin-views/aggregator/origins/csv.php:41
 msgid "Select your .CSV file from the WordPress media library. You may need to first upload the file from your computer to the library."
@@ -3594,12 +3594,12 @@ msgstr ""
 
 #: src/admin-views/aggregator/origins/csv.php:40
 msgid "Choose a CSV file"
-msgstr ""
+msgstr "Valitse CSV tiedosto"
 
 #: src/admin-views/aggregator/origins/csv.php:39
 #: src/admin-views/aggregator/origins/ics.php:5
 msgid "Choose File:"
-msgstr ""
+msgstr "Valitse tiedosto:"
 
 #: src/admin-views/aggregator/origins/csv.php:8
 msgid "For the best results, import venue and organizer files before importing event files."
@@ -3611,15 +3611,15 @@ msgstr ""
 
 #: src/admin-views/aggregator/origins/csv.php:5
 msgid "Select Content Type"
-msgstr ""
+msgstr "Valitse sisällön tyyppi"
 
 #: src/admin-views/aggregator/origins/csv.php:4
 msgid "Content Type:"
-msgstr ""
+msgstr "Sisällön tyyppi"
 
 #: src/admin-views/aggregator/meta-box.php:56
 msgid "Change Event Update Authority"
-msgstr ""
+msgstr "Muuta tapahtumapäivitysten valtuutusta"
 
 #: src/admin-views/aggregator/meta-box.php:36
 msgid "This event will not be re-imported and changes made locally will be preserved."
@@ -3636,7 +3636,7 @@ msgstr ""
 
 #: src/admin-views/aggregator/meta-box.php:9
 msgid "Last Import:"
-msgstr ""
+msgstr "Viimeinen tuonti:"
 
 #: src/admin-views/admin-welcome-message.php:29
 msgid "News and Announcements"
@@ -3644,25 +3644,25 @@ msgstr ""
 
 #: src/admin-views/admin-welcome-message.php:28
 msgid "Developer News"
-msgstr ""
+msgstr "Kehittäjäuutiset"
 
 #: src/admin-views/admin-welcome-message.php:21
 msgid "Rate us today!"
-msgstr ""
+msgstr "Kirjoita arvostelu!"
 
 #: src/admin-views/admin-welcome-message.php:19
 msgid "We Need Your Help"
-msgstr ""
+msgstr "Tarvitsemme apuasi"
 
 #: src/Tribe/Utils/Radius.php:55
 msgctxt "Abbreviation for the kilometers unit of measure"
 msgid "km"
-msgstr ""
+msgstr "km"
 
 #: src/Tribe/Utils/Radius.php:53
 msgctxt "Abbreviation for the miles unit of measure"
 msgid "mi"
-msgstr ""
+msgstr "mailia"
 
 #: src/Tribe/Main.php:985
 msgid "The %3$s \"%1$s\" uses the \"/%2$s\" slug: the Events Calendar plugin will show its calendar in place of the page."
@@ -3671,7 +3671,7 @@ msgstr ""
 #: src/deprecated/Tribe__Events__Importer__Admin_Page.php:77
 #: src/deprecated/Tribe__Events__Importer__Admin_Page.php:78
 msgid "Legacy Import"
-msgstr ""
+msgstr "Vanhentuneiden tuonti"
 
 #: src/Tribe/Ignored_Events.php:926
 msgid "Migration: %d Legacy Ignored Post was migrated successfully. To see the migrated event you will first need to refresh this screen."
@@ -3681,7 +3681,7 @@ msgstr[1] ""
 
 #: src/Tribe/Ignored_Events.php:919
 msgid "Event %d: %s"
-msgstr ""
+msgstr "Tapahtuma %d: %s"
 
 #: src/Tribe/Ignored_Events.php:907
 msgid "Migration: %d Legacy Ignored Post failed to be migrated."
@@ -3697,30 +3697,30 @@ msgstr[1] ""
 
 #: src/Tribe/Ignored_Events.php:871
 msgid "There were no Legacy Events to be Migrated, you are ready to rock!"
-msgstr ""
+msgstr "Ei vanhentuneina sivuutettuja tapahtumia siirrettäviksi. Aloita käyttö!"
 
 #: src/Tribe/Ignored_Events.php:864
 msgid "You do not have permission to migrate Legacy Ignored Events"
-msgstr ""
+msgstr "Sinulla ei ole valtuutusta siirtää vanhentuneina ohitettuja tapahtumia"
 
 #: src/Tribe/Ignored_Events.php:857
 msgid "Error, a unknown bug happened and it was impossible to migrate the Legacy Ignored Events, try again later."
-msgstr ""
+msgstr "Virhe, tuntematon ohjelmavirhe esti vanhentuneina sivuutettujen tapahtumien siirron. Yritä myöhemmin uudelleen."
 
 #: src/Tribe/Ignored_Events.php:745
 msgid "Ignored <span class=\"count\">(%s)</span>"
 msgid_plural "Ignored <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sivuutettu <span class=\"count\">(%s)</span>"
+msgstr[1] "Sivuutetut <span class=\"count\">(%s)</span>"
 
 #. translators: %s: post title
 #: src/Tribe/Ignored_Events.php:434
 msgid "Delete &#8220;%s&#8221; permanently"
-msgstr ""
+msgstr "Poista &#8220;%s&#8221; pysyvästi"
 
 #: src/Tribe/Ignored_Events.php:427
 msgid "Restore"
-msgstr ""
+msgstr "Palauta"
 
 #. translators: %s: post title
 #: src/Tribe/Ignored_Events.php:426
@@ -3730,11 +3730,11 @@ msgstr ""
 #: src/Tribe/Ignored_Events.php:341 src/Tribe/Ignored_Events.php:343
 #: src/admin-views/aggregator/meta-box.php:5
 msgid "Source:"
-msgstr ""
+msgstr "Lähde:"
 
 #: src/Tribe/Ignored_Events.php:315
 msgid "Last Import"
-msgstr ""
+msgstr "Viimeinen tuonti"
 
 #: src/Tribe/Ignored_Events.php:314 src/admin-views/aggregator/meta-box.php:14
 msgid "The last time this event was imported and/or updated via import."
@@ -3742,13 +3742,13 @@ msgstr ""
 
 #: src/Tribe/Ignored_Events.php:312
 msgid "Source"
-msgstr ""
+msgstr "Lähde"
 
 #: src/Tribe/Ignored_Events.php:283
 msgid "%s post restored."
 msgid_plural "%s posts restored."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s julkaisu palautettu."
+msgstr[1] "%s julkaisut palautettu."
 
 #: src/Tribe/Ignored_Events.php:231 src/Tribe/Ignored_Events.php:275
 msgid "Error restoring from Ignored Events."
@@ -3760,42 +3760,42 @@ msgstr ""
 
 #: src/Tribe/Ignored_Events.php:173
 msgid "Migrate Legacy Ignored Events"
-msgstr ""
+msgstr "Siirrä vanhentuneet ohitetut tapahtumat"
 
 #: src/Tribe/Ignored_Events.php:172
 msgctxt "link to knowlegebase article"
 msgid "Read more about Ignored Events."
-msgstr ""
+msgstr "Lisätietoja ohitetuista tapahtumista"
 
 #: src/Tribe/Ignored_Events.php:171
 msgid "Event Aggregator includes a new, better system for removing unwanted imported events from your calendar. Click the button below to transition previously deleted events. This process will remove unwanted records from your database and include recent or upcoming trashed events in your Ignored archive."
-msgstr ""
+msgstr "Tapahtumakerääjä sisältää uuden, paremman järjestelmän poistamaan ei-toivotut tuodut tapahtumat kalenteristasi. Siirtääksesi aiemmin poistetut tapahtumat napsauta alla olevaa painiketta. Tämä prosessi poistaa ei-toivotut tietueet tietokannastasi ja lisää viimeisimmät tai tulevat poistetut tapahtumat Sivuutettujen arkistoosi."
 
 #: src/Tribe/Utils/Radius.php:28
 msgctxt "X (kilometers abbreviation)"
 msgid "%1$s (km)"
-msgstr ""
+msgstr "%1$s (km)"
 
 #: src/Tribe/Utils/Radius.php:18
 msgctxt "X (miles abbreviation)"
 msgid "%1$s (mi)"
-msgstr ""
+msgstr "%1$s (mailia)"
 
 #: src/Tribe/Ignored_Events.php:148
 msgid "Undo"
-msgstr ""
+msgstr "Kumoa"
 
 #: src/Tribe/Ignored_Events.php:137
 msgid "and %s post moved to Ignored."
 msgid_plural "and %s posts moved to Ignored."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ja %s julkaisu siirretty hylättyihin."
+msgstr[1] "ja %s julkaisua siirretty hylättyihin."
 
 #: src/Tribe/Ignored_Events.php:136
 msgid "%s post moved to the Trash"
 msgid_plural "%s posts moved to the Trash"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s julkaisu siirretty roskakoriin."
+msgstr[1] "%s julkaisut siirretty roskakoriin."
 
 #: src/Tribe/Ignored_Events.php:133
 msgid "post moved to Ignored."
@@ -3805,25 +3805,25 @@ msgstr[1] ""
 
 #: src/Tribe/Ignored_Events.php:52 src/Tribe/Ignored_Events.php:397
 msgid "Ignored events do not show on the calendar but can be updated with future imports"
-msgstr ""
+msgstr "Sivuutettuja tapahtumia ei näytetä kalenterissa, mutta ne voidaan päivittää tulevilla tuonneilla."
 
 #: src/Tribe/Ignored_Events.php:51 src/Tribe/Ignored_Events.php:398
 msgid "Hide & Ignore"
-msgstr ""
+msgstr "Piilota ja ohita"
 
 #: src/Tribe/Ignored_Events.php:47 src/Tribe/Ignored_Events.php:468
 #: src/Tribe/Ignored_Events.php:744
 msgid "Ignored"
-msgstr ""
+msgstr "Sivuutetut"
 
 #: src/Tribe/Ignored_Events.php:44
 msgid "Ignored events that are deleted will be removed permanently. They can be recreated via import."
-msgstr ""
+msgstr "Poistetut sivuutetut tapahtumat poistetaan pysyvästi. Ne voidaan uudelleenluoda tuonnilla."
 
 #: src/Tribe/Ignored_Events.php:43 src/Tribe/Ignored_Events.php:59
 #: src/Tribe/Ignored_Events.php:435
 msgid "Delete Permanently"
-msgstr ""
+msgstr "Poista pysyvästi"
 
 #: src/Tribe/Aggregator.php:618
 msgid "Renew your Event Aggregator Facebook token"
@@ -3847,7 +3847,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator.php:93
 msgid "Event Aggregator System Status"
-msgstr ""
+msgstr "Tapahtumakerääjän tila"
 
 #: src/Tribe/Aggregator/Tabs/Scheduled.php:378
 msgid "Enter Event Aggregator License"
@@ -3859,7 +3859,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/Scheduled.php:367
 msgid "All scheduled imports are currently suspended, and no events will be imported."
-msgstr ""
+msgstr "Kaikki ajastetut tuonnit on keskeytetty, eikä mitään tapahtumia tuoda."
 
 #: src/Tribe/Aggregator/Tabs/Scheduled.php:256
 msgid "Successfully %s %d scheduled import"
@@ -3871,23 +3871,23 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/Scheduled.php:193
 msgid "deactivated"
-msgstr ""
+msgstr "poistettu käytöstä"
 
 #: src/Tribe/Aggregator/Tabs/Scheduled.php:189
 msgid "reactivated"
-msgstr ""
+msgstr "uudelleen käyttöönotettu"
 
 #: src/Tribe/Aggregator/Tabs/Scheduled.php:185
 msgid "delete"
-msgstr ""
+msgstr "poista"
 
 #: src/Tribe/Aggregator/Tabs/Scheduled.php:181
 msgid "queued"
-msgstr ""
+msgstr "jonossa"
 
 #: src/Tribe/Aggregator/Tabs/Scheduled.php:94
 msgid "Scheduled Imports"
-msgstr ""
+msgstr "Ajastetut tuonnit"
 
 #: src/Tribe/Aggregator/Tabs/New.php:564
 msgid "Renew your Event Aggregator license"
@@ -3903,7 +3903,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/New.php:512
 msgid "Learn More"
-msgstr ""
+msgstr "Lue lisää"
 
 #: src/Tribe/Aggregator/Tabs/New.php:507 src/Tribe/Aggregator/Tabs/New.php:514
 #: src/admin-views/aggregator/banners/eventbrite-upsell.php:19
@@ -3912,7 +3912,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/New.php:505
 msgid "Buy It Now"
-msgstr ""
+msgstr "Osta nyt"
 
 #: src/Tribe/Aggregator/Tabs/New.php:502
 msgid "With Event Aggregator, you can import events from iCalendar, Google, and Meetup.com in a jiffy."
@@ -3924,11 +3924,11 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/New.php:413
 msgid "Unable to save credentials"
-msgstr ""
+msgstr "Käyttäjätietoja ei voitu tallentaa"
 
 #: src/Tribe/Aggregator/Tabs/New.php:406
 msgid "Credentials have been saved"
-msgstr ""
+msgstr "Käyttäjätiedot tallennettiin."
 
 #: src/Tribe/Aggregator/Tabs/New.php:397
 msgid "The Meetup API key is required."
@@ -3936,24 +3936,24 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/New.php:388
 msgid "Invalid credential save nonce"
-msgstr ""
+msgstr "Virheellinen käyttäjätietojen tallennustilanne"
 
 #: src/Tribe/Aggregator/Tabs/New.php:378
 msgid "Invalid credential save request"
-msgstr ""
+msgstr "Virheellinen käyttäjätietojen tallennuspyyntö"
 
 #: src/Tribe/Aggregator/Tabs/New.php:366
 msgid "View your scheduled imports."
-msgstr ""
+msgstr "Näytä ajastetut tuonnit."
 
 #: src/Tribe/Aggregator/Tabs/New.php:362
 msgid "The next import is scheduled for %1$s."
-msgstr ""
+msgstr "Seuraava tuonti on ajastettu %1$s."
 
 #: src/Tribe/Aggregator/Tabs/New.php:355
 msgctxt "separator between date and time"
 msgid " at "
-msgstr ""
+msgstr " klo "
 
 #: src/Tribe/Aggregator/Tabs/New.php:351
 msgid "Your scheduled import was saved and the first import is complete!"
@@ -3961,7 +3961,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/New.php:326
 msgid "View your event categories"
-msgstr ""
+msgstr "Näytä tapahtuma-kategoriasi."
 
 #: src/Tribe/Aggregator/Tabs/New.php:322
 msgid "%1$d new event category was created."
@@ -3971,7 +3971,7 @@ msgstr[1] ""
 
 #: src/Tribe/Aggregator/Tabs/New.php:313
 msgid "View your event organizers"
-msgstr ""
+msgstr "Näytä tapahtuman järjestäjät"
 
 #: src/Tribe/Aggregator/Tabs/New.php:309
 msgid "%1$d new organizer was imported."
@@ -3981,7 +3981,7 @@ msgstr[1] ""
 
 #: src/Tribe/Aggregator/Tabs/New.php:301
 msgid "View your event venues"
-msgstr ""
+msgstr "Näytä tapahtumien tapahtumapaikat"
 
 #: src/Tribe/Aggregator/Tabs/New.php:297
 msgid "%1$d new venue was imported."
@@ -3991,7 +3991,7 @@ msgstr[1] ""
 
 #: src/Tribe/Aggregator/Tabs/New.php:287
 msgid "View all %s"
-msgstr ""
+msgstr "Näytä kaikki %s"
 
 #: src/Tribe/Aggregator/Tabs/New.php:279
 msgid "No %1$s were imported or updated."
@@ -4023,7 +4023,7 @@ msgstr[1] ""
 
 #: src/Tribe/Aggregator/Tabs/New.php:155
 msgid "1 import was scheduled."
-msgstr ""
+msgstr "1 tuonti oli ajastettu."
 
 #: src/Tribe/Aggregator/Tabs/New.php:80
 msgid "New Import"
@@ -4031,16 +4031,16 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/History.php:93
 msgid "History"
-msgstr ""
+msgstr "Historia"
 
 #: src/Tribe/Aggregator/Tabs/History.php:55
 #: src/Tribe/Aggregator/Tabs/Scheduled.php:57
 msgid "Records per page"
-msgstr ""
+msgstr "Tietuetta sivulla"
 
 #: src/Tribe/Aggregator/Tabs/Favorite.php:37
 msgid "Favorite Imports"
-msgstr ""
+msgstr "Suositut tuonnit"
 
 #: src/Tribe/Aggregator/Tabs/Edit.php:143
 msgid "Your Scheduled Import has been updated!"
@@ -4056,7 +4056,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Tabs/Edit.php:52
 msgid "Edit Import"
-msgstr ""
+msgstr "Muokkaa tuontia"
 
 #: src/Tribe/Aggregator/Tabs/Abstract.php:180
 msgid "Please provide a Meetup URL when importing from Meetup."
@@ -4080,7 +4080,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Service.php:684
 msgid "Import queued"
-msgstr ""
+msgstr "Lataus on jonossa"
 
 #: src/Tribe/Aggregator/Service.php:683
 msgid "Import is complete"
@@ -4096,7 +4096,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Service.php:679
 msgid "Success"
-msgstr ""
+msgstr "Onnistui"
 
 #: src/Tribe/Aggregator/Service.php:678
 msgid "The import will be starting soon."
@@ -4108,7 +4108,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Service.php:675
 msgid "Event Aggregator cannot reach Meetup.com because you exceeded the request limit for your Meetup API key."
-msgstr ""
+msgstr "Tapahtumakerääjä ei pääse Meetup.com-sivustoon, koska olet ylittänyt pyyntörajan Meetup API-avaimellesi."
 
 #: src/Tribe/Aggregator/Service.php:674
 msgid "Your Meetup API key is invalid."
@@ -4146,13 +4146,13 @@ msgstr ""
 msgctxt "event aggregator status"
 msgid "Draft <span class=\"count\">(%s)</span>"
 msgid_plural "Draft <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vedos <span class=\"count\">(%s)</span>"
+msgstr[1] "Vedokset <span class=\"count\">(%s)</span>"
 
 #: src/Tribe/Aggregator/Records.php:217
 msgctxt "event aggregator status"
 msgid "Draft"
-msgstr ""
+msgstr "Luonnos"
 
 #: src/Tribe/Aggregator/Records.php:208
 msgctxt "event aggregator status"
@@ -4164,7 +4164,7 @@ msgstr[1] ""
 #: src/Tribe/Aggregator/Records.php:207
 msgctxt "event aggregator status"
 msgid "Pending"
-msgstr ""
+msgstr "Odottaa"
 
 #: src/Tribe/Aggregator/Records.php:198
 msgctxt "event aggregator status"
@@ -4176,7 +4176,7 @@ msgstr[1] ""
 #: src/Tribe/Aggregator/Records.php:197
 msgctxt "event aggregator status"
 msgid "Schedule"
-msgstr ""
+msgstr "Ajasta"
 
 #: src/Tribe/Aggregator/Records.php:188
 msgctxt "event aggregator status"
@@ -4188,7 +4188,7 @@ msgstr[1] ""
 #: src/Tribe/Aggregator/Records.php:187
 msgctxt "event aggregator status"
 msgid "Failed"
-msgstr ""
+msgstr "Epäonnistui"
 
 #: src/Tribe/Aggregator/Records.php:178
 msgctxt "event aggregator status"
@@ -4200,7 +4200,7 @@ msgstr[1] ""
 #: src/Tribe/Aggregator/Records.php:177
 msgctxt "event aggregator status"
 msgid "Imported"
-msgstr ""
+msgstr "Tuotu"
 
 #: src/Tribe/Aggregator/Records.php:140
 msgid "No Aggregator Records found in Trash."
@@ -4212,7 +4212,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Records.php:138
 msgid "Parent Aggregator Record:"
-msgstr ""
+msgstr "Ylätason yhdistelmätietue:"
 
 #: src/Tribe/Aggregator/Records.php:137
 msgid "Search Aggregator Records"
@@ -4220,7 +4220,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Records.php:136
 msgid "All Aggregator Records"
-msgstr ""
+msgstr "Kaikki yhdistelmätietueet"
 
 #: src/Tribe/Aggregator/Records.php:135
 msgid "View Aggregator Record"
@@ -4236,32 +4236,32 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Records.php:132
 msgid "Add New Aggregator Record"
-msgstr ""
+msgstr "Lisää uusi sisällönkokoajan tietue"
 
 #: src/Tribe/Aggregator/Records.php:131
 msgctxt "record"
 msgid "Add New"
-msgstr ""
+msgstr "Lisää uusi"
 
 #: src/Tribe/Aggregator/Records.php:130
 msgctxt "add new on admin bar"
 msgid "Aggregator Record"
-msgstr ""
+msgstr "Yhdistelmätietue"
 
 #: src/Tribe/Aggregator/Records.php:129
 msgctxt "admin menu"
 msgid "Aggregator Records"
-msgstr ""
+msgstr "Yhdistelmätietueet"
 
 #: src/Tribe/Aggregator/Records.php:128
 msgctxt "post type singular name"
 msgid "Aggregator Record"
-msgstr ""
+msgstr "Yhdistelmätietue"
 
 #: src/Tribe/Aggregator/Records.php:127
 msgctxt "post type general name"
 msgid "Aggregator Records"
-msgstr ""
+msgstr "Yhdistelmätietueet"
 
 #: src/Tribe/Aggregator/Records.php:110
 msgid "Events Aggregator Record"
@@ -4273,15 +4273,15 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Record/Queue_Realtime.php:97
 msgid "Skipped:"
-msgstr ""
+msgstr "Ohitettu:"
 
 #: src/Tribe/Aggregator/Record/Queue_Realtime.php:96
 msgid "Updated:"
-msgstr ""
+msgstr "Päivitetty:"
 
 #: src/Tribe/Aggregator/Record/Queue_Realtime.php:95
 msgid "Created:"
-msgstr ""
+msgstr "Luotu:"
 
 #: src/Tribe/Aggregator/Record/Queue_Realtime.php:91
 msgid "Your import is currently in progress. Don't worry, you can safely navigate away&ndash;the import will continue in the background."
@@ -4289,31 +4289,31 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Record/Queue_Processor.php:233
 msgid "Could not process queue for Import Record %1$d: %2$s"
-msgstr ""
+msgstr "Työjonoa ei pystytty käsittelemään tuontiluettelolle %1$d: %2$s"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:664
 msgid "Select %s"
-msgstr ""
+msgstr "Valitse %s"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:629
 #: src/Tribe/Aggregator/Record/List_Table.php:638
 #: src/Tribe/Aggregator/Record/List_Table.php:646
 msgid "updated"
-msgstr ""
+msgstr "päivitetty"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:627
 #: src/Tribe/Aggregator/Record/List_Table.php:635
 #: src/Tribe/Aggregator/Record/List_Table.php:643
 msgid "new"
-msgstr ""
+msgstr "uusi"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:624
 msgid "Latest Import:"
-msgstr ""
+msgstr "Viimeisin tuonti:"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:622
 msgid "all time"
-msgstr ""
+msgstr "kaikkien aikojen"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:596
 msgid "One Time"
@@ -4321,57 +4321,57 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Record/List_Table.php:593
 msgid "Invalid Frequency"
-msgstr ""
+msgstr "Kelvoton taajuus"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:563 src/Tribe/Aggregator.php:601
 #: src/Tribe/Ignored_Events.php:357
 msgctxt "in human readable time"
 msgid "in about %s"
-msgstr ""
+msgstr "noin %s"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:561 src/Tribe/Aggregator.php:599
 #: src/Tribe/Ignored_Events.php:355
 msgctxt "human readable time ago"
 msgid "about %s ago"
-msgstr ""
+msgstr "noin %s sitten"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:513
 msgid "Radius:"
-msgstr ""
+msgstr "Laajuus:"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:496
 msgid "Keywords:"
-msgstr ""
+msgstr "Avainsanat:"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:483
 #: src/Tribe/Ignored_Events.php:337
 msgctxt "record via origin"
 msgid "via "
-msgstr ""
+msgstr "menetelmällä "
 
 #: src/Tribe/Aggregator/Record/List_Table.php:440
 msgid "Import preview"
-msgstr ""
+msgstr "Tuonnin esikatselu"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:436
 msgid "Import pending"
-msgstr ""
+msgstr "Tuonti odotuksessa"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:432
 msgid "Import schedule"
-msgstr ""
+msgstr "Tuonnin aikataulu"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:420
 msgid "Import failed"
-msgstr ""
+msgstr "Tuonti epäonnistui"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:416
 msgid "Import completed"
-msgstr ""
+msgstr "Tuonti valmis"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:379
 msgid "Run Import"
-msgstr ""
+msgstr "Suorita tuonti"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:378
 msgid "Start an import from this source now, regardless of schedule."
@@ -4380,67 +4380,67 @@ msgstr ""
 #: src/Tribe/Aggregator/Record/List_Table.php:333
 msgctxt "column name"
 msgid "# Imported"
-msgstr ""
+msgstr "# tuotu"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:330
 msgctxt "column name"
 msgid "When"
-msgstr ""
+msgstr "Milloin"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:329
 msgctxt "column name"
 msgid "Type"
-msgstr ""
+msgstr "Tyyppi"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:324
 msgctxt "column name"
 msgid "Last Import"
-msgstr ""
+msgstr "Tuotu viimeksi"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:323
 msgctxt "column name"
 msgid "Frequency"
-msgstr ""
+msgstr "Toistuvuus"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:322
 #: src/Tribe/Aggregator/Record/List_Table.php:328
 msgctxt "column name"
 msgid "Source"
-msgstr ""
+msgstr "Lähde"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:277
 msgctxt "records"
 msgid "All <span class=\"count\">(%s)</span>"
 msgid_plural "All <span class=\"count\">(%s)</span>"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kaikki <span class=\"count\">(%s)</span>"
+msgstr[1] "Kaikki <span class=\"count\">(%s)</span>"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:244
 msgid "Apply"
-msgstr ""
+msgstr "Käytä"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:228
 #: src/Tribe/Aggregator/Record/List_Table.php:229
 msgid "Bulk Actions"
-msgstr ""
+msgstr "Massatoiminnot"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:181
 msgid "Filter"
-msgstr ""
+msgstr "Suodatin"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:163
 #: src/Tribe/Aggregator/Record/List_Table.php:164
 msgid "Filter By Frequency"
-msgstr ""
+msgstr "Suoda taajuuden mukaan"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:144
 #: src/Tribe/Aggregator/Record/List_Table.php:145
 msgid "Filter By Origin"
-msgstr ""
+msgstr "Suodata alkuperän mukaan"
 
 #: src/Tribe/Aggregator/Record/ICS.php:33
 msgid "ICS"
-msgstr ""
+msgstr "ICS"
 
 #: src/Tribe/Aggregator/API/Origins.php:36
 #: src/Tribe/Aggregator/Record/Eventbrite.php:88
@@ -4452,15 +4452,15 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Record/Abstract.php:1136
 msgid "Deleted Attachment: %d"
-msgstr ""
+msgstr "Poistettu liitetiedosto: %d"
 
 #: src/Tribe/Aggregator/Record/Abstract.php:484
 msgid "Record: "
-msgstr ""
+msgstr "Tietue: "
 
 #: src/Tribe/Aggregator/Page.php:422
 msgid "Manage Active Plugins"
-msgstr ""
+msgstr "Hallitse käytössä olevia lisäosia"
 
 #: src/Tribe/Aggregator/Page.php:409
 msgid "It looks like you are using our legacy plugin, %1$s, along with our new Event Aggregator service. Event Aggregator includes all the features of the legacy plugin plus enhanced functionality. For best results, please deactivate %1$s."
@@ -4482,7 +4482,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Page.php:99
 msgid "Please wait while your preview is fetched."
-msgstr ""
+msgstr "Odota esikatselun latautumista."
 
 #: src/Tribe/Aggregator/Page.php:97
 msgid "Hide Filters"
@@ -4491,7 +4491,7 @@ msgstr ""
 #: src/Tribe/Aggregator/Page.php:96
 #: src/Tribe/Aggregator/Record/List_Table.php:492
 msgid "View Filters"
-msgstr ""
+msgstr "Näytä suodattimet"
 
 #: src/Tribe/Aggregator/Page.php:95
 msgid "Removing this scheduled import will stop automatic imports from the source. No events will be deleted."
@@ -4503,11 +4503,11 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Page.php:93
 msgid "Your import must include at least one event"
-msgstr ""
+msgstr "Latauksessasi tulee olla vähintään yksi tapahtuma"
 
 #: src/Tribe/Aggregator/Page.php:91
 msgid "Save Scheduled Import"
-msgstr ""
+msgstr "Tallenna ajastettu tuonti"
 
 #: src/Tribe/Aggregator/Page.php:90
 msgid "Import Checked (%d)"
@@ -4515,7 +4515,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Page.php:89
 msgid "Import All"
-msgstr ""
+msgstr "Tuo kaikki"
 
 #: src/Tribe/Aggregator/Page.php:88
 msgid "Import All (%d)"
@@ -4532,12 +4532,12 @@ msgstr ""
 #: src/Tribe/Aggregator/Page.php:84
 msgctxt "Meridian: pm"
 msgid "PM"
-msgstr ""
+msgstr "ip"
 
 #: src/Tribe/Aggregator/Page.php:83
 msgctxt "Meridian: am"
 msgid "AM"
-msgstr ""
+msgstr "ap"
 
 #: src/Tribe/Aggregator/Migrate.php:239
 msgid "Success! The settings from iCal Importer have been migrated to Event Aggregator. You can view your migrated imports on the Scheduled Imports tab."
@@ -4573,7 +4573,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Migrate.php:65
 msgid "Migrate iCal Importer settings"
-msgstr ""
+msgstr "Muuta iCal-tuonnin asetuksia"
 
 #: src/Tribe/Aggregator/Migrate.php:62
 msgid "Thanks for activating Event Aggregator! It looks like you have some settings and imports configured on our legacy importer plugins. To complete your transition, we need to transfer those options to our new system."
@@ -4581,7 +4581,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Meta_Box.php:38
 msgid "Imported Event"
-msgstr ""
+msgstr "Tuotu tapahtuma"
 
 #: src/Tribe/Aggregator/Errors.php:72
 msgid "The records you were attempting to import were still not available when this queue was processed. Please try again."
@@ -4626,7 +4626,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Errors.php:60
 msgid "Unable to find a matching post."
-msgstr ""
+msgstr "Vastaavaa artikkelia ei löydy."
 
 #: src/Tribe/Aggregator/Errors.php:59
 msgid "An invalid frequency was used when trying to create this scheduled import."
@@ -4634,7 +4634,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Errors.php:58
 msgid "Unable to attach an image to the event"
-msgstr ""
+msgstr "Ei onnistuta lisäämään kuvaa tapahtumaan"
 
 #: src/Tribe/Aggregator/Errors.php:57
 msgid "Unable to find an import record with the ID of %s."
@@ -4662,7 +4662,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Errors.php:51
 msgid "An invalid import type was used when trying to create this import record."
-msgstr ""
+msgstr "Tuontitallennetta yrittäessä käytettiin virheellistä tuontityyppiä."
 
 #: src/Tribe/Aggregator/Errors.php:49
 msgid "During scheduled import, the limit of HTTP requests was reached and the import was rescheduled."
@@ -4670,7 +4670,7 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Errors.php:48
 msgid "You do not have permission to delete this record."
-msgstr ""
+msgstr "Sinulla ei ole oikeuksia poistaa tätä nauhoitusta"
 
 #: src/Tribe/Aggregator/Errors.php:47
 msgid "You cannot delete a history record (ID: \"%d\"). "
@@ -4687,37 +4687,37 @@ msgstr ""
 #: src/Tribe/Aggregator/Cron.php:203
 msgctxt "aggregator schedule frequency"
 msgid "Every 15 minutes"
-msgstr ""
+msgstr "15 minuutin välein"
 
 #: src/Tribe/Aggregator/Cron.php:118
 msgctxt "aggregator schedule frequency"
 msgid "Monthly"
-msgstr ""
+msgstr "Kuukausittain"
 
 #: src/Tribe/Aggregator/Cron.php:113
 msgctxt "aggregator schedule frequency"
 msgid "Weekly"
-msgstr ""
+msgstr "Viikoittain"
 
 #: src/Tribe/Aggregator/Cron.php:108
 msgctxt "aggregator schedule frequency"
 msgid "Daily"
-msgstr ""
+msgstr "Päivittäin"
 
 #: src/Tribe/Aggregator/Cron.php:103
 msgctxt "aggregator schedule frequency"
 msgid "Hourly"
-msgstr ""
+msgstr "Joka tunti"
 
 #: src/Tribe/Aggregator/Cron.php:98
 msgctxt "aggregator schedule frequency"
 msgid "Every 30 Minutes"
-msgstr ""
+msgstr "30 minuutin välein"
 
 #: src/Tribe/Aggregator/Cron.php:93
 msgctxt "aggregator schedule frequency"
 msgid "On Demand"
-msgstr ""
+msgstr "Tarvittaessa"
 
 #: src/Tribe/Aggregator/API/Origins.php:60
 #: src/Tribe/Aggregator/Record/Meetup.php:40
@@ -4725,32 +4725,32 @@ msgstr ""
 #: src/admin-views/aggregator/status.php:203
 #: src/admin-views/tribe-options-addons-api.php:16
 msgid "Meetup"
-msgstr ""
+msgstr "Meetup"
 
 #: src/Tribe/Aggregator/API/Origins.php:54
 #: src/admin-views/aggregator/settings.php:602
 msgid "ICS File"
-msgstr ""
+msgstr "ICS-tiedosto"
 
 #: src/Tribe/Aggregator/API/Origins.php:48
 #: src/Tribe/Aggregator/Record/iCal.php:14
 #: src/admin-views/aggregator/settings.php:598
 msgid "iCalendar"
-msgstr ""
+msgstr "iCalendar"
 
 #: src/Tribe/Aggregator/API/Origins.php:31
 #: src/Tribe/Aggregator/Admin_Bar.php:97 src/Tribe/Aggregator/Service.php:761
 msgid "CSV File"
-msgstr ""
+msgstr "CSV-tiedosto"
 
 #: src/Tribe/Admin_List.php:336
 msgctxt "%s Event count in admin list"
 msgid "All %s"
-msgstr ""
+msgstr "Kaikki %s"
 
 #: common/src/admin-views/tribe-options-licenses.php:30
 msgid "Not seeing an update but expecting one? In WordPress, go to %1$sDashboard > Updates%2$s and click \"Check Again\"."
-msgstr ""
+msgstr "Eikö päivitys näy vaikka sen pitäisi? Mene WordPressissä kohtaan %1$sOhjausnäkymä > Päivitykset%2$s ja valitse ”Tarkista uudelleen\"."
 
 #: common/src/admin-views/tribe-options-licenses.php:25
 msgid "If you're seeing a red message telling you that your key isn't valid or is out of installs, visit %1$s to manage your installs or renew / upgrade your license."
@@ -4767,11 +4767,11 @@ msgstr ""
 #: common/src/admin-views/tribe-options-licenses.php:11
 #: common/src/admin-views/tribe-options-licenses.php:16
 msgid " (opens in new window)"
-msgstr ""
+msgstr " (avautuu uudessa ikkunassa)"
 
 #: common/src/admin-views/tribe-options-help.php:55
 msgid "Event Log"
-msgstr ""
+msgstr "Tapahtumaloki"
 
 #: common/src/admin-views/tribe-options-help.php:42
 msgid "The details of your calendar plugin and settings is often needed for you or our staff to help troubleshoot an issue. Please opt-in below to automatically share your system information with our support team. This will allow us to assist you faster if you post in our help desk."
@@ -4779,11 +4779,11 @@ msgstr ""
 
 #: common/src/admin-views/app-shop.php:26
 msgid "Buy This Add-On"
-msgstr ""
+msgstr "Osta tämä lisäosa"
 
 #: common/src/admin-views/app-shop.php:5
 msgid "Browse All Add-Ons"
-msgstr ""
+msgstr "Selaa kaikkia lisäosia"
 
 #: common/src/admin-views/app-shop.php:4
 msgid "Events Add-Ons"
@@ -4791,7 +4791,7 @@ msgstr ""
 
 #: common/src/Tribe/Languages/Locations.php:110
 msgid "C&ocirc;te d'Ivoire"
-msgstr ""
+msgstr "Norsunluurannikko"
 
 #: common/src/Tribe/Support.php:372
 msgid "Unique System Info Key Generated"
@@ -4799,11 +4799,11 @@ msgstr ""
 
 #: common/src/Tribe/Support.php:358 common/src/Tribe/Support.php:384
 msgid "Permission Error"
-msgstr ""
+msgstr "Käyttöoikeusvirhe"
 
 #: common/src/Tribe/Support.php:325 common/src/Tribe/Support.php:330
 msgid "Invalid Key"
-msgstr ""
+msgstr "Kelvoton avain"
 
 #: common/src/Tribe/Support.php:306
 msgid "Your system information will only be used by the Modern Tribe support team. All information is stored securely. We do not share this information with any third parties."
@@ -4816,7 +4816,7 @@ msgstr ""
 #: common/src/Tribe/PUE/Notices.php:383
 msgctxt "formatted plugin list"
 msgid "%1$s and %2$s"
-msgstr ""
+msgstr "%1$s ja %2$s"
 
 #: common/src/Tribe/PUE/Notices.php:302
 msgid "You have a license key for %1$s but the key is out of installs. %2$sVisit the Events Calendar website%3$s to manage your installs, upgrade your license, or purchase a new one."
@@ -4832,102 +4832,102 @@ msgstr[1] ""
 
 #: common/src/Tribe/PUE/Checker.php:1054
 msgid "There is an update for %s. %sRenew your license%s to get access to bug fixes, security updates, and new features."
-msgstr ""
+msgstr "Kohteeseen %s on saatavilla päivitys. %sUusi lisenssisi%s, jotta saat käyttöösi ohjelmavirheiden korjaukset, turvallisuuspäivitykset ja uudet ominaisuudet."
 
 #: common/src/Tribe/PUE/Checker.php:997
 msgid "There is an update for %s. You'll need to %scheck your license%s to have access to updates, downloads, and support."
-msgstr ""
+msgstr "Kohteeseen %s on saatavilla päivitys. %sTarkista lisenssisi%s, jotta saat päivitykset, lataukset ja tuen käyttöösi."
 
 #: common/src/Tribe/PUE/Checker.php:961 common/src/Tribe/PUE/Notices.php:285
 #: src/Tribe/Aggregator/Record/Abstract.php:1151
 msgid " (opens in a new window)"
-msgstr ""
+msgstr "(avautuu uudessa ikkunassa)"
 
 #: common/src/Tribe/PUE/Checker.php:959 common/src/Tribe/PUE/Notices.php:283
 msgid "Renew Your License Now"
-msgstr ""
+msgstr "Uudista lisenssisi nyt"
 
 #: common/src/Tribe/Main.php:261
 msgid ": Selected 1 row"
-msgstr ""
+msgstr ": valittu 1 rivi"
 
 #: common/src/Tribe/Main.php:260
 msgid ": Selected %d rows"
-msgstr ""
+msgstr ": valittu %d riviä"
 
 #: common/src/Tribe/Main.php:255
 msgid "Previous"
-msgstr ""
+msgstr "Edelliset"
 
 #: common/src/Tribe/Main.php:253
 msgid "All"
-msgstr ""
+msgstr "Kaikki"
 
 #: common/src/Tribe/Main.php:248
 msgid "Search:"
-msgstr ""
+msgstr "Etsi:"
 
 #: common/src/Tribe/Main.php:247
 msgid "No matching records found"
-msgstr ""
+msgstr "Vastaavia merkintöjä ei löytynyt"
 
 #: common/src/Tribe/Main.php:246
 msgid "(filtered from _MAX_ total entries)"
-msgstr ""
+msgstr "(suodatettu _MAX_ tuloksen joukosta)"
 
 #: common/src/Tribe/Main.php:245
 msgid "Showing 0 to 0 of 0 entries"
-msgstr ""
+msgstr "Näytetään 0 - 0 (yhteensä 0)"
 
 #: common/src/Tribe/Main.php:244
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
-msgstr ""
+msgstr "Näytetään rivit _START_ - _END_ (yhteensä _TOTAL_ )"
 
 #: common/src/Tribe/Main.php:243
 msgid "No data available in table"
-msgstr ""
+msgstr "Tietoja ei löytynyt taulusta"
 
 #: common/src/Tribe/Main.php:242
 msgid "Show _MENU_ entries"
-msgstr ""
+msgstr "Näytä kerralla _MENU_ riviä"
 
 #: common/src/Tribe/Main.php:240
 msgid ": activate to sort column descending"
-msgstr ""
+msgstr ": lajittele sarake laskevasti"
 
 #: common/src/Tribe/Main.php:239
 msgid ": activate to sort column ascending"
-msgstr ""
+msgstr ": lajittele sarake nousevasti"
 
 #: common/src/Tribe/Main.php:281
 msgid "Press \"Cmd + C\" to copy"
-msgstr ""
+msgstr "Paina \"Cmd + C\" kopioidaksesi"
 
 #: common/src/Tribe/Main.php:280
 msgid "System info copied"
-msgstr ""
+msgstr "Järjestelmätiedot kopioitu"
 
 #: common/src/Tribe/Main.php:279
 #: common/src/admin-views/tribe-options-help.php:50
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Kopioi leikepöydälle"
 
 #: common/src/Tribe/Error.php:38
 msgid "An Unknown error occurred"
-msgstr ""
+msgstr "Tuntematon virhe sattui"
 
 #: common/src/Tribe/Admin/Help_Page.php:219 common/src/Tribe/Plugins_API.php:34
 #: src/Tribe/Aggregator/API/Origins.php:235 src/Tribe/Aggregator.php:227
 msgid "Event Aggregator"
-msgstr ""
+msgstr "Tapahtumakerääjä"
 
 #: common/src/Tribe/Support.php:171
 msgid "English"
-msgstr ""
+msgstr "Englanti"
 
 #: src/Tribe/Aggregator/Page.php:400
 msgid "iCal Importer"
-msgstr ""
+msgstr "iCal-tuonti"
 
 #: common/src/Tribe/Plugins_API.php:116
 msgid "The Eventbrite Tickets add-on allows you to create & sell tickets through The Events Calendar using the power of %1$sEventbrite%2$s. Whether you’re creating your ticket on the WordPress dashboard or importing the details of an already-existing event from %1$sEventbrite.com%2$s, this add-on brings the power of the Eventbrite API to your calendar."
@@ -4936,155 +4936,155 @@ msgstr ""
 #: common/src/Tribe/Plugins_API.php:105
 msgctxt "Names of required plugins for Community Tickets"
 msgid "Event Tickets Plus and Community Events"
-msgstr ""
+msgstr "Event Tickets Plus ja Community Events"
 
 #: common/src/Tribe/Plugins_API.php:104
 msgid "Enable Community Events organizers to offer tickets to their events. You can set flexible payment and fee options. They can even check-in attendees to their events! All of this managed from the front-end of your site without ever needing to grant access to your admin"
-msgstr ""
+msgstr "Salli yhteisötapahtumien järjestäjien myydä lippuja tapahtumiinsa. Voit asettaa juostavia maksu -ja laskutusvaihtoehtoja. He voivat jopa kirjata tapahtuman osallistujia saapuneiksi. Kaiken tämän voi tehdä etusivulla ilman, että heidän tarvitsee kirjautua sisään järjestelmänvalvojana"
 
 #: common/src/Tribe/Plugins_API.php:48
 msgid "The Events Calendar PRO is a paid Add-On to our open source WordPress plugin %1$sThe Events Calendar%2$s. PRO offers a whole host of calendar features including recurring events, custom event attributes, saved venues and organizers, venue pages, advanced event admin and lots more."
-msgstr ""
+msgstr "The Events Calendar PRO on maksullinen lisäosa vapaan lähdekoodin WordPress-lisäosaamme %1$sThe Events Calendar%2$s. PRO avaa koko joukon uusia ominaisuuksia, kuten toistuvat tapahtumat, tapahtuman ominaisuuksien muokkaus, tallennetut tapahtumapaikat ja järjestäjät, tapahtumasivustot, edistynyt tapahtumien hallinta ja paljon muuta."
 
 #: common/src/Tribe/Plugins_API.php:84
 msgid "It is awesome that your calendar is <em>THE PLACE</em> to get hooked up with prime choice ways to spend time. You have more events than Jabba the Hutt has rolls. Too bad visitors are hiring a personal assistant to go through all the choices. Ever wish you could just filter the calendar to only show events in walking distance, on a weekend, that are free? BOOM. Now you can. Introducing… the Filter Bar."
-msgstr ""
+msgstr "Loistavaa, että kalenterisi on <em>SE MESTA</em>, josta näet parhaat tavat viettää aikaa. Sulla on enemmän tapahtumia kuin Jabba the Huttilla on ihrapoimuja. Vierailijoidenhan on pakko pian palkata henkilökohtainen avustaja käydäkseen läpi kaikki vaihtoehdot. Oletko ikinä toivonut, että voisit suodattaa kalenterisi näyttämään esimerkiksi ilmaistapahtumia viikonloppuna kävelymatkan päässä? PUM. Nyt voit. Saammeko esitellä.... Filter Bar (Suodatinpalkki)."
 
 #: common/src/Tribe/Admin/Help_Page.php:227 common/src/Tribe/Plugins_API.php:80
 msgid "Filter Bar"
-msgstr ""
+msgstr "Suodatinpalkki"
 
 #: common/src/Tribe/Credits.php:64
 msgid "Rate %1$sEvent Tickets%2$s %3$s"
-msgstr ""
+msgstr "Arvioi %1$sEvent Tickets%2$s %3$s"
 
 #: common/src/Tribe/Credits.php:55
 msgid "Rate %1$sThe Events Calendar%2$s %3$s"
-msgstr ""
+msgstr "Arvioi %1$sThe Events Calendar%2$s %3$s"
 
 #: src/Tribe/Organizer.php:184
 msgid "organizer"
-msgstr ""
+msgstr "järjestäjä"
 
 #: src/Tribe/Venue.php:194
 msgid "venues"
-msgstr ""
+msgstr "tapahtumapaikat"
 
 #: src/Tribe/Venue.php:185
 msgid "venue"
-msgstr ""
+msgstr "tapahtumapaikka"
 
 #: src/functions/template-tags/venue.php:775
 msgctxt "Address separator"
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: src/admin-views/tribe-options-addons-api.php:95
 #: src/admin-views/tribe-options-addons-api.php:135
 msgid "APIs"
-msgstr ""
+msgstr "API:t"
 
 #: src/deprecated/Tribe__Events__Importer__Options.php:184
 msgid "Do Not Encode Contents"
-msgstr ""
+msgstr "Älä merkistökoodaa sisältöä"
 
 #: src/deprecated/Tribe__Events__Importer__Options.php:183
 msgid "Encode contents"
-msgstr ""
+msgstr "Koodaa sisältö"
 
 #: src/Tribe/Importer/Column_Mapper.php:125
 msgid "Organizer Description"
-msgstr ""
+msgstr "Järjestäjän kuvaus"
 
 #: src/Tribe/Importer/Column_Mapper.php:102
 msgid "Venue Description"
-msgstr ""
+msgstr "Tapahtumapaikan kuvaus"
 
 #: src/Tribe/Importer/Column_Mapper.php:88
 msgid "Event Allow Trackbacks and Pingbacks"
-msgstr ""
+msgstr "Salli paluuviitteet tapahtumalle"
 
 #: src/Tribe/Importer/Column_Mapper.php:87
 msgid "Event Allow Comments"
-msgstr ""
+msgstr "Salli kommentit tapahtumalle"
 
 #: src/Tribe/Importer/Column_Mapper.php:77
 msgid "Event Organizer Name(s) or ID(s)"
-msgstr ""
+msgstr "Tapahtuman järjestäjän nimi/nimet tai ID/ID:t"
 
 #: src/Tribe/Importer/Column_Mapper.php:74
 msgid "Event Sticky in Month View"
-msgstr ""
+msgstr "Tapahtuma kiinnitettynä kuukausinäkymään"
 
 #: src/Tribe/Importer/Column_Mapper.php:73
 msgid "Hide Event From Event Listings"
-msgstr ""
+msgstr "Piiloita tapahtuma tapahtumalistauksesta"
 
 #: src/Tribe/Importer/Column_Mapper.php:71
 msgid "Event Time Zone"
-msgstr ""
+msgstr "Tapahtuman aikavyöhyke"
 
 #: src/Tribe/Importer/Column_Mapper.php:66
 msgid "Event Excerpt"
-msgstr ""
+msgstr "Tapahtuman ote"
 
 #: src/deprecated/Tribe__Events__Importer__Admin_Page.php:104
 msgid "Default encoding for imported csv file"
-msgstr ""
+msgstr "Oletusarvo tuodun CSV -tiedoston koodaukselle"
 
 #: src/Tribe/Google/Maps_API_Key.php:55 src/Tribe/Google/Maps_API_Key.php:107
 #: src/admin-views/tribe-options-addons-api.php:25
 msgid "Click here"
-msgstr ""
+msgstr "Klikkaa tästä"
 
 #: src/Tribe/Google/Maps_API_Key.php:76 src/Tribe/Google/Maps_API_Key.php:83
 msgid "Google Maps API key"
-msgstr ""
+msgstr "Google Kartat API-avain"
 
 #: src/Tribe/Google/Maps_API_Key.php:66
 msgid "Google Maps API"
-msgstr ""
+msgstr "Google Kartat API"
 
 #: common/src/admin-views/event-log.php:117
 msgid "Download log"
-msgstr ""
+msgstr "Latausloki"
 
 #: common/src/admin-views/event-log.php:100
 msgid "The selected log file is empty or has not been generated yet."
-msgstr ""
+msgstr "Valittu lokitiedosto on tyhjä tai sitä ei ole vielä luotu."
 
 #: common/src/admin-views/event-log.php:43
 msgid "Method"
-msgstr ""
+msgstr "Menettelytapa"
 
 #: common/src/admin-views/event-log.php:21
 msgid "Logging level"
-msgstr ""
+msgstr "Kirjautumistaso"
 
 #: common/src/Tribe/Validate.php:168
 msgid "%s must contain numbers, letters, dashes and undescores only"
-msgstr ""
+msgstr "%s voi sisältää vain numeroita, kirjaimia, viivoja ja alaviivoja"
 
 #: common/src/Tribe/Log.php:376
 msgid "Full debug (all events)"
-msgstr ""
+msgstr "Täysi testaustila (kaikki tapahtumat)"
 
 #: common/src/Tribe/Log.php:375
 msgid "Warnings and errors"
-msgstr ""
+msgstr "Varoitukset ja virheet"
 
 #: common/src/Tribe/Log.php:374
 msgid "Only errors"
-msgstr ""
+msgstr "Vain virheet"
 
 #: common/src/Tribe/Log.php:373 src/admin-views/tribe-options-general.php:178
 #: src/admin-views/tribe-options-general.php:195
 msgid "Disabled"
-msgstr ""
+msgstr "Poissa käytöstä"
 
 #: common/src/Tribe/Log.php:274
 msgid "Cannot set %s as the current logging engine"
-msgstr ""
+msgstr "%s :ää ei voi asettaa kirjautumisjärjestelmäksi"
 
 #: common/src/Tribe/Log/Null_Logger.php:26
 msgid "Null logger (will log nothing)"
@@ -5092,17 +5092,17 @@ msgstr ""
 
 #: common/src/Tribe/Log/File_Logger.php:128
 msgid "Default (uses temporary files)"
-msgstr ""
+msgstr "Oletusarvo (käyttää väliaikaisia tiedostoja)"
 
 #: common/src/Tribe/Log/Admin.php:148
 msgctxt "log engines"
 msgid "None currently available"
-msgstr ""
+msgstr "Ei yhtään saatavissa"
 
 #: common/src/Tribe/Log/Admin.php:133
 msgctxt "log selector"
 msgid "None currently available"
-msgstr ""
+msgstr "Ei yhtään saatavissa"
 
 #: common/src/admin-views/tribe-options-help.php:52
 msgid "Recent Template Changes"
@@ -5138,19 +5138,19 @@ msgstr ""
 
 #: src/Tribe/Main.php:2564
 msgid " (View Full %1$s Description Here: %2$s)"
-msgstr ""
+msgstr " (Katso %1$s kuvaus täältä: %2$s)"
 
 #: src/Tribe/Importer/Column_Mapper.php:129
 msgid "Organizer Featured Image"
-msgstr ""
+msgstr "Järjestäjän kuva"
 
 #: src/Tribe/Importer/Column_Mapper.php:111
 msgid "Venue Featured Image"
-msgstr ""
+msgstr "Tapahtuman artikkelikuva"
 
 #: src/Tribe/Importer/Column_Mapper.php:86
 msgid "Event Featured Image"
-msgstr ""
+msgstr "Tapahtuman artikkelikuva"
 
 #: src/Tribe/Event_Tickets/Attendees_Report.php:60
 msgid "Edit Venue"
@@ -5174,39 +5174,39 @@ msgstr "Edellinen päivä"
 
 #: src/admin-views/venue-meta-box.php:272
 msgid "%s Name already exists"
-msgstr ""
+msgstr "%s nimi on jo olemassa"
 
 #: src/admin-views/venue-meta-box.php:267
 msgid "%s Name can not be empty"
-msgstr ""
+msgstr "%s nimi ei voi olla tyhjä"
 
 #: src/admin-views/admin-update-message.php:32
 msgid "Keep the Core Plugin %sFREE%s!"
-msgstr ""
+msgstr "Pidä peruslisäosa %sILMAISENA%s!"
 
 #: src/Tribe/Template_Factory.php:231
 msgid "No results were found for %1$s in or near %2$s."
-msgstr ""
+msgstr "Ei tuloksia haulle %1$s kohteessa %2$s tai sen lähellä."
 
 #: src/Tribe/Template_Factory.php:229
 msgid "There were no results found for %s."
-msgstr ""
+msgstr "Ei tuloksia haulle %s."
 
 #: src/Tribe/Template/Month.php:458
 msgid "There were no results found for %s this month. Try searching next month."
-msgstr ""
+msgstr "Ei tuloksia haulle \"%s\" tässä kuussa. Yritä etsiä ensi kuusta."
 
 #: src/Tribe/Template/Day.php:154
 msgid "No %1$s scheduled for %2$s. Please try another day."
-msgstr ""
+msgstr "Ei %1$s ajoitettu päivälle %2$s. Kokeile toista päivämäärää."
 
 #: src/Tribe/Main.php:3858
 msgid "Check out the %savailable add-ons%s."
-msgstr ""
+msgstr "Tutustu %ssaatavilla oleviin lisäosiin%s."
 
 #: src/Tribe/Main.php:1925
 msgid "Without a defined location your event will not display a %sGoogle Rich Snippet%s on the search results."
-msgstr ""
+msgstr "Ilman määriteltyä sijaintia, tapahtumasi ei näytä %sGoogle Rich Snippet%s hakutuloksissa. "
 
 #: src/Tribe/Main.php:1856 src/Tribe/Main.php:1876
 msgid "%1$s scheduled for: %2$s."
@@ -5226,7 +5226,7 @@ msgstr "%1$s lähetetty. %2$sEsikatsele %3$s"
 
 #: src/Tribe/Main.php:1804
 msgid "%1$s updated. %2$sView %1$s%3$s"
-msgstr ""
+msgstr "%1$s päivitetty. %2$sNäytä %1$s%3$s"
 
 #: src/Tribe/Main.php:1479
 msgid "It appears as if the tribe-common libraries cannot be found! The directory should be in the \"common/\" directory in the events calendar plugin."
@@ -5242,7 +5242,7 @@ msgstr ""
 
 #: src/Tribe/Main.php:1109
 msgid "<strong>Looking for more immediate support?</strong> We offer %1$s with the purchase of any of our premium plugins (like %2$s). Pick up a license and you can post there directly and expect a response within 24-48 hours during weekdays."
-msgstr ""
+msgstr "<strong>Etsitkö nopeampaa tukea?</strong> Tarjoamme %1$s ostaessasi minkä tahansa premium-laajennuksen (kuten %2$s). Hanki lisenssi ja voit kirjoittaa sinne suoraan ja saat vastauksen arkisin todennäköisesti 24-48 tunnin sisällä."
 
 #: src/Tribe/Main.php:1105
 msgid "If you have tried the above steps and are still having trouble, you can post a new thread to our %s. Our support staff monitors these forums once a week and would be happy to assist you there."
@@ -5250,11 +5250,11 @@ msgstr ""
 
 #: src/Tribe/Main.php:1104
 msgid "open-source forum on WordPress.org"
-msgstr ""
+msgstr "open-source foorumi paikassa WordPress.org"
 
 #: src/Tribe/Main.php:1100
 msgid "<strong>Looking for more immediate support?</strong> We offer %s with the purchase of any of our premium plugins. Pick up a license and you can post there directly and expect a response within 24-48 hours during weekdays"
-msgstr ""
+msgstr "<strong>Etsitkö nopeampaa tukea?</strong>Tarjoamme %s ostaessasi minkä tahansa premium-laajennuksemme. Hanki lisenssi ja voit kirjoittaa sinne suoraan ja saat vastauksen arkisin todennäköisesti 24-48 tunnin sisällä"
 
 #: src/Tribe/Main.php:1099 src/Tribe/Main.php:1107
 msgid "premium support on our website"
@@ -5270,7 +5270,7 @@ msgstr ""
 
 #: src/Tribe/Main.php:1081
 msgid "Customizing the Events plugins"
-msgstr ""
+msgstr "Tapahtumien lisäosien mukauttaminen"
 
 #: src/Tribe/Main.php:1081
 msgid "%s: Code and guides for customizing your calendar in useful and interesting ways."
@@ -5294,7 +5294,7 @@ msgstr ""
 
 #: src/Tribe/Main.php:1075
 msgid "Themer’s Guide"
-msgstr ""
+msgstr "Muokkaajan käsikirja"
 
 #: src/Tribe/Main.php:1075
 msgid "%s: Our most comprehensive outline for customizing the calendar to suit your needs, including custom layouts and styles."
@@ -5302,7 +5302,7 @@ msgstr ""
 
 #: src/Tribe/Main.php:1073
 msgid "Features overview"
-msgstr ""
+msgstr "Yleiskatsaus ominaisuuksista"
 
 #: src/Tribe/Main.php:1073
 msgid "%s: A complete look at the features you can expect to see right out of the box as well as how to use them."
@@ -5310,7 +5310,7 @@ msgstr ""
 
 #: src/Tribe/Main.php:1071
 msgid "Settings overview"
-msgstr ""
+msgstr "Asetusten yleiskatsaus"
 
 #: src/Tribe/Main.php:1071
 msgid "%s: A thorough walkthrough of The Events Calendar and the settings that are available to you."
@@ -5332,7 +5332,7 @@ msgstr ""
 #: src/deprecated/Tribe__Events__Importer__Options.php:25
 #: src/deprecated/Tribe__Events__Importer__Options.php:85
 msgid "This Filter has been deprecated, to comply with WordPress Standards we are now using Underscores (_) instead of Dashes (-). From: \"%s\" To: \"%s\""
-msgstr ""
+msgstr "Tätä suodatinta ei enää käytetä. Käytämme WordPressin standardien mukaisesti alaviivoja (_) emmekä tavuviivoja (-). Alkaa: \"%s\" Päättyy: \"%s\""
 
 #: src/deprecated/Tribe__Events__Importer__Admin_Page.php:139
 msgid "This Action has been deprecated, to comply with WordPress Standards we are now using Underscores (_) instead of Dashes (-). From: \"%s\" To: \"%s\""
@@ -5340,12 +5340,12 @@ msgstr ""
 
 #: src/deprecated/Tribe__Events__Importer__Admin_Page.php:97
 msgid "Default status to use for imported events"
-msgstr ""
+msgstr "Oletustila tuoduille tapahtumille"
 
 #: src/admin-views/aggregator/settings.php:70
 #: src/deprecated/Tribe__Events__Importer__Admin_Page.php:89
 msgid "CSV Import Settings"
-msgstr ""
+msgstr "CSV-tuontiasetukset"
 
 #: src/deprecated/Tribe__Events__Asset__Bootstrap_Datepicker.php:27
 msgid "Clear"
@@ -5389,7 +5389,7 @@ msgstr ""
 
 #: common/src/admin-views/tribe-options-help.php:31
 msgid "Check our Knowledgebase"
-msgstr ""
+msgstr "Tutustu tietämyskantaamme"
 
 #: common/src/admin-views/tribe-options-help.php:31
 msgid "%s. All of the common (and not-so-common) answers to questions we see are here. It’s often the fastest path to finding an answer!"
@@ -5401,11 +5401,11 @@ msgstr ""
 
 #: common/src/admin-views/tribe-options-help.php:26
 msgid "Getting More Help"
-msgstr ""
+msgstr "Hanki lisää apua"
 
 #: common/src/admin-views/tribe-options-help.php:21
 msgid "list of available functions"
-msgstr ""
+msgstr "lista käytettävissä olevista toiminnoista"
 
 #: common/src/admin-views/tribe-options-help.php:15
 msgid "Knowledgebase"
@@ -5417,7 +5417,7 @@ msgstr ""
 
 #: common/src/admin-views/tribe-options-help.php:14
 msgid "Getting Support"
-msgstr ""
+msgstr "Avun saaminen"
 
 #: common/src/admin-views/tribe-options-help.php:11
 msgid "Thank you for using %s! All of us at Modern Tribe sincerely appreciate your support and we’re excited to see you using our plugins."
@@ -5425,7 +5425,7 @@ msgstr ""
 
 #: common/src/admin-views/tribe-options-general.php:15
 msgid "Optimize your site's event listings with %1$sThe Events Calendar%2$s, our free calendar plugin. Looking for additional functionality including recurring events, user-submission, advanced ticket sales and more? Check out our %3$spremium add-ons%4$s."
-msgstr ""
+msgstr "Optimoi sivustosi tapahtumalistaukset %1$sThe Events Calendar%2$s, kanssa. Se on ilmainen kalenterilisäosamme. Haluatko lisätoimintoja, kuten toistuvat tapahtumat, käyttäjien tuonti, edistyneet lipunmyyntitoiminnot ja paljon muuta? Tutustu meidän %3$smaksullisiin lisäosiin%4$s."
 
 #: common/src/admin-views/tribe-options-general.php:10
 msgid "Thank you for using Event Tickets! All of us at Modern Tribe sincerely appreciate your support and we're excited to see you using our plugins. Check out our handy %1$sNew User Primer%2$s to get started."
@@ -5433,11 +5433,11 @@ msgstr ""
 
 #: src/admin-views/tribe-options-display.php:72
 msgid "Enter the format to use for displaying dates with the year. Used when displaying a date in a future year."
-msgstr ""
+msgstr "Anna muotoilu päivämäärien näyttämiseksi. Tätä käytetään, kun näytetään tapahtuma tulevalta vuodelta."
 
 #: common/src/Tribe/PUE/Checker.php:932
 msgid "Thanks for setting up a valid key. It will expire on %s"
-msgstr ""
+msgstr "Kiitos, että annoit voimassa olevan lisenssiavaimen. Sen voimassaolo päättyy %s"
 
 #: common/src/Tribe/Admin/Help_Page.php:860
 msgid "Visit the Add-on Page"
@@ -5445,23 +5445,23 @@ msgstr ""
 
 #: common/src/Tribe/Admin/Help_Page.php:855
 msgid "Plugin Inactive"
-msgstr ""
+msgstr "Lisäosa poissa käytöstä"
 
 #: common/src/Tribe/Admin/Help_Page.php:853
 msgid "Plugin Active"
-msgstr ""
+msgstr "Lisäosa käytössä"
 
 #: common/src/Tribe/Admin/Help_Page.php:828
 msgid "Rating:"
-msgstr ""
+msgstr "Arvio:"
 
 #: common/src/Tribe/Admin/Help_Page.php:825
 msgid "Active Users:"
-msgstr ""
+msgstr "Aktiiviset käyttäjät:"
 
 #: common/src/Tribe/Admin/Help_Page.php:802
 msgid "Install Plugin"
-msgstr ""
+msgstr "Asenna lisäosa"
 
 #: common/src/Tribe/Admin/Help_Page.php:802
 msgid "Install %s"
@@ -5482,7 +5482,7 @@ msgstr "Ota käyttöön %s"
 #: common/src/Tribe/Admin/Help_Page.php:244
 #: common/src/Tribe/Plugins_API.php:100
 msgid "Community Tickets"
-msgstr ""
+msgstr "Community Tickets"
 
 #: common/src/Tribe/Admin/Help_Page.php:235 common/src/Tribe/Plugins_API.php:66
 msgid "Event Tickets Plus"
@@ -5490,12 +5490,12 @@ msgstr ""
 
 #: src/Tribe/Aggregator/Page.php:396
 msgid "Facebook Events"
-msgstr ""
+msgstr "Facebook-tapahtumat"
 
 #: common/src/Tribe/Admin/Help_Page.php:203
 #: common/src/Tribe/Plugins_API.php:111
 msgid "Eventbrite Tickets"
-msgstr ""
+msgstr "Eventbrite Tickets"
 
 #: common/src/Tribe/Admin/Help_Page.php:170
 msgid " and "
@@ -5507,7 +5507,7 @@ msgstr ""
 
 #: common/src/Tribe/Admin/Help_Page.php:91
 msgid "Advanced Post Manager"
-msgstr ""
+msgstr "Artikkelin edistynyt muokkaustoiminto"
 
 #: common/src/Tribe/Admin/Help_Page.php:79
 msgid "Events Tickets is a carefully crafted, extensible plugin that lets you easily sell tickets for your events."
@@ -5515,7 +5515,7 @@ msgstr ""
 
 #: common/src/Tribe/Admin/Help_Page.php:75 common/src/Tribe/Plugins_API.php:57
 msgid "Event Tickets"
-msgstr ""
+msgstr "Tapahtuman liput"
 
 #: common/src/Tribe/Admin/Help_Page.php:63
 msgid "The Events Calendar is a carefully crafted, extensible plugin that lets you easily share your events."
@@ -5529,11 +5529,11 @@ msgstr[1] "Näytä kaikki %1$s %2$s"
 
 #: src/Tribe/Aggregator/Record/Queue_Realtime.php:54
 msgid "Completed!"
-msgstr ""
+msgstr "Valmis!"
 
 #: src/Tribe/Organizer.php:198
 msgid "organizers"
-msgstr ""
+msgstr "järjestäjät"
 
 #: src/admin-views/aggregator/origins/gcal.php:117
 #: src/admin-views/aggregator/origins/ical.php:111
@@ -5549,7 +5549,7 @@ msgstr "%s on oltava positiivinen luku (suurempi kuin nolla) tai prosenttimäär
 
 #: src/Tribe/Main.php:1002
 msgid "%1$s or %2$s"
-msgstr ""
+msgstr "%1$s tai %2$s"
 
 #. Author URI of the plugin/theme
 msgid "http://m.tri.be/1x"
@@ -5561,7 +5561,7 @@ msgstr "Modern Tribe, Inc."
 
 #. Description of the plugin/theme
 msgid "The Events Calendar is a carefully crafted, extensible plugin that lets you easily share your events. Beautiful. Solid. Awesome."
-msgstr ""
+msgstr "The Events Calendar -tapahtumakalenteri on huolella rakennettu, laajennettavissa oleva lisäosa, jonka avulla voit helposti jakaa tapahtumia. Tyylikäs. Luotettava. Mahtava."
 
 #: src/views/widgets/list-widget.php:118
 msgid "There are no upcoming %s at this time."
@@ -5666,7 +5666,7 @@ msgstr "Klikkaa nähdäksesi Google Map"
 
 #: src/functions/template-tags/general.php:1224
 msgid "%s for"
-msgstr "%s ajalle "
+msgstr "%s ajalle"
 
 #: src/functions/template-tags/general.php:1223
 msgid "Find out more »"
@@ -5702,7 +5702,7 @@ msgstr "Eilinen"
 
 #: src/functions/template-tags/date.php:82
 msgid "The function needs to be passed an $event or used in the loop."
-msgstr ""
+msgstr "Funktiolle täytyy antaa $event tai käyttää loopissa."
 
 #: src/Tribe/Linked_Posts/Chooser_Meta_Box.php:171
 msgid "%s:"
@@ -5714,11 +5714,11 @@ msgstr "Alkuperä:"
 
 #: src/views/modules/meta/details.php:56
 msgid "Details"
-msgstr "Tarkemmat tiedot"
+msgstr "Tiedot"
 
 #: src/admin-views/widget-admin-list.php:31
 msgid "Show widget only if there are upcoming events"
-msgstr ""
+msgstr "Näytä vimpain vain, jos siinä on tulevia tapahtumia"
 
 #: src/admin-views/widget-admin-list.php:18
 msgid "Show:"
@@ -5773,35 +5773,35 @@ msgstr ""
 
 #: src/admin-views/tribe-options-timezones.php:48
 msgid "Show time zone"
-msgstr ""
+msgstr "Näytä aikavyöhyke"
 
 #: src/admin-views/tribe-options-timezones.php:43
 msgid "Use the site-wide time zone everywhere"
-msgstr ""
+msgstr "Käytä sivustonlaajuista aikavyöhykettä kaikkialla"
 
 #: src/admin-views/tribe-options-timezones.php:42
 msgid "Use manual time zones for each event"
-msgstr ""
+msgstr "Käytä paikallista aikavyöhykettä jokaiselle tapahtumalle"
 
 #: src/admin-views/tribe-options-timezones.php:38
 msgid "Time zone mode"
-msgstr ""
+msgstr "Aikavyöhykkeen tila"
 
 #: src/admin-views/tribe-options-timezones.php:30
 msgid "Time Zone Settings"
-msgstr ""
+msgstr "Aikavyöhykeasetukset"
 
 #: src/admin-views/tribe-options-timezones.php:10
 msgid "Click this button to update your database and take advantage of additional time zone capabilities. Please <a href=\"%s\" target=\"_blank\">configure WordPress</a> to use the correct time zone before clicking this button!"
-msgstr ""
+msgstr "Paina tätä painiketta päivittääksesi tietokantasi tukemaan aikavyöhykeominaisuuksia.Tarkistathan, että <a href=\"%s\" target=\"_blank\">WordPress on asetettu</a> oikealle aikavyöhykkeelle ennen kuin painat tätä painiketta!"
 
 #: src/admin-views/tribe-options-timezones.php:9
 msgid "Update Time Zone Data"
-msgstr ""
+msgstr "Päivitä aikavyöhyketieto"
 
 #: src/admin-views/tribe-options-timezones.php:7
 msgid "Enable Time Zone support"
-msgstr ""
+msgstr "Lisää aikavyöhyketuki"
 
 #: common/src/admin-views/tribe-options-network.php:27
 msgid "Hide the following settings tabs on every site:"
@@ -5817,7 +5817,7 @@ msgstr "Verkkoasetukset"
 
 #: common/src/admin-views/tribe-options-licenses.php:38
 msgid "%1$s Using our plugins in a multisite network? %2$s Please note that your license key will be applied to the entire network, not just this site."
-msgstr ""
+msgstr "%1$s Käytätkö lisäosiamme multisite-verkossa? %2$s Huomioithan ,että lisenssiavaintasi sovelletaan kaikkiin kohteisiin verkossa, ei siis ainoastaan siihen jota käytät parhaillaan."
 
 #: common/src/admin-views/tribe-options-help.php:74
 msgid "News and Tutorials"
@@ -6114,7 +6114,7 @@ msgstr "Päivämäärän muotoilun asetukset"
 
 #: src/admin-views/tribe-options-display.php:207
 msgid "Check this to cache your month view HTML in transients, which can help improve calendar speed on sites with many events. <a href=\"%s\">Read more</a>."
-msgstr ""
+msgstr "Valitse tämä, jos haluat käyttää välimuistia kk-näkymässä. Tämä voi parentaa kalenterin nopeutta, jos tapahtumia on paljon. <a href=\"%s\">Lue lisää</a>."
 
 #: src/admin-views/tribe-options-display.php:206
 msgid "Enable the Month View Cache"
@@ -6285,7 +6285,7 @@ msgstr "%s www-sivu"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:509
 msgid "Location:"
-msgstr ""
+msgstr "Sijainti:"
 
 #: src/admin-views/events-meta-box.php:83
 #: src/admin-views/events-meta-box.php:122
@@ -6294,7 +6294,7 @@ msgstr "VVVV-KK-PP"
 
 #: src/admin-views/events-meta-box.php:69
 msgid "You have changed the recurrence rules of this %1$s.  Saving the %1$s will update all future %2$s.  If you did not mean to change all %2$s, then please refresh the page."
-msgstr ""
+msgstr "Olet muuttanut toistumissääntöjä kohteessa %1$s.  Tallennettaessa %1$s päivittää kaikki tulevat %2$s.  Jollet tarkoittanut muuttaa kaikkia %2$s, niin lataa sivu uudelleen."
 
 #: src/admin-views/events-meta-box.php:52
 msgid "Time &amp; Date"
@@ -6302,7 +6302,7 @@ msgstr "Aika &amp; päivä"
 
 #: src/admin-views/event-sidebar-options.php:25
 msgid "When events are sticky in month view, they'll display first in the list of events shown within a given day block."
-msgstr ""
+msgstr "Kun tapahtumat on kiinnitetty kuukausinäkymään, ne näytetään ensin annetun päivän tapahtumalistauksessa."
 
 #: src/admin-views/event-sidebar-options.php:23
 msgid "Sticky in Month View"
@@ -6314,11 +6314,11 @@ msgstr "Piilota %s listauksista"
 
 #: src/admin-views/admin-welcome-message.php:54
 msgid "Product Releases, Tutorials and Community Activity"
-msgstr ""
+msgstr "Tuotelanseeraukset, käyttöoppaat ja yhteisötoiminnot"
 
 #: src/admin-views/admin-welcome-message.php:51
 msgid "Get the Skinny on the Latest Updates"
-msgstr ""
+msgstr "Hae uusimmat tiedot pävityksistä"
 
 #: src/admin-views/admin-welcome-message.php:50
 msgid "Release Notes"
@@ -6334,7 +6334,7 @@ msgstr "Tuki"
 
 #: src/admin-views/admin-welcome-message.php:44
 msgid "Addons for Community, Tickets, Filters, and more."
-msgstr ""
+msgstr "Lisäosat yhteisö-, lippu-, suodatin-, Facebook-liitännäisiin yms."
 
 #: src/admin-views/admin-welcome-message.php:43
 msgid "Looking for More Features?"
@@ -6342,7 +6342,7 @@ msgstr "Etsitkö lisää ominaisuuksia?"
 
 #: src/admin-views/admin-welcome-message.php:41
 msgid "Check out the New User Primer &amp; Tutorials"
-msgstr ""
+msgstr "Katso New User Primer &amp; Tutorials"
 
 #: src/admin-views/admin-welcome-message.php:40
 msgid "Getting Started"
@@ -6398,7 +6398,7 @@ msgstr "Arvostele"
 
 #: src/admin-views/admin-update-message.php:33
 msgid "Every time you rate %s5 stars%s, a fairy is born. Okay maybe not, but more happy users mean more contributions and help on the forums. The community NEEDS your voice."
-msgstr "Joka kerran, kun joke antaa %s5 tähteä%s, uusi keijukainen syntyy. Okei, ei ehkä kuitenkaan, mutta useampi tyytyväinen käyttäjä tarkoittaa enemmän apua foorumilla. Yhteisö tarvitsee äänesi!"
+msgstr "Joka kerran, kun joku antaa %s5 tähteä%s, uusi keijukainen syntyy. Okei, ei ehkä kuitenkaan, mutta useampi tyytyväinen käyttäjä tarkoittaa enemmän apua foorumilla. Yhteisö tarvitsee äänesi."
 
 #: src/admin-views/admin-update-message.php:9
 #: src/admin-views/admin-welcome-message.php:11
@@ -6654,7 +6654,7 @@ msgstr "Länsi-Sahara"
 
 #: common/src/Tribe/Languages/Locations.php:293
 msgid "Wallis and Futuna Islands"
-msgstr ""
+msgstr "Wallis ja Futuna"
 
 #: common/src/Tribe/Languages/Locations.php:292
 msgid "Virgin Islands (U.S.)"
@@ -6710,7 +6710,7 @@ msgstr "Tuvalu"
 
 #: common/src/Tribe/Languages/Locations.php:279
 msgid "Turks and Caicos Islands"
-msgstr ""
+msgstr "Turks- ja Caicossaaret"
 
 #: common/src/Tribe/Languages/Locations.php:278
 msgid "Turkmenistan"
@@ -6726,7 +6726,7 @@ msgstr "Tunisia"
 
 #: common/src/Tribe/Languages/Locations.php:275
 msgid "Trinidad and Tobago"
-msgstr ""
+msgstr "Trinidad ja Tobago"
 
 #: common/src/Tribe/Languages/Locations.php:274
 msgid "Tonga"
@@ -6746,7 +6746,7 @@ msgstr "Thaimaa"
 
 #: common/src/Tribe/Languages/Locations.php:270
 msgid "Tanzania, United Republic of"
-msgstr ""
+msgstr "Tansania"
 
 #: common/src/Tribe/Languages/Locations.php:269
 msgid "Tajikistan"
@@ -6774,7 +6774,7 @@ msgstr "Swazimaa"
 
 #: common/src/Tribe/Languages/Locations.php:263
 msgid "Svalbard and Jan Mayen Islands"
-msgstr ""
+msgstr "Huippuvuoret ja Jan Mayen"
 
 #: common/src/Tribe/Languages/Locations.php:262
 msgid "Suriname"
@@ -6786,7 +6786,7 @@ msgstr "Sudan"
 
 #: common/src/Tribe/Languages/Locations.php:241
 msgid "Saint Pierre and Miquelon"
-msgstr ""
+msgstr "Saint Pierre ja Miquelon"
 
 #: common/src/Tribe/Languages/Locations.php:260
 msgid "Sri Lanka"
@@ -6854,7 +6854,7 @@ msgstr "Samoa"
 
 #: common/src/Tribe/Languages/Locations.php:242
 msgid "Saint Vincent and The Grenadines"
-msgstr ""
+msgstr "Saint Vincent ja Grenadiinit"
 
 #: common/src/Tribe/Languages/Locations.php:240
 msgid "Saint Lucia"
@@ -6862,7 +6862,7 @@ msgstr "Saint Lucia"
 
 #: common/src/Tribe/Languages/Locations.php:239
 msgid "Saint Kitts and Nevis"
-msgstr ""
+msgstr "Saint Kitts ja Nevis"
 
 #: common/src/Tribe/Languages/Locations.php:236
 msgid "Rwanda"
@@ -7014,11 +7014,11 @@ msgstr "Monaco"
 
 #: common/src/Tribe/Languages/Locations.php:199
 msgid "Moldova, Republic of"
-msgstr ""
+msgstr "Moldovia"
 
 #: common/src/Tribe/Languages/Locations.php:198
 msgid "Micronesia, Federated States of"
-msgstr ""
+msgstr "Mikronesia"
 
 #: common/src/Tribe/Languages/Locations.php:197
 msgid "Mexico"
@@ -7122,11 +7122,11 @@ msgstr "Kuwait"
 
 #: common/src/Tribe/Languages/Locations.php:172
 msgid "Korea, Republic of"
-msgstr ""
+msgstr "Korean tasavalta"
 
 #: common/src/Tribe/Languages/Locations.php:171
 msgid "Korea, Democratic People's Republic of"
-msgstr ""
+msgstr "Korean demokraattinen kansantasavalta"
 
 #: common/src/Tribe/Languages/Locations.php:170
 msgid "Kiribati"
@@ -7170,7 +7170,7 @@ msgstr "Irak"
 
 #: common/src/Tribe/Languages/Locations.php:160
 msgid "Iran, Islamic Republic of"
-msgstr ""
+msgstr "Iran, islamistinen tasavalta"
 
 #: common/src/Tribe/Languages/Locations.php:159
 msgid "Indonesia"
@@ -7202,7 +7202,7 @@ msgstr "Pyhä istuin (Vatikaanivaltio)"
 
 #: common/src/Tribe/Languages/Locations.php:152
 msgid "Heard and McDonald Islands"
-msgstr ""
+msgstr "Heard ja McDonaldinsaaret"
 
 #: common/src/Tribe/Languages/Locations.php:151
 msgid "Haiti"
@@ -7375,7 +7375,7 @@ msgstr "Cookinsaaret"
 
 #: common/src/Tribe/Languages/Locations.php:107
 msgid "Congo, Democratic Republic of the"
-msgstr ""
+msgstr "Kongon demokraattinen tasavalta"
 
 #: common/src/Tribe/Languages/Locations.php:106
 msgid "Congo"
@@ -7467,7 +7467,7 @@ msgstr "Botswana"
 
 #: common/src/Tribe/Languages/Locations.php:83
 msgid "Bosnia and Herzegovina"
-msgstr ""
+msgstr "Bosnia-Hertsegovina"
 
 #: common/src/Tribe/Languages/Locations.php:82
 msgid "Bolivia"
@@ -7539,7 +7539,7 @@ msgstr "Argentiina"
 
 #: common/src/Tribe/Languages/Locations.php:65
 msgid "Antigua and Barbuda"
-msgstr ""
+msgstr "Antigua ja Barbuda"
 
 #: common/src/Tribe/Languages/Locations.php:64
 msgid "Antarctica"
@@ -7686,15 +7686,15 @@ msgstr "Teeman muokkaukset pitäisi siirtää oikeaan alikansioon: %s"
 
 #: src/Tribe/Template_Factory.php:237
 msgid "No previous %s "
-msgstr "Ei aiempia tapahtumia kohteelle %s"
+msgstr "Ei aiempia tapahtumia kohteelle %s "
 
 #: src/Tribe/Template_Factory.php:235 src/Tribe/Template_Factory.php:240
 msgid "No matching %1$s listed under %2$s. Please try viewing the full calendar for a complete list of %3$s."
-msgstr ""
+msgstr "Ei vastaavia %1$s listattuna kohteeseen %2$s. Kokeile tarkastella koko kalenteria löytääksesi täyden listan näistä %3$s."
 
 #: src/Tribe/Template_Factory.php:233
 msgid "No upcoming %1$s listed under %2$s. Check out upcoming %3$s for this category or view the full calendar."
-msgstr ""
+msgstr "Ei tulevia %1$s listattu tänne %2$s. Tutustu tuleviin %3$s tässä kategoriassa tai tarkastele koko kalenteria."
 
 #: src/Tribe/Template/Embed.php:59 src/Tribe/Template/Single_Event.php:119
 msgid "This %s has passed."
@@ -7710,11 +7710,11 @@ msgstr "Ei tuloksia."
 
 #: src/Tribe/Template/Month.php:462
 msgid "No matching %1$s listed under %2$s. Please try viewing the full calendar for a complete list of events."
-msgstr ""
+msgstr "Ei vastaavia %1$s listattuna kohteeseen %2$s. Kokeile tarkastella koko kalenteria löytääksesi täyden listan tapahtumista."
 
 #: src/Tribe/Template/Day.php:152
 msgid "No matching %1$s listed under %2$s scheduled for %3$s. Please try another day."
-msgstr ""
+msgstr "Ei vastaavia %1$s listattuna kohteeseen %2$s päivämäärällä %3$s. Kokeile jotain toista päivää."
 
 #: src/Tribe/Template/Day.php:118 src/Tribe/Template/Day.php:134
 msgid "Ongoing"
@@ -7727,7 +7727,7 @@ msgstr "Koko päivä"
 
 #: common/src/Tribe/Support.php:199
 msgid "Rewrite rules were purged on load of this help page. Chances are there is a rewrite rule flush occurring in a plugin or theme!"
-msgstr ""
+msgstr "Uudelleenkirjoitussäännöt pyyhittiin ladattaessa tätä sivua. On mahdollista, että lisäosassa tai teemassa on tapahtuu uudelleenkirjoitussäännön pyyhintää!"
 
 #: common/src/Tribe/Support.php:188 common/src/Tribe/Support.php:189
 msgid "Unknown or not set"
@@ -7805,7 +7805,7 @@ msgstr "Lisenssiavain/avaimet päivitetty."
 
 #: common/src/Tribe/PUE/Checker.php:494
 msgid "A valid license key is required for support and updates"
-msgstr "Voimassa oleva lisenssiavain vaaditaan tukea ja päivityksiä varten."
+msgstr "Voimassa oleva lisenssiavain vaaditaan tukea ja päivityksiä varten"
 
 #: common/src/Tribe/PUE/Checker.php:509 common/src/Tribe/PUE/Checker.php:520
 #: src/admin-views/aggregator/status.php:41
@@ -7830,7 +7830,7 @@ msgstr "%s lähtien"
 
 #: src/Tribe/Main.php:4115
 msgid "%s In"
-msgstr "%s kohteessa "
+msgstr "%s kohteessa"
 
 #: src/Tribe/Main.php:4110 src/Tribe/Main.php:4135
 #: src/admin-views/aggregator/origins/refine.php:7
@@ -7994,7 +7994,7 @@ msgstr "%s tallennettu."
 #. translators: %s: date and time of the revision
 #: src/Tribe/Main.php:1813 src/Tribe/Main.php:1851
 msgid "%1$s restored to revision from %2$s"
-msgstr ""
+msgstr "%1$s palautettu korjattuun versioon kohteesta %2$s"
 
 #: src/Tribe/Main.php:1811 src/Tribe/Main.php:1846 src/Tribe/Main.php:1849
 #: src/Tribe/Main.php:1866 src/Tribe/Main.php:1869
@@ -8027,7 +8027,7 @@ msgstr "Muokkaa %s kategoriaa"
 
 #: src/Tribe/Main.php:1783
 msgid "Parent %s Category:"
-msgstr "Isäntä %s kategoria"
+msgstr "Isäntä %s kategoria:"
 
 #: src/Tribe/Main.php:1782
 msgid "Parent %s Category"
@@ -8107,7 +8107,7 @@ msgstr "Näyttäminen"
 
 #: src/Tribe/Main.php:1311
 msgid "The following plugins are out of date: %1$s. All add-ons contain dependencies on The Events Calendar and will not function properly unless paired with the right version. %2$sLearn More%3$s."
-msgstr ""
+msgstr "Seuraavat lisäosat ovat päivittämättä: %1$s. Kaikki lisäosat sisältävät riippuvuuksia tapahtumakalenteriin ja eivät toimi kunnolla, mikäli parina ei ole oikea versio. %2$sKatso lisätietoja%3$s."
 
 #: src/Tribe/Main.php:1299
 msgid "Your version of The Events Calendar is not up-to-date with one of your The Events Calendar add-ons. Please %supdate now.%s"
@@ -8400,12 +8400,12 @@ msgstr "Tämän kalenterin voimalähteenä toimii The Events Calendar."
 
 #: common/src/Tribe/Cost_Utils.php:114
 msgid "Free"
-msgstr "Vapaa"
+msgstr "Ilmainen"
 
 #: src/Tribe/Cost_Utils.php:120
 msgctxt "Cost range separator"
 msgid " – "
-msgstr ""
+msgstr " - "
 
 #: common/src/Tribe/App_Shop.php:50 common/src/Tribe/App_Shop.php:51
 #: common/src/Tribe/App_Shop.php:72
@@ -8455,11 +8455,11 @@ msgstr "Aloituspäivä"
 
 #: src/Tribe/Admin_List.php:246 src/Tribe/Main.php:1778
 msgid "%s Categories"
-msgstr "%s Kategoriaa"
+msgstr "%s Kategoriat"
 
 #: src/Tribe/Admin/Timezone_Updater.php:105
 msgid "A problem stopped the time zone update process from completing. Please refresh and try again."
-msgstr ""
+msgstr "Aikavyöhykkeinen päivityksessä tapahtui ongelma ja se keskeytyi. Päivitä sivu ja yritä uudelleen."
 
 #: src/Tribe/Admin/Timezone_Updater.php:87
 #: src/Tribe/Aggregator/Record/Queue_Realtime.php:56
@@ -8470,11 +8470,11 @@ msgstr "%d%% valmis"
 
 #: src/Tribe/Admin/Timezone_Updater.php:78
 msgid "Update complete: time zone data has been added to all events in the database."
-msgstr ""
+msgstr "Päivitys valmis: aikavyöhyketieto on lisätty kaikkiin tapahtumiin tietokannassa."
 
 #: src/Tribe/Admin/Timezone_Updater.php:77
 msgid "Please wait while time zone data is added to your events."
-msgstr ""
+msgstr "Odota, kun kaikki aikavyöhykkeet lisätään sinun tapahtumiin."
 
 #: src/Tribe/Admin/Bar/Default_Configurator.php:62
 #: src/Tribe/Linked_Posts/Chooser_Meta_Box.php:211 src/Tribe/Main.php:1764
@@ -8489,11 +8489,11 @@ msgstr "Käytä tallennettua %s:"
 
 #: src/Tribe/Main.php:994
 msgid " ask the site administrator set a different Events URL slug."
-msgstr ""
+msgstr " pyydä sivuston ylläpitäjää asettamaan toinen tapahtuman URL-polku."
 
 #: src/Tribe/Main.php:988
 msgid "Ask the site administrator to edit the %s slug"
-msgstr ""
+msgstr "Pyydä sivuston ylläpitäjää muokkaamaan %s -polkutunnusta"
 
 #: src/deprecated/Tribe__Events__Activation_Page.php:215
 msgid "Thanks for Updating The Events Calendar"
@@ -8507,22 +8507,22 @@ msgstr "Tervetuloa tapahtumakalenteriin"
 #: common/src/Tribe/Admin/Activation_Page.php:92
 #: src/deprecated/Tribe__Events__Activation_Page.php:49
 msgid "Return to WordPress Updates"
-msgstr ""
+msgstr "Palaa Wordpress päivityksiin"
 
 #: common/src/Tribe/Admin/Activation_Page.php:92
 #: src/deprecated/Tribe__Events__Activation_Page.php:49
 msgid "Go to WordPress Updates page"
-msgstr ""
+msgstr "Mene Päivitä Wordpress -sivulle"
 
 #: common/src/Tribe/Admin/Activation_Page.php:84
 #: src/deprecated/Tribe__Events__Activation_Page.php:41
 msgid "Return to Plugins page"
-msgstr ""
+msgstr "Palaa lisäosat sivulle"
 
 #: common/src/Tribe/Admin/Activation_Page.php:84
 #: src/deprecated/Tribe__Events__Activation_Page.php:41
 msgid "Go to plugins page"
-msgstr ""
+msgstr "Mene lisäosat-sivulle"
 
 #: common/src/Tribe/Languages/Locations.php:55 src/Tribe/Venue.php:320
 #: src/functions/template-tags/venue.php:379
