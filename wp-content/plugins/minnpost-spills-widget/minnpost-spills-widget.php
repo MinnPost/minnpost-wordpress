@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Spills
 Description: This plugin creates a sidebar widget and endpoint URL that is able to display posts from a group of categories and/or tags
-Version: 0.0.6
+Version: 0.0.7
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-spills
@@ -22,7 +22,7 @@ class MinnpostSpills {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.6';
+		$this->version = '0.0.7';
 
 		$this->load_admin();
 

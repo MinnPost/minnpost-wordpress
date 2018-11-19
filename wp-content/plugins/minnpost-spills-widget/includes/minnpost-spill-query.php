@@ -38,8 +38,10 @@ function minnpost_spill_get_query_args( $categories = '', $terms = '' ) {
 		} else {
 			$terms_array = explode( ',', $terms );
 			foreach ( $terms_array as $term ) {
-				$term_object = get_term_by( 'name', $term, 'post_tag' );
-				$term_ids[]  = $term_object->term_id;
+				if ( ! empty( $term ) ) {
+					$term_object = get_term_by( 'name', $term, 'post_tag' );
+					$term_ids[]  = $term_object->term_id;
+				}
 			}
 		}
 	}
