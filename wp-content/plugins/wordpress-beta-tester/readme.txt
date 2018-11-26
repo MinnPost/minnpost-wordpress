@@ -1,11 +1,11 @@
 === WordPress Beta Tester  ===
 Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
-Tested up to: 4.9
+Tested up to: 5.0
 Requires at least: 3.0.5
-Stable Tag: 1.2.3
+Stable Tag: 1.2.4
 License: GPLv2
-License URI: http://www.opensource.org/licenses/GPL-2.0
+License URI: https://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
 
 Allows you to easily upgrade to Beta releases.
@@ -24,6 +24,8 @@ Don't forget to backup before you start!
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Changelog ==
+= 1.2.4 =
+* don't use $GLOBALS
 
 = 1.2.3 =
 * updated a few strings and correct typos

@@ -4,7 +4,7 @@
 	Plugin URI: https://wordpress.org/plugins/wordpress-beta-tester/
 	Description: Allows you to easily upgrade to Beta releases.
 	Author: Peter Westwood
-	Version: 1.2.3
+	Version: 1.2.4
 	Network: true
 	Author URI: http://blog.ftwr.co.uk/
 	Text Domain: wordpress-beta-tester
@@ -35,7 +35,8 @@ class wp_beta_tester {
 		add_action( is_multisite() ? 'network_admin_menu' : 'admin_menu', array( $this, 'action_admin_menu' ) );
 		add_action( 'network_admin_edit_wp_beta_tester', array( $this, 'update_settings' ) );
 		add_action(
-			'update_option_wp_beta_tester_stream', array(
+			'update_option_wp_beta_tester_stream',
+			array(
 				$this,
 				'action_update_option_wp_beta_tester_stream',
 			)
@@ -154,7 +155,7 @@ class wp_beta_tester {
 	protected function mangle_wp_version() {
 		$stream     = get_site_option( 'wp_beta_tester_stream', 'point' );
 		$preferred  = $this->_get_preferred_from_update_core();
-		$wp_version = $GLOBALS['wp_version'];
+		$wp_version = get_bloginfo( 'version' );
 
 		// If we're getting no updates back from get_preferred_from_update_core(),
 		// let an HTTP request go through unmangled.
@@ -204,7 +205,7 @@ class wp_beta_tester {
 			if ( ( isset( $_GET['updated'] ) && true == $_GET['updated'] ) ||
 				( isset( $_GET['settings-updated'] ) && true == $_GET['settings-updated'] )
 			) :
-			?>
+				?>
 				<div class="updated">
 					<p><?php esc_html_e( 'Saved.', 'wordpress-beta-tester' ); ?></p>
 				</div>

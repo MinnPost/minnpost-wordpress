@@ -2,8 +2,8 @@
 Contributors: vasyltech,noelalvarez
 Tags: access control, membership, backend menu, user role, restricted content
 Requires at least: 4.0
-Tested up to: 4.9.7
-Stable tag: 5.6
+Tested up to: 4.9.8
+Stable tag: 5.7
 
 All you need to manage access to you WordPress websites on frontend, backend and API levels for any role, user or visitors.
 
@@ -22,7 +22,6 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 * No ads or other promotional crap. The UI is clean and well crafted so you can focus only on what matters;
 * No need to be a "paid" customer to get help. Request support via email or start chat with Google Hangout;
 * Some features are limited or available only with [premium extensions](https://aamplugin.com/store). AAM functionality is transparent and you will absolute know when you need to get a premium extension;
-* There are some bad reviews however most of them where posted years ago and are unrelated to current AAM version; or were posted by users that did not bother reading the bullet-point above.
 
 = Main Areas Of Focus =
 
@@ -76,6 +75,18 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 11. Improve your website security
 
 == Changelog ==
+
+= 5.7 =
+* Added a huge innovation to the access control management - Access & Security Policy
+* Fixed the bug with updating extension versions
+
+= 5.6.1.1 =
+* Fixed the bug when website may crash when some extensions are really out-of-date
+
+= 5.6.1 =
+* Fixed the bug with caching
+* Fixed the bug with the way post type and taxonomies are registered with extensions
+* Turned on by default the ability to edit and delete capabilities
 
 = 5.6 =
 * Fixed the bug with encoding on Safari when gzip is enabled
