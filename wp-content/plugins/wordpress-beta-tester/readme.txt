@@ -3,7 +3,7 @@ Tags: beta, advanced, testing
 Contributors: westi, mlteal, afragen
 Tested up to: 5.0
 Requires at least: 3.0.5
-Stable Tag: 1.2.4
+Stable Tag: 1.2.5
 License: GPLv2
 License URI: https://www.opensource.org/licenses/GPL-2.0
 Requires PHP: 5.2.4
@@ -24,6 +24,10 @@ Don't forget to backup before you start!
 PRs are welcome on [GitHub](https://github.com/afragen/wordpress-beta-tester).
 
 == Changelog ==
+
+= 1.2.5 =
+* fixed error message for downgrading version, thanks @andreas-andersson
+
 = 1.2.4 =
 * don't use $GLOBALS
 

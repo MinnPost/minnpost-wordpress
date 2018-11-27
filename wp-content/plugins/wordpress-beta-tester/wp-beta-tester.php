@@ -4,7 +4,7 @@
 	Plugin URI: https://wordpress.org/plugins/wordpress-beta-tester/
 	Description: Allows you to easily upgrade to Beta releases.
 	Author: Peter Westwood
-	Version: 1.2.4
+	Version: 1.2.5
 	Network: true
 	Author URI: http://blog.ftwr.co.uk/
 	Text Domain: wordpress-beta-tester
@@ -81,7 +81,7 @@ class wp_beta_tester {
 				<?php
 				$admin_page = is_multisite() ? 'settings.php' : 'tools.php';
 				/* translators: %s: link to setting page */
-				printf( wp_kses_post( __( '<strong>Error:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ), admin_url( $admin_page . '?page=wp_beta_tester' ) ) );
+				printf( wp_kses_post( __( '<strong>Error:</strong> Your current <a href="%s">WordPress Beta Tester plugin configuration</a> will downgrade your install to a previous version - please reconfigure it.', 'wordpress-beta-tester' ) ), admin_url( $admin_page . '?page=wp_beta_tester' ) );
 				?>
 				</p>
 			</div>
