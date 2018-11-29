@@ -172,6 +172,8 @@ Class GFNotification {
 
 			$notification['disableAutoformat'] = (bool) rgpost( 'gform_notification_disable_autoformat' );
 
+			$notification['enableAttachments'] = (bool) rgpost( 'gform_notification_attachments' );
+
 			if ( rgpost( 'gform_is_default' ) ) {
 				$notification['isDefault'] = true;
 			}
@@ -768,8 +770,8 @@ Class GFNotification {
 			</th>
 			<td>
 				<?php foreach ( $services as $service_name => $service ) { ?>
-				<div id="gform-notification-service-<?php echo $service_name; ?>" class="gform-notification-service">
-					<input type="radio" id="gform_notification_service_<?php echo $service_name; ?>" name="gform_notification_service" <?php checked( $service_name, $notification_service ); ?> value="<?php echo $service_name; ?>" onclick="jQuery(this).parents('form').submit();" onkeypress="jQuery(this).parents('form').submit();" />
+				<div id="gform-notification-service-<?php echo $service_name; ?>" class="gform-notification-service<?php echo rgar( $service, 'disabled' ) && rgar( $service, 'disabled_message' ) ? ' gf_tooltip' : ''; ?>" <?php echo rgar( $service, 'disabled' ) && rgar( $service, 'disabled_message' ) ? 'title="' . $service['disabled_message'] . '"' : ''; ?>>
+					<input type="radio" id="gform_notification_service_<?php echo $service_name; ?>" name="gform_notification_service" <?php checked( $service_name, $notification_service ); ?> value="<?php echo $service_name; ?>" onclick="jQuery(this).parents('form').submit();" onkeypress="jQuery(this).parents('form').submit();" <?php echo rgar( $service, 'disabled' ) ? 'disabled="disabled"' : ''; ?> />
 					<label for="gform_notification_service_<?php echo $service_name; ?>" class="inline">
 						<span><img src="<?php echo esc_attr( rgar( $service, 'image' ) ); ?>" /><br /><?php echo rgar( $service, 'label' ); ?></span>
 					</label>
@@ -1137,7 +1139,30 @@ Class GFNotification {
 		<?php $ui_settings['notification_message'] = ob_get_contents();
 		ob_clean(); ?>
 
-		<tr valign="top">
+        <?php
+        $upload_fields = GFCommon::get_fields_by_type( $form, array( 'fileupload' ) );
+        if ( $upload_fields ) {
+        ?>
+        <tr valign="top">
+            <th scope="row">
+                <label for="gform_notification_attachments">
+                    <?php esc_html_e( 'Attachments', 'gravityforms' ); ?>
+                    <?php gform_tooltip( 'notification_attachments' ) ?>
+                </label>
+            </th>
+            <td>
+                <input type="checkbox" name="gform_notification_attachments" id="gform_notification_attachments" value="1" <?php checked( '1', rgar( $notification, 'enableAttachments' ) ) ?>/>
+                <label for="gform_notification_attachments" class="inline">
+					<?php esc_html_e( 'Attach uploaded files to notification', 'gravityforms' ); ?>
+                </label>
+            </td>
+        </tr> <!-- / attachments -->
+        <?php $ui_settings['notification_attachments'] = ob_get_contents();
+        ob_clean();
+        }
+        ?>
+
+        <tr valign="top">
 			<th scope="row">
 				<label for="gform_notification_disable_autoformat">
 					<?php esc_html_e( 'Auto-formatting', 'gravityforms' ); ?>
@@ -1731,7 +1756,7 @@ class GFNotificationTable extends WP_List_Table {
 		$this->_column_headers = array(
 			$columns,
 			array(),
-			array(),
+			array( 'name' => array( 'name', false ) ),
 			'name',
 		);
 
@@ -1750,7 +1775,45 @@ class GFNotificationTable extends WP_List_Table {
 	 * @return void
 	 */
 	function prepare_items() {
+
 		$this->items = $this->form['notifications'];
+
+		switch ( rgget( 'orderby' ) ) {
+
+			case 'name':
+
+				// Sort notifications alphabetically.
+				usort( $this->items, array( $this, 'sort_notifications' ) );
+
+				// Reverse sort.
+				if ( 'desc' === rgget( 'order' ) ) {
+					$this->items = array_reverse( $this->items );
+				}
+
+				break;
+
+			default:
+				break;
+
+		}
+
+	}
+
+	/**
+	 * Sort notifications alphabetically.
+	 *
+	 * @since  2.4
+	 * @access public
+	 *
+	 * @param array $a First notification to compare.
+	 * @param array $b Second notification to compare.
+	 *
+	 * @return int
+	 */
+	function sort_notifications( $a = array(), $b = array() ) {
+
+		return strcasecmp( $a['name'], $b['name'] );
+
 	}
 
 	/**

@@ -16,7 +16,7 @@ class GF_Query_JSON_Literal extends GF_Query_Literal{
 	 */
 	public function __construct( $value ) {
 		if ( is_string( $value ) ) {
-			$this->value = $value;
+			$this->_value = $value;
 		}
 	}
 
@@ -32,9 +32,13 @@ class GF_Query_JSON_Literal extends GF_Query_Literal{
 		global $wpdb;
 
 		if ( is_string( $this->value ) ) {
-			$this->value = str_replace( '/', '\\\\/', $this->value );
-			$this->value = str_replace( '"', '\\\\"', $this->value );
-			return $wpdb->prepare( '%s', $this->value );
+			$value = $this->value;
+
+			$value = str_replace( '\\', '\\\\\\\\', $value );
+			$value = str_replace( '/', '\\\\/', $value );
+			$value = str_replace( '"', '\\\\"', $value );
+
+			return $wpdb->prepare( '%s', $value );
 		}
 
 		return '';
@@ -48,5 +52,9 @@ class GF_Query_JSON_Literal extends GF_Query_Literal{
 			case 'value':
 				return $this->_value;
 		endswitch;
+	}
+
+	public function __isset( $key ) {
+		return in_array( $key, array( 'value' ) );
 	}
 }
