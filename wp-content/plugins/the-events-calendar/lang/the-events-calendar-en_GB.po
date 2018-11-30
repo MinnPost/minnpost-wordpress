@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-07-12 19:43:49+0000\n"
+"PO-Revision-Date: 2018-11-29 09:56:55+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,210 +13,210 @@ msgstr ""
 
 #: src/admin-views/tribe-options-general.php:69
 msgid "Enable WordPress Custom Fields on Events."
-msgstr ""
+msgstr "Enable WordPress Custom Fields on Events."
 
 #: src/admin-views/tribe-options-general.php:68
 msgid "Show Custom Fields metabox"
-msgstr ""
+msgstr "Show Custom Fields metabox"
 
 #: src/admin-views/tribe-options-display.php:130
 msgid "Please note that you are using The Events Calendar's default Google Maps API key, which will limit the Map View's functionality. Visit %sthe API Settings page%s to learn more and add your own Google Maps API key."
-msgstr ""
+msgstr "Please note that you are using The Events Calendar's default Google Maps API key, which will limit the Map View's functionality. Visit %sthe API Settings page%s to learn more and add your own Google Maps API key."
 
 #: src/admin-views/aggregator/settings.php:230
 msgid "Stop current processes"
-msgstr ""
+msgstr "Stop current processes"
 
 #: src/admin-views/aggregator/settings.php:219
 msgid "The Asynchronous import process is faster and does not rely on WordPress Cron but might not work correctly in all WordPress installations, try switching to the Cron-based process for maximum compatibility."
-msgstr ""
+msgstr "The Asynchronous import process is faster and does not rely on WordPress Cron but might not work correctly in all WordPress installations, try switching to the Cron-based process for maximum compatibility."
 
 #: src/admin-views/aggregator/settings.php:218
 msgid "Import Process System"
-msgstr ""
+msgstr "Import Process System"
 
 #: src/admin-views/aggregator/settings.php:123
 msgid "click here"
-msgstr ""
+msgstr "click here"
 
 #: src/admin-views/aggregator/settings.php:121
 msgid "If you want to stop and clear current asynchronous import processes %1$s."
-msgstr ""
+msgstr "If you want to stop and clear current asynchronous import processes %1$s."
 
 #: src/admin-views/aggregator/origins/eventbrite.php:127
 msgid "Import from Eventbrite URL"
-msgstr ""
+msgstr "Import from Eventbrite URL"
 
 #: src/Tribe/Google/Maps_API_Key.php:108
 msgid "to create your own free Google Maps API key."
-msgstr ""
+msgstr "to create your own free Google Maps API key."
 
 #: src/Tribe/Google/Maps_API_Key.php:106
 msgid "If you do not add your own API key, the built-in API key will always populate this field and some map-related functionality will be limited."
-msgstr ""
+msgstr "If you do not add your own API key, the built-in API key will always populate this field and some map-related functionality will be limited."
 
 #: src/Tribe/Google/Maps_API_Key.php:105
 msgid "You are using The Events Calendar's built-in Google Maps API key."
-msgstr ""
+msgstr "You are using The Events Calendar's built-in Google Maps API key."
 
 #: src/Tribe/Google/Maps_API_Key.php:77
 msgid "Read More"
-msgstr ""
+msgstr "Read More"
 
 #: src/Tribe/Google/Maps_API_Key.php:72
 msgid "The Events Calendar comes with an API key for basic maps functionality. If you’d like to use more advanced features like custom map pins or dynamic map loads, you’ll need to get your own %1$s. %2$s."
-msgstr ""
+msgstr "The Events Calendar comes with an API key for basic maps functionality. If you’d like to use more advanced features like custom map pins or dynamic map loads, you’ll need to get your own %1$s. %2$s."
 
 #: src/Tribe/Google/Maps_API_Key.php:56
 msgid "to learn more about using it with The Events Calendar"
-msgstr ""
+msgstr "to learn more about using it with The Events Calendar"
 
 #: src/Tribe/Google/Maps_API_Key.php:54
 msgid "You are using a custom Google Maps API key."
-msgstr ""
+msgstr "You are using a custom Google Maps API key."
 
 #: src/Tribe/Aggregator/Settings.php:703
 msgid "Cron-based"
-msgstr ""
+msgstr "Cron-based"
 
 #: src/Tribe/Aggregator/Settings.php:699
 msgid "Asynchronous"
-msgstr ""
+msgstr "Asynchronous"
 
 #: src/Tribe/Aggregator/Record/Unsupported.php:58
 msgid "Unsupported"
-msgstr ""
+msgstr "Unsupported"
 
 #: src/Tribe/Aggregator/Processes/Service_Provider.php:74
 msgid "Successfully stopped and cleared 1 asynchronous queue process."
 msgid_plural "Successfully stopped and cleared %d asynchronous queue processes."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Successfully stopped and cleared 1 asynchronous queue process."
+msgstr[1] "Successfully stopped and cleared %d asynchronous queue processes."
 
 #: src/Tribe/Aggregator/Processes/Service_Provider.php:72
 msgid "No asynchronous queue processes to clear."
-msgstr ""
+msgstr "No asynchronous queue processes to clear."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:338
 msgid "The event tag ID or name"
-msgstr ""
+msgstr "The event tag ID or name"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:332
 msgid "The event category ID or name"
-msgstr ""
+msgstr "The event category ID or name"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Event.php:508
 msgid "Events should be filtered by their post_parent being the specified one."
-msgstr ""
+msgstr "Events should be filtered by their post_parent being the specified one."
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Event.php:498
 msgid "Include events with one of the post IDs specified in the array of CSV list, date filters will be ignored."
-msgstr ""
+msgstr "Include events with one of the post IDs specified in the array of CSV list, date filters will be ignored."
 
 #: src/Tribe/Aggregator/Record/Async_Queue.php:348
 #: src/Tribe/Aggregator/Record/Void_Queue.php:122
 msgid "Unable to process this import - a breakage or conflict may have resulted in the import halting."
-msgstr ""
+msgstr "Unable to process this import - a breakage or conflict may have resulted in the import halting."
 
 #: common/src/Tribe/Plugins_API.php:37
 msgid "Event Aggregator adds massive import functionality to your calendar. Before you know it, you’ll be importing events from Meetup, Eventbrite, Google Calendar, iCalendar, and other URLs with ease. Schedule imports to run automatically behind-the-scenes or run them manually when you’re ready. Go ahead and import to your heart’s content—Event Aggregator hooks you up with a central dashboard in the admin to make managing your imports a breeze."
-msgstr ""
+msgstr "Event Aggregator adds massive import functionality to your calendar. Before you know it, you’ll be importing events from Meetup, Eventbrite, Google Calendar, iCalendar, and other URLs with ease. Schedule imports to run automatically behind-the-scenes or run them manually when you’re ready. Go ahead and import to your heart’s content—Event Aggregator hooks you up with a central dashboard in the admin to make managing your imports a breeze."
 
 #: src/views/month/single-day.php:57
 msgid "%s for %s"
-msgstr ""
+msgstr "%s for %s"
 
 #: src/views/month/loop-grid.php:25 src/views/month/loop-grid.php:28
 msgid "Calendar of %s"
-msgstr ""
+msgstr "Calendar of %s"
 
 #: src/views/modules/bar.php:80
 msgid "Submit %s search"
-msgstr ""
+msgstr "Submit %s search"
 
 #: src/views/modules/bar.php:68
 msgid "%s Search"
-msgstr ""
+msgstr "%s Search"
 
 #: src/views/modules/bar.php:48
 msgid "View %s As"
-msgstr ""
+msgstr "View %s As"
 
 #: src/views/modules/bar.php:43
 msgid "%s Views Navigation"
-msgstr ""
+msgstr "%s Views Navigation"
 
 #: src/views/modules/bar.php:29
 msgid "%s Search and Views Navigation"
-msgstr ""
+msgstr "%s Search and Views Navigation"
 
 #: src/admin-views/privacy.php:63
 msgid "If you have extended our plugin(s) to send data to a third-party service such as Eventbrite, Google Maps, or PayPal, user information may be passed to these external services. These services may be located abroad."
-msgstr ""
+msgstr "If you have extended our plugin(s) to send data to a third-party service such as Eventbrite, Google Maps, or PayPal, user information may be passed to these external services. These services may be located abroad."
 
 #: src/admin-views/privacy.php:61
 msgid "Modern Tribe does not send any user data outside of your website by default."
-msgstr ""
+msgstr "Modern Tribe does not send any user data outside of your website by default."
 
 #: src/admin-views/privacy.php:59
 msgid "Where We Send Your Data"
-msgstr ""
+msgstr "Where We Send Your Data"
 
 #: src/admin-views/privacy.php:57
 msgid "Certain data may be exported or removed upon users’ requests via the existing Exporter or Eraser. Please note, however, that several “edge cases” exist in which we are unable to perfect the gathering and export of all data for your end users. We suggest running a search in your local database, as well as within the WordPress Dashboard, in order to identify all data collected and stored for your specific user requests."
-msgstr ""
+msgstr "Certain data may be exported or removed upon users’ requests via the existing Exporter or Eraser. Please note, however, that several “edge cases” exist in which we are unable to perfect the gathering and export of all data for your end users. We suggest running a search in your local database, as well as within the WordPress Dashboard, in order to identify all data collected and stored for your specific user requests."
 
 #: src/admin-views/privacy.php:55
 msgid "All information (data) is retained in the local database indefinitely, unless otherwise deleted."
-msgstr ""
+msgstr "All information (data) is retained in the local database indefinitely, unless otherwise deleted."
 
 #: src/admin-views/privacy.php:53
 msgid "How Long You Retain this Data"
-msgstr ""
+msgstr "How Long You Retain this Data"
 
 #: src/admin-views/privacy.php:51
 msgid "These API keys may include the following third party services: Google Maps, Meetup, PayPal, and Eventbrite (API key, auth URL and Client Secret)."
-msgstr ""
+msgstr "These API keys may include the following third party services: Google Maps, Facebook, Meetup, PayPal, and Eventbrite (API key, auth URL and Client Secret)."
 
 #: src/admin-views/privacy.php:49
 msgid "We make use of certain API keys, in order to provide specific features."
-msgstr ""
+msgstr "We make use of certain API keys, in order to provide specific features."
 
 #: src/admin-views/privacy.php:45
 msgid "The Events Calendar suite offers the use of third-party API keys. The primary functions are to enhance the features we've built in, some of which use Google Maps, PayPal, Eventbrite, and Meetup. These API keys are not supplied by Modern Tribe."
-msgstr ""
+msgstr "The Events Calendar suite offers the use of third-party API keys. The primary functions are to enhance the features we've built in, some of which use Google Maps, PayPal, Eventbrite, Meetup, and Facebook. These API keys are not supplied by Modern Tribe."
 
 #: src/admin-views/privacy.php:43
 msgid "API Keys"
-msgstr ""
+msgstr "API Keys"
 
 #: src/admin-views/privacy.php:41
 msgid "When purchasing Eventbrite Tickets, attendee, purchaser, and order information are stored and managed by Eventbrite."
-msgstr ""
+msgstr "When purchasing Eventbrite Tickets, attendee, purchaser, and order information are stored and managed by Eventbrite."
 
 #: src/admin-views/privacy.php:39
 msgid "Please note that to create new events through the Community Events submission form, a user must hold a website account on this domain. This information is retained in the local database. It is also possible to create events anonymously, if the site owner has this option enabled."
-msgstr ""
+msgstr "Please note that to create new events through the Community Events submission form, a user must hold a website account on this domain. This information is retained in the local database. It is also possible to create events anonymously, if the site owner has this option enabled."
 
 #: src/admin-views/privacy.php:36
 msgid "Eventbrite Ticket information: name, description, cost, type, quantity"
-msgstr ""
+msgstr "Eventbrite Ticket information: name, description, cost, type, quantity"
 
 #: src/admin-views/privacy.php:35
 msgid "Import origin data (URL from where events are being imported—such as Eventbrite, MeetUp, other compatible URL sources, and more, which can include similar or same data as listed above)"
-msgstr ""
+msgstr "Import origin data (URL from where events are being imported—such as Eventbrite, MeetUp, other compatible URL sources, and more, which can include similar or same data as listed above)"
 
 #: src/admin-views/privacy.php:34
 msgid "All data present within a CSV or ICS file and external URLs (for events, venues, organizers, and tickets)"
-msgstr ""
+msgstr "All data present within a CSV or ICS file and external URLs (for events, venues, organisers, and tickets)"
 
 #: src/admin-views/privacy.php:31
 msgid "Importing Events, Venues, and Organizers:"
-msgstr ""
+msgstr "Importing Events, Venues, and Organisers:"
 
 #: src/admin-views/privacy.php:28
 msgid "Event information: website, cost, description, date, time, image"
-msgstr ""
+msgstr "Event information: website, cost, description, date, time, image"
 
 #: src/admin-views/privacy.php:27
 msgid "Organizer information: name, phone, website, email"
@@ -224,19 +224,19 @@ msgstr ""
 
 #: src/admin-views/privacy.php:26
 msgid "Venue information: name, address, city, country, state, postal code, phone, website, geographical coordinates (latitude and longitude)"
-msgstr ""
+msgstr "Venue information: name, address, city, country, province, postal code, phone, website, geographical coordinates (latitude and longitude)"
 
 #: src/admin-views/privacy.php:23
 msgid "If you create, submit, import, save, or publish Event, Venue, or Organizer information, such information is retained in the local database:"
-msgstr ""
+msgstr "If you create, submit, import, save, or publish Event, Venue, or Organizer information, such information is retained in the local database:"
 
 #: src/admin-views/privacy.php:22 src/admin-views/privacy.php:47
 msgid "Suggested text:"
-msgstr ""
+msgstr "Suggested text:"
 
 #: src/admin-views/privacy.php:21
 msgid "Through the usage of The Events Calendar, Events Calendar PRO, The Events Calendar Filter Bar, Eventbrite Tickets, and Community Events plugins, as well as our Event Aggregator Import service (contained within The Events Calendar plugin), information may be collected and stored within your website’s database."
-msgstr ""
+msgstr "Through the usage of The Events Calendar, Events Calendar PRO, The Events Calendar Filter Bar, Eventbrite Tickets, and Community Events plugins, as well as our Event Aggregator Import service (contained within The Events Calendar plugin), information may be collected and stored within your website’s database."
 
 #: src/admin-views/privacy.php:20
 msgid "Event, Venue, and Organizer Information"
@@ -244,248 +244,248 @@ msgstr ""
 
 #: src/admin-views/privacy.php:18
 msgid "What personal data we collect and why we collect it"
-msgstr ""
+msgstr "What personal data we collect and why we collect it"
 
 #: src/admin-views/privacy.php:16
 msgid "This information is only for guidance and not to be considered as legal advice."
-msgstr ""
+msgstr "This information is only for guidance and not to be considered as legal advice."
 
 #: src/admin-views/privacy.php:16
 msgid "Disclaimer:"
-msgstr ""
+msgstr "Disclaimer:"
 
 #: src/admin-views/privacy.php:15
 msgid "You should include the information below in the correct sections of you privacy policy."
-msgstr ""
+msgstr "You should include the information below in the correct sections of you privacy policy."
 
 #: src/admin-views/privacy.php:14
 msgid "This information serves as a guide on what sections need to be modified due to usage of The Events Calendar and its Add-ons."
-msgstr ""
+msgstr "This information serves as a guide on what sections need to be modified due to usage of The Events Calendar and its Add-ons."
 
 #: src/admin-views/privacy.php:13
 msgid "Hello,"
-msgstr ""
+msgstr "Hello,"
 
 #: src/admin-views/aggregator/settings.php:513
 msgid "The default event category for events imported via Eventbrite"
-msgstr ""
+msgstr "The default event category for events imported via Eventbrite"
 
 #: src/admin-views/aggregator/settings.php:501
 msgid "The default post status for events imported via Eventbrite"
-msgstr ""
+msgstr "The default post status for events imported via Eventbrite"
 
 #: src/admin-views/aggregator/settings.php:495
 msgid "Eventbrite Import Settings"
-msgstr ""
+msgstr "Eventbrite Import Settings"
 
 #: src/admin-views/aggregator/settings.php:26
 msgid "None"
-msgstr ""
+msgstr "None"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:13
 msgid "Import from Eventbrite"
-msgstr ""
+msgstr "Import from Eventbrite"
 
 #: src/admin-views/aggregator/banners/eventbrite-upsell.php:17
 msgid "Learn more"
-msgstr ""
+msgstr "Learn more"
 
 #: src/admin-views/aggregator/banners/eventbrite-upsell.php:14
 msgid "Do more with Eventbrite Tickets"
-msgstr ""
+msgstr "Do more with Eventbrite Tickets"
 
 #: src/Tribe/Main.php:4117
 msgid "Search for %s by month. Please use the format %s."
-msgstr ""
+msgstr "Search for %s by month. Please use the format %s."
 
 #: src/Tribe/Main.php:4112
 msgid "Search for %s by Date. Please use the format %s."
-msgstr ""
+msgstr "Search for %s by Date. Please use the format %s."
 
 #: src/Tribe/Main.php:4080 src/Tribe/Main.php:4081
 msgid "2 digit month dot 4 digit year"
-msgstr ""
+msgstr "2 digit month dot 4 digit year"
 
 #: src/Tribe/Main.php:4079
 msgid "4 digit year dot 2 digit month"
-msgstr ""
+msgstr "4 digit year dot 2 digit month"
 
 #: src/Tribe/Main.php:4078
 msgid "2 digit month hyphen 4 digit year"
-msgstr ""
+msgstr "2 digit month hyphen 4 digit year"
 
 #: src/Tribe/Main.php:4075 src/Tribe/Main.php:4076 src/Tribe/Main.php:4077
 msgid "1 digit month hyphen 4 digit year"
-msgstr ""
+msgstr "1 digit month hyphen 4 digit year"
 
 #: src/Tribe/Main.php:4072 src/Tribe/Main.php:4074
 msgid "2 digit month slash 4 digit year"
-msgstr ""
+msgstr "2 digit month slash 4 digit year"
 
 #: src/Tribe/Main.php:4071 src/Tribe/Main.php:4073
 msgid "1 digit month slash 4 digit year"
-msgstr ""
+msgstr "1 digit month slash 4 digit year"
 
 #: src/Tribe/Main.php:4070
 msgid "4 digit year hyphen 2 digit month"
-msgstr ""
+msgstr "4 digit year hyphen 2 digit month"
 
 #: src/Tribe/Main.php:4066
 msgid "2 digit day dot 2 digit month dot 4 digit year"
-msgstr ""
+msgstr "2 digit day dot 2 digit month dot 4 digit year"
 
 #: src/Tribe/Main.php:4065
 msgid "2 digit month dot 2 digit day dot 4 digit year"
-msgstr ""
+msgstr "2 digit month dot 2 digit day dot 4 digit year"
 
 #: src/Tribe/Main.php:4064
 msgid "4 digit year dot 2 digit month dot 2 digit day"
-msgstr ""
+msgstr "4 digit year dot 2 digit month dot 2 digit day"
 
 #: src/Tribe/Main.php:4063
 msgid "2 digit day hyphen 2 digit month hyphen 4 digit year"
-msgstr ""
+msgstr "2 digit day hyphen 2 digit month hyphen 4 digit year"
 
 #: src/Tribe/Main.php:4062
 msgid "1 digit day hyphen 1 digit month hyphen 4 digit year"
-msgstr ""
+msgstr "1 digit day hyphen 1 digit month hyphen 4 digit year"
 
 #: src/Tribe/Main.php:4061
 msgid "1 digit month hyphen 2 digit day hyphen 4 digit year"
-msgstr ""
+msgstr "1 digit month hyphen 2 digit day hyphen 4 digit year"
 
 #: src/Tribe/Main.php:4060
 msgid "1 digit month hyphen 1 digit day hyphen 4 digit year"
-msgstr ""
+msgstr "1 digit month hyphen 1 digit day hyphen 4 digit year"
 
 #: src/Tribe/Main.php:4059
 msgid "2 digit day slash 2 digit month slash 4 digit year"
-msgstr ""
+msgstr "2 digit day slash 2 digit month slash 4 digit year"
 
 #: src/Tribe/Main.php:4058
 msgid "1 digit day slash 1 digit month slash 4 digit year"
-msgstr ""
+msgstr "1 digit day slash 1 digit month slash 4 digit year"
 
 #: src/Tribe/Main.php:4057
 msgid "2 digit month slash 2 digit day slash 4 digit year"
-msgstr ""
+msgstr "2 digit month slash 2 digit day slash 4 digit year"
 
 #: src/Tribe/Main.php:4056
 msgid "1 digit month slash 1 digit day slash 4 digit year"
-msgstr ""
+msgstr "1 digit month slash 1 digit day slash 4 digit year"
 
 #: src/Tribe/Main.php:4055
 msgid "4 digit year hyphen 2 digit month hyphen 2 digit day"
-msgstr ""
+msgstr "4 digit year hyphen 2 digit month hyphen 2 digit day"
 
 #: src/Tribe/Main.php:4034
 msgid "Search for %s by Keyword."
-msgstr ""
+msgstr "Search for %s by Keyword."
 
 #: src/Tribe/API.php:826 src/Tribe/API.php:837
 msgid "An event having a post meta value of `%s` minutes is not valid. Make sure it is from 0 to 59."
-msgstr ""
+msgstr "An event having a post meta value of `%s` minutes is not valid. Make sure it is from 0 to 59."
 
 #: src/Tribe/API.php:796
 msgid "An event having a post meta value of `%s` hour (24-hour) is not valid. Make sure it is from 0 to 23."
-msgstr ""
+msgstr "An event having a post meta value of `%s` hour (24-hour) is not valid. Make sure it is from 0 to 23."
 
 #: src/Tribe/API.php:789
 msgid "An event having a post meta value of `%s` hour (12-hour) is not valid. Make sure it is from 1 to 12."
-msgstr ""
+msgstr "An event having a post meta value of `%s` hour (12-hour) is not valid. Make sure it is from 1 to 12."
 
 #: src/Tribe/API.php:772
 msgid "An event having a post meta value of `%s` hour (am/pm) is not valid. Make sure it is from 1 to 12."
-msgstr ""
+msgstr "An event having a post meta value of `%s` hour (am/pm) is not valid. Make sure it is from 1 to 12."
 
 #: src/Tribe/API.php:744
 msgid "An event having a post meta value of `%s` meridian is not valid. Make sure it is either `am` or `pm`, or remove it entirely if using the 24-hour format."
-msgstr ""
+msgstr "An event having a post meta value of `%s` meridian is not valid. Make sure it is either `am` or `pm`, or remove it entirely if using the 24-hour format."
 
 #: common/src/Tribe/Admin/Notice/Php_Version.php:101
 msgid "Starting March 2019, %1$s will no longer work with versions prior to PHP 5.4. Currently your site is using PHP version %2$s. For best results, we recommend using PHP 5.6 or above."
-msgstr ""
+msgstr "Starting March 2019, %1$s will no longer work with versions prior to PHP 5.4. Currently your site is using PHP version %2$s. For best results, we recommend using PHP 5.6 or above."
 
 #: common/src/Tribe/Admin/Notice/Php_Version.php:98
 msgid "Starting March 2019, %1$s will no longer support versions prior to PHP 5.6. Your site is currently using PHP version %2$s which will no longer be supported by %1$s. For best results, we recommend using PHP 5.6 or above."
-msgstr ""
+msgstr "Starting March 2019, %1$s will no longer support versions prior to PHP 5.6. Your site is currently using PHP version %2$s which will no longer be supported by %1$s. For best results, we recommend using PHP 5.6 or above."
 
 #: src/admin-views/tribe-options-addons-api.php:74
 msgid "You need to connect Event Aggregator to Eventbrite to import your events from Eventbrite."
-msgstr ""
+msgstr "You need to connect Event Aggregator to Eventbrite to import your events from Eventbrite."
 
 #: src/admin-views/tribe-options-addons-api.php:52
 msgid "Refresh your connection to Eventbrite"
-msgstr ""
+msgstr "Refresh your connection to Eventbrite"
 
 #: src/admin-views/tribe-options-addons-api.php:50
 msgid "Connect to Eventbrite"
-msgstr ""
+msgstr "Connect to Eventbrite"
 
 #: src/admin-views/tribe-options-addons-api.php:49
 msgid "You need to connect to Eventbrite for Event Aggregator to work properly"
-msgstr ""
+msgstr "You need to connect to Eventbrite for Event Aggregator to work properly"
 
 #: src/admin-views/tribe-options-addons-api.php:45
 msgid "Eventbrite Token"
-msgstr ""
+msgstr "Eventbrite Token"
 
 #: src/admin-views/aggregator/tabs/import-form.php:306
 msgid "Settings > General"
-msgstr ""
+msgstr "Settings > General"
 
 #: src/admin-views/aggregator/tabs/import-form.php:295
 msgid "The number of events available in the preview may be limited by your %1$sImport Settings.%2$s"
-msgstr ""
+msgstr "The number of events available in the preview may be limited by your %1$sImport Settings.%2$s"
 
 #: src/admin-views/aggregator/tabs/import-form.php:288
 msgid "to change how the actual time is displayed on your calendar."
-msgstr ""
+msgstr "to change how the actual time is displayed on your calendar."
 
 #: src/admin-views/aggregator/tabs/import-form.php:286
 msgid "timezone settings"
-msgstr ""
+msgstr "timezone settings"
 
 #: src/admin-views/aggregator/tabs/import-form.php:284
 msgid "Events will be imported with the same timezone as defined on eventbrite.com. You can make use of The Events Calendar's"
-msgstr ""
+msgstr "Events will be imported with the same timezone as defined on eventbrite.com. You can make use of The Events Calendar's"
 
 #: src/admin-views/aggregator/tabs/import-form.php:277
 msgid "Eventbrite imports can fetch up to 50 events from your source."
-msgstr ""
+msgstr "Eventbrite imports can fetch up to 50 events from your source."
 
 #: src/admin-views/aggregator/status.php:175
 msgid "Limited connectivity with Eventbrite"
-msgstr ""
+msgstr "Limited connectivity with Eventbrite"
 
 #: src/admin-views/aggregator/status.php:171
 msgctxt "link for connecting eventbrite"
 msgid "Connect to Eventbrite"
-msgstr ""
+msgstr "Connect to Eventbrite"
 
 #: src/admin-views/aggregator/status.php:169
 msgid "You have not connected Event Aggregator to Eventbrite"
-msgstr ""
+msgstr "You have not connected Event Aggregator to Eventbrite"
 
 #: src/admin-views/aggregator/origins/refine.php:28
 msgid "Use the filters to narrow down which events are fetched from Eventbrite."
-msgstr ""
+msgstr "Use the filters to narrow down which events are fetched from Eventbrite."
 
 #: src/admin-views/aggregator/origins/meetup.php:154
 msgid "Invalid Meetup URL"
-msgstr ""
+msgstr "Invalid Meetup URL"
 
 #: src/deprecated/facebook.php:129
 msgid "Invalid Facebook URL"
-msgstr ""
+msgstr "Invalid Facebook URL"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:183
 msgid "Invalid Eventbrite URL"
-msgstr ""
+msgstr "Invalid Eventbrite URL"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:153
 msgid "eventbrite.com/e/example-12345"
-msgstr ""
+msgstr "eventbrite.com/e/example-12345"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:116
 msgid "Import events directly from your connected Eventbrite.com account or from a public Eventbrite.com url."
@@ -493,44 +493,44 @@ msgstr ""
 
 #: src/admin-views/aggregator/origins/eventbrite.php:115
 msgid "Select Source"
-msgstr ""
+msgstr "Select Source"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:114
 msgid "Import Source"
-msgstr ""
+msgstr "Import Source"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:44
 msgid "Log into Eventbrite"
-msgstr ""
+msgstr "Log into Eventbrite"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:38
 msgid "Please log in to enable event imports from Eventbrite."
-msgstr ""
+msgstr "Please log in to enable event imports from Eventbrite."
 
 #: src/admin-views/aggregator/origins/eventbrite.php:15
 #: src/admin-views/aggregator/origins/eventbrite.php:121
 msgid "Import from your Eventbrite account"
-msgstr ""
+msgstr "Import from your Eventbrite account"
 
 #: src/admin-views/aggregator/origins/eventbrite.php:8
 msgid "One-time imports include all currently listed events, while scheduled imports automatically grab new events and updates from Eventbrite on a set schedule. Single events can be added via a one-time import."
-msgstr ""
+msgstr "One-time imports include all currently listed events, while scheduled imports automatically grab new events and updates from Eventbrite on a set schedule. Single events can be added via a one-time import."
 
 #: src/Tribe/Aggregator/Tabs/Abstract.php:175
 msgid "Please provide a Eventbrite URL when importing from Eventbrite."
-msgstr ""
+msgstr "Please provide a Eventbrite URL when importing from Eventbrite."
 
 #: src/Tribe/Aggregator/Service.php:681
 msgid "Successfully fetched Eventbrite Token"
-msgstr ""
+msgstr "Successfully fetched Eventbrite Token"
 
 #: src/Tribe/Aggregator/Service.php:666
 msgid "No upcoming Eventbrite events found."
-msgstr ""
+msgstr "No upcoming Eventbrite events found."
 
 #: src/Tribe/Aggregator/Service.php:665
 msgid "Events cannot be imported because Eventbrite has returned an error. This could mean that the event ID does not exist, the event or source is marked as Private, or the event or source has been otherwise restricted by Eventbrite. You can <a href=\"https://theeventscalendar.com/knowledgebase/import-errors/\" target=\"_blank\">read more about Eventbrite restrictions in our knowledgebase</a>."
-msgstr ""
+msgstr "Events cannot be imported because Eventbrite has returned an error. This could mean that the event ID does not exist, the event or source is marked as Private, or the event or source has been otherwise restricted by Eventbrite. You can <a href=\"https://theeventscalendar.com/knowledgebase/import-errors/\" target=\"_blank\">read more about Eventbrite restrictions in our knowledgebase</a>."
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/State.php:78
 msgid "The new status message slug, to allow for localized messages."
@@ -542,34 +542,34 @@ msgstr ""
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/State.php:68
 msgid "The new status of the import."
-msgstr ""
+msgstr "The new status of the import."
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/Batch.php:138
 msgid "The current interval, in seconds, between the end of a batch process and the start of the next; as set on the server."
-msgstr ""
+msgstr "The current interval, in seconds, between the end of a batch process and the start of the next; as set on the server."
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/Batch.php:132
 #: src/Tribe/Aggregator/REST/V1/Endpoints/State.php:84
 msgid "The percentage of import completed."
-msgstr ""
+msgstr "The percentage of import completed."
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/Batch.php:126
 msgid "The current status of the import."
-msgstr ""
+msgstr "The current status of the import."
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/Batch.php:120
 #: src/Tribe/Aggregator/REST/V1/Endpoints/State.php:62
 msgid "The hash of the next expected batch, as previously provided by the client"
-msgstr ""
+msgstr "The hash of the next expected batch, as previously provided by the client"
 
 #: src/Tribe/Aggregator/REST/V1/Endpoints/Batch.php:114
 #: src/Tribe/Aggregator/REST/V1/Endpoints/State.php:56
 msgid "The import unique ID as provided by Event Aggregator service"
-msgstr ""
+msgstr "The import unique ID as provided by Event Aggregator service"
 
 #: src/Tribe/Aggregator/Errors.php:65
 msgid "There is an JSON error with the Event Aggregator server. Please try your import again later."
-msgstr ""
+msgstr "There is an JSON error with the Event Aggregator server. Please try your import again later."
 
 #: src/Tribe/Aggregator/CLI/Service_Provider.php:22
 msgid "If required the commands will use the API keys and licenses set for the current site."
@@ -577,96 +577,96 @@ msgstr ""
 
 #: src/Tribe/Aggregator/CLI/Service_Provider.php:21
 msgid "Create, run and manage Event Aggregator imports."
-msgstr ""
+msgstr "Create, run and manage Event Aggregator imports."
 
 #: src/Tribe/Admin/Notice/Timezones.php:76
 msgid "When using The Events Calendar, we recommend that you choose a city in your timezone and avoid using a UTC timezone offset. Choosing a UTC timezone may cause problems when importing events or with Day Light Savings time. %1$s"
-msgstr ""
+msgstr "When using The Events Calendar, we recommend that you choose a city in your timezone and avoid using a UTC timezone offset. Choosing a UTC timezone may cause problems when importing events or with Day Light Savings time. %1$s"
 
 #: src/Tribe/Admin/Notice/Timezones.php:74
 msgid "Read more"
-msgstr ""
+msgstr "Read more"
 
 #: src/Tribe/Admin/Notice/Marketing.php:52
 msgctxt "2018 user survey"
 msgid "<strong>The Events Calendar Annual Survey:</strong> share your feedback with our team—%1$s!"
-msgstr ""
+msgstr "<strong>The Events Calendar Annual Survey:</strong> share your feedback with our team—%1$s!"
 
 #: src/Tribe/Admin/Notice/Marketing.php:48
 msgctxt "2018 user survey"
 msgid "take the survey now"
-msgstr ""
+msgstr "take the survey now"
 
 #: common/src/admin-views/tribe-options-help.php:33
 msgid "Search our support help desk"
-msgstr ""
+msgstr "Search our support help desk"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:39
 #: src/Tribe/REST/V1/Endpoints/Archive_Event.php:385
 #: src/Tribe/REST/V1/Endpoints/Archive_Organizer.php:67
 #: src/Tribe/REST/V1/Endpoints/Archive_Venue.php:64
 msgid "The requested page was not found."
-msgstr ""
+msgstr "The requested page was not found."
 
 #: src/Tribe/Aggregator/Settings.php:407
 msgid "one month"
-msgstr ""
+msgstr "one month"
 
 #: src/Tribe/Aggregator/Settings.php:395
 msgid "one week"
-msgstr ""
+msgstr "one week"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:577
 msgctxt "when the retry will happen, a date"
 msgid "retrying at %s"
-msgstr ""
+msgstr "retrying at %s"
 
 #: src/Tribe/Aggregator/Record/List_Table.php:574
 msgctxt "in human readable time"
 msgid "retrying in about %s"
-msgstr ""
+msgstr "retrying in about %s"
 
 #: common/vendor/a5hleyrich/wp-background-processing/classes/wp-background-process.php:425
 msgid "Every %d Minutes"
-msgstr ""
+msgstr "Every %d Minutes"
 
 #: src/admin-views/tribe-options-general.php:190
 msgid "This option allows you to bulk delete past events. Be careful and backup your database before removing your events as there is no way to reverse the changes."
-msgstr ""
+msgstr "This option allows you to bulk delete past events. Be careful and backup your database before removing your events as there is no way to reverse the changes."
 
 #: src/admin-views/tribe-options-general.php:189
 msgid "Permanently delete events older than"
-msgstr ""
+msgstr "Permanently delete events older than"
 
 #: src/admin-views/tribe-options-general.php:184
 #: src/admin-views/tribe-options-general.php:201
 msgid "3 years"
-msgstr ""
+msgstr "3 years"
 
 #: src/admin-views/tribe-options-general.php:183
 #: src/admin-views/tribe-options-general.php:200
 msgid "2 years"
-msgstr ""
+msgstr "2 years"
 
 #: src/admin-views/tribe-options-general.php:182
 #: src/admin-views/tribe-options-general.php:199
 msgid "1 year"
-msgstr ""
+msgstr "1 year"
 
 #: src/admin-views/tribe-options-general.php:181
 #: src/admin-views/tribe-options-general.php:198
 msgid "9 months"
-msgstr ""
+msgstr "9 months"
 
 #: src/admin-views/tribe-options-general.php:180
 #: src/admin-views/tribe-options-general.php:197
 msgid "6 months"
-msgstr ""
+msgstr "6 months"
 
 #: src/admin-views/tribe-options-general.php:179
 #: src/admin-views/tribe-options-general.php:196
 msgid "3 months"
-msgstr ""
+msgstr "3 months"
 
 #: src/admin-views/tribe-options-general.php:173
 msgid "This option allows you to automatically move past events to trash."
@@ -678,46 +678,46 @@ msgstr ""
 
 #: src/admin-views/tribe-options-general.php:53
 msgid "Instantly updates the calendar view when searching for or filtering events."
-msgstr ""
+msgstr "Instantly updates the calendar view when searching for or filtering events."
 
 #: src/admin-views/tribe-options-general.php:52
 msgid "Enable live refresh"
-msgstr ""
+msgstr "Enable live refresh"
 
 #: src/admin-views/events-meta-box.php:129
 msgid "Time Zone:"
-msgstr ""
+msgstr "Time Zone:"
 
 #: src/Tribe/Gutenberg.php:84
 msgid "Looks like you are using Gutenberg on this WordPress installation. %1$s"
-msgstr ""
+msgstr "Looks like you are using Gutenberg on this WordPress installation. %1$s"
 
 #: src/Tribe/Gutenberg.php:82
 msgid "Download our Events Gutenberg extension and start using the block editor on your events!"
-msgstr ""
+msgstr "Download our Events Gutenberg extension and start using the block editor on your events!"
 
 #: src/Tribe/Front_Page_View.php:238
 #: src/deprecated/Tribe__Events__Customizer__Front_Page_View.php:55
 msgctxt "Customizer static front page setting"
 msgid "Main %s Page"
-msgstr ""
+msgstr "Main %s Page"
 
 #: common/src/Tribe/Plugins_API.php:71
 msgid "Event Tickets Plus allows you to sell tickets to your events using WooCommerce, Easy Digital Downloads, or our built in Tribe Commerce tool. Add tickets to your posts and pages, or add %1$sThe Events Calendar%2$s and sell tickets from your event listings. Create custom registration forms, manage attendees, use custom capacity options, and more. Guest check in is easy with QR codes and our custom scanning app."
-msgstr ""
+msgstr "Event Tickets Plus allows you to sell tickets to your events using WooCommerce, Easy Digital Downloads, or our built in Tribe Commerce tool. Add tickets to your posts and pages, or add %1$sThe Events Calendar%2$s and sell tickets from your event listings. Create custom registration forms, manage attendees, use custom capacity options, and more. Guest check in is easy with QR codes and our custom scanning app."
 
 #: src/admin-views/tribe-options-general.php:31
 msgid "The number of events per page on the List, Photo, and Map Views. Does not affect other views."
-msgstr ""
+msgstr "The number of events per page on the List, Photo, and Map Views. Does not affect other views."
 
 #: src/admin-views/tribe-options-general.php:28
 msgid "The number of events per page on the List View. Does not affect other views."
-msgstr ""
+msgstr "The number of events per page on the List View. Does not affect other views."
 
 #: src/Tribe/Rewrite.php:265
 msgctxt "The \"/page/\" URL string component."
 msgid "page"
-msgstr ""
+msgstr "page"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Organizer.php:143
 msgid "An organizer with the specified event does not exist."
@@ -729,73 +729,73 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:130
 msgid "An event with the specified ID does not exist."
-msgstr ""
+msgstr "An event with the specified ID does not exist."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:127
 msgid "The event with the specified ID is not accessible."
-msgstr ""
+msgstr "The event with the specified ID is not accessible."
 
 #: src/Tribe/Main.php:1815
 msgid "%1$s published. %2$sView %3$s"
-msgstr ""
+msgstr "%1$s published. %2$sView %3$s"
 
 #: common/src/Tribe/Validate.php:184
 msgid "%s must not be empty"
-msgstr ""
+msgstr "%s must not be empty"
 
 #: src/functions/template-tags/general.php:1345
 msgid "Calendar powered by %s"
-msgstr ""
+msgstr "Calendar powered by %s"
 
 #: src/admin-views/tribe-options-general.php:85
 msgid "The current URL for your events page is %1$s. <br><br> You cannot edit the slug for your events page as you do not have pretty permalinks enabled. In order to edit the slug here, <a href=\"%2$s\">enable pretty permalinks</a>."
-msgstr ""
+msgstr "The current URL for your events page is %1$s. <br><br> You cannot edit the slug for your events page as you do not have pretty permalinks enabled. In order to edit the slug here, <a href=\"%2$s\">enable pretty permalinks</a>."
 
 #: src/admin-views/tribe-options-display.php:52
 msgid "There are going to be situations where no out-of-the-box template is 100&#37; perfect. Check out our <a href=\"%s\">our themer's guide</a> for instructions on custom modifications."
-msgstr ""
+msgstr "There are going to be situations where no out-of-the-box template is 100&#37; perfect. Check out our <a href=\"%s\">our themer's guide</a> for instructions on custom modifications."
 
 #: src/admin-views/tribe-options-display.php:49
 msgid "The settings below control the display of your calendar. If things don't look right, try switching between the three style sheet options or pick a page template from your theme."
-msgstr ""
+msgstr "The settings below control the display of your calendar. If things don't look right, try switching between the three style sheet options or pick a page template from your theme."
 
 #: src/admin-views/aggregator/settings.php:202
 msgid "When importing from an event source, this is the maximum number of events that will be imported; on slower websites this may impact the success of imports. Setting this to a smaller number may improve results."
-msgstr ""
+msgstr "When importing from an event source, this is the maximum number of events that will be imported; on slower websites this may impact the success of imports. Setting this to a smaller number may improve results."
 
 #: src/admin-views/aggregator/settings.php:201
 msgid "Import Quantity Limit"
-msgstr ""
+msgstr "Import Quantity Limit"
 
 #: src/admin-views/aggregator/settings.php:185
 msgid "When importing from an event source, this is how far into the future the events will be fetched; on slower websites a larger date range may impact the success of imports. Selecting a shorter time period may improve results."
-msgstr ""
+msgstr "When importing from an event source, this is how far into the future the events will be fetched; on slower websites a larger date range may impact the success of imports. Selecting a shorter time period may improve results."
 
 #: src/admin-views/aggregator/settings.php:184
 #: src/admin-views/aggregator/settings.php:468
 msgid "Import Date Range Limit"
-msgstr ""
+msgstr "Import Date Range Limit"
 
 #: src/admin-views/aggregator/settings.php:172
 msgid "Limit the number of imported events by number, date range, or not at all; on slower websites this may impact the success of imports. Selecting a shorter time period or a smaller number of events may improve results."
-msgstr ""
+msgstr "Limit the number of imported events by number, date range, or not at all; on slower websites this may impact the success of imports. Selecting a shorter time period or a smaller number of events may improve results."
 
 #: src/admin-views/aggregator/settings.php:171
 msgid "Import Limit Type"
-msgstr ""
+msgstr "Import Limit Type"
 
 #: src/admin-views/aggregator/origins/limit.php:20
 msgid "Event Aggregator will try to fetch %s events starting from the current date or the specified date;"
-msgstr ""
+msgstr "Event Aggregator will try to fetch %s events starting from the current date or the specified date;"
 
 #: src/Tribe/iCal.php:438
 msgctxt "iCal feed description"
 msgid "Events for %s"
-msgstr ""
+msgstr "Events for %s"
 
 #: src/Tribe/REST/V1/Messages.php:45
 msgid "The requested event term archive page does not exist"
-msgstr ""
+msgstr "The requested event term archive page does not exist"
 
 #: src/Tribe/REST/V1/Messages.php:43
 msgid "The requested organizer archive page does not exist"
@@ -803,7 +803,7 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Messages.php:42
 msgid "The requested venue archive page does not exist"
-msgstr ""
+msgstr "The requested venue archive page does not exist"
 
 #: src/Tribe/REST/V1/Messages.php:41
 msgid "The organizer could not be updated"
@@ -811,11 +811,11 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Messages.php:40
 msgid "The venue could not be updated"
-msgstr ""
+msgstr "The venue could not be updated"
 
 #: src/Tribe/REST/V1/Messages.php:39
 msgid "The event could not be updated"
-msgstr ""
+msgstr "The event could not be updated"
 
 #: src/Tribe/REST/V1/Messages.php:38
 msgid "The organizer is already trashed"
@@ -831,7 +831,7 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Messages.php:35
 msgid "The venue could not be deleted"
-msgstr ""
+msgstr "The venue could not be deleted"
 
 #: src/Tribe/REST/V1/Messages.php:34
 msgid "The event is already trashed"
@@ -839,7 +839,7 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Messages.php:33
 msgid "The event could not be deleted"
-msgstr ""
+msgstr "The event could not be deleted"
 
 #: src/Tribe/REST/V1/Messages.php:32
 msgid "The requested organizer is not accessible"
@@ -847,11 +847,11 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Messages.php:31
 msgid "The requested venue is not accessible"
-msgstr ""
+msgstr "The requested venue is not accessible"
 
 #: src/Tribe/REST/V1/Messages.php:30
 msgid "The provided linked post ID is not valid"
-msgstr ""
+msgstr "The provided linked post ID is not valid"
 
 #: src/Tribe/REST/V1/Messages.php:29
 msgid "The organizer could not be created from the provided data"
@@ -859,67 +859,67 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Messages.php:28
 msgid "The venue could not be created from the provided data"
-msgstr ""
+msgstr "The venue could not be created from the provided data"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue_Slug.php:36
 msgid "the venue post name"
-msgstr ""
+msgstr "the venue post name"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:309
 msgid "The venue state and province"
-msgstr ""
+msgstr "The venue state and province"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:253
 msgid "Whether events linked to the venue should show a map link or not"
-msgstr ""
+msgstr "Whether events linked to the venue should show a map link or not"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:247
 msgid "Whether events linked to the venue should show a map or not"
-msgstr ""
+msgstr "Whether events linked to the venue should show a map or not"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:240
 msgid "The venue post status"
-msgstr ""
+msgstr "The venue post status"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:234
 msgid "The venue description"
-msgstr ""
+msgstr "The venue description"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:221
 msgid "The venue publication date (UTC time zone)"
-msgstr ""
+msgstr "The venue publication date (UTC time zone)"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:215
 msgid "The venue publication date"
-msgstr ""
+msgstr "The venue publication date"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:209
 msgid "The venue author ID"
-msgstr ""
+msgstr "The venue author ID"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:187
 msgid "the venue post ID"
-msgstr ""
+msgstr "the venue post ID"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:167
 msgid "The venue with the specified ID could not be deleted."
-msgstr ""
+msgstr "The venue with the specified ID could not be deleted."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:164
 msgid "The venue with the specified ID has been deleted already."
-msgstr ""
+msgstr "The venue with the specified ID has been deleted already."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:161
 msgid "The current user cannot delete the venue with the specified ID."
-msgstr ""
+msgstr "The current user cannot delete the venue with the specified ID."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:158
 msgid "The venue post ID is missing or does not exist."
-msgstr ""
+msgstr "The venue post ID is missing or does not exist."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:152
 msgid "Deletes a venue and returns its data"
-msgstr ""
+msgstr "Deletes a venue and returns its data"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:144
 msgid "The user is not authorized to create venues"
@@ -927,47 +927,47 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:135
 msgid "Returns the data of the created venue"
-msgstr ""
+msgstr "Returns the data of the created venue"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:129
 msgid "Returns the data of the updated venue"
-msgstr ""
+msgstr "Returns the data of the updated venue"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:120
 msgid "A venue with the specified post ID does not exist."
-msgstr ""
+msgstr "A venue with the specified post ID does not exist."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:114
 msgid "The venue post ID is missing."
-msgstr ""
+msgstr "The venue post ID is missing."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:108
 msgid "Returns the data of the venue with the specified post ID"
-msgstr ""
+msgstr "Returns the data of the venue with the specified post ID"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:142
 msgid "the event tag term ID"
-msgstr ""
+msgstr "the event tag term ID"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:122
 msgid "The event tag with the specified term ID could not be deleted."
-msgstr ""
+msgstr "The event tag with the specified term ID could not be deleted."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:119
 msgid "The event tag with the specified term ID has been deleted already."
-msgstr ""
+msgstr "The event tag with the specified term ID has been deleted already."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:116
 msgid "The current user cannot delete the event tag with the specified term ID."
-msgstr ""
+msgstr "The current user cannot delete the event tag with the specified term ID."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:113
 msgid "The event tag term ID is missing or does not exist."
-msgstr ""
+msgstr "The event tag term ID is missing or does not exist."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:107
 msgid "Deletes an event tag and returns its data"
-msgstr ""
+msgstr "Deletes an event tag and returns its data"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:99
 msgid "The user is not authorized to create event tags"
@@ -975,31 +975,31 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:90
 msgid "Returns the data of the created event tag"
-msgstr ""
+msgstr "Returns the data of the created event tag"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:84
 msgid "Returns the data of the updated event tag"
-msgstr ""
+msgstr "Returns the data of the updated event tag"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:72
 msgid "The event tag term ID is missing."
-msgstr ""
+msgstr "The event tag term ID is missing."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:66
 msgid "Returns the data of the event tag with the specified term ID"
-msgstr ""
+msgstr "Returns the data of the event tag with the specified term ID"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:37
 msgid "The event tag slug"
-msgstr ""
+msgstr "The event tag slug"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:31
 msgid "The event tag description"
-msgstr ""
+msgstr "The event tag description"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:25
 msgid "The event tag name"
-msgstr ""
+msgstr "The event tag name"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Organizer_Slug.php:36
 msgid "the organizer post name"
@@ -1008,7 +1008,7 @@ msgstr ""
 #: src/Tribe/REST/V1/Endpoints/Single_Organizer.php:291
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:323
 msgid "The organizer featured image ID or URL"
-msgstr ""
+msgstr "The organiser featured image ID or URL"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Organizer.php:284
 msgid "The organizer e-mail address"
@@ -1072,7 +1072,7 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event_Slug.php:36
 msgid "the event post name"
-msgstr ""
+msgstr "the event post name"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:355
 msgid "The event organizer IDs or data"
@@ -1080,95 +1080,95 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:347
 msgid "The event venue ID or data"
-msgstr ""
+msgstr "The event venue ID or data"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:325
 msgid "Whether the event should be featured on the site or not"
-msgstr ""
+msgstr "Whether the event should be featured on the site or not"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:320
 msgid "Whether the event should be sticky in the calendar view or not"
-msgstr ""
+msgstr "Whether the event should be sticky in the calendar view or not"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:315
 msgid "Whether events should be hidden in the calendar view or not"
-msgstr ""
+msgstr "Whether events should be hidden in the calendar view or not"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:310
 msgid "Whether the event should show a map link or not"
-msgstr ""
+msgstr "Whether the event should show a map link or not"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:305
 msgid "Whether the event should show a map or not"
-msgstr ""
+msgstr "Whether the event should show a map or not"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:292
 msgid "The event cost"
-msgstr ""
+msgstr "The event cost"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:287
 msgid "The event featured image ID or URL"
-msgstr ""
+msgstr "The event featured image ID or URL"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:281
 msgid "The event end date and time"
-msgstr ""
+msgstr "The event end date and time"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:275
 msgid "The event start date and time"
-msgstr ""
+msgstr "The event start date and time"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:269
 msgid "Whether the event lasts the whole day or not"
-msgstr ""
+msgstr "Whether the event lasts the whole day or not"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:263
 msgid "The event time zone"
-msgstr ""
+msgstr "The event time zone"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:250
 msgid "The event excerpt"
-msgstr ""
+msgstr "The event excerpt"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:238
 msgid "The event description"
-msgstr ""
+msgstr "The event description"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:232
 msgid "The event title"
-msgstr ""
+msgstr "The event title"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:226
 msgid "The event publication date (UTC time zone)"
-msgstr ""
+msgstr "The event publication date (UTC time zone)"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:220
 msgid "The event publication date"
-msgstr ""
+msgstr "The event publication date"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:214
 msgid "The event author ID"
-msgstr ""
+msgstr "The event author ID"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:177
 msgid "The event with the specified ID could not be deleted."
-msgstr ""
+msgstr "The event with the specified ID could not be deleted."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:174
 msgid "The event with the specified ID has been deleted already."
-msgstr ""
+msgstr "The event with the specified ID has been deleted already."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:171
 msgid "The current user cannot delete the event with the specified ID."
-msgstr ""
+msgstr "The current user cannot delete the event with the specified ID."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:168
 msgid "The event post ID is missing or does not exist."
-msgstr ""
+msgstr "The event post ID is missing or does not exist."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:162
 msgid "Deletes an event and returns its data"
-msgstr ""
+msgstr "Deletes an event and returns its data"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:154
 msgid "The user is not authorized to create events"
@@ -1176,35 +1176,35 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:145
 msgid "Returns the data of the created event"
-msgstr ""
+msgstr "Returns the data of the created event"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:139
 msgid "Returns the data of the updated event"
-msgstr ""
+msgstr "Returns the data of the updated event"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:148
 msgid "the event category term ID"
-msgstr ""
+msgstr "the event category term ID"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:128
 msgid "The event category with the specified term ID could not be deleted."
-msgstr ""
+msgstr "The event category with the specified term ID could not be deleted."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:125
 msgid "The event category with the specified term ID has been deleted already."
-msgstr ""
+msgstr "The event category with the specified term ID has been deleted already."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:122
 msgid "The current user cannot delete the event category with the specified term ID."
-msgstr ""
+msgstr "The current user cannot delete the event category with the specified term ID."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:119
 msgid "The event category term ID is missing or does not exist."
-msgstr ""
+msgstr "The event category term ID is missing or does not exist."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:113
 msgid "Deletes an event category and returns its data"
-msgstr ""
+msgstr "Deletes an event category and returns its data"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:105
 msgid "The user is not authorized to create event categories"
@@ -1216,80 +1216,80 @@ msgstr ""
 #: src/Tribe/REST/V1/Endpoints/Single_Tag.php:96
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:141
 msgid "A required parameter is missing or an input parameter is in the wrong format"
-msgstr ""
+msgstr "A required parameter is missing or an input parameter is in the wrong format"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:96
 msgid "Returns the data of the created event category"
-msgstr ""
+msgstr "Returns the data of the created event category"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:90
 msgid "Returns the data of the updated event category"
-msgstr ""
+msgstr "Returns the data of the updated event category"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:81
 msgid "An event category with the specified term ID does not exist."
-msgstr ""
+msgstr "An event category with the specified term ID does not exist."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:78
 msgid "The event category term ID is missing."
-msgstr ""
+msgstr "The event category term ID is missing."
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:72
 msgid "Returns the data of the event category with the specified term ID"
-msgstr ""
+msgstr "Returns the data of the event category with the specified term ID"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:37
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:43
 msgid "The event category slug"
-msgstr ""
+msgstr "The event category slug"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:31
 msgid "The event category description"
-msgstr ""
+msgstr "The event category description"
 
 #: src/Tribe/REST/V1/Endpoints/Single_Category.php:25
 msgid "The event category name"
-msgstr ""
+msgstr "The event category name"
 
 #: src/Tribe/REST/V1/Endpoints/Base.php:38
 msgid "No description provided"
-msgstr ""
+msgstr "No description provided"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Venue.php:221
 msgid "Venues should have upcoming events associated to them"
-msgstr ""
+msgstr "Venues should have upcoming events associated to them"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Venue.php:216
 msgid "Venues should have events associated to them"
-msgstr ""
+msgstr "Venues should have events associated to them"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Venue.php:211
 msgid "Venues should be related to this event"
-msgstr ""
+msgstr "Venues should be related to this event"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Venue.php:205
 msgid "Venues should contain the specified string in the title, description or custom fields"
-msgstr ""
+msgstr "Venues should contain the specified string in the title, description or custom fields"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Venue.php:199
 msgid "The number of venues to return on each page"
-msgstr ""
+msgstr "The number of venues to return on each page"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Venue.php:53
 msgid "Returns all the venues matching the search criteria"
-msgstr ""
+msgstr "Returns all the venues matching the search criteria"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Tag.php:118
 msgid "The number of event tags to return on each page"
-msgstr ""
+msgstr "The number of event tags to return on each page"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Tag.php:56
 msgid "No event tags match the query or the requested page was not found."
-msgstr ""
+msgstr "No event tags match the query or the requested page was not found."
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Tag.php:45
 msgid "Returns all the event tags matching the search criteria"
-msgstr ""
+msgstr "Returns all the event tags matching the search criteria"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Organizer.php:233
 #: src/Tribe/REST/V1/Endpoints/Archive_Venue.php:230
@@ -1323,24 +1323,24 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Event.php:494
 msgid "Requires Events Calendar Pro. Events should be filtered by their venue longitude location, must also provide geoloc_lat"
-msgstr ""
+msgstr "Requires Events Calendar Pro. Events should be filtered by their venue longitude location, must also provide geoloc_lat"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Event.php:488
 msgid "Requires Events Calendar Pro. Events should be filtered by their venue latitude location, must also provide geoloc_lng"
-msgstr ""
+msgstr "Requires Events Calendar Pro. Events should be filtered by their venue latitude location, must also provide geoloc_lng"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Event.php:482
 msgid "Requires Events Calendar Pro. Events should be filtered by whether their venue has geolocation data"
-msgstr ""
+msgstr "Requires Events Calendar Pro. Events should be filtered by whether their venue has geolocation data"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Event.php:477
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:256
 msgid "The event post status"
-msgstr ""
+msgstr "The event post status"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Event.php:470
 msgid "Events should be filtered by their featured status"
-msgstr ""
+msgstr "Events should be filtered by their featured status"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Event.php:462
 msgid "Events should be assigned one of the specified organizer IDs"
@@ -1348,80 +1348,80 @@ msgstr ""
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Event.php:454
 msgid "Events should be assigned one of the specified venue IDs"
-msgstr ""
+msgstr "Events should be assigned one of the specified venue IDs"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:164
 #: src/Tribe/REST/V1/Endpoints/Archive_Tag.php:175
 msgid "Limit result set to terms with a specific slug"
-msgstr ""
+msgstr "Limit result set to terms with a specific slug"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:157
 #: src/Tribe/REST/V1/Endpoints/Archive_Tag.php:168
 msgid "Limit result set to terms assigned to a specific event (an alias of the \"post\" parameter)"
-msgstr ""
+msgstr "Limit result set to terms assigned to a specific event (an alias of the \"post\" parameter)"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:151
 #: src/Tribe/REST/V1/Endpoints/Archive_Tag.php:162
 msgid "Limit result set to terms assigned to a specific post"
-msgstr ""
+msgstr "Limit result set to terms assigned to a specific post"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:145
 msgid "Limit result set to terms assigned to a specific parent"
-msgstr ""
+msgstr "Limit result set to terms assigned to a specific parent"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:138
 #: src/Tribe/REST/V1/Endpoints/Archive_Tag.php:155
 msgid "Whether to hide terms not assigned to any posts"
-msgstr ""
+msgstr "Whether to hide terms not assigned to any posts"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:133
 #: src/Tribe/REST/V1/Endpoints/Archive_Tag.php:150
 msgid "Sort collection by term attribute"
-msgstr ""
+msgstr "Sort collection by term attribute"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:127
 #: src/Tribe/REST/V1/Endpoints/Archive_Tag.php:144
 msgid "Order sort attribute ascending or descending"
-msgstr ""
+msgstr "Order sort attribute ascending or descending"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:120
 #: src/Tribe/REST/V1/Endpoints/Archive_Tag.php:137
 msgid "Limit result set to specific IDs"
-msgstr ""
+msgstr "Limit result set to specific IDs"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:113
 #: src/Tribe/REST/V1/Endpoints/Archive_Tag.php:130
 msgid "Ensure result set exclude specific IDs"
-msgstr ""
+msgstr "Ensure result set exclude specific IDs"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:107
 #: src/Tribe/REST/V1/Endpoints/Archive_Tag.php:124
 msgid "Limit results to those matching a string"
-msgstr ""
+msgstr "Limit results to those matching a string"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:101
 msgid "The number of event categories to return on each page"
-msgstr ""
+msgstr "The number of event categories to return on each page"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Category.php:28
 msgid "Returns all the event categories matching the search criteria"
-msgstr ""
+msgstr "Returns all the event categories matching the search criteria"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:136
 msgid "The venue geo longitude"
-msgstr ""
+msgstr "The venue geo longitude"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:131
 msgid "The venue geo latitude"
-msgstr ""
+msgstr "The venue geo latitude"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:77
 msgid "The venue slug"
-msgstr ""
+msgstr "The venue slug"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:57
 msgid "The venue status"
-msgstr ""
+msgstr "The venue status"
 
 #: src/Tribe/REST/V1/Documentation/Organizer_Definition_Provider.php:77
 msgid "The organizer slug"
@@ -1434,39 +1434,39 @@ msgstr ""
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:81
 #: src/Tribe/REST/V1/Endpoints/Single_Event.php:244
 msgid "The event slug"
-msgstr ""
+msgstr "The event slug"
 
 #: src/Tribe/REST/V1/Documentation/Event_Definition_Provider.php:57
 msgid "The event status"
-msgstr ""
+msgstr "The event status"
 
 #: src/Tribe/Linked_Posts.php:1255
 msgctxt "The \"Create or Find {post type name}\" label for custom linked post types that are *not* Venues or Organizers"
 msgid "Create or Find %s"
-msgstr ""
+msgstr "Create or Find %s"
 
 #: src/Tribe/Linked_Posts.php:1246
 msgctxt "The \"Find a {post type name}\" label for custom linked post types that are *not* Venues or Organizers"
 msgid "Find %1$s %2$s"
-msgstr ""
+msgstr "Find %1$s %2$s"
 
 #: src/Tribe/Linked_Posts.php:1237
 msgid "Find a Venue"
-msgstr ""
+msgstr "Find a Venue"
 
 #: src/Tribe/Linked_Posts.php:1236
 msgid "Create or Find a Venue"
-msgstr ""
+msgstr "Create or Find a Venue"
 
 #: src/Tribe/Linked_Posts.php:1229
 msgctxt "\"Create or Find Venue\", but when the word \"Venue\" is customized to something else."
 msgid "Create or Find %s"
-msgstr ""
+msgstr "Create or Find %s"
 
 #: src/Tribe/Linked_Posts.php:1220
 msgctxt "\"Find a Venue\", but when the word \"Venue\" is customized to something else."
 msgid "Find %1$s %2$s"
-msgstr ""
+msgstr "Find %1$s %2$s"
 
 #: src/Tribe/Linked_Posts.php:1209
 msgid "Find an Organizer"
@@ -1479,103 +1479,103 @@ msgstr ""
 #: src/Tribe/Linked_Posts.php:1201
 msgctxt "\"Create or Find Organizer\", but when the word \"Organizer\" is customized to something else."
 msgid "Create or Find %s"
-msgstr ""
+msgstr "Create or Find %s"
 
 #: src/Tribe/Linked_Posts.php:1192
 msgctxt "\"Find an Organizer\", but when the word \"Organizer\" is customized to something else."
 msgid "Find %1$s %2$s"
-msgstr ""
+msgstr "Find %1$s %2$s"
 
 #: src/Tribe/Aggregator/Tabs/Abstract.php:136
 msgid "A record already exists with these settings, %1$s."
-msgstr ""
+msgstr "A record already exists with these settings, %1$s."
 
 #: src/Tribe/Aggregator/Tabs/Abstract.php:135
 msgid "click here to edit it"
-msgstr ""
+msgstr "click here to edit it"
 
 #: src/Tribe/Aggregator/Settings.php:359
 msgid "Do not limit (not recommended)"
-msgstr ""
+msgstr "Do not limit (not recommended)"
 
 #: src/Tribe/Aggregator/Settings.php:358
 msgid "By number of events"
-msgstr ""
+msgstr "By number of events"
 
 #: src/Tribe/Aggregator/Settings.php:357
 msgid "By date range"
-msgstr ""
+msgstr "By date range"
 
 #: src/Tribe/Aggregator/Service.php:696
 msgctxt "The placeholder is for the localized version of the iCal UID specification link"
 msgid "Some events at the requested source are missing the UID attribute required by the iCalendar Specification. One-Time and ICS File imports are allowed but successive imports will create duplicated events on your site. Please contact the source provider to fix the UID issue; linking them to %s may help them more quickly resolve their feed's UID issue."
-msgstr ""
+msgstr "Some events at the requested source are missing the UID attribute required by the iCalendar Specification. One-Time and ICS File imports are allowed but successive imports will create duplicated events on your site. Please contact the source provider to fix the UID issue; linking them to %s may help them more quickly resolve their feed's UID issue."
 
 #: src/Tribe/Aggregator/Service.php:688
 msgctxt "The placeholder is for the localized version of the iCal UID specification link"
 msgid "Some events at the requested source are missing the UID attribute required by the iCalendar Specification. Creating a scheduled import would generate duplicate events on each import. Instead, please use a One-Time import or contact the source provider to fix the UID issue; linking them to %s may help them more quickly resolve their feed's UID issue."
-msgstr ""
+msgstr "Some events at the requested source are missing the UID attribute required by the iCalendar Specification. Creating a scheduled import would generate duplicate events on each import. Instead, please use a One-Time import or contact the source provider to fix the UID issue; linking them to %s may help them more quickly resolve their feed's UID issue."
 
 #: src/Tribe/Aggregator/Service.php:659
 msgid "the UID part of the iCalendar Specification"
-msgstr ""
+msgstr "the UID part of the iCalendar Specification"
 
 #: src/Tribe/Aggregator/Page.php:87
 msgid "A warning was generated while fetching the results from your import:"
-msgstr ""
+msgstr "A warning was generated while fetching the results from your import:"
 
 #: common/src/admin-views/tribe-options-help.php:20
 msgid "Check out our %s for developers."
-msgstr ""
+msgstr "Check out our %s for developers."
 
 #: common/src/admin-views/tribe-options-help.php:18
 msgid "Want to dive deeper?"
-msgstr ""
+msgstr "Want to dive deeper?"
 
 #: common/src/admin-views/tribe-options-display.php:28
 msgid "The following three fields accept the date format options available to the PHP %1$s function. <a href=\"%2$s\" target=\"_blank\">Learn how to make your own date format here</a>."
-msgstr ""
+msgstr "The following three fields accept the date format options available to the PHP %1$s function. <a href=\"%2$s\" target=\"_blank\">Learn how to make your own date format here</a>."
 
 #: common/src/Tribe/Validate.php:545
 msgid "%s must be an email address."
-msgstr ""
+msgstr "%s must be an email address."
 
 #: common/src/Tribe/Languages/Locations.php:252
 msgid "Sint Maarten"
-msgstr ""
+msgstr "Sint Maarten"
 
 #: common/src/Tribe/Languages/Locations.php:245
 msgid "S&atilde;o Tom&eacute; and Pr&iacute;ncipe"
-msgstr ""
+msgstr "S&atilde;o Tom&eacute; and Pr&iacute;ncipe"
 
 #: common/src/Tribe/Languages/Locations.php:238
 msgid "Saint Helena"
-msgstr ""
+msgstr "Saint Helena"
 
 #: common/src/Tribe/Languages/Locations.php:237
 msgid "Saint Barth&eacute;lemy"
-msgstr ""
+msgstr "Saint Barth&eacute;lemy"
 
 #: common/src/Tribe/Languages/Locations.php:113
 msgid "Cura&ccedil;ao"
-msgstr ""
+msgstr "Cura&ccedil;ao"
 
 #: common/src/Tribe/Languages/Locations.php:103
 msgid "Collectivity of Saint Martin"
-msgstr ""
+msgstr "Collectivity of Saint Martin"
 
 #: common/src/Tribe/Languages/Locations.php:57
 msgid "&Aring;land Islands"
-msgstr ""
+msgstr "&Aring;land Islands"
 
 #: common/src/Tribe/Documentation/Swagger/Term_Definition_Provider.php:57
 msgid "A list of links to the term own, archive and parent REST URL"
-msgstr ""
+msgstr "A list of links to the term own, archive and parent REST URL"
 
 #: src/admin-views/create-organizer-fields.php:19
 #: src/admin-views/organizer-meta-box.php:45
 msgid "The e-mail address will be obfuscated on this site to avoid it getting harvested by spammers."
-msgstr "The email address will be obfuscated on this site to avoid it getting harvested by spammers."
+msgstr "The e-mail address will be obfuscated on this site to avoid it getting harvested by spammers."
 
 #: src/Tribe/Main.php:999
 msgid "edit Events settings."
@@ -2055,7 +2055,7 @@ msgstr "Event Aggregator cannot import events from this site."
 
 #: src/Tribe/REST/V1/EA_Messages.php:11
 msgid "The Events Calendar is API is not providing the site origin correctly."
-msgstr "The Events Calendar API is not providing the site origin correctly."
+msgstr "The Events Calendar is API is not providing the site origin correctly."
 
 #: src/Tribe/REST/V1/EA_Messages.php:14
 msgid "Events could not be imported. The URL provided could be reached and has The Events Calendar REST API enabled, but returned malformed data."
@@ -2099,7 +2099,7 @@ msgstr "The number of events to return on each page"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Event.php:438
 msgid "Events should be assigned one of the specified categories slugs or IDs"
-msgstr "Events should be assigned one of the specified categories' slugs or IDs"
+msgstr "Events should be assigned one of the specified categories slugs or IDs"
 
 #: src/Tribe/REST/V1/Endpoints/Archive_Event.php:446
 msgid "Events should be assigned one of the specified tags slugs or IDs"
@@ -2204,7 +2204,7 @@ msgstr "The venue long description"
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:106
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:281
 msgid "The venue province"
-msgstr "The venue county/province"
+msgstr "The venue province"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:110
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:288
@@ -2214,11 +2214,11 @@ msgstr "The venue state"
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:114
 #: src/Tribe/REST/V1/Endpoints/Single_Venue.php:295
 msgid "The venue ZIP code"
-msgstr "The venue postal code"
+msgstr "The venue Postal Code"
 
 #: src/Tribe/REST/V1/Documentation/Venue_Definition_Provider.php:126
 msgid "The venue state or province"
-msgstr "The venue state or county"
+msgstr "The venue state or province"
 
 #: src/Tribe/REST/V1/EA_Messages.php:10
 msgid "Event Aggregator cannot import events because this site is running an outdated version of The Events Calendar."
@@ -3038,7 +3038,7 @@ msgstr "Disconnect"
 
 #: src/admin-views/aggregator/tabs/import-form.php:304
 msgid "Events will be imported with the time zone defined by the source. If no time zone is specified, events will be assigned your site's default time zone ( see"
-msgstr "Events will be imported with the time zone defined by the source. If no time zone is specified, events will be assigned your site's default time zone (see"
+msgstr "Events will be imported with the time zone defined by the source. If no time zone is specified, events will be assigned your site's default time zone ( see"
 
 #: src/admin-views/aggregator/tabs/import-form.php:231
 msgid "Category:"
@@ -3369,7 +3369,7 @@ msgstr "Overwrite my event with any changes from the original source."
 
 #: src/admin-views/aggregator/settings.php:49
 msgid "You can make changes to imported events via The Events Calendar and see those changes reflected on your site’s calendar. The owner of the original event source (e.g. the iCalendar feed or Meetup group) might also make changes to their event. If you choose to re-import an altered event (manually or via a scheduled import), any changes made at the source or on your calendar will need to be addressed."
-msgstr ""
+msgstr "You can make changes to imported events via The Events Calendar and see those changes reflected on your site’s calendar. The owner of the original event source (e.g. the iCalendar feed or Meetup group) might also make changes to their event. If you choose to re-import an altered event (manually or via a scheduled import), any changes made at the source or on your calendar will need to be addressed."
 
 #: src/admin-views/aggregator/settings.php:44
 #: src/admin-views/aggregator/settings.php:54
@@ -3895,7 +3895,7 @@ msgstr "Renew your Event Aggregator licence"
 
 #: src/Tribe/Aggregator/Tabs/New.php:561
 msgid "Renew your license in order to import events from iCalendar, Google, or Meetup."
-msgstr ""
+msgstr "Renew your licence in order to import events from iCalendar, Google, or Meetup."
 
 #: src/Tribe/Aggregator/Tabs/New.php:560
 msgid "Your Event Aggregator license is expired."
@@ -3916,7 +3916,7 @@ msgstr "Buy It Now"
 
 #: src/Tribe/Aggregator/Tabs/New.php:502
 msgid "With Event Aggregator, you can import events from iCalendar, Google, and Meetup.com in a jiffy."
-msgstr ""
+msgstr "With Event Aggregator, you can import events from iCalendar, Google, and Meetup.com in a jiffy."
 
 #: src/Tribe/Aggregator/Tabs/New.php:500
 msgid "Import Using Event Aggregator"
@@ -4597,7 +4597,7 @@ msgstr "Unable to save scheduled import instance. Please try again."
 
 #: src/Tribe/Aggregator/Errors.php:69
 msgid "Import records must be finalized before posts can be inserted."
-msgstr "Import records must be finalised before posts can be inserted."
+msgstr "Import records must be finalized before posts can be inserted."
 
 #: src/Tribe/Aggregator/Errors.php:68
 msgid "The CSV file cannot be found. You may need to re-upload the file."
@@ -4775,7 +4775,7 @@ msgstr "Event Log"
 
 #: common/src/admin-views/tribe-options-help.php:42
 msgid "The details of your calendar plugin and settings is often needed for you or our staff to help troubleshoot an issue. Please opt-in below to automatically share your system information with our support team. This will allow us to assist you faster if you post in our help desk."
-msgstr "The details of your calendar plugin and settings are often needed for you or our staff to help troubleshoot an issue. Please opt-in below to automatically share your system information with our support team. This will allow us to assist you faster if you post in our help desk."
+msgstr "The details of your calendar plugin and settings is often needed for you or our staff to help troubleshoot an issue. Please opt-in below to automatically share your system information with our support team. This will allow us to assist you faster if you post in our help desk."
 
 #: common/src/admin-views/app-shop.php:26
 msgid "Buy This Add-On"
@@ -4791,7 +4791,7 @@ msgstr "Events Add-Ons"
 
 #: common/src/Tribe/Languages/Locations.php:110
 msgid "C&ocirc;te d'Ivoire"
-msgstr "C&ocirc;te d'Ivoire"
+msgstr "Ivory Coast"
 
 #: common/src/Tribe/Support.php:372
 msgid "Unique System Info Key Generated"
@@ -5063,7 +5063,7 @@ msgstr "Logging level"
 
 #: common/src/Tribe/Validate.php:168
 msgid "%s must contain numbers, letters, dashes and undescores only"
-msgstr "%s must contain numbers, letters, dashes and underscores only"
+msgstr "%s must contain numbers, letters, dashes and undescores only"
 
 #: common/src/Tribe/Log.php:376
 msgid "Full debug (all events)"
@@ -5750,7 +5750,7 @@ msgstr "Postal Code:"
 #: src/admin-views/create-venue-fields.php:155
 #: src/admin-views/venue-meta-box.php:122
 msgid "Select a State:"
-msgstr "Select a State:"
+msgstr "Select a State or Province:"
 
 #: src/admin-views/create-venue-fields.php:136
 #: src/admin-views/venue-meta-box.php:105
@@ -6334,7 +6334,7 @@ msgstr "Support Resources"
 
 #: src/admin-views/admin-welcome-message.php:44
 msgid "Addons for Community, Tickets, Filters, and more."
-msgstr ""
+msgstr "Addons for Community, Tickets, Filters, and more."
 
 #: src/admin-views/admin-welcome-message.php:43
 msgid "Looking for More Features?"
@@ -6666,7 +6666,7 @@ msgstr "Virgin Islands (British)"
 
 #: common/src/Tribe/Languages/Locations.php:290
 msgid "Viet Nam"
-msgstr "Viet Nam"
+msgstr "Vietnam"
 
 #: common/src/Tribe/Languages/Locations.php:289
 msgid "Venezuela"
@@ -6854,7 +6854,7 @@ msgstr "Samoa"
 
 #: common/src/Tribe/Languages/Locations.php:242
 msgid "Saint Vincent and The Grenadines"
-msgstr "Saint Vincent and the Grenadines"
+msgstr "Saint Vincent and The Grenadines"
 
 #: common/src/Tribe/Languages/Locations.php:240
 msgid "Saint Lucia"
@@ -7198,7 +7198,7 @@ msgstr "Honduras"
 
 #: common/src/Tribe/Languages/Locations.php:153
 msgid "Holy See (Vatican City State)"
-msgstr "Holy See (Vatican City State)"
+msgstr "Holy City (Vatican City State)"
 
 #: common/src/Tribe/Languages/Locations.php:152
 msgid "Heard and McDonald Islands"
@@ -8517,7 +8517,7 @@ msgstr "Go to WordPress Updates page"
 #: common/src/Tribe/Admin/Activation_Page.php:84
 #: src/deprecated/Tribe__Events__Activation_Page.php:41
 msgid "Return to Plugins page"
-msgstr "Return to Plugins page"
+msgstr "Return to plugins page"
 
 #: common/src/Tribe/Admin/Activation_Page.php:84
 #: src/deprecated/Tribe__Events__Activation_Page.php:41
