@@ -1,5 +1,6 @@
 ------------------------------------------------------------------------------------------------------------------
-Version 2.4.0.1
+Version 2.4.1
+    - Fixed an issue with the upgrade process for sites using an external site management service for upgrades. This fixes an issue preventing forms from being submitted.
     - Fixed an issue with the Status Report incorrectly marking the REST API keys table as missing.
     - API: Fixed the entry created by GFFormsModel::create_lead() containing false for website type fields instead of empty strings.
 

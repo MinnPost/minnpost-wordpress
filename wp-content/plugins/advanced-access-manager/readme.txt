@@ -1,9 +1,9 @@
 === Advanced Access Manager ===
-Contributors: vasyltech,noelalvarez
+Contributors: vasyltech
 Tags: access control, membership, backend menu, user role, restricted content
 Requires at least: 4.0
 Tested up to: 4.9.8
-Stable tag: 5.7
+Stable tag: 5.7.1
 
 All you need to manage access to you WordPress websites on frontend, backend and API levels for any role, user or visitors.
 
@@ -75,6 +75,12 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 11. Improve your website security
 
 == Changelog ==
+
+= 5.7.1 =
+* Fixed the bug with AAM notifications related to extension updates
+* Fixed the bug with AAM not taking in consideration capabilities that defined in policy
+* Improved the way show_admin_bar capability is handled
+* Added ability to define Conditions to the Statement Policy document
 
 = 5.7 =
 * Added a huge innovation to the access control management - Access & Security Policy
