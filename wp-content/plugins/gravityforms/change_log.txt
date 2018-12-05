@@ -1,4 +1,9 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.4.2
+    - Fixed an issue where deleting a multi-input field would delete entry values with the same field ID from other forms.
+    - Fixed an incorrect calculation result when the formula includes the merge tag for a standard choice based field; the choice text was being used instead of the choice value.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.4.1
     - Fixed an issue with the upgrade process for sites using an external site management service for upgrades. This fixes an issue preventing forms from being submitted.
     - Fixed an issue with the Status Report incorrectly marking the REST API keys table as missing.

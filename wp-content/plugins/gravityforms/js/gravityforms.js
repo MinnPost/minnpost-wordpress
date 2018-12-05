@@ -1533,7 +1533,7 @@ var GFCalc = function(formId, formulaFields){
             var inputId = matches[i][1];
             var fieldId = parseInt(inputId,10);
 
-            var modifier = '';
+            var modifier = 'value';
 			if( matches[i][3] ){
 				modifier = matches[i][3];
 			}

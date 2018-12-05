@@ -2224,7 +2224,7 @@ class GFFormsModel {
 		// Delete from entry meta
 		$sql = $wpdb->prepare( "DELETE FROM $entry_meta_table WHERE form_id=%d AND meta_key = %s", $form_id, $field_id );
 		if ( is_numeric( $field_id ) ) {
-			$sql .= $wpdb->prepare( " OR meta_key LIKE %s", sprintf( '%d.%%', $field_id ) );
+			$sql .= $wpdb->prepare( " OR form_id=%d AND meta_key LIKE %s", $form_id, sprintf( '%d.%%', $field_id ) );
 		}
 		$wpdb->query( $sql );
 
