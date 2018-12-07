@@ -16,7 +16,7 @@ if ( ! defined( 'VIEW_ADMIN_AS_DIR' ) ) {
  * @author  Jory Hogeveen <info@keraweb.nl>
  * @package View_Admin_As
  * @since   1.5.0
- * @version 1.8.2
+ * @version 1.8.3
  * @uses    \VAA_View_Admin_As_Base Extends class
  */
 final class VAA_View_Admin_As_Admin_Bar extends VAA_View_Admin_As_Base
@@ -123,11 +123,12 @@ final class VAA_View_Admin_As_Admin_Bar extends VAA_View_Admin_As_Base
 	 * Get the toolbar title for the main VAA node.
 	 *
 	 * @since   1.7.2
-	 * @access  private
+	 * @since   1.8.3  Made public.
+	 * @access  public
 	 * @see     \VAA_View_Admin_As_Admin_Bar::admin_bar_menu()
 	 * @return  string
 	 */
-	private function get_admin_bar_menu_title() {
+	public function get_admin_bar_menu_title() {
 		if ( ! $this->store->get_view() ) {
 			return __( 'View As', VIEW_ADMIN_AS_DOMAIN );
 		}

@@ -16,7 +16,7 @@ if ( ! defined( 'VIEW_ADMIN_AS_DIR' ) ) {
  * @author  Jory Hogeveen <info@keraweb.nl>
  * @package View_Admin_As
  * @since   1.7.0
- * @version 1.8.2
+ * @version 1.8.3
  * @uses    \VAA_View_Admin_As_Module Extends class
  */
 final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
@@ -759,6 +759,17 @@ final class VAA_View_Admin_As_Role_Manager extends VAA_View_Admin_As_Module
 		) );
 
 		$root = $root . '-role-manager';
+
+		$admin_bar->add_node( array(
+			'id'     => $root . '-docs',
+			'parent' => $root,
+			'title'  => VAA_View_Admin_As_Form::do_icon( 'dashicons-book-alt' ) . __( 'Documentation', VIEW_ADMIN_AS_DOMAIN ),
+			'href'   => 'https://github.com/JoryHogeveen/view-admin-as/wiki/Role-Manager',
+			'meta'   => array(
+				'class'  => 'auto-height vaa-has-icon',
+				'target' => '_blank',
+			),
+		) );
 
 		$view_type = view_admin_as()->get_view_types( 'caps' );
 		if ( $view_type instanceof VAA_View_Admin_As_Caps ) {

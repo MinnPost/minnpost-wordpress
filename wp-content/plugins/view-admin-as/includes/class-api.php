@@ -16,7 +16,7 @@ if ( ! defined( 'VIEW_ADMIN_AS_DIR' ) ) {
  * @author  Jory Hogeveen <info@keraweb.nl>
  * @package View_Admin_As
  * @since   1.6.0
- * @version 1.8.2
+ * @version 1.8.3
  */
 final class VAA_API
 {
@@ -167,6 +167,27 @@ final class VAA_API
 	}
 
 	/**
+	 * Get the current active view. Returns `null` if no view (type) is active.
+	 *
+	 * @see  \VAA_View_Admin_As_Store::get_view()
+	 *
+	 * @since   1.8.3
+	 * @access  public
+	 * @static
+	 * @api
+	 *
+	 * @param   string  $type  View type. Will return `null` if this view type is not active.
+	 * @return  mixed
+	 */
+	public static function get_current_view( $type = null ) {
+		$store = view_admin_as()->store();
+		if ( $store ) {
+			return $store->get_view( $type );
+		}
+		return null;
+	}
+
+	/**
 	 * Check if the provided data is the same as the current view.
 	 *
 	 * @see  \VAA_View_Admin_As_Controller::is_current_view()
@@ -230,6 +251,30 @@ final class VAA_API
 		$view = view_admin_as()->view();
 		if ( $view ) {
 			return $view->is_user_modified();
+		}
+		return false;
+	}
+
+	/**
+	 * Set the current view.
+	 *
+	 * @see  \VAA_View_Admin_As_Controller::update()
+	 * @see  \VAA_View_Admin_As_Controller::update_view()
+	 *
+	 * @since   1.8.3
+	 * @access  public
+	 * @static
+	 * @api
+	 *
+	 * @param   array  $view  The view.
+	 * @return  bool
+	 */
+	public static function update_view( $view ) {
+		$controller = view_admin_as()->controller();
+		if ( $controller ) {
+			$view    = array_intersect_key( $view, array_flip( $controller->get_view_types() ) );
+			$success = $controller->update( $view );
+			return ( true === $success );
 		}
 		return false;
 	}
