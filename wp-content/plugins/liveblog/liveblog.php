@@ -4,7 +4,7 @@
  * Plugin Name: Liveblog
  * Plugin URI: http://wordpress.org/extend/plugins/liveblog/
  * Description: Empowers website owners to provide rich and engaging live event coverage to a large, distributed audience.
- * Version:     1.9.3
+ * Version:     1.9.4
  * Author:      WordPress.com VIP, Big Bite Creative and contributors
  * Author URI: https://github.com/Automattic/liveblog/graphs/contributors
  * Text Domain: liveblog
@@ -26,7 +26,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 	final class WPCOM_Liveblog {
 
 		/** Constants *************************************************************/
-		const VERSION                 = '1.9.3';
+		const VERSION                 = '1.9.4';
 		const REWRITES_VERSION        = 1;
 		const MIN_WP_VERSION          = '4.4';
 		const MIN_WP_REST_API_VERSION = '4.4';
@@ -1869,7 +1869,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 				return;
 			}
 
-			$metadata = self::get_liveblog_metadata( array(), get_the_ID() );
+			$metadata = self::get_liveblog_metadata( array(), get_post() );
 			if ( empty( $metadata ) ) {
 				return;
 			}

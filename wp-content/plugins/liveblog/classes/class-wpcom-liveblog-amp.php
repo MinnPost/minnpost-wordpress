@@ -38,6 +38,11 @@ class WPCOM_Liveblog_AMP {
 			return;
 		}
 
+		// If we're not on a liveblog, then bail.
+		if ( ! WPCOM_Liveblog::is_liveblog_post() ) {
+			return;
+		}
+
 		// Remove the standard Liveblog markup which just a <div> for React to render.
 		remove_filter( 'the_content', array( 'WPCOM_Liveblog', 'add_liveblog_to_content' ), 20 );
 
@@ -66,7 +71,6 @@ class WPCOM_Liveblog_AMP {
 			add_action( 'amp_post_template_css', array( __CLASS__, 'print_styles' ) );
 			add_action( 'amp_post_template_head', array( __CLASS__, 'social_meta_tags' ) );
 		}
-
 	}
 
 	/**
@@ -101,7 +105,11 @@ class WPCOM_Liveblog_AMP {
 	 * @return void
 	 */
 	public static function print_styles() {
-		echo esc_html( file_get_contents( dirname( __DIR__ ) . '/assets/amp.css' ) );
+		$css      = file_get_contents( dirname( __DIR__ ) . '/assets/amp.css' );
+		$safe_css = wp_check_invalid_utf8( $css );
+		$safe_css = _wp_specialchars( $safe_css );
+
+		echo $safe_css;  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
