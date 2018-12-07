@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-11-30 15:10:13+0000\n"
+"PO-Revision-Date: 2018-12-03 19:20:40+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -6172,7 +6172,7 @@ msgstr ""
 #: src/modules/blocks/event-links/template.js:101
 #: src/resources/js/app/blocks.js:48525
 msgid "Share Settings"
-msgstr ""
+msgstr "Partajează setările"
 
 #: src/deprecated/Tribe__Events__Importer__Options.php:136
 msgid "Draft"
