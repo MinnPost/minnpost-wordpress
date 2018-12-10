@@ -154,6 +154,8 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 			 * By default QM shows a prompt to install the QM db.php drop-in,
 			 * this filter allows a dev to choose not to show the prompt.
 			 *
+			 * @since 2.9.0
+			 *
 			 * @param bool $show_prompt Whether to show the prompt.
 			 */
 			if ( apply_filters( 'qm/show_extended_query_prompt', true ) && ! $db->has_trace && ( '$wpdb' === $name ) ) {
@@ -492,7 +494,7 @@ class QM_Output_Html_DB_Queries extends QM_Output_Html {
 			) );
 		}
 
-		if ( isset( $data['dbs'] ) and count( $data['dbs'] ) > 1 ) {
+		if ( isset( $data['dbs'] ) && count( $data['dbs'] ) > 1 ) {
 			foreach ( $data['dbs'] as $name => $db ) {
 				$menu[] = $this->menu( array(
 					'id'    => esc_attr( sprintf( 'query-monitor-%s-db-%s', $this->collector->id(), sanitize_title_with_dashes( $name ) ) ),

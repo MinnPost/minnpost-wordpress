@@ -22,7 +22,7 @@ class QM_Collector_Assets extends QM_Collector {
 	public function action_head() {
 		global $wp_scripts, $wp_styles;
 
-		$this->data['header']['styles'] = $wp_styles->done;
+		$this->data['header']['styles']  = $wp_styles->done;
 		$this->data['header']['scripts'] = $wp_scripts->done;
 
 	}
@@ -48,14 +48,16 @@ class QM_Collector_Assets extends QM_Collector {
 			return;
 		}
 
+		$this->data['is_ssl'] = is_ssl();
+
 		foreach ( array( 'scripts', 'styles' ) as $type ) {
 			foreach ( array( 'header', 'footer' ) as $position ) {
 				if ( empty( $this->data[ $position ][ $type ] ) ) {
 					$this->data[ $position ][ $type ] = array();
 				}
 			}
-			$raw = $this->data['raw'][ $type ];
-			$broken = array_values( array_diff( $raw->queue, $raw->done ) );
+			$raw     = $this->data['raw'][ $type ];
+			$broken  = array_values( array_diff( $raw->queue, $raw->done ) );
 			$missing = array_values( array_diff( $raw->queue, array_keys( $raw->registered ) ) );
 
 			if ( ! empty( $broken ) ) {
@@ -123,7 +125,7 @@ class QM_Collector_Assets extends QM_Collector {
 }
 
 function register_qm_collector_assets( array $collectors, QueryMonitor $qm ) {
-	$collectors['assets'] = new QM_Collector_Assets;
+	$collectors['assets'] = new QM_Collector_Assets();
 	return $collectors;
 }
 

@@ -22,13 +22,13 @@ class QM_Output_Html_Hooks extends QM_Output_Html {
 			return;
 		}
 
-		if ( is_multisite() and is_network_admin() ) {
+		if ( is_multisite() && is_network_admin() ) {
 			$screen = preg_replace( '|-network$|', '', $data['screen'] );
 		} else {
 			$screen = $data['screen'];
 		}
 
-		$parts = $data['parts'];
+		$parts      = $data['parts'];
 		$components = $data['components'];
 
 		usort( $parts, 'strcasecmp' );
@@ -70,7 +70,7 @@ class QM_Output_Html_Hooks extends QM_Output_Html {
 				$hook_name = esc_html( $hook['name'] );
 			}
 
-			$row_attr = array();
+			$row_attr                      = array();
 			$row_attr['data-qm-name']      = implode( ' ', $hook['parts'] );
 			$row_attr['data-qm-component'] = implode( ' ', $hook['components'] );
 
@@ -97,14 +97,18 @@ class QM_Output_Html_Hooks extends QM_Output_Html {
 				foreach ( $hook['actions'] as $action ) {
 
 					if ( isset( $action['callback']['component'] ) ) {
-						$component = $action['callback']['component']->name;
+						$component = $subject = $action['callback']['component']->name;
 					} else {
-						$component = '';
+						$component = $subject = '';
+					}
+
+					if ( __( 'Core', 'query-monitor' ) !== $component ) {
+						$subject .= ' non-core';
 					}
 
 					printf( // WPCS: XSS ok.
 						'<tr data-qm-subject="%s" %s>',
-						esc_attr( $component ),
+						esc_attr( $subject ),
 						$attr
 					);
 
@@ -149,18 +153,19 @@ class QM_Output_Html_Hooks extends QM_Output_Html {
 					} else {
 						echo '<td class="qm-ltr qm-nowrap' . esc_attr( $class ) . '">';
 						echo '<code>' . esc_html( $action['callback']['name'] ) . '</code>';
+
+						if ( isset( $action['callback']['error'] ) ) {
+							echo '<br>';
+							echo esc_html( sprintf(
+								/* translators: %s: Error message text */
+								__( 'Error: %s', 'query-monitor' ),
+								$action['callback']['error']->get_error_message()
+							) );
+						}
+
+						echo '</td>';
 					}
 
-					if ( isset( $action['callback']['error'] ) ) {
-						echo '<br>';
-						echo esc_html( sprintf(
-							/* translators: %s: Error message text */
-							__( 'Error: %s', 'query-monitor' ),
-							$action['callback']['error']->get_error_message()
-						) );
-					}
-
-					echo '</td>';
 					echo '<td class="qm-nowrap' . esc_attr( $class ) . '">';
 					echo esc_html( $component );
 					echo '</td>';
