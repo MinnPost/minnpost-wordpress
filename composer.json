@@ -11,9 +11,12 @@
         }
     ],
     "require": {
-        "vlucas/phpdotenv": "^2.5@dev",
         "wp-cli/wp-cli" : "^2.0.1",
         "psy/psysh" : "~0.9",
-        "aaemnnosttv/wp-cli-dotenv-command": "^2.0"
+        "aaemnnosttv/wp-cli-dotenv-command": "^2.0",
+        "composer/installers": "^1.4",
+        "vlucas/phpdotenv": "^2.5@dev",
+        "oscarotero/env": "^1.1.0",
+        "roots/wp-password-bcrypt": "^1.0"
     }
 }
