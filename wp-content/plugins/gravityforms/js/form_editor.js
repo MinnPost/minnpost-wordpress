@@ -548,7 +548,7 @@ function LoadFieldSettings(){
     jQuery("#field_default_value").val(field.defaultValue == undefined ? "" : field.defaultValue);
     jQuery("#field_default_value_textarea").val(field.defaultValue == undefined ? "" : field.defaultValue);
     jQuery("#field_description").val(field.description == undefined ? "" : field.description);
-	jQuery("#field_description").attr('placeholder', field.descriptionPlaceholder);
+	jQuery("#field_description").attr('placeholder', field.descriptionPlaceholder == undefined ? "" : field.descriptionPlaceholder);
 	jQuery("#field_checkbox_label").val(field.checkboxLabel == undefined ? "" : field.checkboxLabel);
     jQuery("#field_css_class").val(field.cssClass == undefined ? "" : field.cssClass);
     jQuery("#field_range_min").val( field.rangeMin == undefined || field.rangeMin === false ? "" : field.rangeMin);
@@ -2044,15 +2044,15 @@ function StartDuplicateField(element) {
 
             if(field.inputs != null) {
 
-                var inputId = 1;
-
                 for(inputIndex in field.inputs) {
 
                     if(!field.inputs.hasOwnProperty(inputIndex))
                         continue;
 
-                    var id = field.inputs[inputIndex]['id'] + "";
-                    field.inputs[inputIndex]['id'] = id.replace(/(\d+\.)/, field.id + '.');
+                    var id = field.inputs[inputIndex]['id'] + '',
+						newId = id == sourcefieldId ? field.id : id.replace(/(\d+\.)/, field.id + '.');
+
+                    field.inputs[inputIndex]['id'] = newId;
 
                 }
             }

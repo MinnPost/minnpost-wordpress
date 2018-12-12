@@ -762,12 +762,25 @@ class GF_Query {
 
 		$paginate = implode( ' ', array_filter( array( $limit, $offset ), 'strlen' ) );
 
-		$sql = implode( ' ', array_filter( array( $select, $from, $join, $where, $order, $paginate ), 'strlen' ) );
+		/**
+		 * Filter the SQL query fragments to allow low-level advanced analysis and modification before the query is run.
+		 *
+		 * @since 2.4.3
+		 *
+		 * @param array $sql An array with all the SQL fragments: select, from, join, where, order, paginate.
+		 */
+		$sql = apply_filters( 'gform_gf_query_sql', compact( 'select', 'from', 'join', 'where', 'order', 'paginate' ) );
+		$sql = implode( ' ', array_filter( $sql, 'strlen' ) );
+
 		GFCommon::log_debug( __METHOD__ . '(): sql => ' . $sql );
 
 		$this->timer_start();
 		$results = $wpdb->get_results( $sql, ARRAY_N );
 		$this->queries []= array( $this->timer_stop(), $sql );
+
+		if ( is_null( $results ) ) {
+			return array();
+		}
 
 		return $results;
 	}

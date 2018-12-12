@@ -472,7 +472,7 @@ class GFFormDisplay {
 						}
 						break;
 					case 'consent':
-						$text        = esc_html( $field->checkboxLabel );
+						$text        = $field->checkboxLabel;
 						$description = GFFormsModel::get_latest_form_revisions_id( $form['id'] );
 
 						$fields[ $field->id . '.1' ] = wp_hash( 1 );

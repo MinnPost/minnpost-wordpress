@@ -917,7 +917,12 @@ class GF_Field_Repeater extends GF_Field {
 							}
 							$line = implode( "\n", $lines );
 						} else {
-							$line = $label . ': ' . $field->get_value_export( $field_value, $field->id, $use_text, $is_csv );
+							$value = implode( '|', $list_rows );
+							if ( strpos( $value, '=' ) === 0 ) {
+								// Prevent Excel formulas
+								$value = "'" . $value;
+							}
+							$line = $label . ': ' . $value;
 						}
 
 					} else {

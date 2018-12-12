@@ -5755,7 +5755,7 @@ abstract class GFAddOn {
 	 *
 	 * @param array $entry
 	 * @param string $field_id
-	 * @param object $field
+	 * @param GF_Field_List $field
 	 *
 	 * @return string
 	 */

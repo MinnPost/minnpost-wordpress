@@ -1820,11 +1820,14 @@ class GFCommon {
 
 				// If field value is empty, skip.
 				if ( empty( $attachment_urls ) ) {
+					self::log_debug( __METHOD__ . '(): No file(s) to attach for field #' . $upload_field->id );
 					continue;
 				}
 
 				// Convert to array.
 				$attachment_urls = $upload_field->multipleFiles ? json_decode( stripslashes( $attachment_urls ), true ) : array( $attachment_urls );
+
+				self::log_debug( __METHOD__ . '(): Attaching file(s) for field #' . $upload_field->id . '. ' . print_r( $attachment_urls, true ) );
 
 				// Loop through attachment URLs; replace URL with path and add to attachments.
 				foreach ( $attachment_urls as $attachment_url ) {
