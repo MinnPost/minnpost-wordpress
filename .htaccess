@@ -3,6 +3,15 @@
     Deny from all
 </FilesMatch>
 
+# keep stage and dev out of indexes
+<IfModule mod_headers.c>
+	<IfModule mod_setenvif.c>
+		SetEnvIf Host ^stage\. NOINDEX
+		SetEnvIf Host ^dev\. NOINDEX
+		Header set X-Robots-Tag "noindex, nofollow, noarchive" env=NOINDEX
+	</IfModule>
+</IfModule>
+
 # Fonts
 # Add correct content-type for fonts and SVG
 AddType application/vnd.ms-fontobject .eot 
