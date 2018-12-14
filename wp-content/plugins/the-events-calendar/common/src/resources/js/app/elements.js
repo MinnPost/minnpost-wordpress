@@ -6092,7 +6092,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "settings", function() { return settings; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapsAPI", function() { return mapsAPI; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "priceSettings", function() { return priceSettings; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tecDateSettings", function() { return tecDateSettings; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "timezoneHtml", function() { return timezoneHtml; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultTimes", function() { return defaultTimes; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pro", function() { return pro; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "editorDefaults", function() { return editorDefaults; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tickets", function() { return tickets; });
@@ -6105,10 +6107,12 @@ var get = function get(key, defaultValue) {
 var google = function google() {
   return get('google');
 };
+
 // Localized Config
 var config = function config() {
   return get('tribe_editor_config', {});
 };
+
 // Common
 var common = function common() {
   return config().common || {};
@@ -6151,9 +6155,16 @@ var mapsAPI = function mapsAPI() {
 var priceSettings = function priceSettings() {
   return tec().priceSettings || {};
 };
+var tecDateSettings = function tecDateSettings() {
+  return tec().dateSettings || {};
+};
 var timezoneHtml = function timezoneHtml() {
   return tec().timezoneHTML || '';
 };
+var defaultTimes = function defaultTimes() {
+  return tec().defaultTimes || {};
+};
+
 // PRO
 var pro = function pro() {
   return config().eventsPRO || {};
@@ -6161,6 +6172,7 @@ var pro = function pro() {
 var editorDefaults = function editorDefaults() {
   return pro().defaults || {};
 };
+
 // Tickets
 var tickets = function tickets() {
   return config().tickets || {};
@@ -9999,7 +10011,7 @@ var moment_toFormat = function toFormat(format) {
  * @returns {moment} A moment object
  */
 var moment_roundTime = function roundTime(date) {
-	if (!(date instanceof moment_default.a)) {
+	if (!Object(moment["isMoment"])(date)) {
 		return date;
 	}
 
@@ -10046,7 +10058,7 @@ var moment_toMoment = function toMoment(date) {
 	var format = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : date_namespaceObject.FORMATS.DATABASE.datetime;
 	var parseFormat = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
-	if (date instanceof moment_default.a || date instanceof Date) {
+	if (Object(moment["isMoment"])(date) || date instanceof Date) {
 		return moment_default()(date);
 	} else if (isString_default()(date)) {
 		return moment_default()(date, parseFormat ? moment_toFormat(format) : format);
@@ -10091,7 +10103,7 @@ var moment_toMomentFromDateTime = function toMomentFromDateTime(date, time) {
  * @returns {moment} A moment object where the date is replaced
  */
 var moment_replaceDate = function replaceDate(original, replaced) {
-	if (!(original instanceof moment_default.a) || !(replaced instanceof moment_default.a)) {
+	if (!Object(moment["isMoment"])(original) || !Object(moment["isMoment"])(replaced)) {
 		throw new Error('Make sure your values are instances of moment');
 	}
 
@@ -10108,7 +10120,7 @@ var moment_replaceDate = function replaceDate(original, replaced) {
 var moment_setTimeInSeconds = function setTimeInSeconds(original) {
 	var seconds = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-	if (!(original instanceof moment_default.a)) {
+	if (!Object(moment["isMoment"])(original)) {
 		throw new Error('Make sure your values are instances of moment');
 	}
 
@@ -10126,7 +10138,7 @@ var moment_setTimeInSeconds = function setTimeInSeconds(original) {
  * @returns {int} Total of seconds from start of the day to the current moment,
  */
 var moment_totalSeconds = function totalSeconds(date) {
-	if (!date || !(date instanceof moment_default.a)) {
+	if (!date || !Object(moment["isMoment"])(date)) {
 		return 0;
 	}
 

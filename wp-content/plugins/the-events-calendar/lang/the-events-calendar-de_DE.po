@@ -9100,7 +9100,52 @@ msgstr "Vereinigte Staaten"
 
 #: src/Tribe/Venue.php:386
 msgid "Unnamed Venue"
-msgstr "Unbenannter Veranstaltungsort"/Tribe/Importer/File_Uploader.php:28
+msgstr "Unbenannter Veranstaltungsort"en"
+
+#: src/Tribe/Organizer.php:157 src/functions/template-tags/organizer.php:112
+#: src/modules/blocks/classic-event-details/template.js:167
+#: src/resources/js/app/blocks.js:45142
+msgid "Organizer"
+msgstr "Veranstalter"
+
+#: src/Tribe/Organizer.php:171
+#: src/deprecated/Tribe__Events__Importer__Admin_Page.php:206
+#: src/functions/template-tags/organizer.php:123
+msgid "Organizers"
+msgstr "Veranstalter"
+
+#: src/Tribe/Venue.php:168 src/functions/template-tags/venue.php:57
+msgid "Venue"
+msgstr "Veranstaltungsort"
+
+#: src/Tribe/Venue.php:177
+#: src/deprecated/Tribe__Events__Importer__Admin_Page.php:205
+#: src/functions/template-tags/venue.php:76
+msgid "Venues"
+msgstr "Veranstaltungsorte"
+
+#: src/Tribe/List_Widget.php:239
+msgid "Upcoming Events"
+msgstr "Anstehende Veranstaltungen"
+
+#: src/Tribe/List_Widget.php:38
+msgid "Events List"
+msgstr "Veranstaltungsliste"
+
+#: src/Tribe/List_Widget.php:30
+msgid "A widget that displays upcoming events."
+msgstr "Ein Widget, das die bevorstehenden Veranstaltungen anzeigt."
+
+#: common/src/Tribe/Settings.php:643
+#: src/deprecated/Tribe__Events__Importer__Options.php:55
+msgid "Settings saved."
+msgstr "Die Einstellungen wurden gespeichert."
+
+#: src/Tribe/Importer/File_Uploader.php:36
+msgid "Could not save %s."
+msgstr "Konnte %s nicht speichern."
+
+#: src/Tribe/Importer/File_Uploader.php:28
 msgid "Temporary file not found. Could not save %s."
 msgstr "Temporäre Datei nicht gefunden. Konnte %s nicht speichern."
 

@@ -1163,7 +1163,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "settings", function() { return settings; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapsAPI", function() { return mapsAPI; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "priceSettings", function() { return priceSettings; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tecDateSettings", function() { return tecDateSettings; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "timezoneHtml", function() { return timezoneHtml; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultTimes", function() { return defaultTimes; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pro", function() { return pro; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "editorDefaults", function() { return editorDefaults; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tickets", function() { return tickets; });
@@ -1176,10 +1178,12 @@ var get = function get(key, defaultValue) {
 var google = function google() {
   return get('google');
 };
+
 // Localized Config
 var config = function config() {
   return get('tribe_editor_config', {});
 };
+
 // Common
 var common = function common() {
   return config().common || {};
@@ -1222,9 +1226,16 @@ var mapsAPI = function mapsAPI() {
 var priceSettings = function priceSettings() {
   return tec().priceSettings || {};
 };
+var tecDateSettings = function tecDateSettings() {
+  return tec().dateSettings || {};
+};
 var timezoneHtml = function timezoneHtml() {
   return tec().timezoneHTML || '';
 };
+var defaultTimes = function defaultTimes() {
+  return tec().defaultTimes || {};
+};
+
 // PRO
 var pro = function pro() {
   return config().eventsPRO || {};
@@ -1232,6 +1243,7 @@ var pro = function pro() {
 var editorDefaults = function editorDefaults() {
   return pro().defaults || {};
 };
+
 // Tickets
 var tickets = function tickets() {
   return config().tickets || {};
