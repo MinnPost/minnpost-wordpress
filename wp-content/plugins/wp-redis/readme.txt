@@ -2,8 +2,8 @@
 Contributors: getpantheon, danielbachhuber, mboynes, Outlandish Josh
 Tags: cache, plugin, redis
 Requires at least: 3.0.1
-Tested up to: 4.9
-Stable tag: 0.7.0
+Tested up to: 5.0
+Stable tag: 0.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,7 +101,15 @@ A page load with 2,000 Redis calls can be 2 full seonds of object cache transact
 
 This declaration means use of `wp_cache_set( 'foo', 'bar', 'bad-actor' );` and `wp_cache_get( 'foo', 'bad-actor' );` will not use Redis, and instead fall back to WordPress' default runtime object cache.
 
+= Why does the object cache sometimes get out of sync with the database? =
+
+There's a known issue with WordPress `alloptions` cache design. Specifically, a race condition between two requests can cause the object cache to have stale values. If you think you might be impacted by this, [review this GitHub issue](https://github.com/pantheon-systems/wp-redis/issues/221) for links to more context, including a workaround.
+
 == Changelog ==
+
+= 0.7.1 (December 14, 2018) =
+* Better support in `wp_cache_init()` for drop-ins like LudicrousDB [[#231](https://github.com/pantheon-systems/wp-redis/pull/231)].
+* Cleans up PHPCS issues.
 
 = 0.7.0 (August 22, 2017) =
 * Adds filterable connection methods to permit use of Predis. See [humanmade/wp-redis-predis-client](https://github.com/humanmade/wp-redis-predis-client) for more details.
