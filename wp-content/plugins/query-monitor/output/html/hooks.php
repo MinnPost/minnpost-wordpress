@@ -95,11 +95,12 @@ class QM_Output_Html_Hooks extends QM_Output_Html {
 				$first = true;
 
 				foreach ( $hook['actions'] as $action ) {
+					$component = '';
+					$subject   = '';
 
 					if ( isset( $action['callback']['component'] ) ) {
-						$component = $subject = $action['callback']['component']->name;
-					} else {
-						$component = $subject = '';
+						$component = $action['callback']['component']->name;
+						$subject   = $component;
 					}
 
 					if ( __( 'Core', 'query-monitor' ) !== $component ) {
@@ -189,7 +190,8 @@ class QM_Output_Html_Hooks extends QM_Output_Html {
 }
 
 function register_qm_output_html_hooks( array $output, QM_Collectors $collectors ) {
-	if ( $collector = QM_Collectors::get( 'hooks' ) ) {
+	$collector = $collectors::get( 'hooks' );
+	if ( $collector ) {
 		$output['hooks'] = new QM_Output_Html_Hooks( $collector );
 	}
 	return $output;

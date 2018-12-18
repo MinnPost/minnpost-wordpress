@@ -86,7 +86,9 @@ class QM_Collector_Environment extends QM_Collector {
 			'query_cache_type'   => 'ON',  # Query cache on or off
 		);
 
-		if ( $dbq = QM_Collectors::get( 'db_queries' ) ) {
+		$dbq = QM_Collectors::get( 'db_queries' );
+
+		if ( $dbq ) {
 
 			foreach ( $dbq->db_objects as $id => $db ) {
 
@@ -120,11 +122,15 @@ class QM_Collector_Environment extends QM_Collector {
 					$client = mysqli_get_client_version();
 					$info   = mysqli_get_server_info( $db->dbh );
 				} else {
+					// Please do not report this code as a PHP 7 incompatibility. Observe the surrounding logic.
+					// @codingStandardsIgnoreLine
 					if ( preg_match( '|[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}|', mysql_get_client_info(), $matches ) ) {
 						$client = $matches[0];
 					} else {
 						$client = null;
 					}
+					// Please do not report this code as a PHP 7 incompatibility. Observe the surrounding logic.
+					// @codingStandardsIgnoreLine
 					$info = mysql_get_server_info( $db->dbh );
 				}
 

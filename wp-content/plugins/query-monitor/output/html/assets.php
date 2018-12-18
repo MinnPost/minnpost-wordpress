@@ -176,6 +176,11 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 		$data = $this->collector->get_data();
 
 		$loader = rtrim( $type, 's' );
+		$src    = $dependency->src;
+
+		if ( ! empty( $src ) && ! empty( $dependency->ver ) ) {
+			$src = add_query_arg( 'ver', $dependency->ver, $src );
+		}
 
 		/**
 		 * Filter the asset loader source.
@@ -187,7 +192,7 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 		 * @param string $src    Script or style loader source path.
 		 * @param string $handle Script or style handle.
 		 */
-		$source = apply_filters( "{$loader}_loader_src", $dependency->src, $dependency->handle );
+		$source = apply_filters( "{$loader}_loader_src", $src, $dependency->handle );
 
 		$host   = (string) wp_parse_url( $source, PHP_URL_HOST );
 		$scheme = (string) wp_parse_url( $source, PHP_URL_SCHEME );
@@ -207,8 +212,9 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 		}
 
 		if ( is_wp_error( $source ) ) {
-			$src = $source->get_error_message();
-			if ( ( $error_data = $source->get_error_data() ) && isset( $error_data['src'] ) ) {
+			$src        = $source->get_error_message();
+			$error_data = $source->get_error_data();
+			if ( $error_data && isset( $error_data['src'] ) ) {
 				$src .= ' (' . $error_data['src'] . ')';
 				$host = (string) wp_parse_url( $error_data['src'], PHP_URL_HOST );
 			}
@@ -262,7 +268,7 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 			printf(
 				'<a href="%s" class="qm-link">%s</a>',
 				esc_attr( $src ),
-				esc_html( ltrim( str_replace( home_url(), '', $src ), '/' ) )
+				esc_html( ltrim( str_replace( home_url(), '', remove_query_arg( 'ver', $src ) ), '/' ) )
 			);
 		}
 		echo '</td>';
@@ -317,7 +323,8 @@ class QM_Output_Html_Assets extends QM_Output_Html {
 }
 
 function register_qm_output_html_assets( array $output, QM_Collectors $collectors ) {
-	if ( $collector = QM_Collectors::get( 'assets' ) ) {
+	$collector = $collectors::get( 'assets' );
+	if ( $collector ) {
 		$output['assets'] = new QM_Output_Html_Assets( $collector );
 	}
 	return $output;
