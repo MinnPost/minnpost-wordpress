@@ -3,7 +3,7 @@
  * Plugin Name: Merge + Minify + Refresh
  * Plugin URI: https://wordpress.org/plugins/merge-minify-refresh
  * Description: Merge/Concatenate & Minify CSS & JS.
- * Version: 1.8.11
+ * Version: 1.8.12
  * Author: Launch Interactive
  * Author URI: http://launchinteractive.com.au
  * License: GPL2
@@ -42,6 +42,8 @@ class MergeMinifyRefresh {
 	private $wordpressdir = '';
 	
 	private $scriptcount = 0;
+
+	private $rootRelativeWPContentDir = '';
 
 	public function __construct() {
 		
@@ -82,7 +84,14 @@ class MergeMinifyRefresh {
 		if(!is_dir(MMR_CACHE_DIR)) {
 			mkdir(MMR_CACHE_DIR);
 		}
-		
+	
+		/* Calculate Root Relative path to WP Content */
+		if(defined('WP_CONTENT_URL')) {
+			$this->rootRelativeWPContentDir = parse_url(WP_CONTENT_URL,PHP_URL_PATH);
+		} else {
+			$this->rootRelativeWPContentDir = str_replace($_SERVER['DOCUMENT_ROOT'],'', WP_CONTENT_DIR);
+		}
+
 		$this->min = defined('PHP_INT_MIN') ? PHP_INT_MIN : -9223372036854775808;
 		$this->max = defined('PHP_INT_MAX') ? PHP_INT_MAX : 9223372036854775807;
 
@@ -394,11 +403,16 @@ class MergeMinifyRefresh {
 	}
 	
 	private function fix_wp_subfolder($file_path) {
-		if(!is_main_site() && defined('SUBDOMAIN_INSTALL') && !SUBDOMAIN_INSTALL) { //is a subfolder site
+		if(!is_main_site() && defined('SUBDOMAIN_INSTALL') && !SUBDOMAIN_INSTALL) { //WordPress site is within a subfolder
 			$details = get_blog_details();
 			$file_path = preg_replace('|^'.$details->path.'|', '/', $file_path);
-		}
-		if($this->wordpressdir != '' && substr($file_path, 0, strlen($this->wordpressdir) + 1) != $this->wordpressdir . '/') {
+		}	
+		/* WordPress includes files relative to its core. This fixes paths when WordPress isn't in the document root. */
+		if(
+			$this->wordpressdir != '' && //WordPress core is within a subfolder
+			substr($file_path, 0, strlen($this->wordpressdir) + 1) != $this->wordpressdir . '/' && //File is not in WordPress core directory
+			substr($file_path, 0, strlen($this->rootRelativeWPContentDir) + 1) != $this->rootRelativeWPContentDir . '/' //File is not in the wp-content directory
+		) {
 			$file_path = $this->wordpressdir . $file_path;
 		}
 		return $file_path;

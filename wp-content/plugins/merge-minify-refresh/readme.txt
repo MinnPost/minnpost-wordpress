@@ -4,7 +4,7 @@ Contributors:launchinteractive
 Tags: merge, concatenate, minify, closure, refresh, litespeed, apache
 Requires at least: 3.6.1
 Stable tag: trunk
-Tested up to: 4.7
+Tested up to: 5.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,11 @@ Version 1.8.8 added a "merge_minify_refresh_done" hook that fires when JS or CSS
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 1.8.12 =
+* Upgraded Closure to latest version
+* Fixed MMR so it works when WordPress and wp-content are in non-standard locations
+* Fixed MMR admin unecessarily updating log text
 
 = 1.8.11 =
 * Upgraded Minify and Closure to latest versions

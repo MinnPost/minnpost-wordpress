@@ -63,13 +63,13 @@
 							}
 							if($li.length > 0) {
 								var $filename = $li.find('.filename');
-								if($filename.html() != this.filename+scheduled) {
+								if($filename.text() != this.filename+scheduled) {
 									$filename.html(this.filename+scheduled);
 								}
-								if($li.find('pre').html() != this.log) {
+								if($li.find('pre').text() != this.log) {
 									$li.find('pre').html(this.log);
 								}
-								if($li.find('.accessed').html() != 'Last Accessed: ' + this.accessed) {
+								if($li.find('.accessed').text() != 'Last Accessed: ' + this.accessed) {
 									$li.find('.accessed').html('Last Accessed: ' + this.accessed);
 								}
 								if(this.error) {
@@ -96,13 +96,13 @@
 							}
 							if($li.length > 0) {
 								var $filename = $li.find('.filename');
-								if($filename.html() != this.filename+scheduled) {
+								if($filename.text() != this.filename+scheduled) {
 									$filename.html(this.filename+scheduled);
 								}
-								if($li.find('pre').html() != this.log) {
+								if($li.find('pre').text() != this.log) {
 									$li.find('pre').html(this.log);
 								}
-								if($li.find('.accessed').html() != 'Last Accessed: ' + this.accessed) {
+								if($li.find('.accessed').text() != 'Last Accessed: ' + this.accessed) {
 									$li.find('.accessed').html('Last Accessed: ' + this.accessed);
 								}
 								if(this.error) {

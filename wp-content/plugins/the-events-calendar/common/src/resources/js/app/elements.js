@@ -9588,6 +9588,7 @@ __webpack_require__.r(input_namespaceObject);
 __webpack_require__.d(input_namespaceObject, "sendValue", function() { return sendValue; });
 var utils_moment_namespaceObject = {};
 __webpack_require__.r(utils_moment_namespaceObject);
+__webpack_require__.d(utils_moment_namespaceObject, "TIME_FORMAT", function() { return TIME_FORMAT; });
 __webpack_require__.d(utils_moment_namespaceObject, "toFormat", function() { return moment_toFormat; });
 __webpack_require__.d(utils_moment_namespaceObject, "roundTime", function() { return moment_roundTime; });
 __webpack_require__.d(utils_moment_namespaceObject, "parseFormats", function() { return moment_parseFormats; });
@@ -9761,7 +9762,7 @@ var date_toNaturalLanguage = function toNaturalLanguage() {
 			month: 'MMMM',
 			day: 'D',
 			year: 'YYYY',
-			time: 'h:mm a'
+			time: utils_moment_namespaceObject.toFormat(FORMATS.WP.time)
 		},
 		separator: ''
 	}, params);
@@ -9953,6 +9954,8 @@ var moment_default = /*#__PURE__*/__webpack_require__.n(moment);
  */
 
 
+var TIME_FORMAT = 'h:mm a';
+
 /**
  * Make sure the format provided matches the spec used by moment.js
  *
@@ -10141,7 +10144,6 @@ var moment_totalSeconds = function totalSeconds(date) {
 	if (!date || !Object(moment["isMoment"])(date)) {
 		return 0;
 	}
-
 	return date.diff(moment_default()(date).startOf('day'), 'seconds');
 };
 
@@ -41109,9 +41111,9 @@ function index (resultFn, isEqual) {
 "use strict";
 
 
-var _CSSTransition = _interopRequireDefault(__webpack_require__(666));
+var _CSSTransition = _interopRequireDefault(__webpack_require__(667));
 
-var _ReplaceTransition = _interopRequireDefault(__webpack_require__(671));
+var _ReplaceTransition = _interopRequireDefault(__webpack_require__(672));
 
 var _TransitionGroup = _interopRequireDefault(__webpack_require__(632));
 
@@ -49250,7 +49252,7 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-__webpack_require__(688);
+__webpack_require__(689);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -49473,7 +49475,7 @@ LoadingIndicator.defaultProps = { size: 4 };
 /* 627 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var now = __webpack_require__(664)
+/* WEBPACK VAR INJECTION */(function(global) {var now = __webpack_require__(665)
   , root = typeof window === 'undefined' ? global : window
   , vendors = ['moz', 'webkit']
   , suffix = 'AnimationFrame'
@@ -50530,7 +50532,7 @@ var _react = _interopRequireDefault(__webpack_require__(2));
 
 var _reactLifecyclesCompat = __webpack_require__(630);
 
-var _ChildMapping = __webpack_require__(672);
+var _ChildMapping = __webpack_require__(673);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51474,7 +51476,7 @@ exports.default = SingleValue;
 /* eslint-disable no-var */
 /* eslint-env node */
 
-var DayPickerInput = __webpack_require__(654);
+var DayPickerInput = __webpack_require__(655);
 
 module.exports = DayPickerInput;
 
@@ -51552,13 +51554,13 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _Select = __webpack_require__(673);
+var _Select = __webpack_require__(674);
 
 var _Select2 = _interopRequireDefault(_Select);
 
 var _utils = __webpack_require__(624);
 
-var _stateManager = __webpack_require__(691);
+var _stateManager = __webpack_require__(692);
 
 var _stateManager2 = _interopRequireDefault(_stateManager);
 
@@ -52995,6 +52997,12 @@ function createEmotion(context, options) {
 /* 654 */
 /***/ (function(module, exports, __webpack_require__) {
 
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 655 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
@@ -53019,7 +53027,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _DayPicker = __webpack_require__(655);
+var _DayPicker = __webpack_require__(656);
 
 var _DayPicker2 = _interopRequireDefault(_DayPicker);
 
@@ -53629,7 +53637,7 @@ DayPickerInput.propTypes =  false ? undefined : {};
 //# sourceMappingURL=DayPickerInput.js.map
 
 /***/ }),
-/* 655 */
+/* 656 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53652,19 +53660,19 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _Caption = __webpack_require__(656);
+var _Caption = __webpack_require__(657);
 
 var _Caption2 = _interopRequireDefault(_Caption);
 
-var _Navbar = __webpack_require__(657);
+var _Navbar = __webpack_require__(658);
 
 var _Navbar2 = _interopRequireDefault(_Navbar);
 
-var _Month = __webpack_require__(658);
+var _Month = __webpack_require__(659);
 
 var _Month2 = _interopRequireDefault(_Month);
 
-var _Weekday = __webpack_require__(661);
+var _Weekday = __webpack_require__(662);
 
 var _Weekday2 = _interopRequireDefault(_Weekday);
 
@@ -54193,7 +54201,7 @@ exports.default = DayPicker;
 //# sourceMappingURL=DayPicker.js.map
 
 /***/ }),
-/* 656 */
+/* 657 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54285,7 +54293,7 @@ Caption.propTypes =  false ? undefined : {};
 //# sourceMappingURL=Caption.js.map
 
 /***/ }),
-/* 657 */
+/* 658 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54446,7 +54454,7 @@ Navbar.propTypes =  false ? undefined : {};
 //# sourceMappingURL=Navbar.js.map
 
 /***/ }),
-/* 658 */
+/* 659 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54466,11 +54474,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _Weekdays = __webpack_require__(659);
+var _Weekdays = __webpack_require__(660);
 
 var _Weekdays2 = _interopRequireDefault(_Weekdays);
 
-var _Day = __webpack_require__(660);
+var _Day = __webpack_require__(661);
 
 var _Day2 = _interopRequireDefault(_Day);
 
@@ -54659,7 +54667,7 @@ Month.propTypes =  false ? undefined : {};
 //# sourceMappingURL=Month.js.map
 
 /***/ }),
-/* 659 */
+/* 660 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54751,7 +54759,7 @@ Weekdays.propTypes =  false ? undefined : {};
 //# sourceMappingURL=Weekdays.js.map
 
 /***/ }),
-/* 660 */
+/* 661 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54925,7 +54933,7 @@ Day.propTypes =  false ? undefined : {};
 //# sourceMappingURL=Day.js.map
 
 /***/ }),
-/* 661 */
+/* 662 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55011,12 +55019,6 @@ Weekday.propTypes =  false ? undefined : {};
 //# sourceMappingURL=Weekday.js.map
 
 /***/ }),
-/* 662 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
 /* 663 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -55024,6 +55026,12 @@ Weekday.propTypes =  false ? undefined : {};
 
 /***/ }),
 /* 664 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 665 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {// Generated by CoffeeScript 1.12.2
@@ -55063,10 +55071,10 @@ Weekday.propTypes =  false ? undefined : {};
 
 //# sourceMappingURL=performance-now.js.map
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(665)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(666)))
 
 /***/ }),
-/* 665 */
+/* 666 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -55256,7 +55264,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 666 */
+/* 667 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55267,9 +55275,9 @@ exports.default = void 0;
 
 var PropTypes = _interopRequireWildcard(__webpack_require__(1));
 
-var _addClass = _interopRequireDefault(__webpack_require__(667));
+var _addClass = _interopRequireDefault(__webpack_require__(668));
 
-var _removeClass = _interopRequireDefault(__webpack_require__(670));
+var _removeClass = _interopRequireDefault(__webpack_require__(671));
 
 var _react = _interopRequireDefault(__webpack_require__(2));
 
@@ -55465,18 +55473,18 @@ exports.default = _default;
 module.exports = exports["default"];
 
 /***/ }),
-/* 667 */
+/* 668 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _interopRequireDefault = __webpack_require__(668);
+var _interopRequireDefault = __webpack_require__(669);
 
 exports.__esModule = true;
 exports.default = addClass;
 
-var _hasClass = _interopRequireDefault(__webpack_require__(669));
+var _hasClass = _interopRequireDefault(__webpack_require__(670));
 
 function addClass(element, className) {
   if (element.classList) element.classList.add(className);else if (!(0, _hasClass.default)(element, className)) if (typeof element.className === 'string') element.className = element.className + ' ' + className;else element.setAttribute('class', (element.className && element.className.baseVal || '') + ' ' + className);
@@ -55485,7 +55493,7 @@ function addClass(element, className) {
 module.exports = exports["default"];
 
 /***/ }),
-/* 668 */
+/* 669 */
 /***/ (function(module, exports) {
 
 function _interopRequireDefault(obj) {
@@ -55497,7 +55505,7 @@ function _interopRequireDefault(obj) {
 module.exports = _interopRequireDefault;
 
 /***/ }),
-/* 669 */
+/* 670 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55513,7 +55521,7 @@ function hasClass(element, className) {
 module.exports = exports["default"];
 
 /***/ }),
-/* 670 */
+/* 671 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55528,7 +55536,7 @@ module.exports = function removeClass(element, className) {
 };
 
 /***/ }),
-/* 671 */
+/* 672 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55680,7 +55688,7 @@ exports.default = _default;
 module.exports = exports["default"];
 
 /***/ }),
-/* 672 */
+/* 673 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55836,7 +55844,7 @@ function getNextChildMapping(nextProps, prevChildMapping, onExited) {
 }
 
 /***/ }),
-/* 673 */
+/* 674 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55863,25 +55871,25 @@ var _memoizeOne2 = _interopRequireDefault(_memoizeOne);
 
 var _Menu = __webpack_require__(623);
 
-var _reactFastCompare = __webpack_require__(674);
+var _reactFastCompare = __webpack_require__(675);
 
 var _reactFastCompare2 = _interopRequireDefault(_reactFastCompare);
 
-var _filters = __webpack_require__(675);
+var _filters = __webpack_require__(676);
 
-var _index = __webpack_require__(677);
+var _index = __webpack_require__(678);
 
-var _index2 = __webpack_require__(685);
+var _index2 = __webpack_require__(686);
 
 var _utils = __webpack_require__(624);
 
-var _builtins = __webpack_require__(686);
+var _builtins = __webpack_require__(687);
 
-var _index3 = __webpack_require__(687);
+var _index3 = __webpack_require__(688);
 
-var _styles = __webpack_require__(689);
+var _styles = __webpack_require__(690);
 
-var _theme = __webpack_require__(690);
+var _theme = __webpack_require__(691);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -57651,7 +57659,7 @@ var _initialiseProps = function _initialiseProps() {
 exports.default = Select;
 
 /***/ }),
-/* 674 */
+/* 675 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -57754,7 +57762,7 @@ function exportedEqual(a, b) {
 };
 
 /***/ }),
-/* 675 */
+/* 676 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -57767,7 +57775,7 @@ exports.createFilter = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _diacritics = __webpack_require__(676);
+var _diacritics = __webpack_require__(677);
 
 var trimString = function trimString(str) {
   return str.replace(/^\s+|\s+$/g, '');
@@ -57806,7 +57814,7 @@ var createFilter = exports.createFilter = function createFilter(config) {
 };
 
 /***/ }),
-/* 676 */
+/* 677 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -57825,7 +57833,7 @@ var stripDiacritics = exports.stripDiacritics = function stripDiacritics(str) {
 };
 
 /***/ }),
-/* 677 */
+/* 678 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -57835,7 +57843,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _A11yText = __webpack_require__(678);
+var _A11yText = __webpack_require__(679);
 
 Object.defineProperty(exports, 'A11yText', {
   enumerable: true,
@@ -57844,7 +57852,7 @@ Object.defineProperty(exports, 'A11yText', {
   }
 });
 
-var _DummyInput = __webpack_require__(679);
+var _DummyInput = __webpack_require__(680);
 
 Object.defineProperty(exports, 'DummyInput', {
   enumerable: true,
@@ -57862,7 +57870,7 @@ Object.defineProperty(exports, 'NodeResolver', {
   }
 });
 
-var _ScrollBlock = __webpack_require__(680);
+var _ScrollBlock = __webpack_require__(681);
 
 Object.defineProperty(exports, 'ScrollBlock', {
   enumerable: true,
@@ -57871,7 +57879,7 @@ Object.defineProperty(exports, 'ScrollBlock', {
   }
 });
 
-var _ScrollCaptor = __webpack_require__(684);
+var _ScrollCaptor = __webpack_require__(685);
 
 Object.defineProperty(exports, 'ScrollCaptor', {
   enumerable: true,
@@ -57883,7 +57891,7 @@ Object.defineProperty(exports, 'ScrollCaptor', {
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
-/* 678 */
+/* 679 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -57925,7 +57933,7 @@ var A11yText = function A11yText(props) {
 exports.default = A11yText;
 
 /***/ }),
-/* 679 */
+/* 680 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58010,7 +58018,7 @@ var DummyInput = function (_Component) {
 exports.default = DummyInput;
 
 /***/ }),
-/* 680 */
+/* 681 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58032,7 +58040,7 @@ var _NodeResolver = __webpack_require__(625);
 
 var _NodeResolver2 = _interopRequireDefault(_NodeResolver);
 
-var _index = __webpack_require__(681);
+var _index = __webpack_require__(682);
 
 var _index2 = _interopRequireDefault(_index);
 
@@ -58126,7 +58134,7 @@ var ScrollBlock = function (_PureComponent) {
 exports.default = ScrollBlock;
 
 /***/ }),
-/* 681 */
+/* 682 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58140,9 +58148,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _react = __webpack_require__(2);
 
-var _constants = __webpack_require__(682);
+var _constants = __webpack_require__(683);
 
-var _utils = __webpack_require__(683);
+var _utils = __webpack_require__(684);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -58282,7 +58290,7 @@ ScrollLock.defaultProps = {
 exports.default = ScrollLock;
 
 /***/ }),
-/* 682 */
+/* 683 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58301,7 +58309,7 @@ var LOCK_STYLES = exports.LOCK_STYLES = {
 };
 
 /***/ }),
-/* 683 */
+/* 684 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58341,7 +58349,7 @@ function isTouchDevice() {
 }
 
 /***/ }),
-/* 684 */
+/* 685 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58535,7 +58543,7 @@ ScrollCaptorSwitch.defaultProps = { isEnabled: true };
 exports.default = ScrollCaptorSwitch;
 
 /***/ }),
-/* 685 */
+/* 686 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58593,7 +58601,7 @@ var resultsAriaMessage = exports.resultsAriaMessage = function resultsAriaMessag
 };
 
 /***/ }),
-/* 686 */
+/* 687 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58619,7 +58627,7 @@ var isOptionDisabled = exports.isOptionDisabled = function isOptionDisabled(opti
 };
 
 /***/ }),
-/* 687 */
+/* 688 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58705,14 +58713,14 @@ var defaultComponents = exports.defaultComponents = function defaultComponents(p
 };
 
 /***/ }),
-/* 688 */
+/* 689 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 /***/ }),
-/* 689 */
+/* 690 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58796,7 +58804,7 @@ function mergeStyles(source) {
 }
 
 /***/ }),
-/* 690 */
+/* 691 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58845,7 +58853,7 @@ var defaultTheme = exports.defaultTheme = {
 };
 
 /***/ }),
-/* 691 */
+/* 692 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58970,12 +58978,6 @@ var manageState = function manageState(SelectComponent) {
 };
 
 exports.default = manageState;
-
-/***/ }),
-/* 692 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 /* 693 */
@@ -59938,11 +59940,45 @@ var react_scroll_to = __webpack_require__(309);
 // EXTERNAL MODULE: ./src/modules/components/index.js + 8 modules
 var modules_components = __webpack_require__(546);
 
+// EXTERNAL MODULE: ./src/modules/elements/input/style.pcss
+var input_style = __webpack_require__(652);
+
+// CONCATENATED MODULE: ./src/modules/elements/input/element.js
+
+
+/**
+ * External Dependencies
+ */
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+var element_Input = function Input(_ref) {
+	var className = _ref.className,
+	    type = _ref.type,
+	    rest = objectWithoutProperties_default()(_ref, ['className', 'type']);
+
+	return wp.element.createElement('input', extends_default()({
+		className: classnames_default()('tribe-editor__input', className),
+		type: type
+	}, rest));
+};
+
+element_Input.propTypes = {
+	className: prop_types_default.a.string,
+	type: prop_types_default.a.string.isRequired
+};
+
+/* harmony default export */ var input_element = (element_Input);
 // EXTERNAL MODULE: ./src/modules/elements/time-picker/style.pcss
-var time_picker_style = __webpack_require__(652);
+var time_picker_style = __webpack_require__(653);
 
 // CONCATENATED MODULE: ./src/modules/elements/time-picker/element.js
-
 
 /**
  * External dependencies
@@ -59967,68 +60003,66 @@ var time_picker_style = __webpack_require__(652);
 
 
 
+
+
 var element_TimePicker = function TimePicker(_ref) {
-	var current = _ref.current,
-	    min = _ref.min,
-	    max = _ref.max,
-	    start = _ref.start,
+	var allDay = _ref.allDay,
+	    current = _ref.current,
+	    disabled = _ref.disabled,
 	    end = _ref.end,
-	    step = _ref.step,
-	    timeFormat = _ref.timeFormat,
-	    allDay = _ref.allDay,
+	    onBlur = _ref.onBlur,
 	    onChange = _ref.onChange,
 	    _onClick = _ref.onClick,
+	    onFocus = _ref.onFocus,
 	    showAllDay = _ref.showAllDay,
-	    disabled = _ref.disabled;
+	    start = _ref.start,
+	    step = _ref.step,
+	    timeFormat = _ref.timeFormat;
 
 
-	var renderLabel = function renderLabel(onToggle) {
+	var renderLabel = function renderLabel(onAllDayClick) {
 		if (allDay) {
 			return wp.element.createElement(
-				'button',
+				button_element,
 				{
 					className: 'tribe-editor__timepicker__all-day-btn',
-					onClick: onToggle,
-					disabled: disabled
+					disabled: disabled,
+					onClick: onAllDayClick
 				},
 				Object(external_var_wp_i18n_root_wp_i18n_["__"])('All Day', 'events-gutenberg')
 			);
 		}
 
-		var additionalProps = {};
-		if (min) {
-			additionalProps.min = min;
-		}
-
-		if (max) {
-			additionalProps.max = max;
-		}
-
-		return wp.element.createElement('input', extends_default()({
-			className: 'tribe-editor__btn-input',
-			type: 'time',
-			value: current,
+		return wp.element.createElement(input_element, {
+			className: 'tribe-editor__timepicker__input',
+			disabled: disabled,
+			onBlur: onBlur,
 			onChange: onChange,
-			disabled: disabled
-		}, additionalProps));
+			onFocus: onFocus,
+			type: 'text',
+			value: current
+		});
 	};
 
-	var toggleDropdown = function toggleDropdown(_ref2) {
+	var renderToggle = function renderToggle(_ref2) {
 		var onToggle = _ref2.onToggle,
 		    isOpen = _ref2.isOpen;
 		return wp.element.createElement(
-			'div',
-			{ className: 'tribe-editor__timepicker-label-container' },
+			external_React_["Fragment"],
+			null,
 			renderLabel(onToggle),
 			wp.element.createElement(
-				'button',
+				button_element,
 				{
-					type: 'button',
 					'aria-expanded': isOpen,
-					onClick: onToggle,
-					disabled: disabled
+					className: 'tribe-editor__timepicker__toggle-btn',
+					disabled: disabled,
+					onClick: onToggle
 				},
-				wp.element.createElement(external_var_wp_components_root_wp_components_["Dashicon"], { className: 'btn--icon', icon: isOpen ? 'arrow-up' : 'arrow-down' })
+				wp.element.createElement(external_var_wp_components_root_wp_components_["Dashicon"], {
+					className: 'tribe-editor__timepicker__toggle-btn-icon',
+					icon: isOpen ? 'arrow-up' : 'arrow-down'
+				})
 			)
 		);
 	};
@@ -60039,11 +60073,19 @@ var element_TimePicker = function TimePicker(_ref) {
 		var startSeconds = utils["time"].toSeconds(start, utils["time"].TIME_FORMAT_HH_MM);
 		var endSeconds = utils["time"].toSeconds(end, utils["time"].TIME_FORMAT_HH_MM);
 
+		var currentMoment = moment_default()(current, utils["moment"].TIME_FORMAT);
+
 		for (var time = startSeconds; time <= endSeconds; time += step) {
+			var isCurrent = false;
+			if (currentMoment.isValid()) {
+				var currentTime = utils["moment"].toTime24Hr(currentMoment);
+				isCurrent = time === utils["time"].toSeconds(currentTime, utils["time"].TIME_FORMAT_HH_MM);
+			}
+
 			items.push({
 				value: time,
 				text: formatLabel(time),
-				isCurrent: current ? time === utils["time"].toSeconds(current, utils["time"].TIME_FORMAT_HH_MM) : false
+				isCurrent: isCurrent
 			});
 		}
 
@@ -60061,10 +60103,9 @@ var element_TimePicker = function TimePicker(_ref) {
 		};
 
 		return wp.element.createElement(
-			'button',
+			button_element,
 			{
 				key: 'time-' + item.value,
-				role: 'menuitem',
 				className: classnames_default()(itemClasses),
 				value: item.value,
 				onClick: function onClick() {
@@ -60075,7 +60116,7 @@ var element_TimePicker = function TimePicker(_ref) {
 		);
 	};
 
-	var renderDropdownContent = function renderDropdownContent(_ref3) {
+	var renderContent = function renderContent(_ref3) {
 		var onClose = _ref3.onClose;
 		return wp.element.createElement(
 			react_scroll_to["ScrollTo"],
@@ -60087,10 +60128,8 @@ var element_TimePicker = function TimePicker(_ref) {
 					wp.element.createElement(
 						react_scroll_to["ScrollArea"],
 						{
-							id: 'tribe-element-timepicker-items',
 							key: 'tribe-element-timepicker-items',
-							role: 'menu',
-							className: classnames_default()('tribe-editor__timepicker__items')
+							className: 'tribe-editor__timepicker__items'
 						},
 						showAllDay && renderItem({ text: Object(external_var_wp_i18n_root_wp_i18n_["__"])('All Day', 'events-gutenberg'), value: 'all-day' }, onClose),
 						getItems().map(function (item) {
@@ -60109,21 +60148,23 @@ var element_TimePicker = function TimePicker(_ref) {
 			className: 'tribe-editor__timepicker'
 		},
 		wp.element.createElement(external_var_wp_components_root_wp_components_["Dropdown"], {
-			className: 'tribe-element-timepicker-label',
+			className: 'tribe-editor__timepicker__toggle',
+			contentClassName: 'tribe-editor__timepicker__content',
 			position: 'bottom center',
-			contentClassName: 'tribe-editor__timepicker__dialog',
-			renderToggle: toggleDropdown,
-			renderContent: renderDropdownContent
+			renderToggle: renderToggle,
+			renderContent: renderContent
 		})
 	);
 };
 
 element_TimePicker.defaultProps = {
-	step: utils["time"].HALF_HOUR_IN_SECONDS,
-	timeFormat: 'H:i',
 	allDay: false,
+	onBlur: noop_default.a,
 	onChange: noop_default.a,
-	onClick: noop_default.a
+	onClick: noop_default.a,
+	onFocus: noop_default.a,
+	step: utils["time"].HALF_HOUR_IN_SECONDS,
+	timeFormat: utils["date"].FORMATS.WP.time
 };
 
 element_TimePicker.propTypes = {
@@ -60132,18 +60173,18 @@ element_TimePicker.propTypes = {
   * using 24h clock in hh:mm format
   * e.g. 00:24, 03:57, 21:12
   */
-	current: utils["TribePropTypes"].timeFormat.isRequired,
-	min: utils["TribePropTypes"].timeFormat,
-	max: utils["TribePropTypes"].timeFormat,
-	start: utils["TribePropTypes"].timeFormat.isRequired,
-	end: utils["TribePropTypes"].timeFormat.isRequired,
-	step: prop_types_default.a.number,
-	timeFormat: prop_types_default.a.string,
 	allDay: prop_types_default.a.bool,
-	onChange: prop_types_default.a.func.isRequired,
-	onClick: prop_types_default.a.func.isRequired,
+	current: prop_types_default.a.string,
+	disabled: prop_types_default.a.bool,
+	end: utils["TribePropTypes"].timeFormat.isRequired,
+	onBlur: prop_types_default.a.func,
+	onChange: prop_types_default.a.func,
+	onClick: prop_types_default.a.func,
+	onFocus: prop_types_default.a.func,
 	showAllDay: prop_types_default.a.bool,
-	disabled: prop_types_default.a.bool
+	start: utils["TribePropTypes"].timeFormat.isRequired,
+	step: prop_types_default.a.number,
+	timeFormat: prop_types_default.a.string
 };
 
 /* harmony default export */ var time_picker_element = (element_TimePicker);
@@ -60223,14 +60264,14 @@ element_Tooltip.propTypes = {
 
 /* harmony default export */ var tooltip_element = (element_Tooltip);
 // EXTERNAL MODULE: ./node_modules/react-day-picker/lib/style.css
-var lib_style = __webpack_require__(653);
+var lib_style = __webpack_require__(654);
 
 // EXTERNAL MODULE: ./node_modules/react-day-picker/DayPickerInput.js
 var react_day_picker_DayPickerInput = __webpack_require__(641);
 var DayPickerInput_default = /*#__PURE__*/__webpack_require__.n(react_day_picker_DayPickerInput);
 
 // EXTERNAL MODULE: ./src/modules/elements/day-picker-input/style.pcss
-var day_picker_input_style = __webpack_require__(662);
+var day_picker_input_style = __webpack_require__(663);
 
 // CONCATENATED MODULE: ./src/modules/elements/day-picker-input/element.js
 
@@ -65073,7 +65114,7 @@ var lib_Creatable = __webpack_require__(643);
 var Creatable_default = /*#__PURE__*/__webpack_require__.n(lib_Creatable);
 
 // EXTERNAL MODULE: ./src/modules/elements/creatable-select/style.pcss
-var creatable_select_style = __webpack_require__(663);
+var creatable_select_style = __webpack_require__(664);
 
 // CONCATENATED MODULE: ./src/modules/elements/creatable-select/element.js
 
@@ -65133,7 +65174,7 @@ element_CreatableSelect.propTypes = {
 
 /* harmony default export */ var creatable_select_element = (element_CreatableSelect);
 // EXTERNAL MODULE: ./src/modules/elements/placeholder/style.pcss
-var placeholder_style = __webpack_require__(692);
+var placeholder_style = __webpack_require__(693);
 
 // CONCATENATED MODULE: ./src/modules/elements/placeholder/element.js
 /**
@@ -65164,7 +65205,7 @@ element_Placeholder.propTypes = {
 
 /* harmony default export */ var placeholder_element = (element_Placeholder);
 // EXTERNAL MODULE: ./src/modules/elements/heading/style.pcss
-var heading_style = __webpack_require__(693);
+var heading_style = __webpack_require__(694);
 
 // CONCATENATED MODULE: ./src/modules/elements/heading/element.js
 /**
@@ -65200,7 +65241,7 @@ element_Heading.propTypes = {
 
 /* harmony default export */ var heading_element = (element_Heading);
 // EXTERNAL MODULE: ./src/modules/elements/paragraph/style.pcss
-var paragraph_style = __webpack_require__(694);
+var paragraph_style = __webpack_require__(695);
 
 // CONCATENATED MODULE: ./src/modules/elements/paragraph/element.js
 /**
@@ -65243,41 +65284,6 @@ element_Paragraph.defaultProps = {
 };
 
 /* harmony default export */ var paragraph_element = (element_Paragraph);
-// EXTERNAL MODULE: ./src/modules/elements/input/style.pcss
-var input_style = __webpack_require__(695);
-
-// CONCATENATED MODULE: ./src/modules/elements/input/element.js
-
-
-/**
- * External Dependencies
- */
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-var element_Input = function Input(_ref) {
-	var className = _ref.className,
-	    type = _ref.type,
-	    rest = objectWithoutProperties_default()(_ref, ['className', 'type']);
-
-	return wp.element.createElement('input', extends_default()({
-		className: classnames_default()('tribe-editor__input', className),
-		type: type
-	}, rest));
-};
-
-element_Input.propTypes = {
-	className: prop_types_default.a.string,
-	type: prop_types_default.a.string.isRequired
-};
-
-/* harmony default export */ var input_element = (element_Input);
 // CONCATENATED MODULE: ./src/modules/elements/url-input/element.js
 
 

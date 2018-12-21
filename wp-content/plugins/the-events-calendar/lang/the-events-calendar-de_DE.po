@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - The Events Calendar - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-09-02 20:12:30+0000\n"
+"PO-Revision-Date: 2018-12-19 06:14:13+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,63 +13,63 @@ msgstr ""
 
 #: src/resources/js/app/blocks.js:48214
 msgid "Edit Organizer"
-msgstr ""
+msgstr "Veranstalter bearbeiten"
 
 #: src/resources/js/app/blocks.js:48211
 msgid "Organizer Settings"
-msgstr ""
+msgstr "Einstellungen Veranstalter"
 
 #: src/resources/js/app/blocks.js:48137
 msgid "Add or find an organizer"
-msgstr ""
+msgstr "Veranstalter finden oder hinzufügen "
 
 #: src/resources/js/app/blocks.js:47979
 msgid "Add email"
-msgstr ""
+msgstr "E-Mail hinzufügen"
 
 #: src/resources/js/app/blocks.js:47972
 msgid "Add website"
-msgstr ""
+msgstr "Website  hinzufügen"
 
 #: src/resources/js/app/blocks.js:47965
 msgid "Add Phone"
-msgstr ""
+msgstr "Telefon hinzufügen"
 
 #: src/resources/js/app/blocks.js:47394
 msgid "Venue Settings"
-msgstr ""
+msgstr "Einstellungen Veranstaltungsort"
 
 #: src/resources/js/app/blocks.js:47272
 msgid "Add or find a venue"
-msgstr ""
+msgstr "Veranstaltungsort finden oder hinzufügen"
 
 #: src/resources/js/app/blocks.js:46934
 msgid "(Untitled Venue)"
-msgstr ""
+msgstr "(Unbenannter Veranstaltungsort)"
 
 #: src/resources/js/app/blocks.js:46387
 msgid "Multi-Day"
-msgstr ""
+msgstr "Mehrtägig"
 
 #: src/resources/js/app/blocks.js:45448
 msgid "Show Time Zone"
-msgstr ""
+msgstr "Zeige Zeitzone"
 
 #: src/resources/js/app/blocks.js:45441
 msgid "Time Zone"
-msgstr ""
+msgstr "Zeitzone"
 
 #: src/resources/js/app/blocks.js:45434
 msgid "Time Range Separator"
-msgstr ""
+msgstr "Zeitbereichs-Trennzeichen"
 
 #: src/resources/js/app/blocks.js:45427
 msgid "Date Time Separator"
-msgstr ""
+msgstr "Datum/Zeit Trennzeichen"
 
 #: src/resources/js/app/blocks.js:13219 src/resources/js/app/elements.js:9845
 msgid "Add or Find"
-msgstr ""
+msgstr "Finden oder Hinzufügen"
 
 #: src/resources/js/app/blocks.js:12598 src/resources/js/app/elements.js:9224
 msgid "A Google Map API KEY is required to view the map"
@@ -85,11 +85,11 @@ msgstr ""
 
 #: src/resources/js/app/blocks.js:11712 src/resources/js/app/elements.js:8338
 msgid "Country"
-msgstr ""
+msgstr "Land"
 
 #: src/resources/js/app/blocks.js:11444 src/resources/js/app/elements.js:8070
 msgid "Name:"
-msgstr ""
+msgstr "Name:"
 
 #: src/modules/blocks/event-datetime/subblocks/content/index.js:23
 #: src/resources/js/app/blocks.js:46184
@@ -122,7 +122,7 @@ msgstr ""
 #: src/modules/blocks/event-website/template.js:26
 #: src/resources/js/app/blocks.js:49305
 msgid "Add Event Website"
-msgstr ""
+msgstr "Veranstaltungswebsite hinzufügen"
 
 #: src/modules/blocks/event-links/index.js:22
 #: src/resources/js/app/blocks.js:48614
@@ -137,7 +137,7 @@ msgstr ""
 #: src/modules/blocks/event-links/template.js:108
 #: src/resources/js/app/blocks.js:48532
 msgid "iCal"
-msgstr ""
+msgstr "iCal"
 
 #: src/resources/js/app/blocks.js:47401
 msgid "Show Google Maps Embed"
@@ -151,7 +151,7 @@ msgstr ""
 #: src/modules/blocks/event-category/index.js:21
 #: src/resources/js/app/blocks.js:49142
 msgid "Event Categories"
-msgstr ""
+msgstr "Veranstaltungskategorien"
 
 #: src/modules/blocks/event-category/block.js:46
 #: src/resources/js/app/blocks.js:49112
@@ -166,7 +166,7 @@ msgstr ""
 #: src/modules/blocks/featured-image/block.js:80
 #: src/resources/js/app/blocks.js:49562
 msgid "Loading the Image"
-msgstr ""
+msgstr "Bild wird geladen"
 
 #: src/modules/blocks/featured-image/block.js:65
 #: src/resources/js/app/blocks.js:49551
@@ -193,7 +193,7 @@ msgstr ""
 #: src/modules/blocks/event-tags/index.js:21
 #: src/resources/js/app/blocks.js:49223 src/resources/js/app/blocks.js:49254
 msgid "Tags"
-msgstr ""
+msgstr "Schlagworte"
 
 #: src/modules/blocks/event-venue/index.js:18
 #: src/resources/js/app/blocks.js:47617
@@ -213,22 +213,22 @@ msgstr ""
 #: src/modules/blocks/event-price/index.js:17
 #: src/resources/js/app/blocks.js:49018
 msgid "Event Price"
-msgstr ""
+msgstr "Eintritt"
 
 #: src/modules/blocks/event-price/template.js:156
 #: src/resources/js/app/blocks.js:48830
 msgid "Currency symbol follows price"
-msgstr ""
+msgstr "Währungssymbol folgt nach dem Eintrittspreis"
 
 #: src/modules/blocks/event-price/template.js:123
 #: src/resources/js/app/blocks.js:48791
 msgid "enter 0 as price for free events"
-msgstr ""
+msgstr "0 für kostenlose Veranstaltungen eingeben"
 
 #: src/modules/blocks/event-price/template.js:117
 #: src/resources/js/app/blocks.js:48783
 msgid "Description"
-msgstr ""
+msgstr "Beschreibung"
 
 #: src/modules/blocks/event-price/template.js:109
 #: src/resources/js/app/blocks.js:48775
@@ -238,29 +238,29 @@ msgstr ""
 #: src/modules/blocks/event-price/template.js:43
 #: src/resources/js/app/blocks.js:48696
 msgid "Add Price"
-msgstr ""
+msgstr "Eintritt hinzufügen"
 
 #: src/modules/blocks/classic-event-details/event-details-organizers/event-details-organizer/template.js:40
 #: src/resources/js/app/blocks.js:44712
 msgid "Remove Organizer"
-msgstr ""
+msgstr "Veranstalter entfernen"
 
 #: src/modules/blocks/classic-event-details/event-details-organizers/template.js:62
 #: src/resources/js/app/blocks.js:44842
 msgid "Add existing Organizer"
-msgstr ""
+msgstr "Existierenden Veranstalter hinzufügen"
 
 #: src/modules/blocks/classic-event-details/event-details-organizers/template.js:61
 #: src/resources/js/app/blocks.js:44841
 msgid "Search for an organizer"
-msgstr ""
+msgstr "Nach Veranstalter suchen"
 
 #: src/modules/blocks/classic-event-details/event-details-organizers/template.js:25
 #: src/resources/js/app/blocks.js:11429 src/resources/js/app/blocks.js:11538
 #: src/resources/js/app/blocks.js:44791 src/resources/js/app/elements.js:8055
 #: src/resources/js/app/elements.js:8164
 msgid "Create Organizer"
-msgstr ""
+msgstr "Veranstalter erstellen"
 
 #: src/modules/blocks/classic-event-details/index.js:22
 #: src/resources/js/app/blocks.js:45285
@@ -276,29 +276,29 @@ msgstr ""
 #: src/modules/blocks/event-price/template.js:152
 #: src/resources/js/app/blocks.js:45170 src/resources/js/app/blocks.js:48826
 msgid "E.g.: $"
-msgstr ""
+msgstr "Z.B. €"
 
 #: src/modules/blocks/classic-event-details/template.js:191
 #: src/modules/blocks/event-price/template.js:150
 #: src/resources/js/app/blocks.js:45168 src/resources/js/app/blocks.js:48824
 msgid " Currency Symbol"
-msgstr ""
+msgstr "Währungssymbol"
 
 #: src/modules/blocks/classic-event-details/template.js:186
 #: src/resources/js/app/blocks.js:45163
 msgid "Show symbol before"
-msgstr ""
+msgstr "Zeige Währungssymbol vor"
 
 #: src/modules/blocks/classic-event-details/template.js:184
 #: src/modules/blocks/event-price/template.js:147
 #: src/resources/js/app/blocks.js:45161 src/resources/js/app/blocks.js:48821
 msgid "Price Settings"
-msgstr ""
+msgstr "Einstellungen Eintritt"
 
 #: src/modules/blocks/classic-event-details/template.js:179
 #: src/resources/js/app/blocks.js:45154
 msgid "Is All Day Event"
-msgstr ""
+msgstr "Ist eine Tagesveranstaltung"
 
 #: src/modules/blocks/classic-event-details/template.js:177
 #: src/resources/js/app/blocks.js:45152 src/resources/js/app/blocks.js:45425
@@ -308,32 +308,32 @@ msgstr ""
 #: src/modules/blocks/classic-event-details/template.js:156
 #: src/resources/js/app/blocks.js:45129
 msgid "Event Category:"
-msgstr ""
+msgstr "Veranstaltungskategorie"
 
 #: src/modules/blocks/classic-event-details/template.js:122
 #: src/resources/js/app/blocks.js:45091 src/resources/js/app/blocks.js:45895
 msgid "Enter price"
-msgstr ""
+msgstr "Eintritt eingeben"
 
 #: src/modules/blocks/classic-event-details/template.js:101
 #: src/resources/js/app/blocks.js:45060
 msgid "Enter url"
-msgstr ""
+msgstr "URL eingeben"
 
 #: src/modules/blocks/classic-event-details/template.js:97
 #: src/resources/js/app/blocks.js:45054
 msgid "Website: "
-msgstr ""
+msgstr "Website:"
 
 #: src/modules/blocks/classic-event-details/template.js:79
 #: src/resources/js/app/blocks.js:45022
 msgid "End: "
-msgstr ""
+msgstr "Ende:"
 
 #: src/modules/blocks/classic-event-details/template.js:57
 #: src/resources/js/app/blocks.js:44982
 msgid "Start: "
-msgstr ""
+msgstr "Start:"
 
 #: src/modules/blocks/event-organizer/index.js:17
 #: src/resources/js/app/blocks.js:48388
@@ -343,34 +343,34 @@ msgstr ""
 #: src/modules/blocks/event-organizer/index.js:16
 #: src/resources/js/app/blocks.js:48387
 msgid "Event Organizer"
-msgstr ""
+msgstr "Veranstalter"
 
 #: src/modules/data/blocks/price/reducer.js:23
 #: src/resources/js/app/data.js:9364 src/resources/js/app/blocks.js:10508
 msgid "$"
-msgstr ""
+msgstr "€"
 
 #: src/modules/data/blocks/datetime/reducer.js:23
 #: src/resources/js/app/data.js:6796 src/resources/js/app/blocks.js:6842
 msgid "-"
-msgstr ""
+msgstr "-"
 
 #: src/modules/data/blocks/datetime/reducer.js:22
 #: src/resources/js/app/data.js:6795 src/resources/js/app/blocks.js:6841
 msgid "@"
-msgstr ""
+msgstr "@"
 
 #: src/modules/elements/terms-list/element.js:128
 #: src/resources/js/app/blocks.js:11214 src/resources/js/app/elements.js:7840
 msgid ", "
-msgstr ""
+msgstr ","
 
 #: src/modules/elements/terms-list/element.js:45
 #: src/modules/blocks/classic-event-details/event-details-organizers/event-details-organizer/template.js:26
 #: src/resources/js/app/blocks.js:11083 src/resources/js/app/blocks.js:44700
 #: src/resources/js/app/elements.js:7709
 msgid "(Untitled)"
-msgstr ""
+msgstr "(Unbenannt)"
 
 #: src/modules/elements/upsell/element.js:33
 #: src/resources/js/app/blocks.js:13490 src/resources/js/app/elements.js:10116
@@ -391,7 +391,7 @@ msgstr ""
 
 #: src/views/blocks/event-datetime.php:80
 msgid "All day"
-msgstr ""
+msgstr "Ganztägig"
 
 #: src/views/modules/bar.php:51
 msgid "Hide %s Search"
@@ -409,7 +409,7 @@ msgstr ""
 #: src/admin-views/aggregator/settings.php:456
 #: src/admin-views/aggregator/settings.php:524
 msgid "Show Map"
-msgstr ""
+msgstr "Zeige Karte"
 
 #: src/admin-views/tribe-options-general.php:243
 msgid "Enable Maps"
@@ -428,14 +428,14 @@ msgstr ""
 
 #: src/admin-views/create-venue-fields.php:239
 msgid "Show Map?"
-msgstr ""
+msgstr "Karte zeigen?"
 
 #: src/admin-views/create-venue-fields.php:230
 #: src/admin-views/create-venue-fields.php:268
 #: src/admin-views/venue-meta-box.php:185
 #: src/admin-views/venue-meta-box.php:221
 msgid "Show Map:"
-msgstr ""
+msgstr "Zeige Karte:"
 
 #: src/Tribe/Editor/Compatibility.php:118
 msgid "Hidden Blocks Editor Config"
@@ -2234,7 +2234,7 @@ msgstr "Andere URLs"
 
 #: src/admin-views/aggregator/settings.php:481
 msgid "Fetch source event's settings (e.g. Show Maps Link or Sticky in Month View) when importing from another site using The Events Calendar."
-msgstr ""
+msgstr "Einstellungen der Quellveranstaltung (z.B. Google Maps-Link oder Oben in der Monatsansicht anzeigen) beim Importieren von einer anderen Website mit dem Veranstaltungskalender abrufen."
 
 #: src/admin-views/aggregator/settings.php:480
 msgid "Import Event Settings"
@@ -2661,7 +2661,7 @@ msgstr "Zeitplan:"
 
 #: src/admin-views/aggregator/fields/schedule.php:32
 msgid "Import runs daily at approximately"
-msgstr "Der Import läuft täglich am"
+msgstr "Der Import läuft täglich um etwa"
 
 #: src/admin-views/aggregator/fields/schedule.php:38
 msgid "Import runs weekly on"
@@ -3827,7 +3827,7 @@ msgstr "Einstellungen für iCalendar Import"
 #: src/admin-views/aggregator/settings.php:457
 #: src/admin-views/aggregator/settings.php:525
 msgid "Show map by default on imported event and venues"
-msgstr ""
+msgstr "Google-Karten standardmäßig auf importierten Veranstaltungen und Veranstaltungsorten anzeigen"
 
 #: src/admin-views/aggregator/settings.php:148
 msgid "The default event category for events"
@@ -3881,7 +3881,7 @@ msgstr "Überschreiben Sie meine Veranstaltung mit Änderungen der ursprünglich
 
 #: src/admin-views/aggregator/settings.php:49
 msgid "You can make changes to imported events via The Events Calendar and see those changes reflected on your site’s calendar. The owner of the original event source (e.g. the iCalendar feed or Meetup group) might also make changes to their event. If you choose to re-import an altered event (manually or via a scheduled import), any changes made at the source or on your calendar will need to be addressed."
-msgstr ""
+msgstr "Sie können Änderungen an importierten Veranstaltungen über The Events Calendar vornehmen und die Änderungen anzeigen, die im Kalender Ihrer Website angezeigt werden. Der Eigentümer der ursprünglichen Veranstaltungsquelle (z. B. der iCalendar-Feed oder die Facebook-Gruppe) kann ebenfalls Änderungen an deren Veranstaltung vornehmen. Wenn Sie eine veränderte Veranstaltung (manuell oder über einen geplanten Import) erneut importieren, müssen alle Änderungen an der Quelle oder an Ihrem Kalender adressiert werden."
 
 #: src/admin-views/aggregator/settings.php:44
 #: src/admin-views/aggregator/settings.php:54
@@ -4410,7 +4410,7 @@ msgstr "Erneuern Sie Ihre Event Aggregator Lizenz"
 
 #: src/Tribe/Aggregator/Tabs/New.php:561
 msgid "Renew your license in order to import events from iCalendar, Google, or Meetup."
-msgstr ""
+msgstr "Erneuern Sie Ihre Lizenz, um Veranstaltungen von Facebook, iCalendar, Google oder Meetup zu importieren."
 
 #: src/Tribe/Aggregator/Tabs/New.php:560
 msgid "Your Event Aggregator license is expired."
@@ -4431,7 +4431,7 @@ msgstr "Jetzt kaufen"
 
 #: src/Tribe/Aggregator/Tabs/New.php:502
 msgid "With Event Aggregator, you can import events from iCalendar, Google, and Meetup.com in a jiffy."
-msgstr ""
+msgstr "Mit Event Aggregator können Sie sehr einfach Veranstaltungen von Facebook, iCalendar, Google und Meetup.com importieren."
 
 #: src/Tribe/Aggregator/Tabs/New.php:500
 msgid "Import Using Event Aggregator"
@@ -6143,7 +6143,7 @@ msgstr "Import Veranstaltungen"
 #: src/modules/blocks/event-links/template.js:101
 #: src/resources/js/app/blocks.js:48525
 msgid "Share Settings"
-msgstr ""
+msgstr "Einstellungen teilen"
 
 #: src/deprecated/Tribe__Events__Importer__Options.php:136
 msgid "Draft"
@@ -6264,7 +6264,7 @@ msgstr "Titel:"
 
 #: src/resources/js/app/blocks.js:47396
 msgid "Show Google Maps Link"
-msgstr ""
+msgstr "Zeige Link zu Google Karte"
 
 #: src/admin-views/create-venue-fields.php:166
 #: src/admin-views/venue-meta-box.php:136
@@ -6719,12 +6719,12 @@ msgstr "Standard Veranstaltungsvorlage"
 #: src/modules/blocks/classic-event-details/template.js:117
 #: src/resources/js/app/blocks.js:45080
 msgid "Price: "
-msgstr ""
+msgstr "Eintritt"
 
 #: common/src/modules/elements/image-upload/element.js:46
 #: common/src/resources/js/app/elements.js:59497
 msgid "remove"
-msgstr ""
+msgstr "Löschen"
 
 #: common/src/admin-views/event-log.php:65
 msgid "View"
@@ -6874,7 +6874,7 @@ msgstr "Supportunterlagen, die Ihnen sicherlich helfen"
 
 #: src/admin-views/admin-welcome-message.php:44
 msgid "Addons for Community, Tickets, Filters, and more."
-msgstr ""
+msgstr "Add-Ons für Community, Tickets, Filter, Facebook und mehr."
 
 #: src/admin-views/admin-welcome-message.php:43
 msgid "Looking for More Features?"
@@ -9100,17 +9100,7 @@ msgstr "Vereinigte Staaten"
 
 #: src/Tribe/Venue.php:386
 msgid "Unnamed Venue"
-msgstr "Unbenannter Veranstaltungsort"en"
-
-#: src/Tribe/Organizer.php:157 src/functions/template-tags/organizer.php:112
-#: src/modules/blocks/classic-event-details/template.js:167
-#: src/resources/js/app/blocks.js:45142
-msgid "Organizer"
-msgstr "Veranstalter"
-
-#: src/Tribe/Organizer.php:171
-#: src/deprecated/Tribe__Events__Importer__Admin_Page.php:206
-#: src/functions/template-tags/organizer.php:123
+msgstr "Unbenannter Veranstaltungsort"late-tags/organizer.php:123
 msgid "Organizers"
 msgstr "Veranstalter"
 

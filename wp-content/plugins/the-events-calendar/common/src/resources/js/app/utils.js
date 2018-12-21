@@ -7136,6 +7136,7 @@ __webpack_require__.r(input_namespaceObject);
 __webpack_require__.d(input_namespaceObject, "sendValue", function() { return sendValue; });
 var utils_moment_namespaceObject = {};
 __webpack_require__.r(utils_moment_namespaceObject);
+__webpack_require__.d(utils_moment_namespaceObject, "TIME_FORMAT", function() { return TIME_FORMAT; });
 __webpack_require__.d(utils_moment_namespaceObject, "toFormat", function() { return moment_toFormat; });
 __webpack_require__.d(utils_moment_namespaceObject, "roundTime", function() { return moment_roundTime; });
 __webpack_require__.d(utils_moment_namespaceObject, "parseFormats", function() { return moment_parseFormats; });
@@ -7309,7 +7310,7 @@ var date_toNaturalLanguage = function toNaturalLanguage() {
 			month: 'MMMM',
 			day: 'D',
 			year: 'YYYY',
-			time: 'h:mm a'
+			time: utils_moment_namespaceObject.toFormat(FORMATS.WP.time)
 		},
 		separator: ''
 	}, params);
@@ -7501,6 +7502,8 @@ var moment_default = /*#__PURE__*/__webpack_require__.n(moment);
  */
 
 
+var TIME_FORMAT = 'h:mm a';
+
 /**
  * Make sure the format provided matches the spec used by moment.js
  *
@@ -7689,7 +7692,6 @@ var moment_totalSeconds = function totalSeconds(date) {
 	if (!date || !Object(moment["isMoment"])(date)) {
 		return 0;
 	}
-
 	return date.diff(moment_default()(date).startOf('day'), 'seconds');
 };
 
