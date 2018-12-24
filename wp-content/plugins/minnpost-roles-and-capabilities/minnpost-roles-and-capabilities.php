@@ -57,6 +57,16 @@ class Minnpost_Roles_And_Capabilities {
 		// setup roles
 		register_activation_hook( __FILE__, array( $this, 'user_roles' ) );
 		add_action( 'init', array( $this, 'disallow_banned_user_comments' ), 10 );
+		//add_action( 'admin_init', array( $this, 'test_capabilities' ) );
+	}
+
+	public function test_capabilities() {
+		$data = get_userdata( get_current_user_id() );
+		if ( is_object( $data ) ) {
+			$current_user_caps = $data->allcaps;
+			// print it to the screen
+			echo '<pre>' . print_r( $current_user_caps, true ) . '</pre>';
+		}
 	}
 
 	/**
@@ -68,7 +78,7 @@ class Minnpost_Roles_And_Capabilities {
 		$existing_roles = array();
 
 		// add new roles and assign capabilities to them
-		$extra_user_roles = $this->get_extra_user_roles;
+		$extra_user_roles = $this->get_extra_user_roles();
 		foreach ( $extra_user_roles as $role => $display_name ) {
 			$result = add_role(
 				$role,
@@ -77,21 +87,28 @@ class Minnpost_Roles_And_Capabilities {
 			);
 			if ( null === $result ) {
 				// this role already exists, but let's make sure it has the right capabilities. add it to array of existing roles.
-				$existing_roles[ $role ];
+				$result                  = get_role( $role );
+				$existing_roles[ $role ] = $result;
+			} else {
+				$result                          = get_role( $role );
+				$existing_roles[ $result->name ] = $result;
 			}
 		}
 
 		// assign core roles to existing role array
 		$core_roles = $this->get_core_roles();
 		foreach ( $core_roles as $role ) {
-			$existing_roles[ $role ];
+			$result                          = get_role( $role );
+			$existing_roles[ $result->name ] = $result;
 		}
 
 		// assign capabilities to existing WordPress roles
-		foreach ( $existing_roles as $role ) {
-			$capabilities = $this->bundle_capabilities( $role );
-			foreach ( $capabilities as $capability ) {
-				$role->add_cap( $capability );
+		foreach ( $existing_roles as $name => $role ) {
+			if ( is_object( $role ) ) {
+				$capabilities = $this->bundle_capabilities( $name );
+				foreach ( $capabilities as $capability ) {
+					$role->add_cap( $capability );
+				}
 			}
 		}
 	}
