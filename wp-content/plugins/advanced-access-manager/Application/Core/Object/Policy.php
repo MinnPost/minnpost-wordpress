@@ -16,10 +16,16 @@
 class AAM_Core_Object_Policy extends AAM_Core_Object {
 
     /**
-     *
-     * @var type 
+     * Resource tree
+     * 
+     * Shared resource tree across all the policy instances
+     * 
+     * @var array
+     * 
+     * @access protected
+     * @static 
      */
-    protected $resources = array();
+    protected static $resources = array();
     
     /**
      * Constructor
@@ -33,12 +39,21 @@ class AAM_Core_Object_Policy extends AAM_Core_Object {
     public function __construct(AAM_Core_Subject $subject) {
         parent::__construct($subject);
         
-        $parent = $this->getSubject()->inheritFromParent('policy');
+        $this->initialize(); // Read options from the database table first
+    }
+    
+    /**
+     * 
+     */
+    public function initialize() {
+        $subject = $this->getSubject();
+        $parent  = $subject->inheritFromParent('policy');
+        
         if(empty($parent)) {
             $parent = array();
         }
         
-        $option = $this->getSubject()->readOption('policy');
+        $option = $subject->readOption('policy');
         if (empty($option)) {
             $option = array();
         } else {
@@ -50,36 +65,41 @@ class AAM_Core_Object_Policy extends AAM_Core_Object {
         }
         
         $this->setOption($parent);
+        
+        // Load statements for policies
+        $subjectId  = $subject->getUID();
+        $subjectId .= ($subject->getId() ? ".{$subject->getId()}" : '');
+        $this->load($subjectId, $option);
     }
     
     /**
      * 
      */
-    public function load() {
+    public function load($subjectId, $policies) {
         $resources = array();
-
-        foreach($this->loadStatements() as $statement) {
+        
+        foreach($this->loadStatements($subjectId, $policies) as $statement) {
             if (isset($statement['Resource']) && $this->applicable($statement)) {
                 $this->evaluateStatement($statement, $resources);
             }
         }
         
-        $this->resources = $resources;
+        self::$resources[$subjectId] = $resources;
     }
     
     /**
      * 
      * @return type
      */
-    protected function loadStatements() {
+    protected function loadStatements($subjectId, $policies) {
         $cache      = AAM::api()->getUser()->getObject('cache');
-        $statements = $cache->get('policyStatements', 0, null);
-       
+        $statements = $cache->get('policy', $subjectId, null);
+        
         // Step #1. Extract all statements
         if (is_null($statements)) {
             $statements = array();
             
-            foreach($this->getOption() as $id => $effect) {
+            foreach($policies as $id => $effect) {
                 if ($effect) {
                     $policy = get_post($id);
 
@@ -93,7 +113,7 @@ class AAM_Core_Object_Policy extends AAM_Core_Object {
                     }
                 }
             }
-            $cache->add('policyStatements', 0, $statements);
+            $cache->add('policy', $subjectId, $statements);
         }
         
         return $statements;
@@ -597,10 +617,11 @@ class AAM_Core_Object_Policy extends AAM_Core_Object {
     public function isAllowed($resource, $action = null) {
         $allowed = null;
         
-        $id = strtolower($resource . (!empty($action) ? ":{$action}" : ''));
+        $id  = strtolower($resource . (!empty($action) ? ":{$action}" : ''));
+        $res = $this->getResources();
         
-        if (isset($this->resources[$id])) {
-            $allowed = ($this->resources[$id]['Effect'] === 'allow');
+        if (isset($res[$id])) {
+            $allowed = ($res[$id]['Effect'] === 'allow');
         }
         
         return $allowed;
@@ -631,4 +652,31 @@ class AAM_Core_Object_Policy extends AAM_Core_Object {
         return AAM::api()->mergeSettings($external, $this->getOption(), 'policy');
     }
     
+    /**
+     * 
+     * @return type
+     */
+    public function getResources(AAM_Core_Subject $subject = null) {
+        $response = array();
+        
+        if (is_null($subject)) {
+            if (!isset(self::$resources['__combined'])) {
+                foreach(self::$resources as $resources) {
+                    $response = array_merge($resources, $response);
+                }
+                self::$resources['__combined'] = $response;
+            } else {
+                $response = self::$resources['__combined'];
+            }
+        } else {
+            $subjectId  = $subject->getUID();
+            $subjectId .= ($subject->getId() ? ".{$subject->getId()}" : '');
+            
+            if (isset(self::$resources[$subjectId])) {
+                $response = self::$resources[$subjectId];
+            }
+        }
+        
+        return $response;
+    }
 }

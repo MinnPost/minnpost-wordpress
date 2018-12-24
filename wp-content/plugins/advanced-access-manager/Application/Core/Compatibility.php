@@ -36,6 +36,58 @@ class AAM_Core_Compatibility {
     }
     
     /**
+     * Converting metabox options from 2 dimensional to 1
+     * 
+     * @param array $metaboxes
+     * 
+     * @return array
+     * @todo Remove in 2021
+     */
+    public static function convertMetaboxes($metaboxes) {
+        $response = array();
+        
+        if (is_array($metaboxes)) {
+            foreach($metaboxes as $key => $value) {
+                if (is_array($value)) {
+                    foreach($value as $id => $grand) {
+                        $response["{$key}|{$id}"] = $grand;
+                    }
+                } else {
+                    $response[$key] = $value;
+                }
+            }
+        }
+        
+        return $response;
+    }
+    
+    /**
+     * 
+     * @param type $list
+     * @return type
+     * @todo Remove in 2021
+     */
+    public static function convertRoute($list) {
+         $response = array();
+        
+        if (is_array($list)) {
+            foreach($list as $type => $routes) {
+                if (is_array($routes)) {
+                    foreach($routes as $route => $methods) {
+                        foreach($methods as $method => $grand) {
+                            $response[strtolower("{$type}|{$route}|{$method}")] = $grand;
+                        }
+                    }
+                } else {
+                    $response[$type] = $routes;
+                }
+            }
+        }
+        
+        return $response;
+    }
+    
+    /**
      * Convert all-style AAM settings to standard ConfigPress style settings
      * 
      * @param array $config

@@ -290,12 +290,16 @@ EOT;
             AAM_Core_API::clearCache(new AAM_Core_Subject_User($id));
             
             //check if role has expiration data set
-            $role   = (is_array($user->roles) ? $user->roles[0] : '');
-            $expire = AAM_Core_API::getOption("aam-role-{$role}-expiration", '');
-            
-            if ($expire) {
-                update_user_option($id, "aam-original-roles", $old->roles);
-                update_user_option($id, "aam-role-expires", strtotime($expire));
+            // TODO: This supports only the first role and NOT the multi-roles
+            if (is_array($user->roles)) {
+                $roles  = array_values($user->roles);
+                $role   = array_shift($roles);
+                $expire = AAM_Core_API::getOption("aam-role-{$role}-expiration", '');
+
+                if ($expire) {
+                    update_user_option($id, "aam-original-roles", $old->roles);
+                    update_user_option($id, "aam-role-expires", strtotime($expire));
+                }
             }
         }
     }
@@ -740,7 +744,7 @@ EOT;
     public function printJavascript() {
         if (AAM::isAAM()) {
             wp_enqueue_script('aam-vendor', AAM_MEDIA . '/js/vendor.js');
-            wp_enqueue_script('aam-main', AAM_MEDIA . '/js/aam-5.7.js');
+            wp_enqueue_script('aam-main', AAM_MEDIA . '/js/aam-5.7.2.js');
             
             //add plugin localization
             $this->printLocalization('aam-main');
@@ -883,7 +887,7 @@ EOT;
         check_ajax_referer('aam_ajax');
         
         // flush any output buffer
-        ob_clean();
+        @ob_clean();
         
         if (AAM::getUser()->hasCapability('aam_manager')) {
             $response = AAM_Backend_View::getInstance()->renderContent(

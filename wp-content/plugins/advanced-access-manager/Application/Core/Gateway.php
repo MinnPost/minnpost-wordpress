@@ -104,7 +104,20 @@ final class AAM_Core_Gateway {
      *               exact match found
      */
     public function isAllowed($resource, $action = null) {
-        return AAM::api()->getUser()->getObject('policy')->isAllowed($resource, $action);
+        $policy = AAM::api()->getUser()->getObject('policy');
+        
+        return $policy->isAllowed($resource, $action);
+    }
+    
+    /**
+     * Get policy manager
+     * 
+     * @return AAM_Core_Policy_Manager
+     * 
+     * @access public
+     */
+    public function getPolicyManager() {
+        return AAM_Core_Policy_Manager::getInstance();
     }
     
     /**

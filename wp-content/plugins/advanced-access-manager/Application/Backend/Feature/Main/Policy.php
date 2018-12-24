@@ -31,18 +31,14 @@ class AAM_Backend_Feature_Main_Policy extends AAM_Backend_Feature_Abstract {
      * @access public
      */
     public function save() {
-        if (defined('AAM_PLUS_PACKAGE')) {
-            $subject = AAM_Backend_Subject::getInstance();
-            $id      = AAM_Core_Request::post('id');
-            $effect  = AAM_Core_Request::post('effect');
+        $subject = AAM_Backend_Subject::getInstance();
+        $id      = AAM_Core_Request::post('id');
+        $effect  = AAM_Core_Request::post('effect');
 
-            //clear cache
-            AAM_Core_API::clearCache();
+        //clear cache
+        AAM_Core_API::clearCache();
 
-            $result = $subject->save($id, $effect, 'policy');
-        } else {
-            $result = false;
-        }
+        $result = $subject->save($id, $effect, 'policy');
 
         return wp_json_encode(array(
             'status'  => ($result ? 'success' : 'failure')

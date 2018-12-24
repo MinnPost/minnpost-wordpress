@@ -1,9 +1,9 @@
 === Advanced Access Manager ===
 Contributors: vasyltech
-Tags: access control, membership, backend menu, user role, restricted content
+Tags: access control, membership, backend menu, user role, restricted content, security, jwt
 Requires at least: 4.0
-Tested up to: 4.9.8
-Stable tag: 5.7.1
+Tested up to: 5.0.2
+Stable tag: 5.7.2
 
 All you need to manage access to you WordPress websites on frontend, backend and API levels for any role, user or visitors.
 
@@ -15,8 +15,8 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 
 = Few Quick Facts =
 
+* The only plugin that gives you absolute freedom to define the most granular access to any aspect of your website and most of the feature are free;
 * Bullet-proven plugin that is used on over 90,000 websites where all features are well-tested and [documented](https://aamplugin.com/help). Very low amount of support tickets speaks for quality;
-* AAM contains the most powerful and flexible set of features to manage access to your WordPress website and were majority of them are absolutely free;
 * It is the only plugin that gives you the ability to manage access to your website content for any role, individual user and visitors or even define the default access to all posts, pages, custom post types, categories and custom hierarchical taxonomies;
 * AAM is [developer oriented plugin](https://aamplugin.com/developers). It has dozens of hooks and configurations. It is integrated with WordPress RESTful and XML-RPC APIs and has numerous abstract layers to simplify coding;
 * No ads or other promotional crap. The UI is clean and well crafted so you can focus only on what matters;
@@ -25,6 +25,7 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 
 = Main Areas Of Focus =
 
+* [Access & Security Policy](https://aamplugin.com/access-and-security-policy) allows you to define who, when, how and under what conditions your website resources can be accessed;
 * Content access control on frontend, backend and API sides to posts, pages, custom post types, categories, custom hierarchical taxonomies and CPTs for any role, user and visitors;
 * Roles & capabilities management with ability to create new roles and capabilities, edit, clone or delete existing;
 * Access control to backend area including backend menu, toolbar, metaboxes & widgets;
@@ -42,6 +43,7 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 * [free] Backend Lockdown. Restrict access to your website backend side for any user or role. Find out more from [How to lockdown WordPress backend](https://aamplugin.com/help/how-to-lockdown-wordpress-backend) article;
 * [free] Secure Login Widget & Shortcode. Drop AJAX login widget or shortcode anywhere on your website. Find out more from [How does AAM Secure Login works](https://aamplugin.com/help/how-does-aam-secure-login-works) article;
 * [free] Ability to enable/disable RESTful and XML-RPC APIs.
+* [limited] URI Access. Allow or deny access to any page of you website by the page URL as well as how to redirect user when access is denied;
 * [free] Manage access to RESTful or XML-RPC individual endpoints for any role, user or visitors.
 * [free] JWT authentication. Authenticate user with WordPress RESTful API and use received JWT token for further requests. Fid out more from [Hot to authenticate WordPress user with JWT token](https://aamplugin.com/help/how-to-authenticate-wordpress-user-with-jwt-token)
 * [free] Content Filter. Filter or replace parts of your content with AAM shortcodes. Find out more from [How to filter WordPress post content](https://aamplugin.com/help/how-to-filter-wordpress-post-content) article;
@@ -75,6 +77,20 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 11. Improve your website security
 
 == Changelog ==
+
+= 5.7.2 =
+* Fixed bug with Posts & Terms feature for WP version under 4.8
+* Fixed bug were Access Policy can't be attached to any principal on the Policy edit screen
+* Fixed bug with Access URI options were not merged for users with multiple roles
+* Fixed bug with Access URI options were not exported
+* Fixed but with Post PUBLISH option due to the fact that Gutenberg is using RESTful API
+* Extended Access & Security Policy to support Posts & Terms options
+* Added /validate-jwt RESTful API endpoint to validate JWT
+* Added ability to extract JWT token from GET queries or POST payload
+* Added custom capability aam_view_help_btn to hide HELP icon on AAM UI
+* Significantly improved capability mapping mechanism and access control based on caps
+* Added URI Access support to Access & Security Policy
+* Added Post, Term, PostType support to Access & Security Policy
 
 = 5.7.1 =
 * Fixed the bug with AAM notifications related to extension updates

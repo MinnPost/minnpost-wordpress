@@ -3,7 +3,7 @@
 /**
   Plugin Name: Advanced Access Manager
   Description: All you need to manage access to your WordPress website
-  Version: 5.7.1
+  Version: 5.7.2
   Author: Vasyl Martyniuk <vasyl@vasyltech.com>
   Author URI: https://vasyltech.com
 
@@ -124,7 +124,7 @@ class AAM {
         }
         
         // Load Access/Security Policies
-        self::getUser()->getObject('policy')->load();
+        AAM_Core_Policy_Manager::bootstrap();
         
         //load WP Core hooks
         AAM_Shared_Manager::bootstrap();
@@ -171,6 +171,9 @@ class AAM {
     public static function getInstance() {
         if (is_null(self::$_instance)) {
             self::$_instance = new self;
+            
+            // Load user capabilities
+            self::$_instance->getUser()->loadCapabilities();
             
             // Logout user if he/she is blocked
             self::$_instance->getUser()->validateUserStatus();

@@ -62,10 +62,12 @@
                                         <span>Extensions</span>
                                     </a>
                                 <?php } ?>
-                                <a href="https://aamplugin.com/help" title="Help" target="_blank">
-                                    <i class="icon-help-circled"></i>
-                                    <span>Help</span>
-                                </a>
+                                <?php if (current_user_can('aam_view_help_btn')) { ?>
+                                    <a href="https://aamplugin.com/help" title="Help" target="_blank">
+                                        <i class="icon-help-circled"></i>
+                                        <span>Help</span>
+                                    </a>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>

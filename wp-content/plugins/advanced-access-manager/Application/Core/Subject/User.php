@@ -170,25 +170,46 @@ class AAM_Core_Subject_User extends AAM_Core_Subject {
      * @access protected
      */
     protected function retrieveSubject() {
-        $subject = new WP_User($this->getId());
-
-        //retrieve aam capabilities if are not retrieved yet
-        $caps = get_user_option(self::AAM_CAPKEY, $this->getId());
-        if (is_array($caps)) {
-            $caps    = array_merge($subject->caps, $caps);
-            $allcaps = array_merge($subject->allcaps, $caps);
-            
-            //reset the user capabilities
-            $subject->allcaps = $allcaps;
-            $subject->caps    = $caps;
-            
-            if (wp_get_current_user()->ID === $subject->ID) {
-                wp_get_current_user()->allcaps = $allcaps;
-                wp_get_current_user()->caps    = $caps;
-            }
+        if ($this->getId() === get_current_user_id()) {
+            $subject = wp_get_current_user();
+        } else {
+            $subject = new WP_User($this->getId());
         }
         
         return $subject;
+    }
+    
+    /**
+     * 
+     */
+    public function loadCapabilities() {
+        $subject = $this->getSubject();
+        
+        // Retrieve all capabilities set in Access Policy
+        // Load Capabilities from the policy
+        $stms = AAM_Core_Policy_Manager::getInstance()->find("/^Capability:/i");
+        
+        $policyCaps = array();
+        
+        foreach($stms as $key => $stm) {
+            $chunks = explode(':', $key);
+            if (count($chunks) === 2) {
+                $policyCaps[$chunks[1]] = ($stm['Effect'] === 'allow' ? 1 : 0);
+            }
+        }
+        
+        //reset the user capabilities
+        $subject->allcaps = array_merge($subject->allcaps, $policyCaps);
+        $subject->caps    = array_merge($subject->caps, $policyCaps);
+
+        // Retrieve user capabilities set with AAM
+        $userCaps = get_user_option(self::AAM_CAPKEY, $this->getId());
+        
+        if (is_array($userCaps)) {
+            //reset the user capabilities
+            $subject->allcaps = array_merge($subject->allcaps, $userCaps);
+            $subject->caps    = array_merge($subject->caps, $userCaps);
+        }
     }
 
     /**

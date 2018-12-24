@@ -406,7 +406,7 @@
                                                 id: data[0]
                                             },
                                             $('#object-id').val(),
-                                            1,
+                                            ($(this).hasClass('icon-check-empty') ? 1 : 0),
                                             this
                                         );
                                     }));
@@ -424,7 +424,7 @@
                                                 id: data[0]
                                             },
                                             $('#object-id').val(),
-                                            0,
+                                            ($(this).hasClass('icon-check') ? 0 : 1),
                                             this
                                         );
                                     }));

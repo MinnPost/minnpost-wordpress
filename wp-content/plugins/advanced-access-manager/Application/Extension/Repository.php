@@ -139,14 +139,14 @@ class AAM_Extension_Repository {
             
             // determin if extension meets minimum required AAM version
             $list    = AAM_Extension_List::get();
-            $version = !empty($conf['requires']['aam']) && (version_compare(AAM_Core_API::version(), $conf['requires']['aam']) >= 0);
-            $load    = $status && $version;
+            $issue   = !empty($conf['requires']['aam']) && (version_compare(AAM_Core_API::version(), $conf['requires']['aam']) === -1);
+            $load    = $status && !$issue;
             
-            if (!$version) {
+            if ($issue) {
                 if (!empty($list[$conf['id']]['title'])) { // Any custom extensions
                     AAM_Core_Console::add(AAM_Backend_View_Helper::preparePhrase(
                         sprintf(
-                            __('[%s] was not loaded. Update extension to the latest version.', AAM_KEY),
+                            __('[%s] was not loaded. Update AAM plugin to the latest version.', AAM_KEY),
                             $list[$conf['id']]['title']
                         ),
                         'b'
