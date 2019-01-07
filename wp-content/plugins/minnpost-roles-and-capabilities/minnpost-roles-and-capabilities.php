@@ -57,9 +57,10 @@ class Minnpost_Roles_And_Capabilities {
 		// setup roles
 		register_activation_hook( __FILE__, array( $this, 'user_roles' ) );
 		add_action( 'init', array( $this, 'disallow_banned_user_comments' ), 10 );
-		//add_action( 'admin_init', array( $this, 'test_capabilities' ) );
+		//add_action( 'admin_init', array( $this, 'test_capabilities' ) ); // temp method
 	}
 
+	/* temporary method */
 	public function test_capabilities() {
 		$data = get_userdata( get_current_user_id() );
 		if ( is_object( $data ) ) {
@@ -119,6 +120,9 @@ class Minnpost_Roles_And_Capabilities {
 	*/
 	public function disallow_banned_user_comments() {
 		$user = wp_get_current_user();
+		if ( ! ( $user instanceof WP_User ) ) {
+			return;
+		}
 		if ( in_array( 'banned', (array) $user->roles ) ) {
 			add_filter( 'comments_open', '__return_false' );
 		}
@@ -200,6 +204,19 @@ class Minnpost_Roles_And_Capabilities {
 	 *   edit_private_posts
 	 *   read_private_posts
 	 *
+	 *   create_blocks
+	 *   read_blocks
+	 *   edit_blocks
+	 *   edit_others_blocks
+	 *   edit_published_blocks
+	 *   publish_blocks
+	 *   delete_blocks
+	 *   delete_others_blocks
+	 *   delete_published_blocks
+	 *   delete_private_blocks
+	 *   edit_private_blocks
+	 *   read_private_blocks
+	 *
 	 *   edit_pages
 	 *   edit_others_pages
 	 *   edit_published_pages
@@ -268,7 +285,7 @@ class Minnpost_Roles_And_Capabilities {
 	*/
 	private function get_core_capabilities( $role = '' ) {
 		$core_capabilities = array(
-			'read'                   => array(
+			'read'                    => array(
 				'administrator',
 				'editor',
 				'business',
@@ -280,7 +297,7 @@ class Minnpost_Roles_And_Capabilities {
 				'subscriber',
 				'banned',
 			),
-			'edit_posts'             => array(
+			'edit_posts'              => array(
 				'administrator',
 				'editor',
 				'business',
@@ -288,13 +305,13 @@ class Minnpost_Roles_And_Capabilities {
 				'contributor',
 				'comment_moderator',
 			),
-			'edit_others_posts'      => array(
+			'edit_others_posts'       => array(
 				'administrator',
 				'editor',
 				'business',
 				'comment_moderator',
 			),
-			'edit_published_posts'   => array(
+			'edit_published_posts'    => array(
 				'administrator',
 				'editor',
 				'business',
@@ -302,199 +319,59 @@ class Minnpost_Roles_And_Capabilities {
 				'contributor',
 				'comment_moderator',
 			),
-			'publish_posts'          => array(
+			'publish_posts'           => array(
 				'administrator',
 				'editor',
 				'business',
 				'author',
 			),
-			'delete_posts'           => array(
-				'administrator',
-				'editor',
-				'business',
-				'author',
-				'contributor',
-			),
-			'delete_others_posts'    => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'delete_published_posts' => array(
-				'administrator',
-				'editor',
-				'business',
-				'author',
-			),
-			'delete_private_posts'   => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'edit_private_posts'     => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'read_private_posts'     => array(
-				'administrator',
-				'editor',
-				'business',
-				'author',
-			),
-			'edit_pages'             => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'edit_others_pages'      => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'edit_published_pages'   => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'publish_pages'          => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'delete_pages'           => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'delete_others_pages'    => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'delete_published_pages' => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'delete_private_pages'   => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'edit_private_pages'     => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'read_private_pages'     => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'unfiltered_html'        => array(
-				'administrator',
-				'editor',
-				'business',
-				'author',
-			),
-			'manage_categories'      => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'manage_links'           => array(
-				'administrator',
-				'editor',
-			),
-			'upload_files'           => array(
-				'administrator',
-				'editor',
-				'business',
-				'author',
-			),
-			'edit_files'             => array(
-				'administrator',
-			),
-			'unfiltered_upload'      => array(
-				'administrator',
-				'editor',
-				'business',
-				'author',
-			),
-			'edit_users'             => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'delete_users'           => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'create_users'           => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'list_users'             => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'remove_users'           => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'promote_users'          => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'moderate_comments'      => array(
-				'administrator',
-				'editor',
-				'business',
-				'comment_moderator',
-			),
-			'manage_options'         => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'level_10'               => array(
-				'administrator',
-			),
-			'level_9'                => array(
-				'administrator',
-			),
-			'level_8'                => array(
-				'administrator',
-				'editor',
-				'business',
-			),
-			'level_7'                => array(
-				'administrator',
-				'editor',
-				'business',
-				'author',
-			),
-			'level_6'                => array(
+			'delete_posts'            => array(
 				'administrator',
 				'editor',
 				'business',
 				'author',
 				'contributor',
 			),
-			'level_5'                => array(
+			'delete_others_posts'     => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'delete_published_posts'  => array(
 				'administrator',
 				'editor',
 				'business',
 				'author',
-				'comment_moderator',
 			),
-			'level_4'                => array(
+			'delete_private_posts'    => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'edit_private_posts'      => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'read_private_posts'      => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'read_blocks'             => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+				'contributor',
+				'comment_moderator',
+				'staff',
+				'unpublished_viewer_user',
+				'subscriber',
+				'banned',
+			),
+			'create_blocks'           => array(
 				'administrator',
 				'editor',
 				'business',
@@ -502,7 +379,7 @@ class Minnpost_Roles_And_Capabilities {
 				'contributor',
 				'comment_moderator',
 			),
-			'level_3'                => array(
+			'edit_blocks'             => array(
 				'administrator',
 				'editor',
 				'business',
@@ -510,7 +387,13 @@ class Minnpost_Roles_And_Capabilities {
 				'contributor',
 				'comment_moderator',
 			),
-			'level_2'                => array(
+			'edit_others_blocks'      => array(
+				'administrator',
+				'editor',
+				'business',
+				'comment_moderator',
+			),
+			'edit_published_blocks'   => array(
 				'administrator',
 				'editor',
 				'business',
@@ -518,7 +401,199 @@ class Minnpost_Roles_And_Capabilities {
 				'contributor',
 				'comment_moderator',
 			),
-			'level_1'                => array(
+			'publish_blocks'          => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'delete_blocks'           => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+				'contributor',
+			),
+			'delete_others_blocks'    => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'delete_published_blocks' => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'delete_private_blocks'   => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'edit_private_blocks'     => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'read_private_blocks'     => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'edit_pages'              => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'edit_others_pages'       => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'edit_published_pages'    => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'publish_pages'           => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'delete_pages'            => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'delete_others_pages'     => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'delete_published_pages'  => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'delete_private_pages'    => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'edit_private_pages'      => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'read_private_pages'      => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'unfiltered_html'         => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'manage_categories'       => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'manage_links'            => array(
+				'administrator',
+				'editor',
+			),
+			'upload_files'            => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'edit_files'              => array(
+				'administrator',
+			),
+			'unfiltered_upload'       => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'edit_users'              => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'delete_users'            => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'create_users'            => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'list_users'              => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'remove_users'            => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'promote_users'           => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'moderate_comments'       => array(
+				'administrator',
+				'editor',
+				'business',
+				'comment_moderator',
+			),
+			'manage_options'          => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'level_10'                => array(
+				'administrator',
+			),
+			'level_9'                 => array(
+				'administrator',
+			),
+			'level_8'                 => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'level_7'                 => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'level_6'                 => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+				'contributor',
+			),
+			'level_5'                 => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+				'comment_moderator',
+			),
+			'level_4'                 => array(
 				'administrator',
 				'editor',
 				'business',
@@ -526,7 +601,31 @@ class Minnpost_Roles_And_Capabilities {
 				'contributor',
 				'comment_moderator',
 			),
-			'level_0'                => array(
+			'level_3'                 => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+				'contributor',
+				'comment_moderator',
+			),
+			'level_2'                 => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+				'contributor',
+				'comment_moderator',
+			),
+			'level_1'                 => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+				'contributor',
+				'comment_moderator',
+			),
+			'level_0'                 => array(
 				'administrator',
 				'editor',
 				'business',
@@ -537,50 +636,50 @@ class Minnpost_Roles_And_Capabilities {
 				'unpublished_viewer_user',
 				'subscriber',
 			),
-			'edit_dashboard'         => array(
+			'edit_dashboard'          => array(
 				'administrator',
 			),
-			'activate_plugins'       => array(
+			'activate_plugins'        => array(
 				'administrator',
 			),
-			'edit_plugins'           => array(
+			'edit_plugins'            => array(
 				'administrator',
 			),
-			'update_plugins'         => array(
+			'update_plugins'          => array(
 				'administrator',
 			),
-			'delete_plugins'         => array(
+			'delete_plugins'          => array(
 				'administrator',
 			),
-			'install_plugins'        => array(
+			'install_plugins'         => array(
 				'administrator',
 			),
-			'switch_themes'          => array(
+			'switch_themes'           => array(
 				'administrator',
 			),
-			'edit_themes'            => array(
+			'edit_themes'             => array(
 				'administrator',
 			),
-			'update_themes'          => array(
+			'update_themes'           => array(
 				'administrator',
 			),
-			'install_themes'         => array(
+			'install_themes'          => array(
 				'administrator',
 			),
-			'edit_theme_options'     => array(
+			'edit_theme_options'      => array(
 				'administrator',
 				'editor',
 			),
-			'delete_themes'          => array(
+			'delete_themes'           => array(
 				'administrator',
 			),
-			'update_core'            => array(
+			'update_core'             => array(
 				'administrator',
 			),
-			'import'                 => array(
+			'import'                  => array(
 				'administrator',
 			),
-			'export'                 => array(
+			'export'                  => array(
 				'administrator',
 			),
 		);
