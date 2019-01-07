@@ -48,5 +48,12 @@ wp-content/themes/twenty*
 
 wp-content/plugins/wp-spamshield/data
 
-/vendor/
+# composer files
+/vendor/**/.git/
+/vendor/**/.github/
+/vendor/**/docs/
+/vendor/**/test/
+/vendor/**/tests/
+
+# config
 .env
