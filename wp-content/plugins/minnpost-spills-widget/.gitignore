@@ -1,1 +1,7 @@
-/vendor/
+.sass-cache
+/node_modules/
+/vendor/**/.git/
+/vendor/**/.github/
+/vendor/**/test/
+# generated
+release/
