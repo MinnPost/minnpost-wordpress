@@ -56,6 +56,8 @@ class Minnpost_Roles_And_Capabilities {
 	private function add_actions() {
 		// setup roles
 		register_activation_hook( __FILE__, array( $this, 'user_roles' ) );
+		// going to need a way to refresh these manually like below
+		add_action( 'admin_init', array( $this, 'user_roles' ) );
 		add_action( 'init', array( $this, 'disallow_banned_user_comments' ), 10 );
 		//add_action( 'admin_init', array( $this, 'test_capabilities' ) ); // temp method
 	}
@@ -744,6 +746,16 @@ class Minnpost_Roles_And_Capabilities {
 	 *
 	 *   manage_advertising (appnexus-acm-provider)
 	 *
+	 *   read_private_tribe_event (the-events-calendar)
+	 *   edit_tribe_event (the-events-calendar)
+	 *   edit_others_tribe_event (the-events-calendar)
+	 *   edit_private_tribe_event (the-events-calendar)
+	 *   edit_published_tribe_event (the-events-calendar)
+	 *   delete_tribe_event (the-events-calendar)
+	 *   delete_others_tribe_event (the-events-calendar)
+	 *   delete_private_tribe_event (the-events-calendar)
+	 *   delete_published_tribe_event (the-events-calendar)
+	 *   publish_tribe_event (the-events-calendar)
 	 *   read_private_tribe_events (the-events-calendar)
 	 *   edit_tribe_events (the-events-calendar)
 	 *   edit_others_tribe_events (the-events-calendar)
@@ -753,7 +765,7 @@ class Minnpost_Roles_And_Capabilities {
 	 *   delete_others_tribe_events (the-events-calendar)
 	 *   delete_private_tribe_events (the-events-calendar)
 	 *   delete_published_tribe_events (the-events-calendar)
-	 *   publsh_tribe_events (the-events-calendar)
+	 *   publish_tribe_events (the-events-calendar)
 	 *   read_private_tribe_venues (the-events-calendar)
 	 *   edit_tribe_venues (the-events-calendar)
 	 *   edit_others_tribe_venues (the-events-calendar)
@@ -980,14 +992,77 @@ class Minnpost_Roles_And_Capabilities {
 				'administrator',
 				'business',
 			),
+			'read_private_tribe_event'            => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'edit_tribe_event'                    => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+				'contributor',
+			),
+			'edit_others_tribe_event'             => array(
+				'administrator',
+				'editor',
+				'business',
+				'business',
+			),
+			'edit_private_tribe_event'            => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'edit_published_tribe_event'          => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'delete_tribe_event'                  => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+				'contributor',
+			),
+			'delete_others_tribe_event'           => array(
+				'administrator',
+				'editor',
+				'business',
+			),
+			'delete_private_tribe_event'          => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'delete_published_tribe_event'        => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
+			'publish_tribe_event'                 => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
 			'read_private_tribe_events'           => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'edit_tribe_events'                   => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 				'contributor',
 			),
@@ -995,20 +1070,24 @@ class Minnpost_Roles_And_Capabilities {
 				'administrator',
 				'editor',
 				'business',
+				'business',
 			),
 			'edit_private_tribe_events'           => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'edit_published_tribe_events'         => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'delete_tribe_events'                 => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 				'contributor',
 			),
@@ -1020,6 +1099,7 @@ class Minnpost_Roles_And_Capabilities {
 			'delete_private_tribe_events'         => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'delete_published_tribe_events'       => array(
@@ -1028,7 +1108,7 @@ class Minnpost_Roles_And_Capabilities {
 				'business',
 				'author',
 			),
-			'publsh_tribe_events'                 => array(
+			'publish_tribe_events'                => array(
 				'administrator',
 				'editor',
 				'business',
@@ -1037,11 +1117,13 @@ class Minnpost_Roles_And_Capabilities {
 			'read_private_tribe_venues'           => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'edit_tribe_venues'                   => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 				'contributor',
 			),
@@ -1053,16 +1135,19 @@ class Minnpost_Roles_And_Capabilities {
 			'edit_private_tribe_venues'           => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'edit_published_tribe_venues'         => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'delete_tribe_venues'                 => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 				'contributor',
 			),
@@ -1074,26 +1159,31 @@ class Minnpost_Roles_And_Capabilities {
 			'delete_private_tribe_venues'         => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'delete_published_tribe_venues'       => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'publish_tribe_venues'                => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'read_private_tribe_organizers'       => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'edit_tribe_organizers'               => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 				'contributor',
 			),
@@ -1105,16 +1195,19 @@ class Minnpost_Roles_And_Capabilities {
 			'edit_private_tribe_organizers'       => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'edit_published_tribe_organizers'     => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'delete_tribe_organizers'             => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 				'contributor',
 			),
@@ -1126,26 +1219,31 @@ class Minnpost_Roles_And_Capabilities {
 			'delete_private_tribe_organizers'     => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'delete_published_tribe_organizers'   => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'publish_tribe_organizers'            => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'read_private_aggregator-records'     => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'edit_aggregator-records'             => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 				'contributor',
 			),
@@ -1157,16 +1255,19 @@ class Minnpost_Roles_And_Capabilities {
 			'edit_private_aggregator-records'     => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'edit_published_aggregator-records'   => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'delete_aggregator-records'           => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 				'contributor',
 			),
@@ -1174,20 +1275,24 @@ class Minnpost_Roles_And_Capabilities {
 				'administrator',
 				'editor',
 				'business',
+				'business',
 			),
 			'delete_private_aggregator-records'   => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'delete_published_aggregator-records' => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'publish_aggregator-records'          => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'edit_popup_themes'                   => array(
