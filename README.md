@@ -89,37 +89,7 @@ Create a new project, and connect it to the correct Git repository, and give it 
 
 ### Tests
 
-Choose PHP as the technology. Include the following commands:
-
-```
-# We support all major PHP versions. Please see our documentation for a full list.
-# https://documentation.codeship.com/basic/languages-frameworks/php/
-#
-# By default we use the latest PHP version from the 5.5 release branch.
-phpenv local 7.1
-# Install extensions via PECL
-#pecl install -f memcache
-# Install dependencies via Composer
-#composer install --no-interaction
-composer install --no-dev --prefer-dist --no-interaction
-cd wp-content/plugins/form-processor-mailchimp
-composer install --no-dev --prefer-dist --no-interaction
-cd ../minnpost-membership
-composer install --no-dev --prefer-dist --no-interaction
-cd ../minnpost-spills-widget
-composer install --no-dev --prefer-dist --no-interaction
-cd ../object-sync-for-salesforce
-composer install --no-dev --prefer-dist --no-interaction
-cd ../wp-message-inserter-plugin
-composer install --no-dev --prefer-dist --no-interaction
-cd ../../themes/minnpost-largo
-composer install --no-dev --prefer-dist --no-interaction
-cd ~/
-```
-
-All of these commands are important, at least for now, because they ensure that our GitHub-hosted plugins - the ones that are not hosted in the WordPress repository, or that we're not using from there - get their required composer libraries.
-
-It'd be nice to have this done some other way, but this works for now.
+Choose PHP as the technology. No further commands are necessary at this time.
 
 ### Deploy
 
