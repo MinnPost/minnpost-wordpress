@@ -265,15 +265,12 @@ class GFEntryDetail {
 		switch ( RGForms::post( 'action' ) ) {
 			case 'update' :
 				check_admin_referer( 'gforms_save_entry', 'gforms_save_entry' );
-				//Loading files that have been uploaded to temp folder
-				$files = GFCommon::json_decode( stripslashes( RGForms::post( 'gform_uploaded_files' ) ) );
-				if ( ! is_array( $files ) ) {
-					$files = array();
-				}
 
 				$original_entry = $lead;
 
-				GFFormsModel::$uploaded_files[ $form_id ] = $files;
+				// Set files that have been uploaded to temp folder
+				GFFormsModel::set_uploaded_files( $form_id );
+
 				GFFormsModel::save_lead( $form, $lead );
 
 				/**
@@ -295,12 +292,18 @@ class GFEntryDetail {
 					$consent_update_note = '';
 
 					foreach ( $form['fields'] as $field ) {
-						if ( $field['type'] === 'consent' && ( $lead[ $field['id'] . '.1' ] !== $original_entry[ $field['id'] . '.1' ] ) ) {
-							if ( ! empty( $consent_update_note ) ) {
-								$consent_update_note .= "\n";
-							}
-							$consent_update_note .= empty( $lead[ $field['id'] . '.1' ] ) ? sprintf( esc_html__( '%s: Unchecked "%s"', 'gravityforms' ), GFCommon::get_label( $field ), $original_entry[ $field['id'] . '.2' ] ) : sprintf( esc_html__( '%s: Checked "%s"', 'gravityforms' ), GFCommon::get_label( $field ), $lead[ $field['id'] . '.2' ] );
+						if ( $field['type'] === 'consent' ) {
+							$field_obj             = GFFormsModel::get_field( $form, $field['id'] );
+							$revision_id           = GFFormsModel::get_latest_form_revisions_id( $form['id'] );
+							$current_description   = $field_obj->get_field_description_from_revision( $revision_id );
+							$submitted_description = $field_obj->get_field_description_from_revision( $original_entry[ $field['id'] . '.3' ] );
 
+							if ( $lead[ $field['id'] . '.1' ] !== $original_entry[ $field['id'] . '.1' ] || $field['checkboxLabel'] !== $original_entry[ $field['id'] . '.2' ] || $current_description !== $submitted_description ) {
+								if ( ! empty( $consent_update_note ) ) {
+									$consent_update_note .= "\n";
+								}
+								$consent_update_note .= empty( $lead[ $field['id'] . '.1' ] ) ? sprintf( esc_html__( '%s: Unchecked "%s"', 'gravityforms' ), GFCommon::get_label( $field ), wp_strip_all_tags( $original_entry[ $field['id'] . '.2' ] ) ) : sprintf( esc_html__( '%s: Checked "%s"', 'gravityforms' ), GFCommon::get_label( $field ), wp_strip_all_tags( $lead[ $field['id'] . '.2' ] ) );
+							}
 						}
 					}
 

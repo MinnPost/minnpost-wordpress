@@ -69,13 +69,8 @@ class GFFormDisplay {
 
 		GFCommon::log_debug( "GFFormDisplay::process_form(): Source page number: {$source_page_number}. Target page number: {$target_page}." );
 
-		//Loading files that have been uploaded to temp folder
-		$files = GFCommon::json_decode( stripslashes( RGForms::post( 'gform_uploaded_files' ) ) );
-		if ( ! is_array( $files ) ) {
-			$files = array();
-		}
-
-		RGFormsModel::$uploaded_files[ $form_id ] = $files;
+		// Set files that have been uploaded to temp folder
+		$files = GFFormsModel::set_uploaded_files( $form_id );
 
 		$saving_for_later = rgpost( 'gform_save' ) ? true : false;
 

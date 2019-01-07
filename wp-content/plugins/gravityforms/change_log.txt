@@ -1,4 +1,19 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.4.4
+	- Added security enhancements.
+	- Added the "gform_permission_granted_pre_download" filter allowing custom logic to be used to determine if the file can be accessed when using the gf-download URL.
+        add_filter( 'gform_permission_granted_pre_download', function( $permission_granted, $form_id, $field_id ) {
+            return $permission_granted;
+        }, 10, 3 );
+	- Fixed an issue with the merge tag for checkbox fields with more than 10 checkboxes when used inside a calculation field.
+	- Fixed issue when using a Product Option checkbox field merge tag in a calculation.
+    - Fixed HTML and quotes in the consent field checkbox label.
+	- Fixed PHP 7.3 warnings when replacing the {all_fields} merge tag and preparing the order summary for the entry detail page.
+	- Fixed issue where conditional logic dependent on a Radio Button click is not correctly evaluated when the Radio Button's default value is restored.
+	- Fixed a PHP notice which can occur when refreshing the cached product info when a product name input is not present in the entry.
+	- Fixed an issue with conditional logic and datepicker based form settings when no-conflict mode is enabled.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.4.3
 	- Added parameter to GFMergeTag.parseMergeTags to allow modifying the regular expression used to parse merge tags.
 	- Fixed a PHP notice which could occur when saving a new confirmation if the conditional logic was not configured.
