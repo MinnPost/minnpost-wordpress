@@ -671,6 +671,7 @@ class Minnpost_Roles_And_Capabilities {
 			'edit_theme_options'      => array(
 				'administrator',
 				'editor',
+				'business',
 			),
 			'delete_themes'           => array(
 				'administrator',
