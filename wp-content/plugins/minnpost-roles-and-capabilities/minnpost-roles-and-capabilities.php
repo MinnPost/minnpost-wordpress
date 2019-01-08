@@ -108,12 +108,19 @@ class Minnpost_Roles_And_Capabilities {
 		// assign capabilities to existing WordPress roles
 		foreach ( $existing_roles as $name => $role ) {
 			if ( is_object( $role ) ) {
-				$capabilities = $this->bundle_capabilities( $name );
-				foreach ( $capabilities as $capability ) {
-					$role->add_cap( $capability );
+				$all_capabilities  = $this->bundle_capabilities();
+				$role_capabilities = $this->bundle_capabilities( $name );
+				// for each possible capability, check if it matches the expected capabilities for that role. if it does, assign it. otherwise, remove it.
+				foreach ( $all_capabilities as $key => $value ) {
+					if ( in_array( $key, $role_capabilities ) ) {
+						$role->add_cap( $key );
+					} else {
+						$role->remove_cap( $key );
+					}
 				}
 			}
 		}
+
 	}
 
 	/**
@@ -1395,7 +1402,6 @@ class Minnpost_Roles_And_Capabilities {
 			),
 			'manage_cron'            => array(
 				'administrator',
-				'editor',
 			),
 			'manage_jetpack'         => array(
 				'administrator',
