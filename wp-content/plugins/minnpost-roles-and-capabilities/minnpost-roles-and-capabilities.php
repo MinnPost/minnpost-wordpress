@@ -56,10 +56,12 @@ class Minnpost_Roles_And_Capabilities {
 	private function add_actions() {
 		// setup roles
 		register_activation_hook( __FILE__, array( $this, 'user_roles' ) );
-		// going to need a way to refresh these manually like below
-		add_action( 'admin_init', array( $this, 'user_roles' ) );
 		add_action( 'init', array( $this, 'disallow_banned_user_comments' ), 10 );
-		//add_action( 'admin_init', array( $this, 'test_capabilities' ) ); // temp method
+		if ( is_admin() ) {
+			//add_action( 'admin_init', array( $this, 'test_capabilities' ) ); // temp method
+			add_action( 'admin_menu', array( $this, 'create_admin_menu' ) );
+		}
+
 	}
 
 	/* temporary method */
@@ -120,6 +122,7 @@ class Minnpost_Roles_And_Capabilities {
 				}
 			}
 		}
+		return true;
 
 	}
 
@@ -1463,6 +1466,44 @@ class Minnpost_Roles_And_Capabilities {
 			}
 		}
 		return $role_capabilities;
+	}
+
+	/**
+	* Create WordPress admin options page
+	*
+	*/
+	public function create_admin_menu() {
+		$capability = 'administrator';
+		add_users_page( 'Roles and Capabilities', 'Roles and Capabilities', $capability, $this->slug, array( $this, 'show_admin_page' ) );
+	}
+
+	/**
+	* Display the admin settings page
+	*
+	* @return void
+	*/
+	public function show_admin_page() {
+		$post_data = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+		?>
+		<div class="wrap">
+			<h1><?php _e( get_admin_page_title() , 'minnpost-roles-and-capabilities' ); ?></h1>
+			<?php if ( empty( $post_data ) ) : ?>
+				<form method="post" action="users.php?page=<?php echo $this->slug; ?>">
+					<input type="hidden" name="action" value="refresh-roles-capabilities" ?>
+					<h3><?php _e( 'Click the button to refresh all roles and capabilities for the site.', 'minnpost-roles-and-capabilities' ); ?></h3>
+					<?php
+						submit_button( esc_html__( 'Refresh', 'minnpost-roles-and-capabilities' ), 'primary', 'submit' );
+					?>
+				</form>
+			<?php else : ?>
+				<?php if ( 'refresh-roles-capabilities' === $post_data['action'] ) : ?>
+					<?php if ( true === $this->user_roles() ) : ?>
+						<p>All roles and capabilities have been refreshed. If you change them again, you can revisit this page and click the button.</p>
+					<?php endif; ?>
+				<?php endif; ?>
+			<?php endif; ?>
+		</div>
+		<?php
 	}
 
 }
