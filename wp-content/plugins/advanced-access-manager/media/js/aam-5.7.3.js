@@ -513,10 +513,9 @@
                                     response.role.level
                                 );
                                 getAAM().fetchContent('main');
-                                $('#add-role-modal').modal('hide');
                             } else {
                                 getAAM().notification(
-                                        'danger', getAAM().__('Failed to add new role')
+                                    'danger', response.reason
                                 );
                             }
                         },
@@ -524,6 +523,7 @@
                             getAAM().notification('danger', getAAM().__('Application error'));
                         },
                         complete: function () {
+                            $('#add-role-modal').modal('hide');
                             $(_this).text(getAAM().__('Add Role')).attr('disabled', false);
                         }
                     });
@@ -1332,6 +1332,56 @@
             
             /**
              * 
+             * @param {type} data
+             * @param {type} cb
+             * @returns {undefined}
+             */
+            function downloadLicense(data, cb) {
+                $.ajax(getLocal().system.apiEndpoint + '/download', {
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        license: data.license,
+                        domain: getLocal().system.domain,
+                        uid: getLocal().system.uid
+                    },
+                    success: function (package) {
+                        $.ajax(getLocal().ajaxurl, {
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                action: 'aam',
+                                sub_action: 'Main_Policy.install',
+                                _ajax_nonce: getLocal().nonce,
+                                license: data.license,
+                                package: package
+                            },
+                            success: function (response) {
+                                if (response.status !== 'success') {
+                                    getAAM().notification('danger', getAAM().__(response.error));
+                                }
+                            },
+                            error: function () {
+                                getAAM().notification(
+                                    'danger', 
+                                    getAAM().__('Application error')
+                                );
+                            },
+                            complete: function() {
+                                cb();
+                            }
+                        });
+                    },
+                    error: function (response) {
+                        getAAM().notification(
+                            'danger', response.responseJSON.message
+                        );
+                    }
+                });
+            }
+            
+            /**
+             * 
              * @param {type} subject
              * @param {type} id
              * @param {type} effect
@@ -1355,6 +1405,23 @@
                     //reset button
                     $('#policy-reset').bind('click', function () {
                         getAAM().reset('policy', $(this));
+                    });
+                    
+                    $('#download-policy').bind('click', function() {
+                        var license = $.trim($('#policy-license-key').val());
+                        
+                        if (license) {
+                            $(this).text(getAAM().__('Downloading'));
+                            downloadLicense({
+                                license: license
+                            }, function() {
+                                $('#download-policy').text(getAAM().__('Download'));
+                                $('#policy-list').DataTable().ajax.reload();
+                                $('#download-policy-modal').modal('hide');
+                            });
+                        } else {
+                            $('#policy-license-key').focus();
+                        }
                     });
                     
                     $('#policy-list').DataTable({
@@ -1386,6 +1453,26 @@
                         columnDefs: [
                             {visible: false, targets: [0,3]}
                         ],
+                        initComplete: function () {
+                            var create = $('<a/>', {
+                                'href': '#',
+                                'class': 'btn btn-primary'
+                            }).html('<i class="icon-plus"></i> ' + getAAM().__('Create'))
+                            .bind('click', function () {
+                                window.open(getLocal().url.addPolicy, '_blank');
+                            });
+                            
+                            /*var download = $('<a/>', {
+                                'href': '#',
+                                'class': 'btn btn-success'
+                            }).html('<i class="icon-download-cloud"></i> ' + getAAM().__('Download'))
+                            .bind('click', function () {
+                               $('#download-policy-modal').modal('show');
+                            });
+
+                            $('.dataTables_filter', '#policy-list_wrapper').append(download);*/
+                            $('.dataTables_filter', '#policy-list_wrapper').append(create);
+                        },
                         createdRow: function (row, data) {
                             var actions = data[2].split(',');
 
@@ -3436,29 +3523,58 @@
              * @returns {undefined}
              */
             function downloadExtension(data, cb) {
-                $.ajax(getLocal().ajaxurl, {
-                    type: 'POST',
+                $.ajax(getLocal().system.apiEndpoint + '/download', {
+                    type: 'GET',
                     dataType: 'json',
-                    data: data,
-                    success: function (response) {
-                        if (response.status === 'success') {
-                            setTimeout(function () {
-                                getAAM().fetchContent('extensions');
-                            }, 500);
+                    data: {
+                        license: data.license,
+                        domain: getLocal().system.domain,
+                        uid: getLocal().system.uid
+                    },
+                    success: function (package) {
+                        if (package.error === true) {
+                            getAAM().notification('danger', package.message);
                         } else {
-                            getAAM().notification('danger', getAAM().__(response.error));
-                            if (typeof response.content !== 'undefined') {
-                                dump = response;
-                                $('#installation-error').text(response.error);
-                                $('#extension-notification-modal').modal('show');
-                            }
+                            $.ajax(getLocal().ajaxurl, {
+                                type: 'POST',
+                                dataType: 'json',
+                                data: {
+                                    action: 'aam',
+                                    sub_action: 'Extension_Manager.install',
+                                    _ajax_nonce: getLocal().nonce,
+                                    license: data.license,
+                                    package: package
+                                },
+                                success: function (response) {
+                                    if (response.status === 'success') {
+                                        setTimeout(function () {
+                                            getAAM().fetchContent('extensions');
+                                        }, 500);
+                                    } else {
+                                        getAAM().notification('danger', response.error);
+                                        if (typeof package.content !== 'undefined') {
+                                            dump = package;
+                                            $('#installation-error').text(response.error);
+                                            $('#extension-notification-modal').modal('show');
+                                        }
+                                    }
+                                },
+                                error: function () {
+                                    getAAM().notification(
+                                        'danger', 
+                                        getAAM().__('Application error')
+                                    );
+                                },
+                                complete: function() {
+                                    cb();
+                                }
+                            });
                         }
                     },
-                    error: function () {
-                        getAAM().notification('danger', getAAM().__('Application error'));
-                    },
-                    complete: function() {
-                        cb();
+                    error: function (response) {
+                        getAAM().notification(
+                            'danger', response.responseJSON.message
+                        );
                     }
                 });
             }
@@ -3505,6 +3621,7 @@
             function initialize() {
                 if ($('#extension-content').length) {
                     $('[data-toggle="toggle"]', '.extensions-metabox').bootstrapToggle();
+                    
                     //check for updates
                     $('#aam-update-check').bind('click', function() {
                         $.ajax(getLocal().ajaxurl, {
@@ -3558,7 +3675,7 @@
                                 action: 'aam',
                                 sub_action: 'Extension_Manager.update',
                                 _ajax_nonce: getLocal().nonce,
-                                extension: _this.data('product')
+                                license: _this.data('license')
                             }, function() {
                                 $('i', _this).attr('class', 'icon-arrows-cw');
                             });
@@ -3648,9 +3765,9 @@
                     //bind the download handler
                     $('#download-extension').bind('click', function () {
                         download(
-                                'data:application/zip;base64,' + dump.content,
-                                dump.title + '.zip',
-                                'application/zip'
+                            'data:application/zip;base64,' + dump.content,
+                            dump.title + '.zip',
+                            'application/zip'
                         );
                         $('#extension-notification-modal').modal('hide');
                     });

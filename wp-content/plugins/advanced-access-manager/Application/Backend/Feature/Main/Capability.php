@@ -266,7 +266,7 @@ class AAM_Backend_Feature_Main_Capability extends AAM_Backend_Feature_Abstract {
             }
         }
         
-        $caps = array_merge($policyCaps, AAM_Core_API::getAllCapabilities());
+        $caps = array_merge(AAM_Core_API::getAllCapabilities(), $policyCaps);
         
         foreach (array_keys($caps) as $cap) {
             if (AAM::api()->isAllowed("Capability:{$cap}:AAM:list") !== false) {

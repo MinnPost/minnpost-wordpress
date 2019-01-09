@@ -36,6 +36,27 @@ class AAM_Core_Compatibility {
     }
     
     /**
+     * 
+     * @param  type $list
+     * @return type
+     * @since  v5.7.3
+     * 
+     * @todo   Remove Jan 2020
+     */
+    public static function preparePolicyList($list) {
+        if (!is_null($list)) {
+            if (empty($list['Statements'])) {
+                $list = array(
+                    'Statements' => $list,
+                    'Features'   => array()
+                );
+            }
+        }
+        
+        return $list;
+    }
+    
+    /**
      * Converting metabox options from 2 dimensional to 1
      * 
      * @param array $metaboxes

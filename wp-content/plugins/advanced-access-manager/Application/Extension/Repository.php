@@ -212,7 +212,7 @@ class AAM_Extension_Repository {
                     $response[] = array(
                         'license'   => $data['license'],
                         'extension' => $extensions[$key]['title'],
-                        'expires'   => (isset($data['expires']) ? $data['expires'] : null)
+                        'expires'   => (!empty($data['expires']) ? $data['expires'] : null)
                     );
                 } else {
                     $response[] = $data['license'];
@@ -294,7 +294,7 @@ class AAM_Extension_Repository {
                 if (empty($item['license'])) {
                     if (!empty($index[$id]['license'])) {
                         $item['license'] = $index[$id]['license'];
-                        $item['expire']  = (isset($index[$id]['expire']) ? date('Y-m-d', strtotime($index[$id]['expire'])) : null);
+                        $item['expire']  = (!empty($index[$id]['expire']) ? date('Y-m-d', strtotime($index[$id]['expire'])) : null);
                     } else {
                         $item['license'] = '';
                     }

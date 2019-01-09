@@ -3,7 +3,7 @@ Contributors: vasyltech
 Tags: access control, membership, backend menu, user role, restricted content, security, jwt
 Requires at least: 4.0
 Tested up to: 5.0.2
-Stable tag: 5.7.2
+Stable tag: 5.7.3
 
 All you need to manage access to you WordPress websites on frontend, backend and API levels for any role, user or visitors.
 
@@ -77,6 +77,21 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 11. Improve your website security
 
 == Changelog ==
+
+= 5.7.3 =
+* Fixed the bug with JWT authentication
+* Fixed the PHP bug in policy metabox when no errors with JSON is detected
+* Fixed the bug with license expiration for Extended versions not properly displayed
+* Fixed the bug with Admin Menu listed incorrectly when Default Access Settings defined
+* Fixed the PHP bug in Post object when access settings are defined in a Policy
+* Improved role creation feature
+* Improved capability handling with Access & Security Policy
+* Refactor the way extension is installed to eliminate cURL issues
+* Deprecated and removed `aam_display_license` capability
+* Extended default policy document with dependencies
+* Added support for `Features` in the Access & Security Policy
+* Added policy Validation functionality
+* Reduced number of methods that use cURL to contact aamplugin.com API
 
 = 5.7.2 =
 * Fixed bug with Posts & Terms feature for WP version under 4.8

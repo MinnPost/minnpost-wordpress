@@ -33,7 +33,28 @@ class AAM_Core_Subject_User extends AAM_Core_Subject {
      *
      * @var type 
      */
+    protected $aamCaps = array();
+    
+    /**
+     *
+     * @var type 
+     */
     protected $parent = null;
+    
+    /**
+     * 
+     * @param type $id
+     */
+    public function __construct($id = '') {
+        parent::__construct($id);
+        
+        // Retrieve user capabilities set with AAM
+        $aamCaps = get_user_option(self::AAM_CAPKEY, $id);
+        
+        if (is_array($aamCaps)) {
+            $this->aamCaps = $aamCaps;
+        }
+    }
     
     /**
      * 
@@ -199,17 +220,8 @@ class AAM_Core_Subject_User extends AAM_Core_Subject {
         }
         
         //reset the user capabilities
-        $subject->allcaps = array_merge($subject->allcaps, $policyCaps);
-        $subject->caps    = array_merge($subject->caps, $policyCaps);
-
-        // Retrieve user capabilities set with AAM
-        $userCaps = get_user_option(self::AAM_CAPKEY, $this->getId());
-        
-        if (is_array($userCaps)) {
-            //reset the user capabilities
-            $subject->allcaps = array_merge($subject->allcaps, $userCaps);
-            $subject->caps    = array_merge($subject->caps, $userCaps);
-        }
+        $subject->allcaps = array_merge($subject->allcaps, $policyCaps,  $this->aamCaps);
+        $subject->caps    = array_merge($subject->caps, $policyCaps,  $this->aamCaps);
     }
 
     /**
@@ -233,7 +245,24 @@ class AAM_Core_Subject_User extends AAM_Core_Subject {
      * @access public
      */
     public function hasCapability($capability) {
-        return user_can($this->getSubject(), $capability);
+        // Priority #1: capability that has been explicitely set
+        if (isset($this->aamCaps[$capability])) {
+            $result = !empty($this->aamCaps[$capability]);
+        } else {
+            // Priority #2: capability that has been defined in policy
+            // Override by policy if is set
+            $stm = AAM::api()->getPolicyManager()->find(
+                    "/^Capability:{$capability}$/i", $this
+            );
+            if (!empty($stm)) {
+                $val = end($stm);
+                $result = ($val['Effect'] === 'allow' ? 1 : 0);
+            } else {
+                $result = user_can($this->getSubject(), $capability);
+            }
+        }
+        
+        return $result;
     }
 
     /**

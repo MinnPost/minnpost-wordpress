@@ -99,6 +99,7 @@ class AAM_Core_Object_Post extends AAM_Core_Object {
                     "/^post:{$post->post_type}:({$post->post_name}|{$post->ID}):/", 
                     $subject
                 );
+                $option = array();
                     
                 foreach($stms as $key => $stm) {
                     // TODO: Prepare better conversion from policy Action to AAM

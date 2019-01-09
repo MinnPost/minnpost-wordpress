@@ -3,7 +3,7 @@
 /**
   Plugin Name: Advanced Access Manager
   Description: All you need to manage access to your WordPress website
-  Version: 5.7.2
+  Version: 5.7.3
   Author: Vasyl Martyniuk <vasyl@vasyltech.com>
   Author URI: https://vasyltech.com
 
@@ -115,6 +115,16 @@ class AAM {
         //load AAM core config
         AAM_Core_Config::bootstrap();
         
+        //login control
+        if (AAM_Core_Config::get('core.settings.secureLogin', true)) {
+            AAM_Core_Login::bootstrap();
+        }
+
+        //JWT Authentication
+        if (AAM_Core_Config::get('core.settings.jwtAuthentication', false)) {
+            AAM_Core_JwtAuth::bootstrap();
+        }
+        
         // Load AAM
         AAM::getInstance();
         
@@ -128,16 +138,6 @@ class AAM {
         
         //load WP Core hooks
         AAM_Shared_Manager::bootstrap();
-
-        //login control
-        if (AAM_Core_Config::get('core.settings.secureLogin', true)) {
-            AAM_Core_Login::bootstrap();
-        }
-
-        //JWT Authentication
-        if (AAM_Core_Config::get('core.settings.jwtAuthentication', false)) {
-            AAM_Core_JwtAuth::bootstrap();
-        }
     }
     
     /**

@@ -110,6 +110,23 @@ final class AAM_Core_Gateway {
     }
     
     /**
+     * Check if feature is enabled
+     * 
+     * @param string $feature
+     * @param string $plugin
+     * 
+     * @return boolean|null
+     * 
+     * @access public
+     * @since  v5.7.3
+     */
+    public function isEnabled($feature, $plugin = 'advanced-access-manager') {
+        $policy = AAM::api()->getUser()->getObject('policy');
+        
+        return $policy->isEnabled($feature, $plugin);
+    }
+    
+    /**
      * Get policy manager
      * 
      * @return AAM_Core_Policy_Manager

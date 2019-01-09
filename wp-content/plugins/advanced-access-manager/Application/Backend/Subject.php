@@ -71,6 +71,7 @@ class AAM_Backend_Subject {
         
         if (class_exists($classname)) {
             $subject = new $classname(stripslashes($id));
+            
             // Load access policy
             $subject->getObject('policy');
             
