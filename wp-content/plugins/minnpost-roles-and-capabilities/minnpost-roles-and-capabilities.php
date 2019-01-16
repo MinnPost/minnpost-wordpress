@@ -757,6 +757,8 @@ class Minnpost_Roles_And_Capabilities {
 	 *
 	 *   manage_advertising (appnexus-acm-provider)
 	 *
+	 *   enable_liveblog (added manually for the liveblog plugin)
+	 *
 	 *   read_private_tribe_event (the-events-calendar)
 	 *   edit_tribe_event (the-events-calendar)
 	 *   edit_others_tribe_event (the-events-calendar)
@@ -1002,6 +1004,10 @@ class Minnpost_Roles_And_Capabilities {
 			'manage_advertising'                  => array(
 				'administrator',
 				'business',
+			),
+			'enable_liveblog'                     => array(
+				'administrator',
+				'editor',
 			),
 			'read_private_tribe_event'            => array(
 				'administrator',
