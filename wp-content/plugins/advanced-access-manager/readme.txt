@@ -2,8 +2,8 @@
 Contributors: vasyltech
 Tags: access control, membership, backend menu, user role, restricted content, security, jwt
 Requires at least: 4.0
-Tested up to: 5.0.2
-Stable tag: 5.7.3
+Tested up to: 5.0.3
+Stable tag: 5.8
 
 All you need to manage access to you WordPress websites on frontend, backend and API levels for any role, user or visitors.
 
@@ -77,6 +77,13 @@ https://www.youtube.com/watch?v=mj5Xa_Wc16Y
 11. Improve your website security
 
 == Changelog ==
+
+= 5.8 =
+* Fixed the bug with Access Policy settings inheritance mechanism
+* Fixed numerous of bugs with JWT authentication and improved time expiration handling
+* Enhanced temporary user access management functionality
+* Added Logout action when user access expired
+* Added ability to login user with URL
 
 = 5.7.3 =
 * Fixed the bug with JWT authentication

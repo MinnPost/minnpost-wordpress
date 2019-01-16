@@ -742,6 +742,44 @@
                     }
                 });
             }
+            
+            /**
+             * 
+             * @param {type} id
+             * @param {type} expires
+             * @returns {undefined}
+             */
+            function generateJWT(id, expires) {
+                $.ajax(getLocal().ajaxurl, {
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        action: 'aam',
+                        sub_action: 'Subject_User.generateJWT',
+                        _ajax_nonce: getLocal().nonce,
+                        user: id,
+                        expires: expires
+                    },
+                    beforeSend: function () {
+                        $('#user-auth-jwt').val(getAAM().__('Generating token...'));
+                    },
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            $('#user-auth-jwt').val(response.jwt);
+                            $('#user-auth-url').val(
+                                $('#user-auth-url').data('url').replace('%s', response.jwt)
+                            );
+                        } else {
+                            getAAM().notification(
+                                'danger', getAAM().__('Failed to generate JWT token')
+                            );
+                        }
+                    },
+                    error: function () {
+                        getAAM().notification('danger', getAAM().__('Application error'));
+                    }
+                });
+            }
 
             //initialize the user list table
             $('#user-list').DataTable({
@@ -836,9 +874,10 @@
                     }
 
                     //add subtitle
+                    var expire = (data[5] ? '; <i class="icon-clock"></i>' : '');
                     $('td:eq(0)', row).append(
                         $('<i/>', {'class': 'aam-row-subtitle'}).html(
-                            getAAM().__('Role') + ': ' + data[1] + '; ID: <b>' + data[0] + '</b>'
+                            getAAM().__('Role') + ': ' + data[1] + '; ID: <b>' + data[0] + '</b>' + expire
                         )
                     );
 
@@ -881,20 +920,26 @@
                                 })).prop('disabled', (isCurrent(data[0]) ? true: false));
                                 break;
                                 
-                            case 'ttl':
+                            case 'edit':
                                 if (getAAM().isUI('main')) {
                                     $(container).append($('<i/>', {
-                                        'class': 'aam-row-action icon-clock text-' + (data[5] ? 'danger' : 'warning')
+                                        'class': 'aam-row-action icon-pencil text-info'
                                     }).bind('click', function () {
+                                        // Update user's edit profile
+                                        $('#edit-user-link').attr(
+                                            'href', 
+                                            getLocal().url.editUser + '?user_id=' + data[0]
+                                        );
+                                        
                                         $('#edit-user-expiration-btn').attr('data-user-id', data[0]);
                                         $('#reset-user-expiration-btn').attr('data-user-id', data[0]);
-                                        
+
                                         if (data[5]) {
                                             $('#reset-user-expiration-btn').removeClass('hidden');
                                             var settings = data[5].split('|');
                                             $('#user-expires').val(settings[0]);
                                             $('#action-after-expiration').val(settings[1]);
-                                            
+
                                             if (settings[1] === 'change-role') {
                                                 $('#expiration-change-role-holder').removeClass('hidden');
                                                 loadRoleList(settings[2]);
@@ -907,31 +952,9 @@
                                             $('#user-expires, #action-after-expiration').val('');
                                             loadRoleList();
                                         }
+
+                                        $('#edit-user-modal').modal('show');
                                         
-                                        $('#edit-user-expiration-modal').modal('show');
-                                    }).attr({
-                                        'data-toggle': "tooltip",
-                                        'title': getAAM().__('User Expiration')
-                                    }));
-                                }
-                                break;
-                                
-                            case 'no-ttl':
-                                if (getAAM().isUI('main')) {
-                                    $(container).append($('<i/>', {
-                                        'class': 'aam-row-action icon-clock text-muted'
-                                    }));
-                                }
-                                break;
-                                
-                            case 'edit':
-                                if (getAAM().isUI('main')) {
-                                    $(container).append($('<i/>', {
-                                        'class': 'aam-row-action icon-pencil text-info'
-                                    }).bind('click', function () {
-                                        window.open(
-                                            getLocal().url.editUser + '?user_id=' + data[0], '_blank'
-                                        );
                                     }).attr({
                                         'data-toggle': "tooltip",
                                         'title': getAAM().__('Edit User')
@@ -1064,15 +1087,17 @@
                 sideBySide: true
             });
 
-            $('#edit-user-expiration-modal').on('show.bs.modal', function() {
+            $('#edit-user-modal').on('show.bs.modal', function() {
                 try{
                     if ($.trim($('#user-expires').val())) {
                         $('#user-expiration-datapicker').data('DateTimePicker').defaultDate(
                             $('#user-expires').val()
                         );
                     } else {
+                        var tomorrow = new Date();
+                        tomorrow.setDate(tomorrow.getDate() + 1);
                         $('#user-expiration-datapicker').data('DateTimePicker').defaultDate(
-                            new Date()
+                            tomorrow
                         );
                     }
                 } catch(e) {
@@ -1082,7 +1107,11 @@
 
             $('#user-expiration-datapicker').on('dp.change', function(res) {
                 $('#user-expires').val(
-                    res.date.format('MM/DD/YYYY, h:mm a')
+                    res.date.format('MM/DD/YYYY, H:mm Z')
+                );
+                generateJWT(
+                    $('#edit-user-expiration-btn').attr('data-user-id'),
+                    $('#user-expires').val()
                 );
             });
             
@@ -1116,7 +1145,7 @@
                         getAAM().notification('danger', getAAM().__('Application error'));
                     },
                     complete: function () {
-                        $('#edit-user-expiration-modal').modal('hide');
+                        $('#edit-user-modal').modal('hide');
                         $(_this).text(getAAM().__('Save')).attr('disabled', false);
                     }
                 });
@@ -1149,7 +1178,7 @@
                         getAAM().notification('danger', getAAM().__('Application error'));
                     },
                     complete: function () {
-                        $('#edit-user-expiration-modal').modal('hide');
+                        $('#edit-user-modal').modal('hide');
                         $(_this).text(getAAM().__('Reset')).attr('disabled', false);
                     }
                 });
@@ -1486,7 +1515,7 @@
                                             save({
                                                 type: getAAM().getSubject().type,
                                                 id: getAAM().getSubject().id
-                                            }, data[0], 1, this);
+                                            }, data[0], ($(this).hasClass('icon-check-empty') ? 1 : 0), this);
                                         }).attr({
                                             'data-toggle': "tooltip",
                                             'title': getAAM().__('Apply Policy')
@@ -1500,7 +1529,7 @@
                                             save({
                                                 type: getAAM().getSubject().type,
                                                 id: getAAM().getSubject().id
-                                            }, data[0], 0, this);
+                                            }, data[0], ($(this).hasClass('icon-check') ? 0 : 1), this);
                                         }).attr({
                                             'data-toggle': "tooltip",
                                             'title': getAAM().__('Revoke Policy')

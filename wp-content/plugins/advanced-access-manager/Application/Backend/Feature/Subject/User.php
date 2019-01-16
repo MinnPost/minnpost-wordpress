@@ -73,7 +73,7 @@ class AAM_Backend_Feature_Subject_User {
             if ($userId != get_current_user_id()) {
                 if ($this->isAllowed(new AAM_Core_Subject_User($userId))) {
                     $this->updateUserExpiration($userId, $expires, $action, $role);
-                    $response['status'] = 'success';
+                    $response = array('status' => 'success');
                 }
             } else {
                 $response['reason'] = __('You cannot set expiration to yourself', AAM_KEY);
@@ -81,6 +81,22 @@ class AAM_Backend_Feature_Subject_User {
         }
         
         return wp_json_encode($response);
+    }
+    
+    /**
+     * 
+     * @return type
+     */
+    public function generateJWT() {
+        $userId  = filter_input(INPUT_POST, 'user');
+        $expires = filter_input(INPUT_POST, 'expires');
+        
+        $jwt = AAM_Core_JwtAuth::generateJWT($userId, $expires);
+        
+        return wp_json_encode(array(
+            'status' => 'success',
+            'jwt'    => $jwt->token
+        ));
     }
     
     /**
@@ -146,7 +162,7 @@ class AAM_Backend_Feature_Subject_User {
 
             if ($this->isAllowed($subject->get())) {
                 //user is not allowed to lock himself
-                if ($subject->getId() != get_current_user_id()) {
+                if (intval($subject->getId()) !== get_current_user_id()) {
                     $result = $subject->block();
                 }
             }
@@ -170,7 +186,7 @@ class AAM_Backend_Feature_Subject_User {
             implode(', ', $this->getUserRoles($user->roles)),
             ($user->display_name ? $user->display_name : $user->user_nicename),
             implode(',', $this->prepareRowActions($user)),
-            AAM_Core_API::maxLevel($user->allcaps),
+            AAM_Core_API::maxLevel($user->getMaxLevel()),
             $this->getUserExpiration($user)
         );
     }
@@ -210,7 +226,7 @@ class AAM_Backend_Feature_Subject_User {
      * @access protected
      */
     protected function prepareRowActions(AAM_Core_Subject_User $user) {
-        if ($this->isAllowed($user) || ($user->ID == get_current_user_id())) {
+        if ($this->isAllowed($user) || ($user->ID === get_current_user_id())) {
             $ui = AAM_Core_Request::post('ui', 'main');
             $id = AAM_Core_Request::post('id');
         
@@ -227,10 +243,8 @@ class AAM_Backend_Feature_Subject_User {
 
                 if (current_user_can('edit_users')) {
                     $actions[] = 'edit';
-                    $actions[] = 'ttl';
                 } else {
                     $actions[] = 'no-edit';
-                    $actions[] = 'no-ttl';
                 }
 
                 if (current_user_can('aam_switch_users')) {
@@ -293,7 +307,7 @@ class AAM_Backend_Feature_Subject_User {
      * @access protected
      */
     protected function isAllowed(AAM_Core_Subject_User $user) {
-        $max = AAM_Core_API::maxLevel(AAM::getUser()->allcaps);
+        $max = AAM::getUser()->getMaxLevel();
         
         return $max >= AAM_Core_API::maxLevel($user->allcaps);
     }
