@@ -3,8 +3,8 @@ Contributors: johnny5
 Donate link: https://redirection.me/donation/
 Tags: redirect, htaccess, 301, 404, seo, permalink, apache, nginx, post, admin
 Requires at least: 4.5
-Tested up to: 5.0
-Stable tag: 3.6.3
+Tested up to: 5.0.3
+Stable tag: 3.7.2
 Requires PHP: 5.4
 License: GPLv3
 
@@ -33,11 +33,15 @@ The plugin can also be configured to monitor when post or page permalinks are ch
 In addition to straightforward URL matching you can redirect based on other conditions:
 
 - Login status - redirect only if the user is logged in or logged out
+- WordPress capability - redirect if the user is able to perform a certain capability
 - Browser - redirect if the user is using a certain browser
 - Referrer - redirect if the user visited the link from another page
 - Cookies - redirect if a particular cookie is set
 - HTTP headers - redirect based on a HTTP header
 - Custom filter - redirect based on your own WordPress filter
+- IP address - redirect if the client IP address matches
+- Server - redirect another domain if also hosted on this server
+- Page type - redirect if the current page is a 404
 
 = Full logging =
 
@@ -47,9 +51,13 @@ Logs can be exported for external viewing, and can be searched and filtered for 
 
 Display geographic information about an IP address, as well as a full user agent information, to try and understand who the visitor is.
 
+You are able to disable or reduce IP collection to meet the legal requirements of your geographic region.
+
 = Track 404 errors =
 
 Redirection will keep track of all 404 errors that occur on your site, allowing you to track down and fix problems.
+
+Errors can be grouped to show where you should focus your attention, and can be redirected in bulk.
 
 = Apache & Nginx support =
 
@@ -137,9 +145,32 @@ The plugin works in a similar manner to how WordPress handles permalinks and sho
 = 3.6.1 =
 * Note Redirection will not work with PHP < 5.4 after 3.6 - please upgrade your PHP
 
+= 3.7 =
+* Requires minimum PHP 5.4. Do not upgrade if you are still using PHP < 5.4
+
 == Changelog ==
 
-= 3.6.4 - 14th November 2018 =
+= 3.7.2 - 16th Jan 2019 =
+* Add further partial upgrade detection
+* Add fallback for sites with no REST API value
+
+= 3.7.1 - 13th Jan 2019 =
+* Clarify database upgrade text
+* Fix Firefox problem with multiple URLs
+* Fix 3.7 built against wrong dropzone module
+* Add DB upgrade detection for people with partial 2.4 sites
+
+= 3.7 - 12th Jan 2019 =
+* Add redirect warning for known problem redirects
+* Add new database install and upgrade process
+* Add database functions to WP CLI
+* Add introduction message when first installed
+* Drop PHP < 5.4 support. Please use version 3.6.3 if your PHP is too old
+* Improve export filename
+* Fix IPs appearing for bulk redirect
+* Fix disabled redirects appearing in htaccess
+
+= 3.6.3 - 14th November 2018 =
 * Remove potential CSRF
 
 = 3.6.2 - 10th November 2018 =
