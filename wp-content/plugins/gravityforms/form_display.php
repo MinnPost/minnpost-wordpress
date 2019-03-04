@@ -2555,7 +2555,8 @@ class GFFormDisplay {
 					"	 'truncate': {$truncate}," .
 					"	 'errorStyle' : '{$error_style}'," .
 					"    'displayFormat' : '#input " . esc_js( __( 'of', 'gravityforms' ) ) . ' #max ' . esc_js( __( 'max characters', 'gravityforms' ) ) . "'" .
-					"    } );";
+					"    } );" .
+					"jQuery('#{$input_id}').next( '.ginput_counter' ).attr( 'aria-live', 'polite' );";
 
 				$script .= gf_apply_filters( array( 'gform_counter_script', $form['id'] ), $field_script, $form['id'], $input_id, $max_length, $field );
 			}

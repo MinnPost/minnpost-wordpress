@@ -2404,22 +2404,29 @@ class GFFormsModel {
 		$is_admin        = $is_form_editor || $is_entry_detail;
 
 		if ( $is_admin && ! GFCommon::current_user_can_any( 'gravityforms_edit_entries' ) ) {
-			die( esc_html__( "You don't have adequate permission to edit entries.", 'gravityforms' ) );
+			wp_die( esc_html__( "You don't have adequate permission to edit entries.", 'gravityforms' ) );
 		}
 
 		$entry_meta_table = self::get_entry_meta_table_name();
-		$is_new_lead       = $entry == null;
+		$is_new_lead      = empty( $entry );
+
+		if ( ! $is_new_lead && ! self::entry_exists( rgar( $entry, 'id' ) ) ) {
+			// Force a new entry to be saved when an entry does not exist for the supplied id.
+			$entry       = array();
+			$is_new_lead = true;
+		}
 
 		$die_message = esc_html__( 'An error prevented the entry for this form submission being saved. Please contact support.', 'gravityforms' );
 
 		$entry_table = GFFormsModel::get_entry_table_name();
 
-		//Inserting lead if null
+		$current_date = $wpdb->get_var( 'SELECT utc_timestamp()' );
+
 		if ( $is_new_lead ) {
+			// Saving the new entry.
 
 			global $current_user;
 			$user_id = $current_user && $current_user->ID ? $current_user->ID : 'NULL';
-
 
 			$user_agent = self::truncate( rgar( $_SERVER, 'HTTP_USER_AGENT' ), 250 );
 			$user_agent = sanitize_text_field( $user_agent );
@@ -2436,17 +2443,13 @@ class GFFormsModel {
 
 			$ip = rgars( $form, 'personalData/preventIP' ) ? '' : self::get_ip();
 
-			$date_created = $wpdb->get_var( 'SELECT utc_timestamp()' );
-
-			$wpdb->query( $wpdb->prepare( "INSERT INTO $entry_table(form_id, ip, source_url, date_created, date_updated, user_agent, currency, created_by) VALUES(%d, %s, %s, %s, %s, %s, %s, {$user_id})", $form['id'], $ip, $source_url, $date_created, $date_created, $user_agent, $currency ) );
-
+			$wpdb->query( $wpdb->prepare( "INSERT INTO $entry_table(form_id, ip, source_url, date_created, date_updated, user_agent, currency, created_by) VALUES(%d, %s, %s, %s, %s, %s, %s, {$user_id})", $form['id'], $ip, $source_url, $current_date, $current_date, $user_agent, $currency ) );
 
 			// Reading newly created lead id
 			$lead_id = $wpdb->insert_id;
 
 			if ( $lead_id == 0 ) {
 				GFCommon::log_error( __METHOD__ . '(): Unable to save entry. ' . $wpdb->last_error );
-
 				wp_die( $die_message );
 			}
 
@@ -2458,8 +2461,8 @@ class GFFormsModel {
 				'source_url'       => $source_url,
 				'currency'         => $currency,
 				'post_id'          => null,
-				'date_created'     => $date_created,
-				'date_updated'     => $date_created,
+				'date_created'     => $current_date,
+				'date_updated'     => $current_date,
 				'is_starred'       => 0,
 				'is_read'          => 0,
 				'user_agent'       => $user_agent,
@@ -2473,19 +2476,16 @@ class GFFormsModel {
 				'transaction_type' => null,
 			);
 
-
 			GFCommon::log_debug( __METHOD__ . "(): Entry record created in the database. ID: {$lead_id}." );
-		} elseif ( ! empty( $entry['id'] ) ) {
-			// Make sure the entry array contains all the entry properties.
-			$sql = $wpdb->prepare( "SELECT * FROM $entry_table WHERE id=%d", $entry['id'] );
-			$current_properties = $wpdb->get_row( $sql, ARRAY_A );
-			foreach ( $current_properties as $key => $property ) {
-				if ( ! isset( $entry[ (string) $key ] ) ) {
-					$entry[ (string) $key ] = $current_properties[ $key ];
-				}
-			}
-			$date_updated = $wpdb->get_var( 'SELECT utc_timestamp()' );
-			GFAPI::update_entry_property( $entry['id'], 'date_updated', $date_updated );
+		} else {
+			GFCommon::log_debug( __METHOD__ . "(): Updating existing entry. ID: {$entry['id']}." );
+
+			// Ensures the entry being updated contains all the current properties and registered meta.
+			self::add_properties_to_entry( $entry );
+			self::add_meta_to_entry( $entry );
+
+			GFAPI::update_entry_property( $entry['id'], 'date_updated', $current_date );
+			$entry['date_updated'] = $current_date;
 		}
 
 		$current_fields = $wpdb->get_results( $wpdb->prepare( "SELECT id, meta_key, item_index FROM $entry_meta_table WHERE entry_id=%d", $entry['id'] ) );
@@ -2638,6 +2638,53 @@ class GFFormsModel {
 		self::hydrate_repeaters( $entry, $form );
 
 		GFCommon::log_debug( __METHOD__ . '(): Finished saving entry fields.' );
+	}
+
+	/**
+	 * Populates the supplied entry with missing properties.
+	 *
+	 * @since 2.4.5.8
+	 *
+	 * @param array $entry The partial or complete entry currently being updated.
+	 */
+	public static function add_properties_to_entry( &$entry ) {
+		if ( empty( $entry['id'] ) ) {
+			return;
+		}
+
+		global $wpdb;
+		$entry_table = GFFormsModel::get_entry_table_name();
+		$sql         = $wpdb->prepare( "SELECT * FROM $entry_table WHERE id=%d", $entry['id'] );
+		$properties  = $wpdb->get_row( $sql, ARRAY_A );
+
+		foreach ( $properties as $key => $property ) {
+			if ( ! isset( $entry[ (string) $key ] ) ) {
+				// Add the missing entry property.
+				$entry[ (string) $key ] = $properties[ $key ];
+			}
+		}
+	}
+
+	/**
+	 * Populates the supplied entry with missing meta.
+	 *
+	 * @since 2.4.5.8
+	 *
+	 * @param array $entry The partial or complete entry currently being updated.
+	 */
+	public static function add_meta_to_entry( &$entry ) {
+		if ( empty( $entry['id'] ) || empty( $entry['form_id'] ) ) {
+			return;
+		}
+
+		$meta_keys = array_keys( self::get_entry_meta( $entry['form_id'] ) );
+
+		foreach ( $meta_keys as $meta_key ) {
+			if ( ! isset( $entry[ $meta_key ] ) ) {
+				// Add the missing entry meta.
+				$entry[ $meta_key ] = gform_get_meta( $entry['id'], $meta_key );
+			}
+		}
 	}
 
 	public static function hydrate_repeaters( &$entry, $form ) {
@@ -3153,7 +3200,7 @@ class GFFormsModel {
 	 * @return false|int
 	 */
 	public static function purge_expired_incomplete_submissions( $expiration_days = 30 ) {
-		_deprecated_function( 'GFFormsModel::purge_expired_incomplete_submissions', '2.4', 'GFFormsModel::purge_expired_incomplete_submissions' );
+		_deprecated_function( 'GFFormsModel::purge_expired_incomplete_submissions', '2.4', 'GFFormsModel::purge_expired_draft_submissions' );
 		return self::purge_expired_draft_submissions( $expiration_days = 30 );
 	}
 
@@ -4486,8 +4533,9 @@ class GFFormsModel {
 
 	public static function media_handle_upload( $url, $post_id, $post_data = array() ) {
 
-		//WordPress Administration API required for the media_handle_upload() function
+		// WordPress Administration API required for the media_handle_upload() function.
 		require_once( ABSPATH . 'wp-admin/includes/image.php' );
+		require_once( ABSPATH . 'wp-admin/includes/media.php' );
 
 		$name = basename( $url );
 
@@ -5911,7 +5959,7 @@ class GFFormsModel {
 	public static function get_sub_field( $repeater_field, $field_id ) {
 		if ( is_array( $repeater_field->fields ) ) {
 			foreach ( $repeater_field->fields as $field ) {
-				if ( is_array( $field ) ) {
+				if ( is_array( $field->fields ) ) {
 					$f = self::get_sub_field( $field, $field_id );
 					if ( $f ) {
 						return $f;
@@ -6904,6 +6952,31 @@ class GFFormsModel {
 
 		return $files;
 	}
+
+	/**
+	 * Checks if an entry exists for the supplied ID.
+	 *
+	 * @since 2.4.5.8
+	 *
+	 * @param int $entry_id The ID to be checked.
+	 *
+	 * @return bool
+	 */
+	public static function entry_exists( $entry_id ) {
+		$entry_id = intval( $entry_id );
+		if ( $entry_id <= 0 ) {
+			return false;
+		}
+
+		global $wpdb;
+		$entry_table_name = GFFormsModel::get_entry_table_name();
+
+		$sql    = $wpdb->prepare( "SELECT count(id) FROM {$entry_table_name} WHERE id = %d", $entry_id );
+		$result = intval( $wpdb->get_var( $sql ) );
+
+		return $result > 0;
+	}
+
 }
 
 class RGFormsModel extends GFFormsModel {

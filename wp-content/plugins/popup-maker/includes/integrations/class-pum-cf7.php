@@ -16,13 +16,11 @@ class PUM_CF7_Integration {
 	 * Initialize if CF7 is active.
 	 */
 	public static function init() {
-		if ( class_exists( 'WPCF7' ) || ( defined( 'WPCF7_VERSION' ) && WPCF7_VERSION ) ) {
-			add_filter( 'pum_get_cookies', array( __CLASS__, 'register_cookies' ) );
-			add_filter( 'wpcf7_editor_panels', array( __CLASS__, 'editor_panels' ) );
-			add_action( 'wpcf7_after_save', array( __CLASS__, 'save' ) );
-			add_filter( 'wpcf7_form_elements', array( __CLASS__, 'form_elements' ) );
-			add_action( 'popmake_preload_popup', array( __CLASS__, 'preload' ) );
-		}
+		add_filter( 'pum_get_cookies', array( __CLASS__, 'register_cookies' ) );
+		add_filter( 'wpcf7_editor_panels', array( __CLASS__, 'editor_panels' ) );
+		add_action( 'wpcf7_after_save', array( __CLASS__, 'save' ) );
+		add_filter( 'wpcf7_form_elements', array( __CLASS__, 'form_elements' ) );
+		add_action( 'popmake_preload_popup', array( __CLASS__, 'preload' ) );
 	}
 
 	/**
@@ -31,7 +29,7 @@ class PUM_CF7_Integration {
 	 * @param $popup_id
 	 */
 	public static function preload( $popup_id ) {
-		$popup = pum_popup( $popup_id );
+		$popup = pum_get_popup( $popup_id );
 
 		if ( has_shortcode( $popup->post_content, 'contact-form-7' ) ) {
 			if ( function_exists( 'wpcf7_enqueue_scripts' ) ) {
@@ -259,5 +257,3 @@ class PUM_CF7_Integration {
 		}
 	}
 }
-
-add_action( 'init', 'PUM_CF7_Integration::init' );

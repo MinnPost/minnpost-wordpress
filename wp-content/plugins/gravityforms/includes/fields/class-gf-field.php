@@ -1001,8 +1001,25 @@ class GF_Field extends stdClass implements ArrayAccess {
 		$is_form_editor  = $this->is_form_editor();
 		$is_entry_detail = $this->is_entry_detail();
 		$is_admin        = $is_form_editor || $is_entry_detail;
+		$id              = "gfield_description_{$this->formId}_{$this->id}";
 
-		return $is_admin || ! empty( $description ) ? "<div class='$css_class'>" . $description . '</div>' : '';
+		return $is_admin || ! empty( $description ) ? "<div class='$css_class' id='$id'>" . $description . '</div>' : '';
+	}
+
+	/**
+	 * If a field has a description, the aria-describedby attribute for the input field is returned.
+	 *
+	 * @return string
+	 */
+	public function get_aria_describedby() {
+
+		if ( empty( $this->description ) ) {
+			return '';
+		}
+		$id = "gfield_description_{$this->formId}_{$this->id}";
+
+		return 'aria-describedby="' . $id . '"';
+
 	}
 
 	/**
@@ -1140,6 +1157,10 @@ class GF_Field extends stdClass implements ArrayAccess {
 
 		$this->inputMask      = (bool) $this->inputMask;
 		$this->inputMaskValue = wp_strip_all_tags( $this->inputMaskValue );
+
+		if ( $this->inputMaskIsCustom !== '' ) {
+			$this->inputMaskIsCustom = (bool) $this->inputMaskIsCustom;
+		}
 
 		if ( $this->maxLength ) {
 			$this->maxLength = absint( $this->maxLength );

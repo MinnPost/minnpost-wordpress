@@ -1048,7 +1048,7 @@ body .gform_wrapper ul.gform_fields li.gfield.gform_validation_container {
 .gform_wrapper div.charleft {
     font-size: .688em;
     margin-top: 4px;
-    color: #B7B7B7;
+    color: #767676;
     width: 92% !important;
     white-space: nowrap !important;
 }
@@ -1070,7 +1070,7 @@ body .gform_wrapper ul.gform_fields li.gfield.gform_validation_container {
 }
 
 .gform_wrapper div.charleft.warningTextareaInfo {
-    color: #A1A1A1;
+    color: #767676;
 }
 
 .gform_wrapper div.charleft.ginput_counter_error {

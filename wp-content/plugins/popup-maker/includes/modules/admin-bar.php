@@ -1,4 +1,7 @@
 <?php
+/*******************************************************************************
+ * Copyright (c) 2018, WP Popup Maker
+ ******************************************************************************/
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -31,7 +34,7 @@ class PUM_Modules_Admin_Bar {
 
 	public static function admin_bar_styles() {
 
-		if ( is_admin() || ! is_admin_bar_showing() || PUM_Options::get( 'disabled_admin_bar', false ) ) {
+		if ( is_admin() || ! is_admin_bar_showing() || PUM_Utils_Options::get( 'disabled_admin_bar', false ) ) {
 			return;
 		} ?>
 
@@ -405,7 +408,7 @@ class PUM_Modules_Admin_Bar {
 	 */
 	public static function toolbar_links( $wp_admin_bar ) {
 
-		if ( is_admin() || ! is_admin_bar_showing() || PUM_Options::get( 'disabled_admin_bar', false ) ) {
+		if ( is_admin() || ! is_admin_bar_showing() || PUM_Utils_Options::get( 'disabled_admin_bar', false ) ) {
 			return;
 		}
 
@@ -468,7 +471,7 @@ class PUM_Modules_Admin_Bar {
 					'parent' => $node_id,
 				) );
 
-				if ( pum_popup( $popup->ID )->has_conditions( array( 'js_only' => true ) ) ) {
+				if ( pum_get_popup( $popup->ID )->has_conditions( array( 'js_only' => true ) ) ) {
 					$wp_admin_bar->add_node( array(
 						'id'     => $node_id . '-conditions',
 						'title'  => __( 'Check Conditions', 'popup-maker' ),

@@ -3,25 +3,27 @@ Contributors: danieliser, wppopupmaker
 Author URI: https://wppopupmaker.com/?utm_source=readme-header&utm_campaign=Readme&utm_medium=author-uri
 Plugin URI: https://wppopupmaker.com/?utm_capmaign=Readme&utm_source=readme-header&utm_medium=plugin-uri
 Donate link:
-Tags: marketing, popup, popups, optin, advertising, conversion, responsive popups, promotion, popover, pop-up, pop over, lightbox, conversion, modal
-Requires at least: 3.6
-Tested up to: 4.9.6
-Stable tag: 1.7.30
-License: GNU Version 3 or Any Later Version
+Tags:  marketing, popup, popups, optin, advertising, conversion, responsive popups, promotion, popover, pop-up, pop over, lightbox, conversion, modal
+Requires at least: 4.1
+Tested up to: 5.1
+Requires PHP: 5.2.17
+Stable tag: 1.8.3
+License: GPLv2 or later
+License URI:  http://www.gnu.org/licenses/gpl-2.0.html
 
-Everything you need to create unique user experiences. Insert forms & other content from your favorite plugins to create custom responsive popups.
+Everything you need to create unique popup user experiences. Insert forms & other content from your favorite plugins to create custom responsive popups.
 
 == Description ==
 
 = Best WordPress Popup Plugin =
 
-Popup Maker™ is the **best popup plugin WordPress** has to offer. It is extremely versatile & flexible. Bend it to create any type of modal or content overlay for your WordPress website.
+Popup Maker™ is the **best popup plugin WordPress** has to offer. It is extremely versatile & flexible. Bend it to create any type of popup, modal or content overlay for your WordPress website.
 
 Customize every facet of your popups, from theme and position, to targeting and cookies.
 
 Easily create [EU cookie notices](https://ninjaforms.com/eu-cookie-notices-ninja-forms/), optin popups, slide-ins, modal forms & more.
 
-Learn tips and tricks, and create cool popups using guides found on our [Blog](https://wppopupmaker.com/blog/?utm_campaign=Readme&utm_source=readme-description&utm_medium=text-link)!
+Learn popup tips and tricks, and create cool popups using guides found on our [Blog](https://wppopupmaker.com/blog/?utm_campaign=Readme&utm_source=readme-description&utm_medium=text-link)!
 
 https://www.youtube.com/watch?v=MAf85_oax4g
 
@@ -30,12 +32,12 @@ Follow this plugin on [GitHub](https://github.com/PopupMaker/Popup-Maker) and [T
 Would you like to help translate the **best wordpress popup plugin** into more languages? [Join our WP-Translations Community](https://translate.wordpress.org/projects/wp-plugins/popup-maker).
 
 = What's Included for Free: =
-> + The plugin has limitless potential with no artificial restrictions. If you can’t get the functionality you’re after, we’ll be happy to help you! Just ask on the [Support Forums](https://wordpress.org/support/plugin/popup-maker).
+> + This popup plugin has limitless potential with no restrictions. If you can’t get the functionality you’re after, we’ll be happy to help you! Just ask at [https://wppopupmaker.com/support/](https://wppopupmaker.com/support/).
 > + There’s simply too many features to list here! But we’ll start with:
-> + Slide Outs, Banner Bars, Floating Stickies, Notifications, Loading Screens, Video Lightboxes, and of course, Opt-In Forms.
-> + Supports the most popular form building plugins available: Ninja Forms, Gravity Forms, Contact Form 7 & More.
+> + Slide Out Popups, Banner Bars, Floating Sticky Popups, Notification Popups, Loading Screen Popups, Video Lightboxes, and of course, Opt-In Form Popups.
+> + Our popups support the most popular form building plugins available: Ninja Forms, Gravity Forms, Contact Form 7 & More.
 > + We support practically every list building form, including but not limited to: MailChimp, AWeber, InfusionSoft, GetResponse, Constant Contact, Mail Poet, Mad Mimi, Hubspot, and Emma.
-> + All of our popups are Responsive popups.
+> + All of our popups are responsive popups.
 > + Use our unique **Popup Editor** to build any content you can imagine inside of our popups, plus control popup sizing, position, animation and so much more.
 > + **Conditions** allow you to target exactly who will (and will not) see your popups. Target any WordPress content such as: posts, pages and 26 more!
 > + We have included specific conditions for popular plugins such as WooCommerce.
@@ -45,7 +47,7 @@ Would you like to help translate the **best wordpress popup plugin** into more l
 > + Trove of options to customize the look of your popup using our unique **Theme Editor**. Change colors, shadows, fonts, paddings, and much, much more.
 > + Stat tracking: Popup Opens Count.
 
-If you are enjoying this wonderful project, [please rate & review it](https://wppopupmaker.com/rate-us/?utm_source=readme-description&utm_medium=text-link&utm_campaign=Readme&utm_content=rate-us) to share the love <3!
+If you are enjoying this wonderful popup plugin, [please rate & review it](https://wppopupmaker.com/rate-us/?utm_source=readme-description&utm_medium=text-link&utm_campaign=Readme&utm_content=rate-us) to share the love <3!
 
 = Enhance Your WordPress Popups Using Our Extensions =
 > + [Exit Intent](https://wppopupmaker.com/extensions/exit-intent/?utm_source=readme-description&utm_medium=text-link&utm_campaign=Upsell&utm_content=exit-intent "Exit Intent")
@@ -100,6 +102,32 @@ There are several common causes for this which include:
 9. Create any popup imaginable using our color pickers and sliders!
 
 == Changelog ==
+
+= v1.8.3 - 02/27/2019 =
+* Fix: Added back deprecated function that got truncated previously.
+
+= v1.8.2 - 02/25/2019 =
+* Fix: Bug on older versions of PHP due to usage of [] rather than array().
+
+= v1.8.1 - 02/22/2019 =
+* Fix: Error on older versions of PHP when calling get_plugin_data on a plugin that wasn't installed.
+* Fix: "Fatal error: Can not use method return value in write context" on older versions of PHP.
+
+= v1.8.0 - 02/20/2019 =
+* Feature: New popup theme settings:
+  * New close button positions top center, bottom center, middle left & middle right.
+  * New option to position close button outside of popup.
+* Improvement: Add constant to disable logging.
+* Improvement: Added complete uninstall option.
+* Improvement: Added limited experimental support for Gutenberg editor when creating popups. Complete support in the works.
+* Improvement: Added new unified alerts interface on PM dash pages. This will keep you up to date on required migration changes, new features & more.
+* Improvement: Added new translation request for detected polyglot admins when their language doesn't have an updated Language Pack.
+* Tweak: Removed option setting to 'Hide Admin Support Widget' which is no longer relevant.
+* Tweak: Add constant to disable logging.
+* Fix: Condition options for BuddyPress integration had values & labels switched.
+* Fix: Bug with Gravity Forms Personal Data menu item missing.
+* Fix: iOS Click overlay close not working.
+* Fix: Analytics not working for themes with incorrect wp_footer usage.
 
 = v1.7.30 - 09/06/2018 =
 * Improvement: Further added methods to log unique messages only once.

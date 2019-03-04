@@ -1,4 +1,41 @@
 ------------------------------------------------------------------------------------------------------------------
+Version 2.4.6
+	- Added security enhancements.
+	- Added maxlength attribute to fields using textarea inputs when maximum character count is defined.
+	- Added the gform_field_validation filter to the Repeater field.
+	- Added aria-describedby to some single input fields including: Consent, Text, Textarea, and Website.
+
+	- Updated link in disable logging notice to immediately disable logging.
+	- Updated the gform_post_export_entries action hook to include the export_id as the fifth parameter.
+	- Updated reCAPTCHA settings description.
+
+	- Fixed an accessibility issue with the total field where screen readers don't announce the total amount when it changes.
+	- Fixed multi-column List fields within Repeater fields appearing as Array during export.
+	- Fixed a fatal error which can occur when using GFFormsModel::media_handle_upload() to upload a video file to the media library.
+	- Fixed an accessibility issue with the color contrast of the character counter on a white background.
+	- Fixed character counter not announcing updated character limit to screenreaders on fields with a maximum character count defined.
+	- Fixed the replacement method name in the GFFormsModel::purge_expired_incomplete_submissions() deprecation notice.
+	- Fixed an issue with the default symbols for the Repeater field buttons and removed the title attribute.
+	- Fixed the placeholder option not being added to drop down type fields when the placeholder is 0.
+	- Fixed an issue with some Address field sub-labels when the form is displayed.
+	- Fixed the input mask type setting reverting to the standard choice after some custom masks are configured.
+	- Fixed an issue that frontend feeds can't be activated after the conditional logic disabled.
+
+	- Removed "Not Checked" rule for the consent field in conditional logic JS. Use "not is" "checked" instead.
+
+	- Fixed issue where conditionally hidden Drop Down fields were evaluated as having a value via conditional logic.
+	- Fixed an issue where use of some special characters, such as quotes, in the List field column label could prevent submission of the input value.
+	- Fixed an issue with the Rich Text Editor height when the Paragraph or Post Body field is displayed by conditional logic.
+	- Fixed some properties not being reset when the Product field input type is changed causing issues for the front-end calculations and conditional logic.
+
+	- API: Added GFAPI::entry_exists() to check if an entry exists for the supplied ID.
+	- API: Fixed PHP warning during form submission if an invalid entry id is returned by the gform_entry_id_pre_save_lead filter.
+	- API: Fixed an issue where existing values for registered entry meta could be lost when using the gform_entry_id_pre_save_lead filter to update an entry during form submission.
+	- API: Fixed returning repeater subfields via GFAPI::get_field()
+	- API (internal): Added GFExport::get_entry_export_line() for getting the line to be included in the export for the entry being processed.
+	- API (internal): Added support for IS/IS NOT NULL operations in GF_Query.
+
+------------------------------------------------------------------------------------------------------------------
 Version 2.4.5
 	- Added security enhancements.
 	- Added support for using a cssClass property with the array returned by the gform_review_page filter to apply custom classes to the page div element.

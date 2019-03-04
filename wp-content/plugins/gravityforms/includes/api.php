@@ -1820,4 +1820,18 @@ class GFAPI {
 
 		return $result > 0;
 	}
+
+	/**
+	 * Checks if an entry exists for the supplied ID.
+	 *
+	 * @since 2.4.5.8
+	 *
+	 * @param int $entry_id The ID to be checked.
+	 *
+	 * @return bool
+	 */
+	public static function entry_exists( $entry_id ) {
+		return GFFormsModel::entry_exists( $entry_id );
+	}
+
 }

@@ -150,9 +150,6 @@ class Coauthors_Extend {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new Coauthors_Extend_Admin( $this->get_plugin_name(), $this->get_version() );
-
-		//$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		//$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_filter( 'coauthors_guest_author_fields', $plugin_admin, 'capx_filter_guest_author_fields', 10, 2 );
 
 	}
@@ -165,15 +162,7 @@ class Coauthors_Extend {
 	 * @access   private
 	 */
 	private function define_public_hooks() {
-
 		$plugin_public = new Coauthors_Extend_Public( $this->get_plugin_name(), $this->get_version() );
-
-		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
-		//$this->loader->add_filter( 'post_link', $plugin_public, 'remove_parent_cats_from_link' );
-		//$this->loader->add_action( 'init', $plugin_public, 'twentysixteen_entry_meta' );
-
 	}
 
 	/**
