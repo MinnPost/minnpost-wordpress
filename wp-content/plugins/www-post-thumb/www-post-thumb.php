@@ -46,7 +46,7 @@ add_filter( 'post_thumbnail_html', 'GM\WWWPostThumbnail\markup', 10, PHP_INT_MAX
 
 function is_image( $url ) {
   $ext = array( 'jpeg', 'jpg', 'gif', 'png' );
-  $info = (array) pathinfo( parse_url( $url, PHP_URL_PATH ) );
+  $info = (array) pathinfo( wp_parse_url( $url, PHP_URL_PATH ) );
   return isset( $info['extension'] ) && in_array( strtolower( $info['extension'] ), $ext, TRUE );
 }
 
