@@ -1,0 +1,20 @@
+{
+  "name"       : "automattic/wpcom-legacy-redirector",
+  "description": "WordPress plugin for handling large volumes of legacy redirects in a scalable manner.",
+  "homepage"   : "https://github.com/Automattic/WPCOM-Legacy-Redirector",
+  "type"       : "wordpress-plugin",
+  "license"    : "GPL-2.0+",
+  "authors"    : [
+    {
+      "name"    : "Automattic",
+      "homepage": "http://automattic.com/"
+    }
+  ],
+  "support"    : {
+    "issues": "https://github.com/Automattic/WPCOM-Legacy-Redirector/issues",
+    "source": "https://github.com/Automattic/WPCOM-Legacy-Redirector"
+  },
+  "require": {
+    "composer/installers": "~1.0"
+  }
+}
