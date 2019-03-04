@@ -89,7 +89,7 @@ function gf_is_match( formId, rule ) {
 	if( isInputSpecific ) {
 		$inputs = $( '#input_{0}_{1}_{2}'.format( formId, fieldId, inputIndex ) );
 	} else {
-		$inputs = $( 'input[id="input_{0}_{1}"], input[id^="input_{0}_{1}_"], input[id^="choice_{0}_{1}_"], select#input_{0}_{1}, textarea#input_{0}_{1}'.format( formId, rule.fieldId ) );
+		$inputs = $( 'input[id="input_{0}_{1}"], input[id^="input_{0}_{1}_"], input[id^="choice_{0}_{1}_"], select#input_{0}_{1}, textarea#input_{0}_{1}'.format( formId, fieldId ) );
 	}
 
 	var isCheckable = $.inArray( $inputs.attr( 'type' ), [ 'checkbox', 'radio' ] ) !== -1,
@@ -135,7 +135,7 @@ function gf_is_match_checkable( $inputs, rule, formId, fieldId ) {
 
 function gf_is_match_default( $input, rule, formId, fieldId ) {
 
-	var val        = $input.val(),
+	var val        = $input.is( 'select' ) && gformIsHidden( $input ) ? '' : $input.val(),
 		values     = ( val instanceof Array ) ? val : [ val ], // transform regular value into array to support multi-select (which returns an array of selected items)
 		matchCount = 0;
 
@@ -311,7 +311,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 
 		// reset tabindex for selects
 		$target.find( 'select' ).each( function() {
-			$select = jQuery( this );
+			var $select = jQuery( this );
 			$select.attr( 'tabindex', $select.data( 'tabindex' ) );
 		} );
 
@@ -376,6 +376,12 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 			}
 		}
 	}
+
+	var $select = $target.find( 'select' );
+	if( $select.length > 0 && $select.find( 'option[value=""]' ).length === 0 ) {
+		$select.change();
+	}
+
 }
 
 function gf_reset_to_default(targetId, defaultValue){

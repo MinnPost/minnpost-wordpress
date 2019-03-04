@@ -34,6 +34,7 @@ wp-content/themes/twenty*
 /wp-blog-header.php
 /wp-comments-post.php
 /wp-config-sample.php
+/wp-config.php
 /wp-cron.php
 /wp-links-opml.php
 /wp-load.php
@@ -46,14 +47,9 @@ wp-content/themes/twenty*
 /wp-admin
 /wp-includes
 
-wp-content/plugins/wp-spamshield/data
-
-# composer files
-/vendor/**/.git/
-/vendor/**/.github/
-/vendor/**/docs/
-/vendor/**/test/
-/vendor/**/tests/
-
-# config
-.env
+# not open source
+wp-content/client-mu-plugins/mu-environment-files.php
+wp-content/config/
+wp-content/private/
+wp-content/plugins/raw-html-pro/
+wp-content/vip-config/

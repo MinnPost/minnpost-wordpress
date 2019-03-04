@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Spills
 Description: This plugin creates a sidebar widget and endpoint URL that is able to display posts from a group of categories and/or tags
-Version: 0.0.7
+Version: 0.0.8
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-spills
@@ -22,7 +22,7 @@ class MinnpostSpills {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.7';
+		$this->version = '0.0.8';
 
 		$this->load_admin();
 
@@ -49,8 +49,10 @@ class MinnpostSpills {
 	 */
 	public function set_home_to_false( $query ) {
 		if ( ! is_admin() && isset( $query->query['is_spill'] ) && true === $query->query['is_spill'] ) {
-			$query->is_home    = false;
-			$query->is_archive = true;
+			if ( $query->is_main_query() ) {
+				$query->is_home    = false;
+				$query->is_archive = true;
+			}
 		}
 	}
 
@@ -68,7 +70,12 @@ class MinnpostSpills {
 			add_action( 'cortex.routes', function( RouteCollectionInterface $routes ) {
 
 				$widget_instances = get_option( 'widget_minnpostspills_widget', false );
-				$instances        = array_values( $widget_instances );
+
+				if ( false === $widget_instances ) {
+					return;
+				}
+
+				$instances = array_values( $widget_instances );
 
 				add_filter( 'get_the_archive_title', array( $this, 'set_wp_title' ) );
 				add_filter( 'document_title_parts', array( $this, 'set_wp_title' ) );
@@ -88,7 +95,7 @@ class MinnpostSpills {
 					return array_merge( $a, (array) $b );
 				}, []);
 
-				$url_array = explode( '/', parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
+				$url_array = explode( '/', wp_parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
 				$url       = $url_array[1];
 
 				if ( isset( $url_array[2] ) && 'page' === $url_array[2] ) {
@@ -97,46 +104,48 @@ class MinnpostSpills {
 					$page = 1;
 				}
 
-				foreach ( $widget_instances as $instance ) {
+				if ( ! empty( $widget_instances ) ) {
+					foreach ( $widget_instances as $instance ) {
 
-					$title = sanitize_title( str_replace( '/', '', $instance['title'] ) );
+						$title = sanitize_title( str_replace( '/', '', $instance['title'] ) );
 
-					if ( $title !== $url || ! is_array( $instance ) ) {
-						continue;
-					}
+						if ( $title !== $url || ! is_array( $instance ) ) {
+							continue;
+						}
 
-					$key   = array_search( $instance['title'], array_column( $instances, 'title' ), true );
-					$match = $instances[ $key ];
+						$key   = array_search( $instance['title'], array_column( $instances, 'title' ), true );
+						$match = $instances[ $key ];
 
-					$spill_args = array(
-						'is_spill'       => true,
-						'posts_per_page' => 10,
-						'paged'          => $page,
-						'post_type'      => 'post',
-					);
+						$spill_args = array(
+							'is_spill'       => true,
+							'posts_per_page' => 10,
+							'paged'          => $page,
+							'post_type'      => 'post',
+						);
 
-					$widget_terms = array();
-					if ( ! is_array( $match['widget_terms'] ) ) {
-						$widget_terms = explode( ',', $match['widget_terms'] );
-					} else {
-						$widget_terms = $match['widget_terms'];
-					}
+						$widget_terms = array();
+						if ( ! is_array( $match['widget_terms'] ) ) {
+							$widget_terms = explode( ',', $match['widget_terms'] );
+						} else {
+							$widget_terms = $match['widget_terms'];
+						}
 
-					if ( file_exists( __DIR__ . '/includes/minnpost-spill-query.php' ) ) {
-						require_once __DIR__ . '/includes/minnpost-spill-query.php';
-					}
-					$args = minnpost_spill_get_query_args( $match['widget_categories'], $widget_terms );
+						if ( file_exists( __DIR__ . '/includes/minnpost-spill-query.php' ) ) {
+							require_once __DIR__ . '/includes/minnpost-spill-query.php';
+						}
+						$args = minnpost_spill_get_query_args( $match['widget_categories'], $widget_terms );
 
-					$query = array_merge( $args, $spill_args );
+						$query = array_merge( $args, $spill_args );
 
-					if ( empty( $instance['url'] ) || ( ! empty( $instance['url'] ) && false === get_term_by( 'slug', str_replace( '/', '', $instance['url'] ) ) ) ) {
-						$routes->addRoute( new QueryRoute(
-							$title . '[/page/{page:\d+}]',
-							$query,
-							[
-								'template' => $this->template,
-							]
-						));
+						if ( empty( $instance['url'] ) || ( ! empty( $instance['url'] ) && false === get_term_by( 'slug', str_replace( '/', '', $instance['url'] ) ) ) ) {
+							$routes->addRoute( new QueryRoute(
+								$title . '[/page/{page:\d+}]',
+								$query,
+								[
+									'template' => $this->template,
+								]
+							));
+						}
 					}
 				}
 			});

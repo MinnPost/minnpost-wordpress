@@ -338,7 +338,7 @@ class GF_Field_List extends GF_Field {
 
 			default :
 				// a11y: inputs without a label must have the aria-label attribute set.
-				$input = "<input aria-label='" . $aria_label . "' type='text' name='input_{$this->id}[]' value='" . esc_attr( $value ) . "' {$tabindex} {$disabled}/>";
+				$input = "<input aria-label='" . esc_attr( $aria_label ) . "' type='text' name='input_{$this->id}[]' value='" . esc_attr( $value ) . "' {$tabindex} {$disabled}/>";
 				break;
 		}
 
@@ -763,7 +763,7 @@ class GF_Field_List extends GF_Field {
 		}
 
 		$value = rgar( $entry, $input_id );
-		$value = unserialize( $value );
+		$value = maybe_unserialize( $value );
 
 		if ( empty( $value ) || $is_csv ) {
 			return $value;

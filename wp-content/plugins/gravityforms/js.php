@@ -810,7 +810,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 				break;
 
-            case 'consent':
+			case 'consent':
 				field.label = <?php echo json_encode( esc_html__( 'Consent', 'gravityforms' ) ); ?>;
 				field.inputs = [new Input(field.id + ".1", <?php echo json_encode( esc_html__( 'Consent', 'gravityforms' ) ); ?>), new Input(field.id + ".2", <?php echo json_encode( esc_html__( 'Text', 'gravityforms' ) ); ?>), new Input(field.id + ".3", <?php echo json_encode( esc_html__( 'Description', 'gravityforms' ) ); ?>)];
 				// Hide the description from select columns.
@@ -820,9 +820,9 @@ if ( ! class_exists( 'GFForms' ) ) {
 				field.descriptionPlaceholder = <?php echo json_encode( esc_html__( 'Enter consent agreement text here.  The Consent Field will store this agreement text with the form entry in order to track what the user has consented to.', 'gravityforms' ) ); ?>;
 				if (!field.inputType)
 					field.inputType = "consent";
-                // Add choices so we have a dropdown in the conditional logic.
-                if (!field.choices)
-                    field.choices = new Array(new Choice(<?php echo json_encode( esc_html__( 'Checked', 'gravityforms' ) ); ?>, '1'), new Choice(<?php echo json_encode( esc_html__( 'Not Checked', 'gravityforms' ) ); ?>, '0'));
+				// Add choices so we have a dropdown in the conditional logic.
+				if (!field.choices)
+					field.choices = new Array(new Choice(<?php echo json_encode( esc_html__( 'Checked', 'gravityforms' ) ); ?>, '1'));
 				break;
 
 			<?php do_action( 'gform_editor_js_set_default_values' ); ?>

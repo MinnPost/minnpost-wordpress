@@ -1921,7 +1921,7 @@ abstract class GFFeedAddOn extends GFAddOn {
 			$_feed = array(
 				'feedId'           => $feed['id'],
 				'addonSlug'        => $this->_slug,
-				'conditionalLogic' => rgars( $feed, 'meta/feed_condition_conditional_logic_object/conditionalLogic', false ),
+				'conditionalLogic' => rgars( $feed, 'meta/feed_condition_conditional_logic' ) === '0' ? false : rgars( $feed, 'meta/feed_condition_conditional_logic_object/conditionalLogic', false ),
 				'isSingleFeed'     => $this->_single_feed_submission,
 			);
 

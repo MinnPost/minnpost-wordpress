@@ -80,7 +80,6 @@ class Coauthors_Extend_Admin {
 			);
 		} 
 		if ( in_array( 'all', $groups ) || in_array( 'about', $groups ) ) {
-			//$fields_to_return['biographical_in']
 			$fields_to_return[] = array(
 				'key'      => 'teaser',
 				'label'    => 'Teaser',

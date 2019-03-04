@@ -29,7 +29,7 @@ class GFSettings {
 	 *
 	 * @uses GFSettings::$addon_pages
 	 *
-	 * @param string       $name      The settings page slug.
+	 * @param string|array $name      The settings page slug.
 	 * @param string|array $handler   The callback function to run for this settings page.
 	 * @param string       $icon_path The path to the icon for the settings tab.
 	 */
@@ -306,36 +306,9 @@ class GFSettings {
 
 			// If Logging was enabled, add Logging tab to settings page.
 			if ( rgpost( 'gform_enable_logging' ) ) {
-
-				// Update option.
-				update_option( 'gform_enable_logging', (bool) rgpost( 'gform_enable_logging' ) );
-
-				// Add settings page.
-				self::add_settings_page(
-					array(
-						'name'      => gf_logging()->get_slug(),
-						'tab_label' => gf_logging()->get_short_title(),
-						'title'     => gf_logging()->plugin_settings_title(),
-						'handler'   => array( gf_logging(), 'plugin_settings_page' ),
-					),
-					null,
-					null
-				);
-
-				// Enabling all loggers by default
-				gf_logging()->enable_all_loggers();
-
+                self::enable_logging();
 			} else {
-
-				// Update option.
-				update_option( 'gform_enable_logging', (bool) rgpost( 'gform_enable_logging' ) );
-
-				// Remove settings page.
-				unset( self::$addon_pages[ gf_logging()->get_slug() ] );
-
-				// Remove Log Files
-				gf_logging()->delete_log_files();
-
+				self::disable_logging();
 			}
 
 			if ( rgpost( 'gform_recaptcha_reset' ) ) {
@@ -532,8 +505,8 @@ class GFSettings {
 			<h3><span><i class="fa fa-cogs"></i> <?php esc_html_e( 'reCAPTCHA Settings', 'gravityforms' ); ?></span></h3>
 
 			<p style="text-align: left;">
-				<?php esc_html_e( 'Gravity Forms integrates with reCAPTCHA, a free CAPTCHA service that helps to digitize books while protecting your forms from spam bots. ', 'gravityforms' ); ?>
-				<?php printf( esc_html__( '%sPlease note%s, these settings are required only if you decide to use the reCAPTCHA field.', 'gravityforms' ), '<strong>', '</strong>' ); ?>
+				<?php esc_html_e( 'Gravity Forms integrates with reCAPTCHA, a free CAPTCHA service that uses an advanced risk analysis engine and adaptive challenges to keep automated software from engaging in abusive activities on your site. ', 'gravityforms' ); ?>
+				<?php printf( esc_html__( '%sPlease note, only v2 checkbox keys are supported%s, these settings are required only if you decide to use the reCAPTCHA field.', 'gravityforms' ), '<strong>', '</strong>' ); ?>
 				<a href="http://www.google.com/recaptcha/" target="_blank"><?php esc_html_e( 'Read more about reCAPTCHA.', 'gravityforms' ); ?></a>
 			</p>
 
@@ -878,6 +851,64 @@ class GFSettings {
 		}
 
 		return $akismet_setting;
+	}
+
+	/**
+	 * Enable the GFLogging class.
+	 *
+	 * @since 2.4.4.2
+	 *
+	 * @return bool
+	 */
+	public static function enable_logging() {
+
+		// Update option.
+		$enabled = update_option( 'gform_enable_logging', true );
+
+		// Prepare settings page, enable logging.
+		if ( function_exists( 'gf_logging' ) ) {
+
+			// Add settings page.
+			self::add_settings_page(
+				array(
+					'name'      => gf_logging()->get_slug(),
+					'tab_label' => gf_logging()->get_short_title(),
+					'title'     => gf_logging()->plugin_settings_title(),
+					'handler'   => array( gf_logging(), 'plugin_settings_page' ),
+				),
+				null,
+				null
+			);
+
+			// Enabling all loggers by default
+			gf_logging()->enable_all_loggers();
+
+		}
+
+		return $enabled;
+
+	}
+
+	/**
+	 * Disable the GFLogging class.
+	 *
+	 * @since 2.4.4.2
+	 *
+	 * @return bool
+	 */
+	public static function disable_logging() {
+
+		// Update option.
+		$disabled = update_option( 'gform_enable_logging', false );
+
+		// Remove settings page, log files.
+		if ( function_exists( 'gf_logging' ) ) {
+			unset( self::$addon_pages[ gf_logging()->get_slug() ] );
+			gf_logging()->delete_log_files();
+		}
+
+		return $disabled;
+
 	}
 
 }

@@ -15,7 +15,7 @@ Add writers as bylines without creating WordPress user accounts. Simply [create 
 
 On the frontend, use the [Co-Authors Plus template tags](http://vip.wordpress.com/documentation/incorporate-co-authors-plus-template-tags-into-your-theme/) to list co-authors anywhere you'd normally list the author.
 
-This plugin is an almost complete rewrite of the [Co-Authors](https://wordpress.org/plugins/co-authors/) plugin originally developed by Weston Ruter (2007). The original plugin was inspired by the '[Multiple Authors](https://txfx.net/2005/08/16/new-plugin-multiple-authors/)' plugin by Mark Jaquith (2005).
+This plugin is an almost complete rewrite of the Co-Authors plugin originally developed at [Shepherd Interactive](http://www.shepherd-interactive.com/) (2007). The original plugin was inspired by the 'Multiple Authors' plugin by Mark Jaquith (2005).
 
 == Frequently Asked Questions ==
 
@@ -40,11 +40,6 @@ To create new guest author profiles, a WordPress will need the 'list_users' capa
 = Can I easily create a list of all co-authors? =
 
 Yep! There's a template tag called `coauthors_wp_list_authors()` that accepts many of the same arguments as `wp_list_authors()`. Look in template-tags.php for more details.
-
-= Can I disable Guest Authors?
-
-Yep! Guest authors can be disabled entirely through an apt filter. Having the following line load on `init` will do the trick:
-`add_filter( 'coauthors_guest_authors_enabled', '__return_false' )`
 
 == Upgrade Notice ==
 

@@ -3059,13 +3059,13 @@ Content-Type: text/html;
 	public static function get_select_choices( $field, $value = '', $support_placeholders = true ) {
 		$choices = '';
 
-		if ( rgget('view') == 'entry' && empty( $value ) && empty( $field->placeholder ) ) {
+		if ( rgget('view') == 'entry' && empty( $value ) && rgblank( $field->placeholder ) ) {
 			$choices .= "<option value=''></option>";
 		}
 
 		if ( is_array( $field->choices ) ) {
 
-			if ( $support_placeholders && ! empty( $field->placeholder ) ) {
+			if ( $support_placeholders && ! rgblank( $field->placeholder ) ) {
 				$selected = empty( $value ) ? "selected='selected'" : '';
 				$choices .= sprintf( "<option value='' %s class='gf_placeholder'>%s</option>", $selected, esc_html( $field->placeholder ) );
 			}
