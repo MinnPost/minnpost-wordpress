@@ -118,6 +118,9 @@ function minnpost_spill_get_query_args( $categories = '', $terms = '' ) {
 		if ( class_exists( 'EP_WP_Query_Integration' ) ) {
 			$args['ep_integrate'] = true;
 		}
+		if ( class_exists( 'ES_WP_Query' ) ) {
+			//$args['es'] = true;
+		}
 
 		return $args;
 	}
