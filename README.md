@@ -1,117 +1,39 @@
 # MinnPost WordPress
 
-This repository is MinnPost.com in WordPress. It is configured to run on a single Linux server, deployed by a [Codeship basic](https://codeship.com/features/basic) free plan.
+This repository is [MinnPost.com](https://www.minnpost.com) in WordPress. It runs live on [WordPress.com VIP Go](https://vip.wordpress.com/). This repository exists to faciliate open sharing of code and other development work, but because of the nature of VIP Go it does not include some required configuration files.
 
 ## Dependencies
 
 1. SSH Access
 2. Git
 3. Composer
-    - [vlucas/phpdotenv](https://github.com/vlucas/phpdotenv)
     - [wp-cli/wp-cli](https://packagist.org/packages/wp-cli/wp-cli)
 
-## Dot Env file
+## Development setup
 
-On both local and remote servers, this setup uses a `.env` file (with phpdotenv above) to store the WordPress credentials. Don't ever put this into the repository.
+You can run this repository as a local WordPress installation. It requires VIP files to work properly. The best document to read about this is the one [hosted by VIP Go](https://vip.wordpress.com/documentation/vip-go/local-vip-go-development-environment/).
 
-Based on our setup, here is the structure:
-
-```
-# database settings
-DB_NAME={databasename}
-DB_USER={databaseuser}
-DB_PASSWORD={databasepassword}
-DB_HOST={databasehost}
-DB_PREFIX=wp_
-
-# authentication keys and salts - get these at https://api.wordpress.org/secret-key/1.1/salt/
-AUTH_KEY={authkey}
-SECURE_AUTH_KEY={secureauthkey}
-LOGGED_IN_KEY={loggedinkey}
-NONCE_KEY={noncekey}
-AUTH_SALT={authsalt}
-SECURE_AUTH_SALT={secureauthsalt}
-LOGGED_IN_SALT={loggedinsalt}
-NONCE_SALT={noncesalt}
-
-# salesforce settings
-OBJECT_SYNC_SF_SALESFORCE_CONSUMER_KEY={salesforceconsumerkey}
-OBJECT_SYNC_SF_SALESFORCE_CONSUMER_SECRET={salesforceconsumersecret}
-OBJECT_SYNC_SF_SALESFORCE_CALLBACK_URL={salesforcecallbackurl}
-OBJECT_SYNC_SF_SALESFORCE_LOGIN_BASE_URL={salesforceloginurl}
-OBJECT_SYNC_SF_SALESFORCE_API_VERSION={salesforceapiversion}
-OBJECT_SYNC_SF_SALESFORCE_AUTHORIZE_URL_PATH={salesforceauthorizepath}
-OBJECT_SYNC_SF_SALESFORCE_TOKEN_URL_PATH={salesforcetokenpath}
-
-# mailchimp settings
-FORM_PROCESSOR_MC_MAILCHIMP_API_KEY={mcapikey}
-
-# gravityforms settings
-GF_LICENSE_KEY={gravityformslicensekey}
-
-# site url settings - no trailing slash
-WP_HOME = {homepageurl}
-WP_SITEURL = {siteurl}
-
-# redis
-WP_REDIS_DATABASE={redis index number}
-
-# elasticpress
-EP_HOST='{hostname for Elasticpress}'
-EP_INDEX_PREFIX='{prefix for Elasticpress}-'
-
-# analytics
-WP_ANALYTICS_TRACKING_ID='{Google Analytics tracking code}'
-
-# debug modes - always set these to false on production
-WP_DEBUG=true
-JETPACK_DEV_DEBUG=true
-SCRIPT_DEBUG=true
-
-# payment processor stuff
-PAYMENT_PROCESSOR_URL='{paymentprocessorurl}'
-
-```
-
-## Local setup
-
-1. Clone the repo. Use `--recursive` to clone the submodules. `git clone --recursive gitrepo.git`
-2. Run `composer install`
-3. Create a database
-4. Create a `.env` file in the directory above WordPress filling in the settings above. If using Laravel Valet, this is annoying, but works.
-5. Install WordPress
+1. Clone this repository.
+2. Create a database.
+3. Install WordPress
     - `wp core download`
     - `wp core install`:  `wp core install --url=<url> --title=<site title> --admin_user=<adminuser> --admin_email=<adminemail> --admin_password=<password> --skip-email`
-
-## Codeship setup
-
-Create a new project, and connect it to the correct Git repository, and give it the correct team/owner settings.
-
-### Tests
-
-Choose PHP as the technology. No further commands are necessary at this time.
-
-### Deploy
-
-For each branch on the server, create a Deployment Pipeline using Custom Script. For example, we use develop, stage, and production (master).
-
-Enter this command in each Custom Script field.
-
-```
-# deploy develop branch with rsync
-rsync -av ~/clone/ {user@server:path-to-public-root/}
+4. Delete the `wp-content` folder if you have access to the private repository for that folder. Clone that repository as `wp-content`. Use `--recursive` to clone the submodules. `git clone --recursive gitrepo.git wp-content`
+5. Add the VIP Go MU plugins. `git clone git@github.com:Automattic/vip-go-mu-plugins.git --recursive wp-content/mu-plugins/`
+6. Update `wp-config.php`:
+```php
+define( 'DISALLOW_FILE_EDIT', true );
+define( 'DISALLOW_FILE_MODS', true );
+define( 'AUTOMATIC_UPDATER_DISABLED', true );
+if ( file_exists( __DIR__ . '/wp-content/vip-config/vip-config.php' ) ) {
+    require_once( __DIR__ . '/wp-content/vip-config/vip-config.php' );
+}
 ```
 
-## Remote server setup
+## Development
 
-1. In the home directory, create a `.ssh` directory. Create an `authorized_keys` file with the SSH public key, which you can get from the General settings tab for the Project in Codeship.
-2. Create a database and virtual host for each site (ex dev, stage, www as subdomains).
-3. For each deploy location (ex dev, stage, www), create a `.env` file in the directory above the public root, filling in the settings above.
-4. For each deploy location, run these commands to create the basic WordPress structure:
-    - `wp core download`
-    - `wp core install`:  `wp core install --url=<url> --title=<site title> --admin_user=<adminuser> --admin_email=<adminemail> --admin_password=<password> --skip-email`
+Develop new features in their own branch, or in the `develop` branch. Pushing to `develop` will deploy to https://dev.minnpost.com, `preprod` will deploy to https://stage.minnpost.com.
 
+To deploy new features, create a pull request in the private repository. The `master` branch, when it has new pull requests, will allow the VIP code bot to check the changes for problems.
 
-## Deploying to server
-
-Pushing to each git branch that exists in Codeship will cause it to rsync its contents to the server after running the `composer install` command above.
+The bot can take some time before it starts running. Once it returns, if there are no problems, merge the pull request.
