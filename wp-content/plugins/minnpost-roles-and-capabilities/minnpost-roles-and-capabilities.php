@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Roles and Capabilities
 Description: Set all roles and capabilities for MinnPost access. This replaces the AAM plugin for us.
-Version: 0.0.1
+Version: 0.0.2
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-roles-and-capabilities
@@ -55,6 +55,7 @@ class Minnpost_Roles_And_Capabilities {
 
 	private function add_actions() {
 		// setup roles
+		add_filter( 'view_admin_as_full_access_capabilities', array ( $this, 'vip_full_access_capabilities' ), 10, 1 );
 		register_activation_hook( __FILE__, array( $this, 'user_roles' ) );
 		add_action( 'init', array( $this, 'disallow_banned_user_comments' ), 10 );
 		if ( is_admin() ) {
@@ -62,6 +63,22 @@ class Minnpost_Roles_And_Capabilities {
 			add_action( 'admin_menu', array( $this, 'create_admin_menu' ) );
 		}
 
+	}
+
+	/**
+	 * Set capabilities requied for view admin as plugin
+	 *
+	 * @param array $caps
+	 * @return array $caps
+	 *
+	*/
+	public function vip_full_access_capabilities( $caps ) {
+		if ( null !== DISALLOW_FILE_MODS && true === DISALLOW_FILE_MODS ) {
+			if ( false !== ( $key = array_search( 'delete_plugins', $caps ) ) ) {
+				unset( $caps[ $key ] );
+			}
+		}
+		return $caps;
 	}
 
 	/* temporary method */
@@ -85,11 +102,19 @@ class Minnpost_Roles_And_Capabilities {
 		// add new roles and assign capabilities to them
 		$extra_user_roles = $this->get_extra_user_roles();
 		foreach ( $extra_user_roles as $role => $display_name ) {
-			$result = add_role(
-				$role,
-				$display_name,
-				$this->bundle_capabilities( $role )
-			);
+			if ( ( defined( 'WPCOM_IS_VIP_ENV' ) && WPCOM_IS_VIP_ENV ) ) {
+				$result = wpcom_vip_add_role(
+					$role,
+					$display_name,
+					$this->bundle_capabilities( $role )
+				);
+			} else {
+				$result = add_role(
+					$role,
+					$display_name,
+					$this->bundle_capabilities( $role )
+				);
+			}
 			if ( null === $result ) {
 				// this role already exists, but let's make sure it has the right capabilities. add it to array of existing roles.
 				$result                  = get_role( $role );
@@ -706,6 +731,8 @@ class Minnpost_Roles_And_Capabilities {
 	/**
 	 * Manage user capabilities that are added by plugins or themes, whether they're ours or from third parties.
 	 *
+	 *   view_query_monitor (query-monitor)
+	 *
 	 *   edit_newsletter (minnpost-largo)
 	 *   delete_newsletter (minnpost-largo)
 	 *   edit_newsletters (minnpost-largo)
@@ -835,6 +862,9 @@ class Minnpost_Roles_And_Capabilities {
 	*/
 	private function plugin_theme_capabilities( $role = '' ) {
 		$plugin_theme_capabilities = array(
+			'view_query_monitor'                  => array(
+				'administrator',
+			),
 			'edit_newsletter'                     => array(
 				'administrator',
 				'editor',
@@ -1492,11 +1522,11 @@ class Minnpost_Roles_And_Capabilities {
 		$post_data = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 		?>
 		<div class="wrap">
-			<h1><?php _e( get_admin_page_title() , 'minnpost-roles-and-capabilities' ); ?></h1>
+			<h1><?php echo esc_html__( get_admin_page_title() , 'minnpost-roles-and-capabilities' ); ?></h1>
 			<?php if ( empty( $post_data ) ) : ?>
-				<form method="post" action="users.php?page=<?php echo $this->slug; ?>">
+				<form method="post" action="users.php?page=<?php echo esc_attr( $this->slug ); ?>">
 					<input type="hidden" name="action" value="refresh-roles-capabilities" ?>
-					<h3><?php _e( 'Click the button to refresh all roles and capabilities for the site.', 'minnpost-roles-and-capabilities' ); ?></h3>
+					<h3><?php echo esc_html__( 'Click the button to refresh all roles and capabilities for the site.', 'minnpost-roles-and-capabilities' ); ?></h3>
 					<?php
 						submit_button( esc_html__( 'Refresh', 'minnpost-roles-and-capabilities' ), 'primary', 'submit' );
 					?>
@@ -1514,5 +1544,5 @@ class Minnpost_Roles_And_Capabilities {
 
 }
 
-// start doing stuff
-add_action( 'plugins_loaded', array( 'Minnpost_Roles_And_Capabilities', 'get_instance' ) );
+// start doing stuff. for the view-admin-as plugin, at least, we have to use muplugins_loaded
+add_action( 'muplugins_loaded', array( 'Minnpost_Roles_And_Capabilities', 'get_instance' ) );
