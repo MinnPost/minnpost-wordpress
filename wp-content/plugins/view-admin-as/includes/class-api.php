@@ -16,7 +16,7 @@ if ( ! defined( 'VIEW_ADMIN_AS_DIR' ) ) {
  * @author  Jory Hogeveen <info@keraweb.nl>
  * @package View_Admin_As
  * @since   1.6.0
- * @version 1.8.3
+ * @version 1.8.4
  */
 final class VAA_API
 {
@@ -137,7 +137,7 @@ final class VAA_API
 	}
 
 	/**
-	 * Get the superior admin ID's (filter since 1.5.2)
+	 * Get the superior admin ID's (filter since 1.5.2).
 	 *
 	 * @since   1.5.3
 	 * @since   1.6.0  Moved from `VAA_View_Admin_As`.
@@ -145,7 +145,7 @@ final class VAA_API
 	 * @static
 	 * @api
 	 *
-	 * @return array
+	 * @return int[]
 	 */
 	public static function get_superior_admins() {
 		static $superior_admins;
@@ -176,7 +176,7 @@ final class VAA_API
 	 * @static
 	 * @api
 	 *
-	 * @param   string  $type  View type. Will return `null` if this view type is not active.
+	 * @param   string  $type  (optional) A view type. Will return `null` if this view type is not active.
 	 * @return  mixed
 	 */
 	public static function get_current_view( $type = null ) {
@@ -185,6 +185,21 @@ final class VAA_API
 			return $store->get_view( $type );
 		}
 		return null;
+	}
+
+	/**
+	 * Is the current user in an active view.
+	 *
+	 * @since   1.8.4
+	 * @access  public
+	 * @static
+	 * @api
+	 *
+	 * @param  string  $type  (optional) Check for a single view type.
+	 * @return bool
+	 */
+	public static function is_view_active( $type = null ) {
+		return (bool) self::get_current_view( $type );
 	}
 
 	/**
@@ -213,7 +228,28 @@ final class VAA_API
 	}
 
 	/**
-	 * Similar function to current_user_can().
+	 * Is the current user modified?
+	 * Returns true if the currently active user's capabilities or roles are changed by the selected view.
+	 *
+	 * @see  \VAA_View_Admin_As_View::current_view_can()
+	 *
+	 * @since   1.7.2
+	 * @access  public
+	 * @static
+	 * @api
+	 *
+	 * @return  bool
+	 */
+	public static function is_user_modified() {
+		$view = view_admin_as()->view();
+		if ( $view ) {
+			return $view->is_user_modified();
+		}
+		return false;
+	}
+
+	/**
+	 * Similar function to current_user_can() but applies to the currently active view.
 	 *
 	 * @see  \VAA_View_Admin_As_View::current_view_can()
 	 *
@@ -231,26 +267,6 @@ final class VAA_API
 		$view = view_admin_as()->view();
 		if ( $view ) {
 			return $view->current_view_can( $cap, $caps );
-		}
-		return false;
-	}
-
-	/**
-	 * Is the current user modified?
-	 *
-	 * @see  \VAA_View_Admin_As_View::current_view_can()
-	 *
-	 * @since   1.7.2
-	 * @access  public
-	 * @static
-	 * @api
-	 *
-	 * @return  bool
-	 */
-	public static function is_user_modified() {
-		$view = view_admin_as()->view();
-		if ( $view ) {
-			return $view->is_user_modified();
 		}
 		return false;
 	}
@@ -414,11 +430,11 @@ final class VAA_API
 	 * @static
 	 * @api
 	 *
-	 * @param   string  $url  (optional) Use a defined url create the reset link.
+	 * @param   string  $url  (optional) Supply the URL to create the reset link.
 	 * @param   bool    $all  (optional) Reset all views link?
 	 * @return  string
 	 */
-	public static function get_reset_link( $url = null, $all = false ) {
+	public static function get_reset_link( $url = '', $all = false ) {
 		$params = 'reset-view';
 		if ( $all ) {
 			$params = 'reset-all-views';
@@ -435,7 +451,7 @@ final class VAA_API
 	 * @static
 	 * @api
 	 *
-	 * @param   string  $url  (optional) Use a defined url to remove the reset link.
+	 * @param   string  $url  (optional) Supply the URL to remove the reset link.
 	 * @return  string
 	 */
 	public static function remove_reset_link( $url = '' ) {
@@ -746,9 +762,7 @@ final class VAA_API
 					'<code>' . $callable . '</code>'
 				);
 			}
-			view_admin_as()->add_error_notice( $callable, array(
-				'message' => $do_notice,
-			) );
+			view_admin_as()->add_error_notice( $callable, $do_notice );
 		}
 		return (boolean) $pass;
 	}
