@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Roles and Capabilities
 Description: Set all roles and capabilities for MinnPost access. This replaces the AAM plugin for us.
-Version: 0.0.2
+Version: 0.0.3
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-roles-and-capabilities
@@ -395,6 +395,7 @@ class Minnpost_Roles_And_Capabilities {
 				'editor',
 				'business',
 				'author',
+				'contributor',
 			),
 			'read_blocks'             => array(
 				'administrator',
@@ -849,6 +850,24 @@ class Minnpost_Roles_And_Capabilities {
 	 *   edit_others_popup_themes (popup-maker)
 	 *   publish_popup_themes (popup-maker)
 	 *   read_private_popup_themes (popup-maker)
+	 *
+	 *   gravityforms_edit_forms (gravity-forms)
+	 *   gravityforms_delete_forms (gravity-forms)
+	 *   gravityforms_create_form (gravity-forms)
+	 *   gravityforms_view_entries (gravity-forms)
+	 *   gravityforms_edit_entries (gravity-forms)
+	 *   gravityforms_delete_entries (gravity-forms)
+	 *   gravityforms_view_settings (gravity-forms)
+	 *   gravityforms_edit_settings (gravity-forms)
+	 *   gravityforms_export_entries (gravity-forms)
+	 *   gravityforms_uninstall (gravity-forms)
+	 *   gravityforms_view_entry_notes (gravity-forms)
+	 *   gravityforms_edit_entry_notes (gravity-forms)
+	 *   gravityforms_view_updates (gravity-forms)
+	 *   gravityforms_view_addons (gravity-forms)
+	 *   gravityforms_preview_forms (gravity-forms)
+	 *   gravityforms_system_status (gravity-forms)
+	 *   gravityforms_logging (gravity-forms)
 	 *
 	 *   ef_view_calendar (inactive)
 	 *   edit_post_subscriptions (inactive)
@@ -1390,6 +1409,64 @@ class Minnpost_Roles_And_Capabilities {
 				'administrator',
 				'business',
 			),
+			'gravityforms_edit_forms'             => array(
+				'administrator',
+			),
+			'gravityforms_delete_forms'           => array(
+				'administrator',
+			),
+			'gravityforms_create_form'            => array(
+				'administrator',
+			),
+			'gravityforms_view_entries'           => array(
+				'administrator',
+				'editor',
+			),
+			'gravityforms_edit_entries'           => array(
+				'administrator',
+				'editor',
+			),
+			'gravityforms_delete_entries'         => array(
+				'administrator',
+				'editor',
+			),
+			'gravityforms_view_settings'          => array(
+				'administrator',
+			),
+			'gravityforms_edit_settings'          => array(
+				'administrator',
+			),
+			'gravityforms_export_entries'         => array(
+				'administrator',
+				'editor',
+			),
+			'gravityforms_uninstall'              => array(
+				'administrator',
+			),
+			'gravityforms_view_entry_notes'       => array(
+				'administrator',
+				'editor',
+			),
+			'gravityforms_edit_entry_notes'       => array(
+				'administrator',
+				'editor',
+			),
+			'gravityforms_view_updates'           => array(
+				'administrator',
+			),
+			'gravityforms_view_addons'            => array(
+				'administrator',
+			),
+			'gravityforms_preview_forms'          => array(
+				'administrator',
+				'editor',
+			),
+			'gravityforms_system_status'          => array(
+				'administrator',
+			),
+			'gravityforms_logging'                => array(
+				'administrator',
+			),
 		);
 		if ( '' === $role ) {
 			return $plugin_theme_capabilities;
@@ -1423,9 +1500,10 @@ class Minnpost_Roles_And_Capabilities {
 		$custom_capabilities = array(
 			'access_blocked_content' => array(
 				'administrator',
-				'author',
 				'business',
 				'editor',
+				'author',
+				'contributor',
 			),
 			'browse_without_ads'     => array(
 				'administrator',
