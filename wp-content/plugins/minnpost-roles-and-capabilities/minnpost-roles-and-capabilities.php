@@ -55,7 +55,7 @@ class Minnpost_Roles_And_Capabilities {
 
 	private function add_actions() {
 		// setup roles
-		add_filter( 'view_admin_as_full_access_capabilities', array ( $this, 'vip_full_access_capabilities' ), 10, 1 );
+		add_filter( 'view_admin_as_full_access_capabilities', array( $this, 'vip_full_access_capabilities' ), 10, 1 );
 		register_activation_hook( __FILE__, array( $this, 'user_roles' ) );
 		add_action( 'init', array( $this, 'disallow_banned_user_comments' ), 10 );
 		if ( is_admin() ) {

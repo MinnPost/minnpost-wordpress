@@ -81,7 +81,6 @@ wpcom_vip_load_plugin( 'widget-settings-importexport/widget-data.php' );
 wpcom_vip_load_plugin( 'wpcom-legacy-redirector/wpcom-legacy-redirector.php' );
 wpcom_vip_load_plugin( 'wp-analytics-tracking-generator/wp-analytics-tracking-generator.php' );
 wpcom_vip_load_plugin( 'wp-category-permalink/wp-category-permalink.php' );
-wpcom_vip_load_plugin( 'wp-crontrol/wp-crontrol.php' );
 wpcom_vip_load_plugin( 'wp-lozad-lazyload/wp-lozad-lazyload.php' );
 wpcom_vip_load_plugin( 'wp-message-inserter-plugin/wp-message-inserter-plugin.php' );
 wpcom_vip_load_plugin( 'wp-post-expires/wp-post-expires.php' );
@@ -91,12 +90,12 @@ wpcom_vip_load_plugin( 'zoninator/zoninator.php' );
 
 // enable jetpack search
 if ( 'local' !== VIP_GO_ENV ) {
-	add_filter( 'jetpack_active_modules', 'x_enable_jetpack_search_module', 9999 ); 
+	add_filter( 'jetpack_active_modules', 'x_enable_jetpack_search_module', 9999 );
 	function x_enable_jetpack_search_module( $modules ) {
-	    if ( ! in_array( 'search', $modules, true ) ) {
-	        $modules[] = 'search';
-	    }
-	    return $modules;
+		if ( ! in_array( 'search', $modules, true ) ) {
+			$modules[] = 'search';
+		}
+		return $modules;
 	}
 }
 
