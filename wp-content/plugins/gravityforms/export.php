@@ -378,6 +378,16 @@ class GFExport {
 							</li>
 							<?php
 							$forms = RGFormsModel::get_forms( null, 'title' );
+
+							/**
+							 * Modify list of forms available for export.
+							 *
+							 * @since 2.4.7
+							 *
+							 * @param array $forms Forms to display on Export Forms page.
+							 */
+							$forms = apply_filters( 'gform_export_forms_forms', $forms );
+
 							foreach ( $forms as $form ) {
 								?>
 								<li>
@@ -536,6 +546,16 @@ class GFExport {
 							<option value=""><?php esc_html_e( 'Select a form', 'gravityforms' ); ?></option>
 							<?php
 							$forms = RGFormsModel::get_forms( null, 'title' );
+
+							/**
+							 * Modify list of forms available to export entries from.
+							 *
+							 * @since 2.4.7
+							 *
+							 * @param array $forms Forms to display on Export Entries page.
+							 */
+							$forms = apply_filters( 'gform_export_entries_forms', $forms );
+
 							foreach ( $forms as $form ) {
 								?>
 								<option value="<?php echo absint( $form->id ) ?>"><?php echo esc_html( $form->title ) ?></option>

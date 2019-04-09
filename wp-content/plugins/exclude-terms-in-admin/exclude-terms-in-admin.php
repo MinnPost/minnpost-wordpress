@@ -2,7 +2,7 @@
 /*
 Plugin Name: Exclude Terms in Admin
 Description: Exclude specified terms from the edit and new post screens
-Version: 0.0.1
+Version: 0.0.2
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: exclude-terms-admin
@@ -46,11 +46,11 @@ class Exclude_Terms_Admin {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.1';
+		$this->version = '0.0.2';
 		$this->slug    = 'exclude-terms-admin';
 
 		$this->see_hidden_capability = 'see_hidden_terms';
-		$this->hidden_terms          = "'3-minute Egg', '612 Authentic', 'Arts Arena', 'Braublog', 'Business Agenda', 'Christian Science Monitor', 'Cityscape', 'D.C. Dispatches', 'Driving Change', 'Effective Democracy', 'Global Post', 'Learning Curve', 'Listing Slightly', 'Max About Town', 'MedCity News', 'Minnesota Blog Cabin', 'Minnesota History', 'Minnov8', 'MinnPOTUS', 'Next Degree', 'Pollen', 'Rural Dispatches', 'Rural Minnesota', 'Salon', 'Scientific Agenda', 'The Intelligencer', 'The Line', 'Thirty Two Magazine', 'Two Cities', 'Verse or Worse', 'View Finder', 'Weekend Best Bets', 'Young Professionals Network'";
+		$this->hidden_terms          = "'3-minute Egg', '612 Authentic', 'Arts Arena', 'Braublog', 'Business Agenda', 'Christian Science Monitor', 'D.C. Dispatches', 'Driving Change', 'Effective Democracy', 'Global Post', 'Learning Curve', 'Listing Slightly', 'Max About Town', 'MedCity News', 'Minnesota Blog Cabin', 'Minnesota History', 'Minnov8', 'MinnPOTUS', 'Next Degree', 'Pollen', 'Rural Dispatches', 'Rural Minnesota', 'Salon', 'Scientific Agenda', 'The Intelligencer', 'The Line', 'Thirty Two Magazine', 'Two Cities', 'Verse or Worse', 'View Finder', 'Weekend Best Bets', 'Young Professionals Network'";
 
 		$this->add_actions();
 	}

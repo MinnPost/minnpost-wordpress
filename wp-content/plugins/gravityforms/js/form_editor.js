@@ -937,6 +937,7 @@ function LoadFieldSettings(){
     SetColorPickerColor("field_captcha_bg", bg);
 
 	jQuery("#field_captcha_type").val(field.captchaType == undefined ? "captcha" : field.captchaType);
+	jQuery("#field_captcha_badge").val(field.captchaBadge == undefined ? "bottomright" : field.captchaBadge);
 	jQuery("#field_captcha_size").val(field.simpleCaptchaSize == undefined ? "medium" : field.simpleCaptchaSize);
 
 	//controlling settings based on captcha type
@@ -3774,3 +3775,48 @@ gform.addFilter( 'gform_is_conditional_logic_field', function( isConditionalLogi
 
     return isConditionalLogicField;
 } );
+
+/**
+ * Validates the calculation formula.
+ *
+ * @since 2.4.6.8 Moved from form_detail.php and added filter.
+ * @since 1.8
+ *
+ * @param formula The formula to be validated.
+ *
+ * @return boolean
+ */
+function IsValidFormula(formula) {
+	if (formula == '')  {
+		return true;
+	}
+
+	var patt = /{([^}]+)}/i,
+		exprPatt = /^[0-9 -/*\(\)]+$/i,
+		expr = formula.replace(/(\r\n|\n|\r)/gm, ''),
+		match,
+		result = false;
+
+	while (match = patt.exec(expr)) {
+		expr = expr.replace(match[0], 1);
+	}
+
+	if (exprPatt.test(expr)) {
+		try {
+			var r = eval(expr);
+			result = !isNaN(parseFloat(r)) && isFinite(r);
+		} catch (e) {
+			result = false;
+		}
+	}
+
+	/**
+	 * Allow the validation result to be overridden.
+	 *
+	 * @since 2.4.6.8
+	 *
+	 * @param result The validation result.
+	 * @param formula The calculation formula being validated.
+	 */
+	return gform.applyFilters( 'gform_is_valid_formula_form_editor', result, formula );
+}

@@ -1171,11 +1171,11 @@ if ( ! class_exists( 'GFForms' ) ) {
 
 			str += gform.applyFilters('gform_append_field_choice_option', '', field, i);
 
-			str += "<a class='gf_insert_field_choice' onclick=\"InsertFieldChoice(" + (i + 1) + ");\" onkeypress=\"InsertFieldChoice(" + (i + 1) + ");\"><i class='gficon-add'></i></a>";
+			str += "<button class='gf_insert_field_choice' onclick=\"InsertFieldChoice(" + (i + 1) + ");\" aria-label='<?php esc_attr_e( 'Add choice', 'gravityforms' ); ?>'><i class='gficon-add' aria-hidden='true'></i></button>";
 
-
-			if (field.choices.length > 1)
-				str += "<a class='gf_delete_field_choice' onclick=\"DeleteFieldChoice(" + i + ");\" onkeypress=\"DeleteFieldChoice(" + i + ");\"><i class='gficon-subtract'></i></a>";
+			if (field.choices.length > 1) {
+				str += "<button class='gf_delete_field_choice' onclick=\"DeleteFieldChoice(" + i + ");\" aria-label='<?php esc_attr_e( 'Delete choice', 'gravityforms' ); ?>'><i class='gficon-subtract' aria-hidden='true'></i></button>";
+			}
 
 			str += "</li>";
 
@@ -1203,10 +1203,11 @@ if ( ! class_exists( 'GFForms' ) ) {
 			str += "<input type='text' id='" + inputType + "_choice_text_" + i + "' value=\"" + input.choices[i].text.replace(/"/g, "&quot;") + "\" class='field-choice-input field-choice-text' />";
 			str += "<input type='text' id='" + inputType + "_choice_value_" + i + "' value=\"" + value.replace(/"/g, "&quot;") + "\" class='field-choice-input field-choice-value' />";
 
-			str += "<a class='gf_insert_field_choice field-input-insert-choice'><i class='gficon-add'></i></a>";
+			str += "<button class='gf_insert_field_choice field-input-insert-choice' onclick=\"InsertFieldChoice(" + (i + 1) + ");\" aria-label='<?php esc_attr_e( 'Add choice', 'gravityforms' ); ?>'><i class='gficon-add' aria-hidden='true'></i></button>";
 
-			if (input.choices.length > 1)
-				str += "<a class='gf_delete_field_choice field-input-delete-choice'><i class='gficon-subtract'></i></a>";
+			if (input.choices.length > 1) {
+				str += "<button class='gf_delete_field_choice field-input-delete-choice' onclick=\"DeleteFieldChoice(" + i + ");\" aria-label='<?php esc_attr_e( 'Delete choice', 'gravityforms' ); ?>'><i class='gficon-subtract' aria-hidden='true'></i></button>";
+			}
 
 			str += "</li>";
 

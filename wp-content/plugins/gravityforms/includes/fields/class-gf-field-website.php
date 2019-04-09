@@ -37,7 +37,7 @@ class GF_Field_Website extends GF_Field {
 	}
 
 	public function validate( $value, $form ) {
-		if ( empty( $value ) || $value == 'http://' ) {
+		if ( empty( $value ) || in_array( $value, array( 'http://', 'https://' ) ) ) {
 			$value = '';
 			if ( $this->isRequired ) {
 				$this->failed_validation  = true;

@@ -4509,7 +4509,19 @@ Content-Type: text/html;
 		echo $condition ? $text : '';
 	}
 
-	public static function gf_global( $echo = true ) {
+	/**
+	 * Outputs the gf_global and returns either the gf_global var declaration or the array containing the gf_global values.
+	 *
+	 *
+	 * @since 2.4.7		Added the $return_array parameter
+	 * @since unknown
+	 *
+	 * @param bool $echo         If true, outputs the inline gf_global var declaration.
+	 * @param bool $return_array If true, returns the array containing the gf_global values.
+	 *
+	 * @return array|string
+	 */
+	public static function gf_global( $echo = true, $return_array = false ) {
 		$gf_global                       = array();
 		$gf_global['gf_currency_config'] = RGCurrency::get_currency( GFCommon::get_currency() );
 		$gf_global['base_url']           = GFCommon::get_base_url();
@@ -4519,7 +4531,7 @@ Content-Type: text/html;
 		$gf_global_json = 'var gf_global = ' . json_encode( $gf_global ) . ';';
 
 		if ( ! $echo ) {
-			return $gf_global_json;
+			return $return_array ? $gf_global : $gf_global_json;
 		}
 
 		echo $gf_global_json;
@@ -4758,12 +4770,12 @@ Content-Type: text/html;
 					continue;
 				}
 
-				$class = in_array( $message['key'], array(
+				$class = in_array( $message['type'], array(
 					'warning',
 					'error',
 					'updated',
 					'success',
-				) ) ? $message['key'] : 'error';
+				) ) ? $message['type'] : 'error';
 				?>
 				<div class="notice below-h1 notice-<?php echo $class; ?> is-dismissible"
 				     data-gf_dismissible_key="<?php echo $message['key'] ?>"

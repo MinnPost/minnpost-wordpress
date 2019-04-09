@@ -4,7 +4,7 @@
  * Plugin Name: Liveblog
  * Plugin URI: http://wordpress.org/extend/plugins/liveblog/
  * Description: Empowers website owners to provide rich and engaging live event coverage to a large, distributed audience.
- * Version:     1.9.4
+ * Version:     1.9.5
  * Author:      WordPress.com VIP, Big Bite Creative and contributors
  * Author URI: https://github.com/Automattic/liveblog/graphs/contributors
  * Text Domain: liveblog
@@ -26,7 +26,7 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 	final class WPCOM_Liveblog {
 
 		/** Constants *************************************************************/
-		const VERSION                 = '1.9.4';
+		const VERSION                 = '1.9.5';
 		const REWRITES_VERSION        = 1;
 		const MIN_WP_VERSION          = '4.4';
 		const MIN_WP_REST_API_VERSION = '4.4';
@@ -910,8 +910,6 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 					case 'delete':
 						unset( $flatten[ $id ] );
 						break;
-					default:
-						continue;
 				}
 			}
 
@@ -1191,19 +1189,6 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			$liveblog_output = apply_filters( 'liveblog_add_to_content', $liveblog_output, $content, self::$post_id );
 
 			return $content . wp_kses_post( $liveblog_output );
-		}
-
-		/**
-		 * Return the posting area for the end-user to liveblog from
-		 *
-		 * @return string
-		 */
-		private static function get_editor_output() {
-			if ( ! self::is_liveblog_editable() ) {
-				return;
-			}
-
-			return self::get_template_part( 'liveblog-form.php' );
 		}
 
 		/**
@@ -1736,40 +1721,6 @@ if ( ! class_exists( 'WPCOM_Liveblog' ) ) :
 			} elseif ( strpos( $size, 'g' ) !== false ) {
 				$bytes = intval( $size ) * 1024 * 1024 * 1024;
 			}
-
-			return $bytes;
-		}
-
-		/**
-		 * Convert bytes to hour
-		 *
-		 * @param string $bytes
-		 * @return string
-		 */
-		private static function convert_bytes_to_hr( $bytes ) {
-			$units = array(
-				0 => 'B',
-				1 => 'kB',
-				2 => 'MB',
-				3 => 'GB',
-			);
-			$log   = log( $bytes, 1024 );
-			$power = (int) $log;
-			$size  = pow( 1024, $log - $power );
-
-			return $size . $units[ $power ];
-		}
-
-		/**
-		 * Get the maximum upload file size
-		 *
-		 * @see wp_max_upload_size()
-		 * @return string
-		 */
-		private static function max_upload_size() {
-			$u_bytes = self::convert_hr_to_bytes( ini_get( 'upload_max_filesize' ) );
-			$p_bytes = self::convert_hr_to_bytes( ini_get( 'post_max_size' ) );
-			$bytes   = apply_filters( 'upload_size_limit', min( $u_bytes, $p_bytes ), $u_bytes, $p_bytes );
 
 			return $bytes;
 		}
