@@ -1,22 +1,22 @@
 ﻿# Co-Authors Plus
 
 * Contributors: batmoo, danielbachhuber, automattic
-* Tags: authors, users, multiple authors, coauthors, multi-author, publishing
-* Tested up to: 5.0
+* Tags: authors, users, multiple authors, co-authors, multi-author, publishing
+* Tested up to: 5.1.1
 * Requires at least: 4.1
-* Stable tag: 3.3.1
+* Stable tag: 3.4
 
 Assign multiple bylines to posts, pages, and custom post types via a search-as-you-type input box
 
 ## Description
 
-Assign multiple bylines to posts, pages, and custom post types via a search-as-you-type input box. Co-authored posts appear on a co-author's archive page and in their feed. Co-authors may edit the posts they are associated with, and co-authors who are contributors may only edit posts if they have not been published (as is core behavior).
+Assign multiple bylines to posts, pages, and custom post types via a search-as-you-type input box. Co-authored posts appear on a co-author's archive page and in their feed. Co-authors may edit the posts they are associated with, and co-authors who are contributors may only edit posts if they have not been published (as is core behaviour).
 
 Add writers as bylines without creating WordPress user accounts. Simply [create a guest author profile](http://vip.wordpress.com/documentation/add-guest-bylines-to-your-content-with-co-authors-plus/) for the writer and assign the byline as you normally would.
 
 On the frontend, use the [Co-Authors Plus template tags](http://vip.wordpress.com/documentation/incorporate-co-authors-plus-template-tags-into-your-theme/) to list co-authors anywhere you'd normally list the author.
 
-This plugin is an almost complete rewrite of the Co-Authors plugin originally developed at [Shepherd Interactive](http://www.shepherd-interactive.com/) (2007). The original plugin was inspired by the 'Multiple Authors' plugin by Mark Jaquith (2005).
+This plugin is an almost complete rewrite of the [Co-Authors](https://wordpress.org/plugins/co-authors/) plugin originally developed by Weston Ruter (2007). The original plugin was inspired by the '[Multiple Authors](https://txfx.net/2005/08/16/new-plugin-multiple-authors/)' plugin by Mark Jaquith (2005).
 
 ## Frequently Asked Questions
 
@@ -60,6 +60,42 @@ $ wp --url=example.com co-authors-plus create-terms-for-posts
 
 ## Changelog ##
 
+**3.4**
+* New filter `get_coauthors` for modifying coauthor data returned in `get_coauthors()` #646
+* New filter `coauthors_guest_authors_exported_extra_data` to allow guest author to export data as regular author #528
+* New filter `get_avatar_url()` to show avatar in JS selection #621
+* New parameter in `coauthors_wp_list_authors()` to only query authors with posts #496
+* Add internationalization support to title and name in author archives #516
+* Add safelist to skip irrelevant capabilities during permission checks #543
+* Add helper function `get_guest_author_post_count()` #605
+* Add parameter for outputting HTML classes in `coauthors_get_avatar()` template tag #610
+* Add `--append_coauthors` flag to synopsis of CLI `assign-coauthors` #600
+* Adjust CLI command `create-guest-authors-from-csv` to import website, avatar and description (#603 and #619)
+* Post type of "any" can be used in filters #617
+* Remove unnecessary `is_array()` check #471
+* Remove unnecessary `action_pre_user_query()` #531
+* Use correct args in `search_authors()` #519
+* Have `filter_author_archive_title()` run on author archives only #535
+* Improve tests coverage (#529, #540, #546, #576 and #569)
+* Change `posts_selection` to action from filter #563
+* Fix number of args expected for `get_the_archive_title` callback #657 
+* Fix spelling, update FAQ for disabling guest authors and credits in readme (#656, #523 and #501)
+* Output `coauthors_links_single()` template tag correctly when guest author has no website #504
+* Number by "Mine" link shows correct listing of posts #663
+* Linked guest authors show accurate post counts #674
+* Can no longer add co-author more than once #532
+* No more overwriting posts with current user in `add_coauthors()` #545
+* Accurate post count for user when using different login #558
+* No more double post count for users with linked accounts #567
+* Fix SQL error (#593 and #628)
+* Fix "Mine" link href for Pages #547
+* Can delete users when guest authors functionality disabled #602
+* Fix incompatibility issue with Yoast of missing posts in author pages #624 
+* Resolve undefined index warnings on author archives #521
+* Resolve warnings when current user has no term assigned #517
+
+Props: [TheCrowned](https://github.com/TheCrowned), [shantanu2704](https://github.com/shantanu2704), [WPprodigy](https://github.com/WPprodigy), [blunce24](https://github.com/blunce24), [rebeccahum](https://github.com/rebeccahum), [andrewfleming](https://github.com/andrewfleming), [justnorris](https://github.com/justnorris), [sboisvert](https://github.com/sboisvert), [jasonbahl](https://github.com/jasonbahl), [mariovalney](https://github.com/mariovalney), [RoyTheRoyalBoy](https://github.com/RoyTheRoyalBoy), [jacobarriola](https://github.com/jacobarriola), [smistephen](https://github.com/smistephen), [manzoorwanijk](https://github.com/manzoorwanijk), [kodemonster](https://github.com/kodemonster), [westonruter](https://github.com/westonruter), [binodkalathil](https://github.com/binodkalathil), [scofennell](https://github.com/scofennell), [hyperionjrw](https://github.com/hyperionjrw), [pdemarte](https://github.com/pdemarte), [mostafaabd](https://github.com/mostafaabd), [paulschreiber](https://github.com/paulschreiber)
+
 **3.3.1 ("Gutentag")**
 * 5.0 Compat: Hide core author inputs when using the Block Editor to limit confusion (h/t jonathanstegall).
 
@@ -70,7 +106,7 @@ $ wp --url=example.com co-authors-plus create-terms-for-posts
 * Remove associated guest user when mapped user id deleted. #414
 * Removed double left join on posts_join_filter #419
 * Fixed WP CLI create-terms-for-posts if no co-authors found #420
-* Pages archive now displays coauthors and quick edit works #422
+* Pages archive now displays co-authors and quick edit works #422
 * Terminology updated throughout #423
 * Replace hardcoded 'author' with $this->$coauthor_taxonomy #426
 * Move parenthesis to fix esc_html and sprintf #430
@@ -239,7 +275,7 @@ Props to the many people who helped make this release possible: [catchmyfame](ht
 * Thanks to everyone who submitted bugs, fixes, and suggestions! And for your patience!
 
 **2.1.1 (Oct. 16, 2009)**
-* Fix for coauthors not being added if their username is different from display name
+* Fix for co-authors not being added if their username is different from display name
 * Fixes to readme.txt (fixes for textual and punctuation errors, language clarification, minor formatting changes) courtesy of [Waldo Jaquith](http://www.vqronline.org)
 
 **2.1 (Oct. 11, 2009)**
@@ -252,7 +288,7 @@ Props to the many people who helped make this release possible: [catchmyfame](ht
 * All authors of a post are now notified on a new comment
 * Various javascript enhancements
 * New option to allow subscribers to be added as authors
-* All Authors can edit they posts of which they are coauthors
+* All Authors can edit they posts of which they are co-authors
 * FIX: Issues with `wp_coauthors_list` function
 * FIX: Issues with coauthored posts not showing up on author archives
 
