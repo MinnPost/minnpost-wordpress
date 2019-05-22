@@ -3,7 +3,7 @@
 Plugin Name: Better Image Credits
 Plugin URI: http://vdvn.me/pga
 Description: Adds credits and link fields for media uploads along with a shortcode and various options to display image credits in your posts.
-Version: 2.0.2
+Version: 2.0.3
 Author: Claude Vedovini
 Author URI: http://vdvn.me/
 License: GPLv3
@@ -172,12 +172,14 @@ class BetterImageCreditsPlugin {
 		}
 
 		// Check for post thumbnail and save its ID in an array
-		if (function_exists('has_post_thumbnail') && has_post_thumbnail($post->ID)) {
+		if (isset($post->ID) && function_exists('has_post_thumbnail') && 
+				has_post_thumbnail($post->ID)) {
 			$attachment_ids[] = $post_thumbnail_id = get_post_thumbnail_id($post->ID);
 		}
 
 		// Next look in post content and check for instances of wp-image-[digits]
-		if (preg_match_all('/wp-image-(\d+)/i', $post->post_content, $matches)) {
+		if (isset($post->post_content) && 
+				preg_match_all('/wp-image-(\d+)/i', $post->post_content, $matches)) {
 			foreach ($matches[1] as $id) {
 				if (!in_array($id, $attachment_ids)) {
 					$attachment_ids[] = $id;
@@ -187,7 +189,8 @@ class BetterImageCreditsPlugin {
 
 		// Finally check for galleries
 		$pattern = get_shortcode_regex();
-		if (preg_match_all('/'. $pattern .'/s', $post->post_content, $matches)
+		if (isset($post->post_content) &&
+				preg_match_all('/'. $pattern .'/s', $post->post_content, $matches)
 				&& array_key_exists(2, $matches)
 				&& in_array('gallery', $matches[2])) {
 			foreach($matches[2] as $index => $tag){

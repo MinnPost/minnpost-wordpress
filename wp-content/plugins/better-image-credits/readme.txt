@@ -5,7 +5,7 @@ Donate link: http://paypal.me/vdvn
 Tags: image, media, credits
 Requires at least: 3.5
 Tested up to: 4.9
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -43,6 +43,9 @@ method](http://codex.wordpress.org/Managing_Plugins#Installing_Plugins):
 
 
 == Changelog ==
+
+= Version 2.0.3 =
+- Fixing notices 
 
 = Version 2.0.2 =
 - Fixing when the admin javascript gets registered 
