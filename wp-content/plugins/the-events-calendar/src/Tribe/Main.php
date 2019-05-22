@@ -8,6 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
+use Tribe\Events\Views\V2\Service_Provider as Views;
+
 if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 
 	/**
@@ -32,7 +34,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		const VENUE_POST_TYPE     = 'tribe_venue';
 		const ORGANIZER_POST_TYPE = 'tribe_organizer';
 
-		const VERSION             = '4.8.2';
+		const VERSION             = '4.9.2';
 
 		/**
 		 * Min Pro Addon
@@ -69,7 +71,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		 *
 		 * @since 4.8
 		 */
-		protected $min_et_version = '4.10-dev';
+		protected $min_et_version = '4.10.4.3-dev';
 
 		/**
 		 * Maybe display data wrapper
@@ -371,12 +373,18 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 				class_exists( 'Tribe__Tickets__Main' ) &&
 				! version_compare( Tribe__Tickets__Main::VERSION, $this->min_et_version, '>=' )
 			) {
-				add_action( 'admin_notices', array( $this, 'compatibility_notice' ) );
-				add_action( 'network_admin_notices', array( $this, 'compatibility_notice' ) );
-				add_filter( 'tribe_ecp_to_run_or_not_to_run', array( $this, 'disable_pro' ) );
-				add_action( 'tribe_plugins_loaded', array( $this, 'remove_exts' ), 0 );
+				add_action( 'admin_notices', [ $this, 'compatibility_notice' ] );
+				add_action( 'network_admin_notices', [ $this, 'compatibility_notice' ] );
+				add_filter( 'tribe_ecp_to_run_or_not_to_run', [ $this, 'disable_pro' ] );
+				add_action( 'tribe_plugins_loaded', [ $this, 'remove_exts' ], 0 );
+				/*
+				* After common was loaded by another source (e.g. Event Tickets) let's append this plugin source files
+				* to the ones the Autoloader will search. Since we're appending them the ones registered by the plugin
+				* "owning" common will be searched first.
+				*/
+				add_action( 'tribe_common_loaded', [ $this, 'register_plugin_autoload_paths' ] );
 
-				//Disable Older Versions of Community Events to Prevent Fatal Error
+				// Disable older versions of Community Events to prevent fatal Error.
 				remove_action( 'plugins_loaded', 'Tribe_CE_Load', 2 );
 
 				return;
@@ -426,22 +434,11 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		 * @return void
 		 */
 		protected function init_autoloading() {
-			$prefixes = array(
-				'Tribe__Events__' => $this->plugin_path . 'src/Tribe',
-				'ForceUTF8__' => $this->plugin_path . 'vendor/ForceUTF8',
-			);
+			$autoloader = $this->get_autoloader_instance();
+			$this->register_plugin_autoload_paths( $autoloader );
 
-			if ( ! class_exists( 'Tribe__Autoloader' ) ) {
-				require_once $GLOBALS['tribe-common-info']['dir'] . '/Autoloader.php';
-
-				$prefixes['Tribe__'] = $GLOBALS['tribe-common-info']['dir'];
-			}
-
-			$autoloader = Tribe__Autoloader::instance();
-			$autoloader->register_prefixes( $prefixes );
-
-			// deprecated classes are registered in a class to path fashion
-			foreach ( glob( $this->plugin_path . 'src/deprecated/*.php' ) as $file ) {
+			// Deprecated classes are registered in a class to path fashion.
+			foreach ( glob( $this->plugin_path . 'src/deprecated/*.php', GLOB_NOSORT ) as $file ) {
 				$class_name = str_replace( '.php', '', basename( $file ) );
 				$autoloader->register_class( $class_name, $file );
 			}
@@ -535,6 +532,12 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 
 			// GDPR Privacy
 			tribe_singleton( 'tec.privacy', 'Tribe__Events__Privacy', array( 'hook' ) );
+
+			// The ORM/Repository service provider.
+			tribe_register_provider( 'Tribe__Events__Service_Providers__ORM' );
+
+			// The Views v2 service provider.
+			tribe_register_provider( Views::class );
 
 			/**
 			 * Allows other plugins and services to override/change the bound implementations.
@@ -955,12 +958,22 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 				return $html;
 			}
 
-			$tec = self::instance();
+			/*
+			 * The category might come from a query for a taxonomy archive or as
+			 * an additional query variable: let's check both.
+			 */
+			$event_taxonomy = self::instance()->get_event_taxonomy();
+			$category       = '';
+			if ( is_tax( $event_taxonomy ) ) {
+				$category = get_query_var( 'term' );
+			} elseif ( $tribe_cat = $wp_query->get( $event_taxonomy, false ) ) {
+				$category = $tribe_cat;
+			}
 
 			$data_attributes = array(
 				'live_ajax'         => tribe_get_option( 'liveFiltersUpdate', true ) ? 1 : 0,
 				'datepicker_format' => tribe_get_option( 'datepickerFormat' ),
-				'category'          => is_tax( $tec->get_event_taxonomy() ) ? get_query_var( 'term' ) : '',
+				'category'          => $category,
 				'featured'          => tribe( 'tec.featured_events' )->is_featured_query(),
 			);
 			// allow data attributes to be filtered before display
@@ -3651,91 +3664,47 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		 * @since 4.0.2
 		 *
 		 * @param string $where_sql WHERE SQL statement
-		 * @param WP_Query $query WP_Query object
 		 *
-		 * return string
+		 * @return string
 		 */
-		public function get_closest_event_where( $where_sql ) {
-			// if we are in this method, we KNOW there is a section of the SQL that looks like this:
-			//     ( table.meta_key = '_EventStartDate' AND CAST( table.meta_value AS DATETIME ) [<|>] '2015-01-01 00:00:00' )
-			// What we want to do is to extract all the portions of the WHERE BEFORE that section, all the
-			// portions AFTER that section, and then rebuild that section to be flexible enough to include
-			// events that have the SAME datetime as the event we're comparing against.  Sadly, this requires
-			// some regex-fu.
-			//
-			// The end-game is to change the known SQL line (from above) into the following:
-			//
-			//  (
-			//    ( table.meta_key = '_EventStartDate' AND CAST( table.meta_value AS DATETIME ) [<|>] '2015-01-01 00:00:00' )
-			//    OR (
-			//      ( table.meta_key = '_EventStartDate' AND CAST( table.meta_value AS DATETIME ) = '2015-01-01 00:00:00' )
-			//      AND
-			//      table.post_id [<|>] POST_ID
-			//    )
-			//  )
-			//
-
-			// Here's the regex portion that matches the part that we know. From that line, we want to
-			// have a few capture groups.
-			//     1) We need the whole thing
-			//     2) We need the meta table alias
-			//     3) We need the < or > sign
-
-			// Here's the regex for getting the meta table alias
-			$meta_table_regex = '([^\.]+)\.meta_key\s*=\s*';
-
-			// Here's the regex for the middle section of the know line
-			$middle_regex = '[\'"]_EventStartDate[\'"]\s+AND\s+CAST[^\)]+AS DATETIME\s*\)\s*';
-
-			// Here's the regex for the < and > sign
-			$gt_lt_regex = '(\<|\>)';
-
-			// Let's put that line together, making sure we are including the wrapping parens and the
-			// characters that make up the rest of the line - spacing in front, non paren characters at
-			// the end
-			$known_sql_regex = "\(\s*{$meta_table_regex}{$middle_regex}{$gt_lt_regex}[^\)]+\)";
-
-			// The known SQL line will undoubtedly be included amongst other WHERE statements. We need
-			// to generically grab the SQL before and after the known line so we can rebuild our nice new
-			// where statement. Here's the regex that brings it all together.
-			//   Note: We are using the 'm' modifier so that the regex looks over multiple lines as well
-			//         as the 's' modifier so that '.' includes linebreaks
-			$full_regex = "/(.*)($known_sql_regex)(.*)/ms";
-
-			// here's a regex to grab the post ID from a portion of the WHERE statement
-			$post_id_regex = '/NOT IN\s*\(([0-9]+)\)/';
-
-			if ( preg_match( $full_regex, $where_sql, $matches ) ) {
-				// place capture groups into vars that are easier to read
-				$before = $matches[1];
-				$known = $matches[2];
-				$alias = $matches[3];
-				$gt_lt = $matches[4];
-				$after = $matches[5];
-
-				// copy the known line but replace the < or > symbol with an =
-				$equal = preg_replace( '/(\<|\>)/', '=', $known );
-
-				// extract the post ID from the extra "before" or "after" WHERE
-				if (
-					preg_match( $post_id_regex, $before, $post_id )
-					|| preg_match( $post_id_regex, $after, $post_id )
-				) {
-					$post_id = absint( $post_id[1] );
-				} else {
-					// if we can't find the post ID, then let's bail
-					return $where_sql;
-				}
-
-				// rebuild the WHERE clause
-				$where_sql = "{$before} (
-					{$known}
-					OR (
-						{$equal}
-						AND {$alias}.post_id {$gt_lt} {$post_id}
-					)
-				) {$after} ";
+		public function get_closest_event_where( $where_sql, WP_Query $query ) {
+			// If we're here the temporary properties should be set, but let's check and bail if not.
+			if ( ! isset( $this->_where_direction, $this->_where_compare, $this->_where_post_id, $this->_where_start_date ) ) {
+				return $where_sql;
 			}
+
+			// Find out the `postmeta` table alias from the Meta Query; use  the comparison operator to discriminate.
+			$meta_query = $query->meta_query;
+			$start_date = null;
+			foreach ( $meta_query->get_clauses() as $clause ) {
+				if ( '_EventStartDate' === $clause['key'] && $this->_where_compare === $clause['compare'] ) {
+					$start_date = $clause['alias'];
+					break;
+				}
+			}
+
+			if ( null === $start_date ) {
+				// This is weird but some other filtering might be working here, bail.
+				return $where_sql;
+			}
+
+			global $wpdb;
+			/*
+			 * If a post has the same date and time as the one we restrict the posts.ID direction.
+			 * If the date is the same pick one with a smaller (prev) or bigger (next) posts.ID; if not then
+			 * use just the date.
+			 */
+			$where_sql .= $wpdb->prepare( "\nAND (
+					(
+						{$start_date}.meta_value = %s
+						AND {$wpdb->posts}.ID {$this->_where_direction} {$this->_where_post_id}
+					)
+					OR
+					{$start_date}.meta_value {$this->_where_direction} %s
+				)",
+				$this->_where_start_date,
+				$this->_where_start_date
+			);
 
 			return $where_sql;
 		}
@@ -3749,27 +3718,32 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		 * @return null|WP_Post
 		 */
 		public function get_closest_event( $post, $mode = 'next' ) {
-			global $wpdb;
-
 			if ( 'previous' === $mode ) {
 				$order      = 'DESC';
-				$direction  = '<';
+				$direction  = '<=';
+				$this->_where_direction = '<';
 			} else {
 				$order      = 'ASC';
-				$direction  = '>';
+				$direction  = '>=';
+				$this->_where_direction = '>';
 				$mode       = 'next';
 			}
 
-			$args = array(
+			// This property and the `_where_x` ones are temporary by design to get around 5.2 lack of closures.
+			$this->_where_compare = $direction;
+			$this->_where_post_id   = $post->ID;
+			$start_date = get_post_meta( $post->ID, '_EventStartDate', true );
+			$this->_where_start_date = $start_date;
+
+			$args       = array(
 				'post__not_in'   => array( $post->ID ),
-				'order'          => $order,
-				'orderby'        => "TIMESTAMP( $wpdb->postmeta.meta_value ) ID",
+				'meta_key'       => '_EventStartDate',
+				'orderby'        => array( '_EventStartDate' => $order, 'ID' => $order ),
 				'posts_per_page' => 1,
 				'meta_query'     => array(
 					array(
 						'key'     => '_EventStartDate',
-						'value'   => $post->EventStartDate,
-						'type'    => 'DATETIME',
+						'value'   => $start_date,
 						'compare' => $direction,
 					),
 					array(
@@ -3788,9 +3762,11 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			 * @var WP_Post $post
 			 */
 			$args = (array) apply_filters( "tribe_events_get_{$mode}_event_link", $args, $post );
-			add_filter( 'posts_where', array( $this, 'get_closest_event_where' ) );
+			add_filter( 'posts_where', array( $this, 'get_closest_event_where' ), 10, 2 );
 			$results = tribe_get_events( $args );
 			remove_filter( 'posts_where', array( $this, 'get_closest_event_where' ) );
+			// Unset the temporary properties we set to get around lack of closure support in PHP 5.2.
+			unset( $this->_where_direction, $this->_where_compare, $this->_where_post_id, $this->_where_start_date );
 
 			$event = null;
 
@@ -5692,5 +5668,38 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			return class_exists( 'Tribe__Events__Pro__Main' ) && defined( 'Tribe__Events__Pro__Main::VERSION' ) && version_compare( Tribe__Events__Pro__Main::VERSION, $version, '>=' );
 		}
 
+		/**
+		 * Returns the autoloader singleton instance to use in a context-aware manner.
+		 *
+		 * @since 4.9.2
+		 *
+		 * @return \Tribe__Autoloader Teh singleton common Autoloader instance.
+		 */
+		public function get_autoloader_instance() {
+			if ( ! class_exists( 'Tribe__Autoloader' ) ) {
+				require_once $GLOBALS['tribe-common-info']['dir'] . '/Autoloader.php';
+
+				Tribe__Autoloader::instance()->register_prefixes( [
+					'Tribe__' => $GLOBALS['tribe-common-info']['dir'],
+				] );
+			}
+
+			return Tribe__Autoloader::instance();
+		}
+
+		/**
+		 * Registers the plugin autoload paths in the Common Autoloader instance.
+		 *
+		 * @since 4.9.2
+		 */
+		public function register_plugin_autoload_paths( ) {
+			$prefixes = array(
+				'Tribe__Events__' => $this->plugin_path . 'src/Tribe',
+				'ForceUTF8__'     => $this->plugin_path . 'vendor/ForceUTF8',
+			);
+
+			$this->get_autoloader_instance()->register_prefixes( $prefixes );
+		}
 	}
+
 } // end if !class_exists Tribe__Events__Main

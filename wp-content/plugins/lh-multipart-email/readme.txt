@@ -3,7 +3,7 @@ Contributors: shawfactor, y0uri
 Donate link: http://lhero.org/plugins/lh-multipart-email/
 Tags: email, text email, html email, spam, spamassassin
 Requires at least: 3.1
-Tested up to: 4.9
+Tested up to: 5.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -58,3 +58,6 @@ Class check.
 
 **1.10 October 17, 2018**  
 Singleton and bulk mail support, props y0uri.
+
+**1.11 May 17, 2019**  
+Minor security, ie prevent direct access and bump compatability.

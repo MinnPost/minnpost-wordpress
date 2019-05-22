@@ -3,11 +3,14 @@
  * Plugin Name: LH Multipart Email
  * Plugin URI: https://lhero.org/portfolio/lh-multipart-email/
  * Description: Makes all html emails Html and plain text multipart emails
- * Version: 1.10
+ * Version: 1.11
  * Author: Peter Shaw
  * Author URI: https://shawfactor.com/
  * Text Domain: lh_multipart_email
  */
+ 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+ 
 if ( ! class_exists( 'LH_multipart_email_plugin' ) ) {
 	/**
 	 * Class LH_multipart_email_plugin
