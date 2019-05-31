@@ -1,10 +1,10 @@
 === WP Post Expires ===
 Contributors: X-NicON
-Donate link:
+Donate link: https://xnicon.ru/donate
 Tags: expired post, posts expiring, expiration, expire, wordpress post expiry
 Requires at least: 5.0
-Tested up to: 5.1
-Stable tag: 1.2.2
+Tested up to: 5.2.1
+Stable tag: 1.2.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,16 @@ A simple plugin that allows to set the date for the posts, after which will be p
 3. Use the Settings->Reading Name screen to configure the plugin
 
 == Changelog ==
+
+= 1.2.4 =
+
+fix bugs classic editor/gutenberg js, tnx @micahjsharp
+
+= 1.2.3 =
+
+add status in post state
+change logic for draft and trash, tnx @micahjsharp
+use local wp timezone
 
 = 1.2.2 =
 

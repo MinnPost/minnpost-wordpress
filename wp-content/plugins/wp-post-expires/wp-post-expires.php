@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Post Expires
 Description: A simple plugin allow to set the posts, the time after which will be performed one of 3 actions: "Add prefix to title", "Move to drafts", "Move to trash".
-Version:     1.2.2
+Version:     1.2.4
 Author:      XNicON
 Author URI:  https://xnicon.ru
 License:     GPL2
@@ -27,9 +27,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 class XNPostExpires {
-    private $plugin_version = '1.2.2';
+    private $plugin_version = '1.2.4';
     private $url_assets;
-    public $settings = [];
+    private static $timezone;
+    private $settings = [];
 
     public static function init() {
         return new self;
@@ -44,20 +45,22 @@ class XNPostExpires {
 
         add_action('the_post', [$this, 'expiredPost']);
 
-        if(current_user_can('manage_options')) {
+        if (current_user_can('manage_options')) {
             add_action('admin_init', [$this, 'registerSettings']);
         }
 
-        if(current_user_can('edit_posts')) {
-            add_action('admin_init', [$this, 'gutenbergOrClassic']);
+        if (current_user_can('edit_posts')) {
+            add_action('admin_enqueue_scripts', [$this, 'gutenbergOrClassic']);
 
             add_action('add_meta_boxes', [$this, 'addMetaBox']);
             add_action('save_post', [$this, 'saveBoxFields']);
         }
 
-        register_meta('post', 'xn-wppe-expiration', ['show_in_rest' => true]);
-        register_meta('post', 'xn-wppe-expiration-action', ['show_in_rest' => true]);
-        register_meta('post', 'xn-wppe-expiration-prefix', ['show_in_rest' => true]);
+        foreach (array_keys($this->settings['post_types']) as $type) {
+            register_meta($type, 'xn-wppe-expiration', ['show_in_rest' => true]);
+            register_meta($type, 'xn-wppe-expiration-action', ['show_in_rest' => true]);
+            register_meta($type, 'xn-wppe-expiration-prefix', ['show_in_rest' => true]);
+        }
     }
 
     private function getSettings() {
@@ -69,7 +72,6 @@ class XNPostExpires {
 
         if(!isset($settings_load['post_types'])) {
             $settings_load['post_types']['post'] = 1;
-            $settings_load['post_types']['page'] = 0;
         }
 
         if(!isset($settings_load['action'])) {
@@ -77,7 +79,7 @@ class XNPostExpires {
         }
 
         if(!isset($settings_load['prefix'])) {
-            $settings_load['prefix'] = __('Expired:', 'wp-post-expires');
+            $settings_load['prefix'] = __('Expired', 'wp-post-expires') . ':';
         }else{
             $settings_load['prefix'] = esc_attr($settings_load['prefix']);
         }
@@ -85,35 +87,40 @@ class XNPostExpires {
         return $settings_load;
     }
 
-    public function gutenbergOrClassic() {
-        if(!is_plugin_active('classic-editor/classic-editor.php')) {
-            add_action('enqueue_block_editor_assets', [$this, 'loadScripts']);
-        } elseif(is_admin()) {
-            $this->loadScripts();
+    public function gutenbergOrClassic( $hook ) {
+        global $post;
+
+        if (($hook == 'post-new.php' || $hook == 'post.php')
+            && in_array($post->post_type, array_keys($this->settings['post_types']))) {
+
+            if (use_block_editor_for_post($post->ID)) {
+                $this->loadScripts();
+            } else {
+                $this->loadScriptsClassic();
+            }
         }
     }
 
     public function loadScripts() {
+        wp_enqueue_script('xn-plugin-js', $this->url_assets.'js/plugin-scripts.js', ['wp-plugins', 'wp-i18n', 'wp-date'], $this->plugin_version);
+        wp_enqueue_style('xn-plugin-css', $this->url_assets.'css/plugin-style.css', [], $this->plugin_version);
+
+        wp_set_script_translations('xn-plugin-js', 'wp-post-expires', plugin_dir_path( __FILE__ ) . 'languages');
+    }
+
+    public function loadScriptsClassic() {
         wp_enqueue_script('jquery-ui-core');
         wp_enqueue_script('jquery-ui-datepicker');
-        wp_enqueue_script('xn-plugin-js', $this->url_assets.'js/plugin-scripts.js', ['jquery-ui-datepicker'], $this->plugin_version);
+        wp_enqueue_script('xn-plugin-js', $this->url_assets.'js/plugin-scripts-classic.js', ['jquery-ui-datepicker'], $this->plugin_version);
 
         wp_enqueue_style('jquery-ui', 'https://cdn.jsdelivr.net/npm/jquery-ui-dist@1.12.1/jquery-ui.min.css', [], $this->plugin_version);
         wp_enqueue_style('jquery-ui-dtpicker-skin', $this->url_assets.'css/latoja.datepicker.css', ['jquery-ui'], $this->plugin_version);
-
-        wp_set_script_translations('xn-plugin-js', 'xn-wppe-expiration', dirname(plugin_basename( __FILE__ )) . '/languages');
     }
 
     public function addMetaBox() {
-        add_meta_box('xn_box_expiration',
-            __('Expires', 'wp-post-expires'),
-            [$this, 'addBoxFields'],
-            array_keys($this->settings['post_types']),
-            'side',
-            'default',
-            [
-                '__back_compat_meta_box' => false
-            ]
+        add_meta_box('xn_box_expiration', __('Expires', 'wp-post-expires'),
+            [$this, 'addBoxFields'], array_keys($this->settings['post_types']),
+            'side', 'default', ['__back_compat_meta_box' => false]
         );
     }
 
@@ -137,7 +144,7 @@ class XNPostExpires {
 
         <div class="components-panel__row">
             <div><?php _e('DateTime', 'wp-post-expires'); ?></div>
-            <div><input type="text" name="xn-wppe-expiration" id="xn-wppe-datetime" style="width:100%" value="<?php echo $date; ?>" placeholder="<?php _e('yyyy-mm-dd h:i','wp-post-expires'); ?>"></div>
+            <div><input type="text" name="xn-wppe-expiration" id="xn-wppe-datetime" style="width:100%" value="<?php echo $date; ?>" placeholder="<?php _e('yyyy-mm-dd h:i', 'wp-post-expires'); ?>"></div>
         </div>
 
         <div class="components-panel__row">
@@ -184,7 +191,6 @@ class XNPostExpires {
     }
 
     public function registerSettings() {
-
         register_setting('reading', 'xn_wppe_settings');
 
         add_settings_section("xn_wppe_section", __('Settings posts expires', 'wp-post-expires'), null, 'reading');
@@ -195,10 +201,7 @@ class XNPostExpires {
     }
 
     public function settingsFieldPosttype() {
-        $all_post_types = get_post_types(false, 'objects');
-        unset($all_post_types['nav_menu_item']);
-        unset($all_post_types['revision']);
-        unset($all_post_types['attachment']);
+        $all_post_types = get_post_types(['public' => true], 'objects');
 
         foreach($all_post_types as $post_type => $post_type_obj) {
             echo '<label>';
@@ -233,36 +236,34 @@ class XNPostExpires {
         return $classes;
     }
 
+    public function addPostState($post_states, $post) {
+        $post_states[] = __('Expired', 'wp-post-expires');
+        return $post_states;
+    }
+
     public function expiredPost($post) {
-        $post_id = $post->ID;
 
-        if(self::isExpired($post_id)) {
-
-            $expires_action = get_post_meta($post_id, 'xn-wppe-expiration-action', true);
+        if(self::isExpired($post->ID)) {
+            $expires_action = get_post_meta($post->ID, 'xn-wppe-expiration-action', true);
             $action = !empty($expires_action)? $expires_action : $this->settings['action'];
 
-            switch($action) {
-                case 'add_prefix':
-                    add_filter('the_title', [$this, 'textTitleFilter'], 10, 2);
-                    add_filter('post_class', [$this, 'cssClassFilter']);
-                break;
-                case 'to_drafts':
-                    remove_action('save_post', [$this, 'saveBoxFields']);
-                    wp_update_post(['ID' => $post_id, 'post_status' => 'draft']);
-                    update_post_meta($post_id, 'xn-wppe-expiration-action', 'add_prefix');
-                    update_post_meta($post_id, 'xn-wppe-expiration-prefix', $this->settings['prefix']);
-                    add_action('save_post', [$this, 'saveBoxFields']);
-                break;
-                case 'to_trash':
-                    remove_action('save_post', [$this, 'saveBoxFields']);
-                    $del_post = wp_trash_post($post_id);
-                    //check post to trash, or deleted
-                    if($del_post !== false) {
-                        update_post_meta($post_id, 'xn-wppe-expiration-action', 'add_prefix');
-                        update_post_meta($post_id, 'xn-wppe-expiration-prefix', $this->settings['prefix']);
-                    }
-                    add_action('save_post', [$this, 'saveBoxFields']);
-                break;
+            if ($action == 'add_prefix') {
+
+                add_filter('the_title', [$this, 'textTitleFilter'], 10, 2);
+                add_filter('post_class', [$this, 'cssClassFilter']);
+
+            } elseif (!in_array($post->post_status, ['draft', 'trash'])) {
+                remove_action('save_post', [$this, 'saveBoxFields']);
+
+                if ($action == 'to_drafts') {
+                    wp_update_post(['ID' => $post->ID, 'post_status' => 'draft']);
+                } elseif($action == 'to_trash') {
+                    wp_trash_post($post->ID);
+                }
+
+                add_action('save_post', [$this, 'saveBoxFields']);
+            } else {
+                add_filter('display_post_states', [$this, 'addPostState'], 10, 2);
             }
         }
     }
@@ -280,14 +281,36 @@ class XNPostExpires {
 
         if(!empty($expires)) {
             $current = new DateTime();
-            $current->setTimestamp(current_time('timestamp'));
-            $expiration = DateTime::createFromFormat('Y-m-d H:i', $expires);
+            $current->setTimezone( self::getWpTimezone() );
 
-            if($expiration && $expiration->format('Y-m-d H:i') == $expires && $current >= $expiration) {
+            $expiration = DateTime::createFromFormat('Y-m-d H:i', $expires,
+                self::getWpTimezone());
+
+            if($expiration
+                && $expiration->format('Y-m-d H:i') == $expires
+                && $current >= $expiration) {
                 return true;
             }
         }
+
         return false;
     }
+
+    private static function getWpTimezone() {
+        if (!empty(self::$timezone)) {
+            return self::$timezone;
+        }
+
+        $timezone_string = get_option( 'timezone_string' );
+        if (!empty($timezone_string)) {
+            return self::$timezone = new DateTimeZone($timezone_string);
+        }
+        $offset  = get_option( 'gmt_offset' );
+        $hours   = (int) $offset;
+        $minutes = abs( ( $offset - (int) $offset ) * 60 );
+        $offset  = sprintf( '%+03d:%02d', $hours, $minutes );
+        return self::$timezone = new DateTimeZone($offset);
+    }
+
 }
 add_action('plugins_loaded', ['XNPostExpires','init']);
