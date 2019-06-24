@@ -219,6 +219,7 @@ googletag.cmd.push(function() { googletag.display('acm-ad-tag-%tag_id%'); });
 
 		$unit_sizes_output = '';
 		if ( ! empty( $url_vars['sizes'] ) ) {
+			$unit_sizes_output = array();
 			foreach( $url_vars['sizes'] as $unit_size ) {
 				$unit_sizes_output[] = array(
 					(int) $unit_size['width'],
