@@ -10,13 +10,17 @@ class ComposerStaticInit943ad7215fba465f392e23772a30dbcd
         'e6e591321f5b22362269a035c1c77470' => __DIR__ . '/..' . '/inn/wordpress-mailchimp-tools/mailchimp-tools.php',
     );
 
-    public static $prefixesPsr0 = array (
-        'M' => 
+    public static $prefixLengthsPsr4 = array (
+        'D' => 
         array (
-            'Mailchimp' => 
-            array (
-                0 => __DIR__ . '/..' . '/mailchimp/mailchimp/src',
-            ),
+            'DrewM\\MailChimp\\' => 16,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'DrewM\\MailChimp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/drewm/mailchimp-api/src',
         ),
     );
 
@@ -31,7 +35,8 @@ class ComposerStaticInit943ad7215fba465f392e23772a30dbcd
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixesPsr0 = ComposerStaticInit943ad7215fba465f392e23772a30dbcd::$prefixesPsr0;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit943ad7215fba465f392e23772a30dbcd::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit943ad7215fba465f392e23772a30dbcd::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInit943ad7215fba465f392e23772a30dbcd::$classMap;
 
         }, null, ClassLoader::class);

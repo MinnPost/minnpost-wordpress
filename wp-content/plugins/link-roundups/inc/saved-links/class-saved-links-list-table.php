@@ -15,7 +15,7 @@
  * @see inc/saved-links/class-wp-list-table-clone.php
  * @since 0.3.2
  */
-require_once( __DIR__ . '/class-wp-list-table-clone.php' );
+require_once __DIR__ . '/class-wp-list-table-clone.php';
 
 
 /**
@@ -33,47 +33,69 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 	 * @since 0.3.2
 	 */
 	function __construct() {
-		parent::__construct( array(
-			'singular' => 'lroundups-link',
-			'plural' => 'lroundups-links',
-		));
+		parent::__construct(
+			array(
+				'singular' => 'lroundups-link',
+				'plural'   => 'lroundups-links',
+			)
+		);
 	}
 
 	/**
 	 * Additional decorations for the table: "Send to editor" button and "Date range" filter
 	 *
+	 * Default presentation: date filter is set to "This Month", and changing that should also change $this->prepare_items.
+	 *
 	 * @param string $which is either "top" or "bottom", and tells you which nav you're outputting.
 	 * @since 0.3.2
+	 * @see prepare_items
 	 */
-	function bulk_actions( $which ) {
+	function bulk_actions( $which = '' ) {
+		$request = $_REQUEST;
+		if ( ! isset( $request['link_date'] ) ) {
+			$request['link_date'] = 'this_month';
+		}
+
 		// this will display at top and bottom
 		?>
-		<button class='button append-saved-links' style='float:left;'><?php _e( 'Send to Editor', 'link-roundups' ); ?></button>
+			<button class='button append-saved-links' style='float:left;'><?php _e( 'Send to Editor', 'link-roundups' ); ?></button>
 		<?php
-		if ( $which == 'top' ) {
+
+		if ( $which === 'top' ) {
 			// Date range:
 			?>
 			<div style='float:left;'>
 				<form method='get' id='filter_links_container'>
 					<label for='link_date'><b><?php _e( 'Date Range:', 'link-roundups' ); ?></b></label>
 					<select name='link_date'>
-						<option value='today' <?php echo ( ( isset( $_REQUEST['link_date'] ) && $_REQUEST['link_date'] == 'today' ) ? 'selected' : '' );?>><?php _e( 'Today',' link-roundups' ); ?></option>
-						<option value='this_week' <?php echo ( ( isset( $_REQUEST['link_date'] ) && $_REQUEST['link_date'] == 'this_week' ) ? 'selected' : '' );?>><?php _e( 'This Week',' link-roundups' ); ?></option>
-						<option value='this_month' <?php echo ( ( isset( $_REQUEST['link_date']) && $_REQUEST['link_date'] == 'this_month' ) ? 'selected' : '' );?>><?php _e( 'This Month',' link-roundups' ); ?></option>
-						<option value='this_year' <?php echo ( ( isset( $_REQUEST['link_date'] ) && $_REQUEST['link_date'] == 'this_year' ) ? 'selected' : '' );?>><?php _e( 'This Year',' link-roundups' ); ?></option>
-						<option value='show_all' <?php echo ( ( isset( $_REQUEST['link_date'] ) && $_REQUEST['link_date'] == 'show_all' ) ? 'selected' : '' );?>><?php _e( 'Show All',' link-roundups' ); ?></option>
+						<option value='today'      <?php selected( $request['link_date'], 'today' ); ?>><?php _e( 'Today', ' link-roundups' ); ?></option>
+						<option value='this_week'  <?php selected( $request['link_date'], 'this_week' ); ?>><?php _e( 'This Week', ' link-roundups' ); ?></option>
+						<option value='this_month' <?php selected( $request['link_date'], 'this_month' ); ?>><?php _e( 'This Month', ' link-roundups' ); ?></option>
+						<option value='this_year'  <?php selected( $request['link_date'], 'this_year' ); ?>><?php _e( 'This Year', ' link-roundups' ); ?></option>
+						<option value='show_all'   <?php selected( $request['link_date'], 'show_all' ); ?>><?php _e( 'Show All', ' link-roundups' ); ?></option>
 					</select>
-					<?php if( isset( $_REQUEST['orderby'] ) ) : ?>
-						<input type='hidden' name='orderby' value='<?php echo $_REQUEST['orderby']; ?>'/>
-					<?php endif;?>
-					<?php if( isset($_REQUEST['order'] ) ) : ?>
-						<input type='hidden' name='order' value='<?php echo $_REQUEST['order']; ?>'/>
-					<?php endif;?>
+					<?php if ( isset( $request['orderby'] ) ) : ?>
+						<input type='hidden' name='orderby' value='<?php echo esc_attr( $request['orderby'] ); ?>'/>
+					<?php endif; ?>
+					<?php if ( isset( $request['order'] ) ) : ?>
+						<input type='hidden' name='order' value='<?php echo esc_attr( $request['order'] ); ?>'/>
+					<?php endif; ?>
 					<input id="filter_links" class='button' type='submit' value='Filter'/><span class="spinner"></span>
 				</form>
 			</div>
-		<?php
+			<?php
 		}
+
+		if ( $which === 'bottom' ) {
+			?>
+			<div style='float:left;'>
+				<a class="button" href="<?php echo esc_attr( admin_url( 'post-new.php?post_type=rounduplink' ) ); ?>">
+					<?php echo strip_tags( __( 'Create new Saved Link', 'link-roundups' ) ); ?>
+				</a>
+			</div>
+			<?php
+		}
+
 	}
 
 	/**
@@ -84,11 +106,11 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 	function get_columns() {
 		return $columns = array(
 			// name => text,
-			'cb' => 'cb', // single_row_columns will turn this into a checkbox.
-			'title' => 'Title',
+			'cb'          => 'cb', // single_row_columns will turn this into a checkbox.
+			'title'       => 'Title',
 			'post_author' => 'Author',
-			'tags' => 'Tags',
-			'date' => 'Date'
+			'tags'        => 'Tags',
+			'date'        => 'Date',
 		);
 	}
 
@@ -99,10 +121,10 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 	 */
 	function get_sortable_columns() {
 		return $columns = array(
-			'title' => 'post_title',
+			'title'       => 'post_title',
 			'post_author' => 'post_author',
-			'tags' => 'tags_input',
-			'date' => 'post_date'
+			'tags'        => 'tags_input',
+			'date'        => 'post_date',
 		);
 	}
 
@@ -110,6 +132,7 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 	 * Build the query of posts that should be displayed, and run the query, and fill $this->items with those posts.
 	 *
 	 * @since 0.3.2
+	 * @see bulk_actions
 	 */
 	function prepare_items() {
 
@@ -120,32 +143,45 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 		// Number of posts per page, from $_REQUEST
 		$posts_per_page = ( isset( $_REQUEST['posts_per_page'] ) ? $_REQUEST['posts_per_page'] : 15 );
 		// Which page of results to get, from $_REQUEST
-		$page = ( isset( $_REQUEST['lroundups_page'] ) ? $_REQUEST['lroundups_page'] : 1);
+		$page = ( isset( $_REQUEST['lroundups_page'] ) ? $_REQUEST['lroundups_page'] : 1 );
 
 		/*
 		 * Date
 		 */
 
 		// Define the default date query
+		// This should match the vale set as default in $this->bulk_actions()
 		$default_date = array(
-			'year' => date( 'Y' ),
+			'year'     => date( 'Y' ),
 			'monthnum' => date( 'm' ),
-			'day' => date( 'd' )
 		);
+
 		// Turn the filter date button's response into a meaningful WP_Query date argument
-		if ( isset($_REQUEST['link_date'] ) ) {
-			switch ($_REQUEST['link_date']) {
+		if ( isset( $_REQUEST['link_date'] ) ) {
+			switch ( $_REQUEST['link_date'] ) {
 				case 'today':
-					$default_date = array( 'year' => date( 'Y' ), 'monthnum' => date( 'm' ), 'day' => date( 'd' ) );
+					$default_date = array(
+						'year'     => date( 'Y' ),
+						'monthnum' => date( 'm' ),
+						'day'      => date( 'd' ),
+					);
 					break;
 				case 'this_week':
-					$default_date = array( 'year' => date( 'Y' ), 'w' => date( 'W' ));
+					$default_date = array(
+						'year' => date( 'Y' ),
+						'w'    => date( 'W' ),
+					);
 					break;
 				case 'this_month':
-					$default_date = array( 'year' => date( 'Y' ), 'monthnum' => date( 'm' ) );
+					$default_date = array(
+						'year'     => date( 'Y' ),
+						'monthnum' => date( 'm' ),
+					);
 					break;
 				case 'this_year':
-					$default_date = array( 'year' => date( 'Y' ) );
+					$default_date = array(
+						'year' => date( 'Y' ),
+					);
 					break;
 				case 'show_all':
 					$default_date = array();
@@ -154,10 +190,10 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 
 		// Generic arguments
 		$args = array(
-			'post_type' 	=> 'rounduplink',
-			'orderby' 		=> ( isset($_REQUEST['orderby'] ) ? $_REQUEST['orderby'] : 'date' ),
-			'order' 		=> ( isset($_REQUEST['order'] ) ? $_REQUEST['order'] : 'desc' ),
-			'posts_per_page' => -1
+			'post_type'      => 'rounduplink',
+			'orderby'        => ( isset( $_REQUEST['orderby'] ) ? $_REQUEST['orderby'] : 'date' ),
+			'order'          => ( isset( $_REQUEST['order'] ) ? $_REQUEST['order'] : 'desc' ),
+			'posts_per_page' => -1,
 		);
 
 		// Join the date query with the generic args.
@@ -167,24 +203,29 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 		$_wp_column_headers;
 
 		$the_posts_count_query = new WP_Query( $args );
-		$total_post_count = $the_posts_count_query->post_count;
-		unset($the_posts_count_query); // to save memory
+		$total_post_count      = $the_posts_count_query->post_count;
+		unset( $the_posts_count_query ); // to save memory
 
 		// Set the pagination links automagically
-		$this->set_pagination_args(array(
-			'total_items' => $total_post_count,
-			'total_pages' => ceil($total_post_count/$posts_per_page),
-			'per_page' => $posts_per_page,
-		));
+		$this->set_pagination_args(
+			array(
+				'total_items' => $total_post_count,
+				'total_pages' => ceil( $total_post_count / $posts_per_page ),
+				'per_page'    => $posts_per_page,
+			)
+		);
 
 		// Set the columns
 		$columns = $this->get_columns();
-		$_wp_column_headers[$screen->id] = $columns;
+		if ( isset( $screen ) ) {
+			$_wp_column_headers[ $screen->id ] = $columns;
+		}
 
 		// Fetch the items
-		$links_query = new WP_Query($args);
+		$links_query = new WP_Query( $args );
 		$this->items = $links_query->posts;
-		/* This is where we begin to deviate from http://www.smashingmagazine.com/2011/11/native-admin-tables-wordpress/
+		/*
+		 This is where we begin to deviate from http://www.smashingmagazine.com/2011/11/native-admin-tables-wordpress/
 		 * Smash Magazine uses wpdb->get_results, and defines its own display_rows method to parse that.
 		 * WP_Query does the following instead::
 		 *   wp_query->get_posts()
@@ -201,9 +242,9 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 	 * @param $post WP_Post object
 	 * @since 0.3.2
 	 */
-	function single_row($post) {
-		$post = get_post($post);
-		$classes .= "lroundups-link";
+	function single_row( $post ) {
+		$post     = get_post( $post );
+		$classes .= 'lroundups-link';
 
 		print "<tr class='$classes' data-post-id='$post->ID'>";
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
@@ -217,9 +258,9 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 				$classes .= ' hidden';
 			}
 			// Instead of using esc_attr(), we strip tags to get closer to a user-friendly string.
-			$data = 'data-colname="' . wp_strip_all_tags( $column_display_name ) . '"';
+			$data       = 'data-colname="' . wp_strip_all_tags( $column_display_name ) . '"';
 			$attributes = "class='$classes' $data";
-			switch ($column_name) {
+			switch ( $column_name ) {
 				case 'cb':
 					echo '<th scope="row" class="check-column">';
 					echo $this->column_cb( $post ); // Creates a checkbox for the $post
@@ -229,26 +270,26 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 					echo "<td $attributes>";
 					echo $post->post_title;
 					echo $this->handle_row_actions( $post, $column_name, $primary );
-					echo "</td>";
+					echo '</td>';
 					break;
 				case 'post_author':
 					echo "<td $attributes>";
-					echo the_author_meta('display_name', $post->post_author);
-					echo "</td>";
+					echo the_author_meta( 'display_name', $post->post_author );
+					echo '</td>';
 					break;
 				case 'tags':
 					echo "<td $attributes>";
-					echo get_the_term_list($post->ID, 'lr-tags', '', ', ', '');
-					echo "</td>";
+					echo get_the_term_list( $post->ID, 'lr-tags', '', ', ', '' );
+					echo '</td>';
 					break;
 				case 'date':
 					echo "<td $attributes>";
-					echo get_the_date( '', $post->ID);
-					echo "</td>";
+					echo get_the_date( '', $post->ID );
+					echo '</td>';
 					break;
 			}
 		}
-		print "</tr>";
+		print '</tr>';
 	}
 
 	/**
@@ -257,13 +298,16 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 	 * @param $post WP_Post
 	 * @since 0.3.2
 	 */
-	function column_cb( $post ) { ?>
-		<label class="screen-reader-text" for="cb-select-<?php echo $post->ID; ?>"><?php
-				printf( __( 'Select %s' ), _draft_or_post_title() );
-		?></label>
+	function column_cb( $post ) {
+		?>
+		<label class="screen-reader-text" for="cb-select-<?php echo $post->ID; ?>">
+																	<?php
+																	printf( __( 'Select %s' ), _draft_or_post_title() );
+																	?>
+		</label>
 		<input id="cb-select-<?php echo $post->ID; ?>" type="checkbox" class="cb-select" name="post[]" value="<?php the_ID(); ?>" />
 		<div class="locked-indicator"></div>
-	<?php
+		<?php
 	}
 
 	/**
@@ -272,7 +316,7 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 	 * @since 0.3.2
 	 */
 	protected function handle_row_actions( $item, $column_name, $primary ) {
-		return '<div class="row-actions"><a href="' . get_edit_post_link($item->ID, '') . '" target="_new">Edit</a></div>';
+		return '<div class="row-actions"><a href="' . get_edit_post_link( $item->ID, '' ) . '" target="_new">Edit</a></div>';
 	}
 
 	/**
@@ -283,20 +327,20 @@ class Saved_Links_List_Table extends clone_WP_List_Table {
 	 * @since 0.3.2
 	 */
 	protected function display_tablenav( $which ) {
-?>
+		?>
 	<div class="tablenav <?php echo esc_attr( $which ); ?>">
 
 		<div class="alignleft actions bulkactions">
 			<?php $this->bulk_actions( $which ); ?>
 		</div>
-<?php
+		<?php
 		$this->extra_tablenav( $which );
 		$this->pagination( $which );
-?>
+		?>
 
 		<br class="clear" />
 	</div>
-<?php
+		<?php
 	}
 
 }

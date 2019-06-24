@@ -1,0 +1,1384 @@
+
+FILE: ...rgo/wp-content/plugins/link-roundups/inc/compatibility-largo.php
+----------------------------------------------------------------------
+FOUND 2 ERRORS AFFECTING 1 LINE
+----------------------------------------------------------------------
+ 7 | ERROR | [ ] Content missing for @package tag in file comment
+ 7 | ERROR | [x] Whitespace found at end of line
+----------------------------------------------------------------------
+PHPCBF CAN FIX THE 1 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+----------------------------------------------------------------------
+
+
+FILE: ...ugins/link-roundups/inc/saved-links/class-saved-links-widget.php
+----------------------------------------------------------------------
+FOUND 10 ERRORS AFFECTING 9 LINES
+----------------------------------------------------------------------
+   1 | ERROR | [ ] Missing file doc comment
+   7 | ERROR | [ ] Class name must begin with a capital letter
+   7 | ERROR | [ ] Class name is not valid; consider
+     |       |     Saved_Links_Widget instead
+  65 | ERROR | [x] Line indented incorrectly; expected 6 tabs, found
+     |       |     7
+  70 | ERROR | [x] Line indented incorrectly; expected 6 tabs, found
+     |       |     8
+  72 | ERROR | [x] Line indented incorrectly; expected 6 tabs, found
+     |       |     8
+  74 | ERROR | [x] Line indented incorrectly; expected 6 tabs, found
+     |       |     7
+  76 | ERROR | [x] Line indented incorrectly; expected 6 tabs, found
+     |       |     7
+  77 | ERROR | [ ] All output should be run through an escaping
+     |       |     function (see the Security sections in the
+     |       |     WordPress Developer Handbooks), found '$output'.
+ 112 | ERROR | [ ] All output should be run through an escaping
+     |       |     function (see the Security sections in the
+     |       |     WordPress Developer Handbooks), found
+     |       |     '$lr_source'.
+----------------------------------------------------------------------
+PHPCBF CAN FIX THE 5 MARKED SNIFF VIOLATIONS AUTOMATICALLY
+----------------------------------------------------------------------
+
+
+FILE: ...tent/plugins/link-roundups/inc/saved-links/class-saved-links.php
+----------------------------------------------------------------------
+FOUND 130 ERRORS AND 17 WARNINGS AFFECTING 101 LINES
+----------------------------------------------------------------------
+   1 | ERROR   | Class file names should be based on the class name
+     |         | with "class-" prepended. Expected
+     |         | class-savedlinks.php, but found
+     |         | class-saved-links.php.
+   1 | ERROR   | Missing file doc comment
+  11 | ERROR   | Missing member variable doc comment
+  23 | ERROR   | Comment closer must be on a new line
+  89 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  98 | ERROR   | Missing doc comment for function
+     |         | change_publish_button()
+ 102 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 102 | ERROR   | Use Yoda Condition checks, you must.
+ 103 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 103 | ERROR   | Use Yoda Condition checks, you must.
+ 180 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 181 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$link_url'.
+ 185 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 199 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 200 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$link_source'.
+ 204 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 205 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$link_img_src'.
+ 206 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$link_img_src'.
+ 207 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 213 | ERROR   | Doc comment for parameter "$post_id" missing
+ 220 | ERROR   | Processing form data without nonce verification.
+ 221 | ERROR   | Processing form data without nonce verification.
+ 221 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 221 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['post_ID']
+ 221 | ERROR   | Processing form data without nonce verification.
+ 221 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 221 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['lr_url']
+ 221 | ERROR   | Processing form data without nonce verification.
+ 224 | ERROR   | Processing form data without nonce verification.
+ 225 | ERROR   | Processing form data without nonce verification.
+ 225 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 225 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['post_ID']
+ 225 | ERROR   | Processing form data without nonce verification.
+ 225 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 225 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['lr_desc']
+ 225 | ERROR   | Processing form data without nonce verification.
+ 228 | ERROR   | Processing form data without nonce verification.
+ 229 | ERROR   | Processing form data without nonce verification.
+ 229 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 229 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['post_ID']
+ 229 | ERROR   | Processing form data without nonce verification.
+ 229 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 229 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['lr_source']
+ 229 | ERROR   | Processing form data without nonce verification.
+ 232 | ERROR   | Processing form data without nonce verification.
+ 232 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 232 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['lr_img']
+ 232 | ERROR   | Processing form data without nonce verification.
+ 233 | ERROR   | Detected usage of a possibly undefined superglobal
+     |         | array index: $_POST['argo_link_img_url']. Use
+     |         | isset() or empty() to check the index exists before
+     |         | using it
+ 233 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 233 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['argo_link_img_url']
+ 233 | ERROR   | Processing form data without nonce verification.
+ 235 | ERROR   | Processing form data without nonce verification.
+ 235 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 235 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['post_ID']
+ 235 | ERROR   | Processing form data without nonce verification.
+ 245 | ERROR   | Parameter comment must end with a full stop
+ 246 | ERROR   | Parameter comment must end with a full stop
+ 247 | ERROR   | Parameter comment must end with a full stop
+ 270 | WARNING | Silencing errors is strongly discouraged. Use proper
+     |         | error checking instead. Found: @unlink(
+     |         | $file_array[...
+ 277 | ERROR   | Doc comment for parameter "$columns" missing
+ 295 | ERROR   | Doc comment for parameter "$column" missing
+ 308 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$custom'.
+ 314 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$custom'.
+ 326 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$term_links'.
+ 373 | ERROR   | Content missing for @see tag in function comment
+ 380 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 384 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 385 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 389 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 400 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found 'add_query_arg'.
+ 413 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '__'.
+ 425 | ERROR   | Content missing for @see tag in function comment
+ 433 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 438 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 439 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 440 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 444 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 445 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 446 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 449 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found 'Save_To_Site_Button'.
+ 449 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 452 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 458 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 465 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 466 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 469 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found 'Save_To_Site_Button'.
+ 469 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 497 | ERROR   | Missing doc comment for function
+     |         | add_saved_links_widget()
+ 501 | ERROR   | Missing doc comment for function
+     |         | add_link_roundups_widget()
+ 505 | ERROR   | Doc comment for parameter "$url" missing
+ 505 | ERROR   | Doc comment for parameter "$post" missing
+ 513 | ERROR   | Doc comment for parameter $content does not match
+     |         | actual variable name $url
+ 518 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 520 | ERROR   | Variable "$remoteUrl" is not in valid snake_case
+     |         | format, try "$remote_url"
+ 522 | ERROR   | Variable "$remoteUrl" is not in valid snake_case
+     |         | format, try "$remote_url"
+ 522 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 529 | ERROR   | Variable "$remoteUrl" is not in valid snake_case
+     |         | format, try "$remote_url"
+ 532 | ERROR   | Doc comment for parameter "$author" missing
+ 541 | ERROR   | Doc comment for parameter $content does not match
+     |         | actual variable name $author
+ 544 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 552 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 560 | ERROR   | Doc comment for parameter "$link" missing
+ 565 | ERROR   | Doc comment for parameter $content does not match
+     |         | actual variable name $link
+ 570 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 575 | WARNING | This comment is 72% valid code; is this commented
+     |         | out code?
+ 600 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 611 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 631 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 632 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 639 | ERROR   | Doc comment for parameter "$post" missing
+ 639 | ERROR   | Doc comment for parameter "$link_class" missing
+ 639 | ERROR   | Doc comment for parameter "$attrs" missing
+ 647 | ERROR   | Doc comment for parameter $content does not match
+     |         | actual variable name $post
+ 658 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 658 | ERROR   | Use Yoda Condition checks, you must.
+ 663 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 705 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 705 | ERROR   | Use Yoda Condition checks, you must.
+ 724 | ERROR   | Doc comment for parameter "$atts" missing
+ 741 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 742 | WARNING | Found: !=. Use strict comparisons (=== or !==).
+ 742 | ERROR   | Use Yoda Condition checks, you must.
+ 743 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 749 | ERROR   | Doc comment for parameter "$post" missing
+ 758 | ERROR   | Doc comment for parameter $content does not match
+     |         | actual variable name $post
+ 766 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$custom'.
+ 768 | WARNING | Found: !=. Use strict comparisons (=== or !==).
+ 768 | ERROR   | Use Yoda Condition checks, you must.
+ 769 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '__'.
+ 770 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$custom'.
+ 770 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$custom'.
+ 770 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$custom'.
+ 783 | ERROR   | You must use "/**" style comments for a function
+     |         | comment
+ 790 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 791 | WARNING | wp_reset_query() is discouraged. Use the
+     |         | wp_reset_postdata() instead.
+ 796 | ERROR   | Doc comment for parameter "$type" missing
+ 796 | ERROR   | Doc comment for parameter "$message" missing
+ 802 | WARNING | urlencode() should only be used when dealing with
+     |         | legacy applications rawurlencode() should now be
+     |         | used instead. See
+     |         | http://php.net/manual/en/function.rawurlencode.php
+     |         | and http://www.faqs.org/rfcs/rfc3986.html
+ 806 | ERROR   | Doc comment for parameter "$location" missing
+ 824 | WARNING | Processing form data without nonce verification.
+ 828 | WARNING | Processing form data without nonce verification.
+ 828 | ERROR   | $_GET data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 828 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_GET['lroundups_notices']
+ 830 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$notice'.
+ 830 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found 'urldecode'.
+ 835 | ERROR   | Missing doc comment for function
+     |         | lroundups_default_link_html()
+----------------------------------------------------------------------
+
+
+FILE: ...s/link-roundups/inc/saved-links/class-saved-links-list-table.php
+----------------------------------------------------------------------
+FOUND 66 ERRORS AND 14 WARNINGS AFFECTING 59 LINES
+----------------------------------------------------------------------
+   9 | ERROR   | There must be exactly one blank line after the file
+     |         | comment
+  35 | ERROR   | Visibility must be declared on method "__construct"
+  53 | ERROR   | Visibility must be declared on method "bulk_actions"
+  54 | WARNING | Processing form data without nonce verification.
+  59 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  61 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+  64 | ERROR   | Use Yoda Condition checks, you must.
+  65 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  69 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+  71 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+  72 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+  73 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+  74 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+  75 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+  89 | ERROR   | Use Yoda Condition checks, you must.
+  93 | WARNING | strip_tags() is discouraged. Use the more
+     |         | comprehensive wp_strip_all_tags() instead.
+  93 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found 'strip_tags'.
+ 106 | ERROR   | Visibility must be declared on method "get_columns"
+ 107 | ERROR   | Assignments must be the first block of code on a
+     |         | line
+ 108 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 122 | ERROR   | Visibility must be declared on method
+     |         | "get_sortable_columns"
+ 123 | ERROR   | Assignments must be the first block of code on a
+     |         | line
+ 137 | ERROR   | Visibility must be declared on method
+     |         | "prepare_items"
+ 139 | ERROR   | Empty line not required before block comment
+ 143 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 144 | WARNING | Processing form data without nonce verification.
+ 144 | WARNING | Processing form data without nonce verification.
+ 144 | ERROR   | $_REQUEST data not unslashed before sanitization.
+     |         | Use wp_unslash() or similar
+ 144 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_REQUEST['posts_per_page']
+ 145 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 146 | WARNING | Processing form data without nonce verification.
+ 146 | WARNING | Processing form data without nonce verification.
+ 146 | ERROR   | $_REQUEST data not unslashed before sanitization.
+     |         | Use wp_unslash() or similar
+ 146 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_REQUEST['lroundups_page']
+ 153 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 159 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 160 | WARNING | Processing form data without nonce verification.
+ 161 | WARNING | Processing form data without nonce verification.
+ 191 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 194 | WARNING | Processing form data without nonce verification.
+ 194 | WARNING | Processing form data without nonce verification.
+ 194 | ERROR   | $_REQUEST data not unslashed before sanitization.
+     |         | Use wp_unslash() or similar
+ 194 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_REQUEST['orderby']
+ 195 | WARNING | Processing form data without nonce verification.
+ 195 | WARNING | Processing form data without nonce verification.
+ 195 | ERROR   | $_REQUEST data not unslashed before sanitization.
+     |         | Use wp_unslash() or similar
+ 195 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_REQUEST['order']
+ 207 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 209 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 218 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 224 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 227 | ERROR   | Empty line required before block comment
+ 228 | WARNING | Found precision alignment of 1 spaces.
+ 245 | ERROR   | You must use "/**" style comments for a function
+     |         | comment
+ 245 | ERROR   | Visibility must be declared on method "single_row"
+ 249 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '"<tr class='$classes'
+     |         | data-post-id='$post->ID'>"'.
+ 257 | WARNING | Not using strict comparison for in_array; supply
+     |         | true for third argument.
+ 266 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+ 266 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 270 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '"<td $attributes>"'.
+ 271 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$post'.
+ 272 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+ 272 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$column_name'.
+ 272 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$primary'.
+ 276 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '"<td $attributes>"'.
+ 277 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found 'the_author_meta'.
+ 281 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '"<td $attributes>"'.
+ 286 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '"<td $attributes>"'.
+ 295 | ERROR   | Doc comment for parameter "$post" missing
+ 298 | ERROR   | Missing parameter name
+ 301 | ERROR   | Visibility must be declared on method "column_cb"
+ 303 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$post'.
+ 305 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '__'.
+ 305 | ERROR   | A gettext call containing placeholders was found,
+     |         | but was not accompanied by a "translators:" comment
+     |         | on the line above to clarify the meaning of the
+     |         | placeholders.
+ 305 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '_draft_or_post_title'.
+ 308 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$post'.
+ 313 | ERROR   | Doc comment for parameter "$item" missing
+ 313 | ERROR   | Doc comment for parameter "$column_name" missing
+ 313 | ERROR   | Doc comment for parameter "$primary" missing
+ 322 | ERROR   | Doc comment for parameter "$which" missing
+----------------------------------------------------------------------
+
+
+FILE: ...ns/link-roundups/inc/link-roundups/class-save-to-site-button.php
+----------------------------------------------------------------------
+FOUND 58 ERRORS AND 7 WARNINGS AFFECTING 37 LINES
+----------------------------------------------------------------------
+  10 | ERROR   | Missing @package tag in file comment
+  22 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  26 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  27 | ERROR   | Variable "$URL" is not in valid snake_case format,
+     |         | try "$u_r_l"
+  27 | WARNING | parse_url() is discouraged because of inconsistency
+     |         | in the output across PHP versions; use
+     |         | wp_parse_url() instead.
+  27 | ERROR   | Detected usage of a possibly undefined superglobal
+     |         | array index: $_SERVER['REQUEST_URI']. Use isset() or
+     |         | empty() to check the index exists before using it
+  27 | ERROR   | $_SERVER data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+  27 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_SERVER['REQUEST_URI']
+  28 | ERROR   | Variable "$newURL" is not in valid snake_case
+     |         | format, try "$new_u_r_l"
+  28 | ERROR   | Variable "$URL" is not in valid snake_case format,
+     |         | try "$u_r_l"
+  30 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  31 | ERROR   | Variable "$newURL" is not in valid snake_case
+     |         | format, try "$new_u_r_l"
+  34 | ERROR   | Missing doc comment for class Save_To_Site_Button
+  36 | ERROR   | Missing member variable doc comment
+  37 | ERROR   | Missing member variable doc comment
+  38 | ERROR   | Missing member variable doc comment
+  39 | ERROR   | Missing member variable doc comment
+  40 | ERROR   | Member variable "$imgUrl" is not in valid snake_case
+     |         | format, try "$img_url"
+  40 | ERROR   | Missing member variable doc comment
+  41 | ERROR   | Class constants must be uppercase; expected
+     |         | PLUGIN_DOMAIN but found plugin_domain
+  49 | WARNING | Processing form data without nonce verification.
+  77 | WARNING | get_shortcut_link() has been deprecated since
+     |         | WordPress version 4.9.0.
+ 105 | ERROR   | Processing form data without nonce verification.
+ 105 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 105 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['_meta']
+ 105 | ERROR   | Processing form data without nonce verification.
+ 106 | ERROR   | Processing form data without nonce verification.
+ 106 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 106 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['_links']
+ 106 | ERROR   | Processing form data without nonce verification.
+ 107 | ERROR   | Processing form data without nonce verification.
+ 107 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 107 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['_images']
+ 107 | ERROR   | Processing form data without nonce verification.
+ 108 | ERROR   | Processing form data without nonce verification.
+ 108 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 108 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['_embeds']
+ 108 | ERROR   | Processing form data without nonce verification.
+ 110 | WARNING | Processing form data without nonce verification.
+ 110 | WARNING | Processing form data without nonce verification.
+ 110 | ERROR   | $_GET data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 110 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_GET['u']
+ 113 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 118 | ERROR   | Processing form data without nonce verification.
+ 118 | WARNING | strip_tags() is discouraged. Use the more
+     |         | comprehensive wp_strip_all_tags() instead.
+ 118 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 118 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['t']
+ 118 | ERROR   | Processing form data without nonce verification.
+ 122 | ERROR   | Processing form data without nonce verification.
+ 123 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 123 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['s']
+ 123 | ERROR   | Processing form data without nonce verification.
+ 127 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 135 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 140 | WARNING | parse_url() is discouraged because of inconsistency
+     |         | in the output across PHP versions; use
+     |         | wp_parse_url() instead.
+ 144 | ERROR   | Object property "$imgUrl" is not in valid snake_case
+     |         | format, try "$img_url"
+ 146 | ERROR   | Object property "$imgUrl" is not in valid snake_case
+     |         | format, try "$img_url"
+ 173 | ERROR   | Doc comment for parameter "$title" missing
+ 184 | ERROR   | Doc comment for parameter "$description" missing
+ 195 | ERROR   | Doc comment for parameter "$link" missing
+ 206 | ERROR   | Doc comment for parameter "$source" missing
+ 217 | ERROR   | Doc comment for parameter "$imgUrl" missing
+ 224 | ERROR   | Method name "default_imgUrl" in class
+     |         | Save_To_Site_Button is not in snake case format, try
+     |         | "default_img_url"
+ 224 | ERROR   | Variable "$imgUrl" is not in valid snake_case
+     |         | format, try "$img_url"
+ 225 | ERROR   | Object property "$imgUrl" is not in valid snake_case
+     |         | format, try "$img_url"
+----------------------------------------------------------------------
+
+
+FILE: .../plugins/link-roundups/inc/link-roundups/class-link-roundups.php
+----------------------------------------------------------------------
+FOUND 48 ERRORS AND 4 WARNINGS AFFECTING 35 LINES
+----------------------------------------------------------------------
+   1 | ERROR   | Class file names should be based on the class name
+     |         | with "class-" prepended. Expected
+     |         | class-linkroundups.php, but found
+     |         | class-link-roundups.php.
+  14 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  15 | ERROR   | You must use "/**" style comments for a function
+     |         | comment
+  17 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  20 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  23 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  34 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  38 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  40 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  41 | ERROR   | You must use "/**" style comments for a function
+     |         | comment
+  42 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  53 | WARNING | Not using strict comparison for in_array; supply
+     |         | true for third argument.
+  54 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  58 | ERROR   | Use Yoda Condition checks, you must.
+  59 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  63 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 127 | WARNING | Found: !=. Use strict comparisons (=== or !==).
+ 127 | ERROR   | Use Yoda Condition checks, you must.
+ 138 | ERROR   | You must use "/**" style comments for a function
+     |         | comment
+ 144 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 154 | ERROR   | You must use "/**" style comments for a function
+     |         | comment
+ 155 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 203 | ERROR   | Doc comment for parameter "$post_id" missing
+ 213 | ERROR   | Empty IF statement detected
+ 213 | ERROR   | Processing form data without nonce verification.
+ 214 | WARNING | This comment is 74% valid code; is this commented
+     |         | out code?
+ 214 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 216 | ERROR   | Processing form data without nonce verification.
+ 217 | ERROR   | Processing form data without nonce verification.
+ 217 | ERROR   | Detected usage of a possibly undefined superglobal
+     |         | array index: $_POST['post_ID']. Use isset() or
+     |         | empty() to check the index exists before using it
+ 217 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 217 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['post_ID']
+ 217 | ERROR   | Processing form data without nonce verification.
+ 217 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 217 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['lr_url']
+ 217 | ERROR   | Processing form data without nonce verification.
+ 219 | ERROR   | Processing form data without nonce verification.
+ 220 | ERROR   | Processing form data without nonce verification.
+ 220 | ERROR   | Detected usage of a possibly undefined superglobal
+     |         | array index: $_POST['post_ID']. Use isset() or
+     |         | empty() to check the index exists before using it
+ 220 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 220 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['post_ID']
+ 220 | ERROR   | Processing form data without nonce verification.
+ 220 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 220 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['lr_desc']
+ 220 | ERROR   | Processing form data without nonce verification.
+ 239 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 243 | ERROR   | Missing doc comment for function
+     |         | register_mysettings()
+ 244 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 252 | ERROR   | Missing doc comment for function
+     |         | build_lroundups_options_page()
+ 253 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 259 | WARNING | Processing form data without nonce verification.
+ 263 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+----------------------------------------------------------------------
+
+
+FILE: ...s/link-roundups/inc/link-roundups/class-link-roundups-widget.php
+----------------------------------------------------------------------
+FOUND 50 ERRORS AND 4 WARNINGS AFFECTING 30 LINES
+----------------------------------------------------------------------
+   1 | ERROR   | Missing file doc comment
+   6 | ERROR   | Class name must begin with a capital letter
+   6 | ERROR   | Class name is not valid; consider
+     |         | Link_Roundups_Widget instead
+   8 | ERROR   | Missing doc comment for function __construct()
+   8 | ERROR   | Visibility must be declared on method "__construct"
+  17 | ERROR   | Missing doc comment for function widget()
+  17 | ERROR   | Visibility must be declared on method "widget"
+  18 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  21 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$args'.
+  24 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$args'.
+  24 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$title'.
+  24 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$args'.
+  34 | WARNING | Found: !=. Use strict comparisons (=== or !==).
+  34 | ERROR   | Use Yoda Condition checks, you must.
+  45 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  47 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  49 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  51 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$output'.
+  58 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+  61 | WARNING | Found: !=. Use strict comparisons (=== or !==).
+  61 | ERROR   | Use Yoda Condition checks, you must.
+  63 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$instance'.
+  63 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$instance'.
+  67 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$args'.
+  70 | ERROR   | Missing doc comment for function update()
+  70 | ERROR   | Visibility must be declared on method "update"
+  72 | WARNING | strip_tags() is discouraged. Use the more
+     |         | comprehensive wp_strip_all_tags() instead.
+  73 | WARNING | strip_tags() is discouraged. Use the more
+     |         | comprehensive wp_strip_all_tags() instead.
+  80 | ERROR   | Missing doc comment for function form()
+  80 | ERROR   | Visibility must be declared on method "form"
+  93 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+  93 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+  94 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+  94 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+  94 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$instance'.
+  98 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+  98 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+  99 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+  99 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+  99 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$instance'.
+ 103 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+ 103 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 118 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 118 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 120 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+ 120 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 121 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+ 121 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+ 121 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$instance'.
+ 125 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+ 125 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 126 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+ 126 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$this'.
+ 126 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '$instance'.
+----------------------------------------------------------------------
+
+
+FILE: ...s/link-roundups/inc/link-roundups/class-link-roundups-editor.php
+----------------------------------------------------------------------
+FOUND 40 ERRORS AND 49 WARNINGS AFFECTING 76 LINES
+----------------------------------------------------------------------
+   1 | ERROR   | Class file names should be based on the class name
+     |         | with "class-" prepended. Expected
+     |         | class-linkroundupseditor.php, but found
+     |         | class-link-roundups-editor.php.
+   1 | ERROR   | Missing file doc comment
+   3 | ERROR   | Missing doc comment for class LinkRoundupsEditor
+   5 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+   6 | ERROR   | You must use "/**" style comments for a function
+     |         | comment
+  16 | ERROR   | Doc comment for parameter "$attrs" missing
+  41 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  79 | ERROR   | Doc comment for parameter "$plugins" missing
+  97 | ERROR   | Resource version not set in call to
+     |         | wp_register_style(). This means new versions of the
+     |         | style will not always be loaded due to browser
+     |         | caching.
+ 100 | WARNING | In footer ($in_footer) is not set explicitly
+     |         | wp_register_script; It is recommended to load
+     |         | scripts in the footer. Please set this value to
+     |         | `true` to load it in the footer, or explicitly
+     |         | `false` if it should be loaded in the header.
+ 100 | ERROR   | Resource version not set in call to
+     |         | wp_register_script(). This means new versions of the
+     |         | script will not always be loaded due to browser
+     |         | caching.
+ 104 | WARNING | In footer ($in_footer) is not set explicitly
+     |         | wp_register_script; It is recommended to load
+     |         | scripts in the footer. Please set this value to
+     |         | `true` to load it in the footer, or explicitly
+     |         | `false` if it should be loaded in the header.
+ 104 | ERROR   | Resource version not set in call to
+     |         | wp_register_script(). This means new versions of the
+     |         | script will not always be loaded due to browser
+     |         | caching.
+ 126 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 126 | ERROR   | Use Yoda Condition checks, you must.
+ 126 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 126 | ERROR   | Use Yoda Condition checks, you must.
+ 131 | WARNING | json_encode() is discouraged. Use wp_json_encode()
+     |         | instead.
+ 148 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= content %><% } %></div>
+     |         | 
+ 151 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% _.each(actions, function(v, k) { %>
+     |         | 
+ 152 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= k %> button button-primary"><%=
+     |         | k %></a...
+ 153 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% }); %>
+     |         | 
+ 158 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= name %></h3>
+     |         | 
+ 159 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= name %>" block.</p>
+     |         | 
+ 165 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% if (hasPosts) { %>loading<% } else { %>...
+ 166 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% if (hasPosts) { %>Loading...<% } else {...
+ 184 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% posts.each(function(post, idx) { %>
+     |         | 
+ 185 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= post.get('ID') %>">
+     |         | 
+ 186 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= post.get('post_title') %>
+     |         | 
+ 187 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= post.getStatus() %></em></div>
+     |         | 
+ 190 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= post.get('ID') %>"
+     |         | href="#">Edit</a> | ...
+ 193 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= post.get('ID') %>"
+     |         | href="#">Add</a>
+     |         | 
+ 197 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% }); %>
+     |         | 
+ 202 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= post_title %></h4>
+     |         | 
+ 205 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= post_title %>"/>
+     |         | 
+ 209 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% if (custom_fields.lr_subhed) { %>
+     |         | 
+ 210 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= custom_fields.lr_subhed %>"/>
+     |         | 
+ 211 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% } else { %>
+     |         | 
+ 212 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= custom_fields.lr_subhed %>"/>
+     |         | 
+ 213 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% } %>
+     |         | 
+ 217 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% if (custom_fields.lr_url) { %>
+     |         | 
+ 218 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= custom_fields.lr_url %>" />
+     |         | 
+ 219 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% } else if (post_permalink) { %>
+     |         | 
+ 220 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= post_permalink %>" />
+     |         | 
+ 221 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% } else { %>
+     |         | 
+ 223 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% } %>
+     |         | 
+ 227 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% if (custom_fields.lr_desc) { %>
+     |         | 
+ 228 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= custom_fields.lr_desc
+     |         | %></textarea>
+     |         | 
+ 229 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% } else if (post_excerpt) { %>
+     |         | 
+ 230 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= post_excerpt %></textarea>
+     |         | 
+ 231 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% } else { %>
+     |         | 
+ 233 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% } %>
+     |         | 
+ 237 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% if (custom_fields.lr_source) { %>
+     |         | 
+ 238 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= custom_fields.lr_source %>" />
+     |         | 
+ 239 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% } else if (source) { %>
+     |         | 
+ 240 | WARNING | Possible use of ASP style short opening tags
+     |         | detected; found: <%= source %>" />
+     |         | 
+ 241 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% } else { %>
+     |         | 
+ 243 | WARNING | Possible use of ASP style opening tags detected;
+     |         | found: <% } %>
+     |         | 
+ 249 | ERROR   | Doc comment for parameter "$add" missing
+ 275 | ERROR   | You must use "/**" style comments for a function
+     |         | comment
+ 283 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 283 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['post']
+ 292 | WARNING | json_encode() is discouraged. Use wp_json_encode()
+     |         | instead.
+ 304 | WARNING | json_encode() is discouraged. Use wp_json_encode()
+     |         | instead.
+ 309 | ERROR   | Missing doc comment for function
+     |         | roundup_block_posts_query()
+ 310 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 334 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 337 | ERROR   | Variable "$exisitingIds" is not in valid snake_case
+     |         | format, try "$exisiting_ids"
+ 345 | ERROR   | Variable "$foundIds" is not in valid snake_case
+     |         | format, try "$found_ids"
+ 345 | ERROR   | split() has been deprecated since PHP 5.3 and
+     |         | removed in PHP 7.0, please use explode(),
+     |         | str_split() or preg_split() instead.
+ 346 | ERROR   | Variable "$foundIds" is not in valid snake_case
+     |         | format, try "$found_ids"
+ 347 | ERROR   | Variable "$exisitingIds" is not in valid snake_case
+     |         | format, try "$exisiting_ids"
+ 355 | ERROR   | Processing form data without nonce verification.
+ 356 | ERROR   | Variable "$exisitingIds" is not in valid snake_case
+     |         | format, try "$exisiting_ids"
+ 356 | ERROR   | $_POST data not unslashed before sanitization. Use
+     |         | wp_unslash() or similar
+ 356 | ERROR   | Detected usage of a non-sanitized input variable:
+     |         | $_POST['existingIds']
+ 356 | ERROR   | Processing form data without nonce verification.
+ 360 | ERROR   | Variable "$exisitingIds" is not in valid snake_case
+     |         | format, try "$exisiting_ids"
+ 360 | ERROR   | Variable "$exisitingId" is not in valid snake_case
+     |         | format, try "$exisiting_id"
+ 361 | WARNING | Not using strict comparison for in_array; supply
+     |         | true for third argument.
+ 361 | ERROR   | Variable "$exisitingId" is not in valid snake_case
+     |         | format, try "$exisiting_id"
+ 362 | ERROR   | Variable "$exisitingId" is not in valid snake_case
+     |         | format, try "$exisiting_id"
+ 376 | ERROR   | Overriding WordPress globals is prohibited. Found
+     |         | assignment to $post
+ 390 | ERROR   | You must use "/**" style comments for a function
+     |         | comment
+ 393 | WARNING | json_encode() is discouraged. Use wp_json_encode()
+     |         | instead.
+ 400 | ERROR   | Parameter comment must end with a full stop
+ 401 | ERROR   | Parameter comment must end with a full stop
+ 402 | ERROR   | Parameter comment must end with a full stop
+ 409 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+----------------------------------------------------------------------
+
+
+FILE: ...largo/wp-content/plugins/link-roundups/inc/updates/functions.php
+----------------------------------------------------------------------
+FOUND 14 ERRORS AND 6 WARNINGS AFFECTING 11 LINES
+----------------------------------------------------------------------
+   1 | ERROR   | Missing file doc comment
+   3 | ERROR   | Doc comment for parameter "$to" missing
+   3 | ERROR   | Doc comment for parameter "$from" missing
+  34 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  54 | ERROR   | Doc comment for parameter "$to" missing
+  54 | ERROR   | Doc comment for parameter "$from" missing
+  81 | ERROR   | Doc comment for parameter "$to" missing
+  81 | ERROR   | Doc comment for parameter "$from" missing
+ 106 | ERROR   | Doc comment for parameter "$old_post_type" missing
+ 106 | ERROR   | Doc comment for parameter "$new_post_type" missing
+ 113 | WARNING | Usage of a direct database call is discouraged.
+ 113 | WARNING | Direct database call without caching detected.
+     |         | Consider using wp_cache_get() / wp_cache_set() or
+     |         | wp_cache_delete().
+ 124 | ERROR   | Doc comment for parameter "$old_meta" missing
+ 124 | ERROR   | Doc comment for parameter "$new_meta" missing
+ 131 | WARNING | Usage of a direct database call is discouraged.
+ 131 | WARNING | Direct database call without caching detected.
+     |         | Consider using wp_cache_get() / wp_cache_set() or
+     |         | wp_cache_delete().
+ 142 | ERROR   | Doc comment for parameter "$old_tax" missing
+ 142 | ERROR   | Doc comment for parameter "$new_tax" missing
+ 149 | WARNING | Usage of a direct database call is discouraged.
+ 149 | WARNING | Direct database call without caching detected.
+     |         | Consider using wp_cache_get() / wp_cache_set() or
+     |         | wp_cache_delete().
+----------------------------------------------------------------------
+
+
+FILE: ...tes/largo/wp-content/plugins/link-roundups/inc/updates/index.php
+----------------------------------------------------------------------
+FOUND 21 ERRORS AND 14 WARNINGS AFFECTING 27 LINES
+----------------------------------------------------------------------
+   6 | ERROR   | Missing @package tag in file comment
+  41 | WARNING | Words in hook names should be separated using
+     |         | underscores. Expected:  'lroundups_update_0_3', but
+     |         | found:  'lroundups_update_0.3'.
+  53 | WARNING | Words in hook names should be separated using
+     |         | underscores. Expected:  'lroundups_update_0_3_2',
+     |         | but found:  'lroundups_update_0.3.2'.
+  86 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  91 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  92 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+  92 | ERROR   | Use Yoda Condition checks, you must.
+  93 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+  94 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 120 | WARNING | Processing form data without nonce verification.
+ 120 | WARNING | Processing form data without nonce verification.
+ 120 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 120 | ERROR   | Use Yoda Condition checks, you must.
+ 127 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '__'.
+ 127 | ERROR   | A gettext call containing placeholders was found,
+     |         | but was not accompanied by a "translators:" comment
+     |         | on the line above to clarify the meaning of the
+     |         | placeholders.
+ 128 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found 'admin_url'.
+ 132 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found '__'.
+ 133 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found 'admin_url'.
+ 212 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 216 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 217 | ERROR   | All output should be run through an escaping
+     |         | function (see the Security sections in the WordPress
+     |         | Developer Handbooks), found 'lroundups_version'.
+ 221 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 222 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 223 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 225 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 227 | ERROR   | All output should be run through an escaping
+     |         | function (like esc_html_e() or esc_attr_e()), found
+     |         | '_e'.
+ 243 | WARNING | Processing form data without nonce verification.
+ 243 | WARNING | Processing form data without nonce verification.
+ 243 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 243 | ERROR   | Use Yoda Condition checks, you must.
+ 244 | ERROR   | Version parameter is not explicitly set or has been
+     |         | set to an equivalent of "false" for
+     |         | wp_enqueue_script; This means that the WordPress
+     |         | core version will be used which is not recommended
+     |         | for plugin or theme development.
+ 262 | WARNING | json_encode() is discouraged. Use wp_json_encode()
+     |         | instead.
+ 272 | WARNING | json_encode() is discouraged. Use wp_json_encode()
+     |         | instead.
+ 284 | WARNING | json_encode() is discouraged. Use wp_json_encode()
+     |         | instead.
+ 292 | WARNING | json_encode() is discouraged. Use wp_json_encode()
+     |         | instead.
+----------------------------------------------------------------------
+
+
+FILE: ...tes/largo/wp-content/plugins/link-roundups/inc/compatibility.php
+----------------------------------------------------------------------
+FOUND 26 ERRORS AND 1 WARNING AFFECTING 11 LINES
+----------------------------------------------------------------------
+  1 | ERROR   | Missing file doc comment
+ 13 | ERROR   | Variable "$pageURL" is not in valid snake_case
+    |         | format, try "$page_u_r_l"
+ 16 | ERROR   | Variable "$pageURL" is not in valid snake_case
+    |         | format, try "$page_u_r_l"
+ 19 | ERROR   | Variable "$pageURL" is not in valid snake_case
+    |         | format, try "$page_u_r_l"
+ 21 | WARNING | Found: !=. Use strict comparisons (=== or !==).
+ 21 | ERROR   | Use Yoda Condition checks, you must.
+ 22 | ERROR   | Variable "$pageURL" is not in valid snake_case
+    |         | format, try "$page_u_r_l"
+ 22 | ERROR   | Detected usage of a possibly undefined superglobal
+    |         | array index: $_SERVER['SERVER_NAME']. Use isset() or
+    |         | empty() to check the index exists before using it
+ 22 | ERROR   | $_SERVER data not unslashed before sanitization. Use
+    |         | wp_unslash() or similar
+ 22 | ERROR   | Detected usage of a non-sanitized input variable:
+    |         | $_SERVER['SERVER_NAME']
+ 22 | ERROR   | $_SERVER data not unslashed before sanitization. Use
+    |         | wp_unslash() or similar
+ 22 | ERROR   | Detected usage of a non-sanitized input variable:
+    |         | $_SERVER['SERVER_PORT']
+ 22 | ERROR   | Detected usage of a possibly undefined superglobal
+    |         | array index: $_SERVER['REQUEST_URI']. Use isset() or
+    |         | empty() to check the index exists before using it
+ 22 | ERROR   | $_SERVER data not unslashed before sanitization. Use
+    |         | wp_unslash() or similar
+ 22 | ERROR   | Detected usage of a non-sanitized input variable:
+    |         | $_SERVER['REQUEST_URI']
+ 24 | ERROR   | Variable "$pageURL" is not in valid snake_case
+    |         | format, try "$page_u_r_l"
+ 24 | ERROR   | Detected usage of a possibly undefined superglobal
+    |         | array index: $_SERVER['SERVER_NAME']. Use isset() or
+    |         | empty() to check the index exists before using it
+ 24 | ERROR   | $_SERVER data not unslashed before sanitization. Use
+    |         | wp_unslash() or similar
+ 24 | ERROR   | Detected usage of a non-sanitized input variable:
+    |         | $_SERVER['SERVER_NAME']
+ 24 | ERROR   | Detected usage of a possibly undefined superglobal
+    |         | array index: $_SERVER['REQUEST_URI']. Use isset() or
+    |         | empty() to check the index exists before using it
+ 24 | ERROR   | $_SERVER data not unslashed before sanitization. Use
+    |         | wp_unslash() or similar
+ 24 | ERROR   | Detected usage of a non-sanitized input variable:
+    |         | $_SERVER['REQUEST_URI']
+ 27 | ERROR   | Variable "$pageURL" is not in valid snake_case
+    |         | format, try "$page_u_r_l"
+ 28 | ERROR   | Variable "$newURL" is not in valid snake_case format,
+    |         | try "$new_u_r_l"
+ 28 | ERROR   | Variable "$pageURL" is not in valid snake_case
+    |         | format, try "$page_u_r_l"
+ 30 | ERROR   | Inline comments must end in full-stops, exclamation
+    |         | marks, or question marks
+ 31 | ERROR   | Variable "$newURL" is not in valid snake_case format,
+    |         | try "$new_u_r_l"
+----------------------------------------------------------------------
+
+
+FILE: ...k/sites/largo/wp-content/plugins/link-roundups/link-roundups.php
+----------------------------------------------------------------------
+FOUND 8 ERRORS AND 5 WARNINGS AFFECTING 6 LINES
+----------------------------------------------------------------------
+   2 | ERROR   | You must use "/**" style comments for a file comment
+   2 | ERROR   | Empty line required before block comment
+  30 | WARNING | error_log() found. Debug code should not normally be
+     |         | used in production.
+  45 | ERROR   | Inline comments must end in full-stops, exclamation
+     |         | marks, or question marks
+ 119 | ERROR   | Resource version not set in call to
+     |         | wp_register_style(). This means new versions of the
+     |         | style will not always be loaded due to browser
+     |         | caching.
+ 122 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 122 | ERROR   | Use Yoda Condition checks, you must.
+ 122 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 122 | ERROR   | Use Yoda Condition checks, you must.
+ 122 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 122 | ERROR   | Use Yoda Condition checks, you must.
+ 127 | WARNING | Found: ==. Use strict comparisons (=== or !==).
+ 127 | ERROR   | Use Yoda Condition checks, you must.
+----------------------------------------------------------------------
+
+
+FILE: ...tes/largo/wp-content/plugins/link-roundups/templates/options.php
+----------------------------------------------------------------------
+FOUND 39 ERRORS AND 2 WARNINGS AFFECTING 34 LINES
+----------------------------------------------------------------------
+  2 | ERROR   | Missing file doc comment
+  2 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+  6 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 10 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found '__'.
+ 10 | ERROR   | A gettext call containing placeholders was found, but
+    |         | was not accompanied by a "translators:" comment on
+    |         | the line above to clarify the meaning of the
+    |         | placeholders.
+ 15 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 15 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 21 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 22 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 25 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found '__'.
+ 25 | ERROR   | A gettext call containing placeholders was found, but
+    |         | was not accompanied by a "translators:" comment on
+    |         | the line above to clarify the meaning of the
+    |         | placeholders.
+ 29 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 30 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 31 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found 'get_option'.
+ 32 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 33 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found 'get_option'.
+ 35 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 36 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 38 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found 'get_site_url'.
+ 44 | ERROR   | Inline comments must end in full-stops, exclamation
+    |         | marks, or question marks
+ 46 | ERROR   | Inline comments must end in full-stops, exclamation
+    |         | marks, or question marks
+ 48 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found '$current_slug'.
+ 52 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found '$custom_slug'.
+ 53 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 56 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found '__'.
+ 56 | ERROR   | A gettext call containing placeholders was found, but
+    |         | was not accompanied by a "translators:" comment on
+    |         | the line above to clarify the meaning of the
+    |         | placeholders.
+ 57 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found 'admin_url'.
+ 62 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 63 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 64 | WARNING | Found: !=. Use strict comparisons (=== or !==).
+ 64 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found 'get_option'.
+ 64 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found 'SavedLinks'.
+ 68 | WARNING | json_encode() is discouraged. Use wp_json_encode()
+    |         | instead.
+ 71 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 77 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 78 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 81 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+ 83 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found '__'.
+ 84 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found '__'.
+ 85 | ERROR   | All output should be run through an escaping function
+    |         | (see the Security sections in the WordPress Developer
+    |         | Handbooks), found '__'.
+ 90 | ERROR   | All output should be run through an escaping function
+    |         | (like esc_html_e() or esc_attr_e()), found '_e'.
+----------------------------------------------------------------------
+
+Time: 1.35 secs; Memory: 20MB
+
