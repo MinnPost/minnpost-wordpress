@@ -56,3 +56,4 @@ wp-content/config/
 wp-content/private/
 wp-content/plugins/raw-html-pro/
 wp-content/vip-config/
+node_modules
