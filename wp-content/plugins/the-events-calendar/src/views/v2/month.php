@@ -9,44 +9,49 @@
  *
  * @link {INSERT_ARTCILE_LINK_HERE}
  *
- * @version 4.9.3
+ * @version 4.9.4
  *
  */
+use Tribe\Events\Views\V2\Rest_Endpoint;
 
 $events = $this->get( 'events' );
-
 ?>
+<div
+	class="tribe-common tribe-events tribe-events-view"
+	data-js="tribe-events-view"
+	data-view-rest-nonce="<?php echo esc_attr( wp_create_nonce( 'wp_rest' ) ); ?>"
+	data-view-rest-url="<?php echo esc_url( tribe( Rest_Endpoint::class )->get_url() ); ?>"
+	data-view-manage-url="<?php echo (int) $this->get( 'should_manage_url', true ); ?>"
+>
+	<div class="tribe-common-l-container tribe-events-l-container">
+		<?php $this->template( 'loader', [ 'text' => 'Loading...' ] ); ?>
 
-<div class="tribe-common-l-container tribe-events-l-container">
+		<?php $this->template( 'data' ); ?>
 
-	<?php $this->template( 'events-bar' ); ?>
+		<header class="tribe-events-header">
+			<?php $this->template( 'events-bar' ); ?>
 
-	<?php $this->template( 'top-bar' ); ?>
+			<?php $this->template( 'top-bar' ); ?>
+		</header>
 
-	<div class="tribe-events-calendar-month" role="grid" aria-labelledby="tribe-calendar-header" aria-readonly="true">
+		<div
+			class="tribe-events-calendar-month"
+			role="grid"
+			aria-labelledby="tribe-calendar-header"
+			aria-readonly="true"
+			data-js="tribe-events-month-grid"
+		>
 
-		<?php $this->template( 'month/grid-header' ); ?>
+			<?php $this->template( 'month/calendar-header' ); ?>
 
-		<div class="tribe-events-calendar-month__body" role="rowgroup">
-
-			<?php // @todo: replace this with the actual month days. Using these for(s) for presentation purposes. ?>
-			<?php for ( $week = 0; $week < 4; $week++ ) : ?>
-
-				<div class="tribe-events-calendar-month__week" role="row">
-
-					<?php for ( $day = 0; $day < 7; $day++ ) : ?>
-
-						<?php $this->template( 'month/day', [ 'day' => $day, 'week' => $week ] ); ?>
-
-					<?php endfor; ?>
-
-				</div>
-
-			<?php endfor; ?>
+			<?php $this->template( 'month/calendar-body' ); ?>
 
 		</div>
+
+		<?php $this->template( 'month/nav', [ 'location' => 'calendar' ] ); ?>
+
+		<?php $this->template( 'month/mobile-events' ); ?>
 
 	</div>
 
 </div>
-

@@ -9,40 +9,37 @@
  *
  * @link {INSERT_ARTCILE_LINK_HERE}
  *
- * @version 4.9.3
+ * @version 4.9.4
  *
  */
 
 use Tribe\Events\Views\V2\Rest_Endpoint;
 
-/**
- * @todo  remove this and properly enqueue assets
- */
-tribe_asset_enqueue( 'tribe-events-views-v2-manager' );
 $events = $this->get( 'events' );
 ?>
 <div
-	class="tribe-common tribe-events"
+	class="tribe-common tribe-events tribe-events-view"
 	data-js="tribe-events-view"
 	data-view-rest-nonce="<?php echo esc_attr( wp_create_nonce( 'wp_rest' ) ); ?>"
 	data-view-rest-url="<?php echo esc_url( tribe( Rest_Endpoint::class )->get_url() ); ?>"
+	data-view-manage-url="<?php echo (int) $this->get( 'should_manage_url', true ); ?>"
 >
 	<div class="tribe-common-l-container tribe-events-l-container">
 		<?php $this->template( 'loader', [ 'text' => 'Loading...' ] ); ?>
 
-		<?php
-		$this->template( 'data', [] );
-		?>
+		<?php $this->template( 'data' ); ?>
 
-		<?php $this->template( 'events-bar' ); ?>
+		<header class="tribe-events-header">
+			<?php $this->template( 'events-bar' ); ?>
 
-		<?php $this->template( 'top-bar' ); ?>
+			<?php $this->template( 'top-bar' ); ?>
+		</header>
 
 		<div class="tribe-events-calendar-list">
 
-			<?php $this->template( 'list/month-separator', [ 'month' => date( 'M' ) ] ); ?>
-
 			<?php foreach ( $events as $event ) : ?>
+
+				<?php $this->template( 'list/month-separator', [ 'event' => $event ] ); ?>
 
 				<?php $this->template( 'list/event', [ 'event' => $event ] ); ?>
 

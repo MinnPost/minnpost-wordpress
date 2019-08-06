@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4e2d8fe79e6d88a0350a7658ab17b2ca
+class ComposerStaticInitfeec375d710f3b5853d28965580ba4c0
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -50,6 +50,8 @@ class ComposerStaticInit4e2d8fe79e6d88a0350a7658ab17b2ca
         'Firebase\\JWT\\ExpiredException' => __DIR__ . '/..' . '/firebase/php-jwt/src/ExpiredException.php',
         'Firebase\\JWT\\JWT' => __DIR__ . '/..' . '/firebase/php-jwt/src/JWT.php',
         'Firebase\\JWT\\SignatureInvalidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/SignatureInvalidException.php',
+        'Tribe\\PUE\\Update_Prevention' => __DIR__ . '/../..' . '/src/Tribe/PUE/Update_Prevention.php',
+        'Tribe\\Service_Providers\\PUE' => __DIR__ . '/../..' . '/src/Tribe/Service_Providers/PUE.php',
         'Tribe\\Traits\\Cache_User' => __DIR__ . '/../..' . '/src/Tribe/Traits/Cache_User.php',
         'tad_DI52_Container' => __DIR__ . '/..' . '/lucatume/di52/src/tad/DI52/Container.php',
         'tad_DI52_ContainerInterface' => __DIR__ . '/..' . '/lucatume/di52/src/tad/DI52/ContainerInterface.php',
@@ -63,10 +65,10 @@ class ComposerStaticInit4e2d8fe79e6d88a0350a7658ab17b2ca
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4e2d8fe79e6d88a0350a7658ab17b2ca::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4e2d8fe79e6d88a0350a7658ab17b2ca::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit4e2d8fe79e6d88a0350a7658ab17b2ca::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit4e2d8fe79e6d88a0350a7658ab17b2ca::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfeec375d710f3b5853d28965580ba4c0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfeec375d710f3b5853d28965580ba4c0::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitfeec375d710f3b5853d28965580ba4c0::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitfeec375d710f3b5853d28965580ba4c0::$classMap;
 
         }, null, ClassLoader::class);
     }
