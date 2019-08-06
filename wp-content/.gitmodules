@@ -1,7 +1,3 @@
-[submodule "plugins/appnexus-acm-provider"]
-	path = plugins/appnexus-acm-provider
-	url = https://github.com/MinnPost/appnexus-acm-provider.git
-	branch = master
 [submodule "plugins/cmb2-field-post-search-ajax"]
 	path = plugins/cmb2-field-post-search-ajax
 	url = https://github.com/MinnPost/cmb2-field-post-search-ajax.git
@@ -13,6 +9,10 @@
 [submodule "plugins/object-sync-for-salesforce"]
 	path = plugins/object-sync-for-salesforce
 	url = https://github.com/MinnPost/object-sync-for-salesforce.git
+	branch = master
+[submodule "plugins/arcads-dfp-acm-provider"]
+	path = plugins/arcads-dfp-acm-provider
+	url = https://github.com/MinnPost/arcads-dfp-acm-provider
 	branch = master
 [submodule "plugins/minnpost-form-processor-mailchimp"]
 	path = plugins/minnpost-form-processor-mailchimp
@@ -37,10 +37,6 @@
 [submodule "plugins/wp-analytics-tracking-generator"]
 	path = plugins/wp-analytics-tracking-generator
 	url = https://github.com/MinnPost/wp-analytics-tracking-generator.git
-	branch = master
-[submodule "plugins/wp-lozad-lazyload"]
-	path = plugins/wp-lozad-lazyload
-	url = https://github.com/MinnPost/wp-lozad-lazyload.git
 	branch = master
 [submodule "plugins/wp-message-inserter-plugin"]
 	path = plugins/wp-message-inserter-plugin

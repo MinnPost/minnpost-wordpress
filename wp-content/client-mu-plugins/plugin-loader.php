@@ -21,7 +21,7 @@
 
 // active plugins
 wpcom_vip_load_plugin( 'ad-code-manager/ad-code-manager.php' );
-wpcom_vip_load_plugin( 'appnexus-acm-provider/appnexus-acm-provider.php' );
+wpcom_vip_load_plugin( 'arcads-dfp-acm-provider/arcads-dfp-acm-provider.php' );
 wpcom_vip_load_plugin( 'better-image-credits/better-image-credits.php' );
 wpcom_vip_load_plugin( 'category-pagination-fix/category-pagefix.php' );
 if ( 'production' === VIP_GO_ENV ) {
@@ -32,6 +32,7 @@ wpcom_vip_load_plugin( 'cmb2-attached-posts/cmb2-attached-posts-field.php' );
 wpcom_vip_load_plugin( 'cmb2-conditionals/cmb2-conditionals.php' );
 wpcom_vip_load_plugin( 'cmb2-field-ajax-search/cmb2-field-ajax-search.php' );
 wpcom_vip_load_plugin( 'cmb2-field-post-search-ajax/cmb-field-post-search-ajax.php' );
+wpcom_vip_load_plugin( 'cmb2-select-plus/cmb2-select-plus.php' );
 wpcom_vip_load_plugin( 'cmb2-user-select/cmb2-user-select.php' );
 wpcom_vip_load_plugin( 'co-authors-extend/co-authors-extend.php' );
 wpcom_vip_load_plugin( 'co-authors-plus/co-authors-plus.php' );
@@ -81,7 +82,6 @@ wpcom_vip_load_plugin( 'widget-settings-importexport/widget-data.php' );
 wpcom_vip_load_plugin( 'wpcom-legacy-redirector/wpcom-legacy-redirector.php' );
 wpcom_vip_load_plugin( 'wp-analytics-tracking-generator/wp-analytics-tracking-generator.php' );
 wpcom_vip_load_plugin( 'wp-category-permalink/wp-category-permalink.php' );
-wpcom_vip_load_plugin( 'wp-lozad-lazyload/wp-lozad-lazyload.php' );
 wpcom_vip_load_plugin( 'wp-message-inserter-plugin/wp-message-inserter-plugin.php' );
 wpcom_vip_load_plugin( 'wp-post-expires/wp-post-expires.php' );
 wpcom_vip_load_plugin( 'wp-post-image-watermarks/wp-post-image-watermarks.php' );
@@ -101,16 +101,23 @@ if ( 'local' !== VIP_GO_ENV ) {
 
 // es-wp-query adapter
 if ( 'local' !== VIP_GO_ENV ) {
-	add_action( 'after_setup_theme', function() {
-		if ( function_exists( 'es_wp_query_load_adapter' ) ) {
-			es_wp_query_load_adapter( 'jetpack-search' );
-		}
-	}, 5 );
+	add_action(
+		'after_setup_theme',
+		function() {
+			if ( function_exists( 'es_wp_query_load_adapter' ) ) {
+				es_wp_query_load_adapter( 'jetpack-search' );
+			}
+		},
+		5
+	);
 }
 
 // es-admin adapter
 if ( 'local' !== VIP_GO_ENV ) {
-	add_filter( 'es_admin_adapter', function() {
-		return '\ES_Admin\Adapters\Jetpack_Search';
-	} );
+	add_filter(
+		'es_admin_adapter',
+		function() {
+			return '\ES_Admin\Adapters\Jetpack_Search';
+		}
+	);
 }
