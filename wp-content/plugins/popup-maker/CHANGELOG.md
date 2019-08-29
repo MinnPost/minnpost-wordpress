@@ -1,3 +1,17 @@
+### v1.8.10 - 07/06/2019
+* Fix: PHP backward compatibility issue due to short array syntax usage.
+
+### v1.8.9 - 07/04/2019
+* Fix: Issue where popup titles wouldn't render.
+
+### v1.8.8 - 06/30/2019
+* Fix: Bug where red alert icons didn't go away when visiting the tabs from the "Extend" menu.
+
+### v1.8.7 - 06/29/2019
+* Tweak: Restricted the admin toolbar to only show under strict circumstances.
+* Tweak: Updated available WooCommerce endpoints in our targeting conditions
+* Fix: Issue with instance based shortcodes when asset caching was enabled but running on every request.
+
 ### v1.8.6 - 05/05/2019
 * Fix: Typo in GDPR eraser that could sometimes result in errors when processing GDPR requests
 * Fix: Added function exists check to prevent errors on WP 4.1

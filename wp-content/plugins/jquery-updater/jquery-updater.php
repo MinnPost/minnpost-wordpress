@@ -1,10 +1,9 @@
 <?php
-
 /**
  * Plugin Name: jQuery Updater
  * Plugin URI: http://www.ramoonus.nl/wordpress/jquery-updater/
  * Description: This plugin updates jQuery to the latest  stable version.
- * Version: 3.4.1
+ * Version: 3.4.1.2
  * Author: Ramoonus
  * Author URI: http://www.ramoonus.nl/
  * License: GPL3
@@ -15,7 +14,7 @@
 /**
  * Replace jQuery with a newer version, load jQuery Migrate
  *
- * @version 3.4.0
+ * @version 3.4.1.2
  * @since 1.0.0
  */
 function rw_jquery_updater()
@@ -40,6 +39,7 @@ function rw_jquery_updater()
  * Front-End
  */
 add_action('wp_enqueue_scripts', 'rw_jquery_updater');
+add_action('login_enqueue_scripts', 'rw_jquery_updater', 1); // since 3.4.0.1
 
 /**
  * Load translation
@@ -48,9 +48,9 @@ add_action('wp_enqueue_scripts', 'rw_jquery_updater');
  * @version 1.0
  *         
  */
-function rw__load_plugin_textdomain()
+function rw_load_plugin_textdomain()
 {
     load_plugin_textdomain('jquery-updater', FALSE, basename(dirname(__FILE__)) . '/languages/');
 }
 
-add_action('plugins_loaded', 'rw__load_plugin_textdomain');
+add_action('plugins_loaded', 'rw_load_plugin_textdomain');
