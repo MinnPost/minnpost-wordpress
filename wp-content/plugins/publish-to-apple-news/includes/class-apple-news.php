@@ -39,7 +39,7 @@ class Apple_News {
 	 * @var string
 	 * @access public
 	 */
-	public static $version = '1.4.4';
+	public static $version = '2.0.1';
 
 	/**
 	 * Link to support for the plugin on WordPress.org.
@@ -55,7 +55,7 @@ class Apple_News {
 	 * @var bool
 	 * @access private
 	 */
-	private static $_is_initialized;
+	private static $is_initialized;
 
 	/**
 	 * Plugin domain.
@@ -79,7 +79,7 @@ class Apple_News {
 	 * @var array
 	 * @access private
 	 */
-	private $_contexts = array(
+	private $contexts = array(
 		'post.php',
 		'post-new.php',
 		'toplevel_page_apple_news_index',
@@ -182,15 +182,15 @@ class Apple_News {
 	public static function is_initialized() {
 
 		// Look up required information in plugin settings, if necessary.
-		if ( null === self::$_is_initialized ) {
-			$settings              = get_option( self::$option_name );
-			self::$_is_initialized = ( ! empty( $settings['api_channel'] )
+		if ( null === self::$is_initialized ) {
+			$settings             = get_option( self::$option_name );
+			self::$is_initialized = ( ! empty( $settings['api_channel'] )
 				&& ! empty( $settings['api_key'] )
 				&& ! empty( $settings['api_secret'] )
 			);
 		}
 
-		return self::$_is_initialized;
+		return self::$is_initialized;
 	}
 
 	/**
@@ -201,11 +201,17 @@ class Apple_News {
 	public function __construct() {
 		add_action(
 			'admin_enqueue_scripts',
-			array( $this, 'action_admin_enqueue_scripts' )
+			[ $this, 'action_admin_enqueue_scripts' ]
 		);
 		add_action(
 			'plugins_loaded',
-			array( $this, 'action_plugins_loaded' )
+			[ $this, 'action_plugins_loaded' ]
+		);
+		add_filter(
+			'update_post_metadata',
+			[ $this, 'filter_update_post_metadata' ],
+			10,
+			5
 		);
 	}
 
@@ -218,8 +224,20 @@ class Apple_News {
 	 */
 	public function action_admin_enqueue_scripts( $hook ) {
 
+		// If the block editor is active, add PluginSidebar.
+		if ( get_the_ID() && use_block_editor_for_post( get_the_ID() ) ) {
+			wp_enqueue_script(
+				'publish-to-apple-news-plugin-sidebar',
+				plugins_url( 'build/pluginSidebar.js', __DIR__ ),
+				[ 'wp-i18n', 'wp-edit-post' ],
+				self::$version,
+				true
+			);
+			$this->inline_locale_data( 'apple-news-plugin-sidebar' );
+		}
+
 		// Ensure we are in an appropriate context.
-		if ( ! in_array( $hook, $this->_contexts, true ) ) {
+		if ( ! in_array( $hook, $this->contexts, true ) ) {
 			return;
 		}
 
@@ -328,6 +346,55 @@ class Apple_News {
 
 		// Load the example themes, if they do not exist.
 		$this->load_example_themes();
+	}
+
+	/**
+	 * A filter callback for update_post_metadata to fix a bug with WordPress
+	 * whereby meta values passed via the REST API that require slashing but are
+	 * otherwise the same as the existing value in the database will cause a failure
+	 * during post save.
+	 *
+	 * @see \update_metadata
+	 *
+	 * @param null|bool $check      Whether to allow updating metadata for the given type.
+	 * @param int       $object_id  Object ID.
+	 * @param string    $meta_key   Meta key.
+	 * @param mixed     $meta_value Meta value. Must be serializable if non-scalar.
+	 * @param mixed     $prev_value Optional. If specified, only update existing.
+	 * @return null|bool True if the conditions are ripe for the fix, otherwise the existing value of $check.
+	 */
+	public function filter_update_post_metadata( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
+		if ( empty( $prev_value ) ) {
+			$old_value = get_metadata( 'post', $object_id, $meta_key );
+			if ( 1 === count( $old_value ) ) {
+				if ( $old_value[0] === $meta_value ) {
+					return true;
+				}
+			}
+		}
+
+		return $check;
+	}
+
+	/**
+	 * Creates a new Jed instance with specified locale data configuration.
+	 *
+	 * @param string $to_handle The script handle to attach the inline script to.
+	 */
+	public function inline_locale_data( $to_handle ) {
+		// Define locale data for Jed.
+		$locale_data = [
+			'' => [
+				'domain' => 'publish-to-apple-news',
+				'lang'   => get_user_locale(),
+			],
+		];
+
+		// Pass the Jed configuration to the admin to properly register i18n.
+		wp_add_inline_script(
+			$to_handle,
+			'wp.i18n.setLocaleData( ' . wp_json_encode( $locale_data ) . ", 'publish-to-apple-news' );"
+		);
 	}
 
 	/**

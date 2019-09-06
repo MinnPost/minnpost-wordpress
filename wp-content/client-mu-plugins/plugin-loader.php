@@ -68,6 +68,7 @@ wpcom_vip_load_plugin( 'public-post-preview/public-post-preview.php' );
 wpcom_vip_load_plugin( 'pwa/pwa.php' );
 wpcom_vip_load_plugin( 'raw-html-pro/raw_html.php' );
 wpcom_vip_load_plugin( 'recent-posts-widget-extended/rpwe.php' );
+wpcom_vip_load_plugin( 'recently-registered/recently-registered.php' );
 wpcom_vip_load_plugin( 'remove-widget-titles/remove-widget-titles.php' );
 wpcom_vip_load_plugin( 'simple-image-sizes/simple_image_sizes.php' );
 wpcom_vip_load_plugin( 'staff-user-post-list/staff-user-list.php' );
