@@ -3,7 +3,7 @@
 Plugin Name: Nav Menu Roles
 Plugin URI: http://www.kathyisawesome.com/449/nav-menu-roles/
 Description: Hide custom menu items based on user roles.
-Version: 1.9.3
+Version: 1.9.5
 Author: Kathy Darling
 Author URI: http://www.kathyisawesome.com
 License: GPL-3.0
@@ -48,13 +48,13 @@ class Nav_Menu_Roles {
 	* @constant string donate url
 	* @since 1.9.1
 	*/
-	CONST DONATE_URL = "https://www.paypal.com/fundraiser/110230052184687338/charity/1451316";
+	CONST DONATE_URL = "https://www.paypal.com/fundraiser/charity/1451316";
 
 	/**
 	* @constant string version number
 	* @since 1.7.0
 	*/
-	CONST VERSION = '1.9.3';
+	CONST VERSION = '1.9.5';
 
 	/**
 	* Main Nav Menu Roles Instance
@@ -222,7 +222,7 @@ class Nav_Menu_Roles {
 	public function add_action_links( $plugin_meta, $plugin_file ) {
 		if( $plugin_file == plugin_basename(__FILE__) ){
 			$plugin_meta[] = sprintf( '<a class="dashicons-before dashicons-welcome-learn-more" href="https://wordpress.org/plugins/nav-menu-roles/faq/#conflict">%s</a>', __( 'FAQ', 'nav-menu-roles' ) );
-			$plugin_meta[] = '<a class="dashicons-before dashicons-awards" href="' . self::DONATE_URL . '" target="_blank">' . __( 'Donate', 'nav-menu-roles' ) . '</a>';
+			$plugin_meta[] = '<a class="dashicons-before dashicons-admin-generic" href="' . self::DONATE_URL . '" target="_blank">' . __( 'Donate', 'nav-menu-roles' ) . '</a>';
 		}
 		return $plugin_meta;
 	}
@@ -345,7 +345,7 @@ class Nav_Menu_Roles {
 
 		        ?>
 
-		        <div class="role-input-holder" style="float: left; width: 33.3%; margin: 2px 0;">
+		        <div class="role-input-holder" style="margin: 2px 0;">
 		        <input type="checkbox" name="nav-menu-role[<?php echo $item->ID ;?>][<?php echo $i; ?>]" id="nav_menu_role-<?php echo $role; ?>-for-<?php echo $item->ID ;?>" <?php echo $checked; ?> value="<?php echo $role; ?>" />
 		        <label for="nav_menu_role-<?php echo $role; ?>-for-<?php echo $item->ID ;?>">
 		        <?php echo esc_html( $name ); ?>
@@ -430,6 +430,27 @@ class Nav_Menu_Roles {
 
 			if ( ! empty( $roles ) ) {
 				$menu_item->roles = $roles;
+
+				// Add the NMR roles as CSS info.
+				$new_classes = array();
+
+				switch( $roles ) {
+					case 'in' :
+						$new_classes[] = 'nmr-logged-in';
+						break;
+					case 'out' :
+						$new_classes[] = 'nmr-logged-out';
+						break;
+					default:
+						if ( is_array( $menu_item->roles ) && ! empty( $menu_item->roles ) ) {
+							foreach ( $menu_item->roles as $role ) {
+								$new_classes[] = 'nmr-' . $role;
+							}
+						}
+						break;
+				}
+
+				$menu_item->classes = array_merge( $menu_item->classes, $new_classes );
 			}
 		}
 		return $menu_item;

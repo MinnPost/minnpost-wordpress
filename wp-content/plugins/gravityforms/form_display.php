@@ -2142,8 +2142,8 @@ class GFFormDisplay {
 
 		if ( is_array( rgar( $form, 'fields' ) ) ) {
 			foreach ( rgar( $form, 'fields' ) as $field ) {
-				if ( isset( $field->fields ) && is_array( $field->fields ) ) {
-					return self::has_conditional_logic_legwork( array( 'fields' => $field->fields ) );
+				if ( isset( $field->fields ) && is_array( $field->fields ) && self::has_conditional_logic_legwork( array( 'fields' => $field->fields ) ) ) {
+					return true;
 				}
 				if ( ! empty( $field->conditionalLogic ) ) {
 					return true;

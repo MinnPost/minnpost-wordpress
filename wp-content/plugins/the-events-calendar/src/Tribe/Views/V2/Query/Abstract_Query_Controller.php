@@ -42,7 +42,7 @@ abstract class Abstract_Query_Controller {
 			return $posts;
 		}
 
-		if ( ! empty( $query->tribe_controller ) || ! $query->is_main_query() ) {
+		if ( ! ( empty( $query->tribe_controller ) && $query->is_main_query() ) ) {
 			return $posts;
 		}
 
@@ -136,6 +136,9 @@ abstract class Abstract_Query_Controller {
 		$query->max_num_pages = $query->post_count > 0
 			? ceil( $query->found_posts / $query->post_count )
 			: 1;
+		$query->is_single = false;
+		$query->is_singular = false;
+		$query->is_archive = true;
 
 		return $injected_posts;
 	}

@@ -6033,7 +6033,11 @@ Content-Type: text/html;
 	 * @return bool
 	 */
 	public static function email_domain_matches( $email_address, $domain = '' ) {
+
+		GFCommon::log_debug( __METHOD__ . '(): Email address: ' . $email_address );
+
 		if ( ! is_email( $email_address ) ) {
+			GFCommon::log_debug( __METHOD__ . '(): Email address failed is_email() validation.' );
 			return false;
 		}
 
@@ -6041,7 +6045,12 @@ Content-Type: text/html;
 			$domain = parse_url( get_bloginfo( 'url' ), PHP_URL_HOST );
 		}
 
-		$domain_matches = ( strpos( $email_address, $domain ) !== false ) ? true : false;
+		GFCommon::log_debug( __METHOD__ . '(): Domain or URL: ' . $domain );
+
+		$email_domain = explode( '@', $email_address );
+
+		$domain_matches = ( strpos( $domain, array_pop( $email_domain ) ) !== false ) ? true : false;
+		GFCommon::log_debug( __METHOD__ . '(): Domain matches? '. var_export( $domain_matches, true ) );
 
 		return $domain_matches;
   }

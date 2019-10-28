@@ -36,14 +36,10 @@ if ( ! function_exists( 'tribe_register_plugin' ) ) {
 	 * @param string $version      The version
 	 * @param array  $classes_req  Any Main class files/tribe plugins required for this to run
 	 * @param array  $dependencies an array of dependencies to check
-	 *
-	 * @return bool Indicates if plugin should continue initialization
 	 */
-	function tribe_register_plugin( $file_path, $main_class, $version, $classes_req = array(), $dependencies = array() ) {
-
-		$tribe_dependency  = Tribe__Dependency::instance();
+	function tribe_register_plugin( $file_path, $main_class, $version, $classes_req = [], $dependencies = [] ) {
+		$tribe_dependency = tribe( Tribe__Dependency::class );
 		$tribe_dependency->register_plugin( $file_path, $main_class, $version, $classes_req, $dependencies );
-
 	}
 }
 
@@ -136,7 +132,9 @@ if ( ! function_exists( 'tribe_get_request_var' ) ) {
 	 *
 	 * The variable being tested for can be an array if you wish to find a nested value.
 	 *
-	 * @see Tribe__Utils__Array::get()
+	 * @since 4.9.17 Included explicit check against $_REQUEST.
+	 *
+	 * @see   Tribe__Utils__Array::get()
 	 *
 	 * @param string|array $var
 	 * @param mixed        $default
@@ -144,7 +142,8 @@ if ( ! function_exists( 'tribe_get_request_var' ) ) {
 	 * @return mixed
 	 */
 	function tribe_get_request_var( $var, $default = null ) {
-		return Tribe__Utils__Array::get_in_any( array( $_GET, $_POST ), $var, $default );
+		$unsafe = Tribe__Utils__Array::get_in_any( [ $_GET, $_POST, $_REQUEST ], $var, $default );
+		return tribe_sanitize_deep( $unsafe );
 	}
 }
 
@@ -637,5 +636,84 @@ if ( ! function_exists( 'tribe_register_rest_route' ) ) {
 		 */
 		$args = apply_filters( 'tribe_register_rest_route_args', $args, $namespace, $route, $override );
 		return register_rest_route( $namespace, $route, $args, $override );
+	}
+}
+
+if ( ! function_exists( 'tribe_get_request_vars' ) ) {
+	/**
+	 * Returns the sanitized version of the `$_REQUEST` super-global array.
+	 *
+	 * Note: the return value is cached. It will be resolve the first time the function is called, per HTTP request,
+	 * then the same return value will be returned. After the function has been called the first time, changes to the
+	 * `$_REQUEST` super-global will NOT be reflected in the function return value.
+	 * Call the function with `$refresh` set to `true` to refresh the function value.
+	 *
+	 * @since 4.9.18
+	 *
+	 * @param bool $refresh Whether to parse the `$_REQUEST` cache again and refresh the cache or not; defaults to
+	 *                      `false`.
+	 *
+	 * @return array The sanitized version of the `$_REQUEST` super-global.
+	 */
+	function tribe_get_request_vars( $refresh = false ) {
+		static $cache;
+
+		if ( ! isset( $_REQUEST ) ) {
+			return [];
+		}
+
+		if ( null !== $cache && ! $refresh ) {
+			return $cache;
+		}
+
+		$cache = array_combine(
+			array_keys( $_REQUEST ),
+			array_map( static function ( $v )
+			{
+				return filter_var( $v, FILTER_SANITIZE_STRING );
+			},
+				$_REQUEST )
+		);
+
+		return $cache;
+	}
+}
+
+if ( ! function_exists( 'tribe_sanitize_deep' ) ) {
+
+	/**
+	 * Sanitizes a value according to its type.
+	 *
+	 * The function will recursively sanitize array values.
+	 *
+	 * @since TBD
+	 *
+	 * @param mixed $value The value, or values, to sanitize.
+	 *
+	 * @return mixed|null Either the sanitized version of the value, or `null` if the value is not a string, number or
+	 *                    array.
+	 */
+	function tribe_sanitize_deep( &$value ) {
+		if ( is_bool( $value ) ) {
+			return $value;
+		}
+		if ( is_string( $value ) ) {
+			$value = filter_var( $value, FILTER_SANITIZE_STRING );
+			return $value;
+		}
+		if ( is_int( $value ) ) {
+			$value = filter_var( $value, FILTER_VALIDATE_INT );
+			return $value;
+		}
+		if ( is_float( $value ) ) {
+			$value = filter_var( $value, FILTER_VALIDATE_FLOAT );
+			return $value;
+		}
+		if ( is_array( $value ) ) {
+			array_walk( $value, 'tribe_sanitize_deep' );
+			return $value;
+		}
+
+		return null;
 	}
 }

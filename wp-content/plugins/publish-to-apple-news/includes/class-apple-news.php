@@ -39,7 +39,7 @@ class Apple_News {
 	 * @var string
 	 * @access public
 	 */
-	public static $version = '2.0.1';
+	public static $version = '2.0.3';
 
 	/**
 	 * Link to support for the plugin on WordPress.org.
@@ -204,6 +204,10 @@ class Apple_News {
 			[ $this, 'action_admin_enqueue_scripts' ]
 		);
 		add_action(
+			'enqueue_block_editor_assets',
+			[ $this, 'action_enqueue_block_editor_assets' ]
+		);
+		add_action(
 			'plugins_loaded',
 			[ $this, 'action_plugins_loaded' ]
 		);
@@ -223,19 +227,6 @@ class Apple_News {
 	 * @access public
 	 */
 	public function action_admin_enqueue_scripts( $hook ) {
-
-		// If the block editor is active, add PluginSidebar.
-		if ( get_the_ID() && use_block_editor_for_post( get_the_ID() ) ) {
-			wp_enqueue_script(
-				'publish-to-apple-news-plugin-sidebar',
-				plugins_url( 'build/pluginSidebar.js', __DIR__ ),
-				[ 'wp-i18n', 'wp-edit-post' ],
-				self::$version,
-				true
-			);
-			$this->inline_locale_data( 'apple-news-plugin-sidebar' );
-		}
-
 		// Ensure we are in an appropriate context.
 		if ( ! in_array( $hook, $this->contexts, true ) ) {
 			return;
@@ -272,6 +263,35 @@ class Apple_News {
 				'media_modal_title'  => esc_html__( 'Choose an image', 'apple-news' ),
 			)
 		);
+	}
+
+	/**
+	 * Enqueues scripts for the block editor.
+	 *
+	 * @access public
+	 */
+	public function action_enqueue_block_editor_assets() {
+		// Bail if the post type is not one of the Publish to Apple News post types configured in settings.
+		if ( ! in_array( get_post_type(), Admin_Apple_Settings_Section::$loaded_settings['post_types'], true ) ) {
+			return;
+		}
+
+		// Bail if this post isn't using the block editor.
+		if ( ! function_exists( 'use_block_editor_for_post' )
+			|| ! use_block_editor_for_post( get_the_ID() )
+		) {
+			return;
+		}
+
+		// Add the PluginSidebar.
+		wp_enqueue_script(
+			'publish-to-apple-news-plugin-sidebar',
+			plugins_url( 'build/pluginSidebar.js', __DIR__ ),
+			[ 'wp-i18n', 'wp-edit-post' ],
+			self::$version,
+			true
+		);
+		$this->inline_locale_data( 'apple-news-plugin-sidebar' );
 	}
 
 	/**

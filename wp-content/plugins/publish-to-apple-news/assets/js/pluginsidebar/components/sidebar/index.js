@@ -1,6 +1,8 @@
 /* global React, wp */
 
 import PropTypes from 'prop-types';
+import safeJsonParseArray from 'util/safeJsonParseArray';
+import safeJsonParseObject from 'util/safeJsonParseObject';
 import ImagePicker from '../imagePicker';
 import Notifications from '../notifications';
 
@@ -8,7 +10,7 @@ const {
   apiFetch,
   compose: {
     compose,
-  },
+  } = {},
   components: {
     Button,
     CheckboxControl,
@@ -16,23 +18,23 @@ const {
     SelectControl,
     Spinner,
     TextareaControl,
-  },
+  } = {},
   data: {
     select,
     subscribe,
     withDispatch,
     withSelect,
-  },
+  } = {},
   editPost: {
     PluginSidebar,
     PluginSidebarMoreMenuItem,
-  },
+  } = {},
   element: {
     Fragment,
-  },
+  } = {},
   i18n: {
     __,
-  },
+  } = {},
 } = wp;
 
 /**
@@ -260,7 +262,7 @@ class Sidebar extends React.PureComponent {
     const {
       meta: {
         selectedSections,
-      },
+      } = {},
     } = this.props;
 
     apiFetch({ path })
@@ -402,10 +404,10 @@ class Sidebar extends React.PureComponent {
       onUpdate,
       meta: {
         coverArt,
-      },
+      } = {},
     } = this.props;
 
-    let parsedCoverArt = JSON.parse(coverArt);
+    let parsedCoverArt = safeJsonParseObject(coverArt);
 
     if (! value) {
       delete parsedCoverArt[metaKey];
@@ -435,10 +437,10 @@ class Sidebar extends React.PureComponent {
       onUpdate,
       meta: {
         selectedSections,
-      },
+      } = {},
     } = this.props;
     // Need to default to [], else JSON parse fails
-    const selectedSectionsArray = JSON.parse(selectedSections) || [];
+    const selectedSectionsArray = safeJsonParseArray(selectedSections);
 
     const selectedArrayDefault = Array.isArray(selectedSectionsArray)
       ? JSON.stringify([...selectedSectionsArray, name]) : null;
@@ -483,7 +485,7 @@ class Sidebar extends React.PureComponent {
         dateModified = '',
         shareUrl = '',
         revision = '',
-      },
+      } = {},
       post: {
         status = '',
       } = {},
@@ -502,22 +504,13 @@ class Sidebar extends React.PureComponent {
         apiAutosyncUpdate,
         automaticAssignment,
         enableCoverArt,
-      },
+      } = {},
       selectedSectionsPrev,
       userCanPublish,
     } = this.state;
 
-    const selectedSectionsRaw = 'null' !== selectedSections
-      && '' !== selectedSections
-      ? JSON.parse(selectedSections)
-      : '';
-
-    const selectedSectionsArray = Array.isArray(selectedSectionsRaw)
-      ? selectedSectionsRaw
-      : [];
-
-    const parsedCoverArt = '' !== coverArt && 'null' !== coverArt
-      ? JSON.parse(coverArt) : {};
+    const selectedSectionsArray = safeJsonParseArray(selectedSections);
+    const parsedCoverArt = safeJsonParseObject(coverArt);
 
     const coverArtOrientation = parsedCoverArt.orientation || 'landscape';
 
@@ -890,24 +883,29 @@ class Sidebar extends React.PureComponent {
 export default compose([
   withSelect((selector) => {
     const editor = selector('core/editor');
+    const meta = editor && editor.getEditedPostAttribute
+      ? editor.getEditedPostAttribute('meta') || {}
+      : {};
     const {
-      apple_news_is_paid: isPaid,
-      apple_news_is_preview: isPreview,
-      apple_news_is_hidden: isHidden,
-      apple_news_is_sponsored: isSponsored,
-      apple_news_maturity_rating: maturityRating,
-      apple_news_pullquote: pullquoteText,
-      apple_news_pullquote_position: pullquotePosition,
-      apple_news_sections: selectedSections,
-      apple_news_coverart: coverArt,
-      apple_news_api_id: apiId,
-      apple_news_api_created_at: dateCreated,
-      apple_news_api_modified_at: dateModified,
-      apple_news_api_share_url: shareUrl,
-      apple_news_api_revision: revision,
-    } = editor.getEditedPostAttribute('meta');
+      apple_news_is_paid: isPaid = false,
+      apple_news_is_preview: isPreview = false,
+      apple_news_is_hidden: isHidden = false,
+      apple_news_is_sponsored: isSponsored = false,
+      apple_news_maturity_rating: maturityRating = '',
+      apple_news_pullquote: pullquoteText = '',
+      apple_news_pullquote_position: pullquotePosition = '',
+      apple_news_sections: selectedSections = '',
+      apple_news_coverart: coverArt = {},
+      apple_news_api_id: apiId = '',
+      apple_news_api_created_at: dateCreated = '',
+      apple_news_api_modified_at: dateModified = '',
+      apple_news_api_share_url: shareUrl = '',
+      apple_news_api_revision: revision = '',
+    } = meta;
 
-    const postId = editor.getCurrentPostId();
+    const postId = editor && editor.getCurrentPostId
+      ? editor.getCurrentPostId()
+      : 0;
 
     return {
       meta: {
@@ -927,7 +925,7 @@ export default compose([
         revision,
         postId,
       },
-      post: editor.getCurrentPost(),
+      post: editor && editor.getCurrentPost ? editor.getCurrentPost() : {},
     };
   }),
   withDispatch((dispatch) => ({

@@ -2525,7 +2525,7 @@ class GFFormsModel {
 		$wpdb->query( $sql );
 	}
 
-	public static function add_note( $entry_id, $user_id, $user_name, $note, $note_type = 'note' ) {
+	public static function add_note( $entry_id, $user_id, $user_name, $note, $note_type = 'user', $sub_type = null ) {
 		global $wpdb;
 
 		if ( version_compare( GFFormsModel::get_database_version(), '2.3-dev-1', '<' ) ) {
@@ -2534,21 +2534,26 @@ class GFFormsModel {
 		}
 
 		$table_name = self::get_entry_notes_table_name();
-		$sql        = $wpdb->prepare( "INSERT INTO $table_name(entry_id, user_id, user_name, value, note_type, date_created) values(%d, %d, %s, %s, %s, utc_timestamp())", $entry_id, $user_id, $user_name, $note, $note_type );
+		$sql        = $wpdb->prepare( "INSERT INTO $table_name(entry_id, user_id, user_name, value, note_type, sub_type, date_created) values(%d, %d, %s, %s, %s, %s, utc_timestamp())", $entry_id, $user_id, $user_name, $note, $note_type, $sub_type );
 
 		$wpdb->query( $sql );
 
 		/**
 		 * Fires after a note has been added to an entry
 		 *
+		 * @since 2.4.13  Added sub_type parameter.
+		 * @since Unknown
+		 *
 		 * @param int    $wpdb->insert_id The row ID of this note in the database
-		 * @param int    $entry_id         The ID of the entry that the note was added to
+		 * @param int    $entry_id        The ID of the entry that the note was added to
 		 * @param int    $user_id         The ID of the current user adding the note
 		 * @param string $user_name       The user name of the current user
 		 * @param string $note            The content of the note being added
 		 * @param string $note_type       The type of note being added.  Defaults to 'note'
+		 * @param string $sub_type        The sub-type of note being added.
+		 *
 		 */
-		do_action( 'gform_post_note_added', $wpdb->insert_id, $entry_id, $user_id, $user_name, $note, $note_type );
+		do_action( 'gform_post_note_added', $wpdb->insert_id, $entry_id, $user_id, $user_name, $note, $note_type, $sub_type );
 	}
 
 	public static function delete_note( $note_id ) {
@@ -5536,7 +5541,7 @@ class GFFormsModel {
 
 		return $wpdb->get_results(
 			$wpdb->prepare(
-				"  SELECT n.id, n.user_id, n.date_created, n.value, n.note_type, ifnull(u.display_name,n.user_name) as user_name, u.user_email
+				"  SELECT n.id, n.user_id, n.date_created, n.value, n.note_type, n.sub_type, ifnull(u.display_name,n.user_name) as user_name, u.user_email
                                                     FROM $notes_table n
                                                     LEFT OUTER JOIN $wpdb->users u ON n.user_id = u.id
                                                     WHERE entry_id=%d ORDER BY id", $lead_id
@@ -7005,7 +7010,7 @@ class GFFormsModel {
 		if ( isset( $logic['rules'] ) && is_array( $logic['rules'] ) ) {
 			foreach ( $logic['rules'] as &$rule ) {
 				if ( isset( $rule['fieldId'] ) ) {
-					// Field ID could be meta key
+					// Field ID could be meta key.
 					$rule['fieldId'] = wp_strip_all_tags( $rule['fieldId'] );
 				}
 				if ( isset( $rule['operator'] ) ) {
@@ -7014,7 +7019,11 @@ class GFFormsModel {
 				}
 
 				if ( isset( $rule['value'] ) ) {
-					$rule['value'] = wp_strip_all_tags( $rule['value'] );
+					// Strip scripts but don't encode.
+					$allowed_protocols = wp_allowed_protocols();
+					$rule['value']     = wp_kses_no_null( $rule['value'], array( 'slash_zero' => 'keep' ) );
+					$rule['value']     = wp_kses_hook( $rule['value'], 'post', $allowed_protocols );
+					$rule['value']     = wp_kses_split( $rule['value'], 'post', $allowed_protocols );
 				}
 			}
 		}

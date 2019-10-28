@@ -60,6 +60,13 @@ class Tribe__Context {
 	const QUERY_PROP = 'query_prop';
 
 	/**
+	 * The key to locate a context value as the value of the main query (global `$wp_query`) method return value.
+	 *
+	 * @since TBD
+	 */
+	const QUERY_METHOD = 'query_method';
+
+	/**
 	 * The key to locate a context value as the value of a constant.
 	 *
 	 * @since 4.9.11
@@ -129,6 +136,13 @@ class Tribe__Context {
 	 */
 	const WP_MATCHED_QUERY = 'wp_matched_query';
 
+	/**
+	 * The key to indicate a location should be read by applying a callback to the value of another context location.
+	 *
+	 * @since 4.9.18
+	 */
+	const LOCATION_FUNC = 'location_func';
+
 	/*
 	 *
 	 * An array defining the properties the context will be able to read and (dangerously) write.
@@ -155,6 +169,7 @@ class Tribe__Context {
 	 * method - get the value calling a method on a tribe() container binding.
 	 * func - get the value from a function or a closure.
 	 * filter - get the value by applying a filter.
+	 * location_func - get the value by applying a callback to the value of a location.
 	 *
 	 * For each location additional arguments can be specified:
 	 * orm_arg - if `false` then the location will never produce an ORM argument, if provided the ORM arg produced bye the
@@ -1449,5 +1464,111 @@ class Tribe__Context {
 		}
 
 		return $filled;
+	}
+
+	/**
+	 * Convenience method to get and check if a location has a truthy value or not.
+	 *
+	 * @since 4.9.18
+	 *
+	 * @param string $flag_key The location to check.
+	 * @param bool   $default  The default value to return if the location is not set.
+	 *
+	 * @return bool Whether the location has a truthy value or not.
+	 */
+	public function is( $flag_key, $default = false ) {
+		$val = $this->get( $flag_key, $default );
+
+		return ! empty( $val ) || tribe_is_truthy( $val );
+	}
+
+	/**
+	 * Reads the value from one callback, passing it the value of another Context location.
+	 *
+	 * @since 4.9.18
+	 *
+	 * @param array $location_and_callback An array of two elements: the location key and the callback to call on the
+	 *                                     location value. The callback will receive the location value as argument.
+	 *
+	 * @return mixed The return value of the callback, called on the location value.
+	 */
+	public function location_func( array $location_and_callback ) {
+		list( $location, $callback ) = $location_and_callback;
+
+		return $callback( $this->get( $location ) );
+	}
+
+	/**
+	 * Checks whether the current request is a REST API one or not.
+	 *
+	 * @since TBD
+	 *
+	 * @return bool Whether the current request is a REST API one or not.
+	 */
+	public function doing_rest() {
+		return defined( 'REST_REQUEST' ) && REST_REQUEST;
+	}
+
+	/**
+	 * Reads the value from one or more global WP_Query object methods.
+	 *
+	 * @since TBD
+	 *
+	 * @param array $query_vars The list of query methods to call, in order.
+	 * @param mixed $default The default value to return if no method was defined on the global `WP_Query` object.
+	 *
+	 * @return mixed The first valid value found or the default value.
+	 */
+	public function query_method( $methods, $default ) {
+		global $wp_query;
+		$found = $default;
+
+		foreach ( $methods as $method ) {
+			$this_value = $wp_query instanceof WP_Query && method_exists( $wp_query, $method )
+				? call_user_func( [ $wp_query, $method ] )
+				: static::NOT_FOUND;
+
+			if ( static::NOT_FOUND !== $this_value ) {
+				return $this_value;
+			}
+		}
+
+		return $found;
+	}
+
+	/**
+	 * Whether the current request is for a PHP-rendered initial state or not.
+	 *
+	 * This method is a shortcut to make sure we're not doing an AJAX, REST or Cron request.
+	 *
+	 * @since TBD
+	 *
+	 * @return bool Whether the current request is for a PHP-rendered initial state or not.
+	 */
+	public function doing_php_initial_state() {
+		return ! $this->doing_rest() && ! $this->doing_ajax() && ! $this->doing_cron();
+	}
+
+	/**
+	 * Returns the first key, if there are many, that will be used to read a location.
+	 *
+	 * The type ar
+	 *
+	 * @since TBD
+	 *
+	 * @param string      $location The location to get the read key for.
+	 * @param string|null $type     The type of read location to return the key for; default to `static::REQUEST_VAR`.
+	 *
+	 * @return string Either the first key for the type of read location, or the input location if not found.
+	 */
+	public function get_read_key_for( $location, $type = null ) {
+		$type = $type ?: static::REQUEST_VAR;
+		if ( isset( static::$locations[ $location ]['read'][ $type ] ) ) {
+			$keys = (array) static::$locations[ $location ]['read'][ $type ];
+
+			return reset( $keys );
+		}
+
+		return $location;
 	}
 }

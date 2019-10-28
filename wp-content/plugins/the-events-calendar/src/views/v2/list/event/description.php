@@ -9,12 +9,17 @@
  *
  * @link {INSERT_ARTCILE_LINK_HERE}
  *
- * @version 4.9.3
+ * @version TBD
  *
+ * @var WP_Post $event The event post object with properties added by the `tribe_get_event` function.
+ *
+ * @see tribe_get_event() For the format of the event object.
  */
-$event    = $this->get( 'event' );
-$event_id = $event->ID;
+
+if ( empty( $event->excerpt ) ) {
+	return;
+}
 ?>
 <div class="tribe-events-calendar-list__event-description tribe-common-b2">
-	<?php echo tribe_events_get_the_excerpt( $event, wp_kses_allowed_html( 'post' ) ); ?>
+	<?php echo $event->excerpt; ?>
 </div>

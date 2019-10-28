@@ -9,9 +9,7 @@
  *
  * @link {INSERT_ARTCILE_LINK_HERE}
  *
- * @var string $link The URL to the next page, if any, or an empty string.
- *
- * @version 4.9.5
+ * @version TBD
  *
  */
 ?>
@@ -21,7 +19,7 @@
 			$events_label = '<span class="tribe-events-c-nav__next-label-plural"> ' . tribe_get_event_label_plural() . '</span>';
 			echo wp_kses(
 				/* translators: %s: Event (plural or singular). */
-				sprintf( __( 'Next %1$s' ), $events_label ),
+				sprintf( __( 'Next %1$s', 'the-events-calendar' ), $events_label ),
 				[ 'span' => [ 'class' => [] ] ]
 			);
 		?>

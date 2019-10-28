@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: https://www.gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.4.12
+Version: 2.4.14
 Author: rocketgenius
 Author URI: https://www.rocketgenius.com
 License: GPL-2.0+
@@ -215,7 +215,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.4.12';
+	public static $version = '2.4.14';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -254,22 +254,15 @@ class GFForms {
 	/**
 	 * Determines if the 3rd party Members plugin is active.
 	 *
+	 * @since  2.4.13 Removed Members v1 support.
 	 * @since  Unknown
 	 *
-	 * @param string $version Minimum version number of Members plugin to check for.
+	 * @param null $deprecated No longer used. Previously the minimum version number of Members plugin to check for.
 	 *
 	 * @return boolean True if the Members plugin is active. False otherwise.
 	 */
-	public static function has_members_plugin( $min_version = '1.0' ) {
-
-		if ( version_compare( $min_version, '2.0', '>=' ) ) {
-			return function_exists( 'members_register_cap_group' );
-		} else if ( version_compare( $min_version, '1.0', '>=' ) ) {
-			return ! function_exists( 'members_register_cap_group' ) && function_exists( 'members_get_capabilities' );
-		}
-
-		return false;
-
+	public static function has_members_plugin( $deprecated = null ) {
+		return function_exists( 'members_register_cap_group' ) && function_exists( 'members_register_cap' );
 	}
 
 	/**
@@ -339,11 +332,9 @@ class GFForms {
 			global $current_user;
 
 			//Members plugin integration. Adding Gravity Forms roles to the checkbox list
-			if ( self::has_members_plugin( '2.0' ) ) {
+			if ( self::has_members_plugin() ) {
 				add_action( 'members_register_cap_groups', array( 'GFForms', 'members_register_cap_group' ) );
 				add_action( 'members_register_caps', array( 'GFForms', 'members_register_caps' ) );
-			} else if ( self::has_members_plugin( '1.0' ) ) {
-				add_filter( 'members_get_capabilities', array( 'GFForms', 'members_get_capabilities' ) );
 			}
 
             // User Role Editor integration.
@@ -1209,20 +1200,6 @@ class GFForms {
 	}
 
 	/**
-	 * Provides the Members plugin with Gravity Forms lists of capabilities.
-	 *
-	 * @since  Unknown
-	 * @access public
-	 *
-	 * @param array $caps All capabilities.
-	 *
-	 * @return array $caps The capabilities list.
-	 */
-	public static function members_get_capabilities( $caps ) {
-		return array_merge( $caps, GFCommon::all_caps() );
-	}
-
-	/**
 	 * Register the Gravity Forms capabilities group with the Members plugin.
 	 *
 	 * @since  2.4
@@ -1471,7 +1448,7 @@ class GFForms {
 			'settings_page'
 		) );
 
-		add_submenu_page( $parent_menu['name'], __( 'Import/Export', 'gravityforms' ), __( 'Import/Export', 'gravityforms' ), $has_full_access ? 'gform_full_access' : 'gravityforms_export_entries', 'gf_export', array(
+		add_submenu_page( $parent_menu['name'], __( 'Import/Export', 'gravityforms' ), __( 'Import/Export', 'gravityforms' ), $has_full_access ? 'gform_full_access' : ( current_user_can( 'gravityforms_export_entries' ) ? 'gravityforms_export_entries' : 'gravityforms_edit_forms' ), 'gf_export', array(
 			'GFForms',
 			'export_page'
 		) );
@@ -1663,7 +1640,7 @@ class GFForms {
 				$title        = strtolower( $title ) == 'false' ? false : true;
 				$description  = strtolower( $description ) == 'false' ? false : true;
 				$field_values = htmlspecialchars_decode( $field_values );
-				$field_values = str_replace( '&#038;', '&', $field_values );
+				$field_values = str_replace( array( '&#038;', '&#091;', '&#093;' ), array( '&', '[', ']' ), $field_values );
 
 				$ajax = strtolower( $ajax ) == 'true' ? true : false;
 
@@ -2432,7 +2409,7 @@ class GFForms {
 			) );
 		}
 
-		if ( self::has_members_plugin( '2.0' ) && rgget( 'page' ) === 'roles' ) {
+		if ( self::has_members_plugin() && rgget( 'page' ) === 'roles' ) {
 		    wp_enqueue_style( 'gform_dashicons' );
         }
 

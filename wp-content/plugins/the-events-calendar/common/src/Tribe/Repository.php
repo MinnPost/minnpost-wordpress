@@ -559,6 +559,10 @@ abstract class Tribe__Repository
 	public function build_query( $use_query_builder = true ) {
 		$query = null;
 
+		if ( array_key_exists( 'void_query', $this->query_args ) && false !== $this->query_args['void_query'] ) {
+			$this->void_query = true;
+		}
+
 		// We'll let the query builder decide if the query has to be rebuilt or not.
 		if ( $use_query_builder && null !== $this->query_builder ) {
 			$query = $this->build_query_with_builder();
@@ -833,6 +837,10 @@ abstract class Tribe__Repository
 		if ( ! empty( $query->request ) ) {
 			$ids = $this->get_ids();
 
+			if ( empty( $ids ) ) {
+				return null;
+			}
+
 			return $return_id ? reset( $ids ) : $this->format_item( reset( $ids ) );
 		}
 
@@ -892,6 +900,10 @@ abstract class Tribe__Repository
 		// The request property will be set during the `get_posts` method and empty before it.
 		if ( ! empty( $query->request ) ) {
 			$ids = $this->get_ids();
+
+			if ( empty( $ids ) ) {
+				return null;
+			}
 
 			return $return_id ? end( $ids ) : $this->format_item( end( $ids ) );
 		}
@@ -1060,7 +1072,9 @@ abstract class Tribe__Repository
 	 * {@inheritdoc}
 	 */
 	public function by( $key, $value = null ) {
-		if ( $this->void_query ) {
+		if ( $this->void_query || ( 'void_query' === $key && false !== $value ) ) {
+			$this->void_query = true;
+
 			// No point in doing more computations if the query is void.
 			return $this;
 		}
@@ -2783,7 +2797,7 @@ abstract class Tribe__Repository
 
 		$created = call_user_func( $this->get_create_callback( $postarr ), $postarr );
 
-		$post = get_post( $created );
+		$post = $this->format_item( $created );
 
 		return $post instanceof WP_Post && $post->ID === $created ? $post : false;
 	}
