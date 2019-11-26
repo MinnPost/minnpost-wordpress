@@ -1778,6 +1778,17 @@ abstract class GFFeedAddOn extends GFAddOn {
     }
 
 	//--------------- Notes ------------------
+
+	/**
+	 * Writes to the add-on log and adds an entry note when a feed processing error occurs.
+	 *
+	 * @since 1.9.12
+	 *
+	 * @param string $error_message The error message.
+	 * @param array  $feed          The feed which was being processed when the error occurred.
+	 * @param array  $entry         The entry which was being processed when the error occurred.
+	 * @param array  $form          The form which was being processed when the error occurred.
+	 */
 	public function add_feed_error( $error_message, $feed, $entry, $form ) {
 
 		/* Log debug error before we prepend the error name. */
@@ -1786,17 +1797,27 @@ abstract class GFFeedAddOn extends GFAddOn {
 		$this->log_error( $method . '(): ' . $error_message );
 
 		/* Prepend feed name to the error message. */
-		$feed_name     = rgars( $feed, 'meta/feed_name' ) ? rgars( $feed, 'meta/feed_name' ) : rgars( $feed, 'meta/feedName' );
-		$error_message = $feed_name . ': ' . $error_message;
+		$feed_name          = rgars( $feed, 'meta/feed_name' ) ? rgars( $feed, 'meta/feed_name' ) : rgars( $feed, 'meta/feedName' );
+		$note_error_message = $feed_name . ': ' . $error_message;
 
 		/* Add error note to the entry. */
-		$this->add_note( $entry['id'], $error_message, 'error' );
+		$this->add_note( $entry['id'], $note_error_message, 'error' );
 
 		/* Get Add-On slug */
 		$slug = str_replace( 'gravityforms', '', $this->_slug );
 
-		/* Process any error actions. */
-		gf_do_action( array( "gform_{$slug}_error", $form['id'] ), $feed, $entry, $form );
+		/**
+		 * Process any error actions.
+		 *
+		 * @since 1.9.12
+		 * @since 2.4.15 Added $error_message as the fourth param.
+		 *
+		 * @param array  $feed          The feed which was being processed when the error occurred.
+		 * @param array  $entry         The entry which was being processed when the error occurred.
+		 * @param array  $feed          The form which was being processed when the error occurred.
+		 * @param string $error_message The error message.
+		 */
+		gf_do_action( array( "gform_{$slug}_error", $form['id'] ), $feed, $entry, $form, $error_message );
 
 	}
 
