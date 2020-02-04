@@ -154,6 +154,10 @@
  * ----------------------------------------------------------------------------- */
 
 /* -----------------------------------------------------------------------------
+ * SVG - Link
+ * ----------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
  * SVG - List
  * ----------------------------------------------------------------------------- */
 
@@ -162,7 +166,15 @@
  * ----------------------------------------------------------------------------- */
 
 /* -----------------------------------------------------------------------------
+ * SVG - Mail
+ * ----------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
  * SVG - Map
+ * ----------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+ * SVG - Map pin
  * ----------------------------------------------------------------------------- */
 
 /* -----------------------------------------------------------------------------
@@ -175,6 +187,10 @@
 
 /* -----------------------------------------------------------------------------
  * SVG - No Map
+ * ----------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+ * SVG - Phone
  * ----------------------------------------------------------------------------- */
 
 /* -----------------------------------------------------------------------------
@@ -515,14 +531,6 @@
 			width: 25%;
 		}
 
-.tribe-events.tribe-events-view--week .datepicker tbody tr.active {
-				position: relative;
-			}
-
-.tribe-events.tribe-events-view--week .datepicker .day.disabled {
-				cursor: pointer;
-			}
-
 /* -----------------------------------------------------------------------------
 	 *
 	 * Datepicker: V1 Style Overrides
@@ -739,6 +747,19 @@
 		height: 16px;
 		margin-bottom: 4px;
 		width: 16px;
+	}
+
+/* iCal link */
+
+/* -----------------------------------------------------------------------------
+ *
+ * iCal link
+ *
+ * ----------------------------------------------------------------------------- */
+
+.tribe-events .tribe-events-c-ical {
+		margin-top: 20px;
+		text-align: right;
 	}
 
 /* Loader */
@@ -1016,6 +1037,7 @@
 
 .tooltipster-base.tribe-events-tooltip-theme .tooltipster-box .tooltipster-content {
 			padding: 0;
+			word-break: break-word;
 		}
 
 .tooltipster-base.tribe-events-tooltip-theme .tooltipster-arrow {
@@ -1039,11 +1061,6 @@
 	 * ----------------------------------------------------------------------------- */
 }
 
-.tribe-events .tribe-events-c-top-bar__nav {
-		display: none !important;
-		visibility: hidden;
-	}
-
 .tribe-events .tribe-events-c-top-bar__nav-list {
 		display: -webkit-box;
 		display: flex;
@@ -1063,12 +1080,16 @@
 		display: block;
 	}
 
-.tribe-events .tribe-events-c-top-bar__today-button {
-		display: none !important;
-		visibility: hidden;
+.tribe-events .tribe-events-c-top-bar__datepicker-form {
+		-webkit-box-align: center;
+		        align-items: center;
+		display: -webkit-box;
+		display: flex;
 	}
 
 .tribe-events .tribe-events-c-top-bar__datepicker {
+		-webkit-box-flex: 1;
+		        flex: auto;
 		position: relative;
 	}
 
@@ -1348,7 +1369,8 @@
 		margin-bottom: 16px;
 	}
 
-.tribe-events .tribe-events-calendar-list__event-featured-image-link {
+.tribe-events .tribe-events-calendar-list__event-featured-image-link,
+	.tribe-events .tribe-events-calendar-list__event-featured-image {
 		display: block;
 	}
 
@@ -1470,11 +1492,25 @@
 		margin-top: 8px;
 	}
 
+.tribe-events .tribe-events-calendar-month__calendar-event-datetime-featured-icon,
+	.tribe-events .tribe-events-calendar-month__calendar-event-datetime-recurring-icon {
+		display: inline-block;
+	}
+
+.tribe-events .tribe-events-calendar-month__calendar-event-datetime-featured-icon {
+		margin-right: 4px;
+	}
+
+.tribe-events .tribe-events-calendar-month__calendar-event-datetime-recurring-icon {
+		margin-left: 2px;
+	}
+
 .tribe-events .tribe-events-calendar-month__calendar-event-featured-image-wrapper {
 		margin-bottom: 4px;
 	}
 
-.tribe-events .tribe-events-calendar-month__calendar-event-featured-image-link {
+.tribe-events .tribe-events-calendar-month__calendar-event-featured-image-link,
+	.tribe-events .tribe-events-calendar-month__calendar-event-featured-image {
 		display: block;
 	}
 
@@ -1495,8 +1531,30 @@
 			margin-bottom: 0;
 		}
 
-.tribe-events .tribe-events-calendar-month__calendar-event-tooltip-featured-image-link {
+.tribe-events .tribe-events-calendar-month__calendar-event-tooltip-featured-image-link,
+	.tribe-events .tribe-events-calendar-month__calendar-event-tooltip-featured-image {
 		display: block;
+	}
+
+.tribe-events .tribe-events-calendar-month__calendar-event-tooltip-datetime {
+		margin-bottom: 4px;
+	}
+
+.tribe-events .tribe-events-calendar-month__calendar-event-tooltip-datetime-featured-icon,
+	.tribe-events .tribe-events-calendar-month__calendar-event-tooltip-datetime-recurring-icon {
+		display: inline-block;
+	}
+
+.tribe-events .tribe-events-calendar-month__calendar-event-tooltip-datetime-featured-icon {
+		margin-right: 4px;
+	}
+
+.tribe-events .tribe-events-calendar-month__calendar-event-tooltip-datetime-recurring-icon {
+		margin-left: 2px;
+	}
+
+.tribe-events .tribe-events-calendar-month__calendar-event-tooltip-title {
+		margin-bottom: 4px;
 	}
 
 .tribe-events .tribe-events-calendar-month__calendar-event-tooltip-description {
@@ -1510,6 +1568,25 @@
 .tribe-events .tribe-events-calendar-month__calendar-event-tooltip-cost {
 		margin-top: 16px;
 	}
+
+/* -------------------------------------------------------------------------
+	 * Theme Overrides - Twenty Nineteen
+	 * ------------------------------------------------------------------------- */
+
+.tribe-theme-twentynineteen .tribe-events .tribe-events-calendar-month__calendar-event, .tribe-theme-twentynineteen .entry .tribe-events .tribe-events-calendar-month__calendar-event {
+			margin: 8px 0;
+			padding: 0 16px;
+			position: relative;
+		}
+
+.tribe-theme-twentynineteen .tribe-events .tribe-events-calendar-month__calendar-event:first-child, .tribe-theme-twentynineteen .entry .tribe-events .tribe-events-calendar-month__calendar-event:first-child {
+				margin-top: 0;
+			}
+
+.tribe-theme-twentynineteen .tribe-events .tribe-events-calendar-month__calendar-event:last-child, .tribe-theme-twentynineteen .entry .tribe-events .tribe-events-calendar-month__calendar-event:last-child {
+				margin-bottom: 0;
+				padding-bottom: 16px;
+			}
 
 /* -----------------------------------------------------------------------------
 	 * Calendar Header
@@ -1692,6 +1769,10 @@
 		z-index: 5;
 	}
 
+.tribe-events .tribe-events-calendar-month__multiday-event-hidden-title {
+		white-space: nowrap;
+	}
+
 .tribe-events .tribe-events-calendar-month__multiday-event-hidden-link {
 		display: block;
 		height: 100%;
@@ -1724,6 +1805,7 @@
 .tribe-events .tribe-events-calendar-month__multiday-event-bar-title {
 		-webkit-box-flex: 0;
 		        flex: none;
+		max-width: 100%;
 		overflow: hidden;
 		white-space: nowrap;
 	}
@@ -1759,7 +1841,8 @@
 			margin-bottom: 40px;
 		}
 
-.tribe-events .tribe-events-calendar-day__time-separator + .tribe-events-calendar-day__event {
+.tribe-events .tribe-events-calendar-day__time-separator + .tribe-events-calendar-day__event,
+	.tribe-events .tribe-events-calendar-day__type-separator + .tribe-events-calendar-day__event {
 		margin-top: 20px;
 	}
 
@@ -1772,7 +1855,8 @@
 		margin-bottom: 16px;
 	}
 
-.tribe-events .tribe-events-calendar-day__event-featured-image-link {
+.tribe-events .tribe-events-calendar-day__event-featured-image-link,
+	.tribe-events .tribe-events-calendar-list__event-featured-image {
 		display: block;
 	}
 
@@ -1820,8 +1904,19 @@
 	 * Theme Overrides - Twenty Nineteen
 	 * ------------------------------------------------------------------------- */
 
-.tribe-theme-twentynineteen .tribe-events .tribe-events-calendar-day__event {
+.tribe-theme-twentynineteen .tribe-events .entry.tribe-events-calendar-day__event {
+			margin-bottom: 24px;
 			margin-top: 32px;
+			padding-left: 54px;
+		}
+
+.tribe-theme-twentynineteen .tribe-events .entry.tribe-events-calendar-day__event:last-child {
+				margin-bottom: 40px;
+			}
+
+.tribe-theme-twentynineteen .tribe-events .tribe-events-calendar-day__time-separator + .entry.tribe-events-calendar-day__event,
+		.tribe-theme-twentynineteen .tribe-events .tribe-events-calendar-day__type-separator + .entry.tribe-events-calendar-day__event {
+			margin-top: 20px;
 		}
 
 /* -----------------------------------------------------------------------------
@@ -2063,6 +2158,14 @@
 .tribe-events .tribe-events-c-top-bar__datepicker-container {
 			max-width: none;
 			min-width: 363px
+	}
+
+.tribe-events .tribe-events-c-top-bar__datepicker-submit {
+			display: block !important;
+			-webkit-box-flex: 0;
+			        flex: none;
+			margin-left: 15px;
+			visibility: visible
 	}
 
 .tribe-events .tribe-events-c-top-bar__actions {
@@ -2358,7 +2461,14 @@
 				margin-bottom: 64px
 		}
 
-.tribe-events .tribe-events-calendar-day__time-separator + .tribe-events-calendar-day__event {
+.tribe-events .tribe-events-calendar-day__event:before {
+				content: '';
+				min-width: 90px;
+				width: 11.111%
+		}
+
+.tribe-events .tribe-events-calendar-day__time-separator + .tribe-events-calendar-day__event,
+	.tribe-events .tribe-events-calendar-day__type-separator + .tribe-events-calendar-day__event {
 			margin-top: 40px
 	}
 
@@ -2423,8 +2533,19 @@
 			margin-top: 16px
 	}
 
-.tribe-theme-twentynineteen .tribe-events .tribe-events-calendar-day__event {
-				margin-top: 48px
+.tribe-theme-twentynineteen .tribe-events .entry.tribe-events-calendar-day__event {
+				margin-bottom: 40px;
+				margin-top: 48px;
+				padding-left: 0
+		}
+
+.tribe-theme-twentynineteen .tribe-events .entry.tribe-events-calendar-day__event:last-child {
+					margin-bottom: 64px
+			}
+
+.tribe-theme-twentynineteen .tribe-events .tribe-events-calendar-day__time-separator + .entry.tribe-events-calendar-day__event,
+		.tribe-theme-twentynineteen .tribe-events .tribe-events-calendar-day__type-separator + .entry.tribe-events-calendar-day__event {
+				margin-top: 40px
 		}
 
 .tribe-events .tribe-events-calendar-day-nav {

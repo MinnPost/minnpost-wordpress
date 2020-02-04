@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: https://www.gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.4.15
+Version: 2.4.16
 Author: rocketgenius
 Author URI: https://www.rocketgenius.com
 License: GPL-2.0+
@@ -133,7 +133,7 @@ define( 'GF_SUPPORTED_WP_VERSION', version_compare( get_bloginfo( 'version' ), G
  *
  * @var string GF_MIN_WP_VERSION_SUPPORT_TERMS The version number
  */
-define( 'GF_MIN_WP_VERSION_SUPPORT_TERMS', '5.1' );
+define( 'GF_MIN_WP_VERSION_SUPPORT_TERMS', '5.2' );
 
 
 if ( ! defined( 'GRAVITY_MANAGER_URL' ) ) {
@@ -215,7 +215,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.4.15';
+	public static $version = '2.4.16';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -1734,7 +1734,7 @@ class GFForms {
 			$form_id             = absint( $args['form_id'] );
 			$display_title       = (bool) $args['title'];
 			$display_description = (bool) $args['description'];
-			$tabindex            = isset( $args['tabindex'] ) ? absint( $args['tabindex'] ) : 1;
+			$tabindex            = isset( $args['tabindex'] ) ? absint( $args['tabindex'] ) : 0;
 
 			parse_str( $_POST['gform_field_values'], $field_values );
 
@@ -3966,8 +3966,14 @@ class GFForms {
 	 */
 	public static function form_switcher() {
 
-		// Get all forms.
-		$all_forms = RGFormsModel::get_forms( null, 'title' );
+		/**
+		 * Get forms to be displayed in Form Switcher dropdown.
+		 *
+		 * @since 2.4.16
+		 *
+		 * @param array $all_forms All available Form objects, sorted by title.
+		 */
+		$all_forms = apply_filters( 'gform_form_switcher_forms', GFFormsModel::get_forms( null, 'title' ) );
 
 		// Sort forms by active state.
 		$forms = array( 'active' => array(), 'inactive' => array(), );
@@ -5609,12 +5615,12 @@ class RGForms extends GFForms {
  * @param bool       $display_inactive    If the form should be displayed if marked as inactive. Defaults to false.
  * @param array|null $field_values        Default field values. Defaults to null.
  * @param bool       $ajax                If submission should be processed via AJAX. Defaults to false.
- * @param int        $tabindex            Starting tabindex. Defaults to 1.
+ * @param int        $tabindex            Starting tabindex. Defaults to 0.
  * @param bool       $echo                If the field should be echoed.  Defaults to true.
  *
  * @return string|void
  */
-function gravity_form( $id, $display_title = true, $display_description = true, $display_inactive = false, $field_values = null, $ajax = false, $tabindex = 1, $echo = true ) {
+function gravity_form( $id, $display_title = true, $display_description = true, $display_inactive = false, $field_values = null, $ajax = false, $tabindex = 0, $echo = true ) {
 	if ( ! $echo ) {
 		return GFForms::get_form( $id, $display_title, $display_description, $display_inactive, $field_values, $ajax, $tabindex );
 	}

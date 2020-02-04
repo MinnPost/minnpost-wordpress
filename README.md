@@ -41,7 +41,15 @@ if ( file_exists( __DIR__ . '/wp-content/vip-config/vip-config.php' ) ) {
 }
 ```
 
-## Development
+## Maintenance
+
+To update the VIP Go MU plugins, regularly run these commands:
+
+- `cd wp-content/mu-plugins/`
+- `git pull origin master`
+- `git submodule update --init --recursive`
+
+## Deployment
 
 Develop new features in their own branch, or in the `develop` branch. Pushing to `develop` will deploy to https://dev.minnpost.com, `preprod` will deploy to https://stage.minnpost.com.
 

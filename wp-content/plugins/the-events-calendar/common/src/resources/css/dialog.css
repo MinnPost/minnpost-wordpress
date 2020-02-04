@@ -103,7 +103,7 @@ Adding these here for now until common-styles are live
 /* The "close" button */
 
 .tribe-common .tribe-dialog__close-button {
-		background-color: var(--tribe-dialog-close-background);
+		background: var(--tribe-dialog-close-background);
 		background-image: url( "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Cg fill='none' fill-rule='evenodd' stroke-linecap='square' stroke-width='2'%3E%3Cpath d='M16 2L2 16M16 16L2 2' stroke='var(--color-icon-secondary)'/%3E%3C/g%3E%3C/svg%3E" );
 		background-repeat: no-repeat;
 		background-size: contain;
@@ -120,6 +120,7 @@ Adding these here for now until common-styles are live
 
 .tribe-common .tribe-dialog__close-button:focus,
 		.tribe-common .tribe-dialog__close-button:hover {
+			background: var(--tribe-dialog-close-background);
 			background-image: url( "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18'%3E%3Cg fill='none' fill-rule='evenodd' stroke-linecap='square' stroke-width='2'%3E%3Cpath d='M16 2L2 16M16 16L2 2' stroke='var(--color-icon-primary)'/%3E%3C/g%3E%3C/svg%3E" );
 			background-size: contain;
 			outline: none;

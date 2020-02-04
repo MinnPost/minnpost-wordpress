@@ -122,6 +122,8 @@ return array(
     'Tribe\\Models\\Post_Types\\Base' => $baseDir . '/src/Tribe/Models/Post_Types/Base.php',
     'Tribe\\Models\\Post_Types\\Nothing' => $baseDir . '/src/Tribe/Models/Post_Types/Nothing.php',
     'Tribe\\PUE\\Update_Prevention' => $baseDir . '/src/Tribe/PUE/Update_Prevention.php',
+    'Tribe\\Repository\\Core_Read_Interface' => $baseDir . '/src/Tribe/Repository/Core_Read_Interface.php',
+    'Tribe\\Repository\\Filter_Validation' => $baseDir . '/src/Tribe/Repository/Filter_Validation.php',
     'Tribe\\Service_Providers\\Dialog' => $baseDir . '/src/Tribe/Service_Providers/Dialog.php',
     'Tribe\\Service_Providers\\PUE' => $baseDir . '/src/Tribe/Service_Providers/PUE.php',
     'Tribe\\Service_Providers\\Tooltip' => $baseDir . '/src/Tribe/Service_Providers/Tooltip.php',
