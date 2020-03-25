@@ -2,8 +2,9 @@
 Contributors: WPbeginner, smub, deb255
 Tags: code, content, css, facebook pixel, footer, footer code, footer scripts, footers, google analytics, head, header, header code, header scripts, headers, insert, insert code, insert scripts, js, meta, meta tags, scripts, wpmu
 Requires at least: 3.6
-Tested up to: 5.2
-Stable tag: 1.4.4
+Tested up to: 5.3.2
+Requires PHP: 5.2
+Stable tag: 1.4.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,7 +72,7 @@ Yes, to verify your account or to tag your page for Auto ads, paste the code AdS
 
 = How to disable Insert Headers and Footers on a specific page? =
 
-You can use one of the three available boolean filters: disable_ihaf, disable_ihaf_footer, disable_ihaf_header and return true value in order to disable printing either on the entire page or specifically in the header or footer of a given page.
+You can use one of the three available boolean filters: disable_ihaf, disable_ihaf_footer, disable_ihaf_header, disable_ihaf_body and return true value in order to disable printing either on the entire page or specifically in the header or footer of a given page.
 
 == Notes ==
 Insert Headers and Footers is the easiest way to insert code in your WordPress headers and footers.
@@ -84,6 +85,10 @@ Thank you
 Syed Balkhi
 
 == Changelog ==
+
+= 1.4.5 =
+* Tested compatibility with WordPress 5.3.2
+* Add support for printing scripts right after the opening body tag using the `wp_body_open` action
 
 = 1.4.4 =
 * Tested compatibility with WordPress 5.2

@@ -106,19 +106,19 @@ class Most_Commented_Widget extends WP_Widget {
 	}
 
 	function form( $instance ) {
-		$title          = esc_attr( $instance['title'] );
-		$show_pass_post = (bool) $instance['show_pass_post'];
-		$duration       = intval( $instance['duration'] );
+		$title          = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
+		$show_pass_post = isset( $instance['show_pass_post'] ) ? (bool) $instance['show_pass_post'] : '';
+		$duration       = isset( $instance['duration'] ) ? intval( $instance['duration'] ) : 0;
 		if ( ! in_array( $duration, array( 0, 1, 7, 30, 365 ) ) ) {
 			$duration = 0;
 		}
 
-		$num_posts = intval( $instance['num_posts'] );
+		$num_posts = isset( $instance['num_posts'] ) ? intval( $instance['num_posts'] ) : 0;
 		if ( $num_posts < 1 ) {
 			$num_posts = 5;
 		}
 
-		$post_type = $instance['post_type'];
+		$post_type = isset( $instance['post_type'] ) ? $instance['post_type'] : 'both';
 		if ( ! in_array( $post_type, array( 'post', 'page', 'both' ) ) ) {
 			$post_type = 'both';
 		}

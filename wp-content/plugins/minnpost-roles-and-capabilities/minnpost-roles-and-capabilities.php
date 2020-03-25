@@ -889,7 +889,18 @@ class Minnpost_Roles_And_Capabilities {
 				'editor',
 				'author',
 			),
+			'read_newsletter'                     => array(
+				'administrator',
+				'editor',
+				'business',
+				'author',
+			),
 			'delete_newsletter'                   => array(
+				'administrator',
+				'editor',
+				'author',
+			),
+			'delete_newsletters'                  => array(
 				'administrator',
 				'editor',
 				'author',
@@ -897,6 +908,7 @@ class Minnpost_Roles_And_Capabilities {
 			'edit_newsletters'                    => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
 			'edit_others_newsletters'             => array(
@@ -912,9 +924,10 @@ class Minnpost_Roles_And_Capabilities {
 			'read_private_newsletters'            => array(
 				'administrator',
 				'editor',
+				'business',
 				'author',
 			),
-			'delete_newsletters'                  => array(
+			'create_newsletters'                  => array(
 				'administrator',
 				'editor',
 				'author',
@@ -1411,24 +1424,33 @@ class Minnpost_Roles_And_Capabilities {
 			),
 			'gravityforms_edit_forms'             => array(
 				'administrator',
+				'editor',
+				'business',
 			),
 			'gravityforms_delete_forms'           => array(
 				'administrator',
+				'editor',
+				'business',
 			),
 			'gravityforms_create_form'            => array(
 				'administrator',
+				'editor',
+				'business',
 			),
 			'gravityforms_view_entries'           => array(
 				'administrator',
 				'editor',
+				'business',
 			),
 			'gravityforms_edit_entries'           => array(
 				'administrator',
 				'editor',
+				'business',
 			),
 			'gravityforms_delete_entries'         => array(
 				'administrator',
 				'editor',
+				'business',
 			),
 			'gravityforms_view_settings'          => array(
 				'administrator',
@@ -1439,6 +1461,7 @@ class Minnpost_Roles_And_Capabilities {
 			'gravityforms_export_entries'         => array(
 				'administrator',
 				'editor',
+				'business',
 			),
 			'gravityforms_uninstall'              => array(
 				'administrator',
@@ -1446,10 +1469,12 @@ class Minnpost_Roles_And_Capabilities {
 			'gravityforms_view_entry_notes'       => array(
 				'administrator',
 				'editor',
+				'business',
 			),
 			'gravityforms_edit_entry_notes'       => array(
 				'administrator',
 				'editor',
+				'business',
 			),
 			'gravityforms_view_updates'           => array(
 				'administrator',
@@ -1460,6 +1485,7 @@ class Minnpost_Roles_And_Capabilities {
 			'gravityforms_preview_forms'          => array(
 				'administrator',
 				'editor',
+				'business',
 			),
 			'gravityforms_system_status'          => array(
 				'administrator',
@@ -1604,7 +1630,7 @@ class Minnpost_Roles_And_Capabilities {
 			<?php if ( empty( $post_data ) ) : ?>
 				<form method="post" action="users.php?page=<?php echo esc_attr( $this->slug ); ?>">
 					<input type="hidden" name="action" value="refresh-roles-capabilities" ?>
-					<h3><?php echo esc_html__( 'Click the button to refresh all roles and capabilities for the site.', 'minnpost-roles-and-capabilities' ); ?></h3>
+					<h3><?php echo esc_html__( 'Press the button to refresh all roles and capabilities for the site.', 'minnpost-roles-and-capabilities' ); ?></h3>
 					<?php
 						submit_button( esc_html__( 'Refresh', 'minnpost-roles-and-capabilities' ), 'primary', 'submit' );
 					?>
@@ -1612,7 +1638,7 @@ class Minnpost_Roles_And_Capabilities {
 			<?php else : ?>
 				<?php if ( 'refresh-roles-capabilities' === $post_data['action'] ) : ?>
 					<?php if ( true === $this->user_roles() ) : ?>
-						<p>All roles and capabilities have been refreshed. If you change them again, you can revisit this page and click the button.</p>
+						<p><?php echo __( 'All roles and capabilities have been refreshed. If you change them again, you can revisit this page and press the button.', 'minnpost-roles-and-capabilities' ); ?></p>
 					<?php endif; ?>
 				<?php endif; ?>
 			<?php endif; ?>
