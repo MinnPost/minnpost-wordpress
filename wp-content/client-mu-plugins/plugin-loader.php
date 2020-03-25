@@ -34,6 +34,8 @@ wpcom_vip_load_plugin( 'cmb2-field-ajax-search/cmb2-field-ajax-search.php' );
 wpcom_vip_load_plugin( 'cmb2-field-post-search-ajax/cmb-field-post-search-ajax.php' );
 wpcom_vip_load_plugin( 'cmb2-select-plus/cmb2-select-plus.php' );
 wpcom_vip_load_plugin( 'cmb2-user-select/cmb2-user-select.php' );
+wpcom_vip_load_plugin( 'link-picker-for-cmb2/plugin.php' );
+wpcom_vip_load_plugin( 'cmb2-field-type-font-awesome/iconselect.php' );
 wpcom_vip_load_plugin( 'co-authors-extend/co-authors-extend.php' );
 wpcom_vip_load_plugin( 'co-authors-plus/co-authors-plus.php' );
 wpcom_vip_load_plugin( 'cr3ativ-sponsor/cr3ativ-sponsor.php' );
@@ -44,6 +46,7 @@ if ( 'local' !== VIP_GO_ENV ) {
 	wpcom_vip_load_plugin( 'es-wp-query/es-wp-query.php' );
 }
 wpcom_vip_load_plugin( 'exclude-terms-in-admin/exclude-terms-in-admin.php' );
+wpcom_vip_load_plugin( 'font-awesome/index.php' );
 wpcom_vip_load_plugin( 'form-processor-mailchimp/form-processor-mailchimp.php' );
 wpcom_vip_load_plugin( 'gravityforms/gravityforms.php' );
 wpcom_vip_load_plugin( 'insert-headers-and-footers/ihaf.php' );
@@ -61,14 +64,17 @@ wpcom_vip_load_plugin( 'multiple-roles/multiple-roles.php' );
 wpcom_vip_load_plugin( 'nav-menu-roles/nav-menu-roles.php' );
 wpcom_vip_load_plugin( 'no-category-base-wpml/no-category-base-wpml.php' );
 wpcom_vip_load_plugin( 'object-sync-for-salesforce/object-sync-for-salesforce.php' );
-wpcom_vip_load_plugin( 'permalink-without-parent-category/permalink-without-parent-category.php' );
-wpcom_vip_load_plugin( 'popup-maker/popup-maker.php' );
+//wpcom_vip_load_plugin( 'permalink-without-parent-category/permalink-without-parent-category.php' );
+if ( 'production' !== VIP_GO_ENV ) {
+	wpcom_vip_load_plugin( 'popup-maker/popup-maker.php' );
+}
 wpcom_vip_load_plugin( 'public-post-preview/public-post-preview.php' );
 wpcom_vip_load_plugin( 'pwa/pwa.php' );
 wpcom_vip_load_plugin( 'raw-html-pro/raw_html.php' );
 wpcom_vip_load_plugin( 'recent-posts-widget-extended/rpwe.php' );
 wpcom_vip_load_plugin( 'recently-registered/recently-registered.php' );
 wpcom_vip_load_plugin( 'remove-widget-titles/remove-widget-titles.php' );
+wpcom_vip_load_plugin( 'republication-tracker-tool/republication-tracker-tool.php' );
 wpcom_vip_load_plugin( 'simple-image-sizes/simple_image_sizes.php' );
 wpcom_vip_load_plugin( 'staff-user-post-list/staff-user-list.php' );
 wpcom_vip_load_plugin( 'stop-spammer-registrations-plugin/stop-spammer-registrations-new.php' );
@@ -104,7 +110,7 @@ if ( 'local' !== VIP_GO_ENV ) {
 if ( 'local' !== VIP_GO_ENV ) {
 	add_action(
 		'after_setup_theme',
-		function() {
+		function () {
 			if ( function_exists( 'es_wp_query_load_adapter' ) ) {
 				es_wp_query_load_adapter( 'jetpack-search' );
 			}
