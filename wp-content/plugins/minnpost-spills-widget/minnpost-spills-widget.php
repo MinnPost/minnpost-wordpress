@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Spills
 Description: This plugin creates a sidebar widget and endpoint URL that is able to display posts from a group of categories and/or tags
-Version: 0.0.8
+Version: 0.0.9
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-spills
@@ -22,16 +22,19 @@ class MinnpostSpills {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.8';
+		$this->version = '0.0.9';
 
 		$this->load_admin();
 
 		$this->template = 'minnpost-spill.php';
 
 		// register the widget
-		add_action( 'widgets_init', function() {
-			register_widget( 'MinnpostSpills_Widget' );
-		});
+		add_action(
+			'widgets_init',
+			function() {
+				register_widget( 'MinnpostSpills_Widget' );
+			}
+		);
 
 		// set is_home() to false and is_archive() to true on spill pages
 		add_action( 'pre_get_posts', array( $this, 'set_home_to_false' ), 10 );
@@ -67,7 +70,7 @@ class MinnpostSpills {
 			}
 			Brain\Cortex::boot();
 
-			add_action( 'cortex.routes', function( RouteCollectionInterface $routes ) {
+			add_action('cortex.routes', function( RouteCollectionInterface $routes ) {
 
 				$widget_instances = get_option( 'widget_minnpostspills_widget', false );
 
@@ -91,9 +94,13 @@ class MinnpostSpills {
 					$featured_columns[] = $fonm->term_id;
 				}
 
-				$featured_columns = array_reduce( $featured_columns, function ( $a, $b ) {
-					return array_merge( $a, (array) $b );
-				}, []);
+				$featured_columns = array_reduce(
+					$featured_columns,
+					function ( $a, $b ) {
+						return array_merge( $a, (array) $b );
+					},
+					[]
+				);
 
 				$url_array = explode( '/', wp_parse_url( $_SERVER['REQUEST_URI'], PHP_URL_PATH ) );
 				$url       = $url_array[1];
@@ -133,8 +140,9 @@ class MinnpostSpills {
 						if ( file_exists( __DIR__ . '/includes/minnpost-spill-query.php' ) ) {
 							require_once __DIR__ . '/includes/minnpost-spill-query.php';
 						}
-						$args = minnpost_spill_get_query_args( $match['widget_categories'], $widget_terms );
+						$use_elasticsearch = isset( $instance['bypass_elasticsearch'] ) ? false : true;
 
+						$args  = minnpost_spill_get_query_args( $match['widget_categories'], $widget_terms, $use_elasticsearch );
 						$query = array_merge( $args, $spill_args );
 
 						if ( empty( $instance['url'] ) || ( ! empty( $instance['url'] ) && false === get_term_by( 'slug', str_replace( '/', '', $instance['url'] ) ) ) ) {
@@ -209,7 +217,8 @@ class MinnpostSpills_Widget extends WP_Widget {
 	public function __construct() {
 
 		parent::__construct(
-			'MinnpostSpills_Widget', __( 'MinnPost Spills Widget', 'minnpost-spills-widget' ),
+			'MinnpostSpills_Widget',
+			__( 'MinnPost Spills Widget', 'minnpost-spills-widget' ),
 			array(
 				'classname'   => 'MinnpostSpills_Widget',
 				'description' => __( 'Posts from a group of categories and/or tags.', 'minnpost-spills-widget' ),
@@ -266,18 +275,19 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 		extract( $args );
 
-		$title           = apply_filters( 'widget_title', $instance['title'] );
-		$slug            = str_replace( '/', '', $instance['title'] );
-		$url             = isset( $instance['url'] ) && '' !== $instance['url'] ? $instance['url'] : '/' . sanitize_title( $slug ) . '/';
-		$content         = isset( $instance['content'] ) ? $instance['content'] : '';
-		$categories      = $instance['widget_categories'];
-		$terms           = $instance['widget_terms'];
-		$output_function = isset( $instance['output_function'] ) ? $instance['output_function'] : '';
+		$title             = apply_filters( 'widget_title', $instance['title'] );
+		$slug              = str_replace( '/', '', $instance['title'] );
+		$url               = isset( $instance['url'] ) && '' !== $instance['url'] ? $instance['url'] : '/' . sanitize_title( $slug ) . '/';
+		$content           = isset( $instance['content'] ) ? $instance['content'] : '';
+		$categories        = $instance['widget_categories'];
+		$terms             = $instance['widget_terms'];
+		$output_function   = isset( $instance['output_function'] ) ? $instance['output_function'] : '';
+		$use_elasticsearch = isset( $instance['bypass_elasticsearch'] ) ? false : true;
 
 		echo str_replace( 'widget MinnpostSpills-widget', 'm-widget m-minnpost-spills-widget', str_replace( '_Widget"', '-widget ' . sanitize_title( $title ) . '"', $before_widget ) );
 
 		if ( isset( $output_function ) && function_exists( $output_function ) ) {
-			$output = $output_function( $before_title, $title, $after_title, $content, $categories, $terms );
+			$output = $output_function( $before_title, $title, $after_title, $content, $categories, $terms, $use_elasticsearch );
 		} else {
 			if ( $title ) {
 				$before_title = str_replace( 'widget-title', 'a-widget-title', $before_title );
@@ -285,7 +295,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 			}
 			echo '<div class="m-widget-contents">';
 				echo $content;
-				$output = $this->get_spill_posts( $categories, $terms );
+				$output = $this->get_spill_posts( $categories, $terms, $use_elasticsearch );
 			echo '</div>';
 		}
 
@@ -334,6 +344,12 @@ class MinnpostSpills_Widget extends WP_Widget {
 			$instance['output_function'] = $new_instance['output_function'];
 		} else {
 			$instance['output_function'] = '';
+		}
+
+		if ( ! empty( $new_instance['bypass_elasticsearch'] ) ) {
+			$instance['bypass_elasticsearch'] = $new_instance['bypass_elasticsearch'];
+		} else {
+			$instance['bypass_elasticsearch'] = '';
 		}
 
 		return $instance;
@@ -397,6 +413,12 @@ class MinnpostSpills_Widget extends WP_Widget {
 			$output_function = '';
 		}
 
+		if ( isset( $instance['bypass_elasticsearch'] ) ) {
+			$bypass_elasticsearch = sanitize_text_field( $instance['bypass_elasticsearch'] );
+		} else {
+			$bypass_elasticsearch = '';
+		}
+
 		// Instantiate the walker passing name and id as arguments to constructor
 		$category_walker = new Walker_Category_Checklist_Widget(
 			$this->get_field_name( 'widget_categories' ),
@@ -432,6 +454,11 @@ class MinnpostSpills_Widget extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'output_function' ); ?>"><?php _e( 'Custom Output Function:' ); ?></label> 
 			<input class="widefat" id="<?php echo $this->get_field_id( 'output_function' ); ?>" name="<?php echo $this->get_field_name( 'output_function' ); ?>" type="text" value="<?php echo $output_function; ?>" />
 		</div>
+		<div>
+			<label class="selectit" style="display: block;" for="<?php echo $this->get_field_id( 'bypass_elasticsearch' ); ?>"><?php _e( 'Bypass Elasticsearch For This Query:' ); ?></label>
+			<?php $checked_bypass = ( isset( $bypass_elasticsearch ) && '' !== $bypass_elasticsearch ) ? ' checked' : ''; ?>
+			<input id="<?php echo $this->get_field_id( 'bypass_elasticsearch' ); ?>" name="<?php echo $this->get_field_name( 'bypass_elasticsearch' ); ?>" type="checkbox" value="1"<?php echo $checked_bypass; ?>/>
+		</div>
 		<?php
 	}
 
@@ -440,12 +467,12 @@ class MinnpostSpills_Widget extends WP_Widget {
 	* This outputs HTML
 	*
 	*/
-	private function get_spill_posts( $categories = '', $terms = '' ) {
+	private function get_spill_posts( $categories = '', $terms = '', $use_elasticsearch = false ) {
 
 		if ( file_exists( __DIR__ . '/includes/minnpost-spill-query.php' ) ) {
 			require_once __DIR__ . '/includes/minnpost-spill-query.php';
 		}
-		$args      = minnpost_spill_get_query_args( $categories, $terms );
+		$args      = minnpost_spill_get_query_args( $categories, $terms, $use_elasticsearch );
 		$the_query = new WP_Query( $args );
 		?>
 

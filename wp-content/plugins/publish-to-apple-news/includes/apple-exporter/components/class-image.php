@@ -26,9 +26,30 @@ class Image extends Component {
 	 */
 	public static function node_matches( $node ) {
 
+		$has_image_child = false;
+		// If this is a figure and it has children, see if we can find an image.
+		if ( $node->hasChildNodes() && 'figure' === $node->tagName ) {
+			foreach ( $node->childNodes as $child ) {
+				if ( 'img' === $child->nodeName ) {
+					$has_image_child = true;
+				}
+			}
+		}
+
 		// Is this an image node?
 		if (
-			( self::node_has_class( $node, 'wp-block-cover' ) || 'img' === $node->nodeName || ( 'figure' === $node->nodeName && Component::is_embed_figure( $node ) ) )
+			(
+				self::node_has_class( $node, 'wp-block-cover' )
+				|| 'img' === $node->nodeName
+				|| (
+					'figure' === $node->nodeName
+					&& (
+						Component::is_embed_figure( $node )
+						|| self::node_has_class( $node, 'wp-caption' )
+						|| $has_image_child
+					)
+				)
+			)
 			&& self::remote_file_exists( $node )
 		) {
 			return $node;
@@ -174,7 +195,7 @@ class Image extends Component {
 		}
 
 		// Check for caption.
-		$caption_regex = $is_cover_block ? '#<div.*?>?\n(.*)#m' : '#<figcaption.*?>(.*?)</figcaption>#m';
+		$caption_regex = $is_cover_block ? '#<div.*?>?\n(.*)#m' : '#<figcaption.*?>(.*?)</figcaption>#ms';
 		if ( preg_match( $caption_regex, $html, $matches ) ) {
 			$caption                  = trim( $matches[1] );
 			$values['#caption#']      = ! $is_cover_block ? $caption : array(

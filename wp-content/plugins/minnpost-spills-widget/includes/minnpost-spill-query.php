@@ -5,10 +5,11 @@
 *
 * @param array $categories
 * @param array $terms
+* @param bool $use_elasticsearch
 * @return array $args
 *
 */
-function minnpost_spill_get_query_args( $categories = '', $terms = '' ) {
+function minnpost_spill_get_query_args( $categories = '', $terms = '', $use_elasticsearch = true ) {
 
 	$perspectives       = get_category_by_slug( 'perspectives' );
 	$featured_columns   = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
@@ -115,10 +116,7 @@ function minnpost_spill_get_query_args( $categories = '', $terms = '' ) {
 		);
 
 		$args = array_merge( $default_args, $args );
-		if ( class_exists( 'EP_WP_Query_Integration' ) ) {
-			$args['ep_integrate'] = true;
-		}
-		if ( class_exists( 'ES_WP_Query' ) && 'production' === VIP_GO_ENV ) {
+		if ( class_exists( 'ES_WP_Query' ) && 'production' === VIP_GO_ENV && true === $use_elasticsearch ) {
 			$args['es'] = true; // elasticsearch on production only
 		}
 
