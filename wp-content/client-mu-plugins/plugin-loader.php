@@ -83,11 +83,9 @@ wpcom_vip_load_plugin( 'schema-and-structured-data-for-wp/structured-data-for-wp
 wpcom_vip_load_plugin( 'simple-image-sizes/simple_image_sizes.php' );
 wpcom_vip_load_plugin( 'staff-user-post-list/staff-user-list.php' );
 wpcom_vip_load_plugin( 'stop-spammer-registrations-plugin/stop-spammer-registrations-new.php' );
-wpcom_vip_load_plugin( 'term-management-tools/term-management-tools.php' );
 wpcom_vip_load_plugin( 'the-events-calendar/the-events-calendar.php' );
 wpcom_vip_load_plugin( 'user-account-management/user-account-management.php' );
 wpcom_vip_load_plugin( 'view-admin-as/view-admin-as.php' );
-wpcom_vip_load_plugin( 'term-management-tools/term-management-tools.php' );
 wpcom_vip_load_plugin( 'widget-options/plugin.php' );
 wpcom_vip_load_plugin( 'widget-output-filters/widget-output-filters.php' );
 wpcom_vip_load_plugin( 'wpcom-legacy-redirector/wpcom-legacy-redirector.php' );
