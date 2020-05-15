@@ -78,6 +78,7 @@ wpcom_vip_load_plugin( 'recent-posts-widget-extended/rpwe.php' );
 wpcom_vip_load_plugin( 'recently-registered/recently-registered.php' );
 wpcom_vip_load_plugin( 'remove-widget-titles/remove-widget-titles.php' );
 wpcom_vip_load_plugin( 'republication-tracker-tool/republication-tracker-tool.php' );
+wpcom_vip_load_plugin( 'schema-and-structured-data-for-wp/structured-data-for-wp.php' );
 //wpcom_vip_load_plugin( 'simple-comment-editing/index.php' );
 wpcom_vip_load_plugin( 'simple-image-sizes/simple_image_sizes.php' );
 wpcom_vip_load_plugin( 'staff-user-post-list/staff-user-list.php' );
