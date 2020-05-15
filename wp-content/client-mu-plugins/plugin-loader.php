@@ -96,6 +96,7 @@ wpcom_vip_load_plugin( 'wp-post-expires/wp-post-expires.php' );
 wpcom_vip_load_plugin( 'wp-post-image-watermarks/wp-post-image-watermarks.php' );
 wpcom_vip_load_plugin( 'www-post-thumb/www-post-thumb.php' );
 wpcom_vip_load_plugin( 'zoninator/zoninator.php' );
+wpcom_vip_load_plugin( 'vip-jetpack-sync-cron' );
 
 // enable jetpack search
 if ( 'local' !== VIP_GO_ENV ) {
