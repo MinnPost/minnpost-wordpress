@@ -2,8 +2,8 @@
 Contributors: ronalfy
 Tags: comment editing, comments,edit comments, edit, comment,
 Requires at least: 5.0
-Tested up to: 5.3
-Stable tag: 2.4.6
+Tested up to: 5.4
+Stable tag: 2.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://mediaron.com/give/
@@ -75,12 +75,18 @@ Simple Comment Editing will work all the way back to IE10.
 
 == Screenshots ==
 
-1. Edit button and timer.
-2. Textarea and Save/Cancel buttons.
-3. Simple Comment Editing Options admin screen.
-4. Simple Comment Editing Options front-end.
+1. Edit Button and Timer.
+2. Styled Buttons and Compact Timer.
 
 == Changelog ==
+
+= 2.5.1 =
+* Released 2020-04-28
+* Fixing undefined variable error.
+
+= 2.5.0 =
+* Released 2020-04-26
+* Unlimited logged-in comment was always failing.
 
 = 2.4.6 =
 * Released 2020-02-17
@@ -377,6 +383,12 @@ Simple Comment Editing will work all the way back to IE10.
 * Initial release.
 
 == Upgrade Notice ==
+
+= 2.5.1 =
+Fixing undefined variable error.
+
+= 2.5.0 =
+Unlimited logged-in comment was always failing with SCE Options.
 
 = 2.4.6 =
 Fixing WSOD error with incompatible PHP7 syntax.

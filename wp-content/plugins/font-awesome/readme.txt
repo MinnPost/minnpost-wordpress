@@ -1,6 +1,6 @@
 === Font Awesome ===
 Contributors: fontawesome, mlwilkerson, robmadole, frrrances, deathnfudge
-Stable tag: 4.0.0-rc19
+Stable tag: 4.0.0-rc20
 Tags: font, awesome, fontawesome, font-awesome, icon, svg, webfont
 Requires at least: 4.7
 Tested up to: 5.4
@@ -131,6 +131,10 @@ Once you activate the Font Awesome plugin, you will see a top-level menu item fo
 
 
 == Changelog ==
+
+= 4.0.0-rc20 =
+
+* developer-oriented update to support building themes that use this code as a composer package
 
 = 4.0.0-rc19 =
 

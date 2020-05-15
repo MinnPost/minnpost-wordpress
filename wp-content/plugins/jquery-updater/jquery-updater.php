@@ -3,7 +3,7 @@
 * Plugin Name: jQuery Updater
 * Plugin URI: http://www.ramoonus.nl/wordpress/jquery-updater/
 * Description: This plugin updates jQuery to the latest  stable version.
-* Version: 3.5.0
+* Version: 3.5.1.1
 * Author: Ramoonus
 * Author URI: http://www.ramoonus.nl/
 * License: GPL3
@@ -14,31 +14,32 @@
 /**
 * Replace jQuery with a newer version, load jQuery Migrate
 *
-* @version 3.5.0
+* @version 3.5.1
 * @since 1.0.0
 * @return void
 */
 function rw_jquery_updater()
  {
-    $ver = '3.5.0';
+    $ver = '3.5.1';
     $ver_core = $ver;
-    $ver_migrate = '3.1.0';
+    $ver_migrate = '3.3.0';
     $slim = false;
     $min = true;
     $cdn = false; // google, microsoft, cdnjs, jsdelivr
-    
+    $migrate = true;
+    $enqueue_admin = false;
 
     // jQuery Core
     // Deregister jQuery core
     wp_deregister_script( 'jquery-core' );
     // Reregister jQuery core
-    wp_register_script( 'jquery-core', plugins_url( '/js/jquery-3.5.0.min.js', __FILE__ ), [], $ver_core );
+    wp_register_script( 'jquery-core', plugins_url( '/js/jquery-3.5.1.min.js', __FILE__ ), [], $ver_core );
 
     // jQuery Migrate
     // Deregister jQuery Migrate
     wp_deregister_script( 'jquery-migrate' );
     // Reregister jQuery Migrate
-    wp_register_script( 'jquery-migrate', plugins_url( '/js/jquery-migrate-3.1.0.min.js', __FILE__ ), ['jquery-core'], $ver_migrate );
+    wp_register_script( 'jquery-migrate', plugins_url( '/js/jquery-migrate-3.3.0.min.js', __FILE__ ), ['jquery-core'], $ver_migrate );
 
     // jQuery
     // Deregister jQuery ( Meta )
@@ -51,8 +52,8 @@ function rw_jquery_updater()
 * Front-End
 * @version 2.1
 */
-add_action( 'wp_enqueue_scripts', 'rw_jquery_updater', 1 );
-add_action( 'login_enqueue_scripts', 'rw_jquery_updater', 1 );
+add_action( 'wp_enqueue_scripts', 'rw_jquery_updater' );
+add_action( 'login_enqueue_scripts', 'rw_jquery_updater' );
 // since 3.4.0.1
 
 /**
@@ -120,7 +121,29 @@ function jqu_render_plugin_settings_page() {
         do_settings_sections( 'dbi_example_plugin' ); ?>
 
         <p>jQuery Updated is succesfully installed and activated.
-        <br>Now running jQuery 3.5.0</p>
+        <br>Now running jQuery 3.5.1</p>
+    
+        <hr> 
+
+        <label for="jquery-version">Select jQuery version</label>
+        <select id="jquery-version" name="jquery-version" disabled>
+            <option value="3" selected>3.x</option>
+            <option value="2">2.x</option>
+            <option value="1">1.x</option>
+            <option value="disabled">Disabled</option>
+        </select>
+
+        <label for="jquery-migrate">jQuery Migrate enabled: </label>
+        <input type="checkbox" id="jquery-migrate" name="jquery-migrate" checked>
+
+        <label for="jquery-slim">Slim: </label>
+        <input type="checkbox" id="jquery-slim" name="jquery-slim">
+
+        <label for="jquery-cdn">CDN: </label>
+        <input type="checkbox" id="jquery-cdn" name="jquery-cdn">
+
+        <label for="jquery-admin">Enqueue in Dashboard: </label>
+        <input type="checkbox" id="jquery-admin" name="jquery-admin">
 
         <input name="submit" class="button button-primary" type="submit" value="<?php esc_attr_e( 'Save' ); ?>" disabled />
     </form>

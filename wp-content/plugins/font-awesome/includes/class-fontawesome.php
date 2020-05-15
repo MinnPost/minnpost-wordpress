@@ -126,7 +126,7 @@ class FontAwesome {
 	 *
 	 * @since 4.0.0
 	 */
-	const PLUGIN_VERSION = '4.0.0-rc19';
+	const PLUGIN_VERSION = '4.0.0-rc20';
 	/**
 	 * The namespace for this plugin's REST API.
 	 *
@@ -344,17 +344,7 @@ class FontAwesome {
 	 * @ignore
 	 */
 	public function run() {
-		add_action(
-			'init',
-			[ $this, 'init' ],
-			10,
-			/**
-			 * Explicitly indicate to the init action hook that 0 args should be passed in when invoking the
-			 * callback function, so that the default parameter will be used.
-			 * Otherwise, the callback seems to be called with a single empty string parameter, which confuses it.
-			 */
-			0
-		);
+		$this->init();
 
 		$this->initialize_rest_api();
 
@@ -2342,7 +2332,7 @@ EOT;
 	/**
 	 * Runs a GraphQL query against the Font Awesome GraphQL API.
 	 *
-	 * It accepts a GraphQL query string like 'query { versions }' and returns
+	 * It accepts a GraphQL query string like 'query { releases { version } }' and returns
 	 * the json encoded body of response from the API server when the response
 	 * has an HTTP status of 200. Otherwise, it throws an exception whose
 	 * message, if non-null, is appropriate for displaying in the WordPress admin ui

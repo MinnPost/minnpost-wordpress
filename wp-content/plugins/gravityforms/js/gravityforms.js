@@ -1233,6 +1233,11 @@ var GFMergeTag = function() {
 			return '';
 		}
 
+		// Filtering out the email field confirmation input to prevent the values from both inputs being returned.
+		if ( field.find( '.ginput_container_email' ).hasClass( 'ginput_complex' ) ) {
+			input = input.first();
+		}
+
 		//If value has been filtered, use it. Otherwise use default logic
 		var value = gform.applyFilters( 'gform_value_merge_tag_' + formId + '_' + fieldId, false, input, modifier );
 		if ( value !== false ){
