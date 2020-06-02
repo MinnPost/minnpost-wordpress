@@ -296,7 +296,7 @@ Class saswp_output_service{
 
                     if($custom_logo_id){
 
-                        $custom_logo    = wp_get_attachment_image_src( $custom_logo_id, $sizes);
+                        $custom_logo    = @wp_get_attachment_image_src( $custom_logo_id, $sizes);
 
                     }
 
@@ -308,7 +308,7 @@ Class saswp_output_service{
                          $response['height'] = array_key_exists(1, $custom_logo)? $custom_logo[1]:'';
                                               
                     }
-                                    
+                break;                    
                 default:
                     if(function_exists('get_field_object')){
                      
@@ -887,7 +887,10 @@ Class saswp_output_service{
                     }                    
                     if(isset($custom_fields['local_menu'])){
                      $input1['hasMenu'] =    $custom_fields['local_menu'];
-                    }                    
+                    }
+                    if(isset($custom_fields['local_additional_type'])){
+                        $input1['additionalType'] =    $custom_fields['local_additional_type'];
+                    }
                     if(isset($custom_fields['local_rating_value']) && isset($custom_fields['local_rating_count'])){
                        $input1['aggregateRating']['@type']       =   'AggregateRating';
                        $input1['aggregateRating']['worstRating'] =   0;
@@ -1275,7 +1278,25 @@ Class saswp_output_service{
                     if(isset($custom_fields['saswp_event_schema_url'])){
                      $input1['offers']['url'] =    $custom_fields['saswp_event_schema_url'];
                     }
-                    
+
+                    if(isset($custom_fields['saswp_event_organizer_name']) || isset($custom_fields['saswp_event_organizer_url']) || isset($custom_fields['saswp_event_organizer_email']) || isset($custom_fields['saswp_event_organizer_phone'])){
+                        
+                        $input1['organizer']['@type'] =    'Organization';
+
+                        if(isset($custom_fields['saswp_event_organizer_name'])){
+                            $input1['organizer']['name']  =    $custom_fields['saswp_event_organizer_name'];
+                        }
+                        if(isset($custom_fields['saswp_event_organizer_url'])){
+                            $input1['organizer']['url']  =    $custom_fields['saswp_event_organizer_url'];
+                        }
+                        if(isset($custom_fields['saswp_event_organizer_email'])){
+                            $input1['organizer']['email']  =    $custom_fields['saswp_event_organizer_email'];
+                        }
+                        if(isset($custom_fields['saswp_event_organizer_phone'])){
+                            $input1['organizer']['telephone']  =    $custom_fields['saswp_event_organizer_phone'];
+                        }                        
+                    }
+                                        
                     break;    
                     
                 case 'TechArticle':      
@@ -1555,6 +1576,9 @@ Class saswp_output_service{
                     }
                     if(isset($custom_fields['saswp_product_schema_gtin13'])){
                         $input1['gtin13'] =    $custom_fields['saswp_product_schema_gtin13'];
+                    }
+                    if(isset($custom_fields['saswp_product_additional_type'])){
+                        $input1['additionalType'] =    $custom_fields['saswp_product_additional_type'];
                     }                                        
                     if(isset($custom_fields['saswp_product_schema_description'])){
                      $input1['description'] =  wp_strip_all_tags(strip_shortcodes( $custom_fields['saswp_product_schema_description'] ));
@@ -1654,6 +1678,47 @@ Class saswp_output_service{
                         }
 
                         break;    
+
+                        case 'PsychologicalTreatment':                                                                                                  
+
+                            if(isset($custom_fields['saswp_psychological_treatment_name'])){
+                                $input1['name'] =    $custom_fields['saswp_psychological_treatment_name'];
+                            }                            
+                            if(isset($custom_fields['saswp_psychological_treatment_url'])){
+                             $input1['url'] =    $custom_fields['saswp_psychological_treatment_url'];
+                            }                                                
+                            if(isset($custom_fields['saswp_psychological_treatment_description'])){
+                             $input1['description'] =    $custom_fields['saswp_psychological_treatment_description'];
+                            }
+                            if(isset($custom_fields['saswp_psychological_treatment_image'])){
+                             $input1['image'] =    $custom_fields['saswp_psychological_treatment_image'];
+                            }                            
+                            if(isset($custom_fields['saswp_psychological_treatment_drug'])){
+                                $input1['drug'] =    $custom_fields['saswp_psychological_treatment_drug'];
+                            }
+                            if(isset($custom_fields['saswp_psychological_treatment_body_location'])){
+                                $input1['bodyLocation'] =    $custom_fields['saswp_psychological_treatment_body_location'];
+                            }
+                            if(isset($custom_fields['saswp_psychological_treatment_preparation'])){
+                                $input1['preparation'] =    $custom_fields['saswp_psychological_treatment_preparation'];
+                            }
+                            if(isset($custom_fields['saswp_psychological_treatment_followup'])){
+                                $input1['followup'] =    $custom_fields['saswp_psychological_treatment_followup'];
+                            }
+                            if(isset($custom_fields['saswp_psychological_treatment_how_performed'])){
+                                $input1['howPerformed'] =    $custom_fields['saswp_psychological_treatment_how_performed'];
+                            }
+                            if(isset($custom_fields['saswp_psychological_treatment_procedure_type'])){
+                                $input1['procedureType'] =    $custom_fields['saswp_psychological_treatment_procedure_type'];
+                            }
+                            if(isset($custom_fields['saswp_psychological_treatment_medical_code'])){
+                                $input1['code'] =    $custom_fields['saswp_psychological_treatment_medical_code'];
+                            }
+                            if(isset($custom_fields['saswp_psychological_treatment_additional_type'])){
+                                $input1['additionalType'] =    $custom_fields['saswp_psychological_treatment_additional_type'];
+                            }
+    
+                            break;            
                 
                 case 'Service':
                     if(isset($custom_fields['saswp_service_schema_name'])){

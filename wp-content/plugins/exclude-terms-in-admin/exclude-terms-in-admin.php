@@ -57,6 +57,7 @@ class Exclude_Terms_Admin {
 
 	public function add_actions() {
 		add_filter( 'list_terms_exclusions', array( $this, 'list_terms_exclusions' ), 10, 2 );
+		add_shortcode( 'return_excluded_terms', array( $this, 'return_excluded_terms' ) );
 	}
 
 	/**
@@ -64,13 +65,24 @@ class Exclude_Terms_Admin {
 	*
 	* @return string $exclusions
 	*/
-	function list_terms_exclusions( $exclusions, $args ) {
+	public function list_terms_exclusions( $exclusions, $args ) {
 		global $pagenow;
 		$user_can_see = current_user_can( $this->see_hidden_capability );
 		if ( in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) && ! $user_can_see ) {
 			$exclusions .= " AND t.name NOT IN ( $this->hidden_terms )";
 		}
 		return $exclusions;
+	}
+
+	/**
+	* Return excluded terms in a shortcode. This lets them be assigned to a variable.
+	*
+	* @param array $attributes
+	* @return string $hidden_terms
+	*
+	*/
+	public function return_excluded_terms( $attributes, $content = null ) {
+		return $this->hidden_terms;
 	}
 }
 

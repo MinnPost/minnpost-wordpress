@@ -6,7 +6,7 @@ Description: Widget to display posts/pages with the most comments.
 Version: 3.0
 Author: Nick Momrik
 Author URI: http://nickmomrik.com/
-Updated by MinnPost to fix code standards/PHP 7 compatibility
+Updated by MinnPost to fix code standards/PHP 7 compatibility, and to use WP_Query instead of get_results.
 */
 
 class Most_Commented_Widget extends WP_Widget {
@@ -16,25 +16,41 @@ class Most_Commented_Widget extends WP_Widget {
 
 	function widget( $args, $instance ) {
 		extract( $args );
-		$title          = apply_filters( 'widget_title', $instance['title'] );
+
+		// title of the widget
+		$title = apply_filters( 'widget_title', $instance['title'] );
+
+		// description of the widget
+		$description = isset( $instance['description'] ) ? apply_filters( 'the_content', $instance['description'] ) : '';
+
+		// whether to display the comment count
+		$show_comment_count = isset( $instance['show_comment_count'] ) ? (bool) $instance['show_comment_count'] : false;
+
+		// whether to check password posts
 		$show_pass_post = (bool) $instance['show_pass_post'];
-		$duration       = intval( $instance['duration'] );
+
+		// how many days to go back. if the value is zero, it checks all posts
+		$duration = intval( $instance['duration'] );
 		if ( ! in_array( $duration, array( 0, 1, 7, 30, 365 ) ) ) {
 			$duration = 0;
 		}
 
+		// how many posts to load
 		$num_posts = intval( $instance['num_posts'] );
 		if ( $num_posts < 1 ) {
 			$num_posts = 5;
 		}
 
+		// what post type to use
 		$post_type = $instance['post_type'];
 		if ( ! in_array( $post_type, array( 'post', 'page', 'both' ) ) ) {
 			$post_type = 'both';
 		}
 
+		// whether to echo or return the widget's content
 		$echo = ( array_key_exists( 'echo', $instance ) ) ? $instance['echo'] : true;
 
+		// content before and after the widget
 		if ( array_key_exists( 'before', $instance ) ) {
 			$before = $instance['before'];
 			$after  = $instance['after'];
@@ -43,62 +59,101 @@ class Most_Commented_Widget extends WP_Widget {
 			$after  = '</li>';
 		}
 
-		global $wpdb;
+		$most_commented_output = '';
+		$most_commented_ids    = get_transient( $widget_id );
+		if ( false === $most_commented_ids ) {
+			// if there's not a cached list of ids, generate a WP_Query based on the widget settings
+			$most_commented_args = array(
+				'post_status'    => 'publish',
+				'orderby'        => 'comment_count',
+				'comment_count'  => array(
+					'value'   => 1,
+					'compare' => '>=',
+				),
+				'posts_per_page' => $num_posts,
+				'fields'         => 'ids',
+				'cache'          => true,
+			);
 
-		if ( ! $output = wp_cache_get( $widget_id ) ) {
-			$request = "SELECT ID, post_title, comment_count FROM $wpdb->posts WHERE comment_count > 0 AND post_status = 'publish'";
-			if ( ! $show_pass_post ) {
-				$request .= " AND post_password = ''";
+			if ( 'both' !== $post_type ) {
+				$most_commented_args['post_type'] = $post_type;
 			}
 
-			if ( 'both' != $post_type ) {
-				$request .= $wpdb->prepare( " AND post_type = %s", $post_type );
+			if ( false === $show_pass_post ) {
+				$most_commented_args['has_password'] = false;
 			}
 
 			if ( $duration > 0 ) {
-				$request .= $wpdb->prepare( " AND DATE_SUB(CURDATE(), INTERVAL %d DAY) < post_date", $duration );
+				$most_commented_args['date_query'] = array(
+					'after' => $duration . ' days ago',
+				);
 			}
 
-			$request .= " ORDER BY comment_count DESC LIMIT $num_posts";
+			// filter args
+			$most_commented_args = apply_filters( 'most_commented_widget_args_pre_cache', $most_commented_args, $post_type, $show_pass_post, $duration );
 
-			$posts = $wpdb->get_results( $request );
+			// run query
+			$most_commented_query = new WP_Query( $most_commented_args );
+			$most_commented_ids   = $most_commented_query->posts;
 
-			if ( $echo ) {
-				$output = '';
-
-				if ( ! empty( $posts ) ) {
-					foreach ( $posts as $post ) {
-						$post_title = apply_filters( 'the_title', $post->post_title );
-
-						$output .= $before . '<a href="' . get_permalink( $post->ID ) . '" title="' . esc_attr( $post_title ) . '">' . $post_title . '</a> (' . $post->comment_count . ')' . $after;
-					}
-				} else {
-					$output .= $before . 'None found' . $after;
-				}
-
-				if ( ! array_key_exists( 'not_widget', $instance ) ) {
-					if ( $title ) {
-						$title = $before_title . $title . $after_title;
-					}
-
-					$output = $before_widget . $title . '<ul>' . $output . '</ul>' . $after_widget;
-				}
-			} else {
-				$output = $posts;
+			if ( true === $most_commented_args['cache'] ) {
+				set_transient( $widget_id, $most_commented_ids, 1800 );
 			}
-
-			wp_cache_set( $widget_id, $output, '', 1800 );
 		}
 
-		if ( $echo ) {
-			echo $output;
+		// these are the cached ids. we do still have to make sure the order is correct.
+		$most_commented_args_ids = array(
+			'post__in' => $most_commented_ids,
+			'orderby'  => 'comment_count',
+		);
+
+		// filter final query args
+		$most_commented_args_ids = apply_filters( 'most_commented_widget_args_ids', $most_commented_args_ids, '', '', '' );
+		// run query. by default the arguments are an array of ids
+		$most_commented_query = new WP_Query( $most_commented_args_ids );
+
+		// clear the cache if need be
+		if ( isset( $most_commented_args_ids['cache'] ) && false === $most_commented_args_ids['cache'] ) {
+			delete_transient( $widget_id );
+		}
+
+		if ( $most_commented_query->have_posts() ) {
+			while ( $most_commented_query->have_posts() ) {
+				$most_commented_query->the_post();
+				$post = $most_commented_query->post;
+
+				$comment_count = wp_count_comments( $post->ID );
+
+				$comment_count_output = '';
+				if ( true === $show_comment_count ) {
+					$comment_count_output = ' (' . $comment_count->approved . ')';
+				}
+
+				$most_commented_output .= $before . '<a href="' . get_permalink( $post->ID ) . '">' . $post->post_title . '</a>' . $comment_count_output . $after;
+			}
 		} else {
-			return $output;
+			$most_commented_output .= $before . 'None found' . $after;
+		}
+
+		// finish output with widget settings values
+		if ( ! array_key_exists( 'not_widget', $instance ) ) {
+			if ( $title ) {
+				$title = $before_title . $title . $after_title;
+			}
+			$most_commented_output = $before_widget . $title . $description . '<ol>' . $most_commented_output . '</ol>' . $after_widget;
+		}
+
+		// either echo or return the complete widget's output
+		if ( true === $echo ) {
+			echo $most_commented_output;
+		} else {
+			return $most_commented_output;
 		}
 	}
 
 	function update( $new_instance, $old_instance ) {
-		$new_instance['show_pass_post'] = isset( $new_instance['show_pass_post'] );
+		$new_instance['show_comment_count'] = isset( $new_instance['show_comment_count'] );
+		$new_instance['show_pass_post']     = isset( $new_instance['show_pass_post'] );
 
 		wp_cache_delete( $this->id );
 
@@ -106,9 +161,11 @@ class Most_Commented_Widget extends WP_Widget {
 	}
 
 	function form( $instance ) {
-		$title          = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
-		$show_pass_post = isset( $instance['show_pass_post'] ) ? (bool) $instance['show_pass_post'] : '';
-		$duration       = isset( $instance['duration'] ) ? intval( $instance['duration'] ) : 0;
+		$title              = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
+		$description        = isset( $instance['description'] ) ? esc_attr( $instance['description'] ) : '';
+		$show_comment_count = isset( $instance['show_comment_count'] ) ? (bool) $instance['show_comment_count'] : false;
+		$show_pass_post     = isset( $instance['show_pass_post'] ) ? (bool) $instance['show_pass_post'] : '';
+		$duration           = isset( $instance['duration'] ) ? intval( $instance['duration'] ) : 0;
 		if ( ! in_array( $duration, array( 0, 1, 7, 30, 365 ) ) ) {
 			$duration = 0;
 		}
@@ -124,6 +181,8 @@ class Most_Commented_Widget extends WP_Widget {
 		}
 		?>
 		<p><label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?> <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" /></label></p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'description' ); ?>"><?php _e( 'Description:' ); ?><textarea class="widefat" id="<?php echo $this->get_field_id( 'description' ); ?>" name="<?php echo $this->get_field_name( 'description' ); ?>"><?php echo $description; ?></textarea></label></p>
 		<p>
 			<label for="<?php echo $this->get_field_id( 'post_type' ); ?>"><?php _e( 'Display:' ); ?>
 				<select id="<?php echo $this->get_field_id( 'post_type' ); ?>" name="<?php echo $this->get_field_name( 'post_type' ); ?>">
@@ -169,6 +228,12 @@ class Most_Commented_Widget extends WP_Widget {
 				}
 				?>
 				</select>
+			</label>
+		</p>
+
+		<p>
+			<label for="<?php echo $this->get_field_id( 'show_comment_count' ); ?>">
+				<input id="<?php echo $this->get_field_id( 'show_comment_count' ); ?>" class="checkbox" type="checkbox" name="<?php echo $this->get_field_name( 'show_comment_count' ); ?>"<?php echo checked( $show_comment_count ); ?> /> <?php _e( 'Show comment count' ); ?>
 			</label>
 		</p>
 

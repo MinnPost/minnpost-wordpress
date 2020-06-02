@@ -16,6 +16,10 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
             
             $business_type = $current_user = $author_desc = $author_url = $post_id = '';
             $author_details     = array();
+
+            if($schema_id !=null ){
+                $schema_id = intval($schema_id);
+            }
             
             if($review_type){
                 $schema_type = $review_type;
@@ -229,7 +233,12 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'label' => 'Serves Cuisine',
                             'id' => 'local_serves_cuisine_'.$schema_id,
                             'type' => 'text',                            
-                         );                                                
+                         );
+                        $meta_field[] =   array(
+                                'label' => 'Additional Type',
+                                'id'    => 'local_additional_type_'.$schema_id,
+                                'type'  => 'text',                            
+                        );                                                
                         $meta_field[] =   array(
                             'label' => 'Facebook',
                             'id' => 'local_facebook_'.$schema_id,
@@ -1074,11 +1083,31 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                 'label' => 'URL',
                                 'id' => 'saswp_event_schema_url_'.$schema_id,
                                 'type' => 'text',                                
+                        ),                        
+                        array(
+                                'label' => 'Organizer Name',
+                                'id'    => 'saswp_event_schema_organizer_name_'.$schema_id,
+                                'type'  => 'text',                                
+                        ),
+                        array(
+                                'label' => 'Organizer URL',
+                                'id'    => 'saswp_event_schema_organizer_url_'.$schema_id,
+                                'type'  => 'text',                                
+                        ),
+                        array(
+                                'label' => 'Organizer Phone',
+                                'id'    => 'saswp_event_schema_organizer_phone_'.$schema_id,
+                                'type'  => 'text',                                
+                        ),
+                        array(
+                                'label' => 'Organizer Email',
+                                'id'    => 'saswp_event_schema_organizer_email_'.$schema_id,
+                                'type'  => 'text',                                
                         ),
                         array(
                                 'label' => 'Performer Name',
-                                'id' => 'saswp_event_schema_performer_name_'.$schema_id,
-                                'type' => 'text',                                
+                                'id'    => 'saswp_event_schema_performer_name_'.$schema_id,
+                                'type'  => 'text',                                
                         ),
                     );
                     break;
@@ -1572,6 +1601,80 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
 
                     );
                     break;
+
+                    case 'PsychologicalTreatment':                                                                                                            
+                        
+                        $meta_field = array(
+                        array(
+                                'label'   => 'Name',
+                                'id'      => 'saswp_psychological_treatment_name_'.$schema_id,
+                                'type'    => 'text'                                                 
+                        ),
+                        array(
+                                'label'   => 'Description',
+                                'id'      => 'saswp_psychological_treatment_description_'.$schema_id,
+                                'type'    => 'textarea'                                                 
+                        ),
+                        array(
+                                'label'   => 'URL',
+                                'id'      => 'saswp_psychological_treatment_url_'.$schema_id,
+                                'type'    => 'text'                                                 
+                        ),
+                        array(
+                                'label'   => 'Image',
+                                'id'      => 'saswp_psychological_treatment_image_'.$schema_id,
+                                'type'    => 'media'                                                 
+                        ),
+                        array(
+                                'label'   => 'Drug',
+                                'id'      => 'saswp_psychological_treatment_drug_'.$schema_id,
+                                'type'    => 'text'                                                 
+                        ),    
+                        array(
+                                'label'   => 'Body Location',
+                                'id'      => 'saswp_psychological_treatment_body_location_'.$schema_id,
+                                'type'    => 'text'                                                 
+                        ),
+                        array(
+                                'label'   => 'Preparation',
+                                'id'      => 'saswp_psychological_treatment_preparation_'.$schema_id,
+                                'type'    => 'text'                                                 
+                        ),
+                        array(
+                                'label'   => 'Followup',
+                                'id'      => 'saswp_psychological_treatment_followup_'.$schema_id,
+                                'type'    => 'text'                                                 
+                        ),
+                        array(
+                                'label'   => 'How Performed',
+                                'id'      => 'saswp_psychological_treatment_how_performed_'.$schema_id,
+                                'type'    => 'text'                                                 
+                        ),
+                        array(
+                                'label'   => 'Procedure Type',
+                                'id'      => 'saswp_psychological_treatment_procedure_type_'.$schema_id,
+                                'type'    => 'select',
+                                'options' => array(
+                                        'Surgical'           => 'Surgical',
+                                        'Noninvasive'        => 'Noninvasive',
+                                        'Percutaneous'       => 'Percutaneous'                                        
+                               )                                                         
+                        ) ,
+                        array(
+                                'label'   => 'MedicalCode',
+                                'id'      => 'saswp_psychological_treatment_medical_code_'.$schema_id,
+                                'type'    => 'text'                                                 
+                        ), 
+                        array(
+                                'label'   => 'Additional Type',
+                                'id'      => 'saswp_psychological_treatment_additional_type_'.$schema_id,
+                                'type'    => 'text'                                                 
+                        ),                              
+                            
+                        );
+                        
+                        break;
+
                     case 'RealEstateListing':                                                                                                            
                         
                         $meta_field = array(
@@ -1783,6 +1886,11 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'label' => 'Seller Organization',
                             'id'    => 'saswp_product_schema_seller_'.$schema_id,
                             'type'  => 'text',                             
+                       ),
+                       array(
+                        'label' => 'Additional Type',
+                        'id'    => 'saswp_product_additional_type_'.$schema_id,
+                        'type'  => 'text',                             
                        ),
                         array(
                             'label' => 'Aggregate Rating',
@@ -3620,32 +3728,38 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                         array(
                                 'label'      => 'Headline',
                                 'id'         => 'saswp_faq_headline_'.$schema_id,
-                                'type'       => 'text'                             
+                                'type'       => 'text',
+                                'default'    => get_the_title()                             
                         ),
                         array(
                                 'label'      => 'Tags',
                                 'id'         => 'saswp_faq_keywords_'.$schema_id,
-                                'type'       => 'text'                            
+                                'type'       => 'text',
+                                'default'    => saswp_get_the_tags()                            
                         ),
                         array(
                                 'label'      => 'Author',
                                 'id'         => 'saswp_faq_author_'.$schema_id,
-                                'type'       => 'text'                            
+                                'type'       => 'text',
+                                'default' => is_object($current_user) ? $current_user->display_name : ''                            
                         ),    
                         array(
                                 'label'      => 'DateCreated',
                                 'id'         => 'saswp_faq_date_created_'.$schema_id,
-                                'type'       => 'text'                            
+                                'type'       => 'text',
+                                'default'    => get_the_date("Y-m-d")                            
                         ),
                         array(
                                 'label'      => 'DatePublished',
                                 'id'         => 'saswp_faq_date_published_'.$schema_id,
-                                'type'       => 'text'                            
+                                'type'       => 'text',
+                                'default'    => get_the_date("Y-m-d")                            
                         ),
                         array(
                                 'label'      => 'DateModified',
                                 'id'         => 'saswp_faq_date_modified_'.$schema_id,
-                                'type'       => 'text'                            
+                                'type'       => 'text',
+                                'default'    => get_the_modified_date("Y-m-d")                            
                         )                                                    
                        );                                                                 
                        

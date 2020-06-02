@@ -1237,19 +1237,16 @@ function saswp_import_callback(){
 		    );
             
         }       
-                
-        ?>
-       
-        <?php
-                                
-        $message               = 'This plugin\'s data already has been imported. Do you want to import again?. click on button above button.';
-        $schema_message        = '';
-        $schema_pro_message    = '';
-        $wp_seo_schema_message = '';
-        $seo_pressor_message   = '';
-        $wpsso_core_message    = '';
-        $aiors_message         = '';
-        $wp_custom_rv_message  = '';
+                                                        
+        $message                 = 'This plugin\'s data already has been imported. Do you want to import again?. click on button above button.';
+        $schema_message          = '';
+        $schema_pro_message      = '';
+        $wp_seo_schema_message   = '';
+        $seo_pressor_message     = '';
+        $wpsso_core_message      = '';
+        $aiors_message           = '';
+        $wp_custom_rv_message    = '';
+        $schema_for_faqs_message = '';
         $schema_plugin         = saswp_check_data_imported_from('schema'); 
         $schema_pro_plugin     = saswp_check_data_imported_from('schema_pro');
         $wp_seo_schema_plugin  = saswp_check_data_imported_from('wp_seo_schema');
@@ -1257,7 +1254,13 @@ function saswp_import_callback(){
         $wpsso_core            = saswp_check_data_imported_from('wpsso_core');
         $aiors                 = saswp_check_data_imported_from('aiors');
         $wp_custom_rv          = saswp_check_data_imported_from('wp_custom_rv');
+        $schema_for_faqs       = saswp_check_data_imported_from('schema_for_faqs');
         
+        if($schema_for_faqs->post_count !=0 ){
+            
+          $schema_for_faqs_message = $message;
+               
+        }
         if($wp_custom_rv->post_count !=0 ){
             
           $wp_custom_rv_message = $message;
@@ -1339,6 +1342,12 @@ function saswp_import_callback(){
                 <li><div class="saswp-tools-field-title"><div class="saswp-tooltip"><span class="saswp-tooltiptext"><?php echo esc_html__('All the settings and data you can import from this plugin when you click start importing','schema-and-structured-data-for-wp') ?></span><strong><?php echo esc_html__('WP Customer Reviews','schema-and-structured-data-for-wp'); ?></strong></div><button data-id="wp_custom_rv" class="button saswp-import-plugins"><?php echo esc_html__('Import','schema-and-structured-data-for-wp'); ?></button>
                         <p class="saswp-imported-message"></p>
                         <?php echo '<p>'.esc_html__($wp_custom_rv_message, 'schema-and-structured-data-for-wp').'</p>'; ?>                          
+                    </div>
+                </li>
+
+                <li><div class="saswp-tools-field-title"><div class="saswp-tooltip"><span class="saswp-tooltiptext"><?php echo esc_html__('All the settings and data you can import from this plugin when you click start importing','schema-and-structured-data-for-wp') ?></span><strong><?php echo esc_html__('FAQ Schema Markup – FAQ Structured Data','schema-and-structured-data-for-wp'); ?></strong></div><button data-id="schema_for_faqs" class="button saswp-import-plugins"><?php echo esc_html__('Import','schema-and-structured-data-for-wp'); ?></button>
+                        <p class="saswp-imported-message"></p>
+                        <?php echo '<p>'.esc_html__($schema_for_faqs_message, 'schema-and-structured-data-for-wp').'</p>'; ?>                          
                     </div>
                 </li>
                 
@@ -1704,7 +1713,7 @@ function saswp_review_page_callback(){
        
        $meta_fields = array(				
                 array(
-			'label'  => 'Rating Module',
+			'label'  => 'Rating Box',
 			'id'     => 'saswp-review-module-checkbox',                        
                         'name'   => 'saswp-review-module-checkbox',
 			'type'   => 'checkbox',
@@ -1714,7 +1723,19 @@ function saswp_review_page_callback(){
                              'id'   => 'saswp-review-module',
                              'name' => 'sd_data[saswp-review-module]',                             
                         )
-		)
+                ),
+                array(
+                        'label'  => 'Stars Rating',
+                        'id'     => 'saswp-stars-rating-checkbox',                        
+                        'name'   => 'saswp-stars-rating-checkbox',
+                        'type'   => 'checkbox',
+                        'class'  => 'checkbox saswp-checkbox',
+                        'note'   => 'This option adds rating field in wordpress default comment box <a target="_blank" href="https://structured-data-for-wp.com/docs/article/how-to-use-rating-module-in-schema-and-structured-data/">Learn More</a>',
+                        'hidden' => array(
+                                'id'   => 'saswp-stars-rating',
+                                'name' => 'sd_data[saswp-stars-rating]',                             
+                        )
+                )
            );  
        
        $field_objs->saswp_field_generator($meta_fields, $settings); 
@@ -1803,7 +1824,20 @@ function saswp_compatibility_page_callback(){
                                 'id'   => 'saswp-ampbyautomatic',
                                 'name' => 'sd_data[saswp-ampbyautomatic]',                             
                         )
-		);
+                );
+        $schemaforfaqs = array(
+                'label'  => 'FAQ Schema Markup',
+                'id'     => 'saswp-schemaforfaqs-checkbox',                        
+                'name'   => 'saswp-schemaforfaqs-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('schemaforfaqs'),
+                'hidden' => array(
+                        'id'   => 'saswp-schemaforfaqs',
+                        'name' => 'sd_data[saswp-schemaforfaqs]',                             
+                )
+        );
+                        
         $total_recipe_generator = array(
 			'label'  => 'Total Recipe Generator',
 			'id'     => 'saswp-total-recipe-generator-checkbox',                        
@@ -2663,6 +2697,7 @@ function saswp_compatibility_page_callback(){
                 $strong_testimonials,
                 $wordpress_news,
                 $WordLift,
+                $schemaforfaqs,
                 $flex_lmx
                 
 	);  
@@ -2853,6 +2888,29 @@ function saswp_support_page_callback(){
 function saswp_enqueue_style_js( $hook ) { 
         
         global $saswp_metaboxes;
+
+        $translable_txt = array(
+                'attach_review'     => esc_html__( 'Attach reviews to this schema type' , 'schema-and-structured-data-for-wp' ),
+                'place_id'          => esc_html__( 'Place ID' , 'schema-and-structured-data-for-wp' ),
+                'reviews'           => esc_html__( 'Reviews' , 'schema-and-structured-data-for-wp' ),
+                'fetch'             => esc_html__( 'Fetch' , 'schema-and-structured-data-for-wp' ),
+                'step_in'           => esc_html__( 'Reviews count should be in step of 10' , 'schema-and-structured-data-for-wp' ),
+                'blocks_zero'       => esc_html__( 'Blocks value is zero' , 'schema-and-structured-data-for-wp' ),
+                'success'           => esc_html__( 'Success', 'schema-and-structured-data-for-wp' ),
+                'enter_place_id'    => esc_html__( 'Please enter place id' , 'schema-and-structured-data-for-wp' ),
+                'enter_api_key'     => esc_html__( 'Please enter api key' , 'schema-and-structured-data-for-wp' ),
+                'enter_rv_api_key'  => esc_html__( 'Please enter reviews api key' , 'schema-and-structured-data-for-wp' ),
+                'using_schema'      => esc_html__( 'Thanks for using Structured Data!' , 'schema-and-structured-data-for-wp' ),
+                'do_you_want'       => esc_html__( 'Do you want the latest on ' , 'schema-and-structured-data-for-wp' ),
+                'sd_update'         => esc_html__( 'Structured Data update' , 'schema-and-structured-data-for-wp' ),
+                'before_others'     => esc_html__( ' before others and some best resources on monetization in a single email? - Free just for users of Structured Data!' , 'schema-and-structured-data-for-wp' ),
+                'fill_email'        => esc_html__( 'Please fill in your name and email.' , 'schema-and-structured-data-for-wp' ),
+                'invalid_email'     => esc_html__( 'Your email address is invalid.' , 'schema-and-structured-data-for-wp' ),
+                'list_id_invalid'   => esc_html__( 'Your list ID is invalid.' , 'schema-and-structured-data-for-wp' ),
+                'already_subsribed' => esc_html__( 'You\'re already subscribed!' , 'schema-and-structured-data-for-wp' ),
+                'subsribed'         => esc_html__( 'Please enter reviews api key' , 'schema-and-structured-data-for-wp' ),
+                'try_again'         => esc_html__( 'Please enter reviews api key' , 'schema-and-structured-data-for-wp' )
+        );
         
         $post_type = '';
         
@@ -2889,7 +2947,8 @@ function saswp_enqueue_style_js( $hook ) {
             'saswp_schema_types'           =>  $all_schema_array,
             'trans_based_on'               => saswp_label_text('translation-based-on'),
             'trans_reviews'                => saswp_label_text('translation-reviews'),
-            'trans_self'                   => saswp_label_text('translation-self')
+            'trans_self'                   => saswp_label_text('translation-self'),
+            'translable_txt'               => $translable_txt
         );
                         
         $data = apply_filters('saswp_localize_filter',$data,'saswp_localize_data');

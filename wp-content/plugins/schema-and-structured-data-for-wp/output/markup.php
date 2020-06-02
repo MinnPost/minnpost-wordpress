@@ -54,11 +54,26 @@ function saswp_get_reviews_schema_markup($reviews){
                                 
                                     if(!empty($reviews_arr)){
                                         
-                                        $input1['aggregateRating'] = array(
-                                            '@type'       => 'AggregateRating',
-                                            'reviewCount' => count($reviews),
-                                            'ratingValue' => esc_attr($avg_rating),                                        
-                                         );
+
+                                        global $collection_aggregate;
+
+                                        if($collection_aggregate){
+
+                                            $input1['aggregateRating'] = array(
+                                                '@type'       => 'AggregateRating',
+                                                'reviewCount' => $collection_aggregate['count'],
+                                                'ratingValue' => $collection_aggregate['average']
+                                             );
+                                             
+                                        }else{
+
+                                            $input1['aggregateRating'] = array(
+                                                '@type'       => 'AggregateRating',
+                                                'reviewCount' => count($reviews),
+                                                'ratingValue' => $avg_rating,                                        
+                                             );
+
+                                        }                                        
 
                                         $input1['review'] = $reviews_arr;
                                         
@@ -430,10 +445,17 @@ function saswp_event_schema_markup($schema_id, $schema_post_id, $all_post_meta){
                     
                 }
 
-
+                    //Performer starts here
                     $performer  = get_post_meta($schema_post_id, 'performer_'.$schema_id, true);
 
                     $performer_arr = array();
+
+                    if(isset($all_post_meta['saswp_event_schema_performer_name_'.$schema_id][0])){
+                        $performer_arr[] = array(
+                            '@type' => 'Person',
+                            'name'  => $all_post_meta['saswp_event_schema_performer_name_'.$schema_id][0]
+                        );
+                    }
 
                     if(!empty($performer)){
 
@@ -445,11 +467,48 @@ function saswp_event_schema_markup($schema_id, $schema_post_id, $all_post_meta){
                             $supply_data['url']          = $val['saswp_event_performer_url'];
 
                             $performer_arr[] =  $supply_data;
-                        }
-
-                       $input1['performer'] = $performer_arr;
+                        }                       
 
                     }
+                    if($performer_arr){
+                        $input1['performer'] = $performer_arr;    
+                    }                    
+                    //Performer ends here
+
+                    //Organizer starts here
+                    $organizer  = get_post_meta($schema_post_id, 'organizer_'.$schema_id, true);
+
+                    $organizer_arr = array();
+
+                    if(isset($all_post_meta['saswp_event_schema_organizer_name_'.$schema_id][0])){
+                        $organizer_arr[] = array(
+                            '@type'      => 'Organization',
+                            'name'       => $all_post_meta['saswp_event_schema_organizer_name_'.$schema_id][0],
+                            'url'        => $all_post_meta['saswp_event_schema_organizer_url_'.$schema_id][0],
+                            'email'      => $all_post_meta['saswp_event_schema_organizer_email_'.$schema_id][0],
+                            'telephone'  => $all_post_meta['saswp_event_schema_organizer_phone_'.$schema_id][0]
+                        );
+                    }
+
+                    if(!empty($organizer)){
+
+                        foreach($organizer as $val){
+
+                            $supply_data = array();
+                            $supply_data['@type']        = 'Organization';
+                            $supply_data['name']         = $val['saswp_event_organizer_name'];                                    
+                            $supply_data['url']          = $val['saswp_event_organizer_url'];
+                            $supply_data['email']        = $val['saswp_event_organizer_email'];
+                            $supply_data['telephone']    = $val['saswp_event_organizer_phone'];
+
+                            $organizer_arr[] =  $supply_data;
+                        }                       
+
+                    }
+                    if($organizer_arr){
+                        $input1['organizer'] = $organizer_arr;
+                    }
+                    //Organizer ends here
     
     
     return $input1;
@@ -760,6 +819,10 @@ function saswp_product_schema_markup($schema_id, $schema_post_id, $all_post_meta
             if(isset($all_post_meta['saswp_product_schema_mpn_'.$schema_id])){
               $input1['mpn'] = esc_attr($all_post_meta['saswp_product_schema_mpn_'.$schema_id][0]);  
             }
+
+            if(isset($all_post_meta['saswp_product_additional_type_'.$schema_id][0])){
+                $input1['additionalType'] = esc_attr($all_post_meta['saswp_product_additional_type_'.$schema_id][0]);  
+            }
             
             if(saswp_remove_warnings($all_post_meta, 'saswp_product_schema_enable_rating_'.$schema_id, 'saswp_array') == 1 && saswp_remove_warnings($all_post_meta, 'saswp_product_schema_rating_'.$schema_id, 'saswp_array') && saswp_remove_warnings($all_post_meta, 'saswp_product_schema_review_count_'.$schema_id, 'saswp_array')){   
                                  
@@ -894,6 +957,56 @@ function saswp_real_estate_listing_schema_markup($schema_id, $schema_post_id, $a
 
 }
 
+function saswp_psychological_treatment_schema_markup($schema_id, $schema_post_id, $all_post_meta){
+    
+    $product_image = get_post_meta( get_the_ID(), 'saswp_psychological_treatment_image_'.$schema_id.'_detail',true);
+
+    $input1 = array(
+        '@context'			=> saswp_context_url(),
+        '@type'				=> 'PsychologicalTreatment',
+        '@id'               => trailingslashit(get_permalink()).'#PsychologicalTreatment',    
+        'url'				=> saswp_remove_warnings($all_post_meta, 'saswp_psychological_treatment_url_'.$schema_id, 'saswp_array'),
+        'name'              => saswp_remove_warnings($all_post_meta, 'saswp_psychological_treatment_name_'.$schema_id, 'saswp_array'),    
+        'description'       => saswp_remove_warnings($all_post_meta, 'saswp_psychological_treatment_description_'.$schema_id, 'saswp_array'),													                            
+        );
+                        
+        if(isset($product_image['thumbnail']) && $product_image['thumbnail']){
+        
+            $input1['image']['@type']           = 'ImageObject';
+            $input1['image']['url']             = $product_image['thumbnail'];
+            $input1['image']['width']           = $product_image['width'];
+            $input1['image']['height']          = $product_image['height'];
+            
+        }
+        if(isset($all_post_meta['saswp_psychological_treatment_drug_'.$schema_id][0])){
+            $input1['drug']                    = $all_post_meta['saswp_psychological_treatment_drug_'.$schema_id][0];
+        }
+        if(isset($all_post_meta['saswp_psychological_treatment_body_location_'.$schema_id][0])){
+            $input1['bodyLocation']                    = $all_post_meta['saswp_psychological_treatment_body_location_'.$schema_id][0];
+        }
+        if(isset($all_post_meta['saswp_psychological_treatment_preparation_'.$schema_id][0])){
+            $input1['preparation']                    = $all_post_meta['saswp_psychological_treatment_preparation_'.$schema_id][0];
+        }
+        if(isset($all_post_meta['saswp_psychological_treatment_followup_'.$schema_id][0])){
+            $input1['followup']                    = $all_post_meta['saswp_psychological_treatment_followup_'.$schema_id][0];
+        }
+        if(isset($all_post_meta['saswp_psychological_treatment_how_performed_'.$schema_id][0])){
+            $input1['Howperformed']                    = $all_post_meta['saswp_psychological_treatment_how_performed_'.$schema_id][0];
+        }
+        if(isset($all_post_meta['saswp_psychological_treatment_procedure_type_'.$schema_id][0])){
+            $input1['procedureType']            = $all_post_meta['saswp_psychological_treatment_procedure_type_'.$schema_id][0];
+        }
+        if(isset($all_post_meta['saswp_psychological_treatment_medical_code_'.$schema_id][0])){
+            $input1['code']                    = $all_post_meta['saswp_psychological_treatment_medical_code_'.$schema_id][0];
+        }
+        if(isset($all_post_meta['saswp_psychological_treatment_additional_type_'.$schema_id][0])){
+            $input1['additionalType']          = $all_post_meta['saswp_psychological_treatment_additional_type_'.$schema_id][0];
+        }                 
+
+    return $input1;
+
+}
+
 function saswp_local_business_schema_markup($schema_id, $schema_post_id, $all_post_meta){
     
             $input1 = array();
@@ -955,6 +1068,10 @@ function saswp_local_business_schema_markup($schema_id, $schema_post_id, $all_po
             'openingHours'                => $operation_days,                                                                                                     
             );
             
+                if(isset($all_post_meta['local_additional_type_'.$schema_id][0])){
+                    $input1['additionalType'] = $all_post_meta['local_additional_type_'.$schema_id][0];   
+                }
+
                 if(isset($all_post_meta['local_price_range_'.$schema_id][0])){
                    $input1['priceRange'] = esc_attr($all_post_meta['local_price_range_'.$schema_id][0]);   
                 }
