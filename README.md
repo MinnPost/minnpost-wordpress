@@ -19,7 +19,7 @@ You can run this repository as a local WordPress installation. It requires VIP f
     - `wp core download`
     - `wp core install`:  `wp core install --url=<url> --title=<site title> --admin_user=<adminuser> --admin_email=<adminemail> --admin_password=<password> --skip-email`
 4. Delete the `wp-content` folder if you have access to the private repository for that folder. Clone that repository as `wp-content`. Use `--recursive` to clone the submodules. `git clone --recursive gitrepo.git wp-content`
-5. Add the VIP Go MU plugins. `git clone git@github.com:Automattic/vip-go-mu-plugins.git --recursive wp-content/mu-plugins/`
+5. Add the VIP Go MU plugins. `git clone git@github.com:Automattic/vip-go-mu-plugins.git --recursive wp-content/mu-plugins/`. This requires an SSH key on the GitHub account.
 6. Install memcache and memcached.
     - `brew install memcached` 
     - `pecl download memcache`
