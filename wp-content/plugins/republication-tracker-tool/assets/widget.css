@@ -1,0 +1,119 @@
+/**
+ * Styles for the Republication Tracker Tool widget.
+ *
+ * .side-widget on passblue.com replaces standard wordpress .widget class
+ */
+.side-widget.republication_tracker_tool,
+.widget.republication_tracker_tool {
+    text-align: center;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.side-widget.republication_tracker_tool p,
+.widget.republication_tracker_tool p {
+    margin-bottom: 1em;
+}
+
+.side-widget.republication_tracker_tool a.license,
+.widget.republication_tracker_tool a.license {
+    border-top: 3px double #ddd;
+    border-bottom: 3px double #ddd;
+    padding: 1em 0;
+    min-width: 100%;
+    display: block;
+}
+
+.side-widget.republication_tracker_tool button.republication-tracker-tool-button,
+.widget.republication_tracker_tool button.republication-tracker-tool-button {
+    width:100%;
+    background-color: #5499db;
+    border: 1px solid #2863a7;
+    color: #fff;
+    padding: 1em;
+    font-size: 1.25em;
+    margin: 0 0 1em 0;
+    display: block;
+    border-radius: .25em;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #2863a7;
+}
+
+.side-widget.republication_tracker_tool button.republication-tracker-tool-button:hover,
+.widget.republication_tracker_tool button.republication-tracker-tool-button:hover {
+    background-color: #2863a7;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#republication-tracker-tool-modal {
+    position: fixed;
+    z-index: 999999999;
+    top: 0;
+    left: 0;
+    width:100%;
+    height:100%;
+    background-color:rgba(0,0,0,.75);
+}
+
+#republication-tracker-tool-modal-content {
+    position: absolute;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90%;
+    overflow: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 2em;
+    text-align: left;
+    width:
+}
+
+#republication-tracker-tool-modal-content textarea {
+    box-sizing: border-box;
+    width: 100%;
+    margin:.5em 0 2em 0;
+    cursor: auto;
+    background-color: inherit;
+    border-color: inherit;
+}
+
+#republication-tracker-tool-modal-content h2,
+#republication-tracker-tool-modal-content .cc-license,
+#republication-tracker-tool-modal-content .cc-policy {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 1em;
+}
+
+#republication-tracker-tool-modal-content .cc-license,
+#republication-tracker-tool-modal-content .cc-policy {
+    margin-bottom: 2em;
+}
+
+#republication-tracker-tool-modal-content .cc-license img {
+    margin-bottom: 1em;
+}
+
+#republication-tracker-tool-modal-content .article-info h1 {
+    margin-bottom: 0;
+}
+
+.republication-tracker-tool-close {
+    position: absolute;
+    top: 0;
+    right: .5em;
+    font-family: sans-serif;
+    text-transform: lowercase;
+    font-size: 2em;
+}
+
+.republication-tracker-tool-close:hover {
+    cursor:pointer;
+    opacity:.8;
+}
+
+.modal-open-disallow-scrolling {
+    overflow: hidden;
+}
