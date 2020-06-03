@@ -29,8 +29,14 @@ You can run this repository as a local WordPress installation. It requires VIP f
     - `./configure --with-zlib-dir=/usr/local/Cellar/zlib/1.2.11`
     - `make`
     - `sudo make install`
-    - `valet restart` or other command, if you aren't running Valet.
-7. Symlink the `object-cache.php` file into the `wp-content` folder. Use this command (edit the path to your site root if necessary): `ln -s ~/Sites/minnpost-wordpress/wp-content/mu-plugins/drop-ins/object-cache/object-cache.php ~/Sites/minnpost-wordpress/wp-content/`.
+    - In the php.ini file, add `extension="memcache.so"`
+    - `valet restart` or other command, if you aren't running Valet. Restarting PHP alone does not seem to work, at least in a Valet environment.
+7. Install graphicsmagick.
+    - `brew install graphicsmagick`
+    - `pecl download gmagick`. You might have to use `pecl install gmagick-2.0.5RC1` (or equivalent version)
+    - This should run the full install for Gmagick.
+    - `valet restart` or other command, if you aren't running Valet. Restarting PHP alone does not seem to work, at least in a Valet environment.
+8. Symlink the `object-cache.php` file into the `wp-content` folder. Use this command (edit the path to your site root if necessary): `ln -s ~/Sites/minnpost-wordpress/wp-content/mu-plugins/drop-ins/object-cache/object-cache.php ~/Sites/minnpost-wordpress/wp-content/`.
 8. Update `wp-config.php`:
 ```php
 define( 'DISALLOW_FILE_EDIT', true );
