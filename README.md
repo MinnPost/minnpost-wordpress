@@ -18,6 +18,8 @@ You can run this repository as a local WordPress installation. It requires VIP f
 3. Install WordPress
     - `wp core download`
     - `wp core install`:  `wp core install --url=<url> --title=<site title> --admin_user=<adminuser> --admin_email=<adminemail> --admin_password=<password> --skip-email`
+    - If you have access to a backup of the site's database, you can skip `wp core install` and instead import that database. You'll need to change `home` and `siteurl` values from `wp_options` in that case.
+    - If you have a newer MySQL, at least as of June of 2020, in order to successfully run a WordPress import you'll need to run this SQL: `set global sql_mode = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';`. Then be sure to restart MySQL, ex with `brew services restart mysql` if you use Homebrew.
 4. Delete the `wp-content` folder if you have access to the private repository for that folder. Clone that repository as `wp-content`. Use `--recursive` to clone the submodules. `git clone --recursive gitrepo.git wp-content`
 5. Add the VIP Go MU plugins. `git clone git@github.com:Automattic/vip-go-mu-plugins.git --recursive wp-content/mu-plugins/`. This requires an SSH key on the GitHub account.
 6. Install memcache and memcached.
