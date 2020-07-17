@@ -6,10 +6,11 @@
 * @param array $categories
 * @param array $terms
 * @param bool $use_elasticsearch
+* @param string $number_of_posts
 * @return array $args
 *
 */
-function minnpost_spill_get_query_args( $categories = '', $terms = '', $use_elasticsearch = true ) {
+function minnpost_spill_get_query_args( $categories = '', $terms = '', $use_elasticsearch = true, $number_of_posts = '' ) {
 
 	$perspectives       = get_category_by_slug( 'perspectives' );
 	$featured_columns   = get_term_meta( $perspectives->term_id, '_mp_category_featured_columns', true );
@@ -107,10 +108,16 @@ function minnpost_spill_get_query_args( $categories = '', $terms = '', $use_elas
 		);
 	}
 
+	if ( '' !== $number_of_posts ) {
+		$number_of_posts = (int) $number_of_posts;
+	} else {
+		$number_of_posts = 5;
+	}
+
 	if ( isset( $args ) ) {
 		$default_args = array(
 			'post_type'      => 'post',
-			'posts_per_page' => 4,
+			'posts_per_page' => $number_of_posts,
 			'orderby'        => 'date',
 			'order'          => 'DESC',
 		);
@@ -119,6 +126,8 @@ function minnpost_spill_get_query_args( $categories = '', $terms = '', $use_elas
 		if ( class_exists( 'ES_WP_Query' ) && 'production' === VIP_GO_ENV && true === $use_elasticsearch ) {
 			$args['es'] = true; // elasticsearch on production only
 		}
+
+		$args = apply_filters( 'minnpost_spills_query', $args );
 
 		return $args;
 	}

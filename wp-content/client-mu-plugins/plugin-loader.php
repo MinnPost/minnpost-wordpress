@@ -22,7 +22,7 @@
 // active plugins
 wpcom_vip_load_plugin( 'ad-code-manager/ad-code-manager.php' );
 wpcom_vip_load_plugin( 'ads-txt/ads-txt.php' );
-//wpcom_vip_load_plugin( 'ap-dates-and-times/ap-dates-and-times.php' );
+wpcom_vip_load_plugin( 'ap-dates-and-times/ap-dates-and-times.php' );
 wpcom_vip_load_plugin( 'arcads-dfp-acm-provider/arcads-dfp-acm-provider.php' );
 wpcom_vip_load_plugin( 'better-image-credits/better-image-credits.php' );
 wpcom_vip_load_plugin( 'category-pagination-fix/category-pagefix.php' );
@@ -52,12 +52,13 @@ wpcom_vip_load_plugin( 'font-awesome/index.php' );
 wpcom_vip_load_plugin( 'form-processor-mailchimp/form-processor-mailchimp.php' );
 wpcom_vip_load_plugin( 'gravityforms/gravityforms.php' );
 //wpcom_vip_load_plugin( 'hcaptcha-for-forms-and-more/hcaptcha.php' );
-//wpcom_vip_load_plugin( 'highlight-search-terms/hlst.php' );
+wpcom_vip_load_plugin( 'highlight-search-terms/hlst.php' );
 wpcom_vip_load_plugin( 'insert-headers-and-footers/ihaf.php' );
 wpcom_vip_load_plugin( 'jquery-updater/jquery-updater.php' );
-//wpcom_vip_load_plugin( 'lazy-load-for-comments/lazy-load-for-comments.php' );
+wpcom_vip_load_plugin( 'lazy-load-for-comments/lazy-load-for-comments.php' );
 wpcom_vip_load_plugin( 'lh-multipart-email/lh-multipart-email.php' );
 wpcom_vip_load_plugin( 'liveblog/liveblog.php' );
+wpcom_vip_load_plugin( 'minnpost-event-addon/minnpost-event-addon.php' );
 wpcom_vip_load_plugin( 'minnpost-form-processor-mailchimp/minnpost-form-processor-mailchimp.php' );
 wpcom_vip_load_plugin( 'minnpost-membership/minnpost-membership.php' );
 wpcom_vip_load_plugin( 'minnpost-roles-and-capabilities/minnpost-roles-and-capabilities.php' );
@@ -70,19 +71,15 @@ wpcom_vip_load_plugin( 'nav-menu-roles/nav-menu-roles.php' );
 wpcom_vip_load_plugin( 'no-category-base-wpml/no-category-base-wpml.php' );
 wpcom_vip_load_plugin( 'object-sync-for-salesforce/object-sync-for-salesforce.php' );
 //wpcom_vip_load_plugin( 'permalink-without-parent-category/permalink-without-parent-category.php' );
-if ( 'preprod' === VIP_GO_ENV ) {
-	wpcom_vip_load_plugin( 'popup-maker/popup-maker.php' );
-}
 wpcom_vip_load_plugin( 'public-post-preview/public-post-preview.php' );
 wpcom_vip_load_plugin( 'pwa/pwa.php' );
 wpcom_vip_load_plugin( 'raw-html-pro/raw_html.php' );
-wpcom_vip_load_plugin( 'recent-posts-widget-extended/rpwe.php' );
 wpcom_vip_load_plugin( 'recently-registered/recently-registered.php' );
 wpcom_vip_load_plugin( 'remove-widget-titles/remove-widget-titles.php' );
 wpcom_vip_load_plugin( 'republication-tracker-tool/republication-tracker-tool.php' );
 wpcom_vip_load_plugin( 'schema-and-structured-data-for-wp/structured-data-for-wp.php' );
-//wpcom_vip_load_plugin( 'simple-comment-editing/index.php' );
-wpcom_vip_load_plugin( 'simple-image-sizes/simple_image_sizes.php' );
+wpcom_vip_load_plugin( 'simple-comment-editing/index.php' );
+//wpcom_vip_load_plugin( 'simple-image-sizes/simple_image_sizes.php' );
 wpcom_vip_load_plugin( 'staff-user-post-list/staff-user-list.php' );
 wpcom_vip_load_plugin( 'stop-spammer-registrations-plugin/stop-spammer-registrations-new.php' );
 wpcom_vip_load_plugin( 'the-events-calendar/the-events-calendar.php' );

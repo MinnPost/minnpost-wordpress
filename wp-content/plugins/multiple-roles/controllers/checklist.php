@@ -47,8 +47,8 @@ class MDMR_Checklist_Controller {
 
 		wp_nonce_field( 'update-md-multiple-roles', 'md_multiple_roles_nonce' );
 
-		$roles        = $this->model->get_editable_roles();
-        $user_roles   = ( isset( $user->roles ) ) ? $user->roles : null;
+		$roles      = $this->model->get_editable_roles();
+		$user_roles = ( isset( $user->roles ) ) ? $user->roles : null;
 
 		include( apply_filters( 'mdmr_checklist_template', MDMR_PATH . 'views/checklist.html.php' ) );
 
@@ -61,7 +61,15 @@ class MDMR_Checklist_Controller {
 	 * @param int $user_id The user ID whose roles might get updated.
 	 */
 	public function process_checklist( $user_id ) {
-		if ( isset( $_POST['md_multiple_roles_nonce'] ) && ! wp_verify_nonce( $_POST['md_multiple_roles_nonce'], 'update-md-multiple-roles' ) ) {
+
+		// The checklist is not always rendered when this method is triggered on 'profile_update' (i.e. when updating a profile programmatically),
+		// First check that the 'md_multiple_roles_nonce' is available, else bail. If we continue to process and update_roles(), all user roles will be lost.
+		// We check for 'md_multiple_roles_nonce' rather than 'md_multiple_roles' as this input/variable will be empty if all role inputs are left unchecked.
+		if ( ! isset( $_POST['md_multiple_roles_nonce'] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( $_POST['md_multiple_roles_nonce'], 'update-md-multiple-roles' ) ) {
 			return;
 		}
 
@@ -70,9 +78,6 @@ class MDMR_Checklist_Controller {
 		}
 
 		$new_roles = ( isset( $_POST['md_multiple_roles'] ) && is_array( $_POST['md_multiple_roles'] ) ) ? $_POST['md_multiple_roles'] : array();
-		if ( empty( $new_roles ) ) {
-			return;
-		}
 
 		$this->model->update_roles( $user_id, $new_roles );
 	}
@@ -86,6 +91,8 @@ class MDMR_Checklist_Controller {
 	 * @param $user_email
 	 * @param $key
 	 * @param $meta
+	 *
+	 * @return void|WP_Error
 	 */
 	public function mu_add_roles_in_signup_meta( $user, $user_email, $key, $meta ) {
 		if ( isset( $_POST['md_multiple_roles_nonce'] ) && ! wp_verify_nonce( $_POST['md_multiple_roles_nonce'], 'update-md-multiple-roles' ) ) {

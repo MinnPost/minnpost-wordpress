@@ -1504,12 +1504,60 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             ),
                     ),    
                     array(
-                            'label' => 'Nutrition',
+                            'label' => 'Calories',
                             'id' => 'saswp_recipe_nutrition_'.$schema_id,
                             'type' => 'text',
                             'attributes' => array(
                                 'placeholder' => '270 calories'
                             ),
+                    ),                    
+                    array(
+                        'label'         => 'Protein',
+                        'id'            => 'saswp_recipe_protein_'.$schema_id,
+                        'type'          => 'text',
+                        'attributes' => array(
+                            'placeholder' => '270 grams'
+                        ),
+                    ),
+                    array(
+                        'label'         => 'Fat',
+                        'id'            => 'saswp_recipe_fat_'.$schema_id,
+                        'type'          => 'text',
+                        'attributes'    => array(
+                            'placeholder' => '270 grams'
+                        ),
+                    ),
+                    array(
+                        'label'   => 'Fiber',
+                        'id'      => 'saswp_recipe_fiber_'.$schema_id,
+                        'type'    => 'text',
+                        'attributes' => array(
+                            'placeholder' => '270 grams'
+                        ),
+                    ),
+                    array(
+                        'label'         => 'Sodium',
+                        'id'            => 'saswp_recipe_sodium_'.$schema_id,
+                        'type'          => 'text',
+                        'attributes' => array(
+                            'placeholder' => '270 grams'
+                        ),
+                    ),
+                    array(
+                        'label'   => 'Sugar',
+                        'id'      => 'saswp_recipe_sugar_'.$schema_id,
+                        'type'    => 'text',
+                        'attributes' => array(
+                            'placeholder' => '270 grams'
+                        ),
+                    ),
+                    array(
+                        'label' => 'Carbohydrate',
+                        'id'    => 'saswp_recipe_carbohydrate_'.$schema_id,
+                        'type'  => 'text',
+                        'attributes' => array(
+                            'placeholder' => '270 grams'
+                        ),
                     ),
                     array(
                             'label' => 'Recipe Ingredient',
@@ -1537,6 +1585,11 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                 'placeholder' => 'Video Name'
                             ),
                     ),
+                    array(
+                        'label' => 'Video URL',
+                        'id'    => 'saswp_recipe_video_url_'.$schema_id,
+                        'type'  => 'text',                         
+                        ),
                     array(
                             'label' => 'Video Description',
                             'id' => 'saswp_recipe_video_description_'.$schema_id,
@@ -1772,6 +1825,498 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                         );
                         
                         break;
+                        
+                        case 'RentAction':                                                                                                            
+                        
+                                $meta_field = array(
+                                        array(
+                                                'label'   => 'Agent Name',
+                                                'id'      => 'saswp_rent_action_agent_name_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Land Lord Name',
+                                                'id'      => 'saswp_rent_action_land_lord_name_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Object Name',
+                                                'id'      => 'saswp_rent_action_object_name_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        )    
+                                                                    
+                                );
+                                
+                                break;  
+
+                        case 'Audiobook':                                                                                                            
+                        
+                                $meta_field = array(
+                                        array(
+                                                'label'   => 'Name',
+                                                'id'      => 'saswp_audiobook_name_'.$schema_id,
+                                                'type'    => 'text',
+                                                'default' => get_the_title()                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Description',
+                                                'id'      => 'saswp_audiobook_description_'.$schema_id,
+                                                'type'    => 'textarea',
+                                                'default' => get_the_excerpt()                                                                  
+                                        ),
+                                        array(
+                                                'label'   => 'URL',
+                                                'id'      => 'saswp_audiobook_url_'.$schema_id,
+                                                'type'    => 'text', 
+                                                'default' => get_permalink()                                                               
+                                        ),
+                                        array(
+                                                'label'   => 'Image',
+                                                'id'      => 'saswp_audiobook_image_'.$schema_id,
+                                                'type'    => 'media'                                                                
+                                        ),
+                                        array(
+                                                'label'      => 'DatePublished',
+                                                'id'         => 'saswp_audiobook_date_published_'.$schema_id,
+                                                'type'       => 'text',
+                                                'default'    => get_the_date("Y-m-d")                            
+                                        ),
+                                        array(
+                                                'label'      => 'DateModified',
+                                                'id'         => 'saswp_audiobook_date_modified_'.$schema_id,
+                                                'type'       => 'text',
+                                                'default'    => get_the_modified_date("Y-m-d")                            
+                                        ),
+                                        array(
+                                                'label'   => 'Author Name',
+                                                'id'      => 'saswp_audiobook_author_name_'.$schema_id,
+                                                'type'    => 'text',
+                                                'default' => is_object($current_user) ? $current_user->display_name : ''    
+                                        ),
+                                        array(
+                                                'label'   => 'Author Description',
+                                                'id'      => 'saswp_audiobook_author_description_'.$schema_id,
+                                                'type'    => 'textarea',
+                                                'default' => $author_desc
+                                        ), 
+                                        array(
+                                                'label'   => 'Author URL',
+                                                'id'      => 'saswp_audiobook_author_url_'.$schema_id,
+                                                'type'    => 'text',
+                                                'default' => $author_url
+                                        ),    
+                                        array(
+                                                'label'   => 'Author Image',
+                                                'id'      => 'saswp_audiobook_author_image_'.$schema_id,
+                                                'type'    => 'media',
+                                                'default' => isset($author_details['url']) ? $author_details['url'] : ''   
+                                        ),                                   
+                                        array(
+                                                'label'      => 'Publisher',
+                                                'id'         => 'saswp_audiobook_publisher_'.$schema_id,
+                                                'type'       => 'text',                           
+                                        ),
+                                        array(
+                                                'label'      => 'Provider',
+                                                'id'         => 'saswp_audiobook_provider_'.$schema_id,
+                                                'type'       => 'text',                           
+                                        ),
+                                        array(
+                                                'label'      => 'Read By',
+                                                'id'         => 'saswp_audiobook_readby_'.$schema_id,
+                                                'type'       => 'text',                           
+                                        ),                                                                                
+                                        array(
+                                                'label'      => 'Content URL',
+                                                'id'         => 'saswp_audiobook_content_url_'.$schema_id,
+                                                'type'       => 'text',                           
+                                        ),
+                                        array(
+                                                'label'      => 'Duration',
+                                                'id'         => 'saswp_audiobook_duration_'.$schema_id,
+                                                'type'       => 'text',                           
+                                        ),
+                                        array(
+                                                'label'      => 'Encoding Format',
+                                                'id'         => 'saswp_audiobook_encoding_format_'.$schema_id,
+                                                'type'       => 'text',                           
+                                        ),
+                                        array(
+                                                'label'      => 'Player Type',
+                                                'id'         => 'saswp_audiobook_player_type_'.$schema_id,
+                                                'type'       => 'text',                           
+                                        ),
+                                        array(
+                                                'label'      => 'Main Entity Of Page',
+                                                'id'         => 'saswp_audiobook_main_entity_of_page_'.$schema_id,
+                                                'type'       => 'text',                           
+                                        )
+                                );
+                                        
+                        break;  
+
+                        case 'HotelRoom':                                                                                                            
+                
+                                $meta_field = array(
+                                        array(
+                                                'label'   => 'Hotel Name',
+                                                'id'      => 'saswp_hotelroom_hotel_name_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Hotel Image',
+                                                'id'      => 'saswp_hotelroom_hotel_image_'.$schema_id,
+                                                'type'    => 'media'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Hotel Description',
+                                                'id'      => 'saswp_hotelroom_hotel_description_'.$schema_id,
+                                                'type'    => 'textarea'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Hotel Price Range',
+                                                'id'      => 'saswp_hotelroom_hotel_price_range_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Hotel Telephone',
+                                                'id'      => 'saswp_hotelroom_hotel_telephone_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Street Address',
+                                                'id' => 'saswp_hotelroom_hotel_streetaddress_'.$schema_id,
+                                                'type' => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Locality',
+                                                'id'    => 'saswp_hotelroom_hotel_locality_'.$schema_id,
+                                                'type'  => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Region',
+                                                'id'    => 'saswp_hotelroom_hotel_region_'.$schema_id,
+                                                'type'  => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel PostalCode',
+                                                'id'    => 'saswp_hotelroom_hotel_postalcode_'.$schema_id,
+                                                'type'  => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Country',
+                                                'id'    => 'saswp_hotelroom_hotel_country_'.$schema_id,
+                                                'type'  => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Room Name',
+                                                'id'    => 'saswp_hotelroom_name_'.$schema_id,
+                                                'type'  => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Room Description',
+                                                'id'    => 'saswp_hotelroom_description_'.$schema_id,
+                                                'type'  => 'textarea',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Room Image',
+                                                'id'    => 'saswp_hotelroom_image_'.$schema_id,
+                                                'type'  => 'media',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Room Offer name',
+                                                'id'    => 'saswp_hotelroom_offer_name_'.$schema_id,
+                                                'type'  => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Room Offer Terms & Condition',
+                                                'id'    => 'saswp_hotelroom_offer_description_'.$schema_id,
+                                                'type'  => 'textarea',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Room Offer Price',
+                                                'id'    => 'saswp_hotelroom_offer_price_'.$schema_id,
+                                                'type'  => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Room Offer Price Currency',
+                                                'id'    => 'saswp_hotelroom_offer_price_currency_'.$schema_id,
+                                                'type'  => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Room Offer Price UnitCode',
+                                                'id'    => 'saswp_hotelroom_offer_unitcode_'.$schema_id,
+                                                'type'  => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Hotel Room Offer Price Valid Through',
+                                                'id'    => 'saswp_hotelroom_offer_validthrough_'.$schema_id,
+                                                'type'  => 'text',                                
+                                        ),
+                                );
+                        break;
+
+                        case 'PodcastEpisode':                                                                                                            
+                
+                                $meta_field = array(
+                                        array(
+                                                'label'   => 'Name',
+                                                'id'      => 'saswp_podcast_episode_name_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Description',
+                                                'id'      => 'saswp_podcast_episode_description_'.$schema_id,
+                                                'type'    => 'textarea'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'URL',
+                                                'id'      => 'saswp_podcast_episode_url_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Image',
+                                                'id'      => 'saswp_podcast_episode_image_'.$schema_id,
+                                                'type'    => 'media'                                                                
+                                        ),
+                                        array(
+                                                'label'      => 'DatePublished',
+                                                'id'         => 'saswp_podcast_episode_date_published_'.$schema_id,
+                                                'type'       => 'text',
+                                                'default'    => get_the_date("Y-m-d")                            
+                                        ),
+                                        array(
+                                                'label'      => 'DateModified',
+                                                'id'         => 'saswp_podcast_episode_date_modified_'.$schema_id,
+                                                'type'       => 'text',
+                                                'default'    => get_the_modified_date("Y-m-d")                            
+                                        ),
+                                        array(
+                                                'label'      => 'Time Required',
+                                                'id'         => 'saswp_podcast_episode_timeRequired_'.$schema_id,
+                                                'type'       => 'text'                                                         
+                                        ),
+                                        array(
+                                                'label'      => 'Content URL',
+                                                'id'         => 'saswp_podcast_episode_content_url_'.$schema_id,
+                                                'type'       => 'text'                                                         
+                                        ),
+                                        array(
+                                                'label'      => 'PodcastSeries Name',
+                                                'id'         => 'saswp_podcast_episode_series_name_'.$schema_id,
+                                                'type'       => 'text'                                                         
+                                        ),
+                                        array(
+                                                'label'      => 'PodcastSeries URL',
+                                                'id'         => 'saswp_podcast_episode_series_url_'.$schema_id,
+                                                'type'       => 'text'                                                         
+                                        )                                                                                             
+                                );
+                                
+                        break;                  
+
+                        case 'PodcastSeason':                                                                                                            
+                
+                                $meta_field = array(
+                                        array(
+                                                'label'   => 'Name',
+                                                'id'      => 'saswp_podcast_season_name_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Description',
+                                                'id'      => 'saswp_podcast_season_description_'.$schema_id,
+                                                'type'    => 'textarea'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'URL',
+                                                'id'      => 'saswp_podcast_season_url_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Image',
+                                                'id'      => 'saswp_podcast_season_image_'.$schema_id,
+                                                'type'    => 'media'                                                                
+                                        ),
+                                        array(
+                                                'label'      => 'DatePublished',
+                                                'id'         => 'saswp_podcast_season_date_published_'.$schema_id,
+                                                'type'       => 'text',
+                                                'default'    => get_the_date("Y-m-d")                            
+                                        ),
+                                        array(
+                                                'label'      => 'DateModified',
+                                                'id'         => 'saswp_podcast_season_date_modified_'.$schema_id,
+                                                'type'       => 'text',
+                                                'default'    => get_the_modified_date("Y-m-d")                            
+                                        ),
+                                        array(
+                                                'label'      => 'Season Number',
+                                                'id'         => 'saswp_podcast_season_number_'.$schema_id,
+                                                'type'       => 'text'                                                         
+                                        ),
+                                        array(
+                                                'label'      => 'Number of seasons',
+                                                'id'         => 'saswp_podcast_season_number_of_seasons_'.$schema_id,
+                                                'type'       => 'text'                                                         
+                                        ),                                        
+                                        array(
+                                                'label'      => 'PodcastSeries Name',
+                                                'id'         => 'saswp_podcast_season_series_name_'.$schema_id,
+                                                'type'       => 'text'                                                         
+                                        ),
+                                        array(
+                                                'label'      => 'PodcastSeries URL',
+                                                'id'         => 'saswp_podcast_season_series_url_'.$schema_id,
+                                                'type'       => 'text'                                                         
+                                        )                                                                                             
+                                );
+                                
+                        break;                  
+
+                        case 'EducationalOccupationalCredential':                                                                                                            
+                        
+                                $meta_field = array(
+                                        array(
+                                                'label'   => 'Additional Type',
+                                                'id'      => 'saswp_eoc_additional_type_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Name',
+                                                'id'      => 'saswp_eoc_name_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Alternative Name',
+                                                'id'      => 'saswp_eoc_alt_name_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Description',
+                                                'id'      => 'saswp_eoc_description_'.$schema_id,
+                                                'type'    => 'textarea'                                                                
+                                        ),                                        
+                                        
+                                        array(
+                                                'label'   => 'Educational Level Name',
+                                                'id'      => 'saswp_eoc_e_lavel_name_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Educational Level DefinedTermSet',
+                                                'id'      => 'saswp_eoc_e_lavel_definedtermset_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+
+                                        array(
+                                                'label'   => 'Credential Category Name',
+                                                'id'      => 'saswp_eoc_c_category_name_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Credential Category Term Code',
+                                                'id'      => 'saswp_eoc_c_category_term_code_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Credential Category DefinedTermSet',
+                                                'id'      => 'saswp_eoc_c_category_definedtermset_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+
+                                        array(
+                                                'label'   => 'Competency Required Name',
+                                                'id'      => 'saswp_eoc_c_required_name_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Competency Required Term Code',
+                                                'id'      => 'saswp_eoc_c_required_term_code_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Competency Required DefinedTermSet',
+                                                'id'      => 'saswp_eoc_c_required_definedtermset_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Competency Required URL',
+                                                'id'      => 'saswp_eoc_c_required_url_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        )                                        
+
+                                );
+                                
+                        break;          
+                                
+                        case 'ApartmentComplex':                                                                                                            
+                
+                                $meta_field = array(
+
+                                        array(
+                                                'label'   => 'Name',
+                                                'id'      => 'saswp_apartment_complex_name_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Description',
+                                                'id'      => 'saswp_apartment_complex_description_'.$schema_id,
+                                                'type'    => 'textarea'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'URL',
+                                                'id'      => 'saswp_apartment_complex_url_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Image',
+                                                'id'      => 'saswp_apartment_complex_image_'.$schema_id,
+                                                'type'    => 'media'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Number Of Bedrooms',
+                                                'id'      => 'saswp_apartment_complex_no_of_bedrooms_'.$schema_id,
+                                                'type'    => 'number'                                                                
+                                        ),
+                                        array(
+                                                'label'   => 'Pets Allowed',
+                                                'id'      => 'saswp_apartment_complex_pets_allowed_'.$schema_id,
+                                                'type'    => 'text'                                                                
+                                        ),                                        
+                                        array(
+                                                'label' => 'Location Street Address',
+                                                'id' => 'saswp_apartment_complex_streetaddress_'.$schema_id,
+                                                'type' => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Location Locality',
+                                                'id' => 'saswp_apartment_complex_locality_'.$schema_id,
+                                                'type' => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Location Region',
+                                                'id' => 'saswp_apartment_complex_region_'.$schema_id,
+                                                'type' => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Location PostalCode',
+                                                'id' => 'saswp_apartment_complex_postalcode_'.$schema_id,
+                                                'type' => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Location Country',
+                                                'id'    => 'saswp_apartment_complex_country_'.$schema_id,
+                                                'type'  => 'text',                                
+                                        ),
+                                        array(
+                                                'label' => 'Location Phone',
+                                                'id'    => 'saswp_apartment_complex_phone_'.$schema_id,
+                                                'type'  => 'text',                                
+                                        )                                                                                                                   
+                                );
+                                
+                        break;          
 
                 case 'Product':                
                     
@@ -1832,7 +2377,13 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'id'      => 'saswp_product_schema_currency_'.$schema_id,
                             'type'    => 'text', 
                             'default' => saswp_remove_warnings($product_details, 'product_currency', 'saswp_string')    
-                      ),
+                       ),
+                       array(
+                        'label'   => 'VAT',
+                        'id'      => 'saswp_product_schema_vat_'.$schema_id,
+                        'type'    => 'text', 
+                        'default' => saswp_remove_warnings($product_details, 'product_vat', 'saswp_string')    
+                   ),
                         array(
                             'label'   => 'Availability',
                             'id'      => 'saswp_product_schema_availability_'.$schema_id,
@@ -2670,7 +3221,35 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'id'         => 'saswp_mc_schema_diagnosis_name_'.$schema_id,
                             'type'       => 'text', 
                             
-                    )                     
+                     ),
+                     array(
+                        'label'      => 'Drug',
+                        'id'         => 'saswp_mc_schema_drug_'.$schema_id,
+                        'type'       => 'text', 
+                        
+                     ),
+                     array(
+                        'label'      => 'Primary Prevention Name',
+                        'id'         => 'saswp_mc_schema_primary_prevention_name_'.$schema_id,
+                        'type'       => 'text', 
+                        
+                     ),
+                     array(
+                        'label'      => 'Primary Prevention Performed',
+                        'id'         => 'saswp_mc_schema_primary_prevention_performed_'.$schema_id,
+                        'type'       => 'textarea',                         
+                     ),
+                     array(
+                        'label'      => 'Possible Treatment Name',
+                        'id'         => 'saswp_mc_schema_possible_treatment_name_'.$schema_id,
+                        'type'       => 'text', 
+                        
+                     ),
+                     array(
+                        'label'      => 'Possible Treatment Performed',
+                        'id'         => 'saswp_mc_schema_possible_treatment_performed_'.$schema_id,
+                        'type'       => 'textarea',                         
+                     )                                          
                    );
                     break;
                 
@@ -3405,6 +3984,89 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                               
                    );
                     break;
+
+                    case 'BuddhistTemple':
+                    
+                        $meta_field = array(
+                        array(
+                                'label'      => 'Name',
+                                'id'         => 'saswp_buddhisttemple_schema_name_'.$schema_id,
+                                'type'       => 'text',
+                                'attributes' => array(
+                                    'placeholder' => 'Name'
+                                ), 
+                        ),
+                        array(
+                                'label'      => 'Description',
+                                'id'         => 'saswp_buddhisttemple_schema_description_'.$schema_id,
+                                'type'       => 'textarea',
+                                'attributes' => array(
+                                    'placeholder' => 'Description'
+                                ), 
+                        ),
+                        array(
+                                'label'      => 'Image',
+                                'id'         => 'saswp_buddhisttemple_schema_image_'.$schema_id,
+                                'type'       => 'media',                            
+                        ),    
+                        array(
+                                'label'      => 'URL',
+                                'id'         => 'saswp_buddhisttemple_schema_url_'.$schema_id,
+                                'type'       => 'text',
+                                'default'    => get_permalink()
+                        ),  
+                        array(
+                                'label'      => 'Has Map',
+                                'id'         => 'saswp_buddhisttemple_schema_hasmap_'.$schema_id,
+                                'type'       => 'text',                            
+                        ),                      
+                        array(
+                                'label'      => 'Is Accessible For Free',
+                                'id'         => 'saswp_buddhisttemple_schema_is_accesible_free_'.$schema_id,
+                                'type'       => 'select',
+                                'options'    => array(
+                                        'true'   => 'True',
+                                        'false'  => 'False',
+                                )
+                        ),
+                        array(
+                                'label'      => 'Maximum Attendee Capacity',
+                                'id'         => 'saswp_buddhisttemple_schema_maximum_a_capacity_'.$schema_id,
+                                'type'       => 'text',                            
+                        ),    
+                        array(
+                                'label'      => 'Address Locality',
+                                'id'         => 'saswp_buddhisttemple_schema_locality_'.$schema_id,
+                                'type'       => 'text',                            
+                        ),
+                        array(
+                                'label'      => 'Address Region',
+                                'id'         => 'saswp_buddhisttemple_schema_region_'.$schema_id,
+                                'type'       => 'text',                            
+                        ),    
+                        array(
+                                'label'      => 'Address Country',
+                                'id'         => 'saswp_buddhisttemple_schema_country_'.$schema_id,
+                                'type'       => 'text',                            
+                        ),
+                        array(
+                                'label'      => 'Address PostalCode',
+                                'id'         => 'saswp_buddhisttemple_schema_postal_code_'.$schema_id,
+                                'type'       => 'text',                            
+                        ), 
+                        array(
+                                'label'      => 'Latitude',
+                                'id'         => 'saswp_buddhisttemple_schema_latitude_'.$schema_id,
+                                'type'       => 'text',                            
+                        ),
+                        array(
+                                'label'      => 'Longitude',
+                                'id'         => 'saswp_buddhisttemple_schema_longitude_'.$schema_id,
+                                'type'       => 'text',                            
+                        ),    
+                                                  
+                       );
+                        break;    
                 
                 case 'Church':
                     
@@ -3680,7 +4342,31 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'attributes' => array(
                                 'placeholder' => 'Hour'
                             )
-                    ),    
+                    ), 
+                        array(
+                        'label'      => 'Estimated Salary Currency',
+                        'id'         => 'saswp_jobposting_schema_es_currency_'.$schema_id,
+                        'type'       => 'text', 
+                        'attributes' => array(
+                            'placeholder' => 'USD'
+                        )
+                        ),
+                        array(
+                                'label'      => 'Estimated Salary Value',
+                                'id'         => 'saswp_jobposting_schema_es_value_'.$schema_id,
+                                'type'       => 'text', 
+                                'attributes' => array(
+                                'placeholder' => '40.00'
+                                )
+                        ),
+                        array(
+                                'label'      => 'Estimated Salary Unit Text',
+                                'id'         => 'saswp_jobposting_schema_es_unittext_'.$schema_id,
+                                'type'       => 'text', 
+                                'attributes' => array(
+                                'placeholder' => 'Hour'
+                                )
+                        )   
                    
                                               
                    );
@@ -4421,6 +5107,143 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                                                                         
                    );
                     break;
+                
+                    case 'Project':
+                    
+                        $meta_field = array(                        
+                        array(
+                                'label'      => 'Name',
+                                'id'         => 'saswp_project_name_'.$schema_id,
+                                'type'       => 'text',                           
+                            ),
+                        array(
+                                'label'      => 'Description',
+                                'id'         => 'saswp_project_description_'.$schema_id,
+                                'type'       => 'textarea',                           
+                            ),    
+                        array(
+                                'label'      => 'URL',
+                                'id'         => 'saswp_project_url_'.$schema_id,
+                                'type'       => 'text',                           
+                            ), 
+                        array(
+                               'label'      => 'Image',
+                               'id'         => 'saswp_project_image_'.$schema_id,
+                               'type'       => 'media',                           
+                            ),
+                        array(
+                                'label'      => 'Logo',
+                                'id'         => 'saswp_project_logo_'.$schema_id,
+                                'type'       => 'media',                           
+                            ), 
+                        array(
+                                'label'      => 'Street Address',
+                                'id'         => 'saswp_project_street_address_'.$schema_id,
+                                'type'       => 'text',                           
+                            ),
+                            array(
+                                'label'      => 'City',
+                                'id'         => 'saswp_project_city_'.$schema_id,
+                                'type'       => 'text',                           
+                            ),
+                            array(
+                                'label'      => 'State',
+                                'id'         => 'saswp_project_state_'.$schema_id,
+                                'type'       => 'text',                           
+                            ),
+                            array(
+                                'label'      => 'Country',
+                                'id'         => 'saswp_project_country_'.$schema_id,
+                                'type'       => 'text',                           
+                            ),
+                            array(
+                                'label'      => 'Postal Code',
+                                'id'         => 'saswp_project_postal_code_'.$schema_id,
+                                'type'       => 'text',                           
+                            ),
+                            array(
+                                    'label'      => 'Email',
+                                    'id'         => 'saswp_project_email_'.$schema_id,
+                                    'type'       => 'text',                           
+                                ),
+                            array(
+                                'label'      => 'Telephone',
+                                'id'         => 'saswp_project_telephone_'.$schema_id,
+                                'type'       => 'text',                           
+                            ),
+                            array(
+                                    'label'      => 'Website',
+                                    'id'         => 'saswp_project_website_'.$schema_id,
+                                    'type'       => 'text',                           
+                                ),
+                                array(
+                                    'label'      => 'Facebook',
+                                    'id'         => 'saswp_project_facebook_'.$schema_id,
+                                    'type'       => 'text',                           
+                                ),
+                                array(
+                                    'label'      => 'Twitter',
+                                    'id'         => 'saswp_project_twitter_'.$schema_id,
+                                    'type'       => 'text',                           
+                               ),
+                               array(
+                                    'label'      => 'LinkedIn',
+                                    'id'         => 'saswp_project_linkedin_'.$schema_id,
+                                    'type'       => 'text',                           
+                                ),
+                                array(
+                                    'label'      => 'Founder',
+                                    'id'         => 'saswp_project_founder_'.$schema_id,
+                                    'type'       => 'text',                           
+                                ),
+                                array(
+                                    'label'      => 'Founding Date',
+                                    'id'         => 'saswp_project_founding_date_'.$schema_id,
+                                    'type'       => 'text',                           
+                                ),
+                                array(
+                                    'label'      => 'Dun & Bradstreet DUNS',
+                                    'id'         => 'saswp_project_duns_'.$schema_id,
+                                    'type'       => 'text',                           
+                                ),
+                                array(
+                                    'label'      => 'Qualifications ( Credential Awarded)',
+                                    'id'         => 'saswp_project_qualifications_'.$schema_id,
+                                    'type'       => 'text',                           
+                                ),
+                                array(
+                                    'label'      => 'Knows About',
+                                    'id'         => 'saswp_project_knows_about_'.$schema_id,
+                                    'type'       => 'text',                           
+                                ),
+                                array(
+                                    'label'      => 'Member Of',
+                                    'id'         => 'saswp_project_member_of_'.$schema_id,
+                                    'type'       => 'text',                           
+                                ),
+                                array(
+                                    'label'      => 'Parent project',
+                                    'id'         => 'saswp_project_parent_project_'.$schema_id,
+                                    'type'       => 'text',                           
+                                ),
+                            array(
+                                'label'      => 'Aggregate Rating',
+                                'id'         => 'saswp_project_enable_rating_'.$schema_id,
+                                'type'       => 'checkbox',                            
+                            ),
+                            array(
+                                'label'      => 'Rating',
+                                'id'         => 'saswp_project_rating_value_'.$schema_id,
+                                'type'       => 'text',                           
+                            ),
+                            array(
+                                'label'      => 'Rating Count',
+                                'id'         => 'saswp_project_rating_count_'.$schema_id,
+                                'type'       => 'text',                            
+                            ),    
+                                                                                            
+                       );
+                        break;
                 
                 case 'Movie':
                     

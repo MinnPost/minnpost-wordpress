@@ -40,24 +40,37 @@ function saswp_schema_markup_hook_on_init() {
             }               
             
             add_action('cooked_amp_head', 'saswp_schema_markup_output');
+            
+            if(saswp_global_option()){
+
+                remove_action( 'amp_post_template_head', 'amp_post_template_add_schemaorg_metadata',99,1);
+                remove_action( 'amp_post_template_footer', 'amp_post_template_add_schemaorg_metadata',99,1);  
+                remove_action( 'wp_footer', 'orbital_markup_site'); 
+                
+                add_filter( 'amp_schemaorg_metadata', '__return_empty_array' );
+                add_filter( 'hunch_schema_markup', '__return_false');                 
+                add_filter('electro_structured_data', '__return_false');
+                add_filter('electro_woocommerce_structured_data', '__return_false');
+                
+            }
                                     
-            remove_action( 'amp_post_template_head', 'amp_post_template_add_schemaorg_metadata',99,1);
-            remove_action( 'amp_post_template_footer', 'amp_post_template_add_schemaorg_metadata',99,1);  
-            remove_action( 'wp_footer', 'orbital_markup_site'); 
-            add_filter( 'amp_schemaorg_metadata', '__return_empty_array' );
-            add_filter( 'hunch_schema_markup', '__return_false');                          
-                        
             if(class_exists('BSF_AIOSRS_Pro_Markup')){
                 
-                remove_action( 'wp_head', array( BSF_AIOSRS_Pro_Markup::get_instance(), 'schema_markup' ),10);
-                remove_action( 'wp_head', array( BSF_AIOSRS_Pro_Markup::get_instance(), 'global_schemas_markup' ),10);
-                remove_action( 'wp_footer', array( BSF_AIOSRS_Pro_Markup::get_instance(), 'schema_markup' ),10);
-                remove_action( 'wp_footer', array( BSF_AIOSRS_Pro_Markup::get_instance(), 'global_schemas_markup' ),10);
+                if(saswp_global_option()){
+
+                    remove_action( 'wp_head', array( BSF_AIOSRS_Pro_Markup::get_instance(), 'schema_markup' ),10);
+                    remove_action( 'wp_head', array( BSF_AIOSRS_Pro_Markup::get_instance(), 'global_schemas_markup' ),10);
+                    remove_action( 'wp_footer', array( BSF_AIOSRS_Pro_Markup::get_instance(), 'schema_markup' ),10);
+                    remove_action( 'wp_footer', array( BSF_AIOSRS_Pro_Markup::get_instance(), 'global_schemas_markup' ),10);
+
+                }                
                 
             }
             
             if(isset($sd_data['saswp-wp-recipe-maker']) && $sd_data['saswp-wp-recipe-maker'] == 1){
-                add_filter( 'wprm_recipe_metadata', '__return_false' );            
+                if(saswp_global_option()){
+                    add_filter( 'wprm_recipe_metadata', '__return_false' );            
+                }                
             }
                                     
             if(isset($sd_data['saswp-microdata-cleanup']) && $sd_data['saswp-microdata-cleanup'] == 1){                
@@ -75,14 +88,14 @@ function saswp_wp_hook_operation(){
 
 function saswp_schema_markup_output_in_buffer($content){
     
-    global $saswp_post_reviews, $saswp_elementor_faq, $saswp_divi_faq, $saswp_elementor_howto, $saswp_evo_json_ld;
+    global $saswp_post_reviews, $saswp_elementor_qanda, $saswp_elementor_faq, $saswp_divi_faq, $saswp_elementor_howto, $saswp_evo_json_ld;
      
     if(!$saswp_divi_faq){
         $regex = "<script type='text/javascript' src='".SASWP_PLUGIN_URL."modules/divi-builder/scripts/frontend-bundle.min.js?ver=1.0.0'></script>";
         $content = str_replace($regex, '', $content);
     }
      
-     if($saswp_post_reviews || $saswp_elementor_faq || $saswp_divi_faq || $saswp_elementor_howto || $saswp_evo_json_ld){
+     if($saswp_post_reviews || $saswp_elementor_qanda || $saswp_elementor_faq || $saswp_divi_faq || $saswp_elementor_howto || $saswp_evo_json_ld){
      
             $saswp_json_ld =  saswp_get_all_schema_markup_output();  
      
@@ -149,6 +162,9 @@ function saswp_get_all_schema_markup_output() {
         $blog_page                = array();          
         
         $gutenberg_how_to         = array();
+        $gutenberg_recipe         = array();
+        $gutenberg_qanda          = array();
+        $elementor_qanda          = array();
         $gutenberg_faq            = array();
         $elementor_faq            = array();
         $elementor_howto          = array();
@@ -157,16 +173,22 @@ function saswp_get_all_schema_markup_output() {
         $gutenberg_job            = array();
         $gutenberg_course         = array();
         
-        if(is_singular()){
+        if(is_singular() || is_front_page() || (function_exists('ampforwp_is_front_page') && ampforwp_is_front_page()) ){
 
-            $gutenberg_how_to         = saswp_gutenberg_how_to_schema(); 
-            $gutenberg_faq            = saswp_gutenberg_faq_schema();        
+            
             $elementor_faq            = saswp_elementor_faq_schema();
+            $elementor_qanda          = saswp_elementor_qanda_schema();
             $elementor_howto          = saswp_elementor_howto_schema();
+
             $divi_builder_faq         = saswp_divi_builder_faq_schema();
+
             $gutenberg_event          = saswp_gutenberg_event_schema();  
+            $gutenberg_qanda          = saswp_gutenberg_qanda_schema();  
             $gutenberg_job            = saswp_gutenberg_job_schema();
             $gutenberg_course         = saswp_gutenberg_course_schema();
+            $gutenberg_how_to         = saswp_gutenberg_how_to_schema();
+            $gutenberg_recipe         = saswp_gutenberg_recipe_schema(); 
+            $gutenberg_faq            = saswp_gutenberg_faq_schema();        
 
         }
 
@@ -192,9 +214,9 @@ function saswp_get_all_schema_markup_output() {
         }
                      
         $schema_breadcrumb_output = saswp_schema_breadcrumb_output();                      
-        $kb_website_output        = saswp_kb_website_output();           
-        
+                         
         if((is_home() || is_front_page() || ( function_exists('ampforwp_is_home') && ampforwp_is_home())) || isset($sd_data['saswp-defragment']) && $sd_data['saswp-defragment'] == 1 ){
+               $kb_website_output        = saswp_kb_website_output();  
                $kb_schema_output         = saswp_kb_schema_output();
         }
                  
@@ -260,6 +282,12 @@ function saswp_get_all_schema_markup_output() {
                             $output .= ",";
                             $output .= "\n\n";
                         }
+                        if(!empty($gutenberg_recipe)){
+                        
+                            $output .= saswp_json_print_format($gutenberg_recipe);   
+                            $output .= ",";
+                            $output .= "\n\n";
+                        }
                         if(!empty($gutenberg_faq)){
                         
                             $output .= saswp_json_print_format($gutenberg_faq);   
@@ -284,6 +312,12 @@ function saswp_get_all_schema_markup_output() {
                             $output .= ",";
                             $output .= "\n\n";
                         }
+                        if(!empty($elementor_qanda)){
+                        
+                            $output .= saswp_json_print_format($elementor_qanda);   
+                            $output .= ",";
+                            $output .= "\n\n";
+                        }
                         if(!empty($elementor_howto)){
                         
                             $output .= saswp_json_print_format($elementor_howto);   
@@ -305,6 +339,12 @@ function saswp_get_all_schema_markup_output() {
                         if(!empty($gutenberg_event)){
                         
                             $output .= saswp_json_print_format($gutenberg_event);   
+                            $output .= ",";
+                            $output .= "\n\n";
+                        }
+                        if(!empty($gutenberg_qanda)){
+                        
+                            $output .= saswp_json_print_format($gutenberg_qanda);   
                             $output .= ",";
                             $output .= "\n\n";
                         }
@@ -444,6 +484,12 @@ function saswp_get_all_schema_markup_output() {
             }                                 
                 if(in_array('BlogPosting', $output_schema_type_id) || in_array('Article', $output_schema_type_id) || in_array('TechArticle', $output_schema_type_id) || in_array('NewsArticle', $output_schema_type_id) ){                                                                                            
                 }else{
+                    if(!empty($site_navigation)){
+                                                                            
+                        $output .= saswp_json_print_format($site_navigation);   
+                        $output .= ",";
+                        $output .= "\n\n";                        
+                    }
                     if(!empty($kb_website_output)){
                         
                             $output .= saswp_json_print_format($kb_website_output);  
@@ -1153,7 +1199,15 @@ function saswp_remove_microdata($content){
         $content = preg_replace("/itemscope\='(.*?)\'/", "", $content);
         $content = preg_replace('/itemscope/', "", $content);
         $content = preg_replace('/hreview-aggregate/', "", $content);
+        $content = preg_replace('/hrecipe/', "", $content);
         
+        //Clean json markup
+        if(isset($sd_data['saswp-wpzoom']) && $sd_data['saswp-wpzoom'] == 1 ){
+
+            $regex = '/<script type=\"application\/ld\+json\">(.*?)<\/script><div class=\"wp-block-wpzoom-recipe-card-block-recipe-card/s';
+
+            $content = preg_replace($regex, '<div class="wp-block-wpzoom-recipe-card-block-recipe-card', $content);        
+        }
         //Clean json markup
         if(isset($sd_data['saswp-aiosp']) && $sd_data['saswp-aiosp'] == 1 ){
             $content = preg_replace('/<script type=\"application\/ld\+json" class=\"aioseop-schema"\>(.*?)<\/script>/', "", $content);
@@ -1288,6 +1342,33 @@ function saswp_get_the_tags(){
         
     }    
     return $tag_str;
+    
+}
+
+function saswp_get_the_categories(){
+
+    global $post;
+
+    $category_str = '';
+    
+    if(is_object($post)){
+        
+      $categories = get_the_category($post->ID);
+      
+      if($categories){
+          
+          foreach($categories as $category){
+              
+            $category_str .= $category->name.', '; 
+              
+          }
+          
+      }
+        
+        
+    }    
+    
+    return $category_str;
     
 }
 
@@ -2028,7 +2109,8 @@ function saswp_append_fetched_reviews($input1, $schema_post_id = null){
                     
                     if(isset($input1['review'])){
 
-                    $input1['review'] = array_merge($input1['review'], $rv_markup['review']);
+                    $input1['review']          = $rv_markup['review'];
+                    $input1['aggregateRating'] = $rv_markup['aggregateRating'];
 
                     }else{
                        $input1 = array_merge($input1, $rv_markup);

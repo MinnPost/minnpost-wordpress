@@ -311,18 +311,12 @@ function saswp_comparison_logic_checker($input){
               
                   $current_post_type = '';
               
-                  if( (is_singular() || is_admin() || is_front_page()) && is_object($post) ){
+                  if( (is_singular() || is_admin()) && is_object($post) && !is_front_page()){
                       
                      $current_post_type  = get_post_type($post->ID);   
                      
                   } 
-                  
-                  if(function_exists('ampforwp_is_front_page') && ampforwp_is_front_page()){
-
-                    $current_post_type = 'page';
-                    
-                  }
-                  
+                                                      
                   if ( $comparison == 'equal' ) {
                       
                   if ( $current_post_type == $data ) {
@@ -546,15 +540,21 @@ function saswp_comparison_logic_checker($input){
         case 'ef_taxonomy':
         // Get all the post registered taxonomies        
         // Get the list of all the taxonomies associated with current post
-        $taxonomy_names = get_post_taxonomies( $post->ID );        
+        $taxonomy_names = '';
 
+        if(is_object($post)){
+          $taxonomy_names = get_post_taxonomies( $post->ID );        
+        }
+        
         $checker    = '';
         $post_terms = '';
 
           if ( $data != 'all') {
 
-            $post_terms = wp_get_post_terms($post->ID, $data);           
-                                
+            if(is_object($post)){
+              $post_terms = wp_get_post_terms($post->ID, $data);           
+            }
+                                            
             if(isset( $input['key_4'] ) && $input['key_4'] !='all'){
              
               $term_data       = $input['key_4'];
@@ -775,12 +775,13 @@ if(is_admin()){
               <select class="widefat select-post-type <?php echo esc_attr( $i );?>" name="data_group_array[group-<?php echo esc_attr( $j) ?>][data_array][<?php echo esc_attr( $i) ?>][key_1]">    
                 <?php 
                 foreach ($choices as $choice_key => $choice_value) { ?>         
-                  <option disabled class="pt-heading" value="<?php echo esc_attr($choice_key);?>"> <?php echo esc_html__($choice_key,'schema-and-structured-data-for-wp');?> </option>
+                  <optgroup label="<?php echo esc_attr($choice_key);?>">
                   <?php
                   foreach ($choice_value as $sub_key => $sub_value) { ?> 
                     <option class="pt-child" value="<?php echo esc_attr( $sub_key );?>" <?php selected( $selected_val_key_1, $sub_key );?> > <?php echo esc_html__($sub_value,'schema-and-structured-data-for-wp');?> </option>
                     <?php
                   }
+                  ?> </optgroup > <?php
                 } ?>
               </select>
             </td>
@@ -886,10 +887,7 @@ function saswp_dequeue_script() {
            
         wp_localize_script( 'structure_admin', 'saswp_app_object', $data_array );
         wp_enqueue_script( 'structure_admin' );
-                    
-        wp_enqueue_style('saswp-select2-style', SASWP_PLUGIN_URL. 'admin_section/css/select2.min.css' , false, SASWP_VERSION);
-        wp_enqueue_script('saswp-select2-script', SASWP_PLUGIN_URL. 'admin_section/js/select2.min.js', false, SASWP_VERSION);
-        
+                                    
         }
       //Enque select 2 script ends here                    
     }
@@ -1156,20 +1154,25 @@ function saswp_custom_breadcrumbs() {
                           
         } else if ( is_category() ) {
             
-                $category = get_the_category();
-             
-                if(!empty($category)) {
-                    
-                  $category_values = array_values( $category );
-                  
-                  foreach ($category_values as $category_value) {
-                      
-                      $category_name        = get_category($category_value);
-                      $cat_name             = $category_name->name;
-                      $variables1_titles[]  = $cat_name;
-                      $variables2_links[]   = get_category_link( $category_value );
-                      $breadcrumb_url       = get_category_link( $category_value );
+                $current_url   = saswp_get_current_url();
+                $exploded_cat  = explode('/', $current_url);
+                                
+                if(!empty($exploded_cat) && is_array($exploded_cat)) {
+                                                      
+                  foreach ($exploded_cat as $value) {
 
+                      $category_value = get_category_by_slug($value);
+                      
+                      if($category_value && is_object($category_value)){
+
+                        $category_name        = get_category($category_value);
+                        $cat_name             = $category_name->name;
+                        $variables1_titles[]  = $cat_name;
+                        $variables2_links[]   = get_category_link( $category_value );
+                        $breadcrumb_url       = get_category_link( $category_value );
+
+                      }
+                      
                   }
               }                          
         } else if ( is_page() ) {
@@ -1833,4 +1836,27 @@ function saswp_save_nav_menu_in_transient($menu_id){
     $menuItems = wp_get_nav_menu_items($menu_id);                
     set_transient('saswp_nav_menu', $menuItems);                
                      
+}
+
+add_action( 'wp_ajax_saswp_get_select2_data', 'saswp_get_select2_data'); 
+
+function saswp_get_select2_data(){
+            
+        if ( ! isset( $_GET['saswp_security_nonce'] ) ){
+          return; 
+        }
+        if ( (wp_verify_nonce( $_GET['saswp_security_nonce'], 'saswp_ajax_check_nonce' ) ) ||  (wp_verify_nonce( $_GET['saswp_security_nonce'], 'saswp_add_new_nonce' ) )){
+
+          $search        = isset( $_GET['q'] ) ? sanitize_text_field( $_GET['q'] ) : '';                                    
+          $type          = isset( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : '';                                    
+
+          $result = saswp_get_condition_list($type, $search);
+                      
+          wp_send_json( $result );            
+
+        }else{
+          return;  
+        }                
+        
+        wp_die();
 }

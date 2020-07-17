@@ -3,7 +3,7 @@ Contributors: magazine3
 Tags: Schema, Structured Data, Google Snippets, Rich Snippets, Schema.org, SEO, AMP
 Requires at least: 3.0
 Tested up to: 5.4
-Stable tag: 1.9.38
+Stable tag: 1.9.43
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,11 +93,11 @@ Bug reports for Schema & Structured Data for WP & AMP are [welcomed on GitHub](h
 
 ### Credits
 
+* Select2 used https://github.com/select2/select2 - License URI: https://github.com/select2/select2/blob/develop/LICENSE.md,
 * Merlin WP used https://github.com/richtabor/MerlinWP - License URI: https://github.com/richtabor/MerlinWP/blob/master/LICENSE,
 * jquery-timepicker used https://github.com/jonthornton/jquery-timepicker
 * Rate Yo! used https://github.com/prrashi/rateYo - License URI: https://github.com/prrashi/rateYo/commit/f3812fe96c38b08627d209795176053550fb1427
 * Aqua Resizer used http://aquagraphite.com - License URI: WTFPL - http://sam.zoy.org/wtfpl/
-
 
 
 == Frequently Asked Questions ==
@@ -119,6 +119,87 @@ Yes, Absolutely! We would suggest you send your feature request by creating an i
 You can contact us from [here](http://structured-data-for-wp.com/contact-us/)
 
 == Changelog ==
+
+= 1.9.43 (04 July 2020) =
+
+* Fixed: Course post is getting blank when product schema is addedd to the ip_couse post type #1101
+* Fixed: Website and searchbox schema should only show on the homepage #1098
+* Fixed: FAQ schema is not being displayed in homepage(AMP) when using a custom front page #1096
+* Fixed: PHP Notice: Trying to get property 'data' of non-object in /output/service.php on line 3700 because of anonymous users #1094
+* Fixed: NewsArticle is not a known valid target type for the itemReviewed property #1093
+* Fixed: Image size is smaller than recommended #1092
+* Fixed: When ACF Video URL is mapped in modified field its not working #1084
+* Added: Compatibility with Recipe Card Block By WPZOOM ( https://wordpress.org/plugins/recipe-card-blocks-by-wpzoom )
+* Added: Compatibility with ReciPress ( https://wordpress.org/plugins/recipress )
+* Added: More nutrition information properties to recipe schema
+* Added: Schema type blocks (Q&A) has been added in Gutenberg editor #842
+* Added: Schema type blocks (Q&A) has been added in Elementor widget #820
+
+
+= 1.9.42 (27 June 2020) =
+
+* Added: Project Schema #486
+* Added: ApartmentComplex Schema #787
+* Added: RentAction Schema #788
+* Added: HotelRoom Schema #788
+* Added: Certifications/education ( EducationalOccupationalCredential ) scheme type #859
+* Added: Podcast ( Audiobook, PodcastEpisode & PodcastSeasons ) Schema
+* Enhancement: Rating selection in decimal number like 3.1, 3.5 etc. #782
+* Fixed: Breadcrumb is not correct on category page #1056
+* Fixed: Uncaught Error: Option 'ajax' is not allowed for Select2 when attached to a <select> element #1082
+* Fixed: Product schema adding through the "Electro" theme on the product category pages causing error #1081
+* Fixed: The text inside tag 'script type=application/ld+json' contains 'html comments' in videoObject schema #1078
+
+= 1.9.41.3 (20 June 2020) =
+
+* Enhancement: Make stars color yellow as default. #1062
+* Fixed: Recipe schema is generating twice in website #1073
+* Fixed: Shortcode is being displayed in the description. #1074
+* Fixed: JS bug after 1.9.41 improvement #1067
+* Fixed: If the "Product Default Review" option is enabled then the collection review count is not showing #1066
+* Added: VAT Schema Property in product #873
+* Added: Veterinary Care schema type in MedicalBusiness inside LocalBusiness
+
+= 1.9.41.2 (17 June 2020) =
+
+* Fixed: Notice message : Undefined variable: selected in C #1069
+* Fixed: JS bug after 1.9.41 #1067
+* Fixed: Warning: A non-numeric value encountered in modules/reviews/reviews_service.php on line 1358 #1065
+
+= 1.9.41.1 (16 June 2020) =
+
+* Fixed: Js Error: function saswp_select2 is not defined #1067
+
+= 1.9.41 (16 June 2020) =
+
+* Fixed: Notice Error: Notice: Trying to get property 'post_content' of non-object #1055
+* Fixed: The property comment is not recognized by Google for an object of type Organization. #1061
+* Fixed: Site links are not displaying even after the option is enabled. #1043
+* Fixed: url validation should be there for all url schema property #1048
+* Enhancement: Option to search for pages/post while applying schema markup on a certain page #742
+* Enhancement: Use select 2 in schema type dropdown #464
+* Added: select2 js in a specific use case dropdown #1027
+
+
+= 1.9.40 (09 June 2020) =
+
+* Added: Possible Treatment, Primary prevention and Drug properties to MedicalCondition schema type #880
+* Fixed: When images are coming from CDN links those images are not getting enlarge by acqua resizer #763
+* Fixed: If the archive option is enabled in the schema setup then the thumbnail images are not showing in the blog page #1031
+
+= 1.9.39 (04 June 2020) =
+
+* Fixed: Placement: Post type equal to page should not apply to custom front page #1038
+* Fixed: Uncaught Error: [ ] operator not supported for strings in admin_section/settings.php line 23 #1037
+* Fixed: fix an issue with Image block of Gutenberg #1035
+* Fixed: WP Recipe card is not visible in Structured data test for the amp post - Proper parent conditioning #1034
+* Fixed: Review schema is added in the markup when it is not enabled on the post - Taqyeem compatibility. #1036
+* Fixed: Description includes HTML in the itemlist-webpage schema. #1024
+* Added: Image resizer option in gutenberg how-to(SASWP) Block #1018
+* Added: Buddhist schema type #985
+* Added: Estimated salary property in Jobposting schema type. #989
+* Enhancement: Rating form rating value should be 5 by default. #1033
+
 
 = 1.9.38 (29 May 2020) =
 

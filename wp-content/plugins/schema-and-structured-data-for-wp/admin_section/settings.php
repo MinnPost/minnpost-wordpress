@@ -18,13 +18,18 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 add_action( 'plugin_action_links_' . plugin_basename( SASWP_DIR_NAME_FILE ), 'saswp_plugin_action_links' );
 
 function saswp_plugin_action_links( $links ) {
-    
-        $nonce = wp_create_nonce( 'saswp_install_wizard_nonce' );  
-	$links[] = '<a href="' . esc_url( admin_url( 'edit.php?post_type=saswp&page=structured_data_options' ) ) . '">' . esc_html__( 'Settings', 'schema-and-structured-data-for-wp' ) . '</a>';
-	$links[] = '<a href="'.  esc_url( admin_url( 'plugins.php?page=saswp-setup-wizard' ).'&_saswp_nonce='.$nonce).'">' . esc_html__( 'Setup Wizard', 'schema-and-structured-data-for-wp' ) . '</a>';
-        $links[] = '<a target="_blank" href="http://structured-data-for-wp.com/docs/">' . esc_html__( 'Documentation', 'schema-and-structured-data-for-wp' ) . '</a>';
-  	return $links;
         
+        $nonce = wp_create_nonce( 'saswp_install_wizard_nonce' );  
+
+        if(is_array($links)){
+
+                $links[] = '<a href="' . esc_url( admin_url( 'edit.php?post_type=saswp&page=structured_data_options' ) ) . '">' . esc_html__( 'Settings', 'schema-and-structured-data-for-wp' ) . '</a>';
+                $links[] = '<a href="'.  esc_url( admin_url( 'plugins.php?page=saswp-setup-wizard' ).'&_saswp_nonce='.$nonce).'">' . esc_html__( 'Setup Wizard', 'schema-and-structured-data-for-wp' ) . '</a>';
+                $links[] = '<a target="_blank" href="http://structured-data-for-wp.com/docs/">' . esc_html__( 'Documentation', 'schema-and-structured-data-for-wp' ) . '</a>';
+
+        }	
+
+  	return $links;        
 }
 
 function saswp_ext_installed_status(){
@@ -808,19 +813,33 @@ function saswp_general_page_callback(){
                 </label>
         </div>
         <div>
-        <div class="saswp-about-contact-page">
-              
+        <div class="saswp-about-contact-page">  
+
                     <label for="sd_about_page-select">
-	<?php        
-        echo wp_dropdown_pages( array( 
-			'name'              => 'sd_data[sd_about_page]', 
-                        'id'                => 'sd_about_page',
-			'echo'              => 0, 
-			'show_option_none'  => esc_html__( 'Select a Page', 'schema-and-structured-data-for-wp' ), 
-			'option_none_value' => '', 
-			'selected'          =>  isset($settings['sd_about_page']) ? esc_attr($settings['sd_about_page']) : '',
-		)); ?>
-	      </label>  
+                        <select data-type="page" class="saswp-select2" name="sd_data[sd_about_page]" id="sd_about_page">
+                         <?php 
+                         $saved_choices = array();
+                         $choices  = saswp_get_condition_list('page');               
+                         
+                         if ( isset($settings['sd_about_page']) && $settings['sd_about_page'] !=  '' ) {
+                                $saved_choices = saswp_get_condition_list('page', '', $settings['sd_about_page']);                        
+                         }
+
+                         $html_str = '';       
+                         foreach ($choices as $value) {                                                                    
+                              $html_str .= '<option value="'.esc_attr($value['id']).'">'.esc_html($value['text']).'</option>';
+                         }
+                         if($saved_choices){
+                                foreach($saved_choices as $value){
+                                        $html_str .= '<option value="' . esc_attr($value['id']) .'" selected> ' .  esc_html__($value['text'], 'schema-and-structured-data-for-wp') .'</option>';                     
+                                }
+                        } 
+
+                        echo $html_str;
+                         ?>                               
+                        </select>
+	            </label>  
+
         </div>
        </div>
     </li>
@@ -831,19 +850,35 @@ function saswp_general_page_callback(){
             </label>
         </div>
         <div>
-            <div class="saswp-about-contact-page">          
-           <label for="sd_contact_page-select">
-	  <?php echo wp_dropdown_pages( array( 
-			'name'              => 'sd_data[sd_contact_page]', 
-                        'id'                => 'sd_contact_page-select',
-			'echo'              => 0, 
-			'show_option_none'  => esc_html( 'Select a Page', 'schema-and-structured-data-for-wp' ), 
-			'option_none_value' => '', 
-			'selected'          =>  isset($settings['sd_contact_page']) ? esc_attr($settings['sd_contact_page']) : '',
-		)); ?>
+                 <div class="saswp-about-contact-page">          
+
+                         <label for="sd_contact_page-select">
+                         <select data-type="page" class="saswp-select2" name="sd_data[sd_contact_page]" id="sd_contact_page">
+                         <?php 
+                         $saved_choices = array();
+                         $choices  = saswp_get_condition_list('page');               
+                         
+                         if ( isset($settings['sd_contact_page']) && $settings['sd_contact_page'] !=  '' ) {
+                                $saved_choices = saswp_get_condition_list('page', '', $settings['sd_contact_page']);                        
+                         }
+
+                         $html_str = '';       
+                         foreach ($choices as $value) {                                                                    
+                              $html_str .= '<option value="'.esc_attr($value['id']).'">'.esc_html($value['text']).'</option>';
+                         }
+                         if($saved_choices){
+                                foreach($saved_choices as $value){
+                                        $html_str .= '<option value="' . esc_attr($value['id']) .'" selected> ' .  esc_html__($value['text'], 'schema-and-structured-data-for-wp') .'</option>';                     
+                                }
+                        } 
+
+                        echo $html_str;
+                         ?>                               
+                        </select>
 	     		 </label>       
+
        	 		</div>
-        	 </div>
+        	        </div>
    			 </li>
 			</ul>
 		</div> 
@@ -2246,7 +2281,33 @@ function saswp_compatibility_page_callback(){
                                 'id'   => 'saswp-wp-recipe-maker',
                                 'name' => 'sd_data[saswp-wp-recipe-maker]',                             
                         )
-		);
+                );
+
+        $wpzoom = array(
+                'label'  => 'Recipe Card Blocks by WPZOOM',
+                'id'     => 'saswp-wpzoom-checkbox',                        
+                'name'   => 'saswp-wpzoom-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('wpzoom'),
+                'hidden' => array(
+                        'id'   => 'saswp-wpzoom',
+                        'name' => 'sd_data[saswp-wpzoom]',                             
+                )
+        );
+
+        $recipress = array(
+                'label'  => 'ReciPress',
+                'id'     => 'saswp-recipress-checkbox',                        
+                'name'   => 'saswp-recipress-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('recipress'),
+                'hidden' => array(
+                        'id'   => 'saswp-recipress',
+                        'name' => 'sd_data[saswp-recipress]',                             
+                )
+        );        
         $wp_ultimate_recipe = array(
 			'label'  => 'WP Ultimate Recipe',
 			'id'     => 'saswp-wp-ultimate-recipe-checkbox',                        
@@ -2663,6 +2724,8 @@ function saswp_compatibility_page_callback(){
                 $aiosp,
                 $squirrly_seo,                
                 $recipe_maker,
+                $recipress,
+                $wpzoom,
                 $wp_ultimate_recipe,
                 $zip_recipes,
                 $total_recipe_generator,
@@ -2960,8 +3023,8 @@ function saswp_enqueue_style_js( $hook ) {
         
         wp_enqueue_script('thickbox');
         wp_enqueue_style('thickbox');
-        	
-        wp_enqueue_script( 'saswp-timepicker-js', SASWP_PLUGIN_URL . 'admin_section/js/jquery.timepicker.js', false, SASWP_VERSION);        
+                       	
+        wp_enqueue_script( 'saswp-timepicker-js', SASWP_PLUGIN_URL . 'admin_section/js/jquery.timepicker.js', array( 'jquery', 'jquery-core', 'jquery-ui-core' ), SASWP_VERSION);        
         wp_enqueue_style( 'saswp-timepicker-css', SASWP_PLUGIN_URL . 'admin_section/css/jquery.timepicker.css', false , SASWP_VERSION );
 
         wp_enqueue_script( 'jquery-ui-datepicker' );
@@ -2979,12 +3042,41 @@ function saswp_enqueue_style_js( $hook ) {
         wp_enqueue_style( 'saswp-main-css', SASWP_PLUGIN_URL . 'admin_section/css/'.(SASWP_ENVIRONMENT == 'production' ? 'main-style.min.css' : 'main-style.css'), false , SASWP_VERSION );
                         
         wp_style_add_data( 'saswp-main-css', 'rtl', 'replace' );
+        
 
         }                
         
 }
-add_action( 'admin_enqueue_scripts', 'saswp_enqueue_style_js' );
 
+function saswp_enqueue_saswp_select2_js( $hook ) { 
+        
+        global $saswp_metaboxes;
+        
+        $post_type = '';
+        
+        $current_screen = get_current_screen(); 
+       
+        if(isset($current_screen->post_type)){                  
+            $post_type = $current_screen->post_type;                
+        }    
+        
+        if($saswp_metaboxes || $post_type == 'saswp' || $post_type == 'saswp-collections' || $post_type == 'saswp_reviews' || $hook == 'saswp_page_structured_data_options' || $hook == 'saswp_page_collection' ){
+
+        //DIGINEX theme compatibility starts         
+        wp_dequeue_script( 'select2-js' );        
+        //DIGINEX theme compatibility ends                                         
+
+        wp_enqueue_style('saswp-select2-style', SASWP_PLUGIN_URL. 'admin_section/css/select2.min.css' , false, SASWP_VERSION);
+        wp_enqueue_script('saswp-select2-script', SASWP_PLUGIN_URL. 'admin_section/js/select2.min.js', array( 'jquery', 'jquery-core', 'jquery-ui-core' ), SASWP_VERSION, true);
+        wp_enqueue_script('saswp-select2-extended-script', SASWP_PLUGIN_URL. 'admin_section/js/select2-extended.min.js', array( 'jquery', 'jquery-core', 'jquery-ui-core' ), SASWP_VERSION, true);
+        	                                        
+        }                
+        
+}
+
+add_action( 'admin_enqueue_scripts', 'saswp_enqueue_saswp_select2_js',9999 );
+
+add_action( 'admin_enqueue_scripts', 'saswp_enqueue_style_js' );
 
 function saswp_option_page_capability( $capability ) {         
     return saswp_current_user_can();         

@@ -41,14 +41,23 @@ class SASWP_Reviews_Form {
         }
        
         public function saswp_review_form_blacklist_sanitizer($data){
+
+                global $post;                
                         
-                if(function_exists('ampforwp_is_amp_endpoint')){
-                    
-                    require_once SASWP_PLUGIN_DIR_PATH .'core/3rd-party/class-amp-review-form-blacklist.php';
-            
-                    unset($data['AMPFORWP_Blacklist_Sanitizer']);
-                    unset($data['AMP_Blacklist_Sanitizer']);
-                    $data[ 'AMP_Review_Form_Blacklist' ] = array();
+                if( function_exists('ampforwp_is_amp_endpoint') && is_object($post) ){
+
+                    if(preg_match( '/\[saswp\-reviews\-form\]/', $post->post_content, $match ) || preg_match( '/\[saswp\-reviews\-form onbutton\=\"1\"\]/', $post->post_content, $match )){
+
+                        if(!empty($match)){
+                                
+                            require_once SASWP_PLUGIN_DIR_PATH .'core/3rd-party/class-amp-review-form-blacklist.php';            
+                            unset($data['AMPFORWP_Blacklist_Sanitizer']);
+                            unset($data['AMP_Blacklist_Sanitizer']);
+                            $data[ 'AMP_Review_Form_Blacklist' ] = array();
+
+                        }
+                        
+                    }                                        
                     
                 }
                                 
@@ -210,7 +219,7 @@ class SASWP_Reviews_Form {
                     $form       .= '<div class="saswp-rv-form-btn"><a href="#" class="button button-default">'.saswp_label_text('translation-review-form').'</a></div>';
                 }
                 
-                $rating_html = '<div class="saswp-rating-front-div"></div><input type="hidden" name="saswp_review_rating" value="5">';
+                $rating_html = '<div class="saswp-rating-container"><div class="saswp-rating-front-div"></div><div class="saswp-rateyo-counter"></div><input type="hidden" name="saswp_review_rating" value="5"></div>';
                 $form   .= '<form action="'.esc_url( admin_url('admin-post.php') ).'" method="post" class="saswp-review-submission-form '.($on_button ? "saswp_hide" : "").'">';
                 
             }else{
