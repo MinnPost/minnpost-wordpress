@@ -16,6 +16,7 @@
         }
     },
     "require-dev": {
-        "automattic/vipwpcs": "^2"
+        "automattic/vipwpcs": "^2",
+        "dealerdirect/phpcodesniffer-composer-installer": "dev-master"
     }
 }
