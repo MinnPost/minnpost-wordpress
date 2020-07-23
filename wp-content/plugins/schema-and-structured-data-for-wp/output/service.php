@@ -1513,6 +1513,9 @@ Class saswp_output_service{
                     $phy_location = array();
                     $vir_location = array();
                     
+                    if(isset($custom_fields['saswp_event_schema_id'])){
+                        $input1['@id'] =    $custom_fields['saswp_event_schema_id'];
+                    }
                     if(isset($custom_fields['saswp_event_schema_name'])){
                      $input1['name'] =    $custom_fields['saswp_event_schema_name'];
                     }
@@ -1921,11 +1924,7 @@ Class saswp_output_service{
                         $input1['video']['@type']   = 'VideoObject';
                         $input1['video']['duration'] =    $custom_fields['saswp_recipe_video_duration'];
                     }
-
-                    if(isset($custom_fields['saswp_recipe_video_url'])){                        
-                        $input1['video']['url'] =    $custom_fields['saswp_recipe_video_url'];
-                    } 
-                    
+                                         
                     if(isset($custom_fields['saswp_recipe_rating_value']) && isset($custom_fields['saswp_recipe_rating_count'])){
                        $input1['aggregateRating']['@type']       =   'AggregateRating';
                        $input1['aggregateRating']['worstRating'] =   0;
@@ -2686,7 +2685,10 @@ Class saswp_output_service{
                 break;
                 
                 case 'Person':      
-                      
+                    
+                    if(isset($custom_fields['saswp_person_schema_id'])){
+                     $input1['@id'] =    $custom_fields['saswp_person_schema_id'];
+                    }
                     if(isset($custom_fields['saswp_person_schema_name'])){
                      $input1['name'] =    $custom_fields['saswp_person_schema_name'];
                     }
@@ -2994,6 +2996,9 @@ Class saswp_output_service{
                     if(isset($custom_fields['saswp_vg_schema_cheat_code'])){
                      $input1['cheatCode'] =    $custom_fields['saswp_vg_schema_cheat_code'];
                     }
+                    if(isset($custom_fields['saswp_vg_schema_file_size'])){
+                        $input1['fileSize'] =    $custom_fields['saswp_vg_schema_file_size'];
+                    }
                     
                 break;
                 
@@ -3256,6 +3261,20 @@ Class saswp_output_service{
 				 				 
                 }  
                  
+             //product categories starts here
+             
+             $terms       = get_the_terms( $post_id, 'product_cat' );
+             $product_cat = array();
+
+             if($terms){
+                foreach($terms as $val){
+                    $product_cat[] = $val->name;
+                }
+                $product_details['product_category'] = $product_cat;      
+             }
+
+             //product categories ends here 
+                
              $gtin = get_post_meta($post_id, $key='hwp_product_gtin', true);
              
              if($gtin !=''){
@@ -3433,7 +3452,17 @@ Class saswp_output_service{
                         $product_details['product_average_rating'] = $sumofrating /  count($judge_me_post);
                     }
                  
-             }else if( $reviews && is_array($reviews) ){
+             } else if(function_exists('wc_yotpo_init') && (isset($sd_data['saswp-yotpo']) && $sd_data['saswp-yotpo'] ==1 )){
+            
+                $yotpo_reviews = saswp_get_yotpo_reviews($post_id);
+                
+                if($yotpo_reviews){
+                    $reviews_arr                               = $yotpo_reviews['reviews'];     
+                    $product_details['product_review_count']   = $yotpo_reviews['total'];
+                    $product_details['product_average_rating'] = $yotpo_reviews['average'];  
+                }
+
+             } else if( $reviews && is_array($reviews) ){
 
               $sumofrating = 0;
               $avg_rating  = 1;
@@ -3715,7 +3744,17 @@ Class saswp_output_service{
                 
                 foreach($answer_array as $answer){
                     
-                    $authorinfo = get_userdata($answer->post_author);  
+                    $authorinfo = get_userdata($answer->post_author);
+                    $authorname =  'Anonymous';
+
+                    if(is_object($authorinfo)){
+                        $authorname = $authorinfo->data->user_nicename;
+                    }else{
+                        $anonymous_name = get_post_meta( $answer->ID, '_dwqa_anonymous_name', true );
+                        if($anonymous_name && $anonymous_name !=''){
+                            $authorname = $anonymous_name;
+                        }
+                    }
                     
                     if($answer->ID == $best_answer_id){
                         
@@ -3724,7 +3763,7 @@ Class saswp_output_service{
                         $accepted_answer['url']         = get_permalink($answer->ID);
                         $accepted_answer['text']        = wp_strip_all_tags($answer->post_content);
                         $accepted_answer['dateCreated'] = get_the_date("Y-m-d\TH:i:s\Z", $answer);
-                        $accepted_answer['author']      = array('@type' => 'Person', 'name' => is_object($authorinfo) ?  $authorinfo->data->user_nicename : 'Anonymous');
+                        $accepted_answer['author']      = array('@type' => 'Person', 'name' => $authorname);
                         
                     }else{
                         
@@ -3734,7 +3773,7 @@ Class saswp_output_service{
                             'url'         => get_permalink($answer->ID),
                             'text'        => wp_strip_all_tags($answer->post_content),
                             'dateCreated' => get_the_date("Y-m-d\TH:i:s\Z", $answer),
-                            'author'      => array('@type' => 'Person', 'name' => is_object($authorinfo) ?  $authorinfo->data->user_nicename : 'Anonymous'),
+                            'author'      => array('@type' => 'Person', 'name' => $authorname),
                         );
                         
                     }
@@ -4003,6 +4042,10 @@ Class saswp_output_service{
 
                            }                              
                             
+                           if($schema_type == 'SoftwareApplication'){
+                            $input1['applicationCategory'] = $product_details['product_category'];     
+                           }
+
                           if(isset($product_details['product_gtin8']) && $product_details['product_gtin8'] !=''){
                             $input1['gtin8'] = esc_attr($product_details['product_gtin8']);  
                           }

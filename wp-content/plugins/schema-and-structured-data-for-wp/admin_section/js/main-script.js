@@ -1,6 +1,31 @@
 var saswp_attached_rv  = [];  
 var saswp_attached_col = [];  
 jQuery(document).ready(function($){
+
+  $(document).on("click", ".saswp-dismiss-notices", function(){
+    var current = $(this);
+    var notice_type = $(this).attr('notice-type');
+
+    if(notice_type){
+
+      $.ajax({
+        type: "POST",    
+        url:ajaxurl,                    
+        dataType: "json",
+        data:{action:"saswp_dismiss_notices",notice_type:notice_type, saswp_security_nonce:saswp_localize_data.saswp_security_nonce},
+        success:function(response){        
+          if(response['status'] == 't'){
+            current.parent().parent().hide();
+          }                                             
+        },
+        error: function(response){                    
+        console.log(response);
+        }
+        }); 
+
+    }
+    
+  });
   
   saswp_select2();
 
@@ -697,6 +722,42 @@ jQuery(document).ready(function($){
                               $("#saswp-wpzoom").val(1);                                
                             }else{
                               $("#saswp-wpzoom").val(0);                                          
+                            }
+                      break;
+
+                      case 'saswp-yotpo-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-yotpo").val(1);                                
+                            }else{
+                              $("#saswp-yotpo").val(0);                                          
+                            }
+                      break;
+
+                      case 'saswp-ultimate-blocks-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-ultimate-blocks").val(1);                                
+                            }else{
+                              $("#saswp-ultimate-blocks").val(0);                                          
+                            }
+                      break;
+
+                      case 'saswp-starsrating-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-starsrating").val(1);                                
+                            }else{
+                              $("#saswp-starsrating").val(0);                                          
+                            }
+                      break;
+
+                      case 'saswp-wptastyrecipe-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-wptastyrecipe").val(1);                                
+                            }else{
+                              $("#saswp-wptastyrecipe").val(0);                                          
                             }
                       break;
 

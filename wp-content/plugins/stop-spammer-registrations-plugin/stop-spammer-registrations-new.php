@@ -3,7 +3,7 @@
 Plugin Name: Stop Spammers
 Plugin URI: https://trumani.com/
 Description: Stop WordPress spam dead in its tracks. Designed to secure your website immediately. Enhance your UX with 30+ configurable options and a testing tool.
-Version: 2020.3
+Version: 2020.4.4
 Author: Trumani
 Author URI: https://trumani.com/
 License: https://www.gnu.org/licenses/gpl.html
@@ -12,11 +12,12 @@ Text Domain: stop-spammers
 */
 
 // networking requires a couple of globals
-define( 'SS_VERSION', '2020.3' );
+define( 'SS_VERSION', '2020.4.4' );
 define( 'SS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SS_PLUGIN_FILE', plugin_dir_path( __FILE__ ) );
 define( 'SS_PLUGIN_DATA', plugin_dir_path( __FILE__ ) . 'data/' );
 $ss_check_sempahore = false;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -25,33 +26,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 function ss_load_plugin_textdomain() {
     load_plugin_textdomain( 'stop-spammers', FALSE, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
-
 add_action( 'plugins_loaded', 'ss_load_plugin_textdomain' );
 
 // load admin styles
 function ss_styles() {
 	wp_enqueue_style( 'admin', plugin_dir_url( __FILE__ ) . 'css/admin.css' );
 }
-
 add_action( 'admin_print_styles', 'ss_styles' );
 
 // admin notice for users
-//function ss_admin_notice() {
-//    $user_id = get_current_user_id();
-//    if ( !get_user_meta( $user_id, 'ss_notice_dismissed2' ) && current_user_can( 'manage_options' ) )
-//        echo '<div class="notice notice-info"><p>' . __( '<big><strong>UPDATE</strong> — Blah blah blah. <a href="https://stopspammers.io/" target="_blank">Check it out</a>.</big>', 'stop-spammers' ) . '<a href="?ss-dismiss" class="alignright">Dismiss</a></p></div>';
-//}
-//
-//add_action( 'admin_notices', 'ss_admin_notice' );
-//
+function ss_admin_notice() {
+	if ( ! is_plugin_active( 'stop-spammers-premium/stop-spammers-premium.php' ) ) {
+		$user_id = get_current_user_id();
+		if ( !get_user_meta( $user_id, 'ss_notice_dismissed3' ) && current_user_can( 'manage_options' ) )
+		echo '<div class="notice notice-info"><p>' . __( '<big><strong>Stop Spammers</strong></big> <sup><i class="fa fa-question-circle fa tooltip"><span class="tooltiptext">* 2,500+ disposable email domains added to deny list<br />* Force username-only login<br />* Force email-only login<br />* Disable custom passwords</span></i></sup> | Upgrade or make a donation to help keep the project alive ♥ — <strong>SSP4ME</strong> for $5 Off <a href="https://trumani.com/downloads/stop-spammers-premium/" class="button" target="_blank">Premium</a> <a href="https://trumani.com/donate" class="button" target="_blank">Donate</a>', 'stop-spammers' ) . '<a href="?ss-dismiss" class="alignright">Dismiss</a></p></div>';
+	}
+}
+add_action( 'admin_notices', 'ss_admin_notice' );
+
 // dismiss admin notice for users
-//function ss_notice_dismissed() {
-//    $user_id = get_current_user_id();
-//    if ( isset( $_GET['ss-dismiss'] ) )
-//        add_user_meta( $user_id, 'ss_notice_dismissed2', 'true', true );
-//}
-//
-//add_action( 'admin_init', 'ss_notice_dismissed' );
+function ss_notice_dismissed() {
+	if ( ! is_plugin_active( 'stop-spammers-premium/stop-spammers-premium.php' ) ) {
+		$user_id = get_current_user_id();
+		if ( isset( $_GET['ss-dismiss'] ) )
+			add_user_meta( $user_id, 'ss_notice_dismissed3', 'true', true );
+	}
+}
+add_action( 'admin_init', 'ss_notice_dismissed' );
 
 // hook the init event to start work
 add_action( 'init', 'ss_init', 0 );
@@ -93,18 +94,18 @@ add_filter( 'ss_addons_get', 'ss_addons_d', 0 );
 function ss_init() {
 	remove_action( 'init', 'ss_init' );
 	add_filter( 'pre_user_login', 'ss_user_reg_filter', 1, 1 );
-// incompatible with a Jetpack submit
+	// incompatible with a Jetpack submit
 	if ( $_POST != null && array_key_exists( 'jetpack_protect_num', $_POST ) ) {
 		return;
 	}
-// eMember trying to log in - disable plugin for eMember logins
+	// eMember trying to log in - disable plugin for eMember logins
 	if ( function_exists( 'wp_emember_is_member_logged_in' ) ) {
-// only eMember function I could find after 30 seconds of Googling
+		// only eMember function I could find after 30 seconds of Googling
 		if ( ! empty( $_POST ) && array_key_exists( 'login_pwd', $_POST ) ) {
 			return;
 		}
 	}
-// set up the Akismet hit
+	// set up the Akismet hit
 	add_action( 'akismet_spam_caught', 'ss_log_akismet' ); // hook Akismet spam
 	$muswitch = 'N';
 	if ( function_exists( 'is_multisite' ) && is_multisite() ) {
@@ -130,7 +131,6 @@ function ss_init() {
 			remove_filter( 'pre_user_login', 'ss_user_reg_filter', 1 );
 			if ( current_user_can( 'manage_options' ) ) {
 				ss_sp_require( 'includes/ss-admin-options.php' );
-
 				return;
 			}
 		}
@@ -169,14 +169,13 @@ function ss_init() {
 				be_load( 'ss_challenge', ss_get_ip(), $stats, $options, $post );
 // if we come back we continue as normal
 				sfs_errorsonoff( 'off' );
-
 				return;
 			}
 		}
-// need to check that we are not Allow Listed
-// don't check if IP is Google, etc.
-// check to see if we are doing a post with values
-// better way to check for Jetpack
+		// need to check that we are not Allow Listed
+		// don't check if IP is Google, etc.
+		// check to see if we are doing a post with values
+		// better way to check for Jetpack
 		if ( class_exists( 'Jetpack' )
 		     && Jetpack::is_module_active( 'protect' )
 		) {
@@ -186,26 +185,26 @@ function ss_init() {
 		if ( ! empty( $post['email'] ) || ! empty( $post['author'] )
 		     || ! empty( $post['comment'] )
 		) { // must be a login or a comment which require minimum stuff
-// remove_filter( 'pre_user_login', 'ss_user_reg_filter', 1 );
-// sfs_debug_msg( 'email or author ' . print_r( $post, true ) );
+			// remove_filter( 'pre_user_login', 'ss_user_reg_filter', 1 );
+			// sfs_debug_msg( 'email or author ' . print_r( $post, true ) );
 			$reason = ss_check_white();
 			if ( $reason !== false ) {
-// sfs_debug_msg( "return from white $reason" );
+			// sfs_debug_msg( "return from white $reason" );
 				return;
 			}
-// sfs_debug_msg( 'past white ' );
+			// sfs_debug_msg( 'past white ' );
 			ss_check_post(); // on POST check if we need to stop comments or logins
 		} else {
-// sfs_debug_msg( 'no email or author ' . print_r( $post, true ) );
+		// sfs_debug_msg( 'no email or author ' . print_r( $post, true ) );
 		}
 	} else {
-// this is a get - check for get addons
+		// this is a get - check for get addons
 		$addons = array();
 		$addons = apply_filters( 'ss_addons_get', $addons );
-// these are the allow before addons
-// returns array 
-// [0]=class location, [1]=class name (also used as counter), [2]=addon name,
-// [3]=addon author, [4]=addon description
+		// these are the allow before addons
+		// returns array 
+		// [0]=class location, [1]=class name (also used as counter), [2]=addon name,
+		// [3]=addon author, [4]=addon description
 		if ( ! empty( $addons ) && is_array( $addons ) ) {
 			foreach ( $addons as $add ) {
 				if ( ! empty( $add ) && is_array( $add ) ) {
@@ -214,23 +213,18 @@ function ss_init() {
 					$post    = get_post_variables();
 					$reason  = be_load( $add, ss_get_ip(), $stats, $options );
 					if ( $reason !== false ) {
-// need to log a passed hit on post here
-						remove_filter( 'pre_user_login', 'ss_user_reg_filter',
-							1 );
+						// need to log a passed hit on post here
+						remove_filter( 'pre_user_login', 'ss_user_reg_filter', 1 );
 						ss_log_bad( ss_get_ip(), $reason, $add[1], $add );
-
 						return;
 					}
 				}
 			}
 		}
 	}
-	add_action( 'template_redirect',
-		'ss_check_404s' ); // check missed hits for robots scanning for exploits
-	add_action( 'ss_stop_spam_caught', 'ss_caught_action', 10,
-		2 ); // hook stop spam  - for testing
-	add_action( 'ss_stop_spam_OK', 'ss_stop_spam_OK', 10,
-		2 ); // hook stop spam - for testing
+	add_action( 'template_redirect', 'ss_check_404s' ); // check missed hits for robots scanning for exploits
+	add_action( 'ss_stop_spam_caught', 'ss_caught_action', 10, 2 ); // hook stop spam  - for testing
+	add_action( 'ss_stop_spam_OK', 'ss_stop_spam_OK', 10, 2 ); // hook stop spam - for testing
 }
 
 // start of loadable functions
@@ -250,7 +244,6 @@ function ss_sfs_reg_add_user_to_allowlist() {
 	$options = ss_get_options();
 	$stats   = ss_get_stats();
 	$post    = get_post_variables();
-
 	return be_load( 'ss_addtoallowlist', ss_get_ip(), $stats, $options );
 }
 
@@ -259,12 +252,10 @@ function ss_set_stats( &$stats, $addon = array() ) {
 	if ( empty( $addon ) || ! is_array( $addon ) ) {
 // need to know if the spam count has changed
 		if ( $stats['spcount'] == 0 || empty( $stats['spdate'] ) ) {
-			$stats['spdate'] = date( 'Y/m/d',
-				time() + ( get_option( 'gmt_offset' ) * 3600 ) );
+			$stats['spdate'] = date( 'Y/m/d', time() + ( get_option( 'gmt_offset' ) * 3600 ) );
 		}
 		if ( $stats['spmcount'] == 0 || empty( $stats['spmdate'] ) ) {
-			$stats['spmdate'] = date( 'Y/m/d',
-				time() + ( get_option( 'gmt_offset' ) * 3600 ) );
+			$stats['spmdate'] = date( 'Y/m/d', time() + ( get_option( 'gmt_offset' ) * 3600 ) );
 		}
 	} else {
 // update addon stats
@@ -292,8 +283,7 @@ function ss_get_now() {
 	if ( function_exists( 'date_default_timezone_set' ) ) {
 		date_default_timezone_set( 'UTC' ); // WP is a UTC base date - if default tz is not set this fixes it
 	}
-	$now = date( 'Y/m/d H:i:s',
-		time() + ( get_option( 'gmt_offset' ) * 3600 ) );
+	$now = date( 'Y/m/d H:i:s', time() + ( get_option( 'gmt_offset' ) * 3600 ) );
 }
 
 function ss_get_stats() {
@@ -304,7 +294,6 @@ function ss_get_stats() {
 	) {
 		return $stats;
 	}
-
 	return be_load( 'ss_get_stats', '' );
 }
 
@@ -317,7 +306,6 @@ function ss_get_options() {
 	) {
 		return $options;
 	}
-
 	return be_load( 'ss_get_options', '' );
 }
 
@@ -327,7 +315,6 @@ function ss_set_options( $options ) {
 
 function ss_get_ip() {
 	$ip = $_SERVER['REMOTE_ADDR'];
-
 	return $ip;
 }
 
@@ -347,7 +334,6 @@ function ss_check_site_get() {
 	sfs_errorsonoff();
 	$ret = be_load( 'ss_check_site_get', ss_get_ip(), $stats, $options, $post );
 	sfs_errorsonoff( 'off' );
-
 	return $ret;
 }
 
@@ -358,7 +344,6 @@ function ss_check_post() {
 	$post    = get_post_variables();
 	$ret     = be_load( 'ss_check_post', ss_get_ip(), $stats, $options, $post );
 	sfs_errorsonoff( 'off' );
-
 	return $ret;
 }
 
@@ -368,7 +353,6 @@ function ss_check_404s() { // check for exploits on 404s
 	$stats   = ss_get_stats();
 	$ret     = be_load( 'ss_check_404s', ss_get_ip(), $stats, $options );
 	sfs_errorsonoff( 'off' );
-
 	return $ret;
 }
 
@@ -379,7 +363,6 @@ function ss_log_bad( $ip, $reason, $chk, $addon = array() ) {
 	$post['reason'] = $reason;
 	$post['chk']    = $chk;
 	$post['addon']  = $addon;
-
 	return be_load( 'ss_log_bad', ss_get_ip(), $stats, $options, $post );
 }
 
@@ -402,7 +385,6 @@ function ss_log_akismet() {
 	$ansa           = be_load( 'ss_log_bad', ss_get_ip(), $stats, $options,
 		$post );
 	sfs_errorsonoff( 'off' );
-
 	return $ansa;
 }
 
@@ -413,7 +395,6 @@ function ss_log_good( $ip, $reason, $chk, $addon = array() ) {
 	$post['reason'] = $reason;
 	$post['chk']    = $chk;
 	$post['addon']  = $addon;
-
 	return be_load( 'ss_log_good', ss_get_ip(), $stats, $options, $post );
 }
 
@@ -422,10 +403,8 @@ function ss_check_white() {
 	$options = ss_get_options();
 	$stats   = ss_get_stats();
 	$post    = get_post_variables();
-	$ansa    = be_load( 'ss_check_white', ss_get_ip(), $stats, $options,
-		$post );
+	$ansa    = be_load( 'ss_check_white', ss_get_ip(), $stats, $options, $post );
 	sfs_errorsonoff( 'off' );
-
 	return $ansa;
 }
 
@@ -435,10 +414,8 @@ function ss_check_white_block() {
 	$stats         = ss_get_stats();
 	$post          = get_post_variables();
 	$post['block'] = true;
-	$ansa          = be_load( 'ss_check_white', ss_get_ip(), $stats, $options,
-		$post );
+	$ansa          = be_load( 'ss_check_white', ss_get_ip(), $stats, $options, $post );
 	sfs_errorsonoff( 'off' );
-
 	return $ansa;
 }
 
@@ -462,7 +439,6 @@ function be_load(
 // this is an absolute location so load it directly
 		if ( ! file_exists( $file[0] ) ) {
 			sfs_debug_msg( 'not found ' . print_r( $add, true ) );
-
 			return false;
 		}
 // require_once( $file[0] );
@@ -490,7 +466,6 @@ function be_load(
 	}
 	if ( ! file_exists( $fd ) ) {
 		echo "<br /><br />Missing $file $fd<br /><br />";
-
 		return false;
 	}
 	require_once( $fd );
@@ -500,7 +475,6 @@ function be_load(
 	$result = $class->process( $ip, $stats, $options, $post );
 	$class  = null;
 	unset( $class ); // does nothing - take out
-
 	return $result;
 }
 
@@ -657,7 +631,6 @@ function really_clean( $s ) {
 			$s .= pack( 'C', $ss[ $j ] );
 		}
 	}
-
 	return $s;
 }
 
@@ -678,7 +651,6 @@ function ss_new_user_ip( $user_id ) {
 
 function ss_sfs_ip_column_head( $column_headers ) {
 	$column_headers['signup_ip'] = 'User IP';
-
 	return $column_headers;
 }
 
@@ -720,7 +692,6 @@ function ss_user_reg_filter( $user_login ) {
 	if ( $options['filterregistrations'] != 'Y' ) {
 		remove_filter( 'pre_user_login', 'ss_user_reg_filter', 1 );
 		sfs_errorsonoff( 'off' );
-
 		return $user_login;
 	}
 // if the suspect is already in the Bad Cache he does not get a second chance?
@@ -731,8 +702,7 @@ function ss_user_reg_filter( $user_login ) {
 		$rejectmessage  = $options['rejectmessage'];
 		$post['reason'] = 'Failed Registration: Bad Cache';
 		$host['chk']    = 'chkbcache';
-		$ansa           = be_load( 'ss_log_bad', ss_get_ip(), $stats, $options,
-			$post );
+		$ansa           = be_load( 'ss_log_bad', ss_get_ip(), $stats, $options, $post );
 		wp_die( "$rejectmessage", "Login Access Denied",
 			array( 'response' => 403 ) );
 		exit();
@@ -742,40 +712,34 @@ function ss_user_reg_filter( $user_login ) {
 	sfs_errorsonoff();
 	if ( $reason !== false ) {
 		$post['reason'] = 'Passed Registration:' . $reason;
-		$ansa           = be_load( 'ss_log_good', ss_get_ip(), $stats, $options,
-			$post );
+		$ansa           = be_load( 'ss_log_good', ss_get_ip(), $stats, $options, $post );
 		sfs_errorsonoff( 'off' );
-
 		return $user_login;
 	}
 // check the blacklist
 // sfs_debug_msg( "Checking blacklist on registration: /r/n".print_r( $post, true ) );
-	$ret            = be_load( 'ss_check_post', ss_get_ip(), $stats, $options,
-		$post );
+	$ret            = be_load( 'ss_check_post', ss_get_ip(), $stats, $options, $post );
 	$post['reason'] = 'Passed Registration ' . $ret;
-	$ansa           = be_load( 'ss_log_good', ss_get_ip(), $stats, $options,
-		$post );
-
+	$ansa           = be_load( 'ss_log_good', ss_get_ip(), $stats, $options, $post );
 	return $user_login;
 }
 
 // action links
-	add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'ss_summary_link' );
-	function ss_summary_link( $links ) {
-		$links = array_merge( array( '<a href="' . admin_url( 'admin.php?page=stop_spammers' ) . '">' . __( 'Settings' ) . '</a>' ), $links );
-		return $links;
-	}
+function ss_summary_link( $links ) {
+	$links = array_merge( array( '<a href="' . admin_url( 'admin.php?page=stop_spammers' ) . '">' . __( 'Settings' ) . '</a>' ), $links );
+	return $links;
+}
+add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'ss_summary_link' );
 
-	add_action( 'admin_init', 'check_for_premium' );
-	function check_for_premium() {
-		if ( ! is_plugin_active( 'stop-spammers-premium/stop-spammers-premium.php' ) ) {
-			add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'ss_upgrade_link' );
-			function ss_upgrade_link( $links ) {
-				$links = array_merge( array( '<a href="https://trumani.com/" title="Get Maximum Dynamic Security" target="_blank" style="font-weight:bold">' . __( 'Upgrade' ) . '</a>' ), $links );
-				return $links;
-			}
+function check_for_premium() {
+	if ( ! is_plugin_active( 'stop-spammers-premium/stop-spammers-premium.php' ) ) {
+		add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'ss_upgrade_link' );
+		function ss_upgrade_link( $links ) {
+			$links = array_merge( array( '<a href="https://trumani.com/" title="Get Maximum Dynamic Security" target="_blank" style="font-weight:bold">' . __( 'Upgrade' ) . '</a>' ), $links );
+			return $links;
 		}
 	}
+}
+add_action( 'admin_init', 'check_for_premium' );
 
 require_once( 'includes/stop-spam-utils.php' );
-?>

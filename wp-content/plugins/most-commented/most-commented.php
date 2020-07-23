@@ -131,6 +131,7 @@ class Most_Commented_Widget extends WP_Widget {
 
 				$most_commented_output .= $before . '<a href="' . get_permalink( $post->ID ) . '">' . $post->post_title . '</a>' . $comment_count_output . $after;
 			}
+			wp_reset_postdata();
 		} else {
 			$most_commented_output .= $before . 'None found' . $after;
 		}

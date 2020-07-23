@@ -948,6 +948,11 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                 'TheaterEvent'     => 'TheaterEvent',
                                 'VisualArtsEvent'  => 'VisualArtsEvent'
                             ) 
+                        ),                        
+                        array(
+                                'label'   => 'ID',
+                                'id'      => 'saswp_event_schema_id_'.$schema_id,
+                                'type'    => 'text'                                
                         ),
                         array(
                                 'label' => 'Event Status',
@@ -1584,12 +1589,7 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'attributes' => array(
                                 'placeholder' => 'Video Name'
                             ),
-                    ),
-                    array(
-                        'label' => 'Video URL',
-                        'id'    => 'saswp_recipe_video_url_'.$schema_id,
-                        'type'  => 'text',                         
-                        ),
+                    ),                    
                     array(
                             'label' => 'Video Description',
                             'id' => 'saswp_recipe_video_description_'.$schema_id,
@@ -3366,6 +3366,11 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             
                     ),
                     array(
+                        'label'      => 'File Size',
+                        'id'         => 'saswp_vg_schema_file_size_'.$schema_id,
+                        'type'       => 'text'                        
+                    ),
+                    array(
                             'label' => 'Aggregate Rating',
                             'id' => 'saswp_vg_schema_enable_rating_'.$schema_id,
                             'type' => 'checkbox',                          
@@ -4454,6 +4459,11 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                 case 'Person':
                     
                     $meta_field = array(
+                    array(
+                                'label'   => 'ID',
+                                'id'      => 'saswp_person_schema_id_'.$schema_id,
+                                'type'    => 'text'                                
+                    ),        
                     array(
                             'label'      => 'Name',
                             'id'         => 'saswp_person_schema_name_'.$schema_id,

@@ -288,7 +288,8 @@ return array(
         ),
         'aiosp' => array(            
                     'name'       => 'All in One SEO Pack',
-                    'free'       => 'all-in-one-seo-pack/all_in_one_seo_pack.php',               
+                    'free'       => 'all-in-one-seo-pack/all_in_one_seo_pack.php',
+                    'pro'        => 'all-in-one-seo-pack-pro/all_in_one_seo_pack.php',               
                     'opt_name'   => 'saswp-aiosp',
                     'part_in'    => 'free',
         ),
@@ -304,10 +305,34 @@ return array(
                     'opt_name'   => 'saswp-wp-recipe-maker',
                     'part_in'    => 'free',
         ),
+        'ultimate_blocks' => array(            
+            'name'       => 'Ultimate Blocks – Gutenberg Blocks Plugin',
+            'free'       => 'ultimate-blocks/ultimate-blocks.php',               
+            'opt_name'   => 'saswp-ultimate-blocks',
+            'part_in'    => 'free',
+        ),
+        'starsrating' => array(            
+            'name'       => 'Stars Rating',
+            'free'       => 'stars-rating/stars-rating.php',               
+            'opt_name'   => 'saswp-starsrating',
+            'part_in'    => 'free',
+        ),
         'wpzoom' => array(            
             'name'       => 'Recipe Card Blocks by WPZOOM',
             'free'       => 'recipe-card-blocks-by-wpzoom/wpzoom-recipe-card.php',               
             'opt_name'   => 'saswp-wpzoom',
+            'part_in'    => 'free',
+        ),
+        'yotpo' => array(            
+            'name'       => 'Yotpo: Product & Photo Reviews for WooCommerce',
+            'free'       => 'yotpo-social-reviews-for-woocommerce/wc_yotpo.php',               
+            'opt_name'   => 'saswp-yotpo',
+            'part_in'    => 'free',
+        ),
+        'wptastyrecipe' => array(            
+            'name'       => 'WP Tasty Recipe',
+            'free'       => 'tasty-recipes/tasty-recipes.php',               
+            'opt_name'   => 'saswp-wptastyrecipe',
             'part_in'    => 'free',
         ),
         'recipress' => array(            

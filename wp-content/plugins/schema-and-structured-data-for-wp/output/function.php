@@ -135,6 +135,29 @@ function saswp_schema_markup_output(){
         echo "\n\n";
         
     }
+
+    //Other schema markup compile with SASWP
+
+    if(saswp_global_option()) {
+
+        $wp_tasty_recipe          = saswp_wp_tasty_recipe_json_ld();
+
+        if(!empty($wp_tasty_recipe)){
+
+            foreach ($wp_tasty_recipe as $recipe) {
+
+                echo '<!-- Schema & Structured Data For WP Other Markup v'.esc_attr(SASWP_VERSION).' - -->';                            
+                echo PHP_EOL;
+                echo '<script type="application/ld+json" class="saswp-other-schema-markup-output">';
+                echo saswp_json_print_format( $recipe);
+                echo '</script>';			
+                echo PHP_EOL;
+
+            }
+
+        }
+
+    }    
         
 }
 /**
@@ -190,8 +213,7 @@ function saswp_get_all_schema_markup_output() {
             $gutenberg_recipe         = saswp_gutenberg_recipe_schema(); 
             $gutenberg_faq            = saswp_gutenberg_faq_schema();        
 
-        }
-
+        }        
         $taqeem_schema            = saswp_taqyeem_review_rich_snippet(); 
         $schema_for_faqs          = saswp_schema_for_faqs_schema();         
         $woo_cat_schema           = saswp_woocommerce_category_schema();  
@@ -305,7 +327,7 @@ function saswp_get_all_schema_markup_output() {
                             $output .= saswp_json_print_format($taqeem_schema);   
                             $output .= ",";
                             $output .= "\n\n";
-                        }
+                        }                        
                         if(!empty($elementor_faq)){
                         
                             $output .= saswp_json_print_format($elementor_faq);   
@@ -971,7 +993,10 @@ function saswp_get_comments_with_rating(){
             'type'    => 'comment' 
         ) 
       );                                                                                                                                                                              
-          
+      
+        $starsrating        = saswp_check_starsrating_status();
+        $stars_rating_moved = get_option('saswp_imported_starsrating');
+
         if ( count( $post_comments ) ) {
 
         $sumofrating = 0;
@@ -979,8 +1004,15 @@ function saswp_get_comments_with_rating(){
             
 		foreach ( $post_comments as $comment ) {                        
 
-            $rating = get_comment_meta($comment->comment_ID, 'review_rating', true);
-
+            if($starsrating || $stars_rating_moved){
+                $rating = get_comment_meta($comment->comment_ID, 'rating', true);
+                if($stars_rating_moved && !$rating){
+                    $rating = get_comment_meta($comment->comment_ID, 'review_rating', true);
+                }
+            }else{
+                $rating = get_comment_meta($comment->comment_ID, 'review_rating', true);
+            }
+            
             if(is_numeric($rating)){
 
                 $sumofrating += $rating;
@@ -1201,6 +1233,16 @@ function saswp_remove_microdata($content){
         $content = preg_replace('/hreview-aggregate/', "", $content);
         $content = preg_replace('/hrecipe/', "", $content);
         
+        //Clean json markup
+        if(isset($sd_data['saswp-ultimate-blocks']) && $sd_data['saswp-ultimate-blocks'] == 1 ){
+            
+            $regex = '/<div class\=\"ub_howto\"(.*?)<\/div><script type=\"application\/ld\+json\">(.*?)<\/script>/s';
+
+            preg_match( $regex, $content, $match);
+
+            $content = preg_replace($regex, '<div class="ub_howto"'.$match[1].' </div>', $content);        
+        }
+
         //Clean json markup
         if(isset($sd_data['saswp-wpzoom']) && $sd_data['saswp-wpzoom'] == 1 ){
 
@@ -2502,5 +2544,56 @@ function saswp_get_loop_markup($i) {
         );    
     $response = array('schema_properties' => $schema_properties, 'itemlist' => $itemlist_arr);
 
+    return $response;
+}
+
+function saswp_get_yotpo_reviews($product_id){
+
+    $yotpo_settings = get_option('yotpo_settings');
+    $response = array();
+
+    if(isset($yotpo_settings['app_key'])){
+
+        $i          = 1;
+        $loop_count = 1; 
+
+        do{
+            
+            $url  = esc_url('https://api.yotpo.com/v1/widget/'.$yotpo_settings['app_key'].'/products/'.$product_id.'/reviews.json?per_page=150&page='.$i);
+            $result = @wp_remote_get($url);
+
+            if(wp_remote_retrieve_response_code($result) == 200 && wp_remote_retrieve_body($result)){
+                
+                $reviews = json_decode(wp_remote_retrieve_body($result),true);
+
+                if($reviews['response']['reviews']){
+
+                    $response['average'] = $reviews['response']['bottomline']['average_score'];
+                    $response['total']   = $reviews['response']['bottomline']['total_review'];
+                    
+                    if($response['total'] > 150){
+                        $loop_count = ceil($response['total'] / 150);
+                    }
+
+                    foreach ($reviews['response']['reviews'] as  $value) {
+
+                        $response['reviews'][] = array(
+                            'author'        => $value['user']['display_name'],
+                            'datePublished' => $value['created_at'],
+                            'description'   => $value['content'],
+                            'reviewRating'  => $value['score'],
+                        ) ;
+
+                    }
+                    
+                }
+            }
+
+            $i++;
+
+        } while ($i <= $loop_count);
+        
+    }
+    
     return $response;
 }

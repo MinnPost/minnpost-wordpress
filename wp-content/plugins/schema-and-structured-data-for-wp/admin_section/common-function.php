@@ -1607,6 +1607,7 @@ if ( ! defined('ABSPATH') ) exit;
                         'class'        => array(),
                         'id'           => array(),
                         'name'         => array(),
+                        'data-type'    => array(),
                         'value'        => array(),
                         'type'         => array(),
                         'style'        => array(),
@@ -2827,12 +2828,42 @@ function saswp_admin_notice(){
         <div class="updated notice is-dismissible message notice notice-alt saswp-feedback-notice">
             <p>
                   <span><?php echo esc_html__('You have not set up default image in Schema & Structured Data For WP.', 'schema-and-structured-data-for-wp') ?> </span>                                               
-                  <a href="<?php echo esc_url( admin_url( 'admin.php?page=structured_data_options&tab=general#saswp-default-container' ) ); ?>"> <?php echo esc_html__('Please Setup', 'schema-and-structured-data-for-wp') ?></a>
+                  &nbsp<a href="<?php echo esc_url( admin_url( 'admin.php?page=structured_data_options&tab=general#saswp-default-container' ) ); ?>"> <?php echo esc_html__('Please Setup', 'schema-and-structured-data-for-wp') ?></a>
             </p>
         </div>
 
       <?php   
         
+    }
+
+    if(function_exists('Stars_Rating') && (isset($sd_data['saswp-starsrating']) && $sd_data['saswp-starsrating'] == 1)){
+        
+        ?>
+        <div class="updated notice is-dismissible message">
+            <p>
+                  <span><?php echo esc_html__('You use Stars Rating plugin and has enabled Stars Rating option in Schema & Structured Data For WP & AMP. Use any one option for better comment form.', 'schema-and-structured-data-for-wp') ?> </span>                                                                
+            </p>
+        </div>
+
+      <?php 
+
+    }
+
+    $user_id      = get_current_user_id();
+    $dismiss_meta = get_user_meta( $user_id, 'amp_enable_dismiss_date' );
+
+    if(!$dismiss_meta && (!isset($sd_data['saswp-for-amp']) ||(isset($sd_data['saswp-for-amp']) &&$sd_data['saswp-for-amp'] == 0)) ){
+
+        ?>
+        <div class="updated notice message notice notice-alt saswp-feedback-notice">
+           <p>
+           <?php echo esc_html__('You have disabled schema on AMP.', 'schema-and-structured-data-for-wp') ?>
+           &nbsp<a href="<?php echo esc_url( admin_url( 'admin.php?page=structured_data_options&tab=amp' ) ); ?>"> <?php echo esc_html__('Enable it', 'schema-and-structured-data-for-wp') ?></a>
+           <a notice-type="amp_enable" class="saswp-revws-lnk saswp-dismiss-notices"> <?php echo esc_html__('Dismiss', 'schema-and-structured-data-for-wp') ?></a>
+         </p>           
+       </div>
+       <?php
+
     }
             
 }
@@ -2918,7 +2949,11 @@ function saswp_get_field_note($pname){
             'aiosp'                       => esc_html__('Requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://wordpress.org/plugins/all-in-one-seo-pack/">All in One SEO Pack</a>',
             'squirrly_seo'                => esc_html__('Requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://wordpress.org/plugins/squirrly-seo/">Squirrly SEO</a>',          
             'wp_recipe_maker'             => esc_html__('Requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://wordpress.org/plugins/wp-recipe-maker/">WP Recipe Maker</a>',        
-            'wp_zoom'                     => esc_html__('Requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://wordpress.org/plugins/recipe-card-blocks-by-wpzoom">Recipe Card Blocks by WPZOOM</a>',        
+            'wpzoom'                      => esc_html__('Requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://wordpress.org/plugins/recipe-card-blocks-by-wpzoom">Recipe Card Blocks by WPZOOM</a>',        
+            'yotpo'                       => esc_html__('Requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://wordpress.org/plugins/yotpo-social-reviews-for-woocommerce/">Yotpo: Product & Photo Reviews for WooCommerce</a>',        
+            'starsrating'                 => esc_html__('Requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://wordpress.org/plugins/stars-rating">Stars Rating</a>',        
+            'ultimate_blocks'             => esc_html__('Requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://wordpress.org/plugins/ultimate-blocks">Ultimate Blocks – Gutenberg Blocks Plugin</a>',        
+            'wptastyrecipe'               => esc_html__('Requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://www.wptasty.com">WP Tasty Recipe</a>',        
             'recipress'                   => esc_html__('Requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://wordpress.org/plugins/recipress">ReciPress</a>',        
             'wp_ultimate_recipe'          => esc_html__('Requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://wordpress.org/plugins/wp-ultimate-recipe/">WP Ultimate Recipe</a>',        
             'learn_press'                 => esc_html__('Requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://wordpress.org/plugins/learnpress/">Learn Press</a>',
@@ -3663,7 +3698,11 @@ function saswp_get_condition_list($condition, $search = '', $saved_data = ''){
         if($taxonomies){
 
             foreach($taxonomies as $tax){
-                $choices[] = array('id' => $tax->slug, 'text' => $tax->name);
+
+                if(is_object($tax)){
+                    $choices[] = array('id' => $tax->slug, 'text' => $tax->name);
+                }
+                
             }
             
         }

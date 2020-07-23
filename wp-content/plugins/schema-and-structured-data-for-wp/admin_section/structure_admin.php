@@ -304,7 +304,28 @@ function saswp_comparison_logic_checker($input){
               
                $result = true;      
               
-          break;            
+          break;
+        
+        case 'date':  
+              
+          $published_date ='';  
+          
+          if(is_singular() || is_admin()){
+             $published_date = get_the_date('Y-m-d');  
+          }
+           
+         if ( $comparison == 'before_published' ) {
+             if ( $published_date <= $data ) {
+               $result = true;
+             }
+         }
+         if ( $comparison == 'after_published') {              
+             if ( $published_date >= $data ) {
+               $result = true;
+             }
+         }
+           
+        break;  
         // Basic Controls ------------ 
           // Posts Type
         case 'post_type':   
@@ -558,18 +579,29 @@ function saswp_comparison_logic_checker($input){
             if(isset( $input['key_4'] ) && $input['key_4'] !='all'){
              
               $term_data       = $input['key_4'];
-              $terms           = wp_get_post_terms( $post->ID ,$data);
-              $termChoices = array();
+              $termChoices     = array();
 
-              if(count($terms)>0){
-                                                  
-                foreach ($terms as $key => $termvalue) {
+              if(is_tax()){
+
+                $queried_obj   = get_queried_object();
+                $termChoices[] = $queried_obj->slug;
+
+              }else{
+
+                $terms           = wp_get_post_terms( $post->ID ,$data);
+                
+                if(count($terms)>0){
+                                                    
+                  foreach ($terms as $key => $termvalue) {
+                      
+                    $termChoices[] = $termvalue->slug;
                     
-                   $termChoices[] = $termvalue->slug;
-                   
-                 } 
-                 
-              }                                                        
+                  } 
+                  
+                }
+
+              }
+                                                                      
               
             if ( $comparison == 'equal' ) {
               if(in_array($term_data, $termChoices)){
@@ -690,7 +722,8 @@ if(is_admin()){
   
   function saswp_select_callback($post) {
     
-    $data_group_array =  get_post_meta($post->ID, 'data_group_array', true );                 
+    $data_group_array =  get_post_meta($post->ID, 'data_group_array', true );     
+                
     $data_group_array = is_array($data_group_array)? array_values($data_group_array): array();  
     
     if ( empty( $data_group_array ) ) {
@@ -734,6 +767,8 @@ if(is_admin()){
         ),
         esc_html__("Other",'schema-and-structured-data-for-wp') => array( 
           'ef_taxonomy'         =>  esc_html__("Taxonomy (Tag)",'schema-and-structured-data-for-wp'), 
+          'date'                =>  esc_html__("Date",'schema-and-structured-data-for-wp'), 
+
         )
       ); 
 
@@ -769,6 +804,19 @@ if(is_admin()){
           if(isset($data_array[$i]['key_4'])){
             $selected_val_key_4 = $data_array[$i]['key_4'];
           }
+
+          if($selected_val_key_1 == 'date'){
+            $comparison = array(
+              'before_published'           =>  esc_html__( 'Before Published', 'schema-and-structured-data-for-wp'), 
+              'after_published'            =>  esc_html__( 'After Published', 'schema-and-structured-data-for-wp'),     
+            );
+          }else{
+            $comparison = array(
+              'equal'                =>  esc_html__( 'Equal to', 'schema-and-structured-data-for-wp'), 
+              'not_equal'            =>  esc_html__( 'Not Equal to (Exclude)', 'schema-and-structured-data-for-wp'),     
+            );    
+          }
+
           ?>
           <tr class="toclone">
             <td style="width:31%" class="post_types"> 
@@ -1405,7 +1453,36 @@ function saswp_send_query_message(){
 
 add_action('wp_ajax_saswp_send_query_message', 'saswp_send_query_message');
 
+add_action('wp_ajax_saswp_dismiss_notices', 'saswp_dismiss_notices');
 
+function saswp_dismiss_notices(){
+
+  if ( ! isset( $_POST['saswp_security_nonce'] ) ){
+    return; 
+  }
+  if ( !wp_verify_nonce( $_POST['saswp_security_nonce'], 'saswp_ajax_check_nonce' ) ){
+    return;  
+  }
+  
+  if(isset($_POST['notice_type'])){
+    
+    $notice_type = $_POST['notice_type'];
+
+    $user_id      = get_current_user_id();
+    
+    
+    $updated = update_user_meta( $user_id, $notice_type.'_dismiss_date', date("Y-m-d"));
+
+    if($updated){
+      echo json_encode(array('status'=>'t'));  
+    }else{
+      echo json_encode(array('status'=>'f'));  
+    }
+
+  }
+  
+  wp_die();           
+}
    /**
      * This is a ajax handler function for sending email from user admin panel to us. 
      * @return type json string
@@ -1464,6 +1541,14 @@ function saswp_import_plugin_data(){
                 if ( is_plugin_active('wp-customer-reviews/wp-customer-reviews-3.php')) {
                     $result = saswp_import_wp_custom_rv_plugin_data();      
                 }                
+                break; 
+
+                case 'starsrating':       
+                      
+                  if ( is_plugin_active('stars-rating/stars-rating.php')) {                      
+                      update_option('saswp_imported_starsrating', 1);
+                      $result = 'updated';
+                  }                
                 break; 
                 
                 case 'schema_for_faqs':                
