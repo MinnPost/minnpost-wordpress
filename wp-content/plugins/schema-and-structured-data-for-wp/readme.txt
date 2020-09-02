@@ -2,8 +2,8 @@
 Contributors: magazine3
 Tags: Schema, Structured Data, Google Snippets, Rich Snippets, Schema.org, SEO, AMP
 Requires at least: 3.0
-Tested up to: 5.4
-Stable tag: 1.9.44.1
+Tested up to: 5.5
+Stable tag: 1.9.48
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,53 @@ Yes, Absolutely! We would suggest you send your feature request by creating an i
 You can contact us from [here](http://structured-data-for-wp.com/contact-us/)
 
 == Changelog ==
+
+= 1.9.48 (25 Aug 2020) =
+
+* Fixed: Placement condition page template is not working. #1166
+* Fixed: Need to show unit of the time in the time required value in the NewsArticle schema #1156
+* Fixed: Getting fatal error on the single post/page,conflict with the seopress in the specific use case. #1146
+* Fixed: Fatal error: Uncaught Error: Call to undefined function fifu_amp_url() in /core/3rd-party/aqua_resizer.php:334 #1155
+* Fixed: The Tripadvisor reviews are not fetching at user end. #1167
+* Fixed: html comments is rendering in the schema markup and causing a validation error in article schema #1169
+* Fixed: Users unable to fetch reviews #1162
+* Added: "additionalType" and "ServiceOutput" properties in service schema #1148
+
+
+= 1.9.47 (13 Aug 2020) =
+
+* Fixed: Warning: getimagesize(): corrupt JPEG data: 8 extraneous bytes before marker in aqua_resizer.php on line 144 #1134
+* Added: HighPrice & LowPrice properties for the Event Schema #431
+* Added: Event schema 3rd party compatibility ( Timetable and Event Schedule by MotoPress, Very Simple Event List, WooCommerce Event Manager, XO Event Calendar, Calendarize it! for WordPress, Events Schedule - WordPress Events Calendar Plugin) #1142
+
+= 1.9.46.1 (12 Aug 2020) =
+
+* Fixed: Compatibility issue with WordPress 5.5 #1149
+
+= 1.9.46 (05 Aug 2020) =
+
+* Fixed: Fatal error due to conflict with Yoast Seo #1127
+* Fixed: The placement options do not appear when trying to add a new schema type. #1126
+* Fixed: Do not create empty entiries in wp_post meta table. #1123
+* Fixed: Schema Does not appear with condition "Page template" #1119
+* Fixed: Itemlist schema should not be generated automatically on frontpage and archive page (When collection or blog list schema is there). #1132
+* Fixed: One of contentUrl or embedUrl must be provided warning is appearing eventhough video is present in the content #1125
+* Added: Compatibility with Ratency - Review & Magazine Theme #793
+
+= 1.9.45 (23 July 2020) =
+
+* Fixed: Fatal error: Uncaught Error: Call to a member function get() on null on activation Arlo training and event management system #1122
+* Fixed: Remove CollectionPage schema on product category page #1080
+* Fixed: Changed the label of Website schema (Global) to Website schema (HomePage) #1121
+* Fixed: Undefined index: saswp_product_reviews_created_date /plugins/schema-and-structured-data-for-wp/output/markup.php on line 885 #1120
+* Added: Compatibility with the Sensei LMS plugin ( https://wordpress.org/plugins/sensei-lms/) in Course Schema pro extension #918
+* Added: Compatibility with classiPress Ads theme #918
+* Added: Compatibility with Stamped.io Product Reviews & UGC for WooCommerce ( https://wordpress.org/plugins/stampedio-product-reviews/ ) #666
+* Added: Compatibility with Wp Product Review ( https://wordpress.org/plugins/wp-product-review/ ) #568
+* Added: Compatibility with Sabai Discuss plugin in Q&A pro extension #1056
+* Added: Compatibility with Geo Directory plugin in Real Estate pro extension #818
+* Added: Compatibility with Featured Video Plus ( https://wordpress.org/support/plugin/featured-video-plus/ ) #576 
+
 
 = 1.9.44.1 (16 July 2020) =
 

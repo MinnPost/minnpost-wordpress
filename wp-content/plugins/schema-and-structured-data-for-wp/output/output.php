@@ -1092,6 +1092,7 @@ function saswp_schema_output() {
                                 $input1['@context'] =  saswp_context_url();
                                 $input1['@type']    =  $event_type ? $event_type : $schema_type;
                                 $input1['@id']      =  trailingslashit(saswp_get_permalink()).'#event';
+                                $input1['url']		= trailingslashit(saswp_get_permalink());
                                                                                        
                                 if(!empty($aggregateRating)){
                                     $input1['aggregateRating'] = $aggregateRating;
@@ -1598,7 +1599,7 @@ function saswp_schema_output() {
                                 
                                 }                                                                                                                     
                                 
-                                $input1 = apply_filters('saswp_modify_service_schema_output', $input1 );
+                                $input1 = apply_filters('saswp_modify_review_schema_output', $input1 );
                                 
                                 if($modified_schema == 1){
                                     
@@ -1609,49 +1610,34 @@ function saswp_schema_output() {
                         
                             case 'VideoObject':
                                 
-                                $video_links      = saswp_get_video_links();
-                                
-                                $image_details 	= wp_get_attachment_image_src($image_id);				
+                                $video_links      = saswp_get_video_metadata();                                                                
 
                                 $description = saswp_get_the_excerpt();
 
                                 if(!$description){
                                     $description = get_bloginfo('description');
-                                }  
-                                $thumbnail = '';
-                                
-                                if(isset($image_details[0])){
-
-                                       $thumbnail = $image_details[0];
-                                       
-                                }else{
-
-                                    if(isset($sd_data['sd_default_image']['thumbnail'])){
-                                       $thumbnail = $sd_data['sd_default_image']['thumbnail'];    
-                                    }
-                                    
-                                }
+                                }                                  
                                 
                                 $input1 = array(
-                                '@context'			=> saswp_context_url(),
-                                '@type'				=> 'VideoObject',
-                                '@id'                           => trailingslashit(saswp_get_permalink()).'#videoobject',        
-                                'url'				=> trailingslashit(saswp_get_permalink()),
-                                'headline'			=> saswp_get_the_title(),
-                                'datePublished'                 => esc_html($date),
-                                'dateModified'                  => esc_html($modified_date),
-                                'description'                   => $description,
-                                'transcript'                    => saswp_get_the_content(),
-                                'name'				            => saswp_get_the_title(),
-                                'uploadDate'                    => esc_html($date),
-                                'thumbnailUrl'                  => $thumbnail,
-                                'author'			            => saswp_get_author_details()						                                                                                                      
+                                    '@context'			            => saswp_context_url(),
+                                    '@type'				            => 'VideoObject',
+                                    '@id'                           => trailingslashit(saswp_get_permalink()).'#videoobject',        
+                                    'url'				            => trailingslashit(saswp_get_permalink()),
+                                    'headline'			            => saswp_get_the_title(),
+                                    'datePublished'                 => esc_html($date),
+                                    'dateModified'                  => esc_html($modified_date),
+                                    'description'                   => $description,
+                                    'transcript'                    => saswp_get_the_content(),
+                                    'name'				            => saswp_get_the_title(),
+                                    'uploadDate'                    => esc_html($date),
+                                    'thumbnailUrl'                  => isset($video_links[0]['thumbnail_url'])? $video_links[0]['thumbnail_url'] : saswp_get_thumbnail(),
+                                    'author'			            => saswp_get_author_details()						                                                                                                      
                                 );
                                 
-                                if(isset($video_links[0])){
+                                if(isset($video_links[0]['video_url'])){
                                     
-                                    $input1['contentUrl'] = saswp_validate_url($video_links[0]);
-                                    $input1['embedUrl']   = saswp_validate_url($video_links[0]);
+                                    $input1['contentUrl'] = saswp_validate_url($video_links[0]['video_url']);
+                                    $input1['embedUrl']   = saswp_validate_url($video_links[0]['video_url']);
                                     
                                 }
                                 
@@ -1806,8 +1792,15 @@ function saswp_schema_output() {
                             
                                     if($schema_type == 'Review'){
 
-
-                                     //kk star rating 
+                                    //Ratency Rating 
+                            
+                                    $ratency = saswp_ratency_rating_box_rating();
+                                
+                                    if(!empty($ratency)){
+                                        $input1['itemReviewed']['aggregateRating'] = $ratency; 
+                                    }
+                                        
+                                    //kk star rating 
                             
                                     $yasr = saswp_extract_yet_another_stars_rating();
                                 
@@ -1870,6 +1863,14 @@ function saswp_schema_output() {
                                     }                                    
                                         
                                     }else{                                                                            
+
+                                        //Ratency Rating 
+                            
+                                        $ratency = saswp_ratency_rating_box_rating();
+                                    
+                                        if(!empty($ratency)){
+                                            $input1['aggregateRating'] = $ratency; 
+                                        }
 
                                         //yet another star rating
                             
@@ -2295,11 +2296,16 @@ function saswp_archive_output(){
     $item_list        = array();  
     $collection_page  = array();
     $blog_page        = array();   
-    $item_list_schema = array();
-                 	        	
+    $item_list_schema = array();    
+    $product_cat      = false;
+
+    if( function_exists('is_product_category') && is_product_category() ){
+        $product_cat      = true;
+    }
+    
 	if(isset($sd_data['saswp_archive_schema']) && $sd_data['saswp_archive_schema'] == 1){
                     
-	    if ( is_category() || is_tax() ) {
+	    if ( (is_category() || is_tax()) && !$product_cat ) {
             		                                   
                 $i = 1;
                 $category_loop = new WP_Query( $query_string );                
@@ -2308,8 +2314,7 @@ function saswp_archive_output(){
                     while( $category_loop->have_posts() ): $category_loop->the_post();
                                                        
                                         $result            = saswp_get_loop_markup($i);
-                                        $category_posts[]  =  $result['schema_properties'];                                                                                                                                                                                                        
-                                        $item_list[]       = $result['itemlist'];
+                                        $category_posts[]  =  $result['schema_properties'];                                                                                                                                                                                                                                              
                                         
                         $i++;
                     endwhile;
@@ -2332,7 +2337,7 @@ function saswp_archive_output(){
                         '@type' 		=> "CollectionPage",
                         '@id' 		    => trailingslashit(esc_url($category_link)).'#CollectionPage',
                         'headline' 		=> esc_attr($category_headline),
-                        'description' 	=> strip_tags(term_description($category_id)),
+                        'description' 	=> strip_tags(get_term($category_id)->description),
                         'url'		 	=> esc_url($category_link),				
                         'hasPart' 		=> $category_posts
                     );
@@ -2342,7 +2347,7 @@ function saswp_archive_output(){
                         '@type' 		=> "Blog",
                         '@id' 		    => trailingslashit(esc_url($category_link)).'#Blog',
                         'headline' 		=> esc_attr($category_headline),
-                        'description' 	=> strip_tags(term_description($category_id)),
+                        'description' 	=> strip_tags(get_term($category_id)->description),
                         'url'		 	=> esc_url($category_link),				
                         'blogPost' 		=> $category_posts
                     );
@@ -2355,15 +2360,15 @@ function saswp_archive_output(){
         
         if(saswp_non_amp()){
             
-            if(is_home()){
+            if( is_home() && !is_front_page() ){
                 $homepage = true;
             }
         }else{
-            if(function_exists('ampforwp_is_home') && ampforwp_is_home()){            
+            if( (function_exists('ampforwp_is_home') && ampforwp_is_home()) && (function_exists('ampforwp_is_front_page') && !ampforwp_is_front_page()) ){            
                 $homepage = true;
             }
         }
-
+        
         if( $homepage ){
             
             $home_query_string = array(
@@ -2412,7 +2417,7 @@ function saswp_archive_output(){
                 }                
                                                        
                 if(isset($sd_data['saswp_archive_schema_type']) && $sd_data['saswp_archive_schema_type'] == 'BlogPosting'){
-                    $output = array($item_list_schema, $collection_page, $blog_page);
+                    $output = array($item_list_schema, array(), $blog_page);
                 }else{
                     $output = array($item_list_schema, $collection_page, array());
                 }

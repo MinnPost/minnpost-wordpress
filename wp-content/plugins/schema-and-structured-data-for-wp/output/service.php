@@ -143,7 +143,8 @@ Class saswp_output_service{
                     $response = @get_the_title();                    
                     break;
                 case 'post_content':
-                    $response = @get_the_content();                        
+                    $response = @get_the_content();
+					$response = wp_strip_all_tags(strip_shortcodes($response));                    
                     break;
                 case 'post_category':
                     $categories = get_the_category();
@@ -1258,6 +1259,9 @@ Class saswp_output_service{
                     if(isset($custom_fields['saswp_blogposting_description'])){
                      $input1['description'] =    wp_strip_all_tags(strip_shortcodes( $custom_fields['saswp_blogposting_description'] ));
                     }
+                    if(isset($custom_fields['saswp_blogposting_body'])){
+                        $input1['articleBody'] =    $custom_fields['saswp_blogposting_body'];
+                    }                                           
                     if(isset($custom_fields['saswp_blogposting_name'])){
                      $input1['name'] =    $custom_fields['saswp_blogposting_name'];
                     }
@@ -1606,14 +1610,26 @@ Class saswp_output_service{
                     }
                     
                     if(isset($custom_fields['saswp_event_schema_image'])){
-                     $input1['image'] =    $custom_fields['saswp_event_schema_image'];
+                        $input1['image'] =    $custom_fields['saswp_event_schema_image'];
                     }
                     if(isset($custom_fields['saswp_event_schema_performer_name'])){
-                     $input1['performer']['name'] =    $custom_fields['saswp_event_schema_performer_name'];
+                        $input1['performer']['name'] =    $custom_fields['saswp_event_schema_performer_name'];
                     }
+
                     if(isset($custom_fields['saswp_event_schema_price'])){
-                     $input1['offers']['price'] =    $custom_fields['saswp_event_schema_price'];
+                        $input1['offers']['@type'] =   'Offer';
+                        $input1['offers']['price'] =    $custom_fields['saswp_event_schema_price'];
                     }
+                    
+                    if(isset($custom_fields['saswp_event_schema_high_price']) && isset($custom_fields['saswp_event_schema_low_price'])){
+
+                        $input1['offers']['@type'] = 'AggregateOffer';
+
+                        $input1['offers']['highPrice'] = $custom_fields['saswp_event_schema_high_price'];
+                        $input1['offers']['lowPrice']  = $custom_fields['saswp_event_schema_low_price'];
+
+                    }
+                                        
                     if(isset($custom_fields['saswp_event_schema_price_currency'])){
                      $input1['offers']['priceCurrency'] =    $custom_fields['saswp_event_schema_price_currency'];
                     }
@@ -2164,6 +2180,12 @@ Class saswp_output_service{
                     }
                     if(isset($custom_fields['saswp_service_schema_type'])){
                       $input1['serviceType'] =    $custom_fields['saswp_service_schema_type'];
+                    }
+                    if(isset($custom_fields['saswp_service_schema_additional_type'])){
+                        $input1['additionalType'] =    $custom_fields['saswp_service_schema_additional_type'];
+                    }
+                    if(isset($custom_fields['saswp_service_schema_service_output'])){
+                      $input1['serviceOutput'] =    $custom_fields['saswp_service_schema_service_output'];
                     }
                     if(isset($custom_fields['saswp_service_schema_provider_type']) && isset($custom_fields['saswp_service_schema_provider_name'])){
                       $input1['provider']['@type'] =    $custom_fields['saswp_service_schema_provider_type'];
@@ -3452,6 +3474,17 @@ Class saswp_output_service{
                         $product_details['product_average_rating'] = $sumofrating /  count($judge_me_post);
                     }
                  
+             } else if(class_exists('Woo_stamped_api') && (isset($sd_data['saswp-stamped']) && $sd_data['saswp-stamped'] == 1)){
+
+                $stamped_reviews = saswp_get_stamped_reviews($post_id);
+                
+                if($stamped_reviews){
+                    $reviews_arr                               = $stamped_reviews['reviews'];     
+                    $product_details['product_review_count']   = $stamped_reviews['total'];
+                    $product_details['product_average_rating'] = $stamped_reviews['average'];  
+                }
+
+
              } else if(function_exists('wc_yotpo_init') && (isset($sd_data['saswp-yotpo']) && $sd_data['saswp-yotpo'] ==1 )){
             
                 $yotpo_reviews = saswp_get_yotpo_reviews($post_id);
@@ -4393,6 +4426,7 @@ Class saswp_output_service{
                                                     
                             $publisher['publisher']['@type']         = 'Organization';
                             $publisher['publisher']['name']          = esc_attr($site_name);                            
+                            $publisher['publisher']['url']           = get_site_url();
                             
                             if($logo !='' && $height !='' && $width !=''){
                                                                              

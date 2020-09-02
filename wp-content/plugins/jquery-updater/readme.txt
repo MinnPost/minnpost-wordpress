@@ -3,8 +3,8 @@ Contributors: Ramoonus
 Donate link: http://www.ramoonus.nl/donate/
 Tags: jquery, update, jquery ui, javascript, jq
 Requires at least: 5.0
-Tested up to: 5.4
-Stable tag: 3.5.1.1
+Tested up to: 5.5
+Stable tag: 3.5.1.2
 Requires PHP: 5.6
 
 This plugin updates jQuery to the latest stable version on your website.
@@ -51,6 +51,10 @@ A: Using jQuery version 2 could break your site. See the warning on the homepage
 Please clear the server and browser cache after upgrading/disabling
 
 == Changelog ==
+= 3.5.1.2 =
+* Bumped supported version to WordPress 5.5
+* Removed (hidden) options screen for now
+
 = 3.5.1.1 = 
 * Bugfix: Fixed a typo
 

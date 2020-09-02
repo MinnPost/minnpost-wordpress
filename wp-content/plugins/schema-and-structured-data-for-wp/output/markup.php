@@ -352,24 +352,46 @@ function saswp_event_schema_markup($schema_id, $schema_post_id, $all_post_meta){
             $input1 = array(
             '@context'			=> saswp_context_url(),
             '@type'				=> (isset($all_post_meta['saswp_event_schema_type_'.$schema_id][0]) && $all_post_meta['saswp_event_schema_type_'.$schema_id][0] !='') ? $all_post_meta['saswp_event_schema_type_'.$schema_id][0] : 'Event' ,            
-            'name'			        => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_name_'.$schema_id, 'saswp_array'),
-            'description'                   => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_description_'.$schema_id, 'saswp_array'),			                
-            'image'                         => array(
-                                                        '@type'		=>'ImageObject',
-                                                        'url'		=>  isset($event_image['thumbnail']) ? esc_url($event_image['thumbnail']):'' ,
-                                                        'width'		=>  isset($event_image['width'])     ? esc_attr($event_image['width'])   :'' ,
-                                                        'height'            =>  isset($event_image['height'])    ? esc_attr($event_image['height'])  :'' ,
-                                                    ),                                            
-            'offers'			=> array(
-                                                '@type'           => 'Offer',
-                                                'url'             => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_url_'.$schema_id, 'saswp_array'),	                        
-                                                'price'           => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_price_'.$schema_id, 'saswp_array'),
-                                                'priceCurrency'   => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_price_currency_'.$schema_id, 'saswp_array'),
-                                                'availability'    => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_availability_'.$schema_id, 'saswp_array'),
-                                                'validFrom'       => isset($all_post_meta['saswp_event_schema_validfrom_'.$schema_id])?date('Y-m-d\TH:i:s\Z',strtotime($all_post_meta['saswp_event_schema_validfrom_'.$schema_id][0])):'',
-                            )                         
-                );
+            'name'			    => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_name_'.$schema_id, 'saswp_array'),
+            'description'       => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_description_'.$schema_id, 'saswp_array'),			                
+            'image'             => array(
+                                    '@type'		=>'ImageObject',
+                                    'url'		=>  isset($event_image['thumbnail']) ? esc_url($event_image['thumbnail']):'' ,
+                                    'width'		=>  isset($event_image['width'])     ? esc_attr($event_image['width'])   :'' ,
+                                    'height'    =>  isset($event_image['height'])    ? esc_attr($event_image['height'])  :'' ,
+                                )                                     
+            );
 
+                
+                if(isset($all_post_meta['saswp_event_schema_high_price_'.$schema_id][0]) && isset($all_post_meta['saswp_event_schema_low_price_'.$schema_id][0])){
+
+                        $input1['offers'] = array(
+                            '@type'           => 'AggregateOffer',
+                            'url'             => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_url_'.$schema_id, 'saswp_array'),	                        
+                            'highPrice'       => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_high_price_'.$schema_id, 'saswp_array'),
+                            'lowPrice'       => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_low_price_'.$schema_id, 'saswp_array'),
+                            'price'           => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_price_'.$schema_id, 'saswp_array'),
+                            'priceCurrency'   => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_price_currency_'.$schema_id, 'saswp_array'),
+                            'availability'    => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_availability_'.$schema_id, 'saswp_array'),
+                            'validFrom'       => isset($all_post_meta['saswp_event_schema_validfrom_'.$schema_id])?date('Y-m-d\TH:i:s\Z',strtotime($all_post_meta['saswp_event_schema_validfrom_'.$schema_id][0])):'',
+                        );
+
+                }else{
+
+                    if(isset($all_post_meta['saswp_event_schema_price_'.$schema_id][0])){
+
+                            $input1['offers'] = array(
+                                '@type'           => 'Offer',
+                                'url'             => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_url_'.$schema_id, 'saswp_array'),	                        
+                                'price'           => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_price_'.$schema_id, 'saswp_array'),
+                                'priceCurrency'   => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_price_currency_'.$schema_id, 'saswp_array'),
+                                'availability'    => saswp_remove_warnings($all_post_meta, 'saswp_event_schema_availability_'.$schema_id, 'saswp_array'),
+                                'validFrom'       => isset($all_post_meta['saswp_event_schema_validfrom_'.$schema_id])?date('Y-m-d\TH:i:s\Z',strtotime($all_post_meta['saswp_event_schema_validfrom_'.$schema_id][0])):'',
+                            );
+
+                    }
+
+                }
 
                 $phy_location = array(
                     '@type'   => 'Place',
@@ -882,9 +904,14 @@ function saswp_product_schema_markup($schema_id, $schema_post_id, $all_post_meta
                                           
                                           $review_fields['@type']         = 'Review';
                                           $review_fields['author']        = esc_attr($review['saswp_product_reviews_reviewer_name']);
-                                          $review_fields['datePublished'] = esc_html($review['saswp_product_reviews_created_date']);
-                                          $review_fields['description']   = esc_textarea($review['saswp_product_reviews_text']);
-                                                                                    
+
+                                          if(isset($review['saswp_product_reviews_created_date'])){
+                                            $review_fields['datePublished'] = esc_html($review['saswp_product_reviews_created_date']);
+                                          }
+                                          if(isset($review['saswp_product_reviews_text'])){
+                                            $review_fields['description']   = esc_textarea($review['saswp_product_reviews_text']);
+                                          }
+                                                                                                                                                                        
                                           if(is_int($review['saswp_product_reviews_reviewer_rating'])){
                                               
                                                 $review_fields['reviewRating']['@type']   = 'Rating';
@@ -2794,6 +2821,7 @@ function saswp_blogposting_schema_markup($schema_id, $schema_post_id, $all_post_
     'mainEntityOfPage'              => saswp_remove_warnings($all_post_meta, 'saswp_blogposting_main_entity_of_page_'.$schema_id, 'saswp_array'),
     'headline'			=> saswp_remove_warnings($all_post_meta, 'saswp_blogposting_headline_'.$schema_id, 'saswp_array'),
     'description'                   => saswp_remove_warnings($all_post_meta, 'saswp_blogposting_description_'.$schema_id, 'saswp_array'),
+    'articleBody'                   => saswp_remove_warnings($all_post_meta, 'saswp_blogposting_body_'.$schema_id, 'saswp_array'),
     'keywords'                      => saswp_remove_warnings($all_post_meta, 'saswp_blogposting_keywords_'.$schema_id, 'saswp_array'),
     'name'				=> saswp_remove_warnings($all_post_meta, 'saswp_blogposting_name_'.$schema_id, 'saswp_array'),
     'url'				=> saswp_remove_warnings($all_post_meta, 'saswp_blogposting_url_'.$schema_id, 'saswp_array'),
@@ -3623,6 +3651,13 @@ function saswp_service_schema_markup($schema_id, $schema_post_id, $all_post_meta
         $input1['@id']         = trailingslashit(get_permalink()).'#service';
         $input1['name']        = saswp_remove_warnings($all_post_meta, 'saswp_service_schema_name_'.$schema_id, 'saswp_array');
         $input1['serviceType'] = saswp_remove_warnings($all_post_meta, 'saswp_service_schema_type_'.$schema_id, 'saswp_array');
+
+        if(isset($all_post_meta['saswp_service_schema_additional_type_'.$schema_id][0])){
+            $input1['additionalType']         = $all_post_meta['saswp_service_schema_additional_type_'.$schema_id][0];
+        }
+        if(isset($all_post_meta['saswp_service_schema_service_output_'.$schema_id][0])){
+            $input1['serviceOutput']         = $all_post_meta['saswp_service_schema_service_output_'.$schema_id][0];
+        }
 
         if(isset($all_post_meta['saswp_service_schema_provider_type_'.$schema_id][0])){
 

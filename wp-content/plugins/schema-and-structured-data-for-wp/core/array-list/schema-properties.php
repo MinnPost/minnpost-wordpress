@@ -317,6 +317,12 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'id' => 'saswp_blogposting_description_'.$schema_id,
                             'type' => 'textarea',
                             'default' => get_the_excerpt()
+                    ),                        
+                    array(
+                        'label'   => 'Article Body',
+                        'id'      => 'saswp_blogposting_body_'.$schema_id,
+                        'type'    => 'textarea',
+                        'default' => is_object($post) ? wp_strip_all_tags(strip_shortcodes($post->post_content)) : ''
                     ),
                     array(
                             'label' => 'Keywords',
@@ -1062,6 +1068,16 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                 'label' => 'Price',
                                 'id' => 'saswp_event_schema_price_'.$schema_id,
                                 'type' => 'number',                                
+                        ),
+                        array(
+                                'label' => 'High Price',
+                                'id'    => 'saswp_event_schema_high_price_'.$schema_id,
+                                'type'  => 'number',                                
+                        ),
+                        array(
+                                'label' => 'Low Price',
+                                'id'    => 'saswp_event_schema_low_price_'.$schema_id,
+                                'type'  => 'number',                                
                         ),
                         array(
                                 'label' => 'Price Currency',
@@ -2551,7 +2567,17 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'attributes' => array(
                                 'placeholder' => 'Apartment light cleaning, carpet cleaning'
                             )                                                        
-                       )                        
+                        ),
+                        array(
+                                'label' => 'Additional Type',
+                                'id'    => 'saswp_service_schema_additional_type_'.$schema_id,
+                                'type'  => 'text',                           
+                        ),
+                        array(
+                                'label' => 'Service Output',
+                                'id'    => 'saswp_service_schema_service_output_'.$schema_id,
+                                'type'  => 'text',                           
+                        )                        
                     );
                     break;
                 
@@ -2855,7 +2881,7 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                 
                 case 'VideoObject':
 
-                    $video_links      = saswp_get_video_links();                        
+                    $video_links      = saswp_get_video_metadata();                        
 
                     $meta_field = array(
                     array(
@@ -2926,7 +2952,7 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'label'   => 'Embed Url',
                             'id'      => 'saswp_video_object_embed_url_'.$schema_id,
                             'type'    => 'text',
-                            'default' => isset($video_links[0]) ? $video_links[0] : get_permalink()                            
+                            'default' => isset($video_links[0]['video_url']) ? $video_links[0]['video_url'] : get_permalink()                            
                     ),    
                     array(
                             'label'   => 'Main Entity Id',

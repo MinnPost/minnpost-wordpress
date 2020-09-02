@@ -2845,17 +2845,22 @@ Content-Type: text/html;
 		}
 
 		$version = rgar( $version_info, 'version' );
-		//Empty response means that the key is invalid. Do not queue for upgrade
+
+		$url    = rgar( $version_info, 'url' );
+		$plugin = array(
+			'url'         => 'https://gravityforms.com',
+			'slug'        => 'gravityforms',
+			'plugin'      => $plugin_path,
+			'package'     => str_replace( '{KEY}', GFCommon::get_key(), $url ),
+			'new_version' => $version,
+			'id'          => '0',
+		);
+		// Empty response means that the key is invalid. Do not queue for upgrade.
 		if ( ! rgar( $version_info, 'is_valid_key' ) || version_compare( GFCommon::$version, $version, '>=' ) ) {
 			unset( $option->response[ $plugin_path ] );
+			$option->no_update[ $plugin_path ] = (object) $plugin;
 		} else {
-			$url                                           = rgar( $version_info, 'url' );
-			$option->response[ $plugin_path ]->url         = 'http://www.gravityforms.com';
-			$option->response[ $plugin_path ]->slug        = 'gravityforms';
-			$option->response[ $plugin_path ]->plugin      = $plugin_path;
-			$option->response[ $plugin_path ]->package     = str_replace( '{KEY}', GFCommon::get_key(), $url );
-			$option->response[ $plugin_path ]->new_version = $version;
-			$option->response[ $plugin_path ]->id          = '0';
+			$option->response[ $plugin_path ] = (object) $plugin;
 		}
 
 		return $option;
@@ -3930,7 +3935,17 @@ Content-Type: text/html;
 		return array( 'name' => $name, 'price' => $price );
 	}
 
+	/**
+	 * Prints or enqueues form scripts and processes shortcodes found in the supplied content.
+	 *
+	 * @since unknown
+	 *
+	 * @param string $content The content to be processed.
+	 *
+	 * @return string
+	 */
 	public static function gform_do_shortcode( $content ) {
+		require_once self::get_base_path() . '/form_display.php';
 
 		$is_ajax = false;
 		$forms   = GFFormDisplay::get_embedded_forms( $content, $is_ajax );

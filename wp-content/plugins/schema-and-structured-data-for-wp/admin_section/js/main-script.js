@@ -1045,6 +1045,33 @@ jQuery(document).ready(function($){
                               $("#saswp-taqyeem").val(0);           
                             }
                       break;
+
+                      case 'saswp-video-thumbnails-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-video-thumbnails").val(1);             
+                            }else{
+                              $("#saswp-video-thumbnails").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-featured-video-plus-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-featured-video-plus").val(1);             
+                            }else{
+                              $("#saswp-featured-video-plus").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-wp-product-review-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-wp-product-review").val(1);             
+                            }else{
+                              $("#saswp-wp-product-review").val(0);           
+                            }
+                      break;
                       
                       case 'saswp-the-events-calendar-checkbox':
                           saswp_compatibliy_notes(current, id); 
@@ -1061,6 +1088,15 @@ jQuery(document).ready(function($){
                               $("#saswp-homeland").val(1);             
                             }else{
                               $("#saswp-homeland").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-ratency-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-ratency").val(1);             
+                            }else{
+                              $("#saswp-ratency").val(0);           
                             }
                       break;
                       
@@ -1088,6 +1124,33 @@ jQuery(document).ready(function($){
                               $("#saswp-realestate-5").val(1);             
                             }else{
                               $("#saswp-realestate-5").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-stamped-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-stamped").val(1);             
+                            }else{
+                              $("#saswp-stamped").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-sabaidiscuss-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-sabaidiscuss").val(1);             
+                            }else{
+                              $("#saswp-sabaidiscuss").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-geodirectory-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-geodirectory").val(1);             
+                            }else{
+                              $("#saswp-geodirectory").val(0);           
                             }
                       break;
 
@@ -1142,6 +1205,15 @@ jQuery(document).ready(function($){
                               $("#saswp-lifter-lms").val(1);             
                             }else{
                               $("#saswp-lifter-lms").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-senseilms-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-senseilms").val(1);             
+                            }else{
+                              $("#saswp-senseilms").val(0);           
                             }
                       break;
                       
@@ -1442,6 +1514,156 @@ jQuery(document).ready(function($){
                             
                       break;
 
+                      case 'saswp-quickandeasyfaq-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-quickandeasyfaq").val(1);                                
+                            }else{
+                              $("#saswp-quickandeasyfaq").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-ultimatefaqs-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-ultimatefaqs").val(1);                                
+                            }else{
+                              $("#saswp-ultimatefaqs").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-arconixfaq-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-arconixfaq").val(1);                                
+                            }else{
+                              $("#saswp-arconixfaq").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-faqconcertina-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-faqconcertina").val(1);                                
+                            }else{
+                              $("#saswp-faqconcertina").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-webfaq10-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-webfaq10").val(1);                                
+                            }else{
+                              $("#saswp-webfaq10").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-wpfaqschemamarkup-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-wpfaqschemamarkup").val(1);                                
+                            }else{
+                              $("#saswp-wpfaqschemamarkup").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-faqschemaforpost-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-faqschemaforpost").val(1);                                
+                            }else{
+                              $("#saswp-faqschemaforpost").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-masteraccordion-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-masteraccordion").val(1);                                
+                            }else{
+                              $("#saswp-masteraccordion").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-easyfaqs-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-easyfaqs").val(1);                                
+                            }else{
+                              $("#saswp-easyfaqs").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-accordion-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-accordion").val(1);                                
+                            }else{
+                              $("#saswp-accordion").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-html5responsivefaq-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-html5responsivefaq").val(1);                                
+                            }else{
+                              $("#saswp-html5responsivefaq").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-wpresponsivefaq-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-wpresponsivefaq").val(1);                                
+                            }else{
+                              $("#saswp-wpresponsivefaq").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-easyaccordion-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-easyaccordion").val(1);                                
+                            }else{
+                              $("#saswp-easyaccordion").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-helpiefaq-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-helpiefaq").val(1);                                
+                            }else{
+                              $("#saswp-helpiefaq").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-accordionfaq-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-accordionfaq").val(1);                                
+                            }else{
+                              $("#saswp-accordionfaq").val(0);                                          
+                            }
+                            
+                      break;
+
                       case 'saswp-schemaforfaqs-checkbox':
                            saswp_compatibliy_notes(current, id); 
                             if ($(this).is(':checked')) {              
@@ -1501,6 +1723,65 @@ jQuery(document).ready(function($){
                               $("#saswp-wp-event-aggregator").val(0);                                          
                             }
                             
+                      break;
+
+                      case 'saswp-timetable-event-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-timetable-event").val(1);                                
+                            }else{
+                              $("#saswp-timetable-event").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-xo-event-calendar-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-xo-event-calendar").val(1);                                
+                            }else{
+                              $("#saswp-xo-event-calendar").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-vs-event-list-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-vs-event-list").val(1);                                
+                            }else{
+                              $("#saswp-vs-event-list").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-calendarize-it-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-calendarize-it").val(1);                                
+                            }else{
+                              $("#saswp-calendarize-it").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-events-schedule-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-events-schedule").val(1);                                
+                            }else{
+                              $("#saswp-events-schedule").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-woo-event-manager-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-woo-event-manager").val(1);                                
+                            }else{
+                              $("#saswp-woo-event-manager").val(0);                                          
+                            }                            
                       break;
 
                       case 'saswp-stachethemes-event-calendar-checkbox':

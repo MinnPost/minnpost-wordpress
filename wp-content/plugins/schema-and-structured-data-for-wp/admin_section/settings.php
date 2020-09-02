@@ -429,6 +429,68 @@ function saswp_premium_features_callback(){ ?>
                                                                                                                                                
                     </div>
             </li>
+
+            <li>                            
+                            <?php
+                            
+                            $cooked_active_text = '';
+                            
+                            if(is_plugin_active('faq-schema-compatibility/faq-schema-compatibility.php')){                                        
+                                $cooked_active_text = '<label class="saswp-sts-txt">Status :<span style="color:green;">Active</span></label>';                                            
+                            }else{
+                                $cooked_active_text .='<label class="saswp-sts-txt">Status :<span>Inactive</span></label>';
+                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">Download</span></a>';
+                            }
+                            
+                            ?> 
+                                            
+                    <div class="saswp-features-ele">
+                        <div class="saswp-ele-ic" style="background: #509207;">
+                                <img src="<?php echo SASWP_PLUGIN_URL; ?>/admin_section/images/faq.png">
+                            </div>
+                            <div class="saswp-ele-tlt">
+                                    <h3><?php echo esc_html__('FAQ Schema Compatibility','schema-and-structured-data-for-wp') ?></h3>
+                                    <p><?php echo esc_html__(' FAQ Schema Compatibility extension is the number one solution to enhance your FAQs website with the right structured data.','schema-and-structured-data-for-wp') ?></p>
+                            </div>
+                    </div>
+                    <div class="saswp-sts-btn">
+                        
+                        <?php echo $cooked_active_text; ?>
+                                                                                                                                               
+                    </div>
+            </li>
+
+            <li>
+                            
+                            <?php
+                            
+                            $cooked_active_text = '';
+                            
+                            if(is_plugin_active('qanda-schema-for-saswp/qanda-schema-for-saswp.php')){                                        
+                                $cooked_active_text = '<label class="saswp-sts-txt">Status :<span style="color:green;">Active</span></label>';                                            
+                            }else{
+                                $cooked_active_text .='<label class="saswp-sts-txt">Status :<span>Inactive</span></label>';
+                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">Download</span></a>';
+                            }
+                            
+                            ?> 
+                                            
+                    <div class="saswp-features-ele">
+                        <div class="saswp-ele-ic" style="background: #509207;">
+                                <img src="<?php echo SASWP_PLUGIN_URL; ?>/admin_section/images/question.png">
+                            </div>
+                            <div class="saswp-ele-tlt">
+                                    <h3><?php echo esc_html__('Q&A Schema Compatibility','schema-and-structured-data-for-wp') ?></h3>
+                                    <p><?php echo esc_html__(' extension is the number one solution to enhance your discussion forum website with the right structured data.','schema-and-structured-data-for-wp') ?></p>
+                            </div>
+                    </div>
+                    <div class="saswp-sts-btn">
+                        
+                        <?php echo $cooked_active_text; ?>
+                                                                                                                                               
+                    </div>
+            </li>
+
                         <li>
                             
                                         <?php
@@ -708,7 +770,7 @@ function saswp_general_page_callback(){
         
         $meta_fields_default = array(	
                 array(
-			'label'  => 'Website Schema (Global)',
+			'label'  => 'Website Schema (HomePage)',
 			'id'     => 'saswp_website_schema_checkbox', 
                         'name'   => 'saswp_website_schema_checkbox',
 			'type'   => 'checkbox',
@@ -1503,6 +1565,11 @@ function saswp_import_callback(){
            $add_on[] = 'Cs';           
                                       
         }
+        if(is_plugin_active('qanda-schema-for-saswp/qanda-schema-for-saswp.php')){
+                      
+                $add_on[] = 'qanda';           
+                                           
+        }
         if(is_plugin_active('event-schema-for-saswp/event-schema-for-saswp.php')){
                       
            $add_on[] = 'Es';           
@@ -1640,6 +1707,14 @@ function saswp_get_license_section_html($on, $license_key, $license_status, $lic
                     $response.= '</div>';
                 
                }
+
+               if($label == true && $on == 'qanda'){
+                   
+                $response.= '<div class="" style="display:inline-block">';
+                $response.= '<strong>'.esc_html__('Q&A Schema','schema-and-structured-data-for-wp').'</strong>';
+                $response.= '</div>';
+            
+                }
                
                if($label == true && $on == 'Rs'){
                    
@@ -1885,6 +1960,201 @@ function saswp_compatibility_page_callback(){
                         'name' => 'sd_data[saswp-schemaforfaqs]',                             
                 )
         );
+
+        $quickandeasyfaq = array(
+                'label'  => 'Quick and Easy FAQs',
+                'id'     => 'saswp-quickandeasyfaq-checkbox',                        
+                'name'   => 'saswp-quickandeasyfaq-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('quickandeasyfaq'),
+                'hidden' => array(
+                        'id'   => 'saswp-quickandeasyfaq',
+                        'name' => 'sd_data[saswp-quickandeasyfaq]',                             
+                )
+        );
+
+        $easyfaqs        = array(
+                'label'  => 'Easy FAQs',
+                'id'     => 'saswp-easyfaqs-checkbox',                        
+                'name'   => 'saswp-easyfaqs-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('easyfaqs'),
+                'hidden' => array(
+                        'id'   => 'saswp-easyfaqs',
+                        'name' => 'sd_data[saswp-easyfaqs]',                             
+                )
+        );
+
+        $accordionfaq = array(
+                'label'  => 'Accordion FAQ',
+                'id'     => 'saswp-accordionfaq-checkbox',                        
+                'name'   => 'saswp-accordionfaq-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('accordionfaq'),
+                'hidden' => array(
+                        'id'   => 'saswp-accordionfaq',
+                        'name' => 'sd_data[saswp-accordionfaq]',                             
+                )
+        );
+
+        $ultimatefaqs = array(
+                'label'  => 'Ultimate FAQs',
+                'id'     => 'saswp-ultimatefaqs-checkbox',                        
+                'name'   => 'saswp-ultimatefaqs-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('ultimatefaqs'),
+                'hidden' => array(
+                        'id'   => 'saswp-ultimatefaqs',
+                        'name' => 'sd_data[saswp-ultimatefaqs]',                             
+                )
+        );
+
+        $arconixfaq   = array(
+                'label'  => 'Arconix FAQ',
+                'id'     => 'saswp-arconixfaq-checkbox',                        
+                'name'   => 'saswp-arconixfaq-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('arconixfaq'),
+                'hidden' => array(
+                        'id'   => 'saswp-arconixfaq',
+                        'name' => 'sd_data[saswp-arconixfaq]',                             
+                )
+        );
+
+        $accordion   = array(
+                'label'  => 'Accordion By PickPlugins',
+                'id'     => 'saswp-accordion-checkbox',                        
+                'name'   => 'saswp-accordion-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('accordion'),
+                'hidden' => array(
+                        'id'   => 'saswp-accordion',
+                        'name' => 'sd_data[saswp-accordion]',                             
+                )
+        );
+
+        $faqconcertina        = array(
+                'label'  => 'FAQ Concertina',
+                'id'     => 'saswp-faqconcertina-checkbox',                        
+                'name'   => 'saswp-faqconcertina-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('faqconcertina'),
+                'hidden' => array(
+                        'id'   => 'saswp-faqconcertina',
+                        'name' => 'sd_data[saswp-faqconcertina]',                             
+                )
+        );
+
+        $faqschemaforpost        = array(
+                'label'  => 'FAQ Schema For Pages And Posts',
+                'id'     => 'saswp-faqschemaforpost-checkbox',                        
+                'name'   => 'saswp-faqschemaforpost-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('faqschemaforpost'),
+                'hidden' => array(
+                        'id'   => 'saswp-faqschemaforpost',
+                        'name' => 'sd_data[saswp-faqschemaforpost]',                             
+                )
+        );
+
+        $wpfaqschemamarkup        = array(
+                'label'  => 'WP FAQ Schema Markup for SEO',
+                'id'     => 'saswp-wpfaqschemamarkup-checkbox',                        
+                'name'   => 'saswp-wpfaqschemamarkup-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('wpfaqschemamarkup'),
+                'hidden' => array(
+                        'id'   => 'saswp-wpfaqschemamarkup',
+                        'name' => 'sd_data[saswp-wpfaqschemamarkup]',                             
+                )
+        );
+
+        $webfaq10        = array(
+                'label'  => '10WebFAQ',
+                'id'     => 'saswp-webfaq10-checkbox',                        
+                'name'   => 'saswp-webfaq10-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('webfaq10'),
+                'hidden' => array(
+                        'id'   => 'saswp-webfaq10',
+                        'name' => 'sd_data[saswp-webfaq10]',                             
+                )
+        );
+
+        $masteraccordion        = array(
+                'label'  => 'Master Accordion',
+                'id'     => 'saswp-masteraccordion-checkbox',                        
+                'name'   => 'saswp-masteraccordion-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('masteraccordion'),
+                'hidden' => array(
+                        'id'   => 'saswp-masteraccordion',
+                        'name' => 'sd_data[saswp-masteraccordion]',                             
+                )
+        );
+
+        $html5responsivefaq   = array(
+                'label'  => 'HTML5 Responsive FAQ',
+                'id'     => 'saswp-html5responsivefaq-checkbox',                        
+                'name'   => 'saswp-html5responsivefaq-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('html5responsivefaq'),
+                'hidden' => array(
+                        'id'   => 'saswp-html5responsivefaq',
+                        'name' => 'sd_data[saswp-html5responsivefaq]',                             
+                )
+        );
+
+        $wpresponsivefaq = array(
+                'label'  => 'WP responsive FAQ with category plugin',
+                'id'     => 'saswp-wpresponsivefaq-checkbox',                        
+                'name'   => 'saswp-wpresponsivefaq-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('wpresponsivefaq'),
+                'hidden' => array(
+                        'id'   => 'saswp-wpresponsivefaq',
+                        'name' => 'sd_data[saswp-wpresponsivefaq]',                             
+                )
+        );
+
+        $easyaccordion = array(
+                'label'  => 'Easy Accordion',
+                'id'     => 'saswp-easyaccordion-checkbox',                        
+                'name'   => 'saswp-easyaccordion-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('easyaccordion'),
+                'hidden' => array(
+                        'id'   => 'saswp-easyaccordion',
+                        'name' => 'sd_data[saswp-easyaccordion]',                             
+                )
+        );
+
+        $helpiefaq = array(
+                'label'  => 'Helpie FAQ',
+                'id'     => 'saswp-helpiefaq-checkbox',                        
+                'name'   => 'saswp-helpiefaq-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('helpiefaq'),
+                'hidden' => array(
+                        'id'   => 'saswp-helpiefaq',
+                        'name' => 'sd_data[saswp-helpiefaq]',                             
+                )
+        );
                         
         $total_recipe_generator = array(
 			'label'  => 'Total Recipe Generator',
@@ -1946,6 +2216,84 @@ function saswp_compatibility_page_callback(){
                                 'name' => 'sd_data[saswp-tevolution-events]',                             
                         )
                 );
+
+        $xo_event_calendar   = array(
+                'label'  => 'XO Event Calendar',
+                'id'     => 'saswp-xo-event-calendar-checkbox',                        
+                'name'   => 'saswp-xo-event-calendar-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('xo_event_calendar'),
+                'hidden' => array(
+                        'id'   => 'saswp-xo-event-calendar',
+                        'name' => 'sd_data[saswp-xo-event-calendar]',                             
+                )
+        );
+        
+        $events_schedule   = array(
+                'label'  => 'Events Schedule',
+                'id'     => 'saswp-events-schedule-checkbox',                        
+                'name'   => 'saswp-events-schedule-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('events_schedule'),
+                'hidden' => array(
+                        'id'   => 'saswp-events-schedule',
+                        'name' => 'sd_data[saswp-events-schedule]',                             
+                )
+        );
+
+        $calendarize_it   = array(
+                'label'  => 'Calendarize it! for WordPress',
+                'id'     => 'saswp-calendarize-it-checkbox',                        
+                'name'   => 'saswp-calendarize-it-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('calendarize_it'),
+                'hidden' => array(
+                        'id'   => 'saswp-calendarize-it',
+                        'name' => 'sd_data[saswp-calendarize-it]',                             
+                )
+        );
+        
+        $woo_event_manager  = array(
+                'label'  => 'WooCommerce Event Manager',
+                'id'     => 'saswp-woo-event-manager-checkbox',                        
+                'name'   => 'saswp-woo-event-manager-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('woo_event_manager'),
+                'hidden' => array(
+                                'id'   => 'saswp-woo-event-manager',
+                                'name' => 'sd_data[saswp-woo-event-manager]',                             
+                )
+        );
+
+        $vs_event_list   = array(
+                'label'  => 'Very Simple Event List',
+                'id'     => 'saswp-vs-event-list-checkbox',                        
+                'name'   => 'saswp-vs-event-list-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('vs_event_list'),
+                'hidden' => array(
+                        'id'   => 'saswp-vs-event-list',
+                        'name' => 'sd_data[saswp-vs-event-list]',                             
+                )
+        );
+
+        $timetable_event = array(
+                'label'  => 'Timetable and Event Schedule by MotoPress',
+                'id'     => 'saswp-timetable-event-checkbox',                        
+                'name'   => 'saswp-timetable-event-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('timetable_event'),
+                'hidden' => array(
+                        'id'   => 'saswp-timetable-event',
+                        'name' => 'sd_data[saswp-timetable-event]',                             
+                )
+        );        
         $stachethemes_events = array(
                 'label'  => 'Stachethemes Event Calendar',
                 'id'     => 'saswp-stachethemes-event-calendar-checkbox',                        
@@ -2030,7 +2378,31 @@ function saswp_compatibility_page_callback(){
                                 'id'   => 'saswp-taqyeem',
                                 'name' => 'sd_data[saswp-taqyeem]',                             
                         )
-		);
+                );
+        $wp_product_review = array(
+                'label'  => 'WP Product Review',
+                'id'     => 'saswp-wp-product-review-checkbox',                        
+                'name'   => 'saswp-wp-product-review-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('wp_product_review'),
+                'hidden' => array(
+                        'id'   => 'saswp-wp-product-review',
+                        'name' => 'sd_data[saswp-wp-product-review]',                             
+                )
+        ); 
+        $stamped = array(
+                'label'  => 'Stamped.io Product Reviews',
+                'id'     => 'saswp-stamped-checkbox',                        
+                'name'   => 'saswp-stamped-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('stamped'),
+                'hidden' => array(
+                        'id'   => 'saswp-stamped',
+                        'name' => 'sd_data[saswp-stamped]',                             
+                )
+        );        
         $smart_crawl = array(
 			'label'  => 'SmartCrawl Seo',
 			'id'     => 'saswp-smart-crawl-checkbox',                        
@@ -2067,7 +2439,19 @@ function saswp_compatibility_page_callback(){
                                 'id'   => 'saswp-homeland',
                                 'name' => 'sd_data[saswp-homeland]',                             
                         )
-		);
+                );
+        $ratency = array(
+                'label'  => 'Ratency - Review & Magazine Theme',
+                'id'     => 'saswp-ratency-checkbox',                        
+                'name'   => 'saswp-ratency-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox', 
+                'note'   => saswp_get_field_note('ratency'),
+                'hidden' => array(
+                        'id'   => 'saswp-ratency',
+                        'name' => 'sd_data[saswp-ratency]',                             
+                )
+        );        
         $real_homes = array(
 			'label'  => 'RealHomes Theme',
 			'id'     => 'saswp-realhomes-checkbox',                        
@@ -2129,7 +2513,20 @@ function saswp_compatibility_page_callback(){
                         'id'   => 'saswp-realestate-5',
                         'name' => 'sd_data[saswp-realestate-5]',                             
                 )
-        ); 
+        );
+        
+        $geo_directory = array(
+                'label'  => 'GeoDirectory – Business Directory Plugin',
+                'id'     => 'saswp-geodirectory-checkbox',                        
+                'name'   => 'saswp-geodirectory-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('geodirectory'),
+                'hidden' => array(
+                        'id'   => 'saswp-geodirectory',
+                        'name' => 'sd_data[saswp-geodirectory]',                             
+                )
+        );
         
         $learn_press = array(
 			'label'  => 'LearnPress',
@@ -2180,7 +2577,21 @@ function saswp_compatibility_page_callback(){
                                 'id'   => 'saswp-lifter-lms',
                                 'name' => 'sd_data[saswp-lifter-lms]',                             
                 )
-	);
+        );
+        
+        $senseilms = array(
+                'label'  => 'Sensei LMS',
+                'id'     => 'saswp-senseilms-checkbox',                        
+                'name'   => 'saswp-senseilms-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('senseilms'),
+                'hidden' => array(
+                        'id'   => 'saswp-senseilms',
+                        'name' => 'sd_data[saswp-senseilms]',                             
+                )
+        );
+
         $wp_event_manager = array(
 			'label'  => 'WP Event Manager',
 			'id'     => 'saswp-wp-event-manager-checkbox',                        
@@ -2306,6 +2717,30 @@ function saswp_compatibility_page_callback(){
                 'hidden' => array(
                         'id'   => 'saswp-wpzoom',
                         'name' => 'sd_data[saswp-wpzoom]',                             
+                )
+        );
+        $video_thumbnails = array(
+                'label'  => 'Video Thumbnails',
+                'id'     => 'saswp-video-thumbnails-checkbox',                        
+                'name'   => 'saswp-video-thumbnails-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('video_thumbnails'),
+                'hidden' => array(
+                        'id'   => 'saswp-video-thumbnails',
+                        'name' => 'sd_data[saswp-video-thumbnails]',                             
+                )
+        );
+        $featured_video_plus = array(
+                'label'  => 'Featured Video Plus',
+                'id'     => 'saswp-featured-video-plus-checkbox',                        
+                'name'   => 'saswp-featured-video-plus-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('featured_video_plus'),
+                'hidden' => array(
+                        'id'   => 'saswp-featured-video-plus',
+                        'name' => 'sd_data[saswp-featured-video-plus]',                             
                 )
         );
         $yotpo = array(
@@ -2571,6 +3006,18 @@ function saswp_compatibility_page_callback(){
                         'name' => 'sd_data[saswp-wp-theme-reviews]',                             
                 )
         );        
+        $sabaidiscuss = array(
+                'label'  => 'SabaiDiscuss',
+                'id'     => 'saswp-sabaidiscuss-checkbox',                        
+                'name'   => 'saswp-sabaidiscuss-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('sabaidiscuss'),
+                'hidden' => array(
+                            'id'   => 'saswp-sabaidiscuss',
+                            'name' => 'sd_data[saswp-sabaidiscuss]',                             
+                )
+        );
         $dwquestiton = array(
 			'label'  => 'DW Question Answer',
 			'id'     => 'saswp-dw-question-answer-checkbox',                        
@@ -2716,9 +3163,8 @@ function saswp_compatibility_page_callback(){
              $wpresidence['note']    = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/extensions/">Real Estate Schema Addon</a>';
              $myhome['note']         = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/extensions/">Real Estate Schema Addon</a>';
              $realestate_5['note']   = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/extensions/">Real Estate Schema Addon</a>';
-             $classipress['note']   = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/extensions/">Real Estate Schema Addon</a>';
-             
-             
+             $geo_directory['note']   = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/extensions/">Real Estate Schema Addon</a>';             
+                          
          }
          
          if(!is_plugin_active('course-schema-for-saswp/course-schema-for-saswp.php')){
@@ -2726,8 +3172,32 @@ function saswp_compatibility_page_callback(){
              $learn_press['note'] = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/course-schema/">Course Schema Addon</a>';
              $learn_dash['note']  = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/course-schema/">Course Schema Addon</a>';
              $lifter_lms['note']  = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/course-schema/">Course Schema Addon</a>';
-             $wplms['note']  = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/course-schema/">Course Schema Addon</a>';
+             $wplms['note']       = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/course-schema/">Course Schema Addon</a>';
+             $senseilms['note']   = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/course-schema/">Course Schema Addon</a>';
              
+         }
+         if(!is_plugin_active('faq-schema-compatibility/faq-schema-compatibility.php')){
+                          
+                $quickandeasyfaq['note']      = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $accordionfaq['note']         = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $helpiefaq['note']            = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $ultimatefaqs['note']         = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $arconixfaq['note']           = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $wpresponsivefaq['note']      = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                                                                
+                $easyaccordion['note']        = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $html5responsivefaq['note']   = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $faqconcertina['note']        = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $accordion['note']            = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $easyfaqs['note']             = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $masteraccordion['note']      = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $wpfaqschemamarkup['note']    = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $faqschemaforpost['note']     = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+                $webfaq10['note']             = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/faq-schema/">FAQ Schema Compatibility Addon</a>';                        
+
+         }
+         if(!is_plugin_active('qanda-schema-for-saswp/qanda-schema-for-saswp.php')){
+                          
+                $sabaidiscuss['note'] = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/qanda-schema/">Q&A Schema Compatibility Addon</a>';                        
          }
          
          if(!is_plugin_active('event-schema-for-saswp/event-schema-for-saswp.php')){
@@ -2741,6 +3211,12 @@ function saswp_compatibility_page_callback(){
              $tevolution_events['note']           = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/event-schema/">Event Schema Addon</a>';               
              $wp_event_aggregator['note']         = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/event-schema/">Event Schema Addon</a>';               
              $stachethemes_events['note']         = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/event-schema/">Event Schema Addon</a>';               
+             $timetable_event['note']             = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/event-schema/">Event Schema Addon</a>';               
+             $xo_event_calendar['note']           = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/event-schema/">Event Schema Addon</a>';               
+             $events_schedule['note']             = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/event-schema/">Event Schema Addon</a>';               
+             $calendarize_it['note']              = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/event-schema/">Event Schema Addon</a>';               
+             $woo_event_manager['note']           = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/event-schema/">Event Schema Addon</a>';               
+             $vs_event_list['note']               = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/event-schema/">Event Schema Addon</a>';               
              $all_in_one_event_calendar['note']   = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/event-schema/">Event Schema Addon</a>';               
              $event_on['note']                    = esc_html__('This feature requires','schema-and-structured-data-for-wp').' <a target="_blank" href="https://structured-data-for-wp.com/event-schema/">Event Schema Addon</a>';               
              
@@ -2779,8 +3255,11 @@ function saswp_compatibility_page_callback(){
                 $soledad,
                 $reviews_wp_theme,
                 $taqyeem,
+                $wp_product_review,
+                $stamped,
                 $extratheme,
-                $dwquestiton,                
+                $dwquestiton,
+                $sabaidiscuss,                
                 $yoast,
                 $smart_crawl,
                 $seo_press,
@@ -2790,6 +3269,8 @@ function saswp_compatibility_page_callback(){
                 $recipe_maker,
                 $recipress,
                 $wpzoom,
+                $video_thumbnails,
+                $featured_video_plus,
                 $yotpo,
                 $starsrating,
                 $ultimate_blocks,
@@ -2803,13 +3284,16 @@ function saswp_compatibility_page_callback(){
                 $rankmath,
                 $homeland_theme,
                 $real_homes,
+                $ratency,
                 $wpresidence,
                 $myhome,
                 $classipress,
                 $realestate_5,
+                $geo_directory,
                 $learn_press,
                 $learn_dash,
                 $lifter_lms,
+                $senseilms,
                 $wplms,
                 $the_events_calendar,
                 $wp_event_manager,
@@ -2822,6 +3306,12 @@ function saswp_compatibility_page_callback(){
                 $all_in_one_event_calendar,
                 $event_on,
                 $stachethemes_events,
+                $timetable_event,
+                $xo_event_calendar,
+                $calendarize_it,
+                $events_schedule,
+                $woo_event_manager,
+                $vs_event_list,
                 $easy_testimonials,
                 $bne_testimonials,
                 $testimonial_pro,
@@ -2829,6 +3319,21 @@ function saswp_compatibility_page_callback(){
                 $wordpress_news,
                 $WordLift,
                 $schemaforfaqs,
+                $quickandeasyfaq,
+                $accordionfaq,
+                $ultimatefaqs,
+                $arconixfaq,
+                $faqconcertina,
+                $faqschemaforpost,
+                $wpfaqschemamarkup,
+                $webfaq10,
+                $masteraccordion,
+                $easyfaqs,
+                $accordion,
+                $html5responsivefaq,
+                $wpresponsivefaq,
+                $easyaccordion,
+                $helpiefaq,
                 $flex_lmx
                 
 	);  
@@ -3092,7 +3597,7 @@ function saswp_enqueue_style_js( $hook ) {
         wp_enqueue_script('thickbox');
         wp_enqueue_style('thickbox');
                        	
-        wp_enqueue_script( 'saswp-timepicker-js', SASWP_PLUGIN_URL . 'admin_section/js/jquery.timepicker.js', array( 'jquery', 'jquery-core', 'jquery-ui-core' ), SASWP_VERSION);        
+        wp_enqueue_script( 'saswp-timepicker-js', SASWP_PLUGIN_URL . 'admin_section/js/jquery.timepicker.js', array( 'jquery' ), SASWP_VERSION);        
         wp_enqueue_style( 'saswp-timepicker-css', SASWP_PLUGIN_URL . 'admin_section/css/jquery.timepicker.css', false , SASWP_VERSION );
 
         wp_enqueue_script( 'jquery-ui-datepicker' );
@@ -3101,7 +3606,7 @@ function saswp_enqueue_style_js( $hook ) {
                                 
         wp_enqueue_script( 'saswp-functions-list', SASWP_PLUGIN_URL . 'admin_section/js/'.(SASWP_ENVIRONMENT == 'production' ? 'functions-list.min.js' : 'functions-list.js'), false, SASWP_VERSION );
         
-        wp_register_script( 'saswp-main-js', SASWP_PLUGIN_URL . 'admin_section/js/'.(SASWP_ENVIRONMENT == 'production' ? 'main-script.min.js' : 'main-script.js'), array('jquery','jquery-ui-core'), SASWP_VERSION , true );
+        wp_register_script( 'saswp-main-js', SASWP_PLUGIN_URL . 'admin_section/js/'.(SASWP_ENVIRONMENT == 'production' ? 'main-script.min.js' : 'main-script.js'), array('jquery'), SASWP_VERSION , true );
                         
         wp_localize_script( 'saswp-main-js', 'saswp_localize_data', $data );
         
@@ -3135,8 +3640,8 @@ function saswp_enqueue_saswp_select2_js( $hook ) {
         //DIGINEX theme compatibility ends                                         
 
         wp_enqueue_style('saswp-select2-style', SASWP_PLUGIN_URL. 'admin_section/css/select2.min.css' , false, SASWP_VERSION);
-        wp_enqueue_script('saswp-select2-script', SASWP_PLUGIN_URL. 'admin_section/js/select2.min.js', array( 'jquery', 'jquery-core', 'jquery-ui-core' ), SASWP_VERSION, true);
-        wp_enqueue_script('saswp-select2-extended-script', SASWP_PLUGIN_URL. 'admin_section/js/select2-extended.min.js', array( 'jquery', 'jquery-core', 'jquery-ui-core' ), SASWP_VERSION, true);
+        wp_enqueue_script('saswp-select2-script', SASWP_PLUGIN_URL. 'admin_section/js/select2.min.js', array( 'jquery'), SASWP_VERSION, true);
+        wp_enqueue_script('saswp-select2-extended-script', SASWP_PLUGIN_URL. 'admin_section/js/select2-extended.min.js', array( 'jquery' ), SASWP_VERSION, true);
         	                                        
         }                
         
