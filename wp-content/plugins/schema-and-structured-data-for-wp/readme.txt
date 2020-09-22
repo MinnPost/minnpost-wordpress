@@ -3,7 +3,7 @@ Contributors: magazine3
 Tags: Schema, Structured Data, Google Snippets, Rich Snippets, Schema.org, SEO, AMP
 Requires at least: 3.0
 Tested up to: 5.5
-Stable tag: 1.9.49
+Stable tag: 1.9.49.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -100,6 +100,7 @@ Bug reports for Schema & Structured Data for WP & AMP are [welcomed on GitHub](h
 * Aqua Resizer used http://aquagraphite.com - License URI: WTFPL - http://sam.zoy.org/wtfpl/
 
 
+
 == Frequently Asked Questions ==
 
 = How to install and use this Schema plugin? =
@@ -119,6 +120,10 @@ Yes, Absolutely! We would suggest you send your feature request by creating an i
 You can contact us from [here](http://structured-data-for-wp.com/contact-us/)
 
 == Changelog ==
+
+= 1.9.49.1 (15 Sept 2020) =
+
+* Fixed: Image size smaller than recommended" warnings in search console for the version 1.9.48 and above. #1200
 
 = 1.9.49 (03 Sept 2020) =
 

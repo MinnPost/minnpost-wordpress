@@ -141,7 +141,7 @@ if(!class_exists('Aq_Resize')) {
                 }
 
                 // Check if img path exists, and is an image indeed.
-                if ( ! file_exists( $img_path ) or ! @getimagesize( $img_path ) ){
+                if ( ! file_exists( $img_path ) or ! getimagesize( $img_path ) ){
                     // Return the Original CDN array
                     return array (
                                 0 => $cdn_url_main,
@@ -152,7 +152,7 @@ if(!class_exists('Aq_Resize')) {
                 // Get image info.
                 $info = pathinfo( $img_path );
                 $ext = $info['extension'];
-                list( $orig_w, $orig_h ) = @getimagesize( $img_path );
+                list( $orig_w, $orig_h ) = getimagesize( $img_path );
 
                 // Get image size after cropping.
                 $dims = image_resize_dimensions( $orig_w, $orig_h, $width, $height, $crop );
@@ -175,7 +175,7 @@ if(!class_exists('Aq_Resize')) {
                         throw new Aq_Exception('Unable to resize image because image_resize_dimensions() failed');
                     }
                     // Else check if cache exists.
-                    elseif ( file_exists( $destfilename ) && @getimagesize( $destfilename ) ) {
+                    elseif ( file_exists( $destfilename ) && getimagesize( $destfilename ) ) {
                         $img_url = "{$upload_url}{$dst_rel_path}-{$suffix}.{$ext}";
                     }
                     // Else, we resize the image and return the new resized image url.
@@ -329,7 +329,10 @@ if(!function_exists('saswp_aq_resize')) {
 		
 		}
 
-        }         
+        }
+        elseif( (function_exists('fifu_activate') || is_plugin_active('fifu-premium/fifu-premium.php')) && function_exists('fifu_amp_url')  ){
+            return fifu_amp_url($url, $width, $height); 
+        } 
         else {
             $aq_resize = Aq_Resize::getInstance();
             return $aq_resize->process( $url, $width, $height, $crop, $single, $upscale );
