@@ -9,20 +9,21 @@
     "packages-dev": [
         {
             "name": "automattic/vipwpcs",
-            "version": "2.1.0",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Automattic/VIP-Coding-Standards.git",
-                "reference": "03e75ddd0261b675dece60fb67fc2e9c6af4ad35"
+                "reference": "4d0612461232b313d06321f1501c3989bd6aecf9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Automattic/VIP-Coding-Standards/zipball/03e75ddd0261b675dece60fb67fc2e9c6af4ad35",
-                "reference": "03e75ddd0261b675dece60fb67fc2e9c6af4ad35",
+                "url": "https://api.github.com/repos/Automattic/VIP-Coding-Standards/zipball/4d0612461232b313d06321f1501c3989bd6aecf9",
+                "reference": "4d0612461232b313d06321f1501c3989bd6aecf9",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4",
+                "sirbrillig/phpcs-variable-analysis": "^2.8.3",
                 "squizlabs/php_codesniffer": "^3.5.5",
                 "wp-coding-standards/wpcs": "^2.3"
             },
@@ -51,7 +52,7 @@
                 "standards",
                 "wordpress"
             ],
-            "time": "2020-07-07T07:48:04+00:00"
+            "time": "2020-09-07T10:45:45+00:00"
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
@@ -120,17 +121,65 @@
             "time": "2020-06-25T14:57:39+00:00"
         },
         {
+            "name": "sirbrillig/phpcs-variable-analysis",
+            "version": "2.10.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sirbrillig/phpcs-variable-analysis.git",
+                "reference": "26f24afa84e0e34e06663c91cbbd513b354b1389"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/26f24afa84e0e34e06663c91cbbd513b354b1389",
+                "reference": "26f24afa84e0e34e06663c91cbbd513b354b1389",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+                "limedeck/phpunit-detailed-printer": "^3.1 || ^4.0 || ^5.0",
+                "phpstan/phpstan": "^0.11.8",
+                "phpunit/phpunit": "^5.0 || ^6.5 || ^7.0 || ^8.0",
+                "sirbrillig/phpcs-import-detection": "^1.1"
+            },
+            "type": "phpcodesniffer-standard",
+            "autoload": {
+                "psr-4": {
+                    "VariableAnalysis\\": "VariableAnalysis/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sam Graham",
+                    "email": "php-codesniffer-variableanalysis@illusori.co.uk"
+                },
+                {
+                    "name": "Payton Swick",
+                    "email": "payton@foolord.com"
+                }
+            ],
+            "description": "A PHPCS sniff to detect problems with variables.",
+            "time": "2020-11-10T22:28:15+00:00"
+        },
+        {
             "name": "squizlabs/php_codesniffer",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "a957a73e3533353451eb9fd62ee58bd0aba2773c"
+                "reference": "6f2a22d75eed4b5c1ada6926bee05e8d198df172"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/a957a73e3533353451eb9fd62ee58bd0aba2773c",
-                "reference": "a957a73e3533353451eb9fd62ee58bd0aba2773c",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/6f2a22d75eed4b5c1ada6926bee05e8d198df172",
+                "reference": "6f2a22d75eed4b5c1ada6926bee05e8d198df172",
                 "shasum": ""
             },
             "require": {
@@ -168,7 +217,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2020-06-22T05:29:29+00:00"
+            "time": "2020-11-17T21:10:09+00:00"
         },
         {
             "name": "wp-coding-standards/wpcs",
