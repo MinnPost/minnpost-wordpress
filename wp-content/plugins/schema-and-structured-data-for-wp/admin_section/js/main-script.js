@@ -513,12 +513,18 @@ jQuery(document).ready(function($){
            || schematype == 'Review'
 
            ){
-
+                        
             $(".saswp-enable-append-reviews").parent().parent().show();
         }else{
             $(".saswp-enable-append-reviews").parent().parent().hide();
         }
 
+
+        if(schematype == 'VideoObject'){
+          $(".saswp-enable-markup-class").parent().parent().show();
+        }else{
+          $(".saswp-enable-markup-class").parent().parent().hide();
+        }
 
         if(schematype == 'local_business'){
          $(".saswp-option-table-class tr").eq(1).show();   
@@ -625,6 +631,12 @@ jQuery(document).ready(function($){
                 $(".saswp-enable-append-reviews").parent().parent().show();
             }else{
                 $(".saswp-enable-append-reviews").parent().parent().hide();
+            }
+            
+            if(schematype == 'VideoObject'){
+              $(".saswp-enable-markup-class").parent().parent().show();
+            }else{
+              $(".saswp-enable-markup-class").parent().parent().hide();
             }
             
             if(schematype == 'local_business'){
@@ -938,6 +950,17 @@ jQuery(document).ready(function($){
                               $("#saswp-kk-star-raring").val(0);           
                             }
                       break;
+
+                      case 'saswp-wpdiscuz-checkbox':
+                          
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-wpdiscuz").val(1);             
+                            }else{
+                              $("#saswp-wpdiscuz").val(0);           
+                            }
+                      break;
+                      
                       case 'saswp-yet-another-stars-rating-checkbox':
                           
                           saswp_compatibliy_notes(current, id); 
@@ -1025,6 +1048,33 @@ jQuery(document).ready(function($){
                               $("#saswp-yoast").val(1);             
                             }else{
                               $("#saswp-yoast").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-polylang-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-polylang").val(1);             
+                            }else{
+                              $("#saswp-polylang").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-metatagmanager-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-metatagmanager").val(1);             
+                            }else{
+                              $("#saswp-metatagmanager").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-slimseo-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-slimseo").val(1);             
+                            }else{
+                              $("#saswp-slimseo").val(0);           
                             }
                       break;
                      
@@ -1510,6 +1560,16 @@ jQuery(document).ready(function($){
                               $("#saswp-ampbyautomatic").val(1);                                
                             }else{
                               $("#saswp-ampbyautomatic").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-rannarecipe-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-rannarecipe").val(1);                                
+                            }else{
+                              $("#saswp-rannarecipe").val(0);                                          
                             }
                             
                       break;

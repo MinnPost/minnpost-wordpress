@@ -4,6 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 return array(    
     'plugins' =>    array(        
+        'polylang'  =>  array(            
+            'name'       => 'Polylang',
+            'free'       => 'polylang/polylang.php',                    
+            'opt_name'   => 'saswp-polylang',
+            'part_in'    => 'pro',
+        ),
         'wpjobmanager'  =>  array(            
             'name'       => 'WP Job Manager',
             'free'       => 'wp-job-manager/wp-job-manager.php',                    
@@ -278,6 +284,12 @@ return array(
                     'opt_name'   => 'saswp-kk-star-raring',
                     'part_in'    => 'free',
         ),
+        'wpdiscuz'  =>  array(            
+            'name'       => 'Comments – wpDiscuz',
+            'free'       => 'wpdiscuz/class.WpdiscuzCore.php',            
+            'opt_name'   => 'saswp-wpdiscuz',
+            'part_in'    => 'free',
+        ),
         'easy_testimonials'  =>  array(            
                     'name'       => 'Easy Testimonials',
                     'free'       => 'easy-testimonials/easy-testimonials.php',            
@@ -415,6 +427,19 @@ return array(
                     'pro'        => 'wordpress-seo-premium/wp-seo-premium.php',
                     'opt_name'   => 'saswp-yoast', 
                     'part_in'    => 'free',
+        ),
+        'metatagmanager' => array(            
+            'name'       => 'Meta Tag Manager',
+            'free'       => 'meta-tag-manager/meta-tag-manager.php',            
+            'opt_name'   => 'saswp-metatagmanager', 
+            'part_in'    => 'free',
+        ),
+        'slimseo' => array(            
+            'name'       => 'Slim Seo',
+            'free'       => 'slim-seo/slim-seo.php',
+            'pro'        => 'slim-seo-premium/slim-seo-premium.php',
+            'opt_name'   => 'saswp-slimseo', 
+            'part_in'    => 'free',
         ),
         'rank_math' => array(            
                     'name'       => 'Rank Math',
@@ -565,6 +590,12 @@ return array(
                     'free'       => 'soledad',               
                     'opt_name'   => 'saswp-soledad',
                     'part_in'    => 'free',
+        ), 
+        'rannarecipe' => array(            
+            'name'       => 'Ranna - Food & Recipe',
+            'free'       => 'ranna',               
+            'opt_name'   => 'saswp-rannarecipe',
+            'part_in'    => 'free',
         ),  
         'wplms' => array(            
             'name'       => 'WPLMS',

@@ -230,7 +230,7 @@ if ( ! empty( $nonce ) && wp_verify_nonce( $nonce, 'ss_stopspam_update' ) ) {
 	ss_set_options( $options );
 	extract( $options ); // extract again to get the new options
 	if ( ! is_plugin_active( 'stop-spammers-premium/stop-spammers-premium.php' ) ) {
-		$msg = '<div class="notice notice-success is-dismissible"><p>Options Updated! Need to import/export your personalized settings to other sites? — <strong><a href="/wp-admin/admin.php?page=ss_premium">Try Premium</a></strong></p></div>';
+		$msg = '<div class="notice notice-success is-dismissible"><p>Options Updated! Need a firewall, themable login, honeypot for Divi / Elementor / CF7 / bbPress? — <strong><a href="/wp-admin/admin.php?page=ss_premium">Try Premium</a></strong></p></div>';
 	} else {
 		$msg = '<div class="notice notice-success is-dismissible"><p>Options Updated!</p></div>';
 	}
@@ -500,6 +500,7 @@ $nonce = wp_create_nonce( 'ss_stopspam_update' );
                     text.style.display = "none";
                 }
             }
+            ss_show_quick();
         </script>
         <br />
         <div class="checkbox switcher">
@@ -724,6 +725,9 @@ $nonce = wp_create_nonce( 'ss_stopspam_update' );
                     text.style.display = "none";
                 }
             }
+            jQuery(function(){
+            	ss_show_chkmulti();
+            });
         </script>
         <br />
         <div class="checkbox switcher">

@@ -3,8 +3,8 @@
 Plugin Name: Metro Sitemap
 Description: Comprehensive sitemaps for your WordPress site. Joint collaboration between Metro.co.uk, MAKE, Alley Interactive, and WordPress.com VIP.
 Author: Artur Synowiec, Paul Kevan, and others
-Version: 1.3
-Stable tag: 1.3
+Version: 1.4.1
+Stable tag: 1.4.1
 License: GPLv2
 */
 
@@ -38,6 +38,9 @@ class Metro_Sitemap {
 		add_action( 'init', array( __CLASS__, 'create_post_type' ) );
 		add_filter( 'posts_pre_query', array( __CLASS__, 'disable_main_query_for_sitemap_xml' ), 10, 2 );
 		add_filter( 'template_include', array( __CLASS__, 'load_sitemap_template' ) );
+		
+		// Disable WordPress 5.5-era sitemaps.
+		add_filter( 'wp_sitemaps_enabled', '__return_false' );
 
 		// By default, we use wp-cron to help generate the full sitemap.
 		// However, this will let us override it, if necessary, like on WP.com
@@ -327,12 +330,11 @@ class Metro_Sitemap {
 	public static function get_post_year_range() {
 		global $wpdb;
 
-		$oldest_post_date_gmt = $wpdb->get_var( "SELECT post_date FROM $wpdb->posts WHERE post_status = 'publish' ORDER BY post_date ASC LIMIT 1" );
+		$oldest_post_date_year = $wpdb->get_var( "SELECT DISTINCT YEAR(post_date) as year FROM $wpdb->posts WHERE post_status = 'publish' ORDER BY year ASC LIMIT 1" );
 
-		if ( null !== $oldest_post_date_gmt ) {
-			$oldest_post_year = date( 'Y', strtotime( $oldest_post_date_gmt ) );
+		if ( null !== $oldest_post_date_year ) {
 			$current_year = date( 'Y' );
-			return range( $oldest_post_year, $current_year );
+			return range( (int) $oldest_post_date_year, $current_year );
 		}
 
 		return array();
@@ -673,6 +675,21 @@ class Metro_Sitemap {
 
 		// Sometimes duplicate sitemaps exist, lets make sure so they are not output
 		$sitemaps = array_unique( $sitemaps );
+
+		/**
+		 * Filter daily sitemaps from the index by date.
+		 *
+		 * Expects an array of dates in MySQL DATETIME format [ Y-m-d H:i:s ].
+		 *
+		 * Since adding dates that do not have posts is pointless, this filter is primarily intended for removing
+		 * dates before or after a specific date or possibly targeting specific dates to exclude.
+		 *
+		 * @since 1.4.0
+		 *
+		 * @param array  $sitemaps Array of dates in MySQL DATETIME format [ Y-m-d H:i:s ].
+		 * @param string $year     Year that sitemap is being generated for.
+		 */
+		$sitemaps = apply_filters( 'msm_sitemap_index', $sitemaps, $year );
 
 		$xml = new SimpleXMLElement( $xml_prefix . '<sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></sitemapindex>' );
 		foreach ( $sitemaps as $sitemap_date ) {

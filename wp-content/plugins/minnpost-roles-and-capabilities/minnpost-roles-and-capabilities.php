@@ -19,6 +19,18 @@ class Minnpost_Roles_And_Capabilities {
 	private $version;
 
 	/**
+	 * @var string
+	 * The setting name for the version
+	*/
+	private $version_option_name;
+
+	/**
+	 * @var string
+	 * The current $roles version
+	*/
+	private $roles_version;
+
+	/**
 	 * @var object
 	 * Static property to hold an instance of the class; this seems to make it reusable
 	 *
@@ -46,8 +58,10 @@ class Minnpost_Roles_And_Capabilities {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.1';
-		$this->slug    = 'minnpost-roles-and-capabilities';
+		$this->version             = '0.0.3';
+		$this->version_option_name = 'minnpost_roles_capabilities_version';
+		$this->roles_version       = get_option( $this->version_option_name, '' );
+		$this->slug                = 'minnpost-roles-and-capabilities';
 
 		$this->add_actions();
 
@@ -55,6 +69,7 @@ class Minnpost_Roles_And_Capabilities {
 
 	private function add_actions() {
 		// setup roles
+		add_action( 'admin_init', array( $this, 'check_version' ), 10 );
 		add_filter( 'view_admin_as_full_access_capabilities', array( $this, 'vip_full_access_capabilities' ), 10, 1 );
 		register_activation_hook( __FILE__, array( $this, 'user_roles' ) );
 		add_action( 'init', array( $this, 'disallow_banned_user_comments' ), 10 );
@@ -66,6 +81,20 @@ class Minnpost_Roles_And_Capabilities {
 	}
 
 	/**
+	* Check for $roles version
+	* When the plugin is loaded in the admin, if the $roles version does not match the current version, perform these methods
+	*
+	*/
+	public function check_version() {
+		// user is running a version less than the current one
+		if ( version_compare( $this->roles_version, $this->version, '<' ) ) {
+			$this->user_roles();
+		} else {
+			return true;
+		}
+	}
+
+	/**
 	 * Set capabilities requied for view admin as plugin
 	 *
 	 * @param array $caps
@@ -74,7 +103,7 @@ class Minnpost_Roles_And_Capabilities {
 	*/
 	public function vip_full_access_capabilities( $caps ) {
 		if ( null !== DISALLOW_FILE_MODS && true === DISALLOW_FILE_MODS ) {
-			if ( false !== ( $key = array_search( 'delete_plugins', $caps ) ) ) {
+			if ( false !== ( $key = array_search( 'delete_plugins', $caps, true ) ) ) {
 				unset( $caps[ $key ] );
 			}
 		}
@@ -139,7 +168,7 @@ class Minnpost_Roles_And_Capabilities {
 				$role_capabilities = $this->bundle_capabilities( $name );
 				// for each possible capability, check if it matches the expected capabilities for that role. if it does, assign it. otherwise, remove it.
 				foreach ( $all_capabilities as $key => $value ) {
-					if ( in_array( $key, $role_capabilities ) ) {
+					if ( in_array( $key, $role_capabilities, true ) ) {
 						$role->add_cap( $key );
 					} else {
 						$role->remove_cap( $key );
@@ -147,6 +176,12 @@ class Minnpost_Roles_And_Capabilities {
 				}
 			}
 		}
+
+		// update the version option
+		if ( '' === $this->roles_version || version_compare( $this->roles_version, $this->version, '<' ) ) {
+			update_option( $this->version_option_name, $this->version );
+		}
+
 		return true;
 
 	}
@@ -160,7 +195,7 @@ class Minnpost_Roles_And_Capabilities {
 		if ( ! ( $user instanceof WP_User ) ) {
 			return;
 		}
-		if ( in_array( 'banned', (array) $user->roles ) ) {
+		if ( in_array( 'banned', (array) $user->roles, true ) ) {
 			add_filter( 'comments_open', '__return_false' );
 		}
 	}
@@ -838,19 +873,6 @@ class Minnpost_Roles_And_Capabilities {
 	 *   delete_published_aggregator-records (the-events-calendar)
 	 *   publish_aggregator-records (the-events-calendar)
 	 *
-	 *   edit_popup_themes (popup-maker)
-	 *   edit_popup (popup-maker)
-	 *   delete_popup (popup-maker)
-	 *   edit_popups (popup-maker)
-	 *   edit_others_popups (popup-maker)
-	 *   publish_popups (popup-maker)
-	 *   read_private_popups (popup-maker)
-	 *   edit_popup_theme (popup-maker)
-	 *   delete_popup_theme (popup-maker)
-	 *   edit_others_popup_themes (popup-maker)
-	 *   publish_popup_themes (popup-maker)
-	 *   read_private_popup_themes (popup-maker)
-	 *
 	 *   gravityforms_edit_forms (gravity-forms)
 	 *   gravityforms_delete_forms (gravity-forms)
 	 *   gravityforms_create_form (gravity-forms)
@@ -1374,54 +1396,6 @@ class Minnpost_Roles_And_Capabilities {
 				'business',
 				'author',
 			),
-			'edit_popup_themes'                   => array(
-				'administrator',
-				'business',
-			),
-			'edit_popup'                          => array(
-				'administrator',
-				'business',
-			),
-			'delete_popup'                        => array(
-				'administrator',
-				'business',
-			),
-			'edit_popups'                         => array(
-				'administrator',
-				'business',
-			),
-			'edit_others_popups'                  => array(
-				'administrator',
-				'business',
-			),
-			'publish_popups'                      => array(
-				'administrator',
-				'business',
-			),
-			'read_private_popups'                 => array(
-				'administrator',
-				'business',
-			),
-			'edit_popup_theme'                    => array(
-				'administrator',
-				'business',
-			),
-			'delete_popup_theme'                  => array(
-				'administrator',
-				'business',
-			),
-			'edit_others_popup_themes'            => array(
-				'administrator',
-				'business',
-			),
-			'publish_popup_themes'                => array(
-				'administrator',
-				'business',
-			),
-			'read_private_popup_themes'           => array(
-				'administrator',
-				'business',
-			),
 			'gravityforms_edit_forms'             => array(
 				'administrator',
 				'editor',
@@ -1492,6 +1466,11 @@ class Minnpost_Roles_And_Capabilities {
 			),
 			'gravityforms_logging'                => array(
 				'administrator',
+			),
+			'manage_redirects'                    => array(
+				'administrator',
+				'editor',
+				'business',
 			),
 		);
 		if ( '' === $role ) {

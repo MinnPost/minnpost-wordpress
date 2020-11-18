@@ -3,7 +3,7 @@ Contributors: magazine3
 Tags: Schema, Structured Data, Google Snippets, Rich Snippets, Schema.org, SEO, AMP
 Requires at least: 3.0
 Tested up to: 5.5
-Stable tag: 1.9.49.1
+Stable tag: 1.9.54.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -100,7 +100,6 @@ Bug reports for Schema & Structured Data for WP & AMP are [welcomed on GitHub](h
 * Aqua Resizer used http://aquagraphite.com - License URI: WTFPL - http://sam.zoy.org/wtfpl/
 
 
-
 == Frequently Asked Questions ==
 
 = How to install and use this Schema plugin? =
@@ -120,6 +119,68 @@ Yes, Absolutely! We would suggest you send your feature request by creating an i
 You can contact us from [here](http://structured-data-for-wp.com/contact-us/)
 
 == Changelog ==
+
+= 1.9.54.1 (11 Nov 2020) =
+
+* Added: Image missing in AMP after last update #1220
+
+
+= 1.9.54 (10 Nov 2020) =
+
+* Added: Rest api to show the headless output #1026
+* Added: Article body and Article Section properties to webpage schema #1147
+* Added: bookformat and inlanguage properties to Book Schema #1143
+* Added: Separate folder (schema-and-structured-data-for-wp) in uploads to store all resized images by this plugin. #807 
+* Added: A notice box has been added, if logo is not set. #1165
+* Added: Compatibility with Meta Tag Manager ( https://wordpress.org/plugins/meta-tag-manager/ )
+* Fixed: Warning Error: The text tag script type=application/ld+json contains html comments, which is disallowed #1140
+* Fixed: Woocommerce category schema has an issue when reviews collection is present #1182
+* Fixed: Excessive number of queries at each page load in admin pages #1227
+* Fixed: Issue with the image size when user inserting recipe by using WP recipe maker plugin. #1159
+
+
+= 1.9.53 (02 Nov 2020) =
+
+* Added: Support for "low price" and "high price" properties of the product schema #1133
+* Added: NutritionInformation all properties such as ( servingSize, fatContent, saturatedFatContent etc. ) in Recipe Schema #1070
+* Added: Properties ( employee & alumni ) in RealEstateAgent schema type. #1053
+* Added: Generate an id for the comment markup. #1057
+* Added: Price Range to the Service schema #1088
+* Added: License property for ImageObject Schema #1190
+* Added: Allow users to change the author from a person to an organization #749
+* Fixed: Undefined index: wpdiscuz plugins\schema-and-structured-data-for-wp\admin_section\common-function.php on line 3054 #1228
+
+
+= 1.9.52 (26 Oct 2020) =
+
+* Fixed: When city names added manually by separating with comma, in store schema, in output of schema markup all city name are showing as one value in areaServed property #1217
+* Fixed: Item list schema is getting generated on the product category pages even though the Archive option is unchecked. we need to connect it to that option. #1177
+* Fixed: When we click on avvo icon it redirecting to homepage (Reviews for Schema). #1216
+* Fixed: Fatal error: Uncaught Error: Call to undefined function mptt_get_event_data () #1222
+* Fixed: User ID Missing issue when fetching the "AVVO" reviews. #1187
+* Added: gtin12 property in product schema #1054
+
+
+= 1.9.51 (15 Oct 2020) =
+
+* Added: Option to show VideoObject json-LD, Only if video is available on the post #1197
+* Added: Compatibility with Slim SEO ( https://wordpress.org/plugins/slim-seo/ ) #1214
+* Added: Compatibility with Comments – wpDiscuz ( https://wordpress.org/plugins/wpdiscuz/ ) #1203
+* Fixed: Facebook user profile picture not showing  #1170
+* Fixed: The attribute 'href' may not appear in tag 'span' validation issue when the "Show form on button tap" shortcode is enabled #1192
+* Fixed: The Paywall functionality of the NewsArticle schema is not updating if the ACF Pro plugin is active #1195
+
+
+= 1.9.50 (08 Oct 2020) =
+
+* Fixed: Schema plugin option panel not saving if the Norebro theme is active #1212
+* Fixed: Duration is not detecting in the video object schema. #1202
+* Fixed: Display the right message after the user tries to fetch reviews.
+* Fixed: The field to enter the license key for the Job Posting schema plugin is not showing when it is active #1213
+* Fixed: HTML tags should not get strip form the description propety of the job posting schema type #1211
+* Fixed: Review count is showing as a minus value: Maximum Reviews Limits -10 #1201
+* Fixed: CLUTCH reviews - Displays message "Something went wrong while preparing database. #1198
+* Added: Compatibility with the "Ranna – Food & Recipe Blog Theme. #1206
 
 = 1.9.49.1 (15 Sept 2020) =
 

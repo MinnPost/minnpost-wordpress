@@ -43,7 +43,7 @@ if ( array_key_exists( 'body', $_POST ) ) {
 $nonce = wp_create_nonce( 'ss_stopspam_update' );
 ?>
 <div id="ss-plugin" class="wrap">
-    <h1 class="ss_head">Stop Spammers — Diagnostics</h1>
+    <h1 class="ss_head">Stop Spammers — Diagnostics & Threat Scan</h1>
 	<div class="ss_info_box">
     <form method="post" action="">
         <input type="hidden" name="action" value="update" />
@@ -131,15 +131,16 @@ $nonce = wp_create_nonce( 'ss_stopspam_update' );
 						'chkhosting',
 						'chkinvalidip',
 						'chklong',
-						'chkshort',
+						'chkmulti',
+						'chkperiods',
 						'chkreferer',
 						'chksession',
 						'chksfs',
+						'chkshort',
 						'chkspamwords',
-						'chkurlshort',
 						'chktld',
 						'chkubiquity',
-						'chkmulti'
+						'chkurlshort'
 					);
 					$m1         = memory_get_usage( true );
 					$m2         = memory_get_peak_usage( true );

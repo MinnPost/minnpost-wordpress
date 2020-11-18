@@ -6,11 +6,11 @@ Contributors: trumani, bhadaway, hiteshchandwani, Keith Graham
 Donate link: https://trumani.com/donate
 Tags: spam, security, anti-spam, spam blocker, block spam, signup spam, comment spam, spam filter, registration spam, spammer, spammers, spamming, xss, malware, virus, captcha, comment, comments, login, protection, user registration spam
 Stable Tag: trunk
-Version: 2020.5
+Version: 2020.6.2
 Tested up to: 5.5
 License: https://www.gnu.org/licenses/gpl.html
 
-Stop WordPress spam dead in its tracks.
+Robust WordPress security & spam prevention. Leverage our pre-defined allow/block lists. Adjust configurable security settings on hyphens, periods, too many hits, quick responses, & much more. Manage custom lists for IPs, emails, usernames, and spam words. Run diagnostic testing and log reporting.
 
 == Description ==
 
@@ -32,13 +32,15 @@ Extremely granular control, so that any variety of website can create a special 
 * Block TLDs
 * Block countries
 * Block/allow IPs, emails, and usernames manually
+* Send email when allow list request is approved
 * So much more...
 * Server-level firewall protection (Premium Only)
-* Themed registration/login pages (Premium Only)
+* Themed registration/login pages and menu links (Premium Only)
 * Import/export settings (Premium Only)
 * Export log to Excel (Premium Only)
 * Restore default settings (Premium Only)
-* Contact Form 7 protection (Premium Only — Coming Soon)
+* Contact Form 7 protection (Premium Only)
+* Built-in contact form (Premium Only)
 
 == Installation ==
 
@@ -52,7 +54,60 @@ OR
 2. Upload the plugin folder to your wp-content/**plugins** folder.
 3. Activate the plugin from the plugins page in the admin.
 
+== Frequently Asked Questions ==
+
+= What do I do if I lock myself out of my own site? =
+
+See: [https://github.com/trumani/stop-spammers/issues/5](https://github.com/trumani/stop-spammers/issues/5).
+
+= Can I use Stop Spammers with Cloudflare? =
+
+Yes. But, you may need to restore visitor IPs: [https://support.cloudflare.com/hc/sections/200805497-Restoring-Visitor-IPs](https://support.cloudflare.com/hc/sections/200805497-Restoring-Visitor-IPs).
+
+= Can I use Stop Spammers with WooCommerce (and other ecommerce plugins)? =
+
+Yes. But, in some configurations, you may need to go to Stop Spammers > Protection Options > Toggle on the option for "Only Use the Plugin for Standard WordPress Forms" > Save if you're running into any issues.
+
+= Can I use Stop Spammers with Akismet? =
+
+Yes. Stop Spammers can even check Akismet for an extra layer of protection.
+
+= Can I use Stop Spammers with Jetpack? =
+
+Yes and no. You can use all Jetpack features except for Jetpack Protect, as it conflicts with Stop Spammers.
+
+= Can I use Stop Spammers with Wordfence (and other spam and security plugins)? =
+
+Yes. The two can compliment each other. However, if you have only a small amount of hosting resources (mainly memory) or aren't even allowing registration on your website, using both might be overkill.
+
+= 2FA is failing. =
+
+Toggle off the "Check Credentials on All Login Attempts" option and try again.
+
+= Is Stop Spammers GDPR-compliant? =
+
+Yes. See: [https://law.stackexchange.com/questions/28603/how-to-satisfy-gdprs-consent-requirement-for-ip-logging](https://law.stackexchange.com/questions/28603/how-to-satisfy-gdprs-consent-requirement-for-ip-logging). Stop Spammers does not collect any data for any other purpose (like marketing or tracking). It is purely for legitimate security purposes only. Additionally, if any of your users ever requested it, all data can be deleted.
+
 == Changelog ==
+
+= 2020.6.2 =
+* [Update] Minor UI improvements
+* [Fix] Duplicate email issue
+
+= 2020.6.1 =
+* [Fix] PHP notice
+
+= 2020.6 =
+* [New] Send email when allow list request is approved (community request)
+* [New] Approve or Deny action in request email with link to Allow List page (community request)
+* [Update] Update Stop Spammers menu icon to 'S' logo
+* [Fix] Conditional fields hidden on page load when option is enabled
+* [Fix] Updates to multisite (community reported)
+* [Fix] Shortcode and HTML support on Spam Message (community reported)
+* [Fix] Wrong key used for the spam reason in the allow request email template sent to the web admin
+
+= 2020.5.1 =
+* [Fix] Deny if email has too many periods
 
 = 2020.5 =
 * [New] Deny URL shortening service links
@@ -99,4 +154,4 @@ OR
 * [Update] Admin UI enhancements
 
 = 2019.6 =
-* [New owner](https://github.com/Trumani/stop-spammers/issues/145)
+* [New owner](https://github.com/trumani/stop-spammers/issues/145)

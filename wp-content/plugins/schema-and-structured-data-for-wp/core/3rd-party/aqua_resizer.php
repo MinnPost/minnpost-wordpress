@@ -35,13 +35,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return str|array
  */
 
-if(!class_exists('Aq_Resize')) {
+if(!class_exists('SASWP_Aq_Resize')) {
     
-    if(!class_exists('Aq_Exception')){
-        class Aq_Exception extends Exception {}
+    if(!class_exists('SASWP_Aq_Exception')){
+        class SASWP_Aq_Exception extends Exception {}
     }
         
-    class Aq_Resize
+    class SASWP_Aq_Resize
     {
         /**
          * The singleton instance
@@ -49,7 +49,7 @@ if(!class_exists('Aq_Resize')) {
         static private $instance = null;
 
         /**
-         * Should an Aq_Exception be thrown on error?
+         * Should an SASWP_Aq_Exception be thrown on error?
          * If false (default), then the error will just be logged.
          */
         public $throwOnError = false;
@@ -82,9 +82,9 @@ if(!class_exists('Aq_Resize')) {
             try {
                 // Validate inputs.
                 if (!$url)
-                    throw new Aq_Exception('$url parameter is required');
+                    throw new SASWP_Aq_Exception('$url parameter is required');
                 if (!$width)
-                    throw new Aq_Exception('$width parameter is required');
+                    throw new SASWP_Aq_Exception('$width parameter is required');
 
                 // Caipt'n, ready to hook.
                 if ( true === $upscale ) add_filter( 'image_resize_dimensions', array($this, 'aq_upscale'), 10, 6 );
@@ -93,6 +93,27 @@ if(!class_exists('Aq_Resize')) {
                 $upload_info = wp_upload_dir();
                 $upload_dir = $upload_info['basedir'];
                 $upload_url = $upload_info['baseurl'];
+
+                //Creating custom folder in uploads and save resizable images. Starts here
+                $upload_main_url = $upload_info['url'];
+                $make_new_dir = $upload_dir . '/schema-and-structured-data-for-wp';
+
+                if (! is_dir($make_new_dir)) {
+                    mkdir( $make_new_dir, 0700 );
+                }
+
+                if(is_dir($make_new_dir)){
+
+                    $old_url    = $url;
+                    $explod_url = @explode('/', $url);                    
+                    $new_url    = end($explod_url);               
+                    $url        = $upload_url.'/schema-and-structured-data-for-wp/'.$new_url;
+                    $new_url    = $make_new_dir.'/'.$new_url;
+                    
+                    @copy($old_url, $new_url);
+
+                }
+                //Creating custom folder in uploads and save resizable images. Ends here
 
                 $http_prefix = "http://";
                 $https_prefix = "https://";
@@ -141,7 +162,7 @@ if(!class_exists('Aq_Resize')) {
                 }
 
                 // Check if img path exists, and is an image indeed.
-                if ( ! file_exists( $img_path ) or ! getimagesize( $img_path ) ){
+                if ( ! file_exists( $img_path ) or ! @getimagesize( $img_path ) ){
                     // Return the Original CDN array
                     return array (
                                 0 => $cdn_url_main,
@@ -152,7 +173,7 @@ if(!class_exists('Aq_Resize')) {
                 // Get image info.
                 $info = pathinfo( $img_path );
                 $ext = $info['extension'];
-                list( $orig_w, $orig_h ) = getimagesize( $img_path );
+                list( $orig_w, $orig_h ) = @getimagesize( $img_path );
 
                 // Get image size after cropping.
                 $dims = image_resize_dimensions( $orig_w, $orig_h, $width, $height, $crop );
@@ -172,10 +193,10 @@ if(!class_exists('Aq_Resize')) {
 
                     if ( ! $dims || ( true == $crop && false == $upscale && ( $dst_w < $width || $dst_h < $height ) ) ) {
                         // Can't resize, so return false saying that the action to do could not be processed as planned.
-                        throw new Aq_Exception('Unable to resize image because image_resize_dimensions() failed');
+                        throw new SASWP_Aq_Exception('Unable to resize image because image_resize_dimensions() failed');
                     }
                     // Else check if cache exists.
-                    elseif ( file_exists( $destfilename ) && getimagesize( $destfilename ) ) {
+                    elseif ( file_exists( $destfilename ) && @getimagesize( $destfilename ) ) {
                         $img_url = "{$upload_url}{$dst_rel_path}-{$suffix}.{$ext}";
                     }
                     // Else, we resize the image and return the new resized image url.
@@ -199,7 +220,7 @@ if(!class_exists('Aq_Resize')) {
                             $resized_rel_path = str_replace( $upload_dir, '', $resized_file['path'] );
                             $img_url = $upload_url . $resized_rel_path;
                         } else {
-                            throw new Aq_Exception('Unable to save resized image file: ' . $resized_file->get_error_message());
+                            throw new SASWP_Aq_Exception('Unable to save resized image file: ' . $resized_file->get_error_message());
                         }
 
                     }
@@ -233,7 +254,7 @@ if(!class_exists('Aq_Resize')) {
 
                 return $image;
             }
-            catch (Aq_Exception $ex) {
+            catch (SASWP_Aq_Exception $ex) {
                 // Throwing errors for the images stored on CDN #2285
                 /*error_log('Aq_Resize.process() error: ' . $ex->getMessage());*/
 
@@ -287,6 +308,13 @@ if(!function_exists('saswp_aq_resize')) {
      * need to change any code in your own WP themes. Usage is still the same :)
      */
     function saswp_aq_resize( $url, $width = null, $height = null, $crop = null, $single = true, $upscale = false ) {
+
+        $stop_resize = apply_filters('saswp_stop_image_resizer', false );
+
+        if($stop_resize){
+            return array();
+        }
+
         /* WPML Fix */
         if ( defined( 'ICL_SITEPRESS_VERSION' ) ){
             global $sitepress;
@@ -324,7 +352,7 @@ if(!function_exists('saswp_aq_resize')) {
 					
 				}	
 											
-				$aq_resize = Aq_Resize::getInstance();
+				$aq_resize = SASWP_Aq_Resize::getInstance();
 				return $aq_resize->process( $url, $width, $height, $crop, $single, $upscale );
 		
 		}
@@ -334,7 +362,7 @@ if(!function_exists('saswp_aq_resize')) {
             return fifu_amp_url($url, $width, $height); 
         } 
         else {
-            $aq_resize = Aq_Resize::getInstance();
+            $aq_resize = SASWP_Aq_Resize::getInstance();
             return $aq_resize->process( $url, $width, $height, $crop, $single, $upscale );
         }
     }

@@ -677,7 +677,7 @@ function saswp_paywall_data_for_login($content){
                     			
 			$redirect       =  home_url( $wp->request );
 			$breakedContent = explode("<!--more-->", $content);
-			$content        = $breakedContent[0].'<a href="'.esc_url(wp_login_url( $redirect )) .'">'.esc_html__( 'Login', 'schema-and-structured-data-for-wp' ).'</a>';
+			$content        = $breakedContent[0].'<a href="'.esc_url(wp_login_url( $redirect )) .'">'.saswp_t_string( 'Login' ).'</a>';
                         
 		}elseif(strpos($content, '<!--more-->')!==false && is_user_logged_in()){
                     			
@@ -704,7 +704,7 @@ function saswp_memberpress_form_update($form){
 		},11); 
 		global $wp;
 		$redirect =  home_url( $wp->request );
-		$form = '<a class="amp-mem-login" href="'.esc_url(wp_login_url( $redirect )) .'">'.esc_html__( 'Login', 'schema-and-structured-data-for-wp' ).'</a>';
+		$form = '<a class="amp-mem-login" href="'.esc_url(wp_login_url( $redirect )) .'">'.saswp_t_string( 'Login' ).'</a>';
 	}
         
 	return $form;
@@ -893,6 +893,45 @@ function saswp_extract_yet_another_stars_rating(){
 }
 
 /**
+ * Extracting the value of wpdiscuz plugins on current post
+ * @global type $sd_data
+ * @param type $id
+ * @return type array
+ */
+function saswp_extract_wpdiscuz(){
+        
+    global $sd_data, $post;    
+    $star_rating = array();
+
+    if(isset($sd_data['saswp-wpdiscuz']) && $sd_data['saswp-wpdiscuz'] == 1 && is_plugin_active('wpdiscuz/class.WpdiscuzCore.php') ){
+           
+        $rating = (float) get_post_meta($post->ID, 'wpdiscuz_post_rating', true);
+        $count = (int) get_post_meta($post->ID, 'wpdiscuz_post_rating_count', true);
+         
+        if($rating){
+           
+            $star_rating['@type']        = 'AggregateRating';
+            $star_rating['bestRating']   = 5;
+            $star_rating['worstRating']  = 1;            
+            $star_rating['ratingCount'] = $count;
+            $star_rating['ratingValue'] = $rating;                                                           
+            
+            return $star_rating;
+            
+        }else{
+            
+            return array();    
+            
+        }
+        
+    }else{
+        
+        return array();
+        
+    }                        
+}
+
+/**
  * Extracting the value of star ratings plugins on current post
  * @global type $sd_data
  * @param type $id
@@ -1025,6 +1064,7 @@ function saswp_get_comments($post_id){
                 
         $comments[] = array (
                 '@type'       => 'Comment',
+                'id'          => trailingslashit(get_permalink()).'comment-'.$comment->comment_ID,
                 'dateCreated' => $is_bbpress ? $comment->comment_date : saswp_format_date_time($comment->comment_date),
                 'description' => strip_tags($comment->comment_content),
                 'author'      => array (
@@ -1461,7 +1501,7 @@ function saswp_global_option(){
  */
 function saswp_get_the_tags(){
 
-    global $post;
+    global $post, $sd_data;
     $tag_str = '';
     
     if(is_object($post)){
@@ -1480,6 +1520,25 @@ function saswp_get_the_tags(){
         
         
     }    
+
+
+    if( isset($sd_data['saswp-metatagmanager']) && $sd_data['saswp-metatagmanager'] == 1 && class_exists('Meta_Tag_Manager') ){
+
+        $post_meta = get_post_meta(get_the_ID(), 'mtm_data', true);
+
+        if(is_array($post_meta)){
+
+            $meta_tag = array_column($post_meta, 'value');
+            $key      = array_search("keywords",$meta_tag);
+            
+            if(array_key_exists($key, $post_meta)){
+                $tag_str = $post_meta[$key]['content'];
+            }
+
+        }
+                                
+    }
+
     return $tag_str;
     
 }
@@ -1568,7 +1627,9 @@ function saswp_get_ids_from_content_by_type($type){
  * @since version 1.9.3
  */
 function saswp_wp_recipe_schema_json($recipe){
-            
+    
+            global $saswp_featured_image;
+
             if ( 'food' === $recipe->type() ) {
                     $metadata = WPRM_Metadata::get_food_metadata( $recipe );
             } elseif ( 'howto' === $recipe->type() ) {
@@ -1576,39 +1637,27 @@ function saswp_wp_recipe_schema_json($recipe){
             } else {
                     $metadata = array();
             } 
-            
-            if(isset($metadata['image']) && is_array($metadata['image'])){
-                
-                $image_list = array();
-                
-                foreach($metadata['image'] as $image_url){
-                    
-                    $image_size    = @getimagesize($image_url);
-                    
-                    if($image_size[0] < 1200 && $image_size[1] < 720){
-                                            
-                        $image_details = @saswp_aq_resize( $image_url, 1200, 720, true, false, true );
-                    
-                            if($image_details){
+                        
+            if( isset($metadata['image'][0]) && $metadata['image'][0]  != '' ) {
 
-                                $image['@type']  = 'ImageObject';
-                                $image['url']    = esc_url($image_details[0]);
-                                $image['width']  = esc_attr($image_details[1]);
-                                $image['height'] = esc_attr($image_details[2]); 
+                $image_size = @getimagesize($metadata['image'][0]);
 
-                                $image_list[] = $image;
-                            }
-                                                
-                    }                                        
+                if( !empty($image_size) ) {
+
+                    $image_arr  = array();
+
+                    $image_arr[0] = $metadata['image'][0];
+                    $image_arr[1] = $image_size[0];
+                    $image_arr[2] = $image_size[1];   
                     
+                    $saswp_featured_image = $image_arr;
+
                 }
                 
-                if($image_list){
-                    $metadata['image'] =  $image_list;
-                }
-               
             }
             
+            unset($metadata['image']);
+
             if(isset($metadata['video'])){
 
                 if(!$metadata['video']['description']){

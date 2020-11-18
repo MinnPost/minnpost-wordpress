@@ -1,15 +1,15 @@
-=== Widget Options ===
-Contributors: phpbits, flowdee
+=== Widget Options - Add Context To WordPress Widgets ===
+Contributors: expresstech, phpbits, flowdee
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FMKC2SLPTULP8
 Tags: widgets, restrict widgets, display widgets, widget logic, hide widgets, hide widget, sidebar, widget content, display widget, widget options, widget option, widget, widget css, CSS, widget classes, widget styling, widget ID, widget custom class, widget visibility, widget ninja, jetpack visibility, siteorigin, siteorigin pagebuilder, pagebuilder by siteorigin
 Requires at least: 4.0
-Tested up to: 5.2
+Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 3.6.1
+Stable tag: 3.7.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Get Better Control over your Widgets. Easily show or hide WordPress widgets on specified pages & devices and/or assign custom alignment.
+Get Better Control over your WordPress Widgets. Easily show or hide WordPress widgets on specific pages, for specific user roles, taxonomy or devices. Elementor supported.
 
 == Description ==
 
@@ -151,6 +151,13 @@ Widget Options is a featured pack fully lightweight plugin. Using Query Monitor 
 10. Advanced Custom Fields ( ACF ) Support
 
 == Changelog ==
+
+= 3.7.6 =
+* Fix blank page issue in admin widget page.
+
+= 3.7.5 =
+* Compatible with Latest WordPress.
+* Other improvements.
 
 = 3.7.4 =
 * Update readme and plugin info.
