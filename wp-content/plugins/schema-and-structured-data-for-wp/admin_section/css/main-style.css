@@ -1347,19 +1347,61 @@ a.saswp-revws-lnk{
 /*
 Collection css starts here
 */
+.saswp-add-dynamic-section{
+    padding: 0px 30px;
+}
+.saswp-add-dynamic-btn{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.saswp-add-single-rv{
+    margin-left: 10px !important;
+}
+.saswp-dynamic-platforms{
+    display: flex;
+    width: 100%;
+}
+.saswp-dynamic-platforms select{
+    margin-right: 10px;
+    width: 40%;
+}
+.saswp-add-rv-btn{
+    font-size: 25px;
+    margin-left: -8px;
+    padding-top: 15px;
+    cursor: pointer;
+}
+.saswp-remove-coll-rv{
+    position: absolute;
+    top: 2;
+    top: 0px;
+    right: 0px;
+}
+.saswp-rmv-coll-rv{
+    padding: 3px;
+    cursor: pointer;
+}
+.saswp-collection-placement-post{    
+    width: -webkit-fill-available;
+}
+.saswp-collection-placement-post td{
+    vertical-align: top;
+    width: -webkit-fill-available;
+}
+
 .saswp-grid-pagination{
-     display: inline-block;
-     padding: 20px;
+    display: inline-block;
+    padding: 20px;
 }
 .saswp-grid-pagination a{
-      color: black;
-  float: left;
-  padding: 8px 16px;
-  text-decoration: none;
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
 }
 .saswp-grid-pagination a.active {
-  background-color: #4CAF50;
-  color: white;
+    background-color: #4CAF50;
+    color: white;
 }
 .saswp-grid-pagination a:hover:not(.active) {
     background-color: #ddd;
@@ -1403,7 +1445,7 @@ Collection css starts here
     margin-top: 10px;
 }
 .saswp-collection-title input{
-    width: 100%;
+    width: 96%;
     padding: 3px 8px;
     font-size: 15px;
     line-height: 2;
@@ -1560,6 +1602,7 @@ Collection css starts here
     grid-gap: 0px 5px;
     align-items: center;
     color:#666;
+    padding-bottom: 8px;
 }
 .saswp-dp-dtm{
     margin-top:13px;
@@ -1692,6 +1735,7 @@ Collection css starts here
     background: #f1f1f1;
     display: inline-block;
     border: 1px solid #ddd;
+    margin-left:75px;
 }
 
 /** Badges CSS **/
@@ -2412,3 +2456,17 @@ span.saswp-mines{
 .saswp-stars-post-table td{
 padding: 2px;
 }
+
+/* Offer Banner Starts Here */
+.saswp-offer-banner{
+    background: #ca4a1f;
+    color: #fff;
+    cursor: pointer;
+    border-color: #ca4a1f;
+}
+.saswp-offer-banner:hover{
+    background: hsl(15deg 73% 46%);
+    color: #fff;
+    cursor: pointer;
+}
+/* Offer Banner Ends Here */

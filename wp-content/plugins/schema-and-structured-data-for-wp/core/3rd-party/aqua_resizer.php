@@ -95,24 +95,31 @@ if(!class_exists('SASWP_Aq_Resize')) {
                 $upload_url = $upload_info['baseurl'];
 
                 //Creating custom folder in uploads and save resizable images. Starts here
-                $upload_main_url = $upload_info['url'];
-                $make_new_dir = $upload_dir . '/schema-and-structured-data-for-wp';
+                global $sd_data;
+                
+                if( isset($sd_data['saswp-resized-image-folder']) && $sd_data['saswp-resized-image-folder'] == 1 ){
 
-                if (! is_dir($make_new_dir)) {
-                    mkdir( $make_new_dir, 0700 );
+                    $upload_main_url = $upload_info['url'];
+                    $make_new_dir = $upload_dir . '/schema-and-structured-data-for-wp';
+
+                    if (! is_dir($make_new_dir)) {
+                        mkdir( $make_new_dir, 0700 );
+                    }
+
+                    if(is_dir($make_new_dir)){
+
+                        $old_url    = $url;
+                        $explod_url = @explode('/', $url);                    
+                        $new_url    = end($explod_url);               
+                        $url        = $upload_url.'/schema-and-structured-data-for-wp/'.$new_url;
+                        $new_url    = $make_new_dir.'/'.$new_url;
+                        
+                        @copy($old_url, $new_url);
+
+                    }
+
                 }
-
-                if(is_dir($make_new_dir)){
-
-                    $old_url    = $url;
-                    $explod_url = @explode('/', $url);                    
-                    $new_url    = end($explod_url);               
-                    $url        = $upload_url.'/schema-and-structured-data-for-wp/'.$new_url;
-                    $new_url    = $make_new_dir.'/'.$new_url;
-                    
-                    @copy($old_url, $new_url);
-
-                }
+                
                 //Creating custom folder in uploads and save resizable images. Ends here
 
                 $http_prefix = "http://";
@@ -172,7 +179,7 @@ if(!class_exists('SASWP_Aq_Resize')) {
                 }
                 // Get image info.
                 $info = pathinfo( $img_path );
-                $ext = $info['extension'];
+                $ext = isset($info['extension']) ? $info['extension'] : '';
                 list( $orig_w, $orig_h ) = @getimagesize( $img_path );
 
                 // Get image size after cropping.
@@ -315,12 +322,15 @@ if(!function_exists('saswp_aq_resize')) {
             return array();
         }
 
-        /* WPML Fix */
+        /* WPML Fix 
+
         if ( defined( 'ICL_SITEPRESS_VERSION' ) ){
             global $sitepress;
             $url = $sitepress->convert_url( $url, $sitepress->get_default_language() );
         }
-        /* WPML Fix */
+        
+         WPML Fix */
+
          /* EWWW Image Optimizer (ExactDN) Compatible*/
         global $exactdn;
         if ( class_exists( 'ExactDN' ) && $exactdn->get_exactdn_domain() ) {

@@ -37,6 +37,8 @@ class SASWP_Reviews_Collection {
           add_action( 'wp_ajax_saswp_get_collection_platforms', array($this, 'saswp_get_collection_platforms' ));          
           add_action( 'amp_post_template_data', array($this, 'saswp_reviews_collection_amp_script'));                                   
           add_shortcode( 'saswp-reviews-collection', array($this, 'saswp_reviews_collection_shortcode_render' ),10);        
+
+          add_filter('the_content', array( $this, 'saswp_reviews_display_collection' ));
                                  
         }
         
@@ -51,7 +53,79 @@ class SASWP_Reviews_Collection {
 		}
 		return self::$instance;
         }
+
         
+        public function saswp_collection_logic_checker($collection_id){
+
+            $response = false;
+
+            $where        = get_post_meta($collection_id, 'saswp_collection_where', true);
+            $where_data   = get_post_meta($collection_id, 'saswp_collection_where_data', true);
+            
+            if(isset($where[0])){
+
+                $input = array();
+
+                $input['key_1'] = $where[0];
+                $input['key_2'] = 'equal';
+                $input['key_3'] = $where_data[0];
+
+                $response = saswp_comparison_logic_checker($input);
+                
+            }
+
+            
+            return $response;
+        }
+        
+        public function saswp_reviews_display_collection($content){
+
+            
+            $display_type_opt = get_option('saswp_collection_display_opt');
+            
+            if(!empty($display_type_opt)){
+
+                foreach ($display_type_opt as $key => $value) {
+
+                    $logic = $this->saswp_collection_logic_checker($key);
+
+                    if($logic){
+
+                        $attr       = array();
+                        $attr['id'] = $key;
+                        $coll_html  = $this->saswp_reviews_collection_shortcode_render($attr);
+                        
+                        if($value == 'before_the_content'){
+                            $content = $coll_html.$content;
+                        }else if($value == 'after_the_content'){
+                            $content = $content.$coll_html;
+                        }else{
+
+                            $closing_p        = '</p>';
+                            $paragraphs       = explode( $closing_p, $content );       
+                            $total_paragraphs = count($paragraphs);
+                            $paragraph_id     = round($total_paragraphs /2);  
+                    
+                            foreach ($paragraphs as $index => $paragraph) {
+                                if ( trim( $paragraph ) ) {
+                                    $paragraphs[$index] .= $closing_p;
+                                }
+                                if ( $paragraph_id == $index + 1 ) {
+                                    $paragraphs[$index] .= $coll_html;
+                                }
+                            }
+                            $content = implode( '', $paragraphs ); 
+
+                        }
+
+                    }
+                                        
+                }
+
+            }
+
+            return $content;
+        }
         public function saswp_add_collection_menu_links(){
             
              add_submenu_page( 'edit.php?post_type=saswp',
@@ -207,6 +281,7 @@ class SASWP_Reviews_Collection {
             wp_die();
         }
         
+
         public function saswp_add_to_collection(){
                         
             if ( ! isset( $_GET['saswp_security_nonce'] ) ){
@@ -218,10 +293,21 @@ class SASWP_Reviews_Collection {
             
             $platform_id = intval($_GET['platform_id']);
             $rvcount     = intval($_GET['rvcount']);
-            
-            if($platform_id  && $rvcount){
-                                
-            $reviews_list = $this->_service->saswp_get_reviews_list_by_parameters(null, $platform_id, $rvcount); 
+            $review_id   = ''; 
+            $attr        = array();
+
+            if(isset($_GET['reviews_ids']) && $_GET['reviews_ids'] != ''){
+                $attr['in'] = json_decode($_GET['reviews_ids']);
+            }
+
+            if(isset($_GET['review_id']) && $_GET['review_id'] != ''){
+                $review_id   = intval($_GET['review_id']);
+                $attr['in'] = array($review_id);
+            }
+                        
+            if( $platform_id ||  isset($attr['in']) ){
+                                                     
+            $reviews_list = $this->_service->saswp_get_reviews_list_by_parameters($attr, $platform_id, $rvcount); 
              
             if($reviews_list){
                 
@@ -262,7 +348,7 @@ class SASWP_Reviews_Collection {
                 $dots = $f_interval = $f_visibility = $arrow = 1;
                 $g_type = $design = $cols = $sorting = '';
                 
-                $collection_data = get_post_meta($attr['id'], $key='', true);
+                $collection_data = get_post_meta($attr['id']);
                 
                 if(isset($collection_data['saswp_collection_design'][0])){
                     $design        = $collection_data['saswp_collection_design'][0];
@@ -359,8 +445,24 @@ class SASWP_Reviews_Collection {
                     }
                                      
                     $collection = $this->_service->saswp_get_reviews_list_by_design($design, $platform_id, $total_reviews, $sorting);                    
-                    $saswp_post_reviews = array_merge($saswp_post_reviews, $collection);
-                    
+
+                    if($design == 'badge'){
+
+                        $new_coll = array();
+
+                        if($collection){
+                            foreach($collection as $coll){
+                                foreach($coll as $new){
+                                    $new_coll[] = $new;   
+                                }
+                            }
+                        }
+
+                        $saswp_post_reviews = array_merge($saswp_post_reviews, $new_coll);
+                    }else{
+                        $saswp_post_reviews = array_merge($saswp_post_reviews, $collection);
+                    }
+                                        
                     switch($design) {
                     
                     case "grid":
@@ -422,7 +524,7 @@ class SASWP_Reviews_Collection {
 
                 $post_id = intval($_GET['post_id']);
 
-                $post_meta = get_post_meta($post_id, $key='', true );            
+                $post_meta = get_post_meta($post_id);            
 
 
             } else{
@@ -450,9 +552,9 @@ class SASWP_Reviews_Collection {
                         
             $coll_display_type = array(
                 'shortcode'               => 'Shortcode',  
-               // 'before_the_content'      => 'Before the content',
-               // 'between_the_content'     => 'Beetween the content',
-               // 'after_the_content'       => 'After the content',                              
+                'before_the_content'      => 'Before The Content',
+                'between_the_content'     => 'Between The Content',
+                'after_the_content'       => 'After The Content',                              
             );
             
             ?> 
@@ -470,6 +572,7 @@ class SASWP_Reviews_Collection {
                         <div class="saswp-collection-lp">
                             <div class="saswp-collection-title">
                                 <input type="text" value="<?php if(get_the_title($post_id) == 'Auto Draft'){ echo 'Untitled'; }else{ echo get_the_title($post_id); } ?>" id="saswp_collection_title" name="saswp_collection_title">
+                                <span class="saswp-rmv-coll-rv dashicons dashicons-admin-generic"></span>
                             </div>
                             <span class="spinner saswp-spinner"></span>
                             <div class="saswp-collection-preview">                                
@@ -512,6 +615,7 @@ class SASWP_Reviews_Collection {
                                          echo '</select>';
                                                     
                                         } ?>   
+                                        
                                         <input type="number" id="saswp-review-count" name="saswp-review-count" min="0" value="5">
                                         <a class="button button-default saswp-add-to-collection"><?php echo saswp_t_string('Add'); ?></a>
                                       </div>
@@ -519,7 +623,22 @@ class SASWP_Reviews_Collection {
                                           
                                       </div>
                                         <div class="saswp-total-reviews-list">  
-                                          
+
+                                        <?php 
+                                        
+                                        if(isset($post_meta['saswp_total_reviews'][0])){
+
+                                            $reviews_list = unserialize($post_meta['saswp_total_reviews'][0]);
+
+                                            if(is_array($reviews_list)){
+                                                echo '<input type="hidden" id="saswp_total_reviews_list" name="saswp_total_reviews" value="'.json_encode($reviews_list).'">';
+                                            }
+                                                                                        
+                                        }
+
+                                        
+                                        ?>
+
                                       </div>
                                     </div>
                                 </li>
@@ -593,6 +712,7 @@ class SASWP_Reviews_Collection {
                               </li>
                               <li>
                                 <a class="saswp-accordion"><?php echo saswp_t_string('Display'); ?></a>
+
                                 <div class="saswp-accordion-panel">
                                     <div class="saswp-dp-dsg">
                                         <label><?php echo saswp_t_string( 'Display Type' ); ?></label>
@@ -605,13 +725,88 @@ class SASWP_Reviews_Collection {
                                             ?> 
                                         </select>
                                     </div>
+
                                     
-                                        <div id="motivatebox" class="saswp_hide saswp-collection-shortcode">
-                                            <span class="motivate">
-                                            [saswp-reviews-collection id="<?php echo $post_id; ?>"]
-                                            </span>
-                                        </div>
-                                   
+                                    <div id="saswp-motivatebox" class="saswp-collection-shortcode">
+                                        <span class="motivate">
+                                        [saswp-reviews-collection id="<?php echo $post_id; ?>"]
+                                        </span>
+                                    </div>                                                                                                                   
+
+                                    <div class="saswp-dp-dsg saswp_hide saswp-coll-where">
+                                         <label><?php echo saswp_t_string( 'Where' ); ?></label>
+                                         <?php
+                                            $choice = array(
+                                                'post_type'     => saswp_t_string("Post Type"),
+                                                'user_type'     => saswp_t_string("Logged in User Type"),
+                                                'post'          => saswp_t_string("Post"),
+                                                'post_category' => saswp_t_string("Post Category"),
+                                                'post_format'   => saswp_t_string("Post Format"),
+                                                'page'          => saswp_t_string("Page"),
+                                                'page_template' => saswp_t_string("Page Template"),
+                                                'ef_taxonomy'   => saswp_t_string("Tag"),
+                                            )
+
+                                          ?>
+                                         <select class="saswp-collection-where " name="saswp_collection_where[]">
+                                            
+                                            <?php
+                                                $selected_val = unserialize($post_meta['saswp_collection_where'][0]);
+
+                                                foreach ($choice as $key => $value) {
+
+                                                    if(isset($selected_val[0]) && $selected_val[0] == $key){
+                                                        echo '<option value="'.$key.'" selected>'.$value.'</option>';
+                                                    }else{
+                                                        echo '<option value="'.$key.'">'.$value.'</option>';
+                                                    }
+                                                    
+                                                }
+
+                                            ?>
+
+                                         </select>
+
+                                    </div>
+                                    <div class="saswp-dp-dsg saswp_hide saswp-coll-where">
+                                                <?php
+                                                    $condition_val = 'post_type';
+                                                    $saved_choices = array();
+
+                                                    if(isset($selected_val[0]) && $selected_val[0] != ''){
+                                                        $condition_val = $selected_val[0];
+                                                    }   
+                                                    
+                                                    $type_list = saswp_get_condition_list($condition_val);
+                                                    
+                                                    
+                                                    $where_data = unserialize($post_meta['saswp_collection_where_data'][0]);
+                                                    
+                                                    if ( isset($where_data[0]) && $where_data[0] !=  '' ) {
+                                                        $saved_choices = saswp_get_condition_list($condition_val, '', $where_data[0]);                        
+                                                    }
+
+                                                    if($type_list){
+                                                        echo '<label></label>';
+                                                        echo '<select data-type="post_type" class="saswp-select2 saswp-collection-where-data" name="saswp_collection_where_data[]">';
+
+                                                        foreach ($type_list as $value) {
+                                                            echo '<option value="'.esc_attr($value['id']).'">'.esc_html($value['text']).'</option>';
+                                                        }
+
+                                                        if($saved_choices){
+                                                            foreach($saved_choices as $value){
+                                                                echo '<option value="' . esc_attr($value['id']) .'" selected> ' .  saswp_t_string($value['text']) .'</option>';                     
+                                                            }
+                                                        }
+
+                                                        echo '</select>';
+
+                                                    }
+
+                                                ?>
+                                    </div>
+
                                 </div>
                               </li>
                             </ul>
@@ -637,7 +832,7 @@ class SASWP_Reviews_Collection {
             if ( ! isset( $_POST['saswp_collection_nonce'] ) || ! wp_verify_nonce( $_POST['saswp_collection_nonce'], 'saswp_collection_nonce_data' ) ) return;            
             
             if(isset($_POST['saswp_collection_id'])){
-                      
+            $display_type_opt    = array();
             $post_id         = intval($_POST['saswp_collection_id']);
             $collection_page = intval($_POST['saswp-collection-page']);
             $post_title      = sanitize_text_field($_POST['saswp_collection_title']);
@@ -651,9 +846,22 @@ class SASWP_Reviews_Collection {
                 );                                        
             wp_update_post($post);                                      
             $post_meta = array();            
+
+            $display_type = isset($_POST['saswp_collection_display_type']) ? sanitize_text_field($_POST['saswp_collection_display_type']) : '';
+            
+            $display_type_opt = get_option('saswp_collection_display_opt');
+
+            unset($display_type_opt[$post_id]);
+
+            if($display_type != 'shortcode'){
+                $display_type_opt[$post_id] = $display_type;
+            }
+
+            update_option('saswp_collection_display_opt', $display_type_opt);
+            
             $post_meta['saswp_collection_design']       = isset($_POST['saswp_collection_design']) ? sanitize_text_field($_POST['saswp_collection_design']) : '';                        
             $post_meta['saswp_collection_sorting']      = isset($_POST['saswp_collection_sorting']) ? sanitize_text_field($_POST['saswp_collection_sorting']) : '';
-            $post_meta['saswp_collection_display_type'] = isset($_POST['saswp_collection_display_type']) ? sanitize_text_field($_POST['saswp_collection_display_type']) : '';
+            $post_meta['saswp_collection_display_type'] = $display_type;
             $post_meta['saswp_collection_gallery_type'] = isset($_POST['saswp_collection_gallery_type']) ? sanitize_text_field($_POST['saswp_collection_gallery_type']) : '';
             $post_meta['saswp_collection_cols']         = isset($_POST['saswp_collection_cols']) ? intval($_POST['saswp_collection_cols']) : '';
             $post_meta['saswp_gallery_arrow']           = isset($_POST['saswp_gallery_arrow']) ? intval($_POST['saswp_gallery_arrow']) : '';
@@ -663,6 +871,8 @@ class SASWP_Reviews_Collection {
             $post_meta['saswp_fomo_interval']           = isset($_POST['saswp_fomo_interval']) ? intval($_POST['saswp_fomo_interval']) : '';
             $post_meta['saswp_fomo_visibility']         = isset($_POST['saswp_fomo_visibility']) ? intval($_POST['saswp_fomo_visibility']) : '';                                                        
             $post_meta['saswp_platform_ids']            = array_map('intval', $_POST['saswp_platform_ids']);
+            $post_meta['saswp_collection_where']        = array_map('sanitize_text_field', $_POST['saswp_collection_where']);
+            $post_meta['saswp_collection_where_data']   = array_map('sanitize_text_field', $_POST['saswp_collection_where_data']);
             $post_meta['saswp_total_reviews']           = array_map('intval', json_decode($_POST['saswp_total_reviews']));
                         
             if(!empty($post_meta)){

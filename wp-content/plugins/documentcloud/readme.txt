@@ -1,9 +1,9 @@
 === DocumentCloud ===
-Contributors: chrisamico, reefdog
+Contributors: chrisamico, reefdog, freedmand
 Tags: documentcloud, documents, journalism, reporting, research
 Requires at least: 3.5
-Tested up to: 4.6.1
-Stable tag: trunk
+Tested up to: 5.5
+Stable tag: 0.5.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,7 +58,7 @@ Here's the full list of embed options you can pass via shortcode attributes; som
 - `responsive_offset` (integer): Distance (in pixels) to vertically offset the viewer for some responsive embeds.
 - `page` (integer): Page number to have the document scroll to by default.
 - `note` (integer): ID of the note that the document should highlight by default.
-- `notes` (boolean): Show/hide notes:
+- `notes` (boolean): Hide or show notes.
 - `search` (boolean): Hide or show search form.
 - `sidebar` (boolean): Hide or show sidebar.
 - `pdf` (boolean): Hide or show link to download original PDF.
@@ -78,6 +78,9 @@ You can read more about publishing and embedding DocumentCloud resources on http
 **Upgrading from Navis DocumentCloud:** If you're currently using the Navis DocumentCloud plugin (from which this plugin was built), you'll want to deactivate or delete it before installing this plugin.
 
 == Changelog ==
+
+= 0.5.0 =
+* Add support for the DocumentCloud beta
 
 = 0.4.3 =
 * Separate the oEmbed config options (provided as params to the endpoint) from the embed config options (encoded as params on the `url`) (#48)
