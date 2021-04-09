@@ -1,0 +1,1 @@
+<?php // LocalHero allows no intruders

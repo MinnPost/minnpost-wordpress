@@ -390,7 +390,7 @@ if ( !class_exists( 'MeowApps_Admin' ) ) {
 								$result = array();
 								foreach( $types as $type )
 									array_push( $result, "{$type->type} ({$type->count})" );
-								echo implode( $result, ', ' );
+								echo implode( ',', $result );
 							?>
 						</div>
 					</div>

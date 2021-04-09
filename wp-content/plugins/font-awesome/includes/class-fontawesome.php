@@ -71,12 +71,12 @@ require_once ABSPATH . 'wp-admin/includes/screen.php';
  *
  * Generally, public API members are accessed only from this `FontAwesome` class.
  *
- * For example, the {@see FontAwesome::refresh_releases()} method provides a way
- * to re-query available releases metadata from `api.fontawesome.com`. It delegates
- * to another class internally. But that other class and its methods are not part
- * of this plugin's public API. They may change significantly from one patch
- * release to another, but no breaking changes would be made to
- * {@see FontAwesome::refresh_releases()} without a major version change.
+ * For example, the {@see FontAwesome::releases_refreshed_at()} method provides a way
+ * to find out when releases metadata were last fetched from `api.fontawesome.com`.
+ * It delegates to another class internally. But that other class and its methods
+ * are not part of this plugin's public API. They may change significantly from
+ * one patch release to another, but no breaking changes would be made to
+ * {@see FontAwesome::releases_refreshed_at()} without a major version change.
  *
  * References to "API" in this section refer to this plugin's PHP code or REST
  * routes, not to the Font Awesome GraphQL API at `api.fontawesome.com`.
@@ -126,7 +126,7 @@ class FontAwesome {
 	 *
 	 * @since 4.0.0
 	 */
-	const PLUGIN_VERSION = '4.0.0-rc21';
+	const PLUGIN_VERSION = '4.0.0-rc22';
 	/**
 	 * The namespace for this plugin's REST API.
 	 *
@@ -178,7 +178,7 @@ class FontAwesome {
 	 * @ignore
 	 * @internal
 	 */
-	const CONFLICT_DETECTOR_SOURCE = 'https://use.fontawesome.com/releases/v5.15.1/js/conflict-detection.js';
+	const CONFLICT_DETECTOR_SOURCE = 'https://use.fontawesome.com/releases/v5.15.3/js/conflict-detection.js';
 
 	/**
 	 * The custom data attribute added to script, link, and style elements enqueued
@@ -247,6 +247,7 @@ class FontAwesome {
 		'kitToken'       => null,
 		// whether the token is present, not the token's value.
 		'apiToken'       => false,
+		'dataVersion'    => 3,
 	);
 
 	/**
@@ -386,7 +387,7 @@ class FontAwesome {
 				 */
 			}
 
-			$this->maybe_enqueue_admin_js_bundle();
+			$this->maybe_enqueue_admin_assets();
 
 			// Setup JavaScript internationalization if we're on WordPress 5.0+.
 			if ( function_exists( 'wp_set_script_translations' ) ) {
@@ -396,16 +397,14 @@ class FontAwesome {
 			if ( $this->using_kit() ) {
 				$this->enqueue_kit( $this->options()['kitToken'] );
 			} else {
-				$resource_collection = $this
-					->release_provider()
-					->get_resource_collection(
-						$this->options()['version'],
-						array(
-							'use_pro'  => $this->pro(),
-							'use_svg'  => 'svg' === $this->technology(),
-							'use_shim' => $this->v4_compatibility(),
-						)
-					);
+				$resource_collection = FontAwesome_Release_Provider::get_resource_collection(
+					$this->options()['version'],
+					array(
+						'use_pro'  => $this->pro(),
+						'use_svg'  => 'svg' === $this->technology(),
+						'use_shim' => $this->v4_compatibility(),
+					)
+				);
 
 				$this->enqueue_cdn( $this->options(), $resource_collection );
 			}
@@ -440,10 +439,7 @@ class FontAwesome {
 
 			$upgraded_options = $this->convert_options_from_v1( $options );
 
-			// Delete the old release metadata transient to ensure we refresh it here.
-			delete_transient( FontAwesome_Release_Provider::RELEASES_TRANSIENT );
-
-			$this->refresh_releases();
+			$this->upgrade_for_4_0_0_rc22();
 
 			/**
 			 * Delete the main option to make sure it's removed entirely, including
@@ -470,7 +466,37 @@ class FontAwesome {
 			$this->validate_options( $upgraded_options );
 
 			update_option( self::OPTIONS_KEY, $upgraded_options );
+
+			$options = $upgraded_options;
 		}
+
+		if ( ! isset( $options['dataVersion'] ) || $options['dataVersion'] < 3 ) {
+			$this->upgrade_for_4_0_0_rc22();
+
+			$options['dataVersion'] = 3;
+
+			update_option( self::OPTIONS_KEY, $options );
+		}
+	}
+
+	/**
+	 * Internal use only.
+	 *
+	 * @ignore
+	 * @internal
+	 */
+	private function upgrade_for_4_0_0_rc22() {
+		// Delete the old release metadata transient.
+		delete_transient( 'font-awesome-releases' );
+
+		delete_site_transient( 'font-awesome-releases' );
+
+		/**
+		 * This is one exception to the rule about not loading release metadata
+		 * on front end page loads. But this would only happen on the first page
+		 * load after upgrading from a particular range of earlier versions.
+		 */
+		FontAwesome_Release_Provider::load_releases();
 	}
 
 	/**
@@ -595,15 +621,23 @@ class FontAwesome {
 	}
 
 	/**
-	 * Queries the Font Awesome API to load releases metadata. Results are
-	 * cached in a site transient.
+	 * Queries the Font Awesome API to load releases metadata. Results are stored
+	 * in the wp database.
 	 *
 	 * This is the metadata that supports API
 	 * methods like {@see FontAwesome::latest_version()}
 	 * and all other metadata required to enqueue Font Awesome when configured
 	 * to use the standard CDN (non-kits).
 	 *
+	 * This has been deprecated to discourage themes or plugins from invoking
+	 * it as a blocking network request during front-end page loads. If we find
+	 * that functionality like this is still needed for some use cases, let's
+	 * design an alternative API that encourages best-practice use while
+	 * discouraging anti-patterns.
+	 *
 	 * @since 4.0.0
+	 * @deprecated
+	 * @ignore
 	 * @throws ApiRequestException
 	 * @throws ApiResponseException
 	 * @throws ReleaseProviderStorageException
@@ -616,7 +650,6 @@ class FontAwesome {
 	 * Returns the time when releases metadata was last
 	 * refreshed.
 	 *
-	 * @see FontAwesome::refresh_releases
 	 * @since 4.0.0
 	 * @return integer|null the time in unix epoch seconds or null if never
 	 */
@@ -637,7 +670,7 @@ class FontAwesome {
 		$refreshed_at = $this->releases_refreshed_at();
 
 		if ( is_null( $refreshed_at ) || ( time() - $refreshed_at ) > self::RELEASES_REFRESH_INTERVAL ) {
-			return $this->refresh_releases();
+			return FontAwesome_Release_Provider::load_releases();
 		} else {
 			return 1;
 		}
@@ -731,7 +764,7 @@ class FontAwesome {
 
 	/**
 	 * Initalizes everything about the admin environment except the React app
-	 * bundle, which is handled in maybe_enqueue_js_bundle().
+	 * bundle, which is handled in maybe_enqueue_admin_assets().
 	 *
 	 * Internal use only, not part of this plugin's public API.
 	 *
@@ -882,20 +915,15 @@ class FontAwesome {
 				throw new ConfigCorruptionException();
 			}
 		} else {
-			// A null version is permitted, until the release metadata has been queried.
-			if ( ! is_null( $this->releases_refreshed_at() ) ) {
-				/**
-				 * Intentionally not constraining the ending of the version number to
-				 * open the possibility of a pre-release version, which means it would have
-				 * something like -rc42 on the end.
-				 * For example, 5.12.0-rc42.
-				 */
-				$version_is_concrete = is_string( $version )
-					&& 1 === preg_match( '/^[0-9]+\.[0-9]+\.[0-9]+/', $version );
+			/**
+			 * If we're not using a kit, then the version cannot be "latest" at this
+			 * point. It must have already been resolved into a concrete version.
+			 */
+			$version_is_concrete = is_string( $version )
+				&& 1 === preg_match( '/^[0-9]+\.[0-9]+\.[0-9]+/', $version );
 
-				if ( ! $version_is_concrete ) {
-					throw new ConfigCorruptionException();
-				}
+			if ( ! $version_is_concrete ) {
+				throw new ConfigCorruptionException();
 			}
 		}
 
@@ -1273,17 +1301,15 @@ class FontAwesome {
 	 * - `fa()->releases_refreshed_at()` will return the time when releases
 	 *     metadata was last refreshed.
 	 *
-	 * - `fa->refresh_releases()` will refresh the releases metadata. This will
-	 *     run a synchronous (blocking) network query to the Font Awesome API
-	 *     server.
+	 * Releases are refreshed when the admin user loads the Font Awesome settings
+	 * page if it's been longer than the {@see FortAwesome\FontAwesome::RELEASES_REFRESH_INTERVAL}.
 	 *
-	 * Therefore, if releases have been refreshed recently enough for your
-	 * purposes, you can rely on the version returned by `fa()->latest_version()`.
-	 * Or, you could refresh the releases metadata and then call
-	 * `fa()->latest_version()`.
+	 * If you think the releases metadata should be refreshed, the best approach
+	 * would be to alert the user in the admin dashboard, requesting that they
+	 * refresh releases by simply re-loading the Font Awesome settings page.
 	 *
 	 * It is still possible that by the time the page loads in the browser,
-	 * a new release of Font Awesome will have become available since your
+	 * a new release of Font Awesome will have become available since the last
 	 * refresh of releases metadata, and will have been loaded as the "latest"
 	 * version for the kit. There's no way to guarantee that the latest version
 	 * you resolve by this method will be the one loaded at runtime. The race
@@ -1291,10 +1317,13 @@ class FontAwesome {
 	 * are sub-second windows of time, and new versions of Font Awesome tend to
 	 * be released only approximately once per month.
 	 *
+	 * (We want to avoid making a synchronous network request to the API server
+	 * on normal front end page loads, so there's currently no supported way in
+	 * this API to programatically force the reload of metadata.)
+	 *
 	 * @since 4.0.0
 	 * @see FontAwesome::latest_version()
 	 * @see FontAwesome::releases_refreshed_at()
-	 * @see FontAwesome::refresh_releases()
 	 * @throws ConfigCorruptionException
 	 * @return string|null null if no version has yet been saved in the options
 	 * in the db. Otherwise, a valid version string, which may be either a
@@ -1369,20 +1398,13 @@ class FontAwesome {
 	 * @internal
 	 * @ignore
 	 */
-	public function maybe_enqueue_admin_js_bundle() {
+	public function maybe_enqueue_admin_assets() {
 		add_action(
 			'admin_enqueue_scripts',
 			function( $hook ) {
 				try {
 					if ( $this->detecting_conflicts() || $hook === $this->screen_id ) {
-						// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
-						wp_enqueue_script(
-							self::ADMIN_RESOURCE_HANDLE,
-							$this->get_webpack_asset_url( 'main.js' ),
-							array(),
-							null,
-							true
-						);
+						$this->enqueue_admin_js_assets();
 					}
 
 					if ( $hook === $this->screen_id ) {
@@ -1439,14 +1461,7 @@ class FontAwesome {
 					$action,
 					function () {
 						try {
-							// phpcs:ignore WordPress.WP.EnqueuedResourceParameters
-							wp_enqueue_script(
-								self::ADMIN_RESOURCE_HANDLE,
-								$this->get_webpack_asset_url( 'main.js' ),
-								null,
-								null,
-								false
-							);
+							$this->enqueue_admin_js_assets();
 
 							wp_localize_script(
 								self::ADMIN_RESOURCE_HANDLE,
@@ -1468,6 +1483,63 @@ class FontAwesome {
 					}
 				);
 			}
+		}
+	}
+
+	/**
+	 * Enqueues all js assets in the webpack asset manifest, according to their
+	 * dependency relationships: those appearing later in the asset manifest
+	 * depend on those appearing earlier.
+	 *
+	 * Expects that one of the resources corresponds to main.js and assigns
+	 * the handle ADMIN_RESOURCE_HANDLE to that one. This is the handle to which
+	 * any subsequent localization should be applied via wp_set_script_translations
+	 * or wp_localize_script.
+	 *
+	 * @ignore
+	 * @internal
+	 * @return string $main_js_handle
+	 */
+	private function enqueue_admin_js_assets() {
+		$asset_manifest = $this->get_webpack_asset_manifest();
+		$asset_url_base = $this->get_webpack_asset_url_base();
+		$entrypoints    = $asset_manifest['entrypoints'];
+
+		$js_entrypoints =
+					array_filter(
+						$entrypoints,
+						function( $e ) {
+							return '.js' === substr( $e, -3 );
+						}
+					);
+
+		$js_entrypoint_urls = array_map(
+			function ( $e ) use ( $asset_url_base ) {
+				return trailingslashit( $asset_url_base ) . $e;
+			},
+			$js_entrypoints
+		);
+
+		// Which one represents main.js?
+		$js_main_url = $asset_manifest['files']['main.js'];
+
+		$js_url_id = 0;
+		$deps      = array();
+		foreach ( $js_entrypoint_urls as $js_url ) {
+			$cur_resource_handle = ( substr( $js_url, -1 * strlen( $js_main_url ) ) === $js_main_url )
+				? self::ADMIN_RESOURCE_HANDLE
+				: self::ADMIN_RESOURCE_HANDLE . "-dep-$js_url_id";
+
+			wp_enqueue_script(
+				$cur_resource_handle,
+				$js_url,
+				$deps,
+				self::PLUGIN_VERSION,
+				true
+			);
+
+			++$js_url_id;
+			array_push( $deps, $cur_resource_handle );
 		}
 	}
 
@@ -1716,6 +1788,7 @@ EOT;
 							$font_face = <<< EOT
 @font-face {
 font-family: "FontAwesome";
+font-display: block;
 src: url("https://${license_subdomain}.fontawesome.com/releases/v${version}/webfonts/fa-brands-400.eot"),
 		url("https://${license_subdomain}.fontawesome.com/releases/v${version}/webfonts/fa-brands-400.eot?#iefix") format("embedded-opentype"),
 		url("https://${license_subdomain}.fontawesome.com/releases/v${version}/webfonts/fa-brands-400.woff2") format("woff2"),
@@ -1726,6 +1799,7 @@ src: url("https://${license_subdomain}.fontawesome.com/releases/v${version}/webf
 
 @font-face {
 font-family: "FontAwesome";
+font-display: block;
 src: url("https://${license_subdomain}.fontawesome.com/releases/v${version}/webfonts/fa-solid-900.eot"),
 		url("https://${license_subdomain}.fontawesome.com/releases/v${version}/webfonts/fa-solid-900.eot?#iefix") format("embedded-opentype"),
 		url("https://${license_subdomain}.fontawesome.com/releases/v${version}/webfonts/fa-solid-900.woff2") format("woff2"),
@@ -1736,6 +1810,7 @@ src: url("https://${license_subdomain}.fontawesome.com/releases/v${version}/webf
 
 @font-face {
 font-family: "FontAwesome";
+font-display: block;
 src: url("https://${license_subdomain}.fontawesome.com/releases/v${version}/webfonts/fa-regular-400.eot"),
 		url("https://${license_subdomain}.fontawesome.com/releases/v${version}/webfonts/fa-regular-400.eot?#iefix") format("embedded-opentype"),
 		url("https://${license_subdomain}.fontawesome.com/releases/v${version}/webfonts/fa-regular-400.woff2") format("woff2"),
@@ -2645,7 +2720,21 @@ EOT;
 			$asset_url_base = FONTAWESOME_DIR_URL . 'admin/build';
 		}
 
-		return $asset_url_base . $asset_manifest[ $asset ];
+		return $asset_url_base . $asset_manifest['files'][ $asset ];
+	}
+
+	/**
+	 * Internal use only, not part of this plugin's public API.
+	 *
+	 * @internal
+	 * @ignore
+	 */
+	private function get_webpack_asset_url_base() {
+		if ( FONTAWESOME_ENV === 'development' ) {
+			return 'http://localhost:3030';
+		} else {
+			return FONTAWESOME_DIR_URL . 'admin/build';
+		}
 	}
 }
 

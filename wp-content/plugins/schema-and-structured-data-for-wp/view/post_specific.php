@@ -75,13 +75,13 @@ class saswp_post_specific {
                 $post_id        = intval($_POST['post_id']);
                 $schema_id      = intval($_POST['schema_id']);            
              
-                update_post_meta($post_id, 'saswp_modify_this_schema_'.$schema_id, 0); 
+                delete_post_meta($post_id, 'saswp_modify_this_schema_'.$schema_id); 
 
                 $meta_field = saswp_get_fields_by_schema_type($schema_id);
                 
                 if($meta_field){
                     foreach($meta_field as $field){
-                        $result = delete_post_meta($post_id, $field['id']); 
+                        delete_post_meta($post_id, $field['id']); 
                     }
                 }                             
                 echo json_encode(array('status'=> 't', 'msg'=>saswp_t_string( 'Schema has been restored' )));                
@@ -260,13 +260,7 @@ class saswp_post_specific {
         public function saswp_post_specifc_add_meta_boxes() {
             
             global $post, $saswp_metaboxes;
-                        
-            $post_specific_id = '';            
-            
-            if(is_object($post)){
-                $post_specific_id = $post->ID;
-            }     
-                
+                                                         
             $show_post_types = get_post_types();
             unset($show_post_types['adsforwp'],$show_post_types['saswp'],$show_post_types['attachment'], $show_post_types['revision'], $show_post_types['nav_menu_item'], $show_post_types['user_request'], $show_post_types['custom_css']);            
             
@@ -302,13 +296,9 @@ class saswp_post_specific {
                return;  
             }
             $meta_name   = '';
-            $meta_array  = array();
-            $schema_id   = null;
+            $meta_array  = array();            
             $schema_type = '';
-            
-            if(isset($_GET['schema_id'])){
-                $schema_id = intval($_GET['schema_id']);
-            }
+                        
             if(isset($_GET['schema_type'])){
                 $schema_type = sanitize_text_field($_GET['schema_type']);
             }              
@@ -544,42 +534,12 @@ class saswp_post_specific {
                 
              return $response_html;   
         }
-
-        public function saswp_post_meta_box_html($std_post){
                 
-                global $post;
-                
-                if(!is_object($post)){
-                    $post = $std_post;
-                }
-                                               
-                $response_html = '';                                
-                $schema_avail  = false;                
-                if($this->all_schema){
-                    
-                    foreach ($this->all_schema as $schema){
-                        
-                      $advnace_status = saswp_check_advance_display_status($schema->ID);
-                    
-                      if($advnace_status == 1){
-                          $schema_avail = true;
-                          break;
-                      }
-                                                
-                    }
-                    
-                }
-                 
-                $response_html .= $this->saswp_post_meta_box_fields($post);  
-                
-                return $response_html;
-        }
-        
         public function saswp_post_meta_box_callback() { 
                     
                 global $post;                 
 		        wp_nonce_field( 'post_specific_data', 'post_specific_nonce' );  
-                echo $this->saswp_post_meta_box_html($post);                                             
+                echo $this->saswp_post_meta_box_fields($post);                                             
                                                                                                                                                                    		
         }        
         
@@ -599,8 +559,11 @@ class saswp_post_specific {
                 $allowed_html = saswp_expanded_allowed_tags(); 
                                                  
                 $custom_schema  = wp_kses(wp_unslash($_POST['saswp_custom_schema_field']), $allowed_html);
-                update_post_meta( $post_id, 'saswp_custom_schema_field', $custom_schema );                 
-                                                                               
+
+                if(!empty($custom_schema)){
+                    update_post_meta( $post_id, 'saswp_custom_schema_field', $custom_schema );                 
+                }
+                                                                                               
                 $this->_common_view->saswp_save_common_view($post_id, $this->all_schema);
 	}
         

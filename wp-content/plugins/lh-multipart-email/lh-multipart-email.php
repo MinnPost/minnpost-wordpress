@@ -3,7 +3,7 @@
  * Plugin Name: LH Multipart Email
  * Plugin URI: https://lhero.org/portfolio/lh-multipart-email/
  * Description: Makes all html emails Html and plain text multipart emails
- * Version: 1.11
+ * Version: 1.12
  * Author: Peter Shaw
  * Author URI: https://shawfactor.com/
  * Text Domain: lh_multipart_email
@@ -22,6 +22,16 @@ if ( ! class_exists( 'LH_multipart_email_plugin' ) ) {
 	    
 	    
 	    private static $instance;
+	    
+	    static function write_log($log) {
+        if (true === WP_DEBUG) {
+            if (is_array($log) || is_object($log)) {
+                error_log(print_r($log, true));
+            } else {
+                error_log($log);
+            }
+        }
+    }
 	    
 	    
 		public function phpmailer_init( $phpmailer ) {
@@ -68,9 +78,13 @@ if ( ! class_exists( 'LH_multipart_email_plugin' ) ) {
 		 
 		public function force_phpmailer_reinit_for_multiple_mails( $wp_mail_atts ) {
 			global $phpmailer;
-			if ( $phpmailer instanceof PHPMailer && $phpmailer->alternativeExists() ) {
+			
+            if ( $phpmailer instanceof PHPMailer\PHPMailer\PHPMailer && $phpmailer->alternativeExists() ) {
 				// AltBody property is set, so WordPress must already have used this
 				// $phpmailer object just now to send another mail
+				
+				//self::write_log('foobar this ran');
+				
 				$this->reinitialize_phpmailer();
 			}
 			return $wp_mail_atts;
@@ -109,8 +123,8 @@ if ( ! class_exists( 'LH_multipart_email_plugin' ) ) {
 		
 		
 		public function __construct() {
-			add_filter( 'wp_mail', array( $this, "force_phpmailer_reinit_for_multiple_mails" ), -1, 1 );
-			add_action( 'phpmailer_init', array( $this, "phpmailer_init" ), 1000, 1 );
+			add_filter( 'wp_mail', array( $this, 'force_phpmailer_reinit_for_multiple_mails' ), -1, 1 );
+			add_action( 'phpmailer_init', array( $this, 'phpmailer_init' ), 1000, 1 );
 		}
 	}
 	$lh_multipart_email_instance = LH_multipart_email_plugin::get_instance();

@@ -20,7 +20,7 @@ class Republication_Tracker_Tool_Widget extends WP_Widget {
 	 */
 	public function __construct() {
 		$widget_ops = array(
-			'classname' => 'republication_tracker_tool',
+			'classname'   => 'republication_tracker_tool',
 			'description' => esc_html__( 'Republication Tracker Tool', 'republication-tracker-tool' ),
 		);
 		parent::__construct( 'republication_tracker_tool', 'Republication Tracker Tool', $widget_ops );
@@ -46,19 +46,16 @@ class Republication_Tracker_Tool_Widget extends WP_Widget {
 
 		// if `republication-tracker-tool-hide-widget` meta is set to true, don't show the shareable content widget
 		// OR if the `hide_republication_widget` filter is set to true, don't show the shareable content widget
-		if( true == $hide_republication_widget_on_post ) {
-				
+		if ( true == $hide_republication_widget_on_post ) {
 			return;
-			
 		}
-		
-		// define our path to grab file content from
-		$republication_plugin_path = plugin_dir_path( __FILE__ );
 
-		wp_enqueue_script( 'republication-tracker-tool-js', plugins_url( 'assets/widget.js', dirname( __FILE__ ) ), array( 'jquery' ), Republication_Tracker_Tool::VERSION, false );
+		$is_amp = self::is_amp();
+
+		if ( ! $is_amp ) {
+			wp_enqueue_script( 'republication-tracker-tool-js', plugins_url( 'assets/widget.js', dirname( __FILE__ ) ), array( 'jquery' ), Republication_Tracker_Tool::VERSION, false );
+		}
 		wp_enqueue_style( 'republication-tracker-tool-css', plugins_url( 'assets/widget.css', dirname( __FILE__ ) ), array(), Republication_Tracker_Tool::VERSION );
-		add_action( 'wp_ajax_my_action', 'my_action' );
-		add_action( 'wp_ajax_nopriv_my_action', 'my_action' );
 
 		echo wp_kses_post( $args['before_widget'] );
 
@@ -68,13 +65,13 @@ class Republication_Tracker_Tool_Widget extends WP_Widget {
 
 		echo '<div class="license">';
 			echo sprintf(
-				'<p><button name="%1$s" id="cc-btn" class="republication-tracker-tool-button">%1$s</button></p>',
+				'<p><button ' . ( $is_amp ? 'on="tap:republication-tracker-tool-modal"' : '' ) . ' name="%1$s" id="cc-btn" class="republication-tracker-tool-button">%1$s</button></p>',
 				esc_html__( 'Republish This Story', 'republication-tracker-tool' )
 			);
 			echo sprintf(
 				'<p><a class="license" rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nd/4.0/"><img alt="%s" style="border-width:0" src="%s" /></a></p>',
 				esc_html__( 'Creative Commons License', 'republication-tracker-tool' ),
-				esc_url( plugin_dir_url( dirname( __FILE__ ) ) ).'assets/img/creative-commons-sharing.png'
+				esc_url( plugin_dir_url( dirname( __FILE__ ) ) ) . 'assets/img/creative-commons-sharing.png'
 			);
 		echo '</div>';
 
@@ -86,18 +83,27 @@ class Republication_Tracker_Tool_Widget extends WP_Widget {
 		echo wp_kses_post( $args['after_widget'] );
 
 		// if has_instance is false, we can continue with displaying the modal
-		if( isset( $this->has_instance ) && false === $this->has_instance ){
+		if ( isset( $this->has_instance ) && false === $this->has_instance ) {
 
 			// update has_instance so the next time the widget is created on the same page, it does not create a second modal
 			$this->has_instance = true;
 
-			printf(
-				'<div id="republication-tracker-tool-modal" style="display:none;" data-postid="%1$s" data-pluginsdir="%2$s">%3$s</div>',
-				esc_attr( $post->ID ),
-				esc_attr( plugins_url() ),
-				esc_html( include_once( $republication_plugin_path . 'shareable-content.php' ) )
-			);
+			// define our path to grab file content from
+			$modal_content_path = plugin_dir_path( __FILE__ ) . 'shareable-content.php';
 
+			if ( $is_amp ) {
+				?>
+					<amp-lightbox id="republication-tracker-tool-modal" layout="nodisplay">
+						<?php echo esc_html( include_once $modal_content_path ); ?>
+					</amp-lightbox>
+				<?php
+			} else {
+				?>
+					<div id="republication-tracker-tool-modal" style="display:none;" data-postid="<?php echo esc_attr( $post->ID ); ?>" data-pluginsdir="<?php echo esc_attr( plugins_url() ); ?>">
+						<?php echo esc_html( include_once $modal_content_path ); ?>
+					</div>
+				<?php
+			}
 		}
 	}
 
@@ -109,7 +115,7 @@ class Republication_Tracker_Tool_Widget extends WP_Widget {
 	public function form( $instance ) {
 		echo sprintf( '<p><em>%s</em></p>', esc_html__( 'This widget will only display on single articles.', 'republication-tracker-tool' ) );
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : '';
-		$text = ! empty( $instance['text'] ) ? $instance['text'] : esc_html__( 'Republish our articles for free, online or in print, under a Creative Commons license.', 'text_domain' );
+		$text  = ! empty( $instance['text'] ) ? $instance['text'] : esc_html__( 'Republish our articles for free, online or in print, under a Creative Commons license.', 'text_domain' );
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title:', 'text_domain' ); ?></label>
@@ -133,8 +139,12 @@ class Republication_Tracker_Tool_Widget extends WP_Widget {
 		$instance = array();
 
 		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? wp_strip_all_tags( $new_instance['title'] ) : '';
-		$instance['text'] = ( ! empty( $new_instance['text'] ) ) ? $new_instance['text'] : '';
+		$instance['text']  = ( ! empty( $new_instance['text'] ) ) ? $new_instance['text'] : '';
 
 		return $instance;
+	}
+
+	public static function is_amp() {
+		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
 	}
 }

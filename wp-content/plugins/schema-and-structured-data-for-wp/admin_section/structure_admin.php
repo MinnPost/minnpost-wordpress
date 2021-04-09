@@ -296,7 +296,11 @@ function saswp_comparison_logic_checker($input){
         $result     = ''; 
        
         // Get all the users registered
-        $user       = wp_get_current_user();
+        $user       = null;
+
+        if( function_exists('wp_get_current_user') ){
+            $user       = wp_get_current_user();
+        }        
 
         switch ($type) {
             
@@ -380,9 +384,15 @@ function saswp_comparison_logic_checker($input){
       // Logged in User Type
         case 'user_type':            
             if ( $comparison == 'equal') {
-                if ( in_array( $data, (array) $user->roles ) ) {
+              
+                if(is_object($user)){
+
+                  if ( in_array( $data, (array) $user->roles ) ) {
                     $result = true;
+                  }
+
                 }
+                
             }            
             if ( $comparison == 'not_equal') {
                 
@@ -594,17 +604,21 @@ function saswp_comparison_logic_checker($input){
 
               }else{
 
-                $terms           = wp_get_post_terms( $post->ID ,$data);
+                if( is_object($post) ) {
+
+                  $terms           = wp_get_post_terms( $post->ID ,$data);
                 
-                if(count($terms)>0){
-                                                    
-                  foreach ($terms as $key => $termvalue) {
+                  if(count($terms)>0){
+                                                      
+                    foreach ($terms as $key => $termvalue) {
+                        
+                      $termChoices[] = $termvalue->slug;
                       
-                    $termChoices[] = $termvalue->slug;
+                    } 
                     
-                  } 
-                  
-                }
+                  }
+
+                }                
 
               }
                                                                       
@@ -697,7 +711,7 @@ if(is_admin()){
             'labels' => array(
                 'name'              => saswp_t_string( 'Structured Data' ),
                 'singular_name'     => saswp_t_string( 'Structured Data' ),
-                'add_new' 	    => saswp_t_string( 'Add Schema Type' ),
+                'add_new' 	        => saswp_t_string( 'Add Schema Type' ),
                 'add_new_item'      => '',
                 'edit_item'         => saswp_t_string( 'Edit Schema Type'),           
                 'all_items'         => saswp_t_string( 'Schema Types' ),  
@@ -959,9 +973,7 @@ function saswp_dequeue_script() {
       
       // if our current user can't edit this post, bail
     if( !current_user_can( saswp_current_user_can() ) ) return;  
-      
-    $meta_value = get_post_meta( $post_id, null, true );       
-    
+                
     $post_data_group_array = array();  
     $temp_condition_array  = array();
     $show_globally         = false;
@@ -1141,40 +1153,82 @@ function saswp_custom_breadcrumbs() {
                     $breadcrumb_url      = $post_type_archive;
             }
              
-            // Get post category info
+            if( !isset($sd_data['saswp_breadcrumb_remove_cat']) || (isset($sd_data['saswp_breadcrumb_remove_cat']) && $sd_data['saswp_breadcrumb_remove_cat'] == 0 ) ){
+
+              // Get post category info
             $category = get_the_category();
               
             if(!empty($category)) {
+              
+              $yoast_primary_cat_name     = '';
+              $yoast_primary_cat_url      = '';
+
+              if ( class_exists('WPSEO_Primary_Term') && ( isset($sd_data['saswp-yoast']) && $sd_data['saswp-yoast'] == 1 ) ) {
+
+                $wpseo_primary_term = new WPSEO_Primary_Term( 'category', get_the_id() );
+                $wpseo_primary_term = $wpseo_primary_term->get_primary_term();
+                $term_yoast = get_term( $wpseo_primary_term );
                 
-              $category_values = array_values( $category );
+                if (!is_wp_error( $term_yoast ) ) {
+                                                               
+                  $yoast_primary_cat_name  = $term_yoast->name;
+                  $yoast_primary_cat_url   = get_category_link( $term_yoast->term_id );                  
+  
+                }
+
+               }
+
+               if(!empty($yoast_primary_cat_name) && !empty($yoast_primary_cat_url)){
+
+                      $variables1_titles[]  = $yoast_primary_cat_name;
+                      $variables2_links[]   = $yoast_primary_cat_url;
+                      $breadcrumb_url       = $yoast_primary_cat_url;
+
+               }else{
+
+                  $category_values = array_values( $category );
               
-              foreach ($category_values as $category_value) {
+                  foreach ($category_values as $category_value) {
+                      
+                      $category_name        = get_category($category_value);
+                      $cat_name             = $category_name->name;
+                      $variables1_titles[]  = $cat_name;
+                      $variables2_links[]   = get_category_link( $category_value );
+                      $breadcrumb_url       = get_category_link( $category_value );
                   
-                  $category_name        = get_category($category_value);
-                  $cat_name             = $category_name->name;
-                  $variables1_titles[]  = $cat_name;
-                  $variables2_links[]   = get_category_link( $category_value );
-                  $breadcrumb_url       = get_category_link( $category_value );
-              
-              }
+                  }
+
+               }                                                        
               
                 // Get last category post is in
                 $last_category   = end(($category));
                 $category_name   = get_category($last_category);
                 // Get parent any categories and create array
-                $get_cat_parents = rtrim(get_category_parents($last_category->term_id, true, ','),',');
-                $cat_parents     = explode(',',$get_cat_parents);
+                $get_cat_parents = get_category_parents($last_category->term_id, true, ',');
+
+                if(is_string($get_cat_parents)){
+
+                  $get_cat_parents = rtrim($get_cat_parents,',');
+                  $cat_parents     = explode(',',$get_cat_parents);
+
+                  // Loop through parent categories and store in variable $cat_display
+                  $cat_display = '';
                   
-                // Loop through parent categories and store in variable $cat_display
-                $cat_display = '';
-                
-                foreach($cat_parents as $parents) {
-                    
-                    $cat_display .= '<li class="item-cat">'.saswp_t_string( $parents ).'</li>';
-                    $cat_display .= '<li class="separator"> ' . saswp_t_string( $separator ) . ' </li>';
-                    
+                  if( !empty($cat_parents) && is_array($cat_parents) ){
+
+                    foreach($cat_parents as $parents) {
+                      
+                      $cat_display .= '<li class="item-cat">'.saswp_t_string( $parents ).'</li>';
+                      $cat_display .= '<li class="separator"> ' . saswp_t_string( $separator ) . ' </li>';
+                      
+                    }
+
+                  }                  
+
                 }
-                
+                                                                                  
+            }
+
             }
               
             // If it's a custom post type within a custom taxonomy
@@ -1232,7 +1286,7 @@ function saswp_custom_breadcrumbs() {
         } else if ( is_page() ) {
               
             // Standard page
-            if( $post->post_parent ){
+            if( is_object( $post ) &&  $post->post_parent ){
                    
                 // If child page, get parents 
                 $anc = get_post_ancestors( $post->ID );
@@ -1271,7 +1325,7 @@ function saswp_custom_breadcrumbs() {
             $term_id        = get_query_var('tag_id');                   
             $get_term       = get_term($term_id);
             
-            if(is_object($get_term)){
+            if( is_object($get_term) && isset($get_term->name) ){
                 
                 $variables1_titles[] = $get_term->name;
                 $variables2_links[]  = get_term_link($term_id);
@@ -1414,17 +1468,18 @@ function saswp_send_query_message(){
         $message        = sanitize_textarea_field($_POST['message']); 
         $email          = sanitize_textarea_field($_POST['email']); 
         $premium_cus    = sanitize_textarea_field($_POST['premium_cus']);   
-        $user           = wp_get_current_user();
-        
-        if($premium_cus == 'yes'){
-           $customer_type  = 'Are you a premium customer ? Yes';
-        }
-        
-        $message = '<p>'.$message.'</p><br><br>'
-                . $customer_type
-                . '<br><br>'.'Query from plugin support tab';
-        
-        if($user){
+                                
+        if(function_exists('wp_get_current_user')){
+
+            $user           = wp_get_current_user();
+
+            if($premium_cus == 'yes'){
+              $customer_type  = 'Are you a premium customer ? Yes';
+            }
+         
+            $message = '<p>'.$message.'</p><br><br>'
+                 . $customer_type
+                 . '<br><br>'.'Query from plugin support tab';
             
             $user_data  = $user->data;        
             $user_email = $user_data->user_email;     
@@ -1655,7 +1710,8 @@ function saswp_license_status($add_on, $license_status, $license_key){
                        'es'           => 'Event Schema',
                        'rs'           => 'Recipe Schema',
                        'qanda'        => 'Q&A Schema Compatibility',
-                       'faq'          => 'FAQ Schema Compatibility'
+                       'faq'          => 'FAQ Schema Compatibility',
+                       'ociaifs'      => '1 Click Indexing Api Integration For SASWP'
                 );
                                                                             
                 $edd_action = '';
@@ -1969,8 +2025,7 @@ function saswp_create_resized_image_folder(){
   $upload_info = wp_upload_dir();
   $upload_dir  = $upload_info['basedir'];
   $upload_url  = $upload_info['baseurl'];  
-
-  $upload_main_url = $upload_info['url'];
+  
   $make_new_dir = $upload_dir . '/schema-and-structured-data-for-wp';
 
   if (! is_dir($make_new_dir)) {
@@ -2003,3 +2058,27 @@ function saswp_create_resized_image_folder(){
 }
 
 add_action('wp_ajax_saswp_create_resized_image_folder', 'saswp_create_resized_image_folder');
+
+// add async and defer attributes to enqueued scripts
+function saswp_script_loader_tag($tag, $handle, $src) {
+	
+	if ($handle === 'saswp-recaptcha') {
+		
+		if (false === stripos($tag, 'async')) {
+			
+			$tag = str_replace(' src', ' async src', $tag);
+			
+		}
+		
+		if (false === stripos($tag, 'defer')) {
+			
+			$tag = str_replace('<script ', '<script defer ', $tag);
+			
+		}
+		
+	}
+	
+	return $tag;
+	
+}
+add_filter('script_loader_tag', 'saswp_script_loader_tag', 10, 3);

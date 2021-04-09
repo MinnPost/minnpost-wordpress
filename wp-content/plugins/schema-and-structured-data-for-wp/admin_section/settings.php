@@ -95,12 +95,8 @@ function saswp_admin_interface_render(){
 	if ( isset( $_GET['settings-updated'] ) ) {							                                                 
 		settings_errors();               
 	}
-            $is_amp = false;
-        if ( is_plugin_active('accelerated-mobile-pages/accelerated-moblie-pages.php') || is_plugin_active('amp/amp.php') ) {
-            $is_amp = true;			
-        }   
-       
-        $tab = saswp_get_tab('general', array('general', 'amp','review','compatibility','email_schema', 'tools', 'tools','premium_features', 'services', 'support'));            
+        
+        $tab = saswp_get_tab('general', apply_filters( 'saswp_extra_settings_tab', array('general', 'amp','review','compatibility','email_schema', 'tools','premium_features', 'services', 'support') ));            
 	
 	?>
 <div class="saswp-settings-container">
@@ -109,33 +105,29 @@ function saswp_admin_interface_render(){
                 <div>
 		<h2 class="nav-tab-wrapper saswp-tabs">
                     
-			<?php			
+			<?php	
 
-			echo '<a href="' . esc_url(saswp_admin_link('general')) . '" class="nav-tab ' . esc_attr( $tab == 'general' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Global') . '</a>';
-			                                               
-                        echo '<a href="' . esc_url(saswp_admin_link('amp')) . '" class="nav-tab ' . esc_attr( $tab == 'amp' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('AMP') . '</a>';    
-                                                                                                                                                                                                                                              
-                        echo '<a href="' . esc_url(saswp_admin_link('review')) . '" class="nav-tab ' . esc_attr( $tab == 'review' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Review') . '</a>';
-                        
-                        echo '<a href="' . esc_url(saswp_admin_link('compatibility')) . '" class="nav-tab ' . esc_attr( $tab == 'compatibility' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Compatibility') . '</a>';
-                        
-                        echo '<a href="' . esc_url(saswp_admin_link('email_schema')) . '" class="nav-tab ' . esc_attr( $tab == 'email_schema' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Email Schema') . '</a>';
-                        
-                        echo '<a href="' . esc_url(saswp_admin_link('tools')) . '" class="nav-tab ' . esc_attr( $tab == 'tools' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Advanced') . '</a>';                         			
-                        
-                        echo '<a href="' . esc_url(saswp_admin_link('premium_features')) . '" class="nav-tab ' . esc_attr( $tab == 'premium_features' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Premium Features') . '</a>';                         			
-                        
-                        echo '<a href="' . esc_url(saswp_admin_link('services')) . '" class="nav-tab ' . esc_attr( $tab == 'services' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Services') . '</a>';                         			
-                        
-                        echo '<a href="' . esc_url(saswp_admin_link('support')) . '" class="nav-tab ' . esc_attr( $tab == 'support' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Support') . '</a>';
-
-                        echo '<a target="_blank" href="http://structured-data-for-wp.com/festive-season/" class="nav-tab saswp-offer-banner">50% OFF for LIMITED time</a>'
-
+                        $tab_links = apply_filters( 'saswp_extra_settings_tab_link',        
+                                array(                                 
+                                        '<a href="' . esc_url(saswp_admin_link('general')) . '" class="nav-tab ' . esc_attr( $tab == 'general' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Global') . '</a>',
+                                        '<a href="' . esc_url(saswp_admin_link('amp')) . '" class="nav-tab ' . esc_attr( $tab == 'amp' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('AMP') . '</a>',
+                                        '<a href="' . esc_url(saswp_admin_link('review')) . '" class="nav-tab ' . esc_attr( $tab == 'review' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Review') . '</a>',
+                                        '<a href="' . esc_url(saswp_admin_link('compatibility')) . '" class="nav-tab ' . esc_attr( $tab == 'compatibility' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Compatibility') . '</a>',
+                                        '<a href="' . esc_url(saswp_admin_link('email_schema')) . '" class="nav-tab ' . esc_attr( $tab == 'email_schema' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Email Schema') . '</a>',
+                                        '<a href="' . esc_url(saswp_admin_link('tools')) . '" class="nav-tab ' . esc_attr( $tab == 'tools' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Advanced') . '</a>',                                       
+                                        '<a href="' . esc_url(saswp_admin_link('premium_features')) . '" class="nav-tab ' . esc_attr( $tab == 'premium_features' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Premium Features') . '</a>',
+                                        '<a href="' . esc_url(saswp_admin_link('services')) . '" class="nav-tab ' . esc_attr( $tab == 'services' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Services') . '</a>',
+                                        '<a href="' . esc_url(saswp_admin_link('support')) . '" class="nav-tab ' . esc_attr( $tab == 'support' ? 'nav-tab-active' : '') . '"><span class=""></span> ' . saswp_t_string('Support') . '</a>',
+                                        //'<a target="_blank" href="http://structured-data-for-wp.com/festive-season/" class="nav-tab saswp-offer-banner">50% OFF for LIMITED time</a>'
+                                ), $tab);
+                                
+                                foreach($tab_links as $link){
+                                        echo $link;
+                                }
 			?>
                     
 		</h2>
-                 
-                                           
+                                                            
                 </div>
                 
                 <form action="<?php echo admin_url("options.php") ?>" method="post" enctype="multipart/form-data" class="saswp-settings-form">		
@@ -188,7 +180,7 @@ function saswp_admin_interface_render(){
 			     // Status                        
 			        do_settings_sections( 'saswp_email_schema_section' );	// Page slug
 			echo "</div>";
-                        
+                                                
                         echo "<div class='saswp-tools' ".( $tab != 'tools' ? 'style="display:none;"' : '').">";
                         
                             echo '<div id="saswp-tools-tabs" style="margin-top: 10px;">';
@@ -215,6 +207,8 @@ function saswp_admin_interface_render(){
 			     // Status                        
 			        do_settings_sections( 'saswp_support_section' );	// Page slug
 			echo "</div>";
+
+                        apply_filters('saswp_extra_settings_tab_div', $tab);
 
 			?>
 		</div>
@@ -311,8 +305,7 @@ function saswp_settings_init(){
 			'saswp_email_schema_callback',								// CB
 			'saswp_email_schema_section',						// Page slug
 			'saswp_email_schema_section'						// Settings Section ID
-		);
-                
+		);               
                 
                 add_settings_section('saswp_support_section', __return_false(), '__return_false', 'saswp_support_section');
 
@@ -363,7 +356,8 @@ function saswp_settings_init(){
 
 function saswp_custom_upload_mimes($mimes = array()) {
 	
-	$mimes['json'] = "application/json";
+        $mimes['json'] = "application/json";
+        $mimes['csv']  =  "text/csv";
 
 	return $mimes;
 }
@@ -391,7 +385,24 @@ function saswp_handle_file_upload($option){
            }
         }
        
-   }  
+   }
+   
+   if(isset($_FILES['saswp_upload_rv_csv'])){
+     
+        $fileInfo = wp_check_filetype(basename($_FILES['saswp_upload_rv_csv']['name']));
+     
+         if (!empty($fileInfo['ext']) && $fileInfo['ext'] == 'csv') {
+ 
+             if(!empty($_FILES["saswp_upload_rv_csv"]["tmp_name"])){
+ 
+               $urls = wp_handle_upload($_FILES["saswp_upload_rv_csv"], array('test_form' => FALSE));    
+               $url = $urls["url"];
+               update_option('saswp_rv_csv_upload_url',esc_url($url));
+ 
+            }
+         }
+        
+  }
    
   return $option;
   
@@ -399,7 +410,9 @@ function saswp_handle_file_upload($option){
 
 
 function saswp_premium_features_callback(){ ?>
+
 	<div class="saswp-pre-ftrs-wrap">
+
 		<ul class="saswp-features-blocks">
 
                 <li>
@@ -408,11 +421,42 @@ function saswp_premium_features_callback(){ ?>
                             
                             $cooked_active_text = '';
                             
-                            if(is_plugin_active('polylang-compatibility-for-saswp/polylang-compatibility-for-saswp.php')){                                        
-                                $cooked_active_text = '<label class="saswp-sts-txt">Status :<span style="color:green;">Active</span></label>';                                            
+                            if(is_plugin_active('1-click-indexing-api-integration-for-saswp/1-click-indexing-api-integration-for-saswp.php')){                                        
+                                $cooked_active_text = '<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span style="color:green;">'.saswp_t_string('Active').'</span></label>';                                            
                             }else{
-                                $cooked_active_text .='<label class="saswp-sts-txt">Status :<span>Inactive</span></label>';
-                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">Download</span></a>';
+                                $cooked_active_text .='<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span>'.saswp_t_string('Inactive').'</span></label>';
+                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">'.saswp_t_string('Download').'</span></a>';
+                            }
+                            
+                            ?> 
+                                            
+                    <div class="saswp-features-ele">
+                        <div class="saswp-ele-ic" style="background: #9fa2f5;">
+                                <img src="<?php echo SASWP_PLUGIN_URL; ?>/admin_section/images/indexing.png">
+                            </div>
+                            <div class="saswp-ele-tlt">
+                                    <h3><?php echo saswp_t_string('1-Click Indexing API Integration') ?></h3>
+                                    <p><?php echo saswp_t_string('The Indexing API allows any site owner to directly notify Google when pages are added or removed. This allows Google to schedule pages for a fresh crawl, which can lead to higher quality user traffic') ?></p>
+                            </div>
+                    </div>
+                    <div class="saswp-sts-btn">
+                        
+                        <?php echo $cooked_active_text; ?>
+                                                                                                                                               
+                    </div>
+            </li>
+
+                <li>
+                            
+                            <?php
+                            
+                            $cooked_active_text = '';
+                            
+                            if(is_plugin_active('polylang-compatibility-for-saswp/polylang-compatibility-for-saswp.php')){                                        
+                                $cooked_active_text = '<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span style="color:green;">'.saswp_t_string('Active').'</span></label>';                                            
+                            }else{
+                                $cooked_active_text .='<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span>'.saswp_t_string('Inactive').'</span></label>';
+                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">'.saswp_t_string('Download').'</span></a>';
                             }
                             
                             ?> 
@@ -422,7 +466,7 @@ function saswp_premium_features_callback(){ ?>
                                 <img src="<?php echo SASWP_PLUGIN_URL; ?>/admin_section/images/polylang.png">
                             </div>
                             <div class="saswp-ele-tlt">
-                                    <h3><?php echo saswp_t_string('Polylang Compatibility for SASWP') ?></h3>
+                                    <h3><?php echo saswp_t_string('Polylang Compatibility') ?></h3>
                                     <p><?php echo saswp_t_string('It adds all the static labels from this plugin to Polylang Strings Translations dashboard where user can translate it') ?></p>
                             </div>
                     </div>
@@ -440,10 +484,10 @@ function saswp_premium_features_callback(){ ?>
                             $cooked_active_text = '';
                             
                             if(is_plugin_active('reviews-for-schema/reviews-for-schema.php')){                                        
-                                $cooked_active_text = '<label class="saswp-sts-txt">Status :<span style="color:green;">Active</span></label>';                                            
+                                $cooked_active_text = '<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span style="color:green;">'.saswp_t_string('Active').'</span></label>';                                            
                             }else{
-                                $cooked_active_text .='<label class="saswp-sts-txt">Status :<span>Inactive</span></label>';
-                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">Download</span></a>';
+                                $cooked_active_text .='<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span>'.saswp_t_string('Inactive').'</span></label>';
+                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">'.saswp_t_string('Download').'</span></a>';
                             }
                             
                             ?> 
@@ -471,10 +515,10 @@ function saswp_premium_features_callback(){ ?>
                             $cooked_active_text = '';
                             
                             if(is_plugin_active('jobposting-schema-compatibility/jobposting-schema-compatibility.php')){                                        
-                                $cooked_active_text = '<label class="saswp-sts-txt">Status :<span style="color:green;">Active</span></label>';                                            
+                                $cooked_active_text = '<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span style="color:green;">'.saswp_t_string('Active').'</span></label>';                                            
                             }else{
-                                $cooked_active_text .='<label class="saswp-sts-txt">Status :<span>Inactive</span></label>';
-                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">Download</span></a>';
+                                $cooked_active_text .='<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span>'.saswp_t_string('Inactive').'</span></label>';
+                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">'.saswp_t_string('Download').'</span></a>';
                             }
                             
                             ?> 
@@ -502,10 +546,10 @@ function saswp_premium_features_callback(){ ?>
                             $cooked_active_text = '';
                             
                             if(is_plugin_active('faq-schema-compatibility/faq-schema-compatibility.php')){                                        
-                                $cooked_active_text = '<label class="saswp-sts-txt">Status :<span style="color:green;">Active</span></label>';                                            
+                                $cooked_active_text = '<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span style="color:green;">'.saswp_t_string('Active').'</span></label>';                                            
                             }else{
-                                $cooked_active_text .='<label class="saswp-sts-txt">Status :<span>Inactive</span></label>';
-                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">Download</span></a>';
+                                $cooked_active_text .='<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span>'.saswp_t_string('Inactive').'</span></label>';
+                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">'.saswp_t_string('Download').'</span></a>';
                             }
                             
                             ?> 
@@ -534,10 +578,10 @@ function saswp_premium_features_callback(){ ?>
                             $cooked_active_text = '';
                             
                             if(is_plugin_active('qanda-schema-for-saswp/qanda-schema-for-saswp.php')){                                        
-                                $cooked_active_text = '<label class="saswp-sts-txt">Status :<span style="color:green;">Active</span></label>';                                            
+                                $cooked_active_text = '<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span style="color:green;">'.saswp_t_string('Active').'</span></label>';                                            
                             }else{
-                                $cooked_active_text .='<label class="saswp-sts-txt">Status :<span>Inactive</span></label>';
-                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">Download</span></a>';
+                                $cooked_active_text .='<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span>'.saswp_t_string('Inactive').'</span></label>';
+                                $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">'.saswp_t_string('Download').'</span></a>';
                             }
                             
                             ?> 
@@ -565,10 +609,10 @@ function saswp_premium_features_callback(){ ?>
                                         $cooked_active_text = '';
                                         
                                         if(is_plugin_active('recipe-schema-for-saswp/recipe-schema-for-saswp.php')){                                        
-                                            $cooked_active_text = '<label class="saswp-sts-txt">Status :<span style="color:green;">Active</span></label>';                                            
+                                            $cooked_active_text = '<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span style="color:green;">'.saswp_t_string('Active').'</span></label>';                                            
                                         }else{
-                                            $cooked_active_text .='<label class="saswp-sts-txt">Status :<span>Inactive</span></label>';
-                                            $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">Download</span></a>';
+                                            $cooked_active_text .='<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span>'.saswp_t_string('Inactive').'</span></label>';
+                                            $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">'.saswp_t_string('Download').'</span></a>';
                                         }
                                         
                                         ?> 
@@ -596,10 +640,10 @@ function saswp_premium_features_callback(){ ?>
                                         $cooked_active_text = '';
                                         
                                         if(is_plugin_active('event-schema-for-saswp/event-schema-for-saswp.php')){                                        
-                                            $cooked_active_text = '<label class="saswp-sts-txt">Status :<span style="color:green;">Active</span></label>';                                            
+                                            $cooked_active_text = '<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span style="color:green;">'.saswp_t_string('Active').'</span></label>';                                            
                                         }else{
-                                            $cooked_active_text .='<label class="saswp-sts-txt">Status :<span>Inactive</span></label>';
-                                            $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">Download</span></a>';
+                                            $cooked_active_text .='<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span>'.saswp_t_string('Inactive').'</span></label>';
+                                            $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">'.saswp_t_string('Download').'</span></a>';
                                         }
                                         
                                         ?> 
@@ -626,10 +670,10 @@ function saswp_premium_features_callback(){ ?>
                                         $cooked_active_text = '';
                                         
                                         if(is_plugin_active('course-schema-for-saswp/course-schema-for-saswp.php')){                                        
-                                            $cooked_active_text = '<label class="saswp-sts-txt">Status :<span style="color:green;">Active</span></label>';                                            
+                                            $cooked_active_text = '<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span style="color:green;">'.saswp_t_string('Active').'</span></label>';                                            
                                         }else{
-                                            $cooked_active_text .='<label class="saswp-sts-txt">Status :<span>Inactive</span></label>';
-                                            $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">Download</span></a>';
+                                            $cooked_active_text .='<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span>'.saswp_t_string('Inactive').'</span></label>';
+                                            $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/"><span class="saswp-d-btn">'.saswp_t_string('Download').'</span></a>';
                                         }
                                         
                                         ?> 
@@ -653,10 +697,10 @@ function saswp_premium_features_callback(){ ?>
                              <?php
                                         $woocommerce_active_text = '';
                                         if(is_plugin_active('woocommerce-compatibility-for-schema/woocommerce-compatibility-for-schema.php')){                                           
-                                          $woocommerce_active_text = '<label class="saswp-sts-txt">Status :<span style="color:green">Active</span></label>';                                          ;
+                                          $woocommerce_active_text = '<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span style="color:green">'.saswp_t_string('Active').'</span></label>';                                          ;
                                         }else{                                            
-                                           $woocommerce_active_text .= '<label class="saswp-sts-txt">Status :<span>Inactive</span></label>'; 
-                                           $woocommerce_active_text .= '<a target="_blank" href="http://structured-data-for-wp.com/extensions/woocommerce-compatibility-for-schema/"><span class="saswp-d-btn">Download</span></a>';
+                                           $woocommerce_active_text .= '<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span>'.saswp_t_string('Inactive').'</span></label>'; 
+                                           $woocommerce_active_text .= '<a target="_blank" href="http://structured-data-for-wp.com/extensions/woocommerce-compatibility-for-schema/"><span class="saswp-d-btn">'.saswp_t_string('Download').'</span></a>';
                                         }
                                         
                                         ?>                                                        
@@ -682,10 +726,10 @@ function saswp_premium_features_callback(){ ?>
                                         $cooked_active_text = '';
                                         
                                         if(is_plugin_active('real-estate-schema/real-estate-schema.php')){                                        
-                                            $cooked_active_text = '<label class="saswp-sts-txt">Status :<span style="color:green;">Active</span></label>';                                            
+                                            $cooked_active_text = '<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span style="color:green;">'.saswp_t_string('Active').'</span></label>';                                            
                                         }else{
-                                            $cooked_active_text .='<label class="saswp-sts-txt">Status :<span>Inactive</span></label>';
-                                            $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/real-estate-schema/"><span class="saswp-d-btn">Download</span></a>';
+                                            $cooked_active_text .='<label class="saswp-sts-txt">'.saswp_t_string('Status').' :<span>'.saswp_t_string('Inactive').'</span></label>';
+                                            $cooked_active_text .='<a target="_blank" href="http://structured-data-for-wp.com/extensions/real-estate-schema/"><span class="saswp-d-btn">'.saswp_t_string('Download').'</span></a>';
                                         }
                                         
                                         ?> 
@@ -891,6 +935,17 @@ function saswp_general_page_callback(){
                         'hidden' => array(
                              'id'   => 'saswp_breadcrumb_schema',
                              'name' => 'sd_data[saswp_breadcrumb_schema]',                             
+                        )
+                ),
+                array(
+			'label'  => 'Exclude Category',
+			'id'     => 'saswp_breadcrumb_remove_cat_checkbox', 
+                        'name'   => 'saswp_breadcrumb_remove_cat_checkbox',
+			'type'   => 'checkbox',
+                        'class'  => 'checkbox saswp-checkbox',                        
+                        'hidden' => array(
+                             'id'   => 'saswp_breadcrumb_remove_cat',
+                             'name' => 'sd_data[saswp_breadcrumb_remove_cat]',                             
                         )
 		),
                 array(
@@ -1400,7 +1455,7 @@ function saswp_import_callback(){
                 
 	);   
         
-        if(is_super_admin()){
+        if( function_exists('is_super_admin') &&  is_super_admin() ){
             
             $meta_fields[] = array(
 			'label'   => 'Role Based Access',
@@ -1622,7 +1677,13 @@ function saswp_import_callback(){
         <?php    
                                 
         $add_on = array();
-                
+        
+        if(is_plugin_active('1-click-indexing-api-integration-for-saswp/1-click-indexing-api-integration-for-saswp.php')){
+                      
+                $add_on[] = 'OCIAIFS';           
+                                           
+        }
+        
         if(is_plugin_active('cooked-compatibility-for-schema/cooked-compatibility-for-schema.php')){
                       
            $add_on[] = 'Cooked';           
@@ -1659,6 +1720,11 @@ function saswp_import_callback(){
         if(is_plugin_active('qanda-schema-for-saswp/qanda-schema-for-saswp.php')){
                       
                 $add_on[] = 'qanda';           
+                                           
+        }
+        if(is_plugin_active('faq-schema-compatibility/faq-schema-compatibility.php')){
+                      
+                $add_on[] = 'faq';           
                                            
         }
         if(is_plugin_active('event-schema-for-saswp/event-schema-for-saswp.php')){
@@ -1814,6 +1880,14 @@ function saswp_get_license_section_html($on, $license_key, $license_status, $lic
                 $response.= '</div>';
             
                 }
+
+                if($label == true && $on == 'faq'){
+                   
+                        $response.= '<div class="" style="display:inline-block">';
+                        $response.= '<strong>'.saswp_t_string('FAQ Schema Compatibility').'</strong>';
+                        $response.= '</div>';
+                    
+                }
                
                if($label == true && $on == 'Rs'){
                    
@@ -1902,10 +1976,25 @@ function saswp_review_page_callback(){
                   )  
                                   
 	);    
-                          
+                    
+        $csv_url  = wp_nonce_url(admin_url('admin-ajax.php?action=saswp_download_csv_review_format'), '_wpnonce');         
+
         ?>
         
     <div class="saswp-review-container" id="saswp-review-reviews-container">
+
+        <div class="saswp-settings-list">
+        <ul>
+                <li>
+                        <div class="saswp-knowledge-label"><label><?php echo saswp_t_string('Upload Reviews From CSV'); ?></label></div>
+                        <div class="saswp-knowledge-field">
+                         <input type="file" name="saswp_upload_rv_csv" id="saswp_upload_rv_csv" multiple="false" accept=".csv" />
+                         <p><?php echo saswp_t_string('You must follow the format.'); ?> <a href="<?php echo esc_url($csv_url); ?>"><?php echo saswp_t_string('Click here');  ?></a> <?php echo saswp_t_string('to download the format.') ?></p>
+                         </div>
+                </li>
+        </ul>
+        </div>
+        
         <?php 
 
             $meta_fields = apply_filters('saswp_modify_reviews_settings_page', $meta_fields);
@@ -2047,6 +2136,55 @@ function saswp_compatibility_page_callback(){
                                 'name' => 'sd_data[saswp-ampbyautomatic]',                             
                         )
                 );
+
+        $cmp = array(
+                'label'  => 'CMP – Coming Soon & Maintenance Plugin',
+                'id'     => 'saswp-cmp-checkbox',                        
+                'name'   => 'saswp-cmp-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('cmp'),
+                'hidden' => array(
+                        'id'   => 'saswp-cmp',
+                        'name' => 'sd_data[saswp-cmp]',                             
+                )
+        );        
+        $wpecommerce = array(
+                'label'  => 'WP eCommerce',
+                'id'     => 'saswp-wpecommerce-checkbox',                        
+                'name'   => 'saswp-wpecommerce-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('wpecommerce'),
+                'hidden' => array(
+                        'id'   => 'saswp-wpecommerce',
+                        'name' => 'sd_data[saswp-wpecommerce]',                             
+                )
+        );
+        $wpreviewpro = array(
+                'label'  => 'WP Review Pro',
+                'id'     => 'saswp-wpreviewpro-checkbox',                        
+                'name'   => 'saswp-wpreviewpro-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('wpreviewpro'),
+                'hidden' => array(
+                        'id'   => 'saswp-wpreviewpro',
+                        'name' => 'sd_data[saswp-wpreviewpro]',                             
+                )
+        );        
+        $webstories = array(
+                'label'  => 'Web Stories',
+                'id'     => 'saswp-webstories-checkbox',                        
+                'name'   => 'saswp-webstories-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('webstories'),
+                'hidden' => array(
+                        'id'   => 'saswp-webstories',
+                        'name' => 'sd_data[saswp-webstories]',                             
+                )
+        );        
         $elementor_testimonial = array(
 			'label'  => 'Elementor Testimonial',
 			'id'     => 'saswp-elementor-checkbox',                        
@@ -2058,7 +2196,20 @@ function saswp_compatibility_page_callback(){
                                 'id'   => 'saswp-elementor',
                                 'name' => 'sd_data[saswp-elementor]',                             
                         )
-        );        
+        );
+        
+        $brb = array(
+                'label'  => 'Business Reviews Bundle',
+                'id'     => 'saswp-brb-checkbox',                        
+                'name'   => 'saswp-brb-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('brb'),
+                'hidden' => array(
+                        'id'   => 'saswp-brb',
+                        'name' => 'sd_data[saswp-brb]',                             
+                )
+        );
 
         $ratingform = array(
                 'label'  => 'Rating Form by SerdarG',
@@ -2945,6 +3096,19 @@ function saswp_compatibility_page_callback(){
                 )
         );
 
+        $ryviu = array(
+                'label'  => 'Ryviu – Product Reviews for WooCommerce',
+                'id'     => 'saswp-ryviu-checkbox',                        
+                'name'   => 'saswp-ryviu-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('ryviu'),
+                'hidden' => array(
+                        'id'   => 'saswp-ryviu',
+                        'name' => 'sd_data[saswp-ryviu]',                             
+                )
+        );
+
         $starsrating = array(
                 'label'  => 'Stars Rating',
                 'id'     => 'saswp-starsrating-checkbox',                        
@@ -3082,6 +3246,19 @@ function saswp_compatibility_page_callback(){
                                 'name' => 'sd_data[saswp-kk-star-raring]',                             
                         )
                 );
+
+        $rmp_rating = array(
+                'label'  => 'Rate my Post – WP Rating System',
+                'id'     => 'saswp-rmprating-checkbox',                        
+                'name'   => 'saswp-rmprating-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('rmprating'),
+                'hidden' => array(
+                        'id'   => 'saswp-rmprating',
+                        'name' => 'sd_data[saswp-rmprating]',                             
+                )
+        );
 
         $wpdiscuz = array(
                 'label'  => 'Comments – wpDiscuz',
@@ -3230,7 +3407,19 @@ function saswp_compatibility_page_callback(){
                                     'id'   => 'saswp-dw-question-answer',
                                     'name' => 'sd_data[saswp-dw-question-answer]',                             
                         )
-		);
+                );
+        $wpqa_builder = array(
+                'label'  => 'WPQA Builder',
+                'id'     => 'saswp-wpqa-checkbox',                        
+                'name'   => 'saswp-wpqa-checkbox',
+                'type'   => 'checkbox',
+                'class'  => 'checkbox saswp-checkbox',
+                'note'   => saswp_get_field_note('wpqa'),
+                'hidden' => array(
+                                'id'   => 'saswp-wpqa',
+                                'name' => 'sd_data[saswp-wpqa]',
+                )
+        );        
         
         $bbpress = array(
 			'label'  => 'bbPress',
@@ -3436,6 +3625,7 @@ function saswp_compatibility_page_callback(){
          if(!is_plugin_active('qanda-schema-for-saswp/qanda-schema-for-saswp.php')){
                           
                 $sabaidiscuss['note'] = saswp_t_string('This feature requires').' <a target="_blank" href="https://structured-data-for-wp.com/qanda-schema/">Q&A Schema Compatibility Addon</a>';                        
+                $wpqa_builder['note'] = saswp_t_string('This feature requires').' <a target="_blank" href="https://structured-data-for-wp.com/qanda-schema/">Q&A Schema Compatibility Addon</a>';                        
          }
          
          if(!is_plugin_active('event-schema-for-saswp/event-schema-for-saswp.php')){
@@ -3478,19 +3668,25 @@ function saswp_compatibility_page_callback(){
         $meta_fields = array(
                 $ampforwp,
                 $ampbyautomatic,
+                $cmp,
                 $betteramp,
                 $wpamp,
                 $ampwp,
                 $kk_star,
+                $rmp_rating,
                 $elementor_testimonial,
+                $brb,
                 $ratingform,
                 $wpdiscuz,
                 $yasr,
                 $wp_customer_review,
                 $simple_author_box,  
                 $wppostratings,
+                $wpreviewpro,
                 $bbpress,
-                $woocommerce,
+                $webstories,
+                $wpecommerce,
+                $woocommerce,                
                 $woocommerce_bok,
                 $woocommerce_mem,
                 $cooked, 
@@ -3501,6 +3697,7 @@ function saswp_compatibility_page_callback(){
                 $stamped,
                 $extratheme,
                 $dwquestiton,
+                $wpqa_builder,
                 $sabaidiscuss,                
                 $yoast,
                 $polylang,
@@ -3517,6 +3714,7 @@ function saswp_compatibility_page_callback(){
                 $video_thumbnails,
                 $featured_video_plus,
                 $yotpo,
+                $ryviu,
                 $starsrating,
                 $ultimate_blocks,
                 $wp_tasty_recipe,
@@ -3871,6 +4069,8 @@ function saswp_enqueue_style_js( $hook ) {
         wp_style_add_data( 'saswp-main-css', 'rtl', 'replace' );
         
 
+        apply_filters('saswp_wp_enqueue_more_script', '');
+
         }                
         
 }
@@ -3895,6 +4095,9 @@ function saswp_enqueue_saswp_select2_js( $hook ) {
         
         wp_dequeue_script( 'select2' );
         wp_deregister_script( 'select2' );
+         
+        // Dequeue mediclinic theme's select2 on schema dashboard to remove conflict.
+        wp_dequeue_script( 'mkdf-select2-script' );        
 
         wp_dequeue_script( 'wds-shared-ui' );
         wp_deregister_script( 'wds-shared-ui' );
@@ -3907,7 +4110,31 @@ function saswp_enqueue_saswp_select2_js( $hook ) {
         
 }
 
+function saswp_dequeue_other_select2_on_saswp_screen(){
+
+        global $saswp_metaboxes;
+        
+        $post_type = $hook = '';        
+        $current_screen = get_current_screen(); 
+        
+        if(isset($current_screen->id)){
+                $hook = $current_screen->id;         
+        }
+
+        if(isset($current_screen->post_type)){                  
+            $post_type = $current_screen->post_type;                
+        }    
+        
+        if($saswp_metaboxes || $post_type == 'saswp' || $post_type == 'saswp-collections' || $post_type == 'saswp_reviews' || $hook == 'saswp_page_structured_data_options' || $hook == 'saswp_page_collection' ){
+
+                wp_dequeue_script( 'forminator-shared-ui' ); 
+        	                                        
+        }  
+          
+}
+
 add_action( 'admin_enqueue_scripts', 'saswp_enqueue_saswp_select2_js',9999 );
+add_action( 'admin_footer', 'saswp_dequeue_other_select2_on_saswp_screen',9999 );
 
 add_action( 'admin_enqueue_scripts', 'saswp_enqueue_style_js' );
 
@@ -3919,25 +4146,35 @@ add_filter( 'option_page_capability_sd_data_group', 'saswp_option_page_capabilit
 
 function saswp_pre_update_settings($value, $old_value,  $option){
     
-    if(!is_super_admin()){
+        if(!function_exists('is_super_admin') || !function_exists('wp_get_current_user') ) {
+                require_once( ABSPATH . '/wp-includes/capabilities.php' );
+                require_once( ABSPATH . '/wp-includes/pluggable.php' );
+        }   
+        
+        if( function_exists('is_super_admin') && function_exists('wp_get_current_user') ){
+
+                   if(!is_super_admin()){
     
-        if(isset($old_value['saswp-role-based-access'])){
-           $value['saswp-role-based-access'] = $old_value['saswp-role-based-access']; 
-        }
-        
-    }else{
-        
-        if(isset($value['saswp-role-based-access']) && !empty($value['saswp-role-based-access'])){
-                if(!in_array('administrator', $value['saswp-role-based-access'])){
-                    array_push($value['saswp-role-based-access'], 'administrator');
-                }
-        }else{
-                $value['saswp-role-based-access'] = array();
-                array_push($value['saswp-role-based-access'], 'administrator');
-        }
-                
-    }    
-   return $value; 
+                        if(isset($old_value['saswp-role-based-access'])){
+                           $value['saswp-role-based-access'] = $old_value['saswp-role-based-access']; 
+                        }
+                        
+                    }else{
+                        
+                        if(isset($value['saswp-role-based-access']) && !empty($value['saswp-role-based-access'])){
+                                if(!in_array('administrator', $value['saswp-role-based-access'])){
+                                    array_push($value['saswp-role-based-access'], 'administrator');
+                                }
+                        }else{
+                                $value['saswp-role-based-access'] = array();
+                                array_push($value['saswp-role-based-access'], 'administrator');
+                        }
+                                
+                    }
+
+        }   
+
+        return $value; 
 }
 
 add_filter('pre_update_option_sd_data', 'saswp_pre_update_settings',10,3);

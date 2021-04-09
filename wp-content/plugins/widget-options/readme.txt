@@ -5,7 +5,7 @@ Tags: widgets, restrict widgets, display widgets, widget logic, hide widgets, hi
 Requires at least: 4.0
 Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 3.7.6
+Stable tag: 3.7.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ Get Better Control over your WordPress Widgets. Easily show or hide WordPress wi
 
 Built with seamlessly integration with WordPress, Widget Options is the world's most complete widget management plugin solution yet.
 
-[vimeo https://vimeo.com/190057410]
+[youtube https://www.youtube.com/watch?v=GNawoUZ_t18]
 
 <h4>Show or hide widgets on specific WordPress pages</h4>
 With Widget Options Plugin, you can easily assign pages visibility and restrict each widgets on different pages, posts, custom post types, categories, tags and custom taxonomies.
@@ -151,6 +151,15 @@ Widget Options is a featured pack fully lightweight plugin. Using Query Monitor 
 10. Advanced Custom Fields ( ACF ) Support
 
 == Changelog ==
+
+= 3.7.7 =
+* Compatible with Latest WordPress.
+* Fixed deprecated jQuery functions.
+* Fixed Logic option issue.
+* Fixed Mobile restrictions issues.
+* Update plugin page descriptions.
+* Updated admin options page details.
+* Added affiliate URL support via hooks.
 
 = 3.7.6 =
 * Fix blank page issue in admin widget page.

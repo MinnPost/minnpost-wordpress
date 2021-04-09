@@ -2,28 +2,29 @@
 Contributors: Ramoonus
 Donate link: http://www.ramoonus.nl/donate/
 Tags: jquery, update, jquery ui, javascript, jq
-Requires at least: 5.0
-Tested up to: 5.5
-Stable tag: 3.5.1.2
+Requires at least: 5.6
+Tested up to: 5.7
+Stable tag: 3.6.0.1
 Requires PHP: 5.6
 
 This plugin updates jQuery to the latest stable version on your website.
 
 == Description ==
 This plugin updates [jQuery](http://jquery.com/) to the latest official stable version, which is most likely not available within the latest stable release of WordPress.
-Since jQuery 2+ was used in this plugin, making jQuery 1.x obsolete, [jQuery Migrate](http://jquery.com/download/#jquery-migrate-plugin) is also included.
+jQuery Migrate is also included for backwards compatibility. 
 
 No files are replaced, therefore deactivation of this plugin returns your site to it`s original state.
+
+Since WordPress 5.6 includes an up-to-date version of jQuery 3, upgrading shouldn`t be neccesary. 
 
 **Warning**
 
 If you are not familiar with beta testing, bugfixing, javascript or running bleeding edge software it`s **not** recommended.
-I will not provide help on JavaScript and jQuery!
+I will not provide help on JavaScript and jQuery, only on plugin related issues (PHP)!
 
 **Reporting problems**
 
-Please post bug reports and request for help on [WordPress.org Support Forums](https://wordpress.org/support/plugin/jquery-updater). I will only provide help on issues caused by the plugin, not on JavaScript and jQuery related matters!
-Please report feature requests and code changes on [GitHub Issues page](https://github.com/Ramoonus/jQuery-Updater/issues)
+Please post bug reports and request for help on [WordPress.org Support Forums](https://wordpress.org/support/plugin/jquery-updater). 
 
 If you run into any bugs, turning this plugin off will fully deactivate everything.
 
@@ -45,12 +46,22 @@ For more information on the development visit the plugins [GitHub](https://githu
 A: No
 
 2. Q: This plugin breaks my site! How do I fix it?
-A: Using jQuery version 2 could break your site. See the warning on the homepage of this plugin.
+A: Using an up-to-date jQuery could break your site on the client-side.
 
 == Upgrade Notice ==
-Please clear the server and browser cache after upgrading/disabling
+Please clear the server and browser cache after upgrading/disabling this plugin.
 
 == Changelog ==
+= 3.6.0.1 =
+* Fixes missing jQuery Migrate minified file
+
+= 3.6.0 =
+* Updated [jQuery to 3.6.0](http://blog.jquery.com/2021/03/02/jquery-3-6-0-released/)
+* Updated jQuery Migrate to 3.3.2
+* Requires atleast WordPress 5.6+
+* Supports WordPress 5.7
+* Improved readme
+
 = 3.5.1.2 =
 * Bumped supported version to WordPress 5.5
 * Removed (hidden) options screen for now

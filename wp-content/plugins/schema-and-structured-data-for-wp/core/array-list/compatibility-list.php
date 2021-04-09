@@ -242,6 +242,12 @@ return array(
                     'opt_name'   => 'saswp-strong-testimonials',
                     'part_in'    => 'free',
         ),
+        'brb'  =>  array(
+            'name'       => 'Business Reviews Bundle',
+            'free'       => 'business-reviews-bundle/brb.php',            
+            'opt_name'   => 'saswp-brb',
+            'part_in'    => 'free',
+        ),
         'wordlift'  =>  array(            
                     'name'       => 'WordLift',
                     'free'       => 'wordlift/wordlift.php',            
@@ -259,6 +265,30 @@ return array(
                     'free'       => 'amp/amp.php',            
                     'opt_name'   => 'saswp-ampbyautomatic',
                     'part_in'    => 'free',
+        ),
+        'cmp'       =>  array(            
+                    'name'       => 'CMP – Coming Soon & Maintenance Plugin',
+                    'free'       => 'cmp-coming-soon-maintenance/niteo-cmp.php',            
+                    'opt_name'   => 'saswp-cmp',
+                    'part_in'    => 'free',
+        ),
+        'wpecommerce'  =>  array(            
+            'name'       => 'WP eCommerce',
+            'free'       => 'wp-e-commerce/wp-shopping-cart.php',            
+            'opt_name'   => 'saswp-wpecommerce',
+            'part_in'    => 'free',
+        ),
+        'wpreviewpro'  =>  array(            
+            'name'       => 'WP Review Pro',
+            'free'       => 'wp-review-pro/wp-review.php',            
+            'opt_name'   => 'saswp-wpreviewpro',
+            'part_in'    => 'free',
+        ),
+        'webstories'  =>  array(
+            'name'       => 'Web Stories',
+            'free'       => 'web-stories/web-stories.php',
+            'opt_name'   => 'saswp-webstories',
+            'part_in'    => 'free'
         ),
         'betteramp'  =>  array(            
                     'name'       => 'Better AMP',
@@ -289,6 +319,12 @@ return array(
                     'free'       => 'kk-star-ratings/index.php',            
                     'opt_name'   => 'saswp-kk-star-raring',
                     'part_in'    => 'free',
+        ),
+        'rmprating'  =>  array(            
+            'name'       => 'Rate my Post – WP Rating System',
+            'free'       => 'rate-my-post/rate-my-post.php',            
+            'opt_name'   => 'saswp-rmprating',
+            'part_in'    => 'free',
         ),
         'elementor'  =>  array(            
             'name'       => 'Elementor Testimonial',
@@ -434,6 +470,13 @@ return array(
                     'opt_name'   => 'saswp-dw-question-answer',
                     'part_in'    => 'free',
         ),
+        'wpqa' => array(            
+            'name'       => 'WPQA Builder',
+            'free'       => 'WPQA/wpqa.php',
+            'pro'        => 'WPQA/wpqa.php',
+            'opt_name'   => 'saswp-wpqa',
+            'part_in'    => 'pro',
+        ),
         'yoast_seo' => array(            
                     'name'       => 'Yoast Seo',
                     'free'       => 'wordpress-seo/wp-seo.php',
@@ -521,6 +564,12 @@ return array(
             'name'       => 'Yotpo: Product & Photo Reviews for WooCommerce',
             'free'       => 'yotpo-social-reviews-for-woocommerce/wc_yotpo.php',               
             'opt_name'   => 'saswp-yotpo',
+            'part_in'    => 'free',
+        ),
+        'ryviu' => array(            
+            'name'       => 'Ryviu – Product Reviews for WooCommerce',
+            'free'       => 'ryviu/ryviu.php',               
+            'opt_name'   => 'saswp-ryviu',
             'part_in'    => 'free',
         ),
         'wptastyrecipe' => array(            

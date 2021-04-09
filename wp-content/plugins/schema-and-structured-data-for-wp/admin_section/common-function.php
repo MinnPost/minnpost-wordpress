@@ -15,7 +15,8 @@ if ( ! defined('ABSPATH') ) exit;
      * List of hooks used in this context
      */
     add_action( 'admin_init', 'saswp_import_all_settings_and_schema',9);
-    add_action( 'wp_ajax_saswp_export_all_settings_and_schema', 'saswp_export_all_settings_and_schema');  
+    add_action( 'wp_ajax_saswp_export_all_settings_and_schema', 'saswp_export_all_settings_and_schema'); 
+    add_action( 'wp_ajax_saswp_download_csv_review_format', 'saswp_download_csv_review_format');  
     add_action( 'plugins_loaded', 'saswp_defaultSettings' );
     add_action( 'wp_enqueue_scripts', 'saswp_frontend_enqueue' );
     add_action( 'amp_post_template_css','saswp_enqueue_amp_script');
@@ -178,6 +179,30 @@ if ( ! defined('ABSPATH') ) exit;
        }                                    
                                                              
     }   
+
+    function saswp_download_csv_review_format(){
+
+        if ( ! current_user_can( saswp_current_user_can() ) ) {
+            return;
+        }
+        if ( ! isset( $_GET['_wpnonce'] ) ){
+                return; 
+        }
+
+        if ( !wp_verify_nonce( $_GET['_wpnonce'], '_wpnonce' ) ){
+                return;  
+        }
+                                                                   
+       $data = "Author, Author Url, Author Image, Date, Time, Rating, Title, Text, Platform, Language";
+
+       header('Content-Type: text/csv; charset=utf-8');
+       header('Content-disposition: attachment; filename=reviewscsv.csv');
+       echo $data;   
+                                     
+       wp_die();
+
+
+    }
     /**
      * We are here exporting all schema types and its settings as a backup file     
      * @global type $wpdb
@@ -313,8 +338,7 @@ if ( ! defined('ABSPATH') ) exit;
                 $wpdb->query("UPDATE ".$wpdb->prefix."posts SET guid ='".esc_sql($guid)."' WHERE ID ='".esc_sql($post_id)."'");   
                 
                 $schema_post_meta       = get_post_meta($schema->ID); 
-                $schema_post_types      = get_post_meta($schema->ID, $key='_schema_post_types', true );                  
-                $schema_post_meta_box   = get_post_meta($schema->ID, $key='_schema_post_meta_box', true );
+                $schema_post_types      = get_post_meta($schema->ID, $key='_schema_post_types', true );                                  
                 
                 $data_group_array = array();
                 
@@ -336,12 +360,9 @@ if ( ! defined('ABSPATH') ) exit;
                     
                     }                                        
                 }                                
-                $schema_type         ='';
-                $schema_article_type ='';                                                
                 
-                if(isset($schema_post_meta['_schema_type'])){
-                  $schema_type = $schema_post_meta['_schema_type'];  
-                }
+                $schema_article_type ='';                                                
+
                 if(isset($schema_post_meta['_schema_article_type'])){
                   $schema_article_type = $schema_post_meta['_schema_article_type'][0];  
                 }                      
@@ -362,8 +383,7 @@ if ( ! defined('ABSPATH') ) exit;
               //Importing settings starts here
                             
                 $schema_plugin_options = get_option('schema_wp_settings');                                      
-                $custom_logo_id        = get_theme_mod( 'custom_logo' );
-                $logo                  = wp_get_attachment_image_src( $custom_logo_id , 'full' );
+                $custom_logo_id        = get_theme_mod( 'custom_logo' );                
                                 
                 $saswp_plugin_options = array(                    
                     'sd_logo'   => array(
@@ -1244,8 +1264,7 @@ if ( ! defined('ABSPATH') ) exit;
                 $result  = $post_id;
                 $guid    = get_option('siteurl') .'/?post_type=saswp&p='.$post_id;                
                 $wpdb->get_results("UPDATE ".$wpdb->prefix."posts SET guid ='".esc_sql($guid)."' WHERE ID ='".esc_sql($post_id)."'");   
-                
-                $schema_post_meta           = get_post_meta($schema->ID);                 
+                                             
                 $schema_post_types          = get_post_meta($schema->ID, $key='bsf-aiosrs-schema-type', true );                   
                 $schema_post_meta_box       = get_post_meta($schema->ID, $key='bsf-aiosrs-'.$schema_post_types, true );                
                 $schema_enable_location     = get_post_meta($schema->ID, $key='bsf-aiosrs-schema-location', true );
@@ -1441,12 +1460,7 @@ if ( ! defined('ABSPATH') ) exit;
                     
                     }                  
                 }                                
-                $schema_type  = '';  
-                $local_name   = '';
-                $local_image  = '';
-                $local_phone  = '';
-                $local_url    = '';
-                $local_url    = '';
+                $schema_type  = '';                  
                 
                 if(isset($schema_post_types)){
                     
@@ -1509,8 +1523,7 @@ if ( ! defined('ABSPATH') ) exit;
               
                 $schema_pro_general_settings = get_option('wp-schema-pro-general-settings');  
                 $schema_pro_social_profile   = get_option('wp-schema-pro-social-profiles');
-                $schema_pro_global_schemas   = get_option('wp-schema-pro-global-schemas');
-                $schema_pro_settings         = get_option('aiosrs-pro-settings');                                 
+                $schema_pro_global_schemas   = get_option('wp-schema-pro-global-schemas');                                             
                 $logo                        = wp_get_attachment_image_src( $schema_pro_general_settings['site-logo-custom'] , 'full' );
                              
                 $saswp_plugin_options = array(
@@ -1781,7 +1794,9 @@ if ( ! defined('ABSPATH') ) exit;
                         'saswp-microdata-cleanup'   => 1,
                         'saswp-other-images'        => 1,
                         'saswp_default_review'      => 1,
-                        'saswp-multiple-size-image' => 1     
+                        'saswp-multiple-size-image' => 1,
+                        'instant_indexing_action'   => 1,
+                        'instant_indexing'          => array('post' => 1, 'page' => 1)   
 
                 );	  
                 
@@ -1981,7 +1996,7 @@ if ( ! defined('ABSPATH') ) exit;
         
         if(is_object($post)){
             $content = get_post_field('post_content', $post->ID);            
-            $content = wp_strip_all_tags(strip_shortcodes($content));   
+            $content = wp_strip_all_tags($content);   
             $content = preg_replace('/\[.*?\]/','', $content);            
             $content = str_replace('=', '', $content); 
             $content = str_replace(array("\n","\r\n","\r"), ' ', $content);
@@ -1989,6 +2004,16 @@ if ( ! defined('ABSPATH') ) exit;
         
         return apply_filters('saswp_the_content' ,$content);
 
+    }
+
+    function saswp_strip_all_tags( $content ) {
+            
+            $content = wp_strip_all_tags($content);   
+            $content = preg_replace('/\[.*?\]/','', $content);            
+            $content = str_replace('=', '', $content); 
+            $content = str_replace(array("\n","\r\n","\r"), ' ', $content);
+
+            return $content;
     }
     /**
      * Here we are modifying the default excerpt
@@ -2843,9 +2868,7 @@ function saswp_admin_notice(){
                     . '</a>'
                     . '</p>'
                     . '</div>';        
-    
-    
-          
+                                      
     $sd_data         = get_option('sd_data'); 
         
     if(($screen_id =='saswp_page_structured_data_options' ||$screen_id == 'plugins' || $screen_id =='edit-saswp' || $screen_id == 'saswp') && !isset($sd_data['sd_initial_wizard_status'])){
@@ -2853,23 +2876,43 @@ function saswp_admin_notice(){
         echo $setup_notice;
         
     }     
-     //Feedback notice
+     //Feedback notice    
     $activation_date  =  get_option("saswp_activation_date");  
     $activation_never =  get_option("saswp_activation_never");      
     $next_days        =  strtotime("+7 day", strtotime($activation_date));
     $next_days        =  date('Y-m-d', $next_days);   
     $current_date     =  date("Y-m-d");
-    
+
+    $notice_msg = '';
+
+    if($activation_date){
+
+        $date1 = new DateTime($activation_date);
+        $date2 = new DateTime($current_date);
+        $diff = $date1->diff($date2);
+        
+        $notice_msg = ( ($diff->y > 0 ) ? $diff->y. ' years, ' : ''). ( ($diff->m > 0 ) ? $diff->m. ' month, ' : ''). ( ($diff->d > 0 ) ? floor($diff->d / 7). ' Week, ' : '');
+
+    }
+        
     if(($next_days < $current_date) && $activation_never !='never' ){
       ?>
-         <div class="updated notice message notice notice-alt saswp-feedback-notice">
-            <p><span class="dashicons dashicons-thumbs-up"></span> 
-            <?php echo saswp_t_string('You have been using the Schema & Structured Data for WP & AMP for some time. Now, Do you like it? If Yes.') ?>
-            <a class="saswp-revws-lnk" target="_blank" href="https://wordpress.org/plugins/schema-and-structured-data-for-wp/#reviews"> <?php echo saswp_t_string('Rate Plugin') ?></a>
-          </p>
+         <div class="updated notice message notice notice-alt saswp-feedback-notice">                         
+            <p class="saswp-notice-p">
+            <?php   echo saswp_t_string('Awesome, you\'ve been using '); 
+                    echo '<strong>' .saswp_t_string(' Schema & Structured Data '). '</strong>' ;
+                    echo saswp_t_string('plugin for more than '. $notice_msg);
+                    echo '<p class="saswp-notice-p">'.saswp_t_string('May we ask you to give it a 5-star rating on WordPress?').'</p>';                                     
+            ?>
+            <div>- SASWP dev team</div>
+            </p>                                                                        
+
             <div class="saswp-update-notice-btns">
-                <a  class="saswp-feedback-remindme"><?php echo saswp_t_string('Remind Me Later') ?></a>
-                <a  class="saswp-feedback-no-thanks"><?php echo saswp_t_string('No Thanks') ?></a>
+                <ul>
+                    <li><a target="_blank" href="https://wordpress.org/plugins/schema-and-structured-data-for-wp/#reviews"><?php echo saswp_t_string('Ok, you deserve it') ?></a></li>
+                    <li><a  class="saswp-feedback-remindme"><?php echo saswp_t_string('Nope, May be later') ?></a></li>
+                    <li><a  class="saswp-feedback-no-thanks"><?php echo saswp_t_string('I already did') ?></a></li>
+                </ul>
             </div>
         </div>
         <?php
@@ -2992,6 +3035,7 @@ function saswp_get_field_note($pname){
             'wp_customer_reviews'         => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/wp-customer-reviews">WP Customer Reviews</a>',
             'wordpress_news'              => saswp_t_string('Requires').' <a target="_blank" href="#">Wordpress News</a>',
             'strong_testimonials'         => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/strong-testimonials">Strong Testimonials</a>',
+            'brb'                         => saswp_t_string('Requires').' <a target="_blank" href="https://richplugins.com/business-reviews-bundle-wordpress-plugin">Business Reviews Bundle</a>',
             'wp_event_aggregator'         => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/wp-event-aggregator/">WP Event Aggregator</a>',
             'stachethemes_event_calendar' => saswp_t_string('Requires').' <a target="_blank" href="http://stachethemes.com/">Stachethemes Event Calendar</a>',
             'timetable_event'             => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/mp-timetable">Timetable and Event Schedule by MotoPress</a>',
@@ -3020,15 +3064,20 @@ function saswp_get_field_note($pname){
             'html5responsivefaq'          => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/html5-responsive-faq/">HTML5 Responsive FAQ</a>',
             'helpiefaq'                   => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/helpie-faq/">Helpie FAQ – WordPress FAQ Accordion Plugin</a>',
             'ampbyautomatic'              => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/amp/">AMP</a>',
+            'cmp'                         => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/cmp-coming-soon-maintenance/">CMP – Coming Soon & Maintenance Plugin</a>',
+            'wpecommerce'                 => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/wp-e-commerce/">WP eCommerce</a>',
+            'wpreviewpro'                 => saswp_t_string('Requires').' <a target="_blank" href="https://mythemeshop.com/plugins/wordpress-review/">WP Review Pro</a>',
+            'webstories'                  => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/web-stories/">Web Stories</a>',
             'simplejobboard'              => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/simple-job-board/">Simple Job Board</a>',
             'wpjobmanager'                => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/wp-job-manager/">WP Job Manager</a>',
             'wpjobopenings'               => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/wp-job-openings/">WP Job Openings</a>',
             'schemaforfaqs'               => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/faq-schema-markup-faq-structured-data/">FAQ Schema Markup</a>',
-            'betteramp'                   => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/kk-star-ratings/">Better AMP</a>',
+            'betteramp'                   => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/better-amp/">Better AMP</a>',
             'wpamp'                       => saswp_t_string('Requires').' <a target="_blank" href="https://codecanyon.net/item/wp-amp-accelerated-mobile-pages-for-wordpress-and-woocommerce/16278608">WP AMP</a>',
             'ampwp'                       => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/amp-wp/">AMP WP</a>',
             'kk_star_ratings'             => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/kk-star-ratings/">kk Star Rating</a>',
-            'elementor'                   => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/kk-star-ratings/">Elementor Testimonial</a>',
+            'rmprating'                   => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/rate-my-post">Rate my Post – WP Rating System</a>',
+            'elementor'                   => saswp_t_string('Requires').' <a target="_blank" href="https://elementor.com/widgets/testimonial-widget/">Elementor Testimonial</a>',
             'ratingform'                  => saswp_t_string('Requires').' <a target="_blank" href="https://codecanyon.net/item/rating-form/10357679/">Rating Form</a>',
             'simple_author_box'           => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/simple-author-box//">Simple Author Box</a>',
             'wp_post_ratings'             => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/wp-postratings/">WP-PostRatings</a>',
@@ -3041,6 +3090,7 @@ function saswp_get_field_note($pname){
             'slimseo'                     => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/slim-seo/">Slim SEO</a>',
             'rank_math'                   => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/seo-by-rank-math/">WordPress SEO Plugin – Rank Math</a>',            
             'dw_qna'                      => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/dw-question-answer/">DW Question Answer</a>',
+            'wpqa'                        => saswp_t_string('Requires').' <a target="_blank" href="https://2code.info/wpqa-builder/">WPQA Builder Plugin</a>',
             'sabaidiscuss'                => saswp_t_string('Requires').' <a target="_blank" href="https://sabaidiscuss.com">SabaiDiscuss</a>',
             'smart_crawl'                 => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/smartcrawl-seo/">SmartCrawl Seo</a>',
             'the_seo_framework'           => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/autodescription/">The Seo Framework</a>',
@@ -3051,12 +3101,13 @@ function saswp_get_field_note($pname){
             'wpzoom'                      => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/recipe-card-blocks-by-wpzoom">Recipe Card Blocks by WPZOOM</a>',        
             'video_thumbnails'            => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/video-thumbnails/">Video Thumbnails</a>',        
             'featured_video_plus'         => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/featured-video-plus/">Featured Video Plus</a>',        
-            'yotpo'                       => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/yotpo-social-reviews-for-woocommerce/">Yotpo: Product & Photo Reviews for WooCommerce</a>',        
+            'yotpo'                       => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/yotpo-social-reviews-for-woocommerce/">Yotpo: Product & Photo Reviews for WooCommerce</a>',
+            'ryviu'                       => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/ryviu">Ryviu – Product Reviews for WooCommerce</a>',
             'starsrating'                 => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/stars-rating">Stars Rating</a>',        
             'ultimate_blocks'             => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/ultimate-blocks">Ultimate Blocks – Gutenberg Blocks Plugin</a>',        
-            'wptastyrecipe'               => saswp_t_string('Requires').' <a target="_blank" href="https://www.wptasty.com">WP Tasty Recipe</a>',        
-            'recipress'                   => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/recipress">ReciPress</a>',        
-            'wp_ultimate_recipe'          => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/wp-ultimate-recipe/">WP Ultimate Recipe</a>',        
+            'wptastyrecipe'               => saswp_t_string('Requires').' <a target="_blank" href="https://www.wptasty.com">WP Tasty Recipe</a>',
+            'recipress'                   => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/recipress">ReciPress</a>',
+            'wp_ultimate_recipe'          => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/wp-ultimate-recipe/">WP Ultimate Recipe</a>',
             'learn_press'                 => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/learnpress/">Learn Press</a>',
             'learn_dash'                  => saswp_t_string('Requires').' <a target="_blank" href="https://www.learndash.com/pricing-and-purchase/">Learn Dash</a>',
             'lifter_lms'                  => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/lifterlms/">LifterLMS</a>',
@@ -3199,7 +3250,11 @@ function saswp_current_user_allowed(){
     
     global $sd_data;
     
-    if( is_user_logged_in() ) {
+    if(!function_exists('wp_get_current_user')) {                
+        require_once( ABSPATH . '/wp-includes/pluggable.php' );
+    } 
+
+    if( ( function_exists('is_user_logged_in') && is_user_logged_in() )  && function_exists('wp_get_current_user') ) {
     
     $currentUser     = wp_get_current_user();        
     $saswp_roles     = isset($sd_data['saswp-role-based-access']) ? $sd_data['saswp-role-based-access'] : array('administrator');
@@ -3240,24 +3295,33 @@ function saswp_current_user_can(){
 function saswp_post_type_capabilities(){
         
         $caplist = array();
-    
-        $cap = saswp_current_user_can();
-    
-        if(!is_super_admin()){
-        
-            $caplist =  array(
-                'publish_posts'       => $cap,
-                'edit_posts'          => $cap,
-                'edit_others_posts'   => $cap,
-                'delete_posts'        => $cap,
-                'delete_others_posts' => $cap,
-                'read_private_posts'  => $cap,
-                'edit_post'           => $cap,
-                'delete_post'         => $cap,
-                'read_post'           => $cap,
-            ); 
             
+        if(!function_exists('is_super_admin') || !function_exists('wp_get_current_user')) {                
+            require_once( ABSPATH . '/wp-includes/capabilities.php' );
+            require_once( ABSPATH . '/wp-includes/pluggable.php' );
         }
+
+        if( function_exists('is_super_admin') && function_exists('wp_get_current_user') ){
+
+            $cap = saswp_current_user_can();
+
+            if(!is_super_admin()){
+        
+                $caplist =  array(
+                    'publish_posts'       => $cap,
+                    'edit_posts'          => $cap,
+                    'edit_others_posts'   => $cap,
+                    'delete_posts'        => $cap,
+                    'delete_others_posts' => $cap,
+                    'read_private_posts'  => $cap,
+                    'edit_post'           => $cap,
+                    'delete_post'         => $cap,
+                    'read_post'           => $cap,
+                ); 
+                
+            }
+
+        }        
         
         return $caplist;      
 }
@@ -3407,15 +3471,21 @@ function saswp_get_video_metadata($content = ''){
            if($matches){
                
                foreach($matches as $match){
-                  
-                  $vurl     = $match[1].'youtube.com'.$match[2]; 
+
+                  $vurl     = 'https://youtube.com'.$match[2]; 
                   $rulr     = 'https://www.youtube.com/oembed?url='.esc_attr($vurl).'&format=json';  
                   $result   = @wp_remote_get($rulr);                                    
-                  $metadata = json_decode(wp_remote_retrieve_body($result),true);
+                  $metadata = array();
 
-                  $metadata['video_url'] = $vurl;                    
+                  if(wp_remote_retrieve_response_code($result) == 200) {
+
+                        $metadata = json_decode(wp_remote_retrieve_body($result),true);                                                
+
+                  }
+
+                  $metadata['video_url'] = $vurl;
                   $response[] = $metadata;
-                   
+
                }                              
            }
            
@@ -3437,19 +3507,30 @@ function saswp_get_video_metadata($content = ''){
                               
            } 
 
-           $attributes = saswp_get_gutenberg_block_data('core-embed/youtube');            
+
+           if(function_exists('has_block')){
+            
+            if( has_block('core-embed/youtube') ){
+                $attributes = saswp_get_gutenberg_block_data('core-embed/youtube');    
+            }
+
+            if( has_block('core/embed') ){
+                $attributes = saswp_get_gutenberg_block_data('core/embed');    
+            }
            
-           if(isset($attributes['attrs']['url'])){
+            if(isset($attributes['attrs']['url'])){
+ 
+                   $vurl     = $attributes['attrs']['url']; 
+                   $rulr     = 'https://www.youtube.com/oembed?url='.esc_attr($vurl).'&format=json';  
+                   $result   = @wp_remote_get($rulr);                                    
+                   $metadata = json_decode(wp_remote_retrieve_body($result),true);
+ 
+                   $metadata['video_url'] = $vurl;                    
+                   $response[0] = $metadata;
+            }
 
-                  $vurl = $attributes['attrs']['url']; 
-                  $rulr     = 'https://www.youtube.com/oembed?url='.esc_attr($vurl).'&format=json';  
-                  $result   = @wp_remote_get($rulr);                                    
-                  $metadata = json_decode(wp_remote_retrieve_body($result),true);
-
-                  $metadata['video_url'] = $vurl;                    
-                  $response[0] = $metadata;
            }
-                          
+                                     
         return $response;
 }
 
@@ -4013,4 +4094,15 @@ function saswp_get_elementor_widget_data($element_data, $widget_type){
 
       }
     }
+}
+
+function saswp_isset($str){
+
+    $result = false;
+
+    if(isset($str) && $str !=''){
+        $result = true;
+    }
+
+    return $result;
 }

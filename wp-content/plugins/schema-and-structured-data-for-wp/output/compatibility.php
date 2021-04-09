@@ -263,6 +263,9 @@ class saswp_output_compatibility{
         add_filter('wpseo_json_ld_output', '__return_false');         
         $this->saswp_remove_yoast_product_schema();                
     }
+    public function saswp_webstories_override(){        
+        add_filter('web_stories_enable_schemaorg_metadata', '__return_false');   
+    }
         
     public function saswp_the_seo_framework_override(){        
         
@@ -348,7 +351,10 @@ class saswp_output_compatibility{
     public function kk_star_ratings_on_activation(){
         $this->saswp_update_option_on_compatibility_activation('saswp-kk-star-raring');
     }
-    public function elementor_ratings_on_activation(){
+    public function rmprating_on_activation(){
+        $this->saswp_update_option_on_compatibility_activation('saswp-rmprating');
+    }
+    public function elementor_on_activation(){
         $this->saswp_update_option_on_compatibility_activation('saswp-elementor');
     }
     public function ratingform_on_activation(){
@@ -438,6 +444,12 @@ class saswp_output_compatibility{
     public function dw_qna_on_activation(){
          $this->saswp_update_option_on_compatibility_activation('saswp-dw-question-answer');
     }
+    public function wpqa_on_activation(){
+        $this->saswp_update_option_on_compatibility_activation('saswp-wpqa');
+    }
+    public function brb_on_activation(){
+        $this->saswp_update_option_on_compatibility_activation('saswp-brb');
+    }
     public function yoast_seo_on_activation(){
          $this->saswp_update_option_on_compatibility_activation('saswp-yoast');
     }
@@ -498,6 +510,9 @@ class saswp_output_compatibility{
     public function yotpo_on_activation(){
         $this->saswp_update_option_on_compatibility_activation('saswp-yotpo');
     }
+    public function ryviu_on_activation(){
+        $this->saswp_update_option_on_compatibility_activation('saswp-ryviu');
+    }
     public function wptastyrecipe_on_activation(){
         $this->saswp_update_option_on_compatibility_activation('saswp-wptastyrecipe');
     }
@@ -521,6 +536,18 @@ class saswp_output_compatibility{
     }
     public function ampbyautomatic_on_activation(){
          $this->saswp_update_option_on_compatibility_activation('saswp-ampbyautomatic');
+    }
+    public function cmp_on_activation(){
+        $this->saswp_update_option_on_compatibility_activation('saswp-cmp');
+    }
+    public function wpecommerce_on_activation(){
+        $this->saswp_update_option_on_compatibility_activation('saswp-wpecommerce');
+    }
+    public function wpreviewpro_on_activation(){
+        $this->saswp_update_option_on_compatibility_activation('saswp-wpreviewpro');
+    }
+    public function webstories_on_activation(){
+        $this->saswp_update_option_on_compatibility_activation('saswp-webstories');
     }
     public function betteramp_on_activation(){
          $this->saswp_update_option_on_compatibility_activation('saswp-betteramp');

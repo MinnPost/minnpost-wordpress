@@ -6,7 +6,7 @@
  * Author URI:      https://labs.inn.org
  * Text Domain:     republication-tracker-tool
  * Domain Path:     /languages
- * Version:         1.0.2
+ * Version:         1.1.1
  *
  * @package         Republication_Tracker_Tool
  */
@@ -173,11 +173,11 @@ final class Republication_Tracker_Tool {
 				'donate' => '<a href="options-reading.php">Settings</a>',
 				'documentation' => '<a href="https://github.com/INN/republication-tracker-tool/tree/master/docs" target="_blank">Documentation</a>'
 			);
-			
+
 			$links = array_merge( $links, $new_links );
 
 		}
-		
+
 		return $links;
 
 	}

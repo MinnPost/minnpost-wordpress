@@ -26,9 +26,6 @@ wpcom_vip_load_plugin( 'ap-dates-and-times/ap-dates-and-times.php' );
 wpcom_vip_load_plugin( 'arcads-dfp-acm-provider/arcads-dfp-acm-provider.php' );
 wpcom_vip_load_plugin( 'better-image-credits/better-image-credits.php' );
 wpcom_vip_load_plugin( 'category-pagination-fix/category-pagefix.php' );
-if ( 'production' === VIP_GO_ENV ) {
-	wpcom_vip_load_plugin( 'chartbeat/chartbeat.php' );
-}
 wpcom_vip_load_plugin( 'cmb2/init.php' );
 wpcom_vip_load_plugin( 'cmb2-attached-posts/cmb2-attached-posts-field.php' );
 wpcom_vip_load_plugin( 'cmb2-conditionals/cmb2-conditionals.php' );
@@ -82,6 +79,7 @@ wpcom_vip_load_plugin( 'simple-comment-editing/index.php' );
 wpcom_vip_load_plugin( 'staff-user-post-list/staff-user-list.php' );
 wpcom_vip_load_plugin( 'stop-spammer-registrations-plugin/stop-spammer-registrations-new.php' );
 wpcom_vip_load_plugin( 'the-events-calendar/the-events-calendar.php' );
+wpcom_vip_load_plugin( 'tribe-ext-speaker-linked-post-type/tribe-ext-speaker-linked-post-type.php' );
 wpcom_vip_load_plugin( 'user-account-management/user-account-management.php' );
 wpcom_vip_load_plugin( 'view-admin-as/view-admin-as.php' );
 wpcom_vip_load_plugin( 'widget-options/plugin.php' );

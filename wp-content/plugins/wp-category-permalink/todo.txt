@@ -1,0 +1,18 @@
+1.
+We should add an option to remove the BASE category completely from the permalink of a certain post type.
+This plugin does this: https://wordpress.org/plugins/wp-no-base-permalink/ (and we can see its code).
+
+2.
+There is a weird bug. Since the plugin is enabled, we can't save the Screen Options (at the top of the Post List, very very top). We can pick the columns, try to save but it will never. An user wrote me an email about it:
+
+    At first look it seamed to work fine with wp4.5 (with 250k posts), but I had a strange bug in wp-admin/edit.php (post editor "all posts" page) where "screen options" selection of what columns to hide in the post list gets "forgotten"
+
+    It took me a while to figure out that the issue appears when activating wp-category-permalink plugin.
+    Note: the issue remains even after disabling the plugin.
+    The "screen options" worked again only after running this SQL
+    DELETE FROM `wp_usermeta` WHERE `meta_key` LIKE 'wp_manageedit-postcolumnshidden'
+
+But I actually don't know why it happens.
+
+3.
+I found the post.php and ui.php a bit obscure, wouldn't it better to create helper functions and use them? Like get_permalink_taxonomy_from_post, get_category_from_post, I don't know, such things we could re-use here and there.

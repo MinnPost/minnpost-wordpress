@@ -16,6 +16,8 @@ add_action( 'init', 'saswp_register_saswp_reviews_location',20);
 
 add_action( 'manage_saswp_reviews_posts_custom_column' , 'saswp_reviews_custom_columns_set', 10, 2 );
 add_filter( 'manage_saswp_reviews_posts_columns', 'saswp_reviews_custom_columns' );
+add_filter( 'manage_edit-saswp_reviews_sortable_columns', 'saswp_reviews_set_sortable_columns',10,2 );
+add_action( 'pre_get_posts', 'saswp_sort_reviews_date_column_query' );
 
 add_action( 'manage_saswp-collections_posts_custom_column' , 'saswp_collection_custom_columns_set', 10, 2 );
 add_filter( 'manage_saswp-collections_posts_columns', 'saswp_collection_custom_columns' );
@@ -65,22 +67,23 @@ function saswp_register_saswp_reviews_location() {
 function saswp_register_saswp_reviews() {
                         
         $post_type = array(
-	    'labels' => array(
-	        'name' 			=> saswp_t_string( 'Reviews' ),	        
-	        'add_new' 		=> saswp_t_string( 'Add Review' ),
-	        'add_new_item'  	=> saswp_t_string( 'Edit Review' ),
-                'edit_item'             => saswp_t_string( 'Edit Review'),                
-	    ),
-      	'public' 		=> true,
-      	'has_archive' 		=> false,
-      	'exclude_from_search'	=> true,
-    	'publicly_queryable'	=> false,
-        'show_in_menu'          => 'edit.php?post_type=saswp',                
-        'show_ui'               => true,
-	'show_in_nav_menus'     => false,			
-        'show_admin_column'     => true,        
-	'rewrite'               => false,        
-    );
+            'labels' => array(
+                'name' 			    => saswp_t_string( 'Reviews' ),	        
+                'add_new' 		    => saswp_t_string( 'Add Review' ),
+                'add_new_item'  	=> saswp_t_string( 'Edit Review' ),
+                'edit_item'         => saswp_t_string( 'Edit Review'),                
+            ),
+            'public' 		        => true,
+            'has_archive' 		    => false,
+            'exclude_from_search'	=> true,
+            'show_in_admin_bar'     => false,
+            'publicly_queryable'	=> false,
+            'show_in_menu'          => 'edit.php?post_type=saswp',                
+            'show_ui'               => true,
+            'show_in_nav_menus'     => false,			
+            'show_admin_column'     => true,        
+            'rewrite'               => false
+        );
     
         if(saswp_current_user_allowed()){
             
@@ -190,19 +193,43 @@ function saswp_reviews_custom_columns_set( $column, $post_id ) {
                
             }
 }
+function saswp_sort_reviews_date_column_query( $query ) {
+
+    if ( ! is_admin() )
+    return;
+
+    $orderby = $query->get( 'orderby');
+
+    if ( 'saswp_review_date' == $orderby ) {
+        $query->set( 'meta_key', 'saswp_review_date' );
+        $query->set( 'orderby', 'meta_value_num' );
+    }
+    if ( 'saswp_review_rating' == $orderby ) {
+        $query->set( 'meta_key', 'saswp_review_rating' );
+        $query->set( 'orderby', 'meta_value_num' );
+    }
+
+}
+
+function saswp_reviews_set_sortable_columns( $columns ){
+
+    $columns['saswp_review_date']  = 'saswp_review_date';
+    $columns['saswp_review_rating'] = 'saswp_review_rating';
+    return $columns;
+}
 
 function saswp_reviews_custom_columns($columns) {    
     
     unset($columns);
     
     $columns['cb']                         = '<input type="checkbox" />';
-    $columns['saswp_reviewer_image']       = '<a>'.saswp_t_string( 'Image' ).'<a>';
+    $columns['saswp_reviewer_image']       = saswp_t_string( 'Image' );
     $columns['title']                      = saswp_t_string( 'Title' );    
-    $columns['saswp_review_rating']        = '<a>'.saswp_t_string( 'Rating' ).'<a>';    
-    $columns['saswp_review_platform']      = '<a>'.saswp_t_string( 'Platform' ).'<a>';    
-    $columns['saswp_review_date']          = '<a>'.saswp_t_string( 'Review Date' ).'<a>'; 
-    $columns['saswp_review_place_id']      = '<a>'.saswp_t_string( 'Place ID/Reviewed To' ).'<a>';    
-    $columns['saswp_review_shortcode']     = '<a>'.saswp_t_string( 'Shortcode' ).'<a>';    
+    $columns['saswp_review_rating']        = saswp_t_string( 'Rating' );    
+    $columns['saswp_review_platform']      = saswp_t_string( 'Platform' );    
+    $columns['saswp_review_date']          = saswp_t_string( 'Review Date' ); 
+    $columns['saswp_review_place_id']      = saswp_t_string( 'Place ID/Reviewed To' );    
+    $columns['saswp_review_shortcode']     = saswp_t_string( 'Shortcode' );    
     
     return $columns;
 }
@@ -326,7 +353,7 @@ function saswp_insert_platform_terms(){
 
     $platform_inserted = get_transient('saswp_platform_inserted');
     
-    if($platform_inserted != 79){
+    if($platform_inserted != 81){
         
         $term_array = array(    
             'Self',
@@ -337,10 +364,11 @@ function saswp_insert_platform_terms(){
             'Expedia', 
             'Facebook', 
             'Google', 
+            'Goodreads',
             'TripAdvisor', 
             'Yelp', 
             'Zillow', 
-            'Zomato',                     
+            'Zomato',                        
             'Airbnb', 
             'AliExpress', 
             'AlternativeTo', 
@@ -393,6 +421,7 @@ function saswp_insert_platform_terms(){
             'Siftery', 
             'Steam',
             'SoftwareAdvice',
+            'Shopify App Store',                     
             'Shopper Approved',
             'Talabat', 
             'The Knot', 
@@ -432,8 +461,8 @@ function saswp_insert_platform_terms(){
 
         }
 
-        if(count($term_ids)  == 79){
-            set_transient('saswp_platform_inserted', 79,  24*7*HOUR_IN_SECONDS ); 
+        if(count($term_ids)  == 81){
+            set_transient('saswp_platform_inserted', 81,  24*7*HOUR_IN_SECONDS ); 
         }
 
     }
@@ -509,6 +538,13 @@ add_filter( 'parse_query', 'saswp_sort_reviews_by_platform' );
 
 function saswp_reviews_form_shortcode_metabox($post){
     
-    echo '<p>Use Below shortcode to show reviews form in your website. Using this you can collect reviews from your website directly</p>';
+    echo '<p>'.saswp_t_string( 'Use Below shortcode to show reviews form in your website. Using this you can collect reviews from your website directly.').'</p>';
     echo '<input type="text" value="[saswp-reviews-form]" readonly>';
+}
+
+function saswp_reviews_usage_metabox ($post) {
+
+    echo '<p>'.saswp_t_string( 'Use these reviews to create a collection and use them to show on frontend.').'</p>';
+    echo '<div><a href="'.esc_url( admin_url("edit.php?post_type=saswp-collections") ).'">'.saswp_t_string( 'Add to collection').'</a></div>';
+
 }

@@ -1,13 +1,13 @@
 <?php
 // Allow List - returns false if not found
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+
+if ( !defined( 'ABSPATH' ) ) {
+	http_response_code( 404 );
+	die();
 }
 
 class chkdisp {
-	public function process(
-		$ip, &$stats = array(), &$options = array(), &$post = array()
-	) {
+	public function process( $ip, &$stats = array(), &$options = array(), &$post = array() ) {
 		if ( empty( $options['em'] ) ) {
 			return false;
 		}
@@ -3125,13 +3125,11 @@ class chkdisp {
 			'zzi.us',
 			'zzz.com',
 		);
-		$emdomain    = explode( '@', $options['em'] );
-		if ( count( $emdomain ) == 2
-		     && in_array( strtolower( $emdomain[1] ), $disposables )
-		) {
-// the email is a disposable email address
-// do you really want this guy?
-			return 'Disposable Email: ' . $options['em'];
+		$emdomain = explode( '@', $options['em'] );
+		if ( count( $emdomain ) == 2 && in_array( strtolower( $emdomain[1] ), $disposables ) ) {
+			// the email is a disposable email address
+			// do you really want this guy?
+			return __( 'Disposable Email: ', 'stop-spammer-registrations-plugin' ) . $options['em'];
 		}
 		return false;
 	}

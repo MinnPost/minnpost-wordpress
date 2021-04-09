@@ -1,13 +1,12 @@
 === Stop Spammers ===
 
-Author: Trumani
-Plugin URI: https://trumani.com/
 Contributors: trumani, bhadaway, hiteshchandwani, Keith Graham
-Donate link: https://trumani.com/donate
+Donate link: https://stopspammers.io/donate
 Tags: spam, security, anti-spam, spam blocker, block spam, signup spam, comment spam, spam filter, registration spam, spammer, spammers, spamming, xss, malware, virus, captcha, comment, comments, login, protection, user registration spam
-Stable Tag: trunk
-Version: 2020.6.2
-Tested up to: 5.5
+Requires PHP: 7.0
+Requires at least: 5.0
+Tested up to: 5.7
+Stable tag: 2021.12
 License: https://www.gnu.org/licenses/gpl.html
 
 Robust WordPress security & spam prevention. Leverage our pre-defined allow/block lists. Adjust configurable security settings on hyphens, periods, too many hits, quick responses, & much more. Manage custom lists for IPs, emails, usernames, and spam words. Run diagnostic testing and log reporting.
@@ -16,26 +15,27 @@ Robust WordPress security & spam prevention. Leverage our pre-defined allow/bloc
 
 Stop spam emails, spam comments, spam registration, and spam bots and spammers in general. Run diagnostic tests, view activity, and much more with this well-maintained, mature plugin.
 
-Stop Spammers works right out-of-the-box, without needing to adjust any settings. If you need more sophisticated protection, you have 50+ configuration options at your fingertips for maximum personalization.
+Stop Spammers adds security that should kill off many of your spam worries straight out-of-the-box. Because every website is different (especially if you have integrated a payment gateway), we offer dozens of features you can leverage to meet your website's specific needs. Our 50+ configuration options make personalization easy.
 
-Get even more options with <strong><a href="https://trumani.com/downloads/stop-spammers-premium/">Stop Spammers Premium</a></strong>.
+Get even more options with **[Stop Spammers Premium](https://stopspammers.io/downloads/stop-spammers-premium/)**.
 
 **Features**
 
 Extremely granular control, so that any variety of website can create a special custom cocktail just for their particular spam issues:
 
-* Block suspicious behavior
-* Block IPs found in public blacklists
-* Block spam words
-* Block disposable emails
-* Block URL shortening services
-* Block TLDs
-* Block countries
-* Block/allow IPs, emails, and usernames manually
-* Send email when allow list request is approved
+* [Block suspicious behavior](https://stopspammers.io/documentation/protection-options/)
+* [Block spam words, disposable emails, URL shortener links, TLDs and more](https://stopspammers.io/documentation/protection-options/)
+* [Connect third-party spam defense services](https://stopspammers.io/documentation/web-services/)
+* [Block countries](https://stopspammers.io/documentation/protection-options/#blockcountries)
+* [Block/allow IPs, emails, and usernames manually](https://stopspammers.io/documentation/allow-requests-and-lists/)
+* [Hide admin notices permanently](https://stopspammers.io/updates/notification-control-stop-admin-spam-messages/)
+* [Allow users to request access and send email when allow list request is approved](https://stopspammers.io/documentation/challenge-and-block/)
+* [Members-only mode](https://stopspammers.io/stop-spammers-features/members-only-mode/)
 * So much more...
 * Server-level firewall protection (Premium Only)
 * Themed registration/login pages and menu links (Premium Only)
+* Brute force login protection (Premium Only)
+* Notification control (Premium Only)
 * Import/export settings (Premium Only)
 * Export log to Excel (Premium Only)
 * Restore default settings (Premium Only)
@@ -80,7 +80,7 @@ Yes and no. You can use all Jetpack features except for Jetpack Protect, as it c
 
 Yes. The two can compliment each other. However, if you have only a small amount of hosting resources (mainly memory) or aren't even allowing registration on your website, using both might be overkill.
 
-= 2FA is failing. =
+= Why is 2FA failing? =
 
 Toggle off the "Check Credentials on All Login Attempts" option and try again.
 
@@ -89,6 +89,65 @@ Toggle off the "Check Credentials on All Login Attempts" option and try again.
 Yes. See: [https://law.stackexchange.com/questions/28603/how-to-satisfy-gdprs-consent-requirement-for-ip-logging](https://law.stackexchange.com/questions/28603/how-to-satisfy-gdprs-consent-requirement-for-ip-logging). Stop Spammers does not collect any data for any other purpose (like marketing or tracking). It is purely for legitimate security purposes only. Additionally, if any of your users ever requested it, all data can be deleted.
 
 == Changelog ==
+
+= 2021.12 =
+* [Fix] Minor fixes
+
+= 2021.11 =
+* [Fix] Settings fix
+
+= 2021.10 =
+* [Enhanced] Security
+
+= 2021.9 =
+* [Enhanced] Security
+
+= 2021.8 =
+* [Update] UI improvements
+* [Enhanced] Notification Control feature
+* [Fix] Math question
+
+= 2021.7 =
+* [Update] PayPal IPs
+* [Enhanced] Cleanup
+
+= 2021.6 =
+* [New] Notification Control feature
+* [New] Sortable registered date column on Users page
+* [Enhanced] Security
+* [Enhanced] Code audit and cleanup
+
+= 2021.5 =
+* [Fix] Email fix
+
+= 2021.4 =
+* [Fix] SFS report fix
+
+= 2021.3 =
+* [Fix] Error fixes
+
+= 2021.2.1 =
+* [Fix] Login issue
+
+= 2021.2 =
+* [New] Strings are now translation-ready
+* [Update] UI improvements
+* [Update] Safety checks for WooCommerce
+* [Enhanced] When approving allow requests, the email address is now whitelisted
+* [Enhanced] Code audit and cleanup
+* [Fix] "Clear the Requests" toggles off other settings
+* [Fix] Too many periods feature
+
+= 2021.1 =
+* [Update] Third-party service IP lists
+
+= 2021 =
+* [New] Private mode feature
+* [Update] UI improvements
+* [Enhanced] Too many periods feature
+* [Enhanced] Emails are now off by default (to avoid potential issues with server reputation)
+* [Enhanced] Code audit and cleanup
+* [Fix] Shortened URL option only checks for exact matches now
 
 = 2020.6.2 =
 * [Update] Minor UI improvements
@@ -99,7 +158,7 @@ Yes. See: [https://law.stackexchange.com/questions/28603/how-to-satisfy-gdprs-co
 
 = 2020.6 =
 * [New] Send email when allow list request is approved (community request)
-* [New] Approve or Deny action in request email with link to Allow List page (community request)
+* [New] Approve or Block action in request email with link to Allow List page (community request)
 * [Update] Update Stop Spammers menu icon to 'S' logo
 * [Fix] Conditional fields hidden on page load when option is enabled
 * [Fix] Updates to multisite (community reported)
@@ -107,10 +166,10 @@ Yes. See: [https://law.stackexchange.com/questions/28603/how-to-satisfy-gdprs-co
 * [Fix] Wrong key used for the spam reason in the allow request email template sent to the web admin
 
 = 2020.5.1 =
-* [Fix] Deny if email has too many periods
+* [Fix] Block if email has too many periods
 
 = 2020.5 =
-* [New] Deny URL shortening service links
+* [New] Block URL shortening service links
 
 = 2020.4.5 =
 * [New] Notice
@@ -131,7 +190,7 @@ Yes. See: [https://law.stackexchange.com/questions/28603/how-to-satisfy-gdprs-co
 * [New] Force username-only login
 * [New] Force email-only login
 * [New] Disable custom passwords
-* [Enhanced] 2,500+ disposable email domains added to deny list
+* [Enhanced] 2,500+ disposable email domains added to block list
 * [Update] Support notice
 
 = 2020.3 =

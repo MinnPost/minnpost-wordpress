@@ -287,7 +287,7 @@ abstract class Component {
 		$dom = new \DOMDocument();
 		libxml_use_internal_errors( true );
 		$dom->loadHTML( '<?xml encoding="utf-8" ?>' . $html );
-		libxml_clear_errors( true );
+		libxml_clear_errors();
 
 		// Find the first-level nodes of the body tag.
 		$element = $dom->getElementsByTagName( 'body' )->item( 0 )->childNodes->item( 0 );
@@ -308,6 +308,11 @@ abstract class Component {
 			$this->json['text'] = wp_kses( $this->json['text'], $this->allowed_html );
 		}
 
+		/**
+		 * Filters the final JSON for a specific component.
+		 *
+		 * @param array $json A PHP array representation of the JSON for this component.
+		 */
 		return apply_filters( 'apple_news_' . $this->get_component_name() . '_json', $this->json );
 	}
 

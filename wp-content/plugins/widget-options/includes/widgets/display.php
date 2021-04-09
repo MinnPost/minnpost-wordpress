@@ -357,9 +357,14 @@ if( !function_exists( 'widgetopts_display_callback' ) ):
                 if ( stristr($display_logic,"return")===false ){
                     $display_logic="return (" . $display_logic . ");";
                 }
-                if ( !eval( $display_logic ) ){
-                    return false;
-                }
+				$display_logic = htmlspecialchars_decode($display_logic, ENT_QUOTES);
+				try {
+					if ( !eval( $display_logic ) ){
+						return false;
+					}
+				} catch (ParseError $e) {
+					return false;
+				}
             }
         }
 

@@ -818,6 +818,15 @@ jQuery(document).ready(function($){
                             }
                       break;
 
+                      case 'saswp-ryviu-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-ryviu").val(1);                                
+                            }else{
+                              $("#saswp-ryviu").val(0);                                          
+                            }
+                      break;
+
                       case 'saswp-ultimate-blocks-checkbox':
                           saswp_compatibliy_notes(current, id); 
                             if ($(this).is(':checked')) {              
@@ -965,14 +974,26 @@ jQuery(document).ready(function($){
                               $("#saswp_search_box_schema").val(0);           
                             }
                       break;
+
+                      case 'saswp_breadcrumb_remove_cat_checkbox':
+                          
+                            if ($(this).is(':checked')) {              
+                              $("#saswp_breadcrumb_remove_cat").val(1);             
+                            }else{
+                              $("#saswp_breadcrumb_remove_cat").val(0);           
+                            }
+                      break;
                       
                       case 'saswp_breadcrumb_schema_checkbox':
                           
                             if ($(this).is(':checked')) {              
-                              $("#saswp_breadcrumb_schema").val(1);             
+                              $("#saswp_breadcrumb_schema").val(1);  
+                              $("#saswp_breadcrumb_remove_cat").parent().parent().show();             
                             }else{
                               $("#saswp_breadcrumb_schema").val(0);           
+                              $("#saswp_breadcrumb_remove_cat").parent().parent().hide();  
                             }
+
                       break;
                                                                   
                       case 'saswp_comments_schema_checkbox':
@@ -1023,6 +1044,16 @@ jQuery(document).ready(function($){
                             }
                       break;
 
+                      case 'saswp-rmprating-checkbox':
+                          
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-rmprating").val(1);             
+                            }else{
+                              $("#saswp-rmprating").val(0);           
+                            }
+                      break;
+
                       case 'saswp-ratingform-checkbox':
                           
                           saswp_compatibliy_notes(current, id); 
@@ -1069,6 +1100,15 @@ jQuery(document).ready(function($){
                               $("#saswp-woocommerce").val(0);                                         
                             }
                       break;
+
+                      case 'saswp-wpecommerce-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-wpecommerce").val(1);                              
+                            }else{
+                              $("#saswp-wpecommerce").val(0);                                         
+                            }
+                      break;
                       
                       case 'saswp-default-review-checkbox':
                           saswp_compatibliy_notes(current, id); 
@@ -1112,6 +1152,15 @@ jQuery(document).ready(function($){
                               $("#saswp-dw-question-answer").val(1);             
                             }else{
                               $("#saswp-dw-question-answer").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-wpqa-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-wpqa").val(1);             
+                            }else{
+                              $("#saswp-wpqa").val(0);           
                             }
                       break;
                       
@@ -1605,6 +1654,16 @@ jQuery(document).ready(function($){
                             }
                             
                       break;
+
+                      case 'saswp-brb-checkbox':
+                          
+                            if ($(this).is(':checked')) {
+                              $("#saswp-brb").val(1);                                
+                            }else{
+                              $("#saswp-brb").val(0);                                          
+                            }
+                            
+                      break;
                       
                       case 'saswp-testimonial-pro-checkbox':
                           
@@ -1643,6 +1702,38 @@ jQuery(document).ready(function($){
                               $("#saswp-ampbyautomatic").val(1);                                
                             }else{
                               $("#saswp-ampbyautomatic").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-cmp-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {
+                              $("#saswp-cmp").val(1);                                
+                            }else{
+                              $("#saswp-cmp").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-wpreviewpro-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {                                            
+
+                              $("#saswp-wpreviewpro").val(1);                                
+                            }else{
+                              $("#saswp-wpreviewpro").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-webstories-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {                                            
+
+                              $("#saswp-webstories").val(1);                                
+                            }else{
+                              $("#saswp-webstories").val(0);                                          
                             }
                             
                       break;
@@ -2611,6 +2702,8 @@ jQuery(document).ready(function($){
         
         if(hash == '#saswp-default-container'){
             $('.saswp-global-container:eq(2)').show();
+        }else if(hash == '#saswp-knowledge-container'){
+            $('.saswp-global-container:eq(1)').show();
         }else{
             $('.saswp-global-container:first').show();
         }
@@ -2967,6 +3060,7 @@ jQuery(document).ready(function($){
                 html += '<p>Use Below shortcode to show reviews form in your website. Using this you can accept reviews from your website directly</p>';
                 html += '<div class="saswp-show-form-on-tab"><strong>Simple Form</strong> <input value="[saswp-reviews-form]" type="text" readonly></div>';
                 html += '<div class="saswp-show-form-on-tab"><strong>Show form on button tap</strong> <input value="[saswp-reviews-form onbutton=&quot;1&quot;]" type="text" readonly></div>';
+                html += '<p><strong>Note:</strong> To enable google reCAPTCHA v2 add SITE KEY & SECRET KEY respectively as parameters in above shortcode. Eg <input value="[saswp-reviews-form site_key=&quot;your key&quot; secret_key=&quot;your key&quot;]" type="text" readonly>. To get keys <a target="_blank" href="https://www.google.com/recaptcha/admin/create">Click here.</a> You must choose reCAPTCHA type v2 </p>'
                 html += '</div>';
                 html += '</div>';
                 
@@ -2982,28 +3076,30 @@ jQuery(document).ready(function($){
             
         }
         // Offer Banner addition
-        if('saswp_reviews' == saswp_localize_data.post_type && saswp_localize_data.page_now == 'edit.php'){
+        // if('saswp_reviews' == saswp_localize_data.post_type && saswp_localize_data.page_now == 'edit.php'){
 
-          var offer_banner = '<a style="background: #ca4a1f;color: #fff;border-color:#ca4a1f;" target="_blank" href="http://structured-data-for-wp.com/festive-season/" class="page-title-action saswp-offer-banner">50% OFF for Limited time</a>';
-          jQuery(jQuery(".wrap .page-title-action")).after(offer_banner);
+        //   var offer_banner = '<a style="background: #ca4a1f;color: #fff;border-color:#ca4a1f;" target="_blank" href="http://structured-data-for-wp.com/festive-season/" class="page-title-action saswp-offer-banner">50% OFF for Limited time</a>';
+        //   jQuery(jQuery(".wrap .page-title-action")).after(offer_banner);
 
-        }
+        // }
 
 
-        if('saswp' == saswp_localize_data.post_type && saswp_localize_data.page_now == 'post.php'){
+        // if('saswp' == saswp_localize_data.post_type && saswp_localize_data.page_now == 'post.php'){
 
-          var offer_banner = '<a style="background: #ca4a1f;color: #fff;border-color:#ca4a1f;" target="_blank" href="http://structured-data-for-wp.com/festive-season/" class="page-title-action saswp-offer-banner">50% OFF for Limited time</a>';
-          jQuery(jQuery(".wrap a")[0]).after(offer_banner);
+        //   var offer_banner = '<a style="background: #ca4a1f;color: #fff;border-color:#ca4a1f;" target="_blank" href="http://structured-data-for-wp.com/festive-season/" class="page-title-action saswp-offer-banner">50% OFF for Limited time</a>';
+        //   jQuery(jQuery(".wrap a")[0]).after(offer_banner);
 
-        }
+        // }
 
         if ('saswp' == saswp_localize_data.post_type && saswp_localize_data.page_now == 'edit.php') {
         
           // Offer Banner addition
 
-          var offer_banner = '<a style="background: #ca4a1f;color: #fff;border-color:#ca4a1f;" target="_blank" href="http://structured-data-for-wp.com/festive-season/" class="page-title-action saswp-offer-banner">50% OFF for Limited time</a>';
+          //var offer_banner = '<a style="background: #ca4a1f;color: #fff;border-color:#ca4a1f;" target="_blank" href="http://structured-data-for-wp.com/festive-season/" class="page-title-action saswp-offer-banner">50% OFF for Limited time</a>';
           
-          jQuery(jQuery(".wrap a")[0]).after("<a href='"+saswp_localize_data.saswp_settings_url+"' id='' class='page-title-action'>Settings</a>"+offer_banner);
+          //jQuery(jQuery(".wrap a")[0]).after("<a href='"+saswp_localize_data.saswp_settings_url+"' id='' class='page-title-action'>Settings</a>"+offer_banner);
+
+          jQuery(jQuery(".wrap a")[0]).after("<a href='"+saswp_localize_data.saswp_settings_url+"' id='' class='page-title-action'>Settings</a>");
          
         }
         

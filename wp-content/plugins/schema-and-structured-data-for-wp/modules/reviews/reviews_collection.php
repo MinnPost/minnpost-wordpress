@@ -226,6 +226,7 @@ class SASWP_Reviews_Collection {
                     'has_archive' 	    => true,
                     'exclude_from_search'   => true,
                     'publicly_queryable'    => false,
+                    'show_in_admin_bar'     => false,
                     //'show_in_menu'          => 'edit.php?post_type=saswp',                
                     'show_in_menu'          => false,                
                     'show_ui'               => true,
@@ -346,7 +347,7 @@ class SASWP_Reviews_Collection {
                 $perpage              = null;
                 $data_id              = null;
                 $dots = $f_interval = $f_visibility = $arrow = 1;
-                $g_type = $design = $cols = $sorting = '';
+                $g_type = $design = $cols = $sorting = $date_format = '';
                 
                 $collection_data = get_post_meta($attr['id']);
                 
@@ -354,7 +355,16 @@ class SASWP_Reviews_Collection {
                     $design        = $collection_data['saswp_collection_design'][0];
                     $this->_design = $design;
                 }
-                                
+
+                if(isset($collection_data['saswp_collection_date_format'][0])){
+                    $date_format        = $collection_data['saswp_collection_date_format'][0];                    
+                }
+                
+                if(isset($collection_data['saswp_collection_cols'][0])){
+                    
+                    $cols          = $collection_data['saswp_collection_cols'][0];
+                }
+                
                 if(isset($collection_data['saswp_collection_cols'][0])){
                     
                     $cols          = $collection_data['saswp_collection_cols'][0];
@@ -389,8 +399,12 @@ class SASWP_Reviews_Collection {
                     $platform_id  = unserialize($collection_data['saswp_platform_ids'][0]);                
                 }
                 if(isset($collection_data['saswp_platform_ids'][0])){
+                    
                     $total_reviews  = unserialize($collection_data['saswp_total_reviews'][0]);
-                    $total_reviews_count = count($total_reviews);
+                    if( is_array($total_reviews) && !empty($total_reviews) ){
+                        $total_reviews_count = count($total_reviews);
+                    }
+                    
                 }
                 if(isset($collection_data['saswp_collection_pagination'][0])){
                     $pagination  = $collection_data['saswp_collection_pagination'][0];                
@@ -467,13 +481,13 @@ class SASWP_Reviews_Collection {
                     
                     case "grid":
                         
-                        $html = $this->_service->saswp_create_collection_grid($cols, $collection, $total_reviews, $pagination, $perpage, $offset, $nextpage, $data_id, $total_reviews_count);
+                        $html = $this->_service->saswp_create_collection_grid($cols, $collection, $total_reviews, $pagination, $perpage, $offset, $nextpage, $data_id, $total_reviews_count, $date_format);
                         
                         break;
                         
                     case 'gallery':
                         
-                        $html = $this->_service->saswp_create_collection_slider($g_type, $arrow, $dots, $collection);
+                        $html = $this->_service->saswp_create_collection_slider($g_type, $arrow, $dots, $collection, $date_format);
                         
                         break;
                     
@@ -485,13 +499,13 @@ class SASWP_Reviews_Collection {
                         
                     case 'popup':
                         
-                        $html = $this->_service->saswp_create_collection_popup($collection);
+                        $html = $this->_service->saswp_create_collection_popup($collection, $date_format);
                         
                         break;
                     
                     case 'fomo':
                         
-                        $html = $this->_service->saswp_create_collection_fomo($f_interval, $f_visibility, $collection);
+                        $html = $this->_service->saswp_create_collection_fomo($f_interval, $f_visibility, $collection, $date_format);
                         
                         
                         break;
@@ -539,6 +553,10 @@ class SASWP_Reviews_Collection {
                 'badge'    => 'Badge',
                 'popup'    => 'PopUp',
                 'fomo'     => 'Fomo',
+            );
+            $date_format = array(
+                'Y-m-d'  => 'yyyy-mm-dd',
+                'd-m-Y'  => 'dd-mm-yyyy',                
             );
        
             $coll_sorting = array(
@@ -689,7 +707,17 @@ class SASWP_Reviews_Collection {
                                             </span>
                                             <input type="number" id="saswp_fomo_interval" name="saswp_fomo_interval" class="saswp-number-change" min="1" value="<?php echo (isset($post_meta['saswp_fomo_interval'][0]) ? $post_meta['saswp_fomo_interval'][0] : '3' ); ?>"> 
                                             </div>                                                                           
-                                        </div>                                                                        
+                                        </div>      
+                                        <div class="saswp-dp-dsg">
+                                        <lable><?php echo saswp_t_string('Date Format'); ?></lable>  
+                                        <select name="saswp_collection_date_format" class="saswp-collection-date-format saswp-coll-settings-options">
+                                            <?php
+                                            foreach($date_format as $key => $val){                                                
+                                                echo '<option value="'.esc_attr($key).'" '.($post_meta['saswp_collection_date_format'][0] == $key ? 'selected':'').' >'.saswp_t_string( $val  ).'</option>';
+                                            }
+                                            ?>                                    
+                                         </select>
+                                        </div>                                                                  
                                     </div>
                                 </li>
                               <li>
@@ -860,6 +888,7 @@ class SASWP_Reviews_Collection {
             update_option('saswp_collection_display_opt', $display_type_opt);
             
             $post_meta['saswp_collection_design']       = isset($_POST['saswp_collection_design']) ? sanitize_text_field($_POST['saswp_collection_design']) : '';                        
+            $post_meta['saswp_collection_date_format']  = isset($_POST['saswp_collection_date_format']) ? sanitize_text_field($_POST['saswp_collection_date_format']) : '';                        
             $post_meta['saswp_collection_sorting']      = isset($_POST['saswp_collection_sorting']) ? sanitize_text_field($_POST['saswp_collection_sorting']) : '';
             $post_meta['saswp_collection_display_type'] = $display_type;
             $post_meta['saswp_collection_gallery_type'] = isset($_POST['saswp_collection_gallery_type']) ? sanitize_text_field($_POST['saswp_collection_gallery_type']) : '';

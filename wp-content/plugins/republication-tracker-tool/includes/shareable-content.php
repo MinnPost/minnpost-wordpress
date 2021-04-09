@@ -31,7 +31,7 @@ unset( $allowed_tags_excerpt['form'] );
 
 /**
  * Allow sites to configure which tags are allowed to be output in the republication content
- * 
+ *
  * Default value is the standard global $allowedposttags, except form elements.
  *
  * @link https://github.com/INN/republication-tracker-tool/issues/49
@@ -65,8 +65,6 @@ $content = htmlspecialchars( $content, ENT_HTML5, 'UTF-8', true );
 // grab our analytics id to pass as GA param
 $analytics_id = get_option( 'republication_tracker_tool_analytics_id' );
 
-
-
 /**
  * The article source
  *
@@ -89,7 +87,7 @@ $attribution_statement = sprintf(
 $pixel = sprintf(
 	// %1$s is the javascript source, %2$s is the post ID, %3$s is the plugins URL
 	'<img id="republication-tracker-tool-source" src="%1$s/?republication-pixel=true&post=%2$s&ga=%3$s" style="max-width:200px;">',
-	esc_attr( get_site_url( ) ),
+	esc_attr( get_site_url() ),
 	esc_attr( $post->ID ),
 	esc_attr( $analytics_id )
 );
@@ -117,15 +115,15 @@ $article_info = str_replace( '<p></p>', '', wpautop( $article_info ) );
  */
 $license_statement = wp_kses_post( get_option( 'republication_tracker_tool_policy' ) );
 
-echo '<div id="republication-tracker-tool-modal-content" style="display:none;">';
-	echo '<div class="republication-tracker-tool-close">X</div>';
+echo '<div id="republication-tracker-tool-modal-content" ' . ( $is_amp ? '' : 'style="display:none;"' ) . '>';
+	echo '<div ' . ( $is_amp ? 'on="tap:republication-tracker-tool-modal.close"' : '' ) . ' class="republication-tracker-tool-close">X</div>';
 	echo sprintf( '<h2>%s</h2>', esc_html__( 'Republish this article', 'republication-tracker-tool' ) );
 
 	// Explain Creative Commons
 	echo '<div class="cc-policy">';
 		echo '<div class="cc-license">';
 			echo sprintf( '<a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-nd/4.0/"><img alt="%s" style="border-width:0" src="https://i.creativecommons.org/l/by-nd/4.0/88x31.png" /></a>', esc_html__( 'Creative Commons License' ) );
-			echo wp_kses_post( 
+			echo wp_kses_post(
 				wpautop(
 					sprintf(
 						// translators: %1$s is the URL to the particular Creative Commons license.
@@ -144,15 +142,18 @@ echo '<div id="republication-tracker-tool-modal-content" style="display:none;">'
 	echo '</div>'; // .article-info
 
 	// the text area that is copyable
-	echo wp_kses_post( 
+	echo wp_kses_post(
 		sprintf(
 			'<textarea readonly id="republication-tracker-tool-shareable-content" rows="5">%1$s %2$s %3$s</textarea>',
 			esc_html( $article_info ),
-			$content . "\n\n" ,
-			wpautop( $attribution_statement . $pixel )
+			$content . "\n\n",
+			wpautop( $attribution_statement . htmlentities( $pixel ) )
 		)
 	);
-	?>
-	<button onclick="copyToClipboard('#republication-tracker-tool-shareable-content')"><?php echo esc_html__( 'Copy to Clipboard', 'republication-tracker-tool' ); ?></button>
-	<?php
+	if ( ! $is_amp ) {
+		?>
+			<button onclick="copyToClipboard('#republication-tracker-tool-shareable-content')"><?php echo esc_html__( 'Copy to Clipboard', 'republication-tracker-tool' ); ?></button>
+		<?php
+	}
+
 echo '</div>'; // #republication-tracker-tool-modal-content

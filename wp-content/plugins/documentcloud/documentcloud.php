@@ -3,14 +3,14 @@
  * Plugin Name: DocumentCloud
  * Plugin URI: https://www.documentcloud.org/
  * Description: Embed DocumentCloud resources in WordPress content.
- * Version: 0.5.0
+ * Version: 0.5.1
  * Authors: Chris Amico, Justin Reese, Dylan Freedman
  * License: GPLv2
 ***/
 /*
 	Copyright 2011 National Public Radio, Inc.
 	Copyright 2015 DocumentCloud, Investigative Reporters & Editors
-	Copyright 2020 MuckRock Foundation, Inc.
+	Copyright 2021 MuckRock Foundation, Inc.
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License, version 2, as
@@ -308,14 +308,14 @@ class WP_DocumentCloud {
 	function parse_dc_url( $url ) {
 		$patterns = array(
 			// Document
-			'{' . WP_DocumentCloud::DOCUMENT_PATTERN . '\.html$}',
+			'{' . WP_DocumentCloud::DOCUMENT_PATTERN . '(\.html)?$}',
 			// Pages and page variants
-			'{' . WP_DocumentCloud::DOCUMENT_PATTERN . '.html#document\/p(?P<page_number>[0-9]+)$}',
+			'{' . WP_DocumentCloud::DOCUMENT_PATTERN . '(\.html)?#document\/p(?P<page_number>[0-9]+)$}',
 			'{' . WP_DocumentCloud::DOCUMENT_PATTERN . '\/pages\/(?P<page_number>[0-9]+)\.(html|js)$}',
 			// Notes and note variants
 			'{' . WP_DocumentCloud::DOCUMENT_PATTERN . '\/annotations\/(?P<note_id>[0-9]+)\.(html|js)$}',
-			'{' . WP_DocumentCloud::DOCUMENT_PATTERN . '.html#document\/p([0-9]+)/a(?P<note_id>[0-9]+)$}',
-			'{' . WP_DocumentCloud::DOCUMENT_PATTERN . '.html#annotation\/a(?P<note_id>[0-9]+)$}',
+			'{' . WP_DocumentCloud::DOCUMENT_PATTERN . '(\.html)?#document\/p([0-9]+)/a(?P<note_id>[0-9]+)$}',
+			'{' . WP_DocumentCloud::DOCUMENT_PATTERN . '(\.html)?#annotation\/a(?P<note_id>[0-9]+)(\.[a-z]+)?$}',
 		);
 
 		$elements = array();
