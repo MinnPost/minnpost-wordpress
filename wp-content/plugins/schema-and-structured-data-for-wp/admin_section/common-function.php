@@ -1651,7 +1651,9 @@ if ( ! defined('ABSPATH') ) exit;
                         'value'        => array(),
                         'type'         => array(),
                         'style'        => array(),                    
-                        'width'        => array(),                    
+                        'width'        => array(),
+                        'min'          => array(),
+                        'max'          => array(),                    
                 );
                 $my_allowed['script'] = array(
                         'class'        => array(),
@@ -1777,11 +1779,10 @@ if ( ! defined('ABSPATH') ) exit;
                 if($user_id > 0){
 
                     $user_info = get_userdata($user_id);
-                    $username = $user_info->data->display_name;
+                    $username  = $user_info->data->display_name;
 
                 }
-                $defaults = array(
-                                                                                                
+                $defaults = array(                                                                                                
                         'saswp_kb_type'             => 'Organization',    
                         'sd_name'                   => $sd_name,   
                         'sd_alt_name'               => $sd_name,
@@ -1795,9 +1796,11 @@ if ( ! defined('ABSPATH') ) exit;
                         'saswp-other-images'        => 1,
                         'saswp_default_review'      => 1,
                         'saswp-multiple-size-image' => 1,
+                        'saswp-image-resizing'      => 1,
+                        'saswp_woocommerce_archive' => 1,
+                        'saswp-default-rating'      => 5,
                         'instant_indexing_action'   => 1,
                         'instant_indexing'          => array('post' => 1, 'page' => 1)   
-
                 );	  
                 
                 if(is_array($logo)){
@@ -1871,7 +1874,7 @@ if ( ! defined('ABSPATH') ) exit;
          
          }         
         
-         if($sd_data['saswp-review-module']== 1 && $saswp_rv_item_enable == 1){  
+         if( ( isset($sd_data['saswp-review-module']) && $sd_data['saswp-review-module'] == 1 ) && $saswp_rv_item_enable == 1){  
              
               $rating_module_css  =  SASWP_PLUGIN_DIR_PATH . 'admin_section/css/amp/rating-module.css';  
               echo @file_get_contents($rating_module_css);
@@ -3026,6 +3029,7 @@ function saswp_remove_anonymous_object_filter_or_action( $tag, $class, $method, 
 function saswp_get_field_note($pname){
     
     $notes = array(  
+            'wpml'                        => saswp_t_string('Requires').' <a target="_blank" href="https://wpml.org">WPML</a>',
             'polylang'                    => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/polylang/">Polylang</a>',
             'wpdiscuz'                    => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/wpdiscuz/">Comments – wpDiscuz</a>',
             'rannarecipe'                 => saswp_t_string('Requires').' <a target="_blank" href="https://themeforest.net/item/ranna-food-recipe-wordpress-theme/25157340">Ranna - Food & Recipe</a>',
@@ -3063,7 +3067,11 @@ function saswp_get_field_note($pname){
             'easyfaqs'                    => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/easy-faqs/">Easy FAQs</a>',
             'html5responsivefaq'          => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/html5-responsive-faq/">HTML5 Responsive FAQ</a>',
             'helpiefaq'                   => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/helpie-faq/">Helpie FAQ – WordPress FAQ Accordion Plugin</a>',
+            'mooberrybm'                  => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/mooberry-book-manager/">Mooberry Book Manager</a>',
+            'novelist'                    => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/novelist">Novelist</a>',
             'ampbyautomatic'              => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/amp/">AMP</a>',
+            'wpreviewslider'              => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/wp-facebook-reviews/">WP Review Slider</a>',
+            'jetpackrecipe'               => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/jetpack/">JetPack Recipe</a>',
             'cmp'                         => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/cmp-coming-soon-maintenance/">CMP – Coming Soon & Maintenance Plugin</a>',
             'wpecommerce'                 => saswp_t_string('Requires').' <a target="_blank" href="https://wordpress.org/plugins/wp-e-commerce/">WP eCommerce</a>',
             'wpreviewpro'                 => saswp_t_string('Requires').' <a target="_blank" href="https://mythemeshop.com/plugins/wordpress-review/">WP Review Pro</a>',
@@ -3249,6 +3257,7 @@ function saswp_get_capability_by_role($role){
 function saswp_current_user_allowed(){
     
     global $sd_data;
+    $currentuserrole = array();
     
     if(!function_exists('wp_get_current_user')) {                
         require_once( ABSPATH . '/wp-includes/pluggable.php' );
@@ -3264,7 +3273,7 @@ function saswp_current_user_allowed(){
         if($currentUser->roles){
                 $currentuserrole = (array) $currentUser->roles;
         }else{
-            if($currentUser->caps['administrator']){
+            if( isset($currentUser->caps['administrator']) ){
                     $currentuserrole = array('administrator');
             }	
         }
@@ -3407,7 +3416,8 @@ function saswp_is_date_field($date_str){
 
 function saswp_get_video_metadata($content = ''){
     
-        global $post;
+        global $post, $sd_data;
+      
         $response = array();
 
         if(!$content){
@@ -3466,23 +3476,38 @@ function saswp_get_video_metadata($content = ''){
                           
             }
            
-           preg_match_all( '/src\=\"(.*?)youtube\.com(.*?)\"/s', $content, $matches, PREG_SET_ORDER );
+           @preg_match_all( '@(https?://)?(?:www\.)?(youtu(?:\.be/([-\w]+)|be\.com/watch\?v=([-\w]+)))\S*@im', $content, $matches, PREG_SET_ORDER );
            
            if($matches){
                
                foreach($matches as $match){
 
-                  $vurl     = 'https://youtube.com'.$match[2]; 
-                  $rulr     = 'https://www.youtube.com/oembed?url='.esc_attr($vurl).'&format=json';  
-                  $result   = @wp_remote_get($rulr);                                    
-                  $metadata = array();
+                  $vurl     = $match[0]; 
+                  $metadata = array();  
+                  if(isset($sd_data['saswp-youtube-api']) && $sd_data['saswp-youtube-api'] != ''){
 
-                  if(wp_remote_retrieve_response_code($result) == 200) {
+                    $vid = saswp_get_youtube_vid($vurl);
 
-                        $metadata = json_decode(wp_remote_retrieve_body($result),true);                                                
+                    $video_meta = SASWP_Youtube::getVideoInfo($vid, $sd_data['saswp-youtube-api']);
 
-                  }
+                    if(!empty($video_meta)){
+                        $metadata['duration']      = $video_meta['duration'];
+                        $metadata['thumbnail_url'] = $video_meta['thumbnail']['sdDefault'];
+                    }
 
+                  }else{
+
+                    $rulr     = 'https://www.youtube.com/oembed?url='.esc_attr($vurl).'&format=json';  
+                    $result   = @wp_remote_get($rulr);                                                        
+
+                    if(wp_remote_retrieve_response_code($result) == 200) {
+
+                            $metadata = json_decode(wp_remote_retrieve_body($result),true);                                                
+
+                    }                                       
+
+                  }  
+                  
                   $metadata['video_url'] = $vurl;
                   $response[] = $metadata;
 
@@ -3496,10 +3521,27 @@ function saswp_get_video_metadata($content = ''){
                foreach($youtubematches as $match){
                    
                   $vurl       = $match[1].'youtu.be'.$match[2];                   
-                  $rulr     = 'https://www.youtube.com/oembed?url='.esc_attr($vurl).'&format=json';  
-                  $result   = @wp_remote_get($rulr);                                    
-                  $metadata = json_decode(wp_remote_retrieve_body($result),true);
+                  $metadata   = array();  
 
+                  if(isset($sd_data['saswp-youtube-api']) && $sd_data['saswp-youtube-api'] != ''){
+
+                    $vid = saswp_get_youtube_vid($vurl);
+
+                    $video_meta = SASWP_Youtube::getVideoInfo($vid, $sd_data['saswp-youtube-api']);
+
+                    if(!empty($video_meta)){
+                        $metadata['duration']      = $video_meta['duration'];
+                        $metadata['thumbnail_url'] = $video_meta['thumbnail']['sdDefault'];
+                    }
+
+                  }else{
+
+                    $rulr     = 'https://www.youtube.com/oembed?url='.esc_attr($vurl).'&format=json';  
+                    $result   = @wp_remote_get($rulr);                                    
+                    $metadata = json_decode(wp_remote_retrieve_body($result),true);
+
+                  }
+                  
                   $metadata['video_url'] = $vurl;                    
                   $response[] = $metadata;
 
@@ -3518,16 +3560,33 @@ function saswp_get_video_metadata($content = ''){
                 $attributes = saswp_get_gutenberg_block_data('core/embed');    
             }
            
-            if(isset($attributes['attrs']['url'])){
+            if(isset($attributes['attrs']['url'])) {
  
                    $vurl     = $attributes['attrs']['url']; 
-                   $rulr     = 'https://www.youtube.com/oembed?url='.esc_attr($vurl).'&format=json';  
-                   $result   = @wp_remote_get($rulr);                                    
-                   $metadata = json_decode(wp_remote_retrieve_body($result),true);
- 
+                   $metadata = array();
+                   if(isset($sd_data['saswp-youtube-api']) && $sd_data['saswp-youtube-api'] != ''){
+
+                    $vid = saswp_get_youtube_vid($vurl);
+
+                    $video_meta = SASWP_Youtube::getVideoInfo($vid, $sd_data['saswp-youtube-api']);
+
+                    if(!empty($video_meta)){
+                        $metadata['duration']      = $video_meta['duration'];
+                        $metadata['thumbnail_url'] = $video_meta['thumbnail']['sdDefault'];
+                    }
+                                        
+                   }else{
+
+                    $rulr     = 'https://www.youtube.com/oembed?url='.esc_attr($vurl).'&format=json';  
+                    $result   = @wp_remote_get($rulr);                                    
+                    $metadata = json_decode(wp_remote_retrieve_body($result),true);                                        
+
+                   }
+
                    $metadata['video_url'] = $vurl;                    
                    $response[0] = $metadata;
-            }
+                   
+                }
 
            }
                                      
@@ -3695,8 +3754,22 @@ function saswp_get_condition_list($condition, $search = '', $saved_data = ''){
 
     switch($condition){
     
-      case "post_type":
+      case "languages_polylang":
         
+        $array_search = true;             
+        $choices = apply_filters('saswp_set_languages_polylang_condition', $saved_data);
+                                                       
+        break;
+
+       case "languages_wpml":
+        
+        $array_search = true;             
+        $choices = apply_filters('saswp_set_languages_wpml_condition', $saved_data);
+                                                        
+        break;   
+
+      case "post_type":
+           
           $post_type = array();
           $args['public'] = true;
             
@@ -3908,6 +3981,7 @@ function saswp_get_condition_list($condition, $search = '', $saved_data = ''){
         break;      
 
         case "homepage":
+        case "author":
             $array_search = true; 
             $choices = array(
                 array('id'  => 'true', 'text' => 'True'),
@@ -4105,4 +4179,108 @@ function saswp_isset($str){
     }
 
     return $result;
+}
+
+function saswp_get_youtube_vid($url){
+
+    $youtube_id = '';
+
+    if( $url ){
+        preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match);
+        $youtube_id = isset($match[1]) ? $match[1] : '';
+    }
+    
+    return $youtube_id;
+
+}
+
+function saswp_format_time_to_ISO_8601($string) {
+
+    $response = '';   
+    $exploded = explode(" ", trim($string));
+     
+    if( !empty($exploded) && is_array($exploded) ) {
+        
+        if(count($exploded) > 1){
+
+            $response = 'PT';    
+            $arr_count = count($exploded);
+            $arr_count = $arr_count - 1;         
+        
+            for ($i=0; $i < $arr_count; $i++){
+                
+                if( strpos($exploded[($i+1)], 'hr') !== false || strpos($exploded[($i+1)], 'hour') !== false ){
+                    $response .= $exploded[$i].'H';
+                }
+                if( strpos($exploded[($i+1)], 'min') !== false || strpos($exploded[($i+1)], 'minute') !== false ){
+                    $response .= $exploded[$i].'M';
+                }
+                if( strpos($exploded[($i+1)], 'sec') !== false || strpos($exploded[($i+1)], 'second') !== false ){
+                    $response .= $exploded[$i].'S';
+                }
+
+            }
+
+        }        
+                    
+    }
+    
+    if($response){
+        return $response;
+    }
+   
+    return $string;
+}
+
+function saswp_prepend_schema_org( $short_str ){
+
+    $response = '';
+
+    switch (strtolower($short_str)) {
+        
+        case 'instock':
+            $response = 'https://schema.org/InStock';    
+        break;
+
+        case 'soldout':
+            $response = 'https://schema.org/SoldOut';    
+        break;
+
+        case 'presale':
+            $response = 'https://schema.org/PreSale';    
+        break;
+
+        case 'onlineonly':
+            $response = 'https://schema.org/OnlineOnly';    
+        break;
+
+        case 'limitedavailability':
+            $response = 'https://schema.org/LimitedAvailability';    
+        break;
+
+        case 'instoreonly':
+            $response = 'https://schema.org/InStoreOnly';    
+        break;
+
+        case 'outofstock':
+            $response = 'https://schema.org/OutOfStock';    
+        break;
+        
+        case 'discontinued':
+            $response = 'https://schema.org/Discontinued';    
+        break;
+       
+        case 'onbackorder':
+            $response = 'https://schema.org/BackOrder';    
+        break;
+        case 'preorder':
+            $response = 'https://schema.org/PreOrder';
+        break;
+
+        default:
+            
+            break;
+    }
+
+    return $response;
 }

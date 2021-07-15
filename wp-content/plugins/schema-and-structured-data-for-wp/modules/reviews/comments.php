@@ -62,7 +62,11 @@ function saswp_check_starsrating_status(){
 //Get the average rating of a post.
 function saswp_comment_rating_get_average_ratings( $id ) {
 
-	$comments = get_approved_comments( $id );
+	$args = array(
+		'parent'  => 0 
+	);
+
+	$comments           = get_approved_comments( $id, $args );
 	$stars_rating_moved = get_option('saswp_imported_starsrating');
 
 	if ( $comments ) {
@@ -100,12 +104,22 @@ add_action( 'comment_form_top', 'saswp_comment_rating_rating_field' );
 
 function saswp_comment_rating_rating_field () {	
 
+	  global $sd_data;
+
 	if(saswp_check_stars_rating()){
 
 		wp_enqueue_style( 'saswp-frontend-css', SASWP_PLUGIN_URL . 'admin_section/css/'.(SASWP_ENVIRONMENT == 'production' ? 'saswp-frontend.min.css' : 'saswp-frontend.css'), false , SASWP_VERSION );	
 		wp_enqueue_script( 'saswp-rateyo-front-js', SASWP_PLUGIN_URL . 'admin_section/js/jquery.rateyo.min.js', array('jquery', 'jquery-ui-core'), SASWP_VERSION , true );                                                                                        
 		wp_enqueue_style( 'jquery-rateyo-min-css', SASWP_PLUGIN_URL . 'admin_section/css/'.(SASWP_ENVIRONMENT == 'production' ? 'jquery.rateyo.min.css' : 'jquery.rateyo.min.css'), false, SASWP_VERSION );
-		wp_enqueue_script( 'saswp-frontend-js', SASWP_PLUGIN_URL . 'admin_section/js/'.(SASWP_ENVIRONMENT == 'production' ? 'saswp-frontend.min.js' : 'saswp-frontend.js'), array('jquery', 'jquery-ui-core'), SASWP_VERSION );
+
+
+		$data = array(     
+            'rateyo_default_rating'  =>  isset($sd_data['saswp-default-rating']) ? $sd_data['saswp-default-rating'] : 5
+		);
+
+		wp_register_script( 'saswp-frontend-js', SASWP_PLUGIN_URL . 'admin_section/js/'.(SASWP_ENVIRONMENT == 'production' ? 'saswp-frontend.min.js' : 'saswp-frontend.js'), array('jquery', 'jquery-ui-core'), SASWP_VERSION );
+		wp_localize_script( 'saswp-frontend-js', 'saswp_localize_front_data', $data );
+		wp_enqueue_script( 'saswp-frontend-js' );
 
 		?>
 		<p class="comment-form-comment">
@@ -134,11 +148,11 @@ function saswp_comment_rating_save_comment_rating( $comment_id ) {
 }
 
 //Display the rating on a submitted comment.
-add_filter( 'comment_text', 'saswp_comment_rating_display_rating');
+add_filter( 'comment_text', 'saswp_comment_rating_display_rating', 10, 2);
 
-function saswp_comment_rating_display_rating( $comment_text ){
+function saswp_comment_rating_display_rating( $comment_text = null, $comment = null ){
 	
-	if ( saswp_check_stars_rating() ) {
+	if ( saswp_check_stars_rating() &&  '0' == $comment->comment_parent ) {
 		$stars_rating_moved = get_option('saswp_imported_starsrating');
 		if($stars_rating_moved){
 			$rating = get_comment_meta( get_comment_ID(), 'rating', true );

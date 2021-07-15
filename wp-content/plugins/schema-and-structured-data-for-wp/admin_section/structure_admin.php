@@ -44,14 +44,17 @@ function saswp_get_saved_schema_ids(){
     $schema_ids = array();
 
     if(!$all_schemas){
+      
+      $args = array();
+      $args['post_type']      = 'saswp';
+      $args['posts_per_page'] = -1;
+      $args['post_status']    = 'publish';
 
-      $all_schemas = get_posts(
-        array(
-                'post_type' 	 => 'saswp',
-                'posts_per_page'     => -1,   
-                'post_status'        => 'publish',
-        )
-     );   
+      if(function_exists('pll_register_string')){
+        $args['lang'] = '';
+      }
+            
+      $all_schemas = get_posts($args);   
 
     }
 
@@ -63,8 +66,7 @@ function saswp_get_saved_schema_ids(){
         
       }
       
-    }    
-    
+    }        
     return $schema_ids;
 
 }
@@ -148,10 +150,10 @@ add_action( 'plugins_loaded', 'saswp_load_plugin_textdomain' );
 
 
 
-function saswp_check_advance_display_status($post_id){
+function saswp_check_advance_display_status($post_id, $post){
               
           $unique_checker = '';
-          $resultset = saswp_generate_field_data( $post_id );
+          $resultset = saswp_generate_field_data( $post_id, $post );
           
           if($resultset){
               
@@ -199,7 +201,7 @@ function saswp_check_advance_display_status($post_id){
 }
 
 function saswp_get_all_schema_posts(){
-    
+    global $post;
     $schema_id_array = array();
 
     $schema_id_array = json_decode(get_transient('saswp_transient_schema_ids'), true); 
@@ -219,7 +221,7 @@ function saswp_get_all_schema_posts(){
       
       foreach ($schema_id_array as $post_id){ 
         
-          $unique_checker = saswp_check_advance_display_status($post_id);
+          $unique_checker = saswp_check_advance_display_status($post_id, $post);
                                         
           if ( $unique_checker === 1 || $unique_checker === true || $unique_checker == 'notset') {
               
@@ -265,7 +267,7 @@ function saswp_get_all_schema_posts(){
    return false;
 }
 
-function saswp_generate_field_data( $post_id ){
+function saswp_generate_field_data( $post_id, $post ){
     
       $data_group_array = get_post_meta( $post_id, 'data_group_array', true);  
       
@@ -276,7 +278,13 @@ function saswp_generate_field_data( $post_id ){
         foreach ($data_group_array as $group){
 
           if(is_array($group['data_array'])){
-            $output[] = array_map('saswp_comparison_logic_checker', $group['data_array']);     
+            
+            $inner_output = array();
+
+            foreach($group['data_array'] as $value){
+              $inner_output[] = saswp_comparison_logic_checker($value, $post); 
+            }
+            $output[] = $inner_output;            
           }
            
         }   
@@ -287,9 +295,8 @@ function saswp_generate_field_data( $post_id ){
       
 }
 
-function saswp_comparison_logic_checker($input){
-    
-        global $post;              
+function saswp_comparison_logic_checker($input, $post){
+            
         $type       = isset($input['key_1']) ? $input['key_1'] : '';
         $comparison = isset($input['key_2']) ? $input['key_2'] : '';
         $data       = isset($input['key_3']) ? $input['key_3'] : '';
@@ -329,7 +336,19 @@ function saswp_comparison_logic_checker($input){
              }
          }
            
-        break;  
+        break; 
+        
+        case 'languages_polylang':  
+          
+             $result = apply_filters('saswp_get_languages_polylang_logic', $data, $comparison);             
+           
+        break; 
+
+        case 'languages_wpml':  
+          
+             $result = apply_filters('saswp_get_languages_wpml_logic', $data, $comparison);             
+        
+        break; 
         // Basic Controls ------------ 
           // Posts Type
         case 'post_type':   
@@ -378,6 +397,27 @@ function saswp_comparison_logic_checker($input){
                   $result = true;
                 }
             }
+
+        break;
+
+        case 'author':    
+          
+          $author ='false';  
+        
+          if( is_author() ){
+             $author = 'true';  
+          }
+                    
+          if ( $comparison == 'equal' ) {
+              if ( $author == $data ) {
+                $result = true;
+              }
+          }
+          if ( $comparison == 'not_equal') {              
+              if ( $author != $data ) {
+                $result = true;
+              }
+          }
 
         break;
 
@@ -513,6 +553,12 @@ function saswp_comparison_logic_checker($input){
           if(ampforwp_is_front_page()){
               
                 $current_post = $redux_builder_amp['amp-frontpage-select-option-pages'];  
+
+                if(empty($current_post)){
+                  if(is_object($post)){
+                    $current_post = $post->ID;   
+                  }
+                }
           
           } else{
               
@@ -608,15 +654,19 @@ function saswp_comparison_logic_checker($input){
 
                   $terms           = wp_get_post_terms( $post->ID ,$data);
                 
-                  if(count($terms)>0){
-                                                      
-                    foreach ($terms as $key => $termvalue) {
-                        
-                      $termChoices[] = $termvalue->slug;
-                      
-                    } 
+                  if(!is_wp_error($terms)){
                     
-                  }
+                    if(count($terms)>0){
+                                                      
+                      foreach ($terms as $key => $termvalue) {
+                          
+                        $termChoices[] = $termvalue->slug;
+                        
+                      } 
+                      
+                    }
+
+                  }                  
 
                 }                
 
@@ -637,7 +687,7 @@ function saswp_comparison_logic_checker($input){
 
             }else{
               
-              if($input['key_4'] == 'all'){
+              if( isset($input['key_4']) && $input['key_4'] == 'all' ) {
               
                 if ( $comparison == 'equal' ) {
                   if ( $post_terms ) {
@@ -660,10 +710,13 @@ function saswp_comparison_logic_checker($input){
                 }
 
                 if ( $comparison == 'not_equal') { 
+                  if(is_array($taxonomy_names)){
                     $checker =  in_array($data, $taxonomy_names);       
                     if ( ! $checker ) {
                         $result = true;
                     }
+                  }
+                    
                 }
 
               }
@@ -769,12 +822,13 @@ if(is_admin()){
 
     <?php 
     // Type Select    
-      $choices = array(
+      $choices = apply_filters('saswp_add_more_placement', array(
         saswp_t_string("Basic") => array(        
           'post_type'           =>  saswp_t_string("Post Type"),
           'show_globally'       =>  saswp_t_string("Show Globally"),    
           'user_type'           =>  saswp_t_string("Logged in User Type"),
-          'homepage'            =>  saswp_t_string("Homepage"),  
+          'homepage'            =>  saswp_t_string("Homepage"), 
+          'author'              =>  saswp_t_string("Author"),  
         ),
         saswp_t_string("Post") => array(
           'post'                =>  saswp_t_string("Post"),
@@ -787,10 +841,9 @@ if(is_admin()){
         ),
         saswp_t_string("Other") => array( 
           'ef_taxonomy'         =>  saswp_t_string("Taxonomy (Tag)"), 
-          'date'                =>  saswp_t_string("Date"), 
-
+          'date'                =>  saswp_t_string("Date")           
         )
-      ); 
+      )); 
 
       $comparison = array(
         'equal'                =>  saswp_t_string( 'Equal to'), 
@@ -1703,6 +1756,7 @@ function saswp_license_status($add_on, $license_status, $license_key){
                 $item_name = array(                       
                        'jobposting'   => 'JobPosting Schema Compatibility',
                        'polylang'     => 'Polylang Compatibility For SASWP',
+                       'wpml'         => 'WPML Schema Compatibility',
                        'woocommerce'  => 'Woocommerce compatibility for Schema',
                        'reviews'      => 'Reviews for schema',
                        'res'          => 'Real Estate Schema',
@@ -1711,7 +1765,7 @@ function saswp_license_status($add_on, $license_status, $license_key){
                        'rs'           => 'Recipe Schema',
                        'qanda'        => 'Q&A Schema Compatibility',
                        'faq'          => 'FAQ Schema Compatibility',
-                       'ociaifs'      => '1 Click Indexing Api Integration For SASWP'
+                       'ociaifs'      => '1-Click Indexing API Integration'
                 );
                                                                             
                 $edd_action = '';
@@ -2012,6 +2066,44 @@ function saswp_get_select2_data(){
         wp_die();
 }
 
+function saswp_clear_resized_image_folder(){
+
+  if ( ! isset( $_POST['saswp_security_nonce'] ) ){
+      return; 
+  }
+  if ( !wp_verify_nonce( $_POST['saswp_security_nonce'], 'saswp_ajax_check_nonce' ) ){
+      return;  
+  }
+
+  $response    = array(); 
+  
+  $upload_info = wp_upload_dir();
+  $upload_dir  = $upload_info['basedir'];    
+  
+  $folder = $upload_dir . '/schema-and-structured-data-for-wp';
+
+  $files = glob($folder . '/*');
+
+  if($files){
+    //Loop through the file list.
+    foreach($files as $file){
+      //Make sure that this is a file and not a directory.
+      if(is_file($file)){
+          //Use the unlink function to delete the file.
+          unlink($file);
+      }
+    }
+
+  }  
+
+  $response = array('status' => 't');
+
+  wp_send_json( $response );
+
+  wp_die();           
+
+}
+
 function saswp_create_resized_image_folder(){                  
     
   if ( ! isset( $_POST['saswp_security_nonce'] ) ){
@@ -2058,6 +2150,7 @@ function saswp_create_resized_image_folder(){
 }
 
 add_action('wp_ajax_saswp_create_resized_image_folder', 'saswp_create_resized_image_folder');
+add_action('wp_ajax_saswp_clear_resized_image_folder', 'saswp_clear_resized_image_folder');
 
 // add async and defer attributes to enqueued scripts
 function saswp_script_loader_tag($tag, $handle, $src) {

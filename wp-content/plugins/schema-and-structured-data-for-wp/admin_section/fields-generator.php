@@ -20,6 +20,9 @@ class saswp_fields_generator {
         array(
             "image" => "/admin_section/images/reviews_platform_icon/google-1-img.png",
             "name"  => "Google Reviews"),
+		array(
+			"image" => "/admin_section/images/reviews_platform_icon/google-1-img.png",
+			"name"  => "Google Shopping Reviews"),
         array(
             "image" => "/admin_section/images/reviews_platform_icon/shopper-approved-img.png",
             "name"  => "Shopper Approved"),
@@ -246,8 +249,54 @@ class saswp_fields_generator {
             "name"  => "Shopify App Store"),
         array(
             "image" => "/admin_section/images/reviews_platform_icon/goodreads-img.png",
-            "name"  => "Goodreads")
-);
+            "name"  => "Goodreads"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/bark-com-img.png",
+            "name"  => "bark.com"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/advieskeuze-nl-img.png",
+            "name"  => "Advieskeuze.nl"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/bidvine-img.png",
+            "name"  => "bidvine"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/podcasts-img.png",
+            "name"  => "Podcasts"),   
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/productreview-img.png",
+            "name"  => "productreview.com.au"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/styleseat-img.png",
+            "name"  => "styleseat.com"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/mariages-net-img.png",
+            "name"  => "mariages.net"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/zankyou-img.png",
+            "name"  => "zankyou"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/serviceseeking-img.png",
+            "name"  => "serviceseeking.com.au"),   
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/solarquotes-img.png",
+            "name"  => "solarquotes.com.au"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/oneflare-img.png",
+            "name"  => "oneflare.com.au"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/airbnb-experiences-img.png",
+            "name"  => "Airbnb Experiences"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/hipages-img.png",
+            "name"  => "Hipages"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/upwork-img.png",
+            "name"  => "Upwork"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/freelancer-img.png",
+            "name"  => "freelancer.com")                                  
+
+    );
     
     public function saswp_tooltip_message($meta_field_id){
         
@@ -345,7 +394,7 @@ class saswp_fields_generator {
                             
                             foreach ($attribute as $key => $attr ){
 
-                                $attribute_str .=''.esc_attr($key).'="'.esc_attr($attr).'"';
+                                $attribute_str .=''.esc_attr($key).'="'.esc_attr($attr).'" ';
                            
                             }
                         
@@ -663,12 +712,12 @@ class saswp_fields_generator {
                         if($meta_field['id'] == 'saswp-reviews-module-section'){
                             $output .= '<li class="saswp-rev-mod">'                                                                
                                 .  '<div class="saswp-knowledge-label">'.$label.'</div>'
-                                .  '<div class="saswp-knowledge-field">'.$input.'<p class="">'.$note.'</p>'.$subfields.'</div>'                                                               
+                                .  '<div class="saswp-knowledge-field">'.$input.'<p class="saswp-note-p">'.$note.'</p>'.$subfields.'</div>'                                                               
                                 .  '</li>';
                         }else{
                             $output .= '<li>'                                                                
                                 .  '<div class="saswp-knowledge-label">'.$label.'</div>'
-                                .  '<div class="saswp-knowledge-field">'.$input.'<p class="">'.$note.'</p>'.$subfields.'</div>'
+                                .  '<div class="saswp-knowledge-field">'.$input.'<p class="saswp-note-p">'.$note.'</p>'.$subfields.'</div>'
                                                                
                                 .  '</li>';    
                         }

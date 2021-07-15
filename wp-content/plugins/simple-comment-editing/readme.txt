@@ -2,56 +2,29 @@
 Contributors: ronalfy
 Tags: comment editing, comments,edit comments, edit, comment,
 Requires at least: 5.0
-Tested up to: 5.4
-Stable tag: 2.5.1
+Tested up to: 5.7
+Stable tag: 2.7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://mediaron.com/give/
 
-Simple Comment Editing for your website.
+Supercharge your comment section and allow your users to edit their comments for a period of time.
 
 == Description ==
 
-Simple Comment Editing gives anonymous users the ability to edit and/or delete their comments for a period of time.
+Supercharge your comment section and allow your users to edit their comments for a period of time. Save your users some headaches and let them fix their typos while you take a backseat and relax.
 
 [youtube https://www.youtube.com/watch?v=bNCDdQbwA-s&rel=0]
 
 Simple Comment Editing features:
 <ol>
-<li>No options. Install the plugin. It just works.
+<li>Install the plugin. That's it. It just works.
 <li>Anonymous users can edit comments for 5 minutes.</li>
 <li>No styling is necessary. For advanced customization, see the "Other Notes" section.</li>
 <li>Advanced customization can be achieved using filters.</li>
 </ol>
 
-<h3>Introducing Simple Comment Editing Options</h3>
-
-Introducing Simple Comment Editing Options. It is a paid add-on for Simple Comment Editing. If you lack programming experience and want to customize Simple Comment Editing, then this plugin is for you. See the features below.
-
-<ul>
-<li>Set the comment timer</li>
-<li>Stop the timer</li>
-<li>Hide the timer</li>
-<li>Allow unlimited editing for logged in users.</li>
-<li>Change the timer output to words or compact (e.g., 10:45)
-<li>Select button styles to match your theme</li>
-<li>Enable comment editing logging to show an editing history for the comment</li>
-<li>See how many people are editing comments</li>
-<li>Receive email notifications of edited or deleted comments</li>
-<li>Edit the messages and text shown to users</li>
-<li>Set a minimum and maximum comment length</li>
-<li>Disable/Enable comment deletion</li>
-<li>And More!</li>
-</ul>
-
-> Get <a href="https://mediaron.com/simple-comment-editing-options">the Simple Comment Editing Options add-on</a> today!
-> As a WordPress Plugin directory user, enter coupon code `scewp` for 50% off any license plan.
-
-<h3>Help Contribute</h3>
-
-* Leave a star rating
-* <a href="https://translate.wordpress.org/projects/wp-plugins/simple-comment-editing">Contribute a translation</a>
-* <a href="https://github.com/ronalfy/simple-comment-editing">Contribute some code</a>
+For additional features in addition to comment editing, please check out <a href="https://mediaron.com/simple-comment-editing-options">SCE Options</a>. You can download a 1-site license for free.
 
 == Installation ==
 
@@ -65,7 +38,7 @@ It's impossible to style an inline comment editor for every theme.  We've includ
 With <a href="https://mediaron.com/simple-comment-editing-options">Simple Comment Editing Options</a>, you can choose between three themes.
 
 = Where are the options? =
-No options :) - Just simple comment editing. If you prefer options, try out the add-on <a href="https://mediaron.com/simple-comment-editing-options">Simple Comment Editing Options</a>.
+No options :) - Just simple comment editing. If you prefer options, try out the paid add-on <a href="https://mediaron.com/simple-comment-editing-options">Simple Comment Editing Options</a>.
 
 = How do I customize this plugin? =
 For advanced options, please see the <a href="https://github.com/ronalfy/simple-comment-editing#wordpress-filters">SCE Filter/Action reference</a> or get <a href="https://mediaron.com/simple-comment-editing-options">Simple Comment Editing Options</a>.
@@ -77,8 +50,36 @@ Simple Comment Editing will work all the way back to IE10.
 
 1. Edit Button and Timer.
 2. Styled Buttons and Compact Timer.
+3. Default button theme.
+4. Dark button theme.
+5. Light button theme.
 
 == Changelog ==
+
+= 2.7.1 =
+* Released 2021-07-02
+* Added in a filter for better IP tracking when editing a comment. Props <a href="https://wordpress.org/support/users/tim-reeves/">Tim Reeves</a> for the fix.
+
+= 2.7.0 =
+* Released 2021-06-03
+* New option: timer can now be compact (e.g., 41:15).
+* New option: button themes.
+* Using new comment check function name if it exists.
+* Correcting typo in admin options.
+* Basic styling for edit buttons.
+
+= 2.6.1 =
+* Released 2021-06-02
+* Fix admin styling.
+* Fixing timer for > 5 minutes.
+
+= 2.6.0 =
+* Released 2021-05-30
+* New admin panel style in anticipation of a few more feature additions.
+
+= 2.5.5 =
+* Released 2021-04-25
+* Added new filters to allow comment deletion only.
 
 = 2.5.1 =
 * Released 2020-04-28
@@ -384,21 +385,15 @@ Simple Comment Editing will work all the way back to IE10.
 
 == Upgrade Notice ==
 
-= 2.5.1 =
-Fixing undefined variable error.
+= 2.7.1 =
+Added IP fix that should make editing comments more reliable and less prone to error. Props @tim-reeves.
 
-= 2.5.0 =
-Unlimited logged-in comment was always failing with SCE Options.
+= 2.7.0 =
+New option: timer can now be compact (e.g., 41:15). New option: button themes. Using new comment check function name if it exists. Correcting typo in admin options. Basic styling for edit buttons.
 
-= 2.4.6 =
-Fixing WSOD error with incompatible PHP7 syntax.
+= 2.6.1 =
+Fixing admin styling. Fixing timer for times greater than 5 minutes.
 
-= 2.4.5 =
-Added better support for multisite.
-
-= 2.4.2 =
-Added hook for when the editing dialog is displayed.
-
-== Customization ==
-
-For advanced options, please see the <a href="https://github.com/ronalfy/simple-comment-editing#wordpress-filters">SCE Filter/Action reference</a>. Don't want to program? Try <a href="https://mediaron.com/simple-comment-editing-options">the Simple Comment Editing Options add-on</a>.
+= 2.6.0 =
+* Released 2021-05-30
+* New admin panel style in anticipation of a few more feature additions.

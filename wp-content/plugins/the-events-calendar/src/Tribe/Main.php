@@ -32,14 +32,14 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		const VENUE_POST_TYPE     = 'tribe_venue';
 		const ORGANIZER_POST_TYPE = 'tribe_organizer';
 
-		const VERSION             = '5.5.0.1';
+		const VERSION             = '5.8.0';
 
 		/**
 		 * Min Pro Addon
 		 *
 		 * @deprecated 4.8
 		 */
-		const MIN_ADDON_VERSION   = '4.6-dev';
+		const MIN_ADDON_VERSION   = '5.7-dev';
 
 		/**
 		 * Min Common
@@ -1017,7 +1017,8 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 			$this->singular_event_label_lowercase             = tribe_get_event_label_singular_lowercase();
 			$this->plural_event_label_lowercase               = tribe_get_event_label_plural_lowercase();
 
-			$this->post_type_args['rewrite']['slug']            = $rewrite->prepare_slug( $this->rewriteSlugSingular, self::POSTTYPE, false );
+			$this->post_type_args['rewrite']['slug']          = $rewrite->prepare_slug( $this->rewriteSlugSingular, self::POSTTYPE, false );
+			$this->post_type_args['show_in_rest']             = current_user_can( 'manage_options' );
 			$this->currentDay                                 = '';
 			$this->errors                                     = '';
 
@@ -2181,6 +2182,14 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 					'item_updated'             => sprintf(
 						esc_html__( '%s updated.', 'the-events-calendar' ), $this->singular_event_label
 					),
+					'item_link'                => sprintf(
+						// Translators: %s: Event singular.
+						esc_html__( '%s Link', 'the-events-calendar' ), $this->singular_event_label
+					),
+					'item_link_description'    => sprintf(
+						// Translators: %s: Event singular.
+						esc_html__( 'A link to a particular %s.', 'the-events-calendar' ), $this->singular_event_label
+					),
 				]
 			);
 
@@ -2221,6 +2230,14 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 					),
 					'new_item_name'     => sprintf(
 						esc_html__( 'New %s Category Name', 'the-events-calendar' ), $this->singular_event_label
+					),
+					'item_link'         => sprintf(
+						// Translators: %s: Event singular.
+						esc_html__( '%s Category Link', 'the-events-calendar' ), $this->singular_event_label
+					),
+					'item_link_description' => sprintf(
+						// Translators: %s: Event singular.
+						esc_html__( 'A link to a particular %s category.', 'the-events-calendar' ), $this->singular_event_label
 					),
 				]
 			);
@@ -3013,12 +3030,17 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 				'sprop'    => 'website:' . home_url(),
 			];
 
-			$timezone = Tribe__Events__Timezones::get_event_timezone_string( $post->ID );
-			$timezone = Tribe__Events__Timezones::maybe_get_tz_name( $timezone );
+			if ( Tribe__Timezones::is_mode( Tribe__Timezones::SITE_TIMEZONE ) ) {
+				$timezone = Tribe__Timezones::build_timezone_object();
+			} else {
+				$timezone = Tribe__Events__Timezones::get_timezone(
+					Tribe__Events__Timezones::get_event_timezone_string( $post->ID )
+				);
+			}
 
 			// If we have a good timezone string we setup it; UTC doesn't work on Google
-			if ( false !== $timezone ) {
-				$params['ctz'] = urlencode( $timezone );
+			if ( $timezone instanceof DateTimeZone) {
+				$params['ctz'] = urlencode( $timezone->getName() );
 			}
 
 			/**
@@ -6065,7 +6087,7 @@ if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		 *
 		 * @since 4.9.2
 		 *
-		 * @return \Tribe__Autoloader Teh singleton common Autoloader instance.
+		 * @return \Tribe__Autoloader The singleton common Autoloader instance.
 		 */
 		public function get_autoloader_instance() {
 			if ( ! class_exists( 'Tribe__Autoloader' ) ) {

@@ -35,7 +35,8 @@ class ss_get_options {
 			'chkstripe'		     => 'Y',
 			'chkauthorizenet'    => 'Y',
 			'chkbraintree'	     => 'Y',
-			'chkrecurly'	     => 'Y'
+			'chkrecurly'	     => 'Y',
+			'chksquare'		   	 => 'Y'
 		);
 		// Block List Y/N settings
 		$defaultBL = array(
@@ -1231,6 +1232,8 @@ class ss_get_options {
 			'googleapi'			     => '',
 			'recaptchaapisecret'	 => '',
 			'recaptchaapisite'	     => '',
+			'hcaptchaapisecret'		 => '',
+			'hcaptchaapisite'	     => '',
 			'solvmediaapivchallenge' => '',
 			'solvmediaapiverify'	 => '',
 			'blogseyekey'			 => '',

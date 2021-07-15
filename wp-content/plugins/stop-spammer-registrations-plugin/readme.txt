@@ -1,12 +1,12 @@
-=== Stop Spammers ===
+=== Stop Spammers Security | Block Spam Users, Comments, Forms ===
 
-Contributors: trumani, bhadaway, hiteshchandwani, Keith Graham
+Contributors: blockspam, trumani, bhadaway, hiteshchandwani, Keith Graham
 Donate link: https://stopspammers.io/donate
 Tags: spam, security, anti-spam, spam blocker, block spam, signup spam, comment spam, spam filter, registration spam, spammer, spammers, spamming, xss, malware, virus, captcha, comment, comments, login, protection, user registration spam
 Requires PHP: 7.0
 Requires at least: 5.0
-Tested up to: 5.7
-Stable tag: 2021.12
+Tested up to: 5.8
+Stable tag: 2021.17
 License: https://www.gnu.org/licenses/gpl.html
 
 Robust WordPress security & spam prevention. Leverage our pre-defined allow/block lists. Adjust configurable security settings on hyphens, periods, too many hits, quick responses, & much more. Manage custom lists for IPs, emails, usernames, and spam words. Run diagnostic testing and log reporting.
@@ -42,6 +42,8 @@ Extremely granular control, so that any variety of website can create a special 
 * Contact Form 7 protection (Premium Only)
 * Built-in contact form (Premium Only)
 
+We sincerely thank everyone who has contributed to the project through donations, feedback, and bug reporting. Every little bit goes a long way.
+
 == Installation ==
 
 The most powerful spam prevention for WordPress: 50+ spam-blocking settings, dianostic testing, log reports, and much more.
@@ -55,6 +57,10 @@ OR
 3. Activate the plugin from the plugins page in the admin.
 
 == Frequently Asked Questions ==
+
+= What should I expect? =
+
+See: [Breaking Down Stop Spammers](https://stopspammers.io/learning/breaking-down-stop-spammers/).
 
 = What do I do if I lock myself out of my own site? =
 
@@ -89,6 +95,24 @@ Toggle off the "Check Credentials on All Login Attempts" option and try again.
 Yes. See: [https://law.stackexchange.com/questions/28603/how-to-satisfy-gdprs-consent-requirement-for-ip-logging](https://law.stackexchange.com/questions/28603/how-to-satisfy-gdprs-consent-requirement-for-ip-logging). Stop Spammers does not collect any data for any other purpose (like marketing or tracking). It is purely for legitimate security purposes only. Additionally, if any of your users ever requested it, all data can be deleted.
 
 == Changelog ==
+
+= 2021.17 =
+* [New] hCaptcha integration
+
+= 2021.16 =
+* [New] Allow Square
+
+= 2021.15 =
+* [Fix] Checking for periods in emails
+* [Fix] jQuery error
+
+= 2021.14 =
+* [Fix] Network toggle fix
+* [Fix] Design issue with icons on some browsers
+
+= 2021.13 =
+* [Update] Cloudflare IPs
+* [Fix] SFS report
 
 = 2021.12 =
 * [Fix] Minor fixes

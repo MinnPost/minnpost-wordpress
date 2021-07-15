@@ -3,7 +3,7 @@ Contributors: magazine3
 Tags: Schema, Structured Data, Google Snippets, Rich Snippets, Schema.org, SEO, AMP
 Requires at least: 3.0
 Tested up to: 5.7
-Stable tag: 1.9.70
+Stable tag: 1.9.81
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,136 @@ Yes, Absolutely! We would suggest you send your feature request by creating an i
 You can contact us from [here](http://structured-data-for-wp.com/contact-us/)
 
 == Changelog ==
+
+= 1.9.81 (04 July 2021) =
+
+* Fixed: Google review page redirect to wrong url, it should redirect to Google review page url. #1457
+* Fixed: When the "Defragment Schema Markup" option is enabled knowledge graph markup is displaying on the category post and pages. #1455
+* Fixed: Microdata cleaner option does not remove single itemtype, itemprop #1463
+* Fixed: Remove the cause property in the Medical condition schema type #1462
+* Fixed: Errors in NewsArticle (The property 2 is not recognised by the schema) #1468
+* Added: Google Shopping reviews platform #1448
+
+
+= 1.9.80 (23 Jun 2021) =
+
+* Fixed: Item name mismatches when We try to activate "1-Click Indexing API Integration" extension. #1454
+* Fixed: Validation error in GSC: Unparable structured data (incorrect value type) #1452
+* Fixed: Availability should have full string like what mentioned in google example. Such as "https://schema.org/InStock" #1453
+* Fixed: Recipe schema's properties should be in proper order #1450
+* Added: Schedule property to Event schema #1044
+* Added: Author placement option #1281
+* Added: Book Guteberg block #930
+* Added: Creative Work schema #1204
+* Added: Visual Artwork schema #1377
+* Added: Integration with multi-currency plugin for woocommerce. #1160
+
+
+= 1.9.79 (15 Jun 2021) =
+
+* Fixed: Bark reviews do not redirect to their origin reviews url #1445
+* Fixed: If schema types are set up in different languages as per polylang the schema is not loading correctly #1449
+* Fixed: Need to fetch the reviews which is present on the page when schema is modified on the page/post or in the respective schema type #1442
+* Added: LegalName properties to KnowledgeGraph Organization schema #1443
+* Added: Need option for enabling/disabling the extra image generation process by saswp #1439
+* Added: An option to enable disable woocommerce Archive schema #1441
+* Added: Option for Removal of automatically generated thumbnails by SASWP #1438
+* Added: birthPlace, deathDate, familyName, Spouse, Instagram and Snapchat properties to Person Schema #1275
+* Added: AcquireLicensePage property to ImageObject schema #1446
+* Added: Jumblinks to sections in Advanced tab #832
+* Added: Compatibility with Mooberry Book Manager ( https://wordpress.org/plugins/mooberry-book-manager/ ) #1440
+* Added: Compatibility with Novelist ( https://wordpress.org/plugins/novelist/ ) #1440
+
+
+= 1.9.78 (09 Jun 2021) =
+
+* Added: freelancer.com review platform. #1342
+* Added: Upwork review platform. #1189
+* Added: Airbnb Experiences review platform. #824
+* Added: solarquotes.com.au review platform. #1207
+* Added: serviceseeking.com.au review platform. #1208
+* Added: productreview.com.au review platform. #1183
+* Added: styleseat.com review platform. #1231
+* Added: mariage.net review platform. #1196
+* Added: zankyou.com review platform. #1196
+* Added: oneflare.com.au review platform. #1209
+* Added: hipages.com.au review platform. #1210
+* Added: Shopper Approved (product) review platform. #1079
+* Added: Carousel feature for the grid layout of the collection #1345
+* Added: Pagejumps to FAQ questions #1058
+* Added: Feature support for polylang extension with schema #1431
+* Fixed: PHP Fatal error: when "Data types for Adventure Tours theme" plugin activated. #1437
+* Fixed: Additional properties are not rendering for a simple product type #1433
+
+= 1.9.77 (29 May 2021) =
+
+* Added: Created an option to add schema for a selected language. [Polylang addon] #1425
+* Added: Option to disable contact or about page schema #1428
+* Added: aggregateRating property in service schema #1395
+* Added: Add makeoffer and its sub fields in local business schema type #1379
+* Fixed: If anyone click on reviews,it should be redirect to reviews page. #1426
+* Fixed: Angie's List Reviews Integration. #863
+* Fixed: Issue with H3 tag in FAQ (SASWP) #1432
+* Fixed: WPML Translatater Not Working with our Schema [WPML Adon] #1427
+* Fixed: ProfilePress plugin and newsgem are loading select2 on schema admin panel which cause conflict #1434
+
+= 1.9.76 (25 May 2021) =
+
+* Added: An option for changing the FAQ (SASWP) text to H1 H2 H3 #1382
+* Added: Tutorial Links in every review platform fetch section. #1351
+* Added: bidvine.com review platform. #1341
+* Added: bark.com review platform. #1342
+* Added: Apple Podcasts review platform. #1334
+* Added: advieskeuze.nl review platform. #1419
+* Added: Add Support for WP GraphQL plugin ( https://wordpress.org/plugins/wp-graphql ) #1343
+* Fixed: Event validation issue with Event manager plugin #1422
+* Fixed: Compatibility issue: Error in FQA schema, setup by Yoast gutenberg block #1423
+
+= 1.9.75 (18 May 2021) =
+
+* Fixed: When the Polylang plugin is active with the front page setup, placement is not working properly. #1420
+* Fixed: Reply to the comment not be counted as a separate rating review count #1416
+* Fixed: Incompatibility with AMP plugin after releasing of new version of AMP #1413 
+* Added: ProviderMobility property for Services schema. #1418
+
+= 1.9.74 (15 May 2021) =
+
+* Fixed: Custom schema's data is not cleared when the post/page is updated. #1411
+* Fixed: php8.0.3 incompatability #1409
+* Fixed: Product ID Error: Added empty array which cause invalid Json-LD error #1407
+* Fixed: "Thumbnail URL" data is not fetched automatically in VideoObject schema #1405
+* Fixed: EmbedUrl property has error( value url) in the video object schema for specific content #1402
+* Fixed: Shortcode should be rendered its value when present in faq content #1404
+* Fixed: Fatal error: Uncaught Error: Call to a member function get_bookings() on null in event-schema-for-saswp/output/service.php:8 #1410
+* Added: A custom field on each page individually in the Woocommerce product categories to add custom Json-LD. #1400
+* Added: Compatability with YITH google product feed and product feed pro #1408
+
+= 1.9.73 (07 May 2021) =
+
+* Added: ID property in the product schema. #1376
+* Added: Enter multiple jobLocation with an array on individual post #1373
+* Added: applicantLocationRequirements and jobLocationType properties to JobPosting #1373
+* Added: Option to select the default value for star rating option #1386
+* Added: Brand URL, Brand Logo, and Brand Image properties to Product Schema #1390
+* Fixed: If a user enter any time format in a custom advanced field, it should be automatically converted to ISO format recommended by schema.org #1378
+* Fixed:  Need to show the title URL under the suggested answer for the Q&A schema. #1391
+* Fixed: Inf and NaN cannot be JSON encoded #1399
+* Fixed: "Thumbnail URL" and "Duration" field data are not fetching automatically. #1389
+
+
+= 1.9.72 (30 April 2021) =
+
+* Fixed: The reply to review should not be counted as a separate review count #1392
+* Fixed: Escaping of html in json string missing for FAQ schema which cause invalid json issue #1388
+* Fixed: Warning: htmlspecialchars() expects parameter 1 to be string, array given in /output/gutenberg.php #1385
+* Added: Compatibility with WP Review Slider Pro (Premium) plugin #1387
+
+= 1.9.71 (17 April 2021) =
+
+* Fixed: Schema type is not displaying in the schema block when the site page builder plugin is activated. #1381
+* Fixed: Image is not being in output for LocalBusiness schema #1375
+* Added: Compatability support for Jetpack Recipes #1380
+* Added: Review support with clutch.co #1357
 
 = 1.9.70 (07 April 2021) =
 

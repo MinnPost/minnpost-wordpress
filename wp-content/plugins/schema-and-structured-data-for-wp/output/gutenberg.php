@@ -746,9 +746,9 @@ function saswp_gutenberg_faq_schema(){
 
                                    $supply_data = array();
                                    $supply_data['@type']                   = 'Question';
-                                   $supply_data['name']                    = htmlspecialchars($val['question'][0]);
+                                   $supply_data['name']                    = (isset($val['jsonQuestion']) && is_string($val['jsonQuestion']) ) ? htmlspecialchars($val['jsonQuestion'], ENT_QUOTES, 'UTF-8') : '';
                                    $supply_data['acceptedAnswer']['@type'] = 'Answer';
-                                   $supply_data['acceptedAnswer']['text']  = htmlspecialchars($val['answer'][0]);
+                                   $supply_data['acceptedAnswer']['text']  = (isset($val['jsonAnswer']) && is_string($val['jsonAnswer']) ) ? htmlspecialchars($val['jsonAnswer'], ENT_QUOTES, 'UTF-8') : '';
 
                                     if(isset($val['answer'][1]['key']) && $val['answer'][1]['key'] !=''){
 
@@ -782,9 +782,9 @@ function saswp_gutenberg_faq_schema(){
 
                                    $supply_data = array();
                                    $supply_data['@type']                   = 'Question';
-                                   $supply_data['name']                    = htmlspecialchars($val['title']);
+                                   $supply_data['name']                    = htmlspecialchars($val['title'], ENT_QUOTES, 'UTF-8');
                                    $supply_data['acceptedAnswer']['@type'] = 'Answer';
-                                   $supply_data['acceptedAnswer']['text']  = htmlspecialchars($val['description']);
+                                   $supply_data['acceptedAnswer']['text']  = htmlspecialchars(do_shortcode($val['description']), ENT_QUOTES, 'UTF-8');
 
                                     if(isset($val['imageId']) && $val['imageId'] !=''){
 
@@ -930,7 +930,7 @@ function saswp_gutenberg_qanda_schema(){
             foreach($accepted_answer as $answer){
                 $accepted_json[] = array(
                     '@type'         => 'Answer',
-                    'text'          => htmlspecialchars($answer['text']),
+                    'text'          => htmlspecialchars($answer['text'], ENT_QUOTES, 'UTF-8'),
                     'dateCreated'   => $answer['date_created_iso'],
                     'upvoteCount'   => $answer['vote'],
                     'url'           => $answer['url'],
@@ -948,7 +948,7 @@ function saswp_gutenberg_qanda_schema(){
             foreach($suggested_answer as $answer){
                 $suggested_json[] = array(
                     '@type'         => 'Answer',
-                    'text'          => htmlspecialchars($answer['text']),
+                    'text'          => htmlspecialchars($answer['text'], ENT_QUOTES, 'UTF-8'),
                     'dateCreated'   => $answer['date_created_iso'],
                     'upvoteCount'   => $answer['vote'],
                     'url'           => $answer['url'],
@@ -980,6 +980,55 @@ function saswp_gutenberg_qanda_schema(){
                 
     return $input1;
         
+}
+
+function saswp_gutenberg_book_schema(){
+
+    $input1 = array();
+
+    $attributes = saswp_get_gutenberg_block_data('saswp/book-block');
+
+    if(isset($attributes['attrs'])){
+
+        $data = $attributes['attrs'];
+
+        $input1['@context']              = saswp_context_url();
+        $input1['@type']                 = 'Book';
+        $input1['@id']                   = trailingslashit(saswp_get_permalink()).'#Book';  
+        $input1['name']                  = $data['title'] ? $data['title'] : saswp_get_the_title(); 
+
+        if(!empty($data['description'])){
+            $input1['description']           = wp_strip_all_tags($data['description']);
+        }
+        
+        if(!empty($data['release_date'])){            
+            $input1['datePublished']  = saswp_format_date_time($data['release_date']);
+        }
+        if(!empty($data['author'])){
+            $input1['author']['@type'] = 'Person';
+            $input1['author']['name']  = $data['author'];
+        }
+        if(!empty($data['publisher'])){
+            $input1['publisher']['@type'] = 'Organization';
+            $input1['publisher']['name']  = $data['publisher'];
+        }
+        if(!empty($data['pages'])){            
+            $input1['numberOfPages']  = $data['pages'];
+        }
+        if(!empty($data['format'])){            
+            $input1['bookFormat']  = $data['format'];
+        }
+        if(!empty($data['genre'])){            
+            $input1['genre']  = $data['genre'];
+        }
+        if(!empty($data['rating'])){            
+            $input1['aggregateRating']['@type']       = 'AggregateRating';
+            $input1['aggregateRating']['ratingValue'] = $data['rating'];
+            $input1['aggregateRating']['reviewCount'] = 1;
+        }        
+    }
+
+    return $input1;
 }
 
 function saswp_gutenberg_job_schema(){

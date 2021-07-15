@@ -58,7 +58,7 @@ class Widget_View extends View {
 	 * @return string The widget "view more" text.
 	 */
 	public function get_view_more_text() {
-		return esc_html__( 'View More', 'the-events-calendar');
+		return esc_html__( 'View Calendar', 'the-events-calendar');
 	}
 
 	/**
@@ -170,11 +170,7 @@ class Widget_View extends View {
 	 *                       _at least_ 'tribe-compatibility-container' as an indicator.
 	 */
 	public function get_compatibility_classes() {
-		/**
-		 * @var Theme_Compatibility $theme_compatibility
-		 */
-		$theme_compatibility = tribe( Theme_Compatibility::class );
-		$classes = $theme_compatibility->get_container_classes();
+		$classes = Theme_Compatibility::get_container_classes();
 
 		/**
 		 * Filters the HTML classes applied to a widget top-level container.

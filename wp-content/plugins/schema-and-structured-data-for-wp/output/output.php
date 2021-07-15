@@ -67,8 +67,12 @@ function saswp_kb_schema_output() {
                         '@id'                   => $site_url.'#Organization',
                         'name'			=> saswp_remove_warnings($sd_data, 'sd_name', 'saswp_string'),
                         'url'			=> saswp_remove_warnings($sd_data, 'sd_url', 'saswp_string'),
-                        'sameAs'		=> isset($sd_data['saswp_social_links']) ? $sd_data['saswp_social_links'] : array(),                                        		
+                        'sameAs'		=> isset($sd_data['saswp_social_links']) ? $sd_data['saswp_social_links'] : array()
 		);
+
+                if(!empty($sd_data['sd_legal_name'])){
+                    $input['legalName'] = $sd_data['sd_legal_name'];
+                }
                 
                 if($logo !='' && $width !='' && $height !=''){
                     
@@ -656,11 +660,13 @@ function saswp_schema_output() {
                             break;
                         
                             case 'Person':
-                                                                                                                                                                     
-                                $input1['@context']              = saswp_context_url();
-                                $input1['@type']                 = 'Person';
-                                $input1['@id']                   = trailingslashit(saswp_get_permalink()).'#Person';                                                        
-                                $input1['name']                  = saswp_get_the_title();
+
+                                $author_id = get_the_author_meta( 'ID' );
+
+                                $input1['@context']              = saswp_context_url();                                                               
+                                $input1                          = array_merge($input1, saswp_get_author_details());                                                                                                                                                               
+                                $input1['url']                   = get_the_author_meta('user_url', $author_id);  
+                                
                                 $input1['address']['@type']      = 'PostalAddress';             
 
                                 $input1 = apply_filters('saswp_modify_person_schema_output', $input1 );
@@ -1279,6 +1285,51 @@ function saswp_schema_output() {
 			                                
                             break;
                             
+                            case 'VisualArtwork':
+                                                                
+                                $input1 = array(
+                                    '@context'			=> saswp_context_url(),
+                                    '@type'				=> $schema_type ,
+                                    '@id'				=> trailingslashit(saswp_get_permalink()).'#VisualArtwork',     
+                                    'url'				=> trailingslashit(saswp_get_current_url()),                                                                                    
+                                    'description'       => saswp_get_the_excerpt(),                                                                        
+                                    'name'				=> saswp_get_the_title(),
+                                    'dateCreated'       => esc_html($date),                                    
+                                    'creator'			=> saswp_get_author_details()			
+                                );
+                                                                				                                                                                                                                
+                                $input1 = apply_filters('saswp_modify_visualartwork_schema_output', $input1 );  
+                                
+                                $input1 = saswp_get_modified_markup($input1, $schema_type, $schema_post_id, $schema_options);
+                                
+                                if($modified_schema == 1){
+                                    
+                                    $input1 = saswp_visualartwork_schema_markup($schema_post_id, get_the_ID(), $all_post_meta);
+                                }
+			                                
+                            break;
+
+                            case 'CreativeWork':
+                                                                
+                                $input1 = $service_object->saswp_schema_markup_generator($schema_type);
+                                
+                                $mainentity = saswp_get_mainEntity($schema_post_id);
+                                
+                                if($mainentity){
+                                   $input1['mainEntity'] = $mainentity;                                     
+                                }
+				                                                                                                                                
+                                $input1 = apply_filters('saswp_modify_creativework_schema_output', $input1 );  
+                                
+                                $input1 = saswp_get_modified_markup($input1, $schema_type, $schema_post_id, $schema_options);
+                                
+                                if($modified_schema == 1){
+                                    
+                                    $input1 = saswp_creativework_schema_markup($schema_post_id, get_the_ID(), $all_post_meta);
+                                }
+			                                
+                            break;
+
                             case 'Article':
                                                                 
                                 $input1 = $service_object->saswp_schema_markup_generator($schema_type);
@@ -1694,6 +1745,9 @@ function saswp_schema_output() {
                                     'author'			            => saswp_get_author_details()						                                                                                                      
                                 );
                                 
+                                if(isset($video_links[0]['duration'])){                                                                        
+                                    $input1['duration']   = $video_links[0]['duration'];                                    
+                                }
                                 if(isset($video_links[0]['video_url'])){
                                     
                                     $input1['contentUrl'] = saswp_validate_url($video_links[0]['video_url']);
@@ -2139,6 +2193,7 @@ function saswp_schema_output() {
                                           
                                     }
                         
+                                    $input1 = apply_filters('saswp_modify_reviews_schema', $input1);
                         }                                                
                                 
                         //Check for Featured Image
@@ -2294,7 +2349,7 @@ function saswp_woocommerce_category_schema(){
     
     global $query_string, $sd_data; 
     
-    if ( function_exists('is_product_category') && is_product_category() &&  ( isset($sd_data['saswp_archive_schema']) && $sd_data['saswp_archive_schema'] == 1 )  ) {
+    if ( function_exists('is_product_category') && is_product_category() &&  ( (isset($sd_data['saswp_woocommerce_archive']) && $sd_data['saswp_woocommerce_archive'] == 1) || !isset($sd_data['saswp_woocommerce_archive'])) ) {
             		
                 $list_item     = array();
                 $term          = get_queried_object();
@@ -2362,7 +2417,7 @@ function saswp_woocommerce_shop_page(){
     $collection     = array();
     $itemlist_arr   = array();
         
-    if(function_exists('is_shop') && function_exists('woocommerce_get_loop_display_mode') && is_shop() && (isset( $sd_data['saswp_archive_schema']) && $sd_data['saswp_archive_schema'] == 1 ) ){
+    if(function_exists('is_shop') && function_exists('woocommerce_get_loop_display_mode') && is_shop() && (  (isset( $sd_data['saswp_woocommerce_archive']) && $sd_data['saswp_woocommerce_archive'] == 1) || !isset( $sd_data['saswp_woocommerce_archive']) ) ){
         
         $display_type = woocommerce_get_loop_display_mode();
         $parent_id    = is_product_category() ? get_queried_object_id() : 0;
@@ -2428,6 +2483,21 @@ function saswp_woocommerce_shop_page(){
             
     return array('itemlist' => $itemlist_arr, 'collection' => $collection);
     
+}
+
+function saswp_taxonomy_schema_output(){
+
+    $input1 = array();    
+
+    if( is_category() || is_tag() || is_tax() || ( function_exists('is_product_category') && is_product_category() ) ){
+
+        $term_id = get_queried_object_id();
+        $input1  = get_term_meta( $term_id, 'saswp_custom_schema_field', true );        
+
+    }    
+
+    return $input1;
+
 }
 
 /**
@@ -2644,11 +2714,15 @@ function saswp_author_output(){
  */
 function saswp_about_page_output(){
 
-	global $sd_data;   
+	    global $sd_data;   
         $feature_image = array();
         $publisher     = array();
+        $page_ids      = array();
+        $page_ids[]    = get_the_ID();
+        $page_ids      = apply_filters( 'saswp_modify_about_page_ids', $page_ids);
         
-	if((isset($sd_data['sd_about_page'])) && $sd_data['sd_about_page'] == get_the_ID()){   
+                                
+	if((isset($sd_data['sd_about_page'])) && in_array($sd_data['sd_about_page'], $page_ids) ){   
             
                         $service_object     = new saswp_output_service();
                         $feature_image      = $service_object->saswp_get_fetaure_image();
@@ -2691,8 +2765,11 @@ function saswp_contact_page_output(){
 	global $sd_data;	        	        
         $feature_image = array();
         $publisher     = array();
+        $page_ids      = array();
+        $page_ids[]    = get_the_ID();
+        $page_ids      = apply_filters( 'saswp_modify_contact_page_ids', $page_ids);
         
-	if(isset($sd_data['sd_contact_page']) && $sd_data['sd_contact_page'] == get_the_ID()){
+	if(isset($sd_data['sd_contact_page']) && in_array($sd_data['sd_contact_page'], $page_ids)){
                         
                         $service_object     = new saswp_output_service();
                         $feature_image      = $service_object->saswp_get_fetaure_image();

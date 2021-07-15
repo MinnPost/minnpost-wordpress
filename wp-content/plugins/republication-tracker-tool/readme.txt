@@ -34,9 +34,9 @@ In this plugin, the tracking is achieved through an image element included insid
 = 1.0.2 =
 
 - Sets a default width for the site icon that is displayed at the bottom of republished articles. Previously it did not have a width set which was causing some sites to experience larger than expected images at the end of their republished articles.
-- Added the new `republication_tracker_tool_allowed_tags_excerpt` filter which allows developers to choose what tags to allow and exclude from their shareable content. The only tags that are now excluded by default are `form` tags. Read more about it <a href="https://github.com/INN/republication-tracker-tool/blob/master/docs/removing-republish-button-from-categories.md" target="_blank">here</a>.
+- Added the new `republication_tracker_tool_allowed_tags_excerpt` filter which allows developers to choose what tags to allow and exclude from their shareable content. The only tags that are now excluded by default are `form` tags. Read more about it <a href="https://github.com/Automattic/republication-tracker-tool/blob/master/docs/removing-republish-button-from-categories.md" target="_blank">here</a>.
 - Added the ability to toggle the Republication sharing widget on or off for individual posts.
-- Added the new `hide_republication_widget` filter which allows developers to programatically hide the Republication sharing widget on specific posts, categories, tags, etc. Read more about it <a href="https://github.com/INN/republication-tracker-tool/blob/master/docs/removing-republish-button-from-categories.md" target="_blank">here</a>.
+- Added the new `hide_republication_widget` filter which allows developers to programatically hide the Republication sharing widget on specific posts, categories, tags, etc. Read more about it <a href="https://github.com/Automattic/republication-tracker-tool/blob/master/docs/removing-republish-button-from-categories.md" target="_blank">here</a>.
 
 = 1.0.1 =
 

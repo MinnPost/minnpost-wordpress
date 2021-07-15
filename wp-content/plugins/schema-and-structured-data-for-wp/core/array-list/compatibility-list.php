@@ -16,6 +16,13 @@ return array(
             'opt_name'   => 'saswp-polylang',
             'part_in'    => 'pro',
         ),
+        'wpml'  =>  array(            
+            'name'       => 'WPML Multilingual CMS',
+            'free'       => 'sitepress-multilingual-cms/sitepress.php',
+            'pro'        => 'wpml-translation-management/plugin.php',                    
+            'opt_name'   => 'saswp-wpml',
+            'part_in'    => 'pro',
+        ),
         'wpjobmanager'  =>  array(            
             'name'       => 'WP Job Manager',
             'free'       => 'wp-job-manager/wp-job-manager.php',                    
@@ -111,6 +118,18 @@ return array(
             'free'       => 'helpie-faq/helpie-faq.php',                    
             'opt_name'   => 'saswp-helpiefaq',
             'part_in'    => 'pro',
+        ),
+        'mooberrybm'  =>  array(            
+            'name'       => 'Mooberry Book Manager',
+            'free'       => 'mooberry-book-manager/mooberry-book-manager.php',                    
+            'opt_name'   => 'saswp-mooberrybm',
+            'part_in'    => 'free',
+        ),
+        'novelist'  =>  array(            
+            'name'       => 'Novelist',
+            'free'       => 'novelist/novelist.php',                    
+            'opt_name'   => 'saswp-novelist',
+            'part_in'    => 'free',
         ),
         'accordionfaq'  =>  array(            
             'name'       => 'Accordion FAQ',
@@ -265,6 +284,13 @@ return array(
                     'free'       => 'amp/amp.php',            
                     'opt_name'   => 'saswp-ampbyautomatic',
                     'part_in'    => 'free',
+        ),
+        'wpreviewslider'  =>  array(            
+            'name'       => 'WP Review Slider',
+            'free'       => 'wp-facebook-reviews/wp-fb-reviews.php',
+            'pro'        => 'wp-review-slider-pro/wp-review-slider-pro.php',            
+            'opt_name'   => 'saswp-wpreviewslider',
+            'part_in'    => 'pro',
         ),
         'cmp'       =>  array(            
                     'name'       => 'CMP – Coming Soon & Maintenance Plugin',
@@ -596,6 +622,12 @@ return array(
                     'free'       => 'zip-recipes/zip-recipes.php',                     
                     'opt_name'   => 'saswp-zip-recipes',
                     'part_in'    => 'pro',
+        ),
+        'jetpackrecipe' => array(
+            'name'       => 'JetPack Recipes',
+            'free'       => 'jetpack/jetpack.php',                     
+            'opt_name'   => 'saswp-jetpackrecipe',
+            'part_in'    => 'pro',
         ),
         'mediavine_create' => array(            
                     'name'       => 'Create by Mediavine',

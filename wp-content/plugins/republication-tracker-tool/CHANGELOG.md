@@ -1,3 +1,24 @@
+## [1.2.2](https://github.com/Automattic/republication-tracker-tool/compare/v1.2.1...v1.2.2) (2021-06-16)
+
+
+### Bug Fixes
+
+* change 'rel' attribute on links ([#113](https://github.com/Automattic/republication-tracker-tool/issues/113)) ([bff4883](https://github.com/Automattic/republication-tracker-tool/commit/bff48834a36c4e01d3b90359c755778f712b1566))
+
+## [1.2.1](https://github.com/Automattic/republication-tracker-tool/compare/v1.2.0...v1.2.1) (2021-05-18)
+
+
+### Bug Fixes
+
+* add tracking pixel if attribution statement is not displayed ([c99bf26](https://github.com/Automattic/republication-tracker-tool/commit/c99bf262f697048ae0d2c132aead05a8c72aa93e))
+
+# [1.2.0](https://github.com/Automattic/republication-tracker-tool/compare/v1.1.1...v1.2.0) (2021-05-13)
+
+
+### Features
+
+* optional attribution statement ([#103](https://github.com/Automattic/republication-tracker-tool/issues/103)) ([e5e0fd6](https://github.com/Automattic/republication-tracker-tool/commit/e5e0fd6f5134bcadbd8a43203faea3ab6c1fd050)), closes [#69](https://github.com/Automattic/republication-tracker-tool/issues/69)
+
 ## [1.1.1](https://github.com/Automattic/republication-tracker-tool/compare/v1.1.0...v1.1.1) (2021-04-01)
 
 

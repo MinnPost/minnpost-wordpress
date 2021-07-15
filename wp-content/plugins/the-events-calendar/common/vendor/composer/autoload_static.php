@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit22033a11c3a08d2d0eb7e1f1368f6f14
+class ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -173,6 +173,8 @@ class ComposerStaticInit22033a11c3a08d2d0eb7e1f1368f6f14
         'Tribe\\Admin\\Notice\\WP_Version' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/WP_Version.php',
         'Tribe\\Customizer\\Control' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Control.php',
         'Tribe\\Customizer\\Controls\\Heading' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Heading.php',
+        'Tribe\\Customizer\\Controls\\Radio' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Radio.php',
+        'Tribe\\Customizer\\Controls\\Separator' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Separator.php',
         'Tribe\\DB_Lock' => __DIR__ . '/../..' . '/src/Tribe/DB_Lock.php',
         'Tribe\\Dialog\\View' => __DIR__ . '/../..' . '/src/Tribe/Dialog/View.php',
         'Tribe\\Log\\Action_Logger' => __DIR__ . '/../..' . '/src/Tribe/Log/Action_Logger.php',
@@ -203,6 +205,7 @@ class ComposerStaticInit22033a11c3a08d2d0eb7e1f1368f6f14
         'Tribe\\Utils\\Body_Classes' => __DIR__ . '/../..' . '/src/Tribe/Utils/Body_Classes.php',
         'Tribe\\Utils\\Collection_Interface' => __DIR__ . '/../..' . '/src/Tribe/Utils/Collection_Interface.php',
         'Tribe\\Utils\\Collection_Trait' => __DIR__ . '/../..' . '/src/Tribe/Utils/Collection_Trait.php',
+        'Tribe\\Utils\\Compatibility_Classes' => __DIR__ . '/../..' . '/src/Tribe/Utils/Compatibility_Classes.php',
         'Tribe\\Utils\\Date_I18n' => __DIR__ . '/../..' . '/src/Tribe/Utils/Date_I18n.php',
         'Tribe\\Utils\\Date_I18n_Immutable' => __DIR__ . '/../..' . '/src/Tribe/Utils/Date_I18n_Immutable.php',
         'Tribe\\Utils\\Element_Attributes' => __DIR__ . '/../..' . '/src/Tribe/Utils/Element_Attributes.php',
@@ -215,6 +218,7 @@ class ComposerStaticInit22033a11c3a08d2d0eb7e1f1368f6f14
         'Tribe\\Utils\\Query' => __DIR__ . '/../..' . '/src/Tribe/Utils/Query.php',
         'Tribe\\Utils\\Strings' => __DIR__ . '/../..' . '/src/Tribe/Utils/Strings.php',
         'Tribe\\Utils\\Taxonomy' => __DIR__ . '/../..' . '/src/Tribe/Utils/Taxonomy.php',
+        'Tribe\\Utils\\Theme_Compatibility' => __DIR__ . '/../..' . '/src/Tribe/Utils/Theme_Compatibility.php',
         'Tribe\\Widget\\Manager' => __DIR__ . '/../..' . '/src/Tribe/Widget/Manager.php',
         'Tribe\\Widget\\Widget_Abstract' => __DIR__ . '/../..' . '/src/Tribe/Widget/Widget_Abstract.php',
         'Tribe\\Widget\\Widget_Interface' => __DIR__ . '/../..' . '/src/Tribe/Widget/Widget_Interface.php',
@@ -230,10 +234,10 @@ class ComposerStaticInit22033a11c3a08d2d0eb7e1f1368f6f14
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit22033a11c3a08d2d0eb7e1f1368f6f14::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit22033a11c3a08d2d0eb7e1f1368f6f14::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit22033a11c3a08d2d0eb7e1f1368f6f14::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit22033a11c3a08d2d0eb7e1f1368f6f14::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540::$classMap;
 
         }, null, ClassLoader::class);
     }

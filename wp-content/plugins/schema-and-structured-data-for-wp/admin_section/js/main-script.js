@@ -1026,9 +1026,11 @@ jQuery(document).ready(function($){
                       case 'saswp-stars-rating-checkbox':
                           
                             if ($(this).is(':checked')) { 
-                              $(".saswp-stars-post-table").removeClass('saswp_hide');             
+                              $(".saswp-stars-post-table").removeClass('saswp_hide');  
+                              $(this).parent().parent().next().removeClass('saswp_hide');           
                               $("#saswp-stars-rating").val(1);             
                             }else{
+                              $(this).parent().parent().next().addClass('saswp_hide');
                               $(".saswp-stars-post-table").addClass('saswp_hide');
                               $("#saswp-stars-rating").val(0);           
                             }
@@ -1098,6 +1100,15 @@ jQuery(document).ready(function($){
                               $("#saswp-woocommerce").val(1);                              
                             }else{
                               $("#saswp-woocommerce").val(0);                                         
+                            }
+                      break;
+
+                      case 'saswp_woocommerce_archive_checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp_woocommerce_archive").val(1);                              
+                            }else{
+                              $("#saswp_woocommerce_archive").val(0);                                         
                             }
                       break;
 
@@ -1188,6 +1199,15 @@ jQuery(document).ready(function($){
                               $("#saswp-polylang").val(1);             
                             }else{
                               $("#saswp-polylang").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-wpml-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-wpml").val(1);             
+                            }else{
+                              $("#saswp-wpml").val(0);           
                             }
                       break;
 
@@ -1635,6 +1655,16 @@ jQuery(document).ready(function($){
                             
                       break;
 
+                      case 'saswp-image-resizing-checkbox':
+                          
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-image-resizing").val(1);                                
+                            }else{
+                              $("#saswp-image-resizing").val(0);                                          
+                            }
+                            
+                      break;
+
                       case 'saswp-multiple-size-image-checkbox':
                           
                             if ($(this).is(':checked')) {              
@@ -1695,6 +1725,17 @@ jQuery(document).ready(function($){
                             
                       break;
                       
+                      case 'saswp-wpreviewslider-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {                                            
+
+                              $("#saswp-wpreviewslider").val(1);                                
+                            }else{
+                              $("#saswp-wpreviewslider").val(0);                                          
+                            }
+                            
+                      break;
+
                       case 'saswp-ampbyautomatic-checkbox':
                            saswp_compatibliy_notes(current, id); 
                             if ($(this).is(':checked')) {                                            
@@ -1752,7 +1793,8 @@ jQuery(document).ready(function($){
                                 success:function(response){   
                                   
                                   if(response.status == 't'){
-                                    $("#saswp-resized-image-folder").val(1);                                
+                                    $("#saswp-resized-image-folder").val(1);
+                                    $("#saswp-resized-image-folder-checkbox").after('<a class="saswp-clear-images button button-default">Clear Images</a>');                                  
                                   }else{
                                     resized_id.prop("checked", false);
                                     resized_id.next().text(response.message);
@@ -1768,7 +1810,8 @@ jQuery(document).ready(function($){
                                 });
                                                                                          
                             }else{
-                              $("#saswp-resized-image-folder").val(0);                                          
+                              $("#saswp-resized-image-folder").val(0);  
+                              $(".saswp-clear-images").remove();                                        
                             }
                             
                       break;
@@ -1788,6 +1831,16 @@ jQuery(document).ready(function($){
                               $("#saswp-rannarecipe").val(1);                                
                             }else{
                               $("#saswp-rannarecipe").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-jetpackrecipe-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-jetpackrecipe").val(1);                                
+                            }else{
+                              $("#saswp-jetpackrecipe").val(0);                                          
                             }
                             
                       break;
@@ -1958,6 +2011,26 @@ jQuery(document).ready(function($){
                               $("#saswp-helpiefaq").val(1);                                
                             }else{
                               $("#saswp-helpiefaq").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-mooberrybm-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-mooberrybm").val(1);                                
+                            }else{
+                              $("#saswp-mooberrybm").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-novelist-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-novelist").val(1);                                
+                            }else{
+                              $("#saswp-novelist").val(0);                                          
                             }
                             
                       break;
@@ -2719,25 +2792,7 @@ jQuery(document).ready(function($){
             $('#'+t).show();
          }
         });
-        
-        
-        $('#saswp-tools-tabs a:first').addClass('saswp-global-selected');
-        $('.saswp-tools-container').hide();
-        $('.saswp-tools-container:first').show();
-        
-        $('#saswp-tools-tabs a').click(function(){
-            var t = $(this).attr('data-id');
-            
-          if(!$(this).hasClass('saswp-global-selected')){ 
-            $('#saswp-tools-tabs a').removeClass('saswp-global-selected');           
-            $(this).addClass('saswp-global-selected');
-
-            $('.saswp-tools-container').hide();
-            $('#'+t).show();
-         }
-        });
-        
-        
+                                        
         $('#saswp-review-tabs a:first').addClass('saswp-global-selected');
         $('.saswp-review-container').hide();
         $('.saswp-review-container:first').show();
@@ -3090,6 +3145,39 @@ jQuery(document).ready(function($){
         //   jQuery(jQuery(".wrap a")[0]).after(offer_banner);
 
         // }
+                    
+          jQuery(document).on("click", ".saswp-clear-images", function(e){            
+
+            e.preventDefault();
+            var current     = $(this);
+            var saswp_confirm = confirm("Are you sure? It will remove all the resized images");
+
+            if(saswp_confirm == true){
+
+              current.addClass('updating-message');
+
+              $.ajax({
+                type: "POST",    
+                url:ajaxurl,                    
+                dataType: "json",
+                data:{action:"saswp_clear_resized_image_folder", saswp_security_nonce:saswp_localize_data.saswp_security_nonce },
+                success:function(response){   
+                  
+                  current.removeClass('updating-message');
+
+                  if(response.status != 't'){
+                    alert('something went wrong')                    
+                  }
+                    
+                },
+                error: function(response){                    
+                   console.log(response);
+                }
+                });
+
+            }
+                        
+          });
 
         if ('saswp' == saswp_localize_data.post_type && saswp_localize_data.page_now == 'edit.php') {
         

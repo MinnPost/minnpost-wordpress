@@ -31,6 +31,15 @@ class SASWP_Gutenberg {
                 'editor'       => 'saswp-gutenberg-css-reg-editor',
                 'local'        => array()            
             ),
+            'book' => array(            
+                'handler'      => 'saswp-book-js-reg',                
+                'local_var'    => 'saswpGutenbergBook',
+                'block_name'   => 'book-block',
+                'render_func'  => 'render_book_data',
+                'style'        => 'saswp-g-book-css',
+                'editor'       => 'saswp-gutenberg-css-reg-editor',
+                'local'        => array()            
+            ),
             'course' => array(            
                 'handler'      => 'saswp-course-js-reg',                
                 'local_var'    => 'saswpGutenbergCourse',
@@ -140,6 +149,10 @@ class SASWP_Gutenberg {
                                 $amp_css  =  SASWP_PLUGIN_DIR_PATH . 'modules/gutenberg/assets/css/amp/course.css';              
                                 echo @file_get_contents($amp_css);
                             }
+                            if(isset($parse_blocks['blockName']) && $parse_blocks['blockName'] === 'saswp/book-block'){
+                                $amp_css  =  SASWP_PLUGIN_DIR_PATH . 'modules/gutenberg/assets/css/amp/book.css';              
+                                echo @file_get_contents($amp_css);
+                            }
                             
                         }
                         
@@ -198,6 +211,16 @@ class SASWP_Gutenberg {
                                                 array()                        
                                            );
                                            
+                                       }
+
+                                       if(isset($parse_blocks['blockName']) && $parse_blocks['blockName'] === 'saswp/book-block'){
+                                           
+                                        wp_enqueue_style(
+                                             'saswp-g-book-css',
+                                             SASWP_PLUGIN_URL . '/modules/gutenberg/assets/css/book.css',
+                                             array()                        
+                                        );
+                                        
                                        }
 
                                    }
@@ -297,6 +320,21 @@ class SASWP_Gutenberg {
             
         }
         
+        public function render_book_data($attributes){
+            
+            ob_start();
+            
+            if ( !isset( $attributes ) ) {
+			    ob_end_clean();                                                                       
+			    return '';
+            }
+            
+            echo $this->render->book_block_data($attributes);
+            
+            return ob_get_clean();
+            
+        }
+
         public function render_course_data($attributes){
             
             ob_start();
@@ -394,8 +432,44 @@ class SASWP_Gutenberg {
                     foreach($attributes['items'] as $item){
                         
                       if($item['title'] || $item['description']){
-                        echo '<li>'; 
-                        echo '<strong class="saswp-faq-question-title">'. html_entity_decode(esc_attr($item['title'])).'</strong>';
+
+                        if(!empty($item['questionID'])){
+                            echo '<li id="'.esc_attr($item['questionID']).'">'; 
+                        }else{
+                            echo '<li>'; 
+                        }                        
+                        if(isset($attributes['headingTag'])){
+
+                            switch ($attributes['headingTag']) {
+
+                                case 'h1':
+                                        echo '<h1>'. html_entity_decode(esc_attr($item['title'])).'</h1>';
+                                    break;
+                                case 'h2':
+                                        echo '<h2>'. html_entity_decode(esc_attr($item['title'])).'</h2>';
+                                    break;
+                                case 'h3':
+                                        echo '<h3>'. html_entity_decode(esc_attr($item['title'])).'</h3>';
+                                    break;
+                                case 'h4':
+                                        echo '<h4>'. html_entity_decode(esc_attr($item['title'])).'</h4>';
+                                    break;
+                                case 'h5':
+                                        echo '<h5>'. html_entity_decode(esc_attr($item['title'])).'</h5>';
+                                    break;
+                                case 'h6':
+                                        echo '<h6>'. html_entity_decode(esc_attr($item['title'])).'</h6>';
+                                    break;    
+
+                                default:
+                                echo '<h3>'. html_entity_decode(esc_attr($item['title'])).'</h3>';
+                                    break;
+                            }
+
+                        }else{
+                            echo '<strong class="saswp-faq-question-title">'. html_entity_decode(esc_attr($item['title'])).'</strong>';    
+                        }
+                                                
                         echo '<p class="saswp-faq-answer-text">'.html_entity_decode(esc_textarea($item['description'])).'</p>';
                         echo '</li>';
                       }  

@@ -74,10 +74,8 @@ $num_events_label = sprintf(
 >
 
 	<button
-		<?php if ( ! empty( $day['found_events'] ) || ! empty( $day['is-widget-today']) ) : ?>
-			aria-expanded="<?php echo esc_attr( $expanded ); ?>"
-			aria-controls="<?php echo esc_attr( $mobile_day_id ); ?>"
-		<?php endif; ?>
+		aria-expanded="<?php echo esc_attr( $expanded ); ?>"
+		aria-controls="<?php echo esc_attr( $mobile_day_id ); ?>"
 		<?php tribe_classes( $day_button_classes ); ?>
 		data-js="tribe-events-calendar-month-day-cell-mobile"
 		tabindex="-1"
@@ -100,10 +98,15 @@ $num_events_label = sprintf(
 			?>
 			<em
 				class="tribe-events-calendar-month__mobile-events-icon tribe-events-calendar-month__mobile-events-icon--featured"
-				aria-label="<?php echo esc_attr( $has_featured_events_label ); ?>"
 				title="<?php echo esc_attr( $has_featured_events_label ); ?>"
 			>
-				<?php $this->template( 'components/icons/featured', [ 'classes' => [ 'tribe-events-calendar-month__mobile-events-icon-svg' ] ] ); ?>
+				<?php $this->template(
+					'components/icons/featured',
+					[
+						'classes'    => [ 'tribe-events-calendar-month__mobile-events-icon-svg' ],
+						'icon_title' => esc_html( $has_featured_events_label )
+					]
+				); ?>
 			</em>
 		<?php elseif ( ! empty( $day['found_events'] ) ) : ?>
 			<?php
@@ -112,10 +115,8 @@ $num_events_label = sprintf(
 			?>
 			<em
 				class="tribe-events-calendar-month__mobile-events-icon tribe-events-calendar-month__mobile-events-icon--event"
-				aria-label="<?php echo esc_attr( $has_events_label ); ?>"
 				title="<?php echo esc_attr( $has_events_label ); ?>"
-			>
-			</em>
+			></em>
 		<?php endif ?>
 	</button>
 

@@ -12,6 +12,9 @@
     var InspectorControls = editor.InspectorControls;
     var ToggleControl     = components.ToggleControl;
     var PanelBody         = components.PanelBody;
+    var SelectControl     = components.SelectControl;
+    var TextControl       = components.TextControl;
+    
             
     blocks.registerBlockType( 'saswp/faq-block', {
         title: __('FAQ (SASWP)', 'schema-and-structured-data-for-wp'),
@@ -29,6 +32,9 @@
                 type: 'string',
                 default: 'none'
             },
+            headingTag: {
+              type: 'string'              
+            },
             toggleList: {
                 type: 'boolean',
                 default: false
@@ -44,6 +50,9 @@
                 description: {
                   type: 'string',                  
                   selector: '.description'
+                },
+                questionID: {
+                  type: 'string',                                    
                 },
                 imageId: {
                   type: 'integer'                
@@ -337,7 +346,7 @@
                           ( parseInt(item.index) + 1) + "."
                           ),  
                           el( RichText, {                
-                          tagName: 'p',
+                          tagName: attributes.headingTag,
                           className:'saswp-faq-step-title',
                           placeholder: __('Enter a question', 'schema-and-structured-data-for-wp'), 
                           style: { textAlign: alignment },
@@ -362,7 +371,8 @@
                           style: { textAlign: alignment },
                           value: item.description,
                           autoFocus: true,
-                          onChange: function( value ) {                                
+                          onChange: function( value ) {
+
                             var newObject = Object.assign({}, item, {
                               description: value
                             });
@@ -371,10 +381,31 @@
                                 return itemFilter.index != item.index;
                               })), [newObject])
                             });
+
                           }
                         }            
                       ),                      
                       el('div', {className:'saswp-faq-step-controls-container'},                        
+                        item.isSelected ?
+                        el(TextControl,
+                          {                             
+                            className:'saswp-faq-question-id',
+                            value: item.questionID,
+                            placeholder: __('Question ID (Optional)', 'schema-and-structured-data-for-wp'), 
+                            onChange: function(value){
+                             
+                              var newObject = Object.assign({}, item, {
+                                questionID: value
+                              });
+                              return props.setAttributes({
+                                items: [].concat(_cloneArray(props.attributes.items.filter(function (itemFilter) {
+                                  return itemFilter.index != item.index;
+                                })), [newObject])
+                              });
+                           }
+                          }                          
+                          )
+                        : '',
                         saswpGetMover(item),
                         saswpGetButtons(item)        
                       )
@@ -404,7 +435,22 @@
                       return (value == true ? 'Showing step item as an unordered list': 'Showing step item as an ordered list');
                     }
                 },
-                )
+                ),
+                el(SelectControl,{
+                  value : attributes.headingTag,
+                  label: __('Heading Tag', 'schema-and-structured-data-for-wp'),
+                  options:[                    
+                    { label: 'H1', value: 'h1' },
+                    { label: 'H2', value: 'h2' },
+                    { label: 'H3', value: 'h3' },
+                    { label: 'H4', value: 'h4' },
+                    { label: 'H5', value: 'h5' },
+                    { label: 'H6', value: 'h6' },
+                  ] ,
+                  onChange: function(value){
+                       props.setAttributes( { headingTag: value } ); 
+                  }
+                }),
                 )
                 ),
                 el(

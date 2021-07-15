@@ -44,7 +44,9 @@ abstract class MWCPPost
 
         // That works well with CPT UI and Custom Post Type Permalinks
         $find[] = '%' . $post->post_type . '_slug%';
-        $replace[] = $post_types[$post->post_type]->rewrite['slug'];
+        if ( is_array( $post_types[$post->post_type]->rewrite ) ) {
+            $replace[] = $post_types[$post->post_type]->rewrite['slug'];
+        }
 
         if ( !$leavename ) {
           $find[] = '%' . $post->post_type . '%';
@@ -82,7 +84,7 @@ abstract class MWCPPost
         // Base the url on the post_type slug, not the $url.
         global $wp_rewrite;
         $post_link = $wp_rewrite->get_extra_permastruct( $post->post_type );
-        $slug = $post_types[$post->post_type]->rewrite['slug'];
+        $slug = is_array( $post_types[$post->post_type]->rewrite ) ? $post_types[$post->post_type]->rewrite['slug'] : $post->post_name;
         $slug = trailingslashit( site_url( trailingslashit( $slug ) . '%postname%' ) );
         $newUrl = str_replace( $find, $replace, $post_link );
         $newUrl = trailingslashit( trim( site_url( $newUrl ) ) );
