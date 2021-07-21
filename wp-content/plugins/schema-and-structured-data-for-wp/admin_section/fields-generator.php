@@ -20,9 +20,9 @@ class saswp_fields_generator {
         array(
             "image" => "/admin_section/images/reviews_platform_icon/google-1-img.png",
             "name"  => "Google Reviews"),
-		array(
-			"image" => "/admin_section/images/reviews_platform_icon/google-1-img.png",
-			"name"  => "Google Shopping Reviews"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/google-1-img.png",
+            "name"  => "Google Shopping Reviews"),    
         array(
             "image" => "/admin_section/images/reviews_platform_icon/shopper-approved-img.png",
             "name"  => "Shopper Approved"),

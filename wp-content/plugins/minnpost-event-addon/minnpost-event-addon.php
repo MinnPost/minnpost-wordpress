@@ -50,6 +50,9 @@ class MinnPostEventAddon {
 			require_once __DIR__ . '/includes/minnpost-event-get-years.php';
 		}
 
+		// don't load the event aggregator.
+		add_filter( 'tribe_aggregator_should_load', '__return_false' );
+
 		// filter the plugin context
 		add_filter( 'tribe_context_locations', array( $this, 'filter_context_locations' ) );
 		// filter the url query arguments
@@ -67,6 +70,10 @@ class MinnPostEventAddon {
 
 		// widget
 		add_action( 'widgets_init', array( $this, 'widget' ) );
+
+		// Don't load the Tribe App Shop.
+		add_action( 'plugins_loaded', array( $this, 'remove_events_calendar_app_shop' ), 11 );
+		add_filter( 'tribe_asset_pre_register', array( $this, 'filter_tribe_asset' ) );
 	}
 
 	/**
@@ -200,6 +207,35 @@ class MinnPostEventAddon {
 	public function widget() {
 		include_once( 'minnpost-event-years-widget.php' );
 		register_widget( 'MinnpostEventYears_Widget' );
+	}
+
+	/**
+	 * Removes the app shop page from the Events Calendar sub menu.
+	 */
+	public function remove_events_calendar_app_shop() {
+		if ( class_exists( 'Tribe__App_Shop' ) ) {
+			$tribe_app_shop = Tribe__App_Shop::instance();
+			remove_action( 'admin_menu', array( $tribe_app_shop, 'add_menu_page' ), 100 );
+			remove_action( 'wp_before_admin_bar_render', array( $tribe_app_shop, 'add_toolbar_item' ), 20 );
+		}
+	}
+
+	/**
+	 * Ensure that Tribe App Shop assets are never enqueued by attaching `__return_false` as
+	 * the conditional.
+	 *
+	 * @since 0.5.1
+	 *
+	 * @param object $asset The asset currently being registered.
+	 *
+	 * @return object The modified asset.
+	 */
+	public function filter_tribe_asset( $asset ) {
+		if ( 'tribe-app-shop-css' === $asset->slug || 'tribe-app-shop-js' === $asset->slug ) {
+			$asset->conditionals = array( '__return_false' );
+		}
+
+		return $asset;
 	}
 
 }

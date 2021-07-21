@@ -50,7 +50,7 @@ Class saswp_output_service{
 					while ( $the_query->have_posts() ) :
 						$the_query->the_post();
 
-						$post_id = get_the_id();
+						$post_id = saswp_get_the_ID();
 						
 						$acf_fields = apply_filters( 'acf/field_group/get_fields', array(), $post_id ); // WPCS: XSS OK.						
 
@@ -121,15 +121,18 @@ Class saswp_output_service{
          * @param type $schema_post_id
          * @return type array or string
          */        
-        public function saswp_get_meta_list_value($key, $field, $schema_post_id){
+        public function saswp_get_meta_list_value($key, $field, $schema_post_id, $schema_type){
             
             global $post;
             
-            $fixed_image       = get_post_meta($schema_post_id, 'saswp_fixed_image', true) ;            
+            $fixed_image       = saswp_get_post_meta($schema_post_id, 'saswp_fixed_image', true) ;            
                         
             $response = null;
             
             switch ($field) {
+                case 'blogname':
+                    $response   = get_bloginfo();                    
+                break;
                 case 'blogname':
                     $response   = get_bloginfo();                    
                     break;
@@ -180,7 +183,7 @@ Class saswp_output_service{
                     break;
                 case 'manual_text':    
                     
-                    $fixed_text        = get_post_meta($schema_post_id, 'saswp_fixed_text', true) ; 
+                    $fixed_text        = saswp_get_post_meta($schema_post_id, 'saswp_fixed_text', true) ; 
 
                     if(isset($fixed_text[$key])){
                         
@@ -212,7 +215,7 @@ Class saswp_output_service{
                     
                     $response = '';
                     
-                    $taxonomy_term       = get_post_meta( $schema_post_id, 'saswp_taxonomy_term', true) ; 
+                    $taxonomy_term       = saswp_get_post_meta( $schema_post_id, 'saswp_taxonomy_term', true) ; 
                                         
                     if($taxonomy_term[$key] == 'all'){
                         
@@ -254,8 +257,8 @@ Class saswp_output_service{
                     
                 case 'custom_field':
                     
-                    $cus_field   = get_post_meta($schema_post_id, 'saswp_custom_meta_field', true);                    
-                    $response    = get_post_meta($post->ID, $cus_field[$key], true); 
+                    $cus_field   = saswp_get_post_meta($schema_post_id, 'saswp_custom_meta_field', true);                    
+                    $response    = saswp_get_post_meta($post->ID, $cus_field[$key], true); 
                     
                     break;
                 case 'fixed_image':                    
@@ -319,29 +322,165 @@ Class saswp_output_service{
 
                             if($acf_obj['type'] == 'image'){
                                 
-                                $image_id           = get_post_meta($post->ID, $field, true );                                
+                                $image_id           = saswp_get_post_meta($post->ID, $field, true );                                
                                 $response           = saswp_get_image_by_id($image_id);                    
                                                                                                             
                             }else if($acf_obj['type'] == 'repeater'){
                                                                                                 
-                                if(isset($acf_obj['value'])){
-                                    foreach($acf_obj['value'] as $value){
-                                        foreach ($value as $val){
-                                         $response[] = $val;   
+                                switch ($schema_type) {
+
+                                    case 'FAQ':
+                                                                                                                        
+                                        if(!empty($acf_obj['value'])){
+
+                                            foreach($acf_obj['value'] as $value){
+
+                                                $main_entity = array();
+
+                                                $ar_values = array_values($value);
+                                                
+                                                $main_entity['@type']                   = 'Question';
+                                              
+                                                if(!empty($ar_values[0])){
+                                                    $main_entity['name'] = $ar_values[0]; 
+                                                }
+                                                $main_entity['acceptedAnswer']['@type'] = 'Answer';
+                                                if(!empty($ar_values[1])){
+                                                    $main_entity['acceptedAnswer']['text'] = $ar_values[1];
+                                                }
+                                                if(!empty($ar_values[2]['url'])){
+                                                    $main_entity['acceptedAnswer']['image'] = $ar_values[2]['url'];
+                                                }
+                                                
+                                                $response [] = $main_entity;                                   
+                                               
+                                            }
+                                            
                                         }
-                                    }
-                                }                                
+
+                                        break;
+
+                                        case 'HowTo':
+                                                                                        
+                                            if(strpos($acf_obj['name'], "tool") !== false){
+
+                                                if(!empty($acf_obj['value'])){
+    
+                                                    foreach($acf_obj['value'] as $value){
+        
+                                                        $main_entity = array();
+        
+                                                        $ar_values = array_values($value);
+                                                        
+                                                        $main_entity['@type']                   = 'HowToTool';
+                                                      
+                                                        if(!empty($ar_values[0])){
+                                                            $main_entity['name'] = $ar_values[0]; 
+                                                        }
+                                                        if(!empty($ar_values[1])){
+                                                            $main_entity['url'] = $ar_values[1]; 
+                                                        }                                                        
+                                                        if(!empty($ar_values[2]['url'])){
+                                                            $main_entity['image'] = $ar_values[2]['url'];
+                                                        }
+                                                        
+                                                        $response [] = $main_entity;                                   
+                                                       
+                                                    }
+                                                    
+                                                }
+
+                                            }
+
+                                            if(strpos($acf_obj['name'], "supp") !== false){
+                                                
+                                                if(!empty($acf_obj['value'])){
+    
+                                                    foreach($acf_obj['value'] as $value){
+        
+                                                        $main_entity = array();
+        
+                                                        $ar_values = array_values($value);
+                                                        
+                                                        $main_entity['@type']                   = 'HowToSupply';
+                                                      
+                                                        if(!empty($ar_values[0])){
+                                                            $main_entity['name'] = $ar_values[0]; 
+                                                        }
+                                                        if(!empty($ar_values[1])){
+                                                            $main_entity['url'] = $ar_values[1]; 
+                                                        }                                                        
+                                                        if(!empty($ar_values[2]['url'])){
+                                                            $main_entity['image'] = $ar_values[2]['url'];
+                                                        }
+                                                        
+                                                        $response [] = $main_entity;                                   
+                                                       
+                                                    }
+                                                    
+                                                }
+
+                                            }
+
+                                            if(strpos($acf_obj['name'], "step") !== false){
+
+                                                if(!empty($acf_obj['value'])){
+    
+                                                    foreach($acf_obj['value'] as $value){
+        
+                                                        $main_entity = array();
+        
+                                                        $ar_values = array_values($value);
+                                                        
+                                                        $main_entity['@type']                   = 'HowToStep';
+                                                      
+                                                        if(!empty($ar_values[0])){
+                                                            $main_entity['name'] = $ar_values[0]; 
+                                                        }
+                                                        if(!empty($ar_values[1])){
+                                                            $main_entity['url'] = $ar_values[1]; 
+                                                        }
+                                                        if(!empty($ar_values[2])){
+                                                            $main_entity['text'] = $ar_values[2]; 
+                                                        }                                                        
+                                                        if(!empty($ar_values[3]['url'])){
+                                                            $main_entity['image'] = $ar_values[3]['url'];
+                                                        }
+                                                        
+                                                        $response [] = $main_entity;                                   
+                                                       
+                                                    }
+                                                    
+                                                }
+
+                                            }
+                                                
+                                            break;
+                                        
+                                    
+                                    default:
+
+                                        if(isset($acf_obj['value'])){
+                                            foreach($acf_obj['value'] as $value){
+                                                foreach ($value as $val){
+                                                $response[] = $val;   
+                                                }
+                                            }
+                                        }   
+
+                                        break;
+                                }                             
                                                                 
                             }else{
-                                $response = get_post_meta($post->ID, $field, true );
+                                $response = saswp_get_post_meta($post->ID, $field, true );
                             }
 
                         }else{
-                            $response = get_post_meta($post->ID, $field, true );
+                            $response = saswp_get_post_meta($post->ID, $field, true );
                         }
                         
                     }else{
-                        $response = get_post_meta($post->ID, $field, true );
+                        $response = saswp_get_post_meta($post->ID, $field, true );
                     }                    
                     
                     break;
@@ -358,26 +497,26 @@ Class saswp_output_service{
          */
         public function saswp_replace_with_custom_fields_value($input1, $schema_post_id){
                                                  
-            $custom_fields    = get_post_meta($schema_post_id, 'saswp_meta_list_val', true);            
+            $custom_fields    = saswp_get_post_meta($schema_post_id, 'saswp_meta_list_val', true);            
             $allowed_html     = saswp_expanded_allowed_tags();
             $review_markup    = array();
             $review_response  = array();
             $main_schema_type = '';
                                                           
             if(!empty($custom_fields)){
-                
+
+                $schema_type      = saswp_get_post_meta( $schema_post_id, 'schema_type', true);     
+
                 foreach ($custom_fields as $key => $field){
                                                                                                                                          
-                    $custom_fields[$key] = $this->saswp_get_meta_list_value($key, $field, $schema_post_id);                                           
+                    $custom_fields[$key] = $this->saswp_get_meta_list_value($key, $field, $schema_post_id, $schema_type);                                           
                                                            
                 }   
-                
-                $schema_type      = get_post_meta( $schema_post_id, 'schema_type', true);                                     
-            
+                                                                            
                 if($schema_type == 'Review'){
 
                     $main_schema_type = $schema_type;                                                                                  
-                    $schema_type = get_post_meta($schema_post_id, 'saswp_review_item_reviewed_'.$schema_post_id, true);
+                    $schema_type = saswp_get_post_meta($schema_post_id, 'saswp_review_item_reviewed_'.$schema_post_id, true);
                                         
                     if(isset($custom_fields['saswp_review_name'])){
                         $review_markup['name']                       =    $custom_fields['saswp_review_name'];
@@ -1408,6 +1547,16 @@ Class saswp_output_service{
                     }
                     if(isset($custom_fields['saswp_howto_schema_image'])){
                      $input1['image'] =    $custom_fields['saswp_howto_schema_image'];
+                    }
+
+                    if(isset($custom_fields['saswp_howto_schema_supplies'])){                                                                                                                    
+                        $input1['supply'] =    $custom_fields['saswp_howto_schema_supplies'];
+                    }
+                    if(isset($custom_fields['saswp_howto_schema_tools'])){                                                                                                                    
+                        $input1['tool'] =    $custom_fields['saswp_howto_schema_tools'];
+                    }
+                    if(isset($custom_fields['saswp_howto_schema_steps'])){                                                                                                                    
+                        $input1['step'] =    $custom_fields['saswp_howto_schema_steps'];
                     }
                                                             
                     break;     
@@ -3073,6 +3222,10 @@ Class saswp_output_service{
                        
                        $input1['author']['name']              =    $custom_fields['saswp_faq_author'];                                              
                     }
+
+                    if(isset($custom_fields['saswp_faq_main_entity'])){                                                                                                                    
+                        $input1['mainEntity'] =    $custom_fields['saswp_faq_main_entity'];
+                    }
                                                              
                 break;
                 
@@ -3970,28 +4123,31 @@ Class saswp_output_service{
                              
                         if(method_exists('WC_Product_Simple', 'get_type')){
 
-                            if($product->get_type() == 'variable'){
+                            if($product->get_type() == 'variable' && class_exists('WC_Product_Variable') ){
 
                                 $product_id_some = $woocommerce->product_factory->get_product();
-    
-                                $variations  = $product_id_some->get_available_variations(); 
                                 
-                                    if($variations){
-    
-                                            foreach($variations as $value){
-    
-                                                    $product_variation = wc_get_product( $value['variation_id'] ); 
-													$p_inc_tax = $product_variation->get_price_including_tax(); 
+                                if($product_id_some instanceof WC_Product_Variable) {
+                                    
+                                    $variations  = $product_id_some->get_available_variations(); 
+                                    
+                                        if($variations){
+        
+                                                foreach($variations as $value){
 
-													if($p_inc_tax){
-														$varible_prices[] = $p_inc_tax; 
-													}else{
-														$varible_prices[] = $value['display_price']; 
-													}
-    
-                                            }
-                                    }
-    
+                                                    $product_variation = wc_get_product( $value['variation_id'] ); 
+                                                    $p_inc_tax = $product_variation->get_price_including_tax(); 
+
+                                                    if($p_inc_tax){
+                                                        $varible_prices[] = $p_inc_tax; 
+                                                    }else{
+                                                        $varible_prices[] = $value['display_price']; 
+                                                    }                                                       
+                                                }
+                                        }
+
+                                }
+                                    
                             }
                             
                         }                                        
@@ -4012,7 +4168,7 @@ Class saswp_output_service{
 
              //product categories ends here 
                 
-             $gtin = get_post_meta($post_id, $key='hwp_product_gtin', true);
+             $gtin = saswp_get_post_meta($post_id, $key='hwp_product_gtin', true);
              
              if($gtin !=''){
                  
@@ -4021,7 +4177,7 @@ Class saswp_output_service{
              }  
              
              $brand = '';
-             $brand = get_post_meta($post_id, $key='hwp_product_brand', true);
+             $brand = saswp_get_post_meta($post_id, $key='hwp_product_brand', true);
              
              if($brand !=''){
                  
@@ -4102,7 +4258,7 @@ Class saswp_output_service{
              }
                 
              if(!isset($product_details['product_mpn'])){
-                 $product_details['product_mpn'] = get_the_ID();
+                 $product_details['product_mpn'] = saswp_get_the_ID();
              }
                                
              $product_details['product_availability'] = saswp_prepend_schema_org($product->get_stock_status());
@@ -4130,7 +4286,7 @@ Class saswp_output_service{
                 $product_details['product_price']           = $woo_price;
              }
                           
-             $product_details['product_sku']             = $product->get_sku() ? $product->get_sku(): get_the_ID();             
+             $product_details['product_sku']             = $product->get_sku() ? $product->get_sku(): saswp_get_the_ID();             
              
              if(isset($date_on_sale)){
                  
@@ -4185,10 +4341,10 @@ Class saswp_output_service{
                         
                         foreach($post_meta as $key => $val){
                   
-                               $rv[$val] = get_post_meta($me_post->ID, $key, true );  
+                               $rv[$val] = saswp_get_post_meta($me_post->ID, $key, true );  
                                
                                if($val == 'reviewRating'){
-                                   $sumofrating += get_post_meta($me_post->ID, $key, true ); 
+                                   $sumofrating += saswp_get_post_meta($me_post->ID, $key, true ); 
                                }
                                
                                    
@@ -4306,7 +4462,7 @@ Class saswp_output_service{
                 $item_enable            = 0;
                 $review_count           = "1";
 
-                $rating_box   = get_post_meta($post_id, 'saswp_review_details', true); 
+                $rating_box   = saswp_get_post_meta($post_id, 'saswp_review_details', true); 
 
                 if(isset($rating_box['saswp-review-item-over-all'])){
 
@@ -4349,7 +4505,7 @@ Class saswp_output_service{
             $post_review_title  = '';
             $post_review_desc   = '';
             
-            $post_meta   = get_post_meta($post_id);                                       
+            $post_meta   = saswp_get_post_meta($post_id);                                       
             
             if(isset($post_meta['_post_review_box_breakdowns_score'])){
                 
@@ -4467,7 +4623,7 @@ Class saswp_output_service{
                 
                 if($post_type =='dwqa-question' && isset($sd_data['saswp-dw-question-answer']) && $sd_data['saswp-dw-question-answer'] ==1 && (is_plugin_active('dw-question-answer/dw-question-answer.php') || is_plugin_active('dw-question-answer-pro/dw-question-answer.php')) ){
                  
-                $post_meta      = get_post_meta($post_id);
+                $post_meta      = saswp_get_post_meta($post_id);
                 
                 if(isset($post_meta['_dwqa_best_answer'])){
                     
@@ -4477,7 +4633,7 @@ Class saswp_output_service{
                                                                                                                                               
                 $dw_qa['@type']       = 'Question';
                 $dw_qa['name']        = saswp_get_the_title(); 
-                $dw_qa['upvoteCount'] = get_post_meta( $post_id, '_dwqa_votes', true );                                             
+                $dw_qa['upvoteCount'] = saswp_get_post_meta( $post_id, '_dwqa_votes', true );                                             
                 
                 $args = array(
                     'p'         => $post_id, // ID of a page, post, or custom type
@@ -4522,7 +4678,7 @@ Class saswp_output_service{
                     if(is_object($authorinfo)){
                         $authorname = $authorinfo->data->user_nicename;
                     }else{
-                        $anonymous_name = get_post_meta( $answer->ID, '_dwqa_anonymous_name', true );
+                        $anonymous_name = saswp_get_post_meta( $answer->ID, '_dwqa_anonymous_name', true );
                         if($anonymous_name && $anonymous_name !=''){
                             $authorname = $anonymous_name;
                         }
@@ -4531,7 +4687,7 @@ Class saswp_output_service{
                     if($answer->ID == $best_answer_id){
                         
                         $accepted_answer['@type']       = 'Answer';
-                        $accepted_answer['upvoteCount'] = get_post_meta( $answer->ID, '_dwqa_votes', true );
+                        $accepted_answer['upvoteCount'] = saswp_get_post_meta( $answer->ID, '_dwqa_votes', true );
                         $accepted_answer['url']         = get_permalink();
                         $accepted_answer['text']        = wp_strip_all_tags($answer->post_content);
                         $accepted_answer['dateCreated'] = get_the_date("Y-m-d\TH:i:s\Z", $answer);
@@ -4541,7 +4697,7 @@ Class saswp_output_service{
                         
                         $suggested_answer[] =  array(
                             '@type'       => 'Answer',
-                            'upvoteCount' => get_post_meta( $answer->ID, '_dwqa_votes', true ),
+                            'upvoteCount' => saswp_get_post_meta( $answer->ID, '_dwqa_votes', true ),
                             'url'         => get_permalink(),
                             'text'        => wp_strip_all_tags($answer->post_content),
                             'dateCreated' => get_the_date("Y-m-d\TH:i:s\Z", $answer),
@@ -4662,7 +4818,7 @@ Class saswp_output_service{
                 }
                 
                 if(isset($sd_data['saswp_comments_schema']) && $sd_data['saswp_comments_schema'] == 1){
-                    $input1['comment'] = saswp_get_comments(get_the_ID());
+                    $input1['comment'] = saswp_get_comments(saswp_get_the_ID());
                 }
 
                     break;
@@ -4726,7 +4882,7 @@ Class saswp_output_service{
                 case 'Car':
                 case 'Vehicle':    
                                                                         
-                        $product_details = $this->saswp_woocommerce_product_details(get_the_ID());  
+                        $product_details = $this->saswp_woocommerce_product_details(saswp_get_the_ID());  
 
                         if((isset($sd_data['saswp-woocommerce']) && $sd_data['saswp-woocommerce'] == 1) && !empty($product_details)){
 
