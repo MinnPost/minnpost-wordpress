@@ -17,6 +17,7 @@
  * @global string  $pullquote_position
  * @global WP_Post $post
  * @global string  $publish_action
+ * @global string  $slug
  *
  * @package Apple_News
  */
@@ -36,7 +37,7 @@ if ( ! \Apple_News::is_initialized() ) : ?>
 <?php endif;  // phpcs:ignore Squiz.PHP.NonExecutableCode.Unreachable ?>
 <div id="apple-news-publish">
 	<?php wp_nonce_field( $publish_action, 'apple_news_nonce' ); ?>
-	<div id="apple-news-metabox-sections" class="apple-news-metabox-section">
+	<div id="apple-news-metabox-sections" class="apple-news-metabox-section apple-news-metabox-section-collapsable">
 		<h3><?php esc_html_e( 'Sections', 'apple-news' ); ?></h3>
 		<?php Admin_Apple_Meta_Boxes::build_sections_override( $post->ID ); ?>
 		<div class="apple-news-sections">
@@ -44,33 +45,33 @@ if ( ! \Apple_News::is_initialized() ) : ?>
 			<p class="description"><?php esc_html_e( 'Select the sections in which to publish this article. If none are selected, it will be published to the default section.', 'apple-news' ); ?></p>
 		</div>
 	</div>
-	<div id="apple-news-metabox-is-paid" class="apple-news-metabox-section">
-		<h3><?php esc_html_e( 'Paid?', 'apple-news' ); ?></h3>
+	<div id="apple-news-metabox-metadata" class="apple-news-metabox-section apple-news-metabox-section-collapsable">
+		<h3><?php esc_html_e( 'Metadata', 'apple-news' ); ?></h3>
 		<label for="apple-news-is-paid">
 			<input id="apple-news-is-paid" name="apple_news_is_paid" type="checkbox" value="1" <?php checked( $is_paid ); ?>>
-			<?php esc_html_e( 'Check this to indicate that viewing the article requires a paid subscription. Note that Apple must approve your channel for paid content before using this feature.', 'apple-news' ); ?>
+			<strong><?php esc_html_e( 'Paid Article', 'apple-news' ); ?></strong>
 		</label>
-	</div>
-	<div id="apple-news-metabox-is-preview" class="apple-news-metabox-section">
-		<h3><?php esc_html_e( 'Preview?', 'apple-news' ); ?></h3>
+		<p><?php esc_html_e( 'Check this to indicate that viewing the article requires a paid subscription. Note that Apple must approve your channel for paid content before using this feature.', 'apple-news' ); ?></p>
 		<label for="apple-news-is-preview">
 			<input id="apple-news-is-preview" name="apple_news_is_preview" type="checkbox" value="1" <?php checked( $is_preview ); ?>>
-			<?php esc_html_e( 'Check this to publish the article as a draft.', 'apple-news' ); ?>
+			<strong><?php esc_html_e( 'Preview Article', 'apple-news' ); ?></strong>
 		</label>
-	</div>
-	<div id="apple-news-metabox-is-hidden" class="apple-news-metabox-section">
-		<h3><?php esc_html_e( 'Hidden?', 'apple-news' ); ?></h3>
+		<p><?php esc_html_e( 'Check this to publish the article as a draft.', 'apple-news' ); ?></p>
 		<label for="apple-news-is-hidden">
 			<input id="apple-news-is-hidden" name="apple_news_is_hidden" type="checkbox" value="1" <?php checked( $is_hidden ); ?>>
-			<?php esc_html_e( 'Hidden articles are visible to users who have a link to the article, but do not appear in feeds.', 'apple-news' ); ?>
+			<strong><?php esc_html_e( 'Hidden Article', 'apple-news' ); ?></strong>
 		</label>
-	</div>
-	<div id="apple-news-metabox-is-sponsored" class="apple-news-metabox-section">
-		<h3><?php esc_html_e( 'Sponsored?', 'apple-news' ); ?></h3>
+		<p><?php esc_html_e( 'Check this to publish the article as a hidden article. Hidden articles are visible to users who have a link to the article, but do not appear in feeds.', 'apple-news' ); ?></p>
 		<label for="apple-news-is-sponsored">
 			<input id="apple-news-is-sponsored" name="apple_news_is_sponsored" type="checkbox" value="1" <?php checked( $is_sponsored ); ?>>
-			<?php esc_html_e( 'Check this to indicate this article is sponsored content.', 'apple-news' ); ?>
+			<strong><?php esc_html_e( 'Sponsored Article', 'apple-news' ); ?></strong>
 		</label>
+		<p><?php esc_html_e( 'Check this to indicate this article is sponsored content.', 'apple-news' ); ?></p>
+		<h4><?php esc_html_e( 'Custom Metadata', 'apple-news' ); ?></h4>
+		<?php Admin_Apple_Meta_Boxes::build_metadata( $post->ID ); ?>
+		<button class="button-primary apple-news-metadata-add">
+			<?php esc_html_e( 'Add Metadata', 'apple-news' ); ?>
+		</button>
 	</div>
 	<div id="apple-news-metabox-maturity-rating" class="apple-news-metabox-section apple-news-metabox-section-collapsable">
 		<h3><?php esc_html_e( 'Maturity Rating', 'apple-news' ); ?></h3>
@@ -84,6 +85,14 @@ if ( ! \Apple_News::is_initialized() ) : ?>
 			</select>
 			<p class="description"><?php esc_html_e( 'Select the optional maturity rating for this post.', 'apple-news' ); ?></p>
 		</label>
+	</div>
+	<div id="apple-news-metabox-slug" class="apple-news-metabox-section apple-news-metabox-section-collapsable">
+		<h3><?php esc_html_e( 'Slug', 'apple-news' ); ?></h3>
+		<label for="apple-news-slug">
+			<?php esc_html_e( 'Slug Text', 'apple-news' ); ?>
+			<input id="apple-news-slug" name="apple_news_slug" type="text" value="<?php echo esc_attr( $slug ); ?>" />
+		</label>
+		<p class="description"><?php esc_html_e( 'A word or phrase that will appear near the title, if the Slug component is enabled in theme settings. This is optional and can be left blank.', 'apple-news' ); ?></p>
 	</div>
 	<div id="apple-news-metabox-pullquote" class="apple-news-metabox-section apple-news-metabox-section-collapsable">
 		<h3><?php esc_html_e( 'Pull quote', 'apple-news' ); ?></h3>

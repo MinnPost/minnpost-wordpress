@@ -33,7 +33,6 @@ wpcom_vip_load_plugin( 'cmb2-field-ajax-search/cmb2-field-ajax-search.php' );
 wpcom_vip_load_plugin( 'cmb2-field-post-search-ajax/cmb-field-post-search-ajax.php' );
 wpcom_vip_load_plugin( 'cmb2-select-plus/cmb2-select-plus.php' );
 wpcom_vip_load_plugin( 'cmb2-user-select/cmb2-user-select.php' );
-wpcom_vip_load_plugin( 'link-picker-for-cmb2/plugin.php' );
 wpcom_vip_load_plugin( 'cmb2-field-type-font-awesome/iconselect.php' );
 wpcom_vip_load_plugin( 'co-authors-extend/co-authors-extend.php' );
 wpcom_vip_load_plugin( 'co-authors-plus/co-authors-plus.php' );

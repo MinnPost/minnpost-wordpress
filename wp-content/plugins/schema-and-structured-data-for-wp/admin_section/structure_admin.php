@@ -227,7 +227,7 @@ function saswp_get_all_schema_posts(){
               
               $conditions = array();
               
-              $data_group_array = saswp_get_post_meta( $post_id, 'data_group_array', true);                                         
+              $data_group_array = get_post_meta( $post_id, 'data_group_array', true);                                         
               
               if(isset($data_group_array['group-0'])){
                   
@@ -249,8 +249,8 @@ function saswp_get_all_schema_posts(){
               }
               
               $returnData[] = array(
-                    'schema_type'      => saswp_get_post_meta( $post_id, 'schema_type', true),
-                    'schema_options'   => saswp_get_post_meta( $post_id, 'schema_options', true),
+                    'schema_type'      => get_post_meta( $post_id, 'schema_type', true),
+                    'schema_options'   => get_post_meta( $post_id, 'schema_options', true),
                     'conditions'       => $conditions,
                     'post_id'          => $post_id,
                   );
@@ -269,7 +269,7 @@ function saswp_get_all_schema_posts(){
 
 function saswp_generate_field_data( $post_id, $post ){
     
-      $data_group_array = saswp_get_post_meta( $post_id, 'data_group_array', true);  
+      $data_group_array = get_post_meta( $post_id, 'data_group_array', true);  
       
       $output = array();
       
@@ -647,7 +647,7 @@ function saswp_comparison_logic_checker($input, $post){
               $term_data       = $input['key_4'];
               $termChoices     = array();
 
-              if(is_tax()){
+              if(is_tax() || is_tag()){
 
                 $queried_obj   = get_queried_object();
                 $termChoices[] = $queried_obj->slug;
@@ -695,7 +695,7 @@ function saswp_comparison_logic_checker($input, $post){
             }
 
             }else{
-
+              
               if( isset($_GET['tag_ID'] ) && is_admin() ){
 
                 $term_object  = get_term( intval($_GET['tag_ID']) );
@@ -761,7 +761,7 @@ function saswp_comparison_logic_checker($input, $post){
         break;
     }
 
-    return $result;
+    return apply_filters( 'saswp_filter_comparison_logic_checker', $result );    
 }
 
 
@@ -811,7 +811,7 @@ if(is_admin()){
   
   function saswp_select_callback($post) {
     
-    $data_group_array =  saswp_get_post_meta($post->ID, 'data_group_array', true );     
+    $data_group_array =  get_post_meta($post->ID, 'data_group_array', true );     
                 
     $data_group_array = is_array($data_group_array)? array_values($data_group_array): array();  
     
@@ -1075,7 +1075,7 @@ function saswp_dequeue_script() {
         
       $post_data_group_array = saswp_sanitize_multi_array($post_data_group_array, 'data_array'); 
       
-      saswp_update_post_meta(
+      update_post_meta(
         $post_id, 
         'data_group_array', 
         $post_data_group_array 
@@ -1217,9 +1217,12 @@ function saswp_custom_breadcrumbs() {
                         $post_type_archive = get_permalink();
                     }
                     
-                    $variables1_titles[]= $post_type_object->labels->name;
-                    $variables2_links[] = $post_type_archive;     
-                    $breadcrumb_url      = $post_type_archive;
+                    if(is_object($post_type_object)){
+                      $variables1_titles[]= $post_type_object->labels->name;
+                      $variables2_links[] = $post_type_archive;     
+                      $breadcrumb_url     = $post_type_archive;
+                    }
+                    
             }
              
             if( !isset($sd_data['saswp_breadcrumb_remove_cat']) || (isset($sd_data['saswp_breadcrumb_remove_cat']) && $sd_data['saswp_breadcrumb_remove_cat'] == 0 ) ){
@@ -1234,7 +1237,7 @@ function saswp_custom_breadcrumbs() {
 
               if ( class_exists('WPSEO_Primary_Term') && ( isset($sd_data['saswp-yoast']) && $sd_data['saswp-yoast'] == 1 ) ) {
 
-                $wpseo_primary_term = new WPSEO_Primary_Term( 'category', saswp_get_the_ID() );
+                $wpseo_primary_term = new WPSEO_Primary_Term( 'category', get_the_ID() );
                 $wpseo_primary_term = $wpseo_primary_term->get_primary_term();
                 $term_yoast = get_term( $wpseo_primary_term );
                 
@@ -1260,39 +1263,49 @@ function saswp_custom_breadcrumbs() {
                   foreach ($category_values as $category_value) {
                       
                       $category_name        = get_category($category_value);
-                      $cat_name             = $category_name->name;
-                      $variables1_titles[]  = $cat_name;
-                      $variables2_links[]   = get_category_link( $category_value );
-                      $breadcrumb_url       = get_category_link( $category_value );
-                  
+
+                      if(is_object($category_name)){
+
+                        $cat_name             = $category_name->name;
+                        $variables1_titles[]  = $cat_name;
+                        $variables2_links[]   = get_category_link( $category_value );
+                        $breadcrumb_url       = get_category_link( $category_value );
+
+                      }
+                                        
                   }
 
                }                                                        
               
                 // Get last category post is in
                 $last_category   = end(($category));
-                $category_name   = get_category($last_category);
+                
+                if( is_object($last_category) ){
+
+                  $category_name   = get_category($last_category);
                 // Get parent any categories and create array
-                $get_cat_parents = get_category_parents($last_category->term_id, true, ',');
+                  $get_cat_parents = get_category_parents($last_category->term_id, true, ',');
 
-                if(is_string($get_cat_parents)){
+                  if(is_string($get_cat_parents)){
 
-                  $get_cat_parents = rtrim($get_cat_parents,',');
-                  $cat_parents     = explode(',',$get_cat_parents);
-
-                  // Loop through parent categories and store in variable $cat_display
-                  $cat_display = '';
-                  
-                  if( !empty($cat_parents) && is_array($cat_parents) ){
-
-                    foreach($cat_parents as $parents) {
-                      
-                      $cat_display .= '<li class="item-cat">'.saswp_t_string( $parents ).'</li>';
-                      $cat_display .= '<li class="separator"> ' . saswp_t_string( $separator ) . ' </li>';
-                      
-                    }
-
-                  }                  
+                    $get_cat_parents = rtrim($get_cat_parents,',');
+                    $cat_parents     = explode(',',$get_cat_parents);
+  
+                    // Loop through parent categories and store in variable $cat_display
+                    $cat_display = '';
+                    
+                    if( !empty($cat_parents) && is_array($cat_parents) ){
+  
+                      foreach($cat_parents as $parents) {
+                        
+                        $cat_display .= '<li class="item-cat">'.saswp_t_string( $parents ).'</li>';
+                        $cat_display .= '<li class="separator"> ' . saswp_t_string( $separator ) . ' </li>';
+                        
+                      }
+  
+                    }                  
+  
+                  }
 
                 }
                                                                                   
@@ -1307,7 +1320,7 @@ function saswp_custom_breadcrumbs() {
                    
                 $taxonomy_terms = get_the_terms( $post->ID, $custom_taxonomy );
 
-                if($taxonomy_terms){
+                if( isset($taxonomy_terms[0]) ){
                     
                     $cat_id         = $taxonomy_terms[0]->term_id;                
                     $cat_link       = get_term_link($taxonomy_terms[0]->term_id, $custom_taxonomy);
@@ -1419,13 +1432,13 @@ function saswp_custom_column_set( $column, $post_id ) {
                 
                 case 'saswp_schema_type' :
                     
-                    $schema_type = saswp_get_post_meta( $post_id, $key='schema_type', true);
+                    $schema_type = get_post_meta( $post_id, $key='schema_type', true);
                      $url = admin_url( 'post.php?post='.$post_id.'&action=edit' );
                     
                     if($schema_type == 'local_business'){
 
-                      $business_type     = saswp_get_post_meta($post_id, 'saswp_business_type', true);
-                      $business_name     = saswp_get_post_meta($post_id, 'saswp_business_name', true);
+                      $business_type     = get_post_meta($post_id, 'saswp_business_type', true);
+                      $business_name     = get_post_meta($post_id, 'saswp_business_name', true);
 
                       if($business_name){
                           echo '<strong><a class="row-title" href="'.esc_url($url).'">LocalBusiness ('.esc_html($business_name).')</a></strong>';   
@@ -1447,7 +1460,7 @@ function saswp_custom_column_set( $column, $post_id ) {
                     
                     $enabled ='';
                     $exclude ='';
-                    $data_group_array = saswp_get_post_meta( $post_id, $key='data_group_array', true);
+                    $data_group_array = get_post_meta( $post_id, $key='data_group_array', true);
                    
                     
                     if($data_group_array){
@@ -1769,7 +1782,8 @@ add_action('wp_ajax_saswp_feeback_remindme', 'saswp_feeback_remindme');
 
 function saswp_license_status($add_on, $license_status, $license_key){
                                       
-                $item_name = array(                       
+                $item_name = array(    
+                       'cooked'       => 'Cooked compatibility for Schema',                   
                        'jobposting'   => 'JobPosting Schema Compatibility',
                        'polylang'     => 'Polylang Compatibility For SASWP',
                        'wpml'         => 'WPML Schema Compatibility',
@@ -1781,7 +1795,8 @@ function saswp_license_status($add_on, $license_status, $license_key){
                        'rs'           => 'Recipe Schema',
                        'qanda'        => 'Q&A Schema Compatibility',
                        'faq'          => 'FAQ Schema Compatibility',
-                       'ociaifs'      => '1-Click Indexing API Integration'
+                       'ociaifs'      => '1-Click Indexing API Integration',
+                       'cpc'         => 'Classifieds Plugin Compatibility',
                 );
                                                                             
                 $edd_action = '';
@@ -1803,6 +1818,7 @@ function saswp_license_status($add_on, $license_status, $license_key){
               );
                 
                 $message        = '';
+                $fname        = '';
                 $current_status = '';
                 $response       = @wp_remote_post( SASWP_EDD_STORE_URL, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
                            
@@ -1819,10 +1835,57 @@ function saswp_license_status($add_on, $license_status, $license_key){
                                 
 				switch( $license_data->error ) {
 					case 'expired' :
-						$message = sprintf(
-							__( 'Your license key expired on %s.' ),
-							date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) )
-						);
+          
+              $license[strtolower($add_on).'_addon_license_key_status']  = 'active';
+               $license[strtolower($add_on).'_addon_license_key']         = $license_key;
+                $license[strtolower($add_on).'_addon_license_key_message'] = 'active'; 
+                if ($license_data) { 
+              // Get UserName 
+              $fname = $license_data->customer_name;
+               $fname = substr($fname, 0, strpos($fname, ' ')); 
+               $check_for_Caps = ctype_upper($fname); 
+               if ( $check_for_Caps == 1 ) {
+                $fname =  strtolower($fname);
+                 $fname =  ucwords($fname);
+                  }
+                   else
+                    {
+                     $fname =  ucwords($fname);
+                      } 
+              // Get Expiring Date 
+              $license_exp = date('Y-m-d', strtotime($license_data->expires)); 
+              $license_info_lifetime = $license_data->expires; 
+              $today = date('Y-m-d');
+               $exp_date =$license_exp; 
+               $date1 = date_create($today);
+                $date2 = date_create($exp_date);
+                 $diff = date_diff($date1,$date2);
+                  $days = $diff->format("%a");
+                   if( $license_info_lifetime == 'lifetime' ){
+                    $days = 'Lifetime';
+                     if ($days == 'Lifetime') {
+                      $expire_msg = " Your License is Valid for Lifetime ";
+                       }
+                        }
+                         elseif($today > $exp_date){
+                          $days = -$days;
+                           } 
+              // Get Download_ID 
+              $download_id = $license_data->payment_id;
+               } 
+               $license_exp_norml = date('Y-m-d', strtotime($license_data->expires));
+               $license[strtolower($add_on).'_addon_license_key_user_name'] = $fname; 
+               $license[strtolower($add_on).'_addon_license_key_expires'] = $days; 
+               $license[strtolower($add_on).'_addon_license_key_expires_normal'] = $license_exp_norml;
+               $license[strtolower($add_on).'_addon_license_key_download_id'] = $download_id; 
+               $current_status = 'active'; 
+               $message = 'Activated'; 
+               $days_remaining = $days; 
+               $username = $fname;
+               $message = sprintf(
+              __( 'Your license key expired on %s.' ),
+              date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) )
+            );
 						break;
 					case 'revoked' :
 						$message = __( 'Your license key has been disabled.' );
@@ -1854,6 +1917,20 @@ function saswp_license_status($add_on, $license_status, $license_key){
                         $license[strtolower($add_on).'_addon_license_key_status'] = $current_status;
                         $license[strtolower($add_on).'_addon_license_key']        = $license_key;
                         $license[strtolower($add_on).'_addon_license_key_message']= $message;
+                        if ($license_data) {
+                        $fname = $license_data->customer_name;
+                        $fname = substr($fname, 0, strpos($fname, ' '));
+                        $check_for_Caps = ctype_upper($fname);
+                        if ( $check_for_Caps == 1 ) {
+                        $fname =  strtolower($fname);
+                        $fname =  ucwords($fname);
+                        }
+                        else
+                          {
+                            $fname =  ucwords($fname);
+                          }
+                        }
+                        $license[strtolower($add_on).'_addon_license_key_user_name'] = $fname;
                     
                 }else{
 
@@ -1878,10 +1955,57 @@ function saswp_license_status($add_on, $license_status, $license_key){
                         
                         $license[strtolower($add_on).'_addon_license_key_status']  = 'active';
                         $license[strtolower($add_on).'_addon_license_key']         = $license_key;
-                        $license[strtolower($add_on).'_addon_license_key_message'] = 'active';
-                                                                        
+                        $license[strtolower($add_on).'_addon_license_key_message'] = 'active'; 
+                        
+                        if ($license_data) {
+                          // Get UserName
+                        $fname = $license_data->customer_name;
+                        $fname = substr($fname, 0, strpos($fname, ' '));
+                        $check_for_Caps = ctype_upper($fname);
+                        if ( $check_for_Caps == 1 ) {
+                        $fname =  strtolower($fname);
+                        $fname =  ucwords($fname);
+                        }
+                        else
+                          {
+                            $fname =  ucwords($fname);
+                          }
+
+                          // Get Expiring Date
+                          $license_exp = date('Y-m-d', strtotime($license_data->expires));
+                          $license_exp_norml = date('Y-m-d', strtotime($license_data->expires));
+                          $license_info_lifetime = $license_data->expires;
+                          $today = date('Y-m-d');
+                          $exp_date =$license_exp;
+                          $date1 = date_create($today);
+                          $date2 = date_create($exp_date);
+                          $diff = date_diff($date1,$date2);
+                          $days = $diff->format("%a");
+                          if( $license_info_lifetime == 'lifetime' ){
+                            $days = 'Lifetime';
+                            if ($days == 'Lifetime') {
+                            $expire_msg = " Your License is Valid for Lifetime ";
+                          }
+                        }
+                        elseif($today > $exp_date){
+                          $days = -$days;
+                        }
+                          // Get Download_ID
+                          $download_id = $license_data->payment_id;
+                        }
+
+                        $license[strtolower($add_on).'_addon_license_key_user_name'] = $fname;
+
+                        $license[strtolower($add_on).'_addon_license_key_expires'] = $days;
+
+                        $license[strtolower($add_on).'_addon_license_key_expires_normal'] = $license_exp_norml;
+                        
+                        $license[strtolower($add_on).'_addon_license_key_download_id'] = $download_id;
+
                         $current_status = 'active';
                         $message = 'Activated';
+                        $days_remaining = $days;
+                        $username = $fname;
                     }
                     
                     if($license_status == 'inactive'){
@@ -1889,8 +2013,31 @@ function saswp_license_status($add_on, $license_status, $license_key){
                         $license[strtolower($add_on).'_addon_license_key_status']  = 'deactivated';
                         $license[strtolower($add_on).'_addon_license_key']         = $license_key;
                         $license[strtolower($add_on).'_addon_license_key_message'] = 'Deactivated';
+                        if ($license_data) {
+                        $fname = $license_data->customer_name;
+                        $fname = substr($fname, 0, strpos($fname, ' '));
+                        $check_for_Caps = ctype_upper($fname);
+                        if ( $check_for_Caps == 1 ) {
+                        $fname =  strtolower($fname);
+                        $fname =  ucwords($fname);
+                        }
+                        else
+                          {
+                            $fname =  ucwords($fname);
+                          }
+                        }
+
+                        $license_exp_norml = date('Y-m-d', strtotime($license_data->expires));
+                        $license[strtolower($add_on).'_addon_license_key_user_name'] = $fname;
+
+                        $license[strtolower($add_on).'_addon_license_key_expires'] = $days;
+
+                        $license[strtolower($add_on).'_addon_license_key_expires_normal'] = $license_exp_norml;
+
                         $current_status = 'deactivated';
-                        $message = 'Deactivated';
+                        $message = 'Deactivated';                        
+                        $days_remaining = $days;
+                        $username = $fname;
                     }
                     
                 }
@@ -1899,7 +2046,7 @@ function saswp_license_status($add_on, $license_status, $license_key){
                 $merge_options = array_merge($get_options, $license);
                 update_option('sd_data', $merge_options);  
                 
-                return array('status'=> $current_status, 'message'=> $message);
+                return array('status'=> $current_status, 'message'=> $message, 'days_remaining' => $days_remaining, 'username' => $fname  );
                                                                 
 }
 
@@ -1918,7 +2065,12 @@ function saswp_license_status_check(){
         $add_on           = sanitize_text_field($_POST['add_on']);
         $license_status   = sanitize_text_field($_POST['license_status']);
         $license_key      = sanitize_text_field($_POST['license_key']);
-        
+        // $match_asterick_pattern = "**********************";
+        // if (strpos($license_key, $match_asterick_pattern)===0) {
+        //   $data = get_option('sd_data');
+        //   $license_key = $data[$add_on.'_addon_license_key'];
+        // }
+
         if($add_on && $license_status && $license_key){
             
           $result = saswp_license_status($add_on, $license_status, $license_key);
@@ -1931,6 +2083,23 @@ function saswp_license_status_check(){
 }
 
 add_action('wp_ajax_saswp_license_status_check', 'saswp_license_status_check');
+
+add_action('wp_ajax_saswp_license_transient', 'saswp_license_transient');
+function saswp_license_transient(){
+            $transient_load =  'saswp_addons_set_transient';
+            $value_load =  'saswp_addons_set_transient_value';
+            $expiration_load =  86400 ;
+            set_transient( $transient_load, $value_load, $expiration_load );
+}
+
+add_action('wp_ajax_saswp_expired_license_transient', 'saswp_expired_license_transient');
+function saswp_expired_license_transient(){
+            $transient_load =  'saswp_addons_expired_set_transient';
+            $value_load =  'saswp_addons_expired_set_transient_value';
+            $expiration_load =  3600 ;
+            set_transient( $transient_load, $value_load, $expiration_load );
+}
+
 /**
  * Licensing code ends here
  */
@@ -2002,7 +2171,7 @@ function saswp_review_module_upgradation(){
                         
                                 foreach($posts_list as $list){
 
-                                    $g_place_id = saswp_get_post_meta($list->ID, $key='saswp_google_place_id', true);
+                                    $g_place_id = get_post_meta($list->ID, $key='saswp_google_place_id', true);
                                     
                                     if($g_place_id){
                                         $service->saswp_get_free_reviews_data($g_place_id, $g_review_api); 

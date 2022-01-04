@@ -50,7 +50,7 @@ class saswp_view_common_class {
                 $response    = '';
                 $output      = '';    
         
-                $item_type = saswp_get_post_meta($schema_id, 'saswp_itemlist_item_type', true); 
+                $item_type = get_post_meta($schema_id, 'saswp_itemlist_item_type', true); 
                 
                 if($meta_name == 'itemlist_item'){
                     
@@ -210,7 +210,7 @@ class saswp_view_common_class {
                     if($type_fields){
                        
                     if($schema_type == 'ItemList'){
-                         $itemlist_sub_type     = saswp_get_post_meta($schema_id, 'saswp_itemlist_item_type', true); 
+                         $itemlist_sub_type     = get_post_meta($schema_id, 'saswp_itemlist_item_type', true); 
                          $tabs_fields .= '<div schema-id="'.esc_attr($schema_id).'" class="saswp-table-create-onajax saswp-ps-toggle">';   
                         
                     }else{
@@ -472,13 +472,16 @@ class saswp_view_common_class {
                                              $rating_class = 'class="saswp-enable-rating-review-'.strtolower($schema_type).'"';   
                                         }
                                                                             
+                                        if(strpos($meta_field['id'], 'rating_automate') !== false){
+                                            $rating_class = 'class="saswp-enable-rating-automate-'.strtolower($schema_type).'"';  
+                                        }
 					$input = sprintf(
 						'<input %s %s id="%s" name="%s" type="checkbox" value="1">',
                                                 $rating_class,
 						$meta_value === '1' ? 'checked' : '',
 						$meta_field['id'],
 						$meta_field['id']
-						);
+						);                        
 					break;        
                                         
                 case 'multiselect':                                       
@@ -564,9 +567,12 @@ class saswp_view_common_class {
                            $meta_field['id'] == 'saswp_review_review_count_'.$schema_id         ||
                            $meta_field['id'] == 'saswp_review_rating_'.$schema_id               ||
                            $meta_field['id'] == 'local_review_count_'.$schema_id                ||
+                           $meta_field['id'] == 'local_rating_automate_'.$schema_id                ||
+                           $meta_field['id'] == 'local_google_place_id_'.$schema_id                ||
                            $meta_field['id'] == 'saswp_recipe_schema_rating_'.$schema_id        ||
                            $meta_field['id'] == 'saswp_recipe_schema_review_count_'.$schema_id  ||
-                           $meta_field['id'] == 'saswp_software_schema_rating_count_'.$schema_id     
+                           $meta_field['id'] == 'saswp_software_schema_rating_count_'.$schema_id ||
+                           $meta_field['id'] == 'saswp_review_worst_count_'.$schema_id
                                 
                           )
                           {
@@ -607,9 +613,7 @@ class saswp_view_common_class {
                         $tabs_fields .=  $this->saswp_schema_fields_html_on_the_fly($schema_type, $schema_id, $post_id, $disabled_schema, $modify_this, $modified); 
                         
                      }
-                     
-                
-                
+                                                     
                 return $tabs_fields;                                               
 	}	
      
@@ -680,7 +684,7 @@ class saswp_view_common_class {
                  foreach($all_schema as $schema){
                    
                      if( isset($_POST['saswp_modify_this_schema_'.$schema->ID]) && !empty($_POST['saswp_modify_this_schema_'.$schema->ID]) ){
-                         saswp_update_post_meta( $post_id, 'saswp_modify_this_schema_'.$schema->ID, intval($_POST['saswp_modify_this_schema_'.$schema->ID]));
+                        saswp_update_post_meta( $post_id, 'saswp_modify_this_schema_'.$schema->ID, intval($_POST['saswp_modify_this_schema_'.$schema->ID]));
                      }
                                   
                      foreach ($this->schema_type_element as $element){
@@ -700,7 +704,7 @@ class saswp_view_common_class {
                                         $sanitize_data = array();
 
                                             foreach($supply as $k => $el){   
-                                                    if($el){
+                                                    if(isset($el)){
                                                         $sanitize_data[$k] = wp_kses_post(wp_unslash($el));                                                                                                                                   
                                                     }                                               
                                                     

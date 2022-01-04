@@ -3,7 +3,7 @@ Contributors: magazine3
 Tags: Schema, Structured Data, Google Snippets, Rich Snippets, Schema.org, SEO, AMP
 Requires at least: 3.0
 Tested up to: 5.8
-Stable tag: 1.9.82.1
+Stable tag: 1.9.92
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,129 @@ Yes, Absolutely! We would suggest you send your feature request by creating an i
 You can contact us from [here](http://structured-data-for-wp.com/contact-us/)
 
 == Changelog ==
+
+= 1.9.92 (15 Dec 2021) =
+
+* Added: Combine product reviews and reviews added from collection and show in rich results. #1584
+
+
+= 1.9.91 (06 Dec 2021) =
+
+* Added: worstRating property to review schema #1564
+* Added: Plcae ID finder in Reviews For Schema below Google platform #1466
+* Added: Language parameter added to google review fetch
+* Fixed: Howto schema showing aggrigate ratings, rating coming from elementor. #1465
+* Fixed: Remove minute from recipe schema Gutenberg block in the serving section. #1577
+* Fixed: WPML compatibility is not working for aboutpage, contactpage and sitenavigation schema. #1575
+
+
+= 1.9.90 (01 Dec 2021) =
+
+* Fixed: Service schema tab missing to enter details #1568
+* Added: arrivalBoatTermina, arrivalTime, departureBoatTerminal and departureTime in BoatTrip schema #1460
+* Added: Added cusrev.com review platform #1569
+* Fixed: SKU was not being added in Arabic language #1574
+
+
+= 1.9.89 (16 Nov 2021) =
+
+* Fixed: Yet Another Star Rating Premium isn't getting its LD+Json stripped out #1562
+* Fixed: Enabling elementor testimonial causing product failing in schema #1559
+* Added: The salary range like ( €3300 - €3600 ) in job posting schema. #1558
+* Added: dateCreated property to webpage schema #1543
+
+
+= 1.9.88 (03 Nov 2021) =
+
+* Added: An option called "Specific" in the Sorting Filter for Collection feature. #1472
+* Added: Support for SeekToAction in Video Object Schema #1498
+* Added: Support for video object in How to schema. #1513
+* Added: textarea or multiline support for the description. #1456
+* Added: reviewbody and actor properties to Review Schema
+* Added: Two properties(Latitude, Longitude) for ApartmentComplex schema #1524
+* Added: The number of votes each comment has received in the structured data #1523
+* Fixed: Issue with Yell an Yellowpages fetched reviews in collection #1534
+* Fixed: Schema add empty review array to the code #1557
+* Fixed: Invalid author type for review when product individually modified #1556
+
+
+= 1.9.87 (23 Oct 2021) =
+
+* Fixed: Invalid object type for field “author” #1552
+* Fixed: License link improvement #1539
+* Fixed: QandA Schema activation issue on SASWP #1547
+* Added: Support for All-in-Once SEO plugin v.4 fields #1528
+* Enhancement: Need add 'US' date format in reviews section. #1540
+
+
+= 1.9.86.1 (20 Oct 2021) =
+
+* Fixed: Empty FAQPage schema #1549
+
+
+= 1.9.86 (18 Oct 2021) =
+
+* Fixed: Undefined index _mbdb_isbn in other-schema.php #1545
+* Fixed: css issue of star ratings in comment form with Neptune by Osetin Theme. #1476
+* Fixed: Woocommerce-Product priceValidUntil #1537
+* Fixed: Debug log Errors #1536
+* Fixed: Images are not displaying while fetching the reviews [oneflare]. #1544
+* Added: Dynamic Aggregate Rating #1393
+* Added: More properties to Person Schema #1366
+* Added: An option to Set variable product as simple product #1291
+* Added: Need to show the review text in the review list #1344
+* Added: Enfold Theme compatibility #1530
+* Added: Schema blocks (FAQ & HowTo) for classic editor #1362
+* Added: The condition to fetch GTIN or SKU of the product on woocommerce compatibility for schema. #1531
+
+
+= 1.9.85 (24 Sept 2021) =
+
+* Fixed: Fatal error: Uncaught TypeError: count(): Argument #1 ($var) must be of type Countable|array, null given #1533
+* Fixed: Notice: wp_enqueue_script() was called incorrectly. "wp-editor" script should not be enqueued together with the new widgets editor (wp-edit-widgets or wp-customize-widgets). #1527
+* Fixed: Deprecated: block_categories is deprecated since version 5.8.0! Use block_categories_all instead. #1529
+* Fixed: Product image URL is coming same for all the products listed under product category page. #1514
+* Added: An option to keep full headline without removing words #1516
+
+
+= 1.9.84 (15 Sept 2021) =
+
+* Fixed: Conflict with Impreza theme #1521
+* Fixed: Conflict issue with content view plugin. #1501
+* Fixed: PHP Notice: Undefined offset #1519
+* Fixed: Issue with Imported Schema Settings #1522
+* Added: Shortcode to render breadcrumbs. Use the shortcode [saswp-breadcrumbs] #1497
+
+
+= 1.9.83.1 (31 Aug 2021) =
+
+* Fixed: Debug log errors #1508
+* Fixed: Last update(1.9.83) break other plugin shortcode functionality #1510
+* Fixed: Variable Product Price does not take price with Vat #1467
+* Fixed: Conflict with yoast faq in gutenberg block #1496
+* Fixed: Conflict with “YITH WooCommerce Customize My Account Page” plugin #1507
+
+
+= 1.9.83 (10 Aug 2021) =
+
+* Fixed: when "Add Schema Markup in footer" checked breadcurm does not work properly #1477
+* Fixed: Item list heading are not working if the content generating from shortcode #1494
+* Fixed: Compatibility issue with SmartCrawl plugin #1490
+* Fixed: Error in Article schema #1486
+* Fixed: getting image warning after placing the image also (image: 91 (The value provided for image must be a valid URL.)) #1470
+* Fixed: License Key {Fatal Error}- Reviews for Schema #1473
+* Fixed: css issue of star ratings in comment form with Neptune by Osetin Theme. #1476
+* Added: Auto Listings Plugin integration #1493
+* Fixed: conflict with popup maker when schema enabled #1495
+* Fixed: Article category("Thing" is not a known valid target type for the publisher property) #1474
+
+
+= 1.9.82.2 (28 July 2021) =
+
+* Added: Feefo reviews ( https://www.feefo.com ) platform
+* Fixed: Error on product category pages #1492
+* Fixed: Uncaught Error: Call to undefined function saswp_post_exists() #1485
+
 
 = 1.9.82.1 (16 July 2021) =
 
@@ -1250,7 +1373,7 @@ You can contact us from [here](http://structured-data-for-wp.com/contact-us/)
 * Bug Fixed: Notice: Undefined variable: custom_markup #308
 * Bug Fixed: JS and CSS should be included where it's need. #294
 * Bug Fixed: Remove duplicate queries #296
-* Bug Fixed: Google Review Module ( saswp_update_post_meta was called earlier than its actually call ) #307
+* Bug Fixed: Google Review Module ( update_post_meta was called earlier than its actually call ) #307
 * Bug Fixed: When extensions are active then it should show #313
 * Bug Fixed: Compatibility conflicts with WooCommerce SEO #312
 * Bug Fixed: '@type' => 'VideoObject' is missing in recipe schema video entity #314

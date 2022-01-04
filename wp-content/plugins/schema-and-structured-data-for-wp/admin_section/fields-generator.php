@@ -294,8 +294,13 @@ class saswp_fields_generator {
             "name"  => "Upwork"),
         array(
             "image" => "/admin_section/images/reviews_platform_icon/freelancer-img.png",
-            "name"  => "freelancer.com")                                  
-
+            "name"  => "freelancer.com"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/feefo-img.png",
+            "name"  => "feefo.com"),
+        array(
+            "image" => "/admin_section/images/reviews_platform_icon/cusrev-img.png",
+            "name"  => "cusrev.com")                                      
     );
     
     public function saswp_tooltip_message($meta_field_id){
@@ -484,8 +489,18 @@ class saswp_fields_generator {
 					);                                    
 					foreach ( $meta_field['options'] as $key => $value ) {	  
                                                 $settings_meta_field = '';
-                                                if(isset($settings[$meta_field['id']])){
-                                                 $settings_meta_field   = $settings[$meta_field['id']];
+                                                if(isset($settings[$meta_field['id']])){                                                 
+
+                                                 if($meta_field['id'] == 'saswp_site_navigation_menu' && function_exists('icl_object_id')){
+																											
+                                                    $settings_meta_field   = apply_filters( 'wpml_object_id', $settings[$meta_field['id']], 'nav_menu', FALSE,ICL_LANGUAGE_CODE );
+                                                    if(!$settings_meta_field){
+                                                            $settings_meta_field   = $settings[$meta_field['id']];
+                                                    }
+                                                    }else{
+                                                        $settings_meta_field   = $settings[$meta_field['id']];
+                                                    }
+
                                                 }
                                             
 						$input .= sprintf(
@@ -537,9 +552,11 @@ class saswp_fields_generator {
                                     switch ($meta_field['id']) {
                                     
                                         case 'saswp-reviews-pro-api':
-
+                                        $license_user_name = '';
+                                        $license_download_id = '';
+                                        $license_expires     = '';
                                             $pro_api    = '<div class="" style="display:block;">
-                                                          '.saswp_get_license_section_html($on, $license_key, $license_status, $license_status_msg, $lable=false, $rv_limits).'
+                                                          '.saswp_get_license_section_html($on, $license_key, $license_status, $license_status_msg,$license_user_name, $license_download_id, $license_expires, $lable=false, $rv_limits).'
                                                           </div>';
                                                           
                                            
@@ -583,8 +600,9 @@ class saswp_fields_generator {
                             
                             if(isset($settings['saswp_reviews_location_name']) && !empty($settings['saswp_reviews_location_name'])){
                                 
-                                $rv_loc    = $settings['saswp_reviews_location_name'];
-                                $rv_blocks = isset($settings['saswp_reviews_location_blocks'])? $settings['saswp_reviews_location_blocks']:array();
+                                $rv_loc     = $settings['saswp_reviews_location_name'];
+                                $rv_lang    = $settings['saswp_reviews_language_name'];
+                                $rv_blocks  = isset($settings['saswp_reviews_location_blocks'])? $settings['saswp_reviews_location_blocks']:array();
                                 
                                 $i=0;
                                 
@@ -596,7 +614,9 @@ class saswp_fields_generator {
                                         
                                         $location .= '<tr>'
                                         . '<td style="width:12%;"><strong>'.saswp_t_string( 'Place Id' ).'</strong></td>'
-                                        . '<td style="width:20%;"><input class="saswp-g-location-field" name="sd_data[saswp_reviews_location_name][]" type="text" value="'. esc_attr($rvl).'"></td>'
+                                        . '<td style="width:10%;"><input class="saswp-g-location-field" name="sd_data[saswp_reviews_location_name][]" type="text" value="'. esc_attr($rvl).'"></td>'
+                                        . '<td style="width:12%;"><strong>'.saswp_t_string( 'Language' ).'</strong></td>'
+                                        . '<td style="width:10%;"><input class="saswp-g-language-field" name="sd_data[saswp_reviews_language_name][]" type="text" value="'. esc_attr($rv_lang[$i]).'"></td>'
                                         . '<td style="width:10%;"><strong>'.saswp_t_string( 'Reviews' ).'</strong></td>'
                                         . '<td style="width:10%;">'.$blocks_fields.'</td>'                                        
                                         . '<td style="width:10%;"><a class="button button-default saswp-fetch-g-reviews">'.saswp_t_string( 'Fetch' ).'</a></td>'

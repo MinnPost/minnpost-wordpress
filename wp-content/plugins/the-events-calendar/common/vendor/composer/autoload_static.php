@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540
+class ComposerStaticInitfb459d561ae441259befd145de9f3839
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -170,11 +170,24 @@ class ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540
         'Psr\\Log\\Test\\DummyTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/DummyTest.php',
         'Psr\\Log\\Test\\LoggerInterfaceTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
         'Psr\\Log\\Test\\TestLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/TestLogger.php',
+        'Tribe\\Admin\\Conditional_Content\\Black_Friday' => __DIR__ . '/../..' . '/src/Tribe/Admin/Conditional_Content/Black_Friday.php',
+        'Tribe\\Admin\\Conditional_Content\\Datetime_Conditional_Abstract' => __DIR__ . '/../..' . '/src/Tribe/Admin/Conditional_Content/Datetime_Conditional_Abstract.php',
+        'Tribe\\Admin\\Conditional_Content\\End_Of_Year_Sale' => __DIR__ . '/../..' . '/src/Tribe/Admin/Conditional_Content/End_Of_Year_Sale.php',
+        'Tribe\\Admin\\Conditional_Content\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Admin/Conditional_Content/Service_Provider.php',
+        'Tribe\\Admin\\Notice\\Date_Based' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Date_Based.php',
+        'Tribe\\Admin\\Notice\\Marketing\\Black_Friday' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Marketing/Black_Friday.php',
+        'Tribe\\Admin\\Notice\\Marketing\\End_Of_Year_Sale' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Marketing/End_Of_Year_Sale.php',
+        'Tribe\\Admin\\Notice\\Marketing\\Stellar_Sale' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Marketing/Stellar_Sale.php',
+        'Tribe\\Admin\\Notice\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Service_Provider.php',
         'Tribe\\Admin\\Notice\\WP_Version' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/WP_Version.php',
+        'Tribe\\Admin\\Troubleshooting' => __DIR__ . '/../..' . '/src/Tribe/Admin/Troubleshooting.php',
         'Tribe\\Customizer\\Control' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Control.php',
         'Tribe\\Customizer\\Controls\\Heading' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Heading.php',
+        'Tribe\\Customizer\\Controls\\Number' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Number.php',
         'Tribe\\Customizer\\Controls\\Radio' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Radio.php',
+        'Tribe\\Customizer\\Controls\\Range_Slider' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Range_Slider.php',
         'Tribe\\Customizer\\Controls\\Separator' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Separator.php',
+        'Tribe\\Customizer\\Controls\\Toggle' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Toggle.php',
         'Tribe\\DB_Lock' => __DIR__ . '/../..' . '/src/Tribe/DB_Lock.php',
         'Tribe\\Dialog\\View' => __DIR__ . '/../..' . '/src/Tribe/Dialog/View.php',
         'Tribe\\Log\\Action_Logger' => __DIR__ . '/../..' . '/src/Tribe/Log/Action_Logger.php',
@@ -183,12 +196,16 @@ class ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540
         'Tribe\\Log\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Log/Service_Provider.php',
         'Tribe\\Models\\Post_Types\\Base' => __DIR__ . '/../..' . '/src/Tribe/Models/Post_Types/Base.php',
         'Tribe\\Models\\Post_Types\\Nothing' => __DIR__ . '/../..' . '/src/Tribe/Models/Post_Types/Nothing.php',
+        'Tribe\\Onboarding\\Hints_Abstract' => __DIR__ . '/../..' . '/src/Tribe/Onboarding/Hints_Abstract.php',
+        'Tribe\\Onboarding\\Main' => __DIR__ . '/../..' . '/src/Tribe/Onboarding/Main.php',
+        'Tribe\\Onboarding\\Tour_Abstract' => __DIR__ . '/../..' . '/src/Tribe/Onboarding/Tour_Abstract.php',
         'Tribe\\PUE\\Update_Prevention' => __DIR__ . '/../..' . '/src/Tribe/PUE/Update_Prevention.php',
         'Tribe\\Repository\\Core_Read_Interface' => __DIR__ . '/../..' . '/src/Tribe/Repository/Core_Read_Interface.php',
         'Tribe\\Repository\\Filter_Validation' => __DIR__ . '/../..' . '/src/Tribe/Repository/Filter_Validation.php',
         'Tribe\\Service_Providers\\Body_Classes' => __DIR__ . '/../..' . '/src/Tribe/Service_Providers/Body_Classes.php',
         'Tribe\\Service_Providers\\Crons' => __DIR__ . '/../..' . '/src/Tribe/Service_Providers/Crons.php',
         'Tribe\\Service_Providers\\Dialog' => __DIR__ . '/../..' . '/src/Tribe/Service_Providers/Dialog.php',
+        'Tribe\\Service_Providers\\Onboarding' => __DIR__ . '/../..' . '/src/Tribe/Service_Providers/Onboarding.php',
         'Tribe\\Service_Providers\\PUE' => __DIR__ . '/../..' . '/src/Tribe/Service_Providers/PUE.php',
         'Tribe\\Service_Providers\\Shortcodes' => __DIR__ . '/../..' . '/src/Tribe/Service_Providers/Shortcodes.php',
         'Tribe\\Service_Providers\\Tooltip' => __DIR__ . '/../..' . '/src/Tribe/Service_Providers/Tooltip.php',
@@ -219,6 +236,13 @@ class ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540
         'Tribe\\Utils\\Strings' => __DIR__ . '/../..' . '/src/Tribe/Utils/Strings.php',
         'Tribe\\Utils\\Taxonomy' => __DIR__ . '/../..' . '/src/Tribe/Utils/Taxonomy.php',
         'Tribe\\Utils\\Theme_Compatibility' => __DIR__ . '/../..' . '/src/Tribe/Utils/Theme_Compatibility.php',
+        'Tribe\\Values\\Abstract_Currency' => __DIR__ . '/../..' . '/src/Tribe/Values/Abstract_Currency.php',
+        'Tribe\\Values\\Abstract_Value' => __DIR__ . '/../..' . '/src/Tribe/Values/Abstract_Value.php',
+        'Tribe\\Values\\Currency_Interface' => __DIR__ . '/../..' . '/src/Tribe/Values/Currency_Interface.php',
+        'Tribe\\Values\\Value_Calculation' => __DIR__ . '/../..' . '/src/Tribe/Values/Value_Calculation.php',
+        'Tribe\\Values\\Value_Formatting' => __DIR__ . '/../..' . '/src/Tribe/Values/Value_Formatting.php',
+        'Tribe\\Values\\Value_Interface' => __DIR__ . '/../..' . '/src/Tribe/Values/Value_Interface.php',
+        'Tribe\\Values\\Value_Update' => __DIR__ . '/../..' . '/src/Tribe/Values/Value_Update.php',
         'Tribe\\Widget\\Manager' => __DIR__ . '/../..' . '/src/Tribe/Widget/Manager.php',
         'Tribe\\Widget\\Widget_Abstract' => __DIR__ . '/../..' . '/src/Tribe/Widget/Widget_Abstract.php',
         'Tribe\\Widget\\Widget_Interface' => __DIR__ . '/../..' . '/src/Tribe/Widget/Widget_Interface.php',
@@ -234,10 +258,10 @@ class ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit4cbc6f7ab7c3753aced4e92011e91540::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfb459d561ae441259befd145de9f3839::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfb459d561ae441259befd145de9f3839::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitfb459d561ae441259befd145de9f3839::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitfb459d561ae441259befd145de9f3839::$classMap;
 
         }, null, ClassLoader::class);
     }

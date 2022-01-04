@@ -3,10 +3,10 @@
 Contributors: theeventscalendar, borkweb, bordoni, brianjessee, aguseo, camwynsp, GeoffBel, geoffgraham, jentheo, leahkoerper, lucatume, neillmcshea, patriciahillebrandt, paulskim, vicskf, zbtirrell, juanfra
 Tags: events, calendar, event, schedule, organizer
 Donate link: https://evnt.is/29
-Requires at least: 4.9.16
-Stable tag: 5.8.0
-Tested up to: 5.7.2
-Requires PHP: 5.6
+Requires at least: 5.6
+Stable tag: 5.12.2
+Tested up to: 5.8.2
+Requires PHP: 7.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -205,7 +205,7 @@ If you want to let users sell tickets for the events they submit, check out [Com
 
 = I have a feature idea. What's the best way to tell you about it? =
 
-We've got a [UserVoice page](https://tribe.uservoice.com/forums/195723-feature-ideas) where we're actively watching for feature ideas from the community. Vote up existing feature requests or add your own, and help us shape the future of the products business in a way that best meets the community's needs.
+We've got an [ideas page](https://app.loopedin.io/the-events-calendar-suite-roadmap#/ideas) where we're actively watching for feature ideas from the community. Vote up existing feature requests or add your own, and help us shape [our roadmap](https://app.loopedin.io/the-events-calendar-suite-roadmap#/roadmap).
 
 = I've still got questions. Where can I find answers? =
 
@@ -221,6 +221,118 @@ Remember to always make a backup of your database and files before updating!
 
 == Changelog ==
 
+= [5.12.2] 2021-12-20 =
+
+* Fix - Remove trialing comma that can cause fatals on older versions of PHP. [FBAR-252]
+* Fix - Prevent infinite loops in the block editor when including the links block. [TEC-4190]
+* Fix - Initial steps to make The Events Calendar compatible with PHP 8.1
+
+= [5.12.1] 2021-12-14 =
+
+* Feature - Add TEC widget based blocks to the `Event Blocks` custom block category. [TEC-4151]
+* Feature - Add Event Status filter options when Filter Bar is active. [FBAR-92]
+* Fix - Add a valid rel value to the link tag for TEC REST API support in order to improve HTML 5 and WCAG 2.1 compliance. (props to @gabyrau for the fix!) [TEC-4129]
+* Fix - Ensure the date selected when creating a new event from the Event Manager is applied to the block editor. [ECP-954]
+* Fix - Properly observe the disabling of JSON-LD output on widget blocks in the block editor. [TEC-4077]
+* Fix - Prevent PHP warning in some cases when fetching the date from `tribe_get_display_end_date()`. (props to @huubl for the fix!) [TEC-4161]
+* Fix - Close a div in the new subscribe dropdown that was left open. Props to @whoisuncle for bringing this to our attention! [TEC-4166]
+* Tweak - Ensure the `Disable the Event Search Bar` setting doesn't get applied on the Event Manager page. [ECP-948]
+* Tweak - Ensure the `related events title` and `event titles` within the single event page for the block editor make use the customizer font settings. [TEC-4125]
+* Tweak - Update the description text for the "Merge Duplicates" action. Add filters for data sets usd for comparison. [TEC-3018]
+* Tweak - Adjust the Subscribe to Calendar dropdown styling to better accommodate themes with sidebars. [TEC-4166]
+* Tweak - Add the Event List and Mini-Calendar widgets to the Event Blocks category. [TEC-4151]
+* Tweak - Correct some incorrect template paths in docblocks. [TEC-4111]
+* Language - 4 new strings added, 159 updated, 0 fuzzied, and 1 obsoleted
+
+= [5.12.0] 2021-12-02 =
+
+* Feature - Add new subscribe options to the "Export Events" link at the bottom of calendar views and single Event view [TEC-4131]
+* Fix - Bypass caching of the event when dealing with the admin event list table. [TEC-4156]
+* Fix - Event List Widget will not print the H3 tag related to the title when that is empty. [BTRIA-1075]
+* Tweak - Allow bypassing of the Aggregator logging function by using the `tec_aggregator_records_should_log_error` filter. [BTRIA-1074]
+* Tweak - Removed the `tribe_events_force_filtered_ical_link` filter and the associated js function that recreates the subscribe link on v1 and Single Event views. [TEC-4131]
+* Language - 4 new strings added, 52 updated, 0 fuzzied, and 2 obsoleted
+
+= [5.11.0] 2021-11-17 =
+
+* Feature - Add an `Events List` block that is based on the `Events List` widget to the block editor which users can drag around to any position they want it to appear. [ECP-989]
+* Feature - Add event status options of scheduled, canceled, and postponed with the ability to add and display a reason for the latter two. [TEC-3465]
+* Feature - Add live preview to the TEC customizer screens. [TEC-4055]
+* Fix - When accessing comments there could be situations where an undefined array key was accessed, and in PHP 8 it is a promoted Warning error for undefined array access. [TEC-4093]
+* Fix - Resolved `Warning: reset(): Argument #1 ($array) must be passed by reference...` error that was displayed on the Events, Organizers and Venue REST endpoints in PHP v8. [TEC-4097]
+* Fix - Ensure that the proper spacing is applied for the venue address in list view. [TEC-4089]
+* Tweak - Update the google calendar export button to open in a new tab on the event single page for both the classic and block editors. [TEC-4084]
+* Tweak - Add supplied organizer url to JSON-LD for the event->organizer. Props @cmenon12 for the notification and code! [TEC-4095]
+* Tweak - Add a link to the Customizer in the admin menu and in Events->Settings->Display for folks running a FSE theme. [TEC-4126]
+* Language - 10 new strings added, 55 updated, 0 fuzzied, and 0 obsoleted
+
+= [5.10.1] 2021-11-04 =
+
+* Feature - Added Black Friday promo to the General Settings panel. [TCMN-127]
+* Tweak - Update Black Friday banner. [TCMN-126]
+
+= [5.10.0] 2021-10-19 =
+
+* Tweak - Improve the look and feel of the single events page when using the block editor. These changes can be bypassed by defining the following constant to your wp-config.php file: `define( 'TRIBE_EVENTS_SINGLE_VIEW_V2_DISABLED', true );` [TEC-3979]
+* Language - 0 new strings added, 1 updated, 0 fuzzied, and 0 obsoleted
+
+= [5.9.2] 2021-10-12 =
+
+* Fix - Ensure the day view on mobile displays the not found message when no events are present. [TEC-3944]
+* Fix - Ensure a map preview is displayed on the venue block in the admin area when using TEC's default Google API Key. [TEC-3042]
+* Fix - Add some missing text domains for string translation. [TEC-3908]
+* Fix - Correct block use checks around the Classic Editor plugin. [TEC-4099]
+* Tweak - Set the appropriate Content-Type for REST responses that return just HTML during view partial requests. [TEC-4087]
+* Language - 0 new strings added, 164 updated, 0 fuzzied, and 0 obsoleted
+
+= [5.9.1] 2021-09-14 =
+
+* Feature - Updated swagger docs generated from swagger 2.0 to openapi 3.0.0
+* Fix - Initialize $local_time_zone to ensure we don't have notices displayed in the frontend. [TEC-3791]
+* Fix - Ensure the correct timezone label is being displayed on the Classic and Block editors when site-wide timezone is set. [TEC-3791]
+* Fix - Ensure that venue state or province are displayed next to the city in list view. [TEC-3332]
+* Fix - Ensure the category archive event breadcrumb links to the main events page. [TEC-3330]
+* Fix - Ensure that the page title does not encode (em)dashes before passing it on. [TEC-4049]
+* Fix - Ensure that the page title does not encode apostrophes before passing it on. [TEC-4058]
+* Fix - Ensure that filter_single_event_details_event_website_label() only filters the label for the website field. [ECP-921]
+* Tweak - Remove unused template file to avoid confusion.
+* Language - 0 new strings added, 13 updated, 0 fuzzied, and 0 obsoleted
+
+= [5.9.0] 2021-08-24 =
+
+* Fix - Ensure that $eventDisplay is defined before we use it in the default template. [TEC-4060]
+* Feature - Alter Customizer to leverage the new exposed CSS custom properties. [TCMN-104]
+* Feature - Reduce the CSS load of The Events Calendar Customizer style overrides. [TEC-3011]
+* Feature - Allow easier style overrides by users and third-party themes/plugins. [TEC-3011]
+* Feature - Add new Font Sections to Customizer -> The Events Calendar -> Global Events. [TEC-3872]
+* Feature - Add new font family control to allow The Events Calendar styles to inherit theme fonts. [TEC-3895]
+* Feature - Add new font size controls for accessibility and to allow users to more closely match the font sizes of their theme. [TEC-3891]
+* Tweak - Support optionally passing start dates to the Event Edit page so targeted event creation can be triggered by The Events Calendar Pro's Event Manager.
+* Language - 16 new strings added, 429 updated, 0 fuzzied, and 0 obsoleted
+
+= [5.8.2] 2021-08-17 =
+
+* Feature - Redesign In-App help and troubleshooting pages. [TEC-3741]
+* Fix - Try to ensure that when we do an event search the query post type remains `tribe_events`. [TEC-4012]
+* Fix - Ensure the year is displayed in the block editor event single page for events that are occurring in a different year from the current one. [TEC-3740]
+* Fix - Fix the issue of the Event Date Time block Timezone dropdown taking up a lot of space. [TEC-4029]
+* Fix - Ensure WPML translated event posts show up on translated venue and organizer pages. (props @NicoX13) [TEC-4036]
+* Fix - Fix issue of month names not being translatable. This was caused by a missing moment js localization dependency. [ECP-739]
+* Fix - Ensure we test the value of tribe_events_get_current_month_day() before using it. [ECP-912]
+* Fix - Add a new function to add "Event Blocks" category to the editor for WP >= 5.8. [TEC-4037]
+* Tweak - Change label of API Settings tab to "Integrations" and alter helper text. [TEC-4015]
+* Language - 2 new strings added, 251 updated, 1 fuzzied, and 18 obsoleted
+
+= [5.8.1] 2021-07-20 =
+
+* Fix - Ensure that the Block Editor saves cost data when submitted. [TEC-3987]
+* Fix - Ensure that when viewing a single event we load the correct template when tribe_context is "confused". [TEC-3975]
+* Tweak - Remove some CSS on the single events page that was causing a random border to appear on avada theme [TEC-3952]
+* Tweak - Add CSS class to the event tags label on the event details section on the single event page. [TEC-3951]
+* Tweak - Correct the messaging and link for the v1 deprecation notice. [TEC-3958]
+* Tweak - Include filter to allow modifications to the Grid query for By Day Views like Month and Week, `tribe_events_views_v2_by_day_view_day_repository`
+* Language - 5 new strings added, 26 updated, 2 fuzzied, and 5 obsoleted
+
 = [5.8.0] 2021-07-01 =
 
 * Version - The Events Calendar 5.8.0 is only compatible with Events Calendar PRO 5.8.0 and higher
@@ -228,7 +340,7 @@ Remember to always make a backup of your database and files before updating!
 * Fix - Correct instance where the date & time symbols ("@") are not changing color along with the text. [TEC-3883]
 * Tweak - Ensure that the Month view date and time default colors match up with the rest [TEC-3709]
 * Tweak - Ensure the Customizer Accent Color defaults to "royal blue" (#334aff) [TEC-3884]
-* Tweak - Stop doing all the work here and leverage the new tribe-common Theme_Compatibility.
+* Tweak - Stop doing all the work here and leverage the new tribe-common Theme_Compatibility. [TCMN-106]
 * Tweak - Add new hooks to the single event templates to allow more third-party control over content without custom templates. [TEC-3948]
 * Tweak - Added filters: `tribe_customizer_should_print_shortcode_customizer_styles`, `tribe_events_views_v2_bootstrap_html`, `tribe_default_events_template_classes`, `tribe_events_single_event_title_classes`, `tribe_events_single_event_title_html_before`, `tribe_events_single_event_title_html_after`, `tribe_events_single_event_title_html`
 * Tweak - Removed filters: `tribe_events_views_v2_compatibility_classes`, `tribe_events_views_v2_theme_compatibility_registered`

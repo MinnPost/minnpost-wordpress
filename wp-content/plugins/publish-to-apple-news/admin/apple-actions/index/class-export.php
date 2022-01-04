@@ -70,16 +70,25 @@ class Export extends Action {
 	}
 
 	/**
+	 * Sets the exporting flag.
+	 *
+	 * @param bool $exporting The new value of the exporting flag.
+	 */
+	public static function set_exporting( $exporting ) {
+		self::$exporting = (bool) $exporting;
+	}
+
+	/**
 	 * Perform the export and return the results.
 	 *
 	 * @return string The JSON data
 	 * @access public
 	 */
 	public function perform() {
-		self::$exporting = true;
-		$exporter        = $this->fetch_exporter();
-		$json            = $exporter->export();
-		self::$exporting = false;
+		self::set_exporting( true );
+		$exporter = $this->fetch_exporter();
+		$json     = $exporter->export();
+		self::set_exporting( false );
 
 		return $json;
 	}
@@ -129,6 +138,12 @@ class Export extends Action {
 				$cover_caption = wp_get_attachment_caption( $thumb_id );
 			}
 			if ( ! empty( $post_thumb_url ) ) {
+				// If the post thumb URL is root-relative, convert it to fully-qualified.
+				if ( 0 === strpos( $post_thumb_url, '/' ) ) {
+					$post_thumb_url = site_url( $post_thumb_url );
+				}
+
+				// Compile the post_thumb object using the URL and caption from the featured image.
 				$post_thumb = [
 					'caption' => ! empty( $cover_caption ) ? $cover_caption : '',
 					'url'     => $post_thumb_url,
@@ -147,8 +162,17 @@ class Export extends Action {
 		// Build the byline.
 		$byline = $this->format_byline( $post );
 
+		// Build the author.
+		$author = $this->format_author( $post );
+
+		// Build the publication date.
+		$date = $this->format_date( $post );
+
 		// Get the content.
 		$content = $this->get_content( $post );
+
+		// Get the slug.
+		$slug = get_post_meta( $post->ID, 'apple_news_slug', true );
 
 		/*
 		 * If the excerpt looks too similar to the content, remove it.
@@ -204,6 +228,42 @@ class Export extends Action {
 		$byline = apply_filters( 'apple_news_exporter_byline', $byline, $post->ID );
 
 		/**
+		 * Filters the author of an article before it is sent to Apple News.
+		 *
+		 * The author is used for the Author component, if it is active.
+		 *
+		 * @since 2.3.0
+		 *
+		 * @param string $author  The author for the post.
+		 * @param int    $post_id The ID of the post.
+		 */
+		$author = apply_filters( 'apple_news_exporter_author', $author, $post->ID );
+
+		/**
+		 * Filters the date of an article before it is sent to Apple News.
+		 *
+		 * The date is used for the Date component, if it is active.
+		 *
+		 * @since 2.3.0
+		 *
+		 * @param string $ date   The date for the post.
+		 * @param int    $post_id The ID of the post.
+		 */
+		$date = apply_filters( 'apple_news_exporter_date', $date, $post->ID );
+
+		/**
+		 * Filters the slug of an article before it is sent to Apple News.
+		 *
+		 * The slug is used for the Slug component, if it is active.
+		 *
+		 * @since 2.2.0
+		 *
+		 * @param string $slug    The slug for the post.
+		 * @param int    $post_id The ID of the post.
+		 */
+		$slug = apply_filters( 'apple_news_exporter_slug', $slug, $post->ID );
+
+		/**
 		 * Filters the HTML of a post after `the_content` filter is called, but
 		 * before the HTML is parsed into Apple News Format.
 		 *
@@ -250,7 +310,10 @@ class Export extends Action {
 			$excerpt,
 			$post_thumb,
 			$byline,
-			$this->fetch_content_settings()
+			$this->fetch_content_settings(),
+			$slug,
+			$author,
+			$date
 		);
 
 		return new Exporter( $base_content, null, $this->settings );
@@ -268,7 +331,6 @@ class Export extends Action {
 	 * @return string
 	 */
 	public function format_byline( $post, $author = '', $date = '' ) {
-
 		// Get information about the currently used theme.
 		$theme = \Apple_Exporter\Theme::get_used();
 
@@ -316,6 +378,90 @@ class Export extends Action {
 		}
 
 		return $byline;
+	}
+
+	/**
+	 * Formats the author.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @param \WP_Post $post   The post to use.
+	 * @param string   $author Optional. Overrides author information. Defaults to author of the post.
+	 * @access public
+	 * @return string
+	 */
+	public function format_author( $post, $author = '' ) {
+		// Get information about the currently used theme.
+		$theme = \Apple_Exporter\Theme::get_used();
+
+		// Get the author.
+		if ( empty( $author ) ) {
+			$author = Apple_News::get_authors();
+		}
+
+		// Check for a custom byline format.
+		$byline_format = $theme->get_value( 'author_format' );
+		if ( ! empty( $byline_format ) ) {
+			/**
+			 * Find and replace the author format placeholder name with a temporary placeholder.
+			 * This is because some bylines could contain hashtags!
+			 */
+			$temp_byline_placeholder = 'AUTHOR';
+			$byline                  = str_replace( '#author#', $temp_byline_placeholder, $byline_format );
+
+			// Replace the temporary placeholder with the actual byline.
+			$byline = str_replace( $temp_byline_placeholder, $author, $byline );
+
+		} else {
+			// Use the default format.
+			$byline = sprintf(
+				'by %1$s',
+				$author
+			);
+		}
+
+		return $byline;
+	}
+
+	/**
+	 * Formats the publication date
+	 *
+	 * @since 2.3.0
+	 *
+	 * @param \WP_Post $post   The post to use.
+	 * @param string   $date   Optional. Overrides the date. Defaults to the date of the post.
+	 * @access public
+	 * @return string
+	 */
+	public function format_date( $post, $date = '' ) {
+		// Get information about the currently used theme.
+		$theme = \Apple_Exporter\Theme::get_used();
+
+		// Get the date.
+		if ( empty( $date ) && ! empty( $post->post_date ) ) {
+			$date = $post->post_date;
+		}
+
+		// Check for a custom byline format.
+		$date_format = $theme->get_value( 'date_format' );
+
+		if ( ! empty( $date_format ) ) {
+			// Attempt to parse the date format from the remaining string.
+			$matches = array();
+			preg_match( '/#(.*?)#/', $date_format, $matches );
+			if ( ! empty( $matches[1] ) ) {
+				// Set the date using the custom format.
+				$date = apple_news_date( $matches[1], strtotime( $date ) );
+			}
+		} else {
+			// Use the default format.
+			$date = sprintf(
+				'%1$s',
+				apple_news_date( $date_format, strtotime( $date ) )
+			);
+		}
+
+		return $date;
 	}
 
 	/**

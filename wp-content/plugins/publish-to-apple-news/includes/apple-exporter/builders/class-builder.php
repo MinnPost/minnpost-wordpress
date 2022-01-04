@@ -84,6 +84,26 @@ abstract class Builder {
 	}
 
 	/**
+	 * Gets the content author.
+	 *
+	 * @access protected
+	 * @return string The byline from the content object.
+	 */
+	protected function content_author() {
+		return $this->content->author();
+	}
+
+	/**
+	 * Gets the content publication date.
+	 *
+	 * @access protected
+	 * @return string The publication date from the content object.
+	 */
+	protected function content_date() {
+		return $this->content->date();
+	}
+
+	/**
 	 * Gets the content cover.
 	 *
 	 * @access protected
@@ -143,6 +163,16 @@ abstract class Builder {
 	 */
 	protected function content_text() {
 		return $this->content->content();
+	}
+
+	/**
+	 * Gets the content slug.
+	 *
+	 * @access protected
+	 * @return string The slug from the content object, or a fallback slug.
+	 */
+	protected function content_slug() {
+		return $this->content->slug();
 	}
 
 	/**

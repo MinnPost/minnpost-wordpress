@@ -204,7 +204,12 @@ class Tribe__Events__Assets {
 			$plugin,
 			'tribe-events-dynamic',
 			'events-dynamic.js',
-			[ 'jquery', 'tribe-events-php-date-formatter', 'tribe-moment' ],
+			[
+				'jquery',
+				'tribe-events-php-date-formatter',
+				'tribe-moment',
+				'tribe-moment-locales'
+			],
 			[ 'wp_enqueue_scripts', 'admin_enqueue_scripts' ],
 			[
 				'conditionals' => [ $this, 'should_enqueue_on_tribe' ],
@@ -225,6 +230,7 @@ class Tribe__Events__Assets {
 				'tribe-events-jquery-resize',
 				'jquery-placeholder',
 				'tribe-moment',
+				'tribe-moment-locales',
 			],
 			'wp_enqueue_scripts',
 			[
@@ -346,6 +352,7 @@ class Tribe__Events__Assets {
 				'tribe-events-jquery-resize',
 				'jquery-placeholder',
 				'tribe-moment',
+				'tribe-moment-locales',
 			],
 			null,
 			[
@@ -693,18 +700,6 @@ class Tribe__Events__Assets {
 		 * @param bool
 		 */
 		$js_config_array['debug'] = apply_filters( 'tribe_events_js_debug', tribe_get_option( 'debugEvents' ) );
-
-		/**
-		 * Allows for easier filtering of the "Export Events" iCal link URL.
-		 *
-		 * @since 4.6.5
-		 *
-		 * @see tribe_get_ical_link
-		 * @param boolean $force Defaults to false; when true, the dynamic JS generation of the "Export Events" URL is disabled.
-		 */
-		if ( apply_filters( 'tribe_events_force_filtered_ical_link', false ) ) {
-			$js_config_array['force_filtered_ical_link'] = true;
-		}
 
 		/**
 		 * Allows filtering the contents of the Javascript configuration object that will be printed on the page.

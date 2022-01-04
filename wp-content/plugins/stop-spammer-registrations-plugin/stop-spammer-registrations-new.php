@@ -3,7 +3,7 @@
 Plugin Name: Stop Spammers
 Plugin URI: https://stopspammers.io/
 Description: Secure your WordPress sites and stop spam dead in its tracks. Designed to secure your website immediately. Enhance your visitors' UX with 50+ configurable options, an allow access form, and a testing tool.
-Version: 2021.17
+Version: 2021.20
 Author: Trumani
 Author URI: https://stopspammers.io/
 License: https://www.gnu.org/licenses/gpl.html
@@ -12,7 +12,7 @@ Text Domain: stop-spammer-registrations-plugin
 */
 
 // networking requires a couple of globals
-define( 'SS_VERSION', '2021.17' );
+define( 'SS_VERSION', '2021.20' );
 define( 'SS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SS_PLUGIN_FILE', plugin_dir_path( __FILE__ ) );
 define( 'SS_PLUGIN_DATA', plugin_dir_path( __FILE__ ) . 'data/' );
@@ -39,7 +39,7 @@ add_action( 'admin_print_styles', 'ss_styles' );
 function ss_admin_notice() {
 	if ( !is_plugin_active( 'stop-spammers-premium/stop-spammers-premium.php' ) ) {
 		$user_id = get_current_user_id();
-		if ( !get_user_meta( $user_id, 'ss_notice_dismissed_12' ) && current_user_can( 'manage_options' ) ) {
+		if ( !get_user_meta( $user_id, 'ss_notice_dismissed_15' ) && current_user_can( 'manage_options' ) ) {
 			echo '<div class="notice notice-info"><p>' . __( '<big><strong>Stop Spammers</strong></big> | 💚 Help us keep the project alive! <a href="https://stopspammers.io/downloads/stop-spammers-premium/" target="_blank" class="button-primary" style="background-color:blue">Upgrade</a> <a href="https://stopspammers.io/donate" target="_blank" class="button-primary" style="background-color:green">Donate</a> <a href="https://stopspammers.io/chat" target="_blank" class="button-primary" style="background-color:purple">Volunteer</a>', 'stop-spammers' ) . '<a href="?ss-dismiss" class="alignright">' . __( 'Dismiss', 'stop-spammer-registrations-plugin' ) . '</a></p></div>';
 		}
 	}
@@ -51,7 +51,7 @@ function ss_notice_dismissed() {
 	if ( !is_plugin_active( 'stop-spammers-premium/stop-spammers-premium.php' ) ) {
 		$user_id = get_current_user_id();
 		if ( isset( $_GET['ss-dismiss'] ) ) {
-			add_user_meta( $user_id, 'ss_notice_dismissed_12', 'true', true );
+			add_user_meta( $user_id, 'ss_notice_dismissed_15', 'true', true );
 		}
 	}
 	// Notification Control: handles notices
@@ -406,6 +406,18 @@ function ss_init() {
 	add_action( 'template_redirect', 'ss_check_404s' ); // check missed hits for robots scanning for exploits
 	add_action( 'ss_stop_spam_caught', 'ss_caught_action', 10, 2 ); // hook stop spam  - for testing
 	add_action( 'ss_stop_spam_ok', 'ss_stop_spam_ok', 10, 2 ); // hook stop spam - for testing
+
+	// captcha for forms
+	$options = ss_get_options();
+	if ( isset( $options['form_captcha_login'] ) and $options['form_captcha_login'] === 'Y' ) {
+		add_action( 'login_form', 'ss_add_captcha' );
+	}
+	if ( isset( $options['form_captcha_registration'] ) and $options['form_captcha_registration'] === 'Y' ) {
+		add_action( 'register_form', 'ss_add_captcha' );
+	}
+	if ( isset( $options['form_captcha_comment'] ) and $options['form_captcha_comment'] === 'Y' ) {
+		add_action( 'comment_form_after_fields', 'ss_add_captcha' );
+	}
 }
 
 // start of loadable functions
@@ -982,6 +994,167 @@ function ss_login_redirect() {
 	}
 }
 add_action( 'wp', 'ss_login_redirect' );
+
+function ss_add_captcha() {
+	$options = ss_get_options();
+	$html    = '';
+	switch ( $options['chkcaptcha'] ) {
+		case 'G':
+			// reCAPTCHA
+			$recaptchaapisite = $options['recaptchaapisite'];
+			$html  = '<script src=\"https://www.google.com/recaptcha/api.js\" async defer></script>';
+			$html .= '<input type="hidden" name="recaptcha" value="recaptcha" />';
+			$html .= '<div class="g-recaptcha" data-sitekey="$recaptchaapisite"></div>';
+		break;
+		case 'H':
+			// hCaptcha
+			$hcaptchaapisite = $options['hcaptchaapisite'];
+			$html  = '<script src="https://hcaptcha.com/1/api.js" async defer></script>';
+			$html .= '<input type="hidden" name="h-captcha" value="h-captcha" />';
+			$html .= '<div class="h-captcha" data-sitekey="' . $hcaptchaapisite . '"></div>';
+		break;
+		case 'S':
+			$solvmediaapivchallenge = $options['solvmediaapivchallenge'];
+			$html   = '<script src\"https://api-secure.solvemedia.com/papi/challenge.script?k=$solvmediaapivchallenge"></script>';
+			$html  .= '<noscript>';
+			$html  .= '<iframe src="https://api-secure.solvemedia.com/papi/challenge.noscript?k=$solvmediaapivchallenge" height="300" width="500" frameborder="0"></iframe><br />';
+			$html  .= '<textarea name="adcopy_challenge" rows="3" cols="40"></textarea>';
+			$html  .= '<input type="hidden" name="adcopy_response" value="manual_challenge" />';
+			$html  .= '</noscript>';
+		break;
+	}
+	echo $html;
+}
+
+function ss_captcha_verify() {
+	global $wpdb;
+	$options = ss_get_options();
+	$ip 	 = ss_get_ip();
+	switch ( $options['chkcaptcha'] ) {
+		case 'G':
+			if ( array_key_exists( 'recaptcha', $_POST ) && !empty( $_POST['recaptcha'] ) && array_key_exists( 'g-recaptcha-response', $_POST ) ) {
+				// check reCAPTCHA
+				$recaptchaapisecret = $options['recaptchaapisecret'];
+				$recaptchaapisite   = $options['recaptchaapisite'];
+				if ( empty( $recaptchaapisecret ) || empty( $recaptchaapisite ) ) {
+					return __( '<strong>Error:</strong> reCAPTCHA keys are not set.', 'stop-spammer-registrations-plugin' );
+				} else { 
+					$g    = sanitize_textarea_field( $_REQUEST['g-recaptcha-response'] );
+					$url  = "https://www.google.com/recaptcha/api/siteverify?secret=$recaptchaapisecret&response=$g&remoteip=$ip";
+					$resp = ss_read_file( $url );
+					if ( strpos( $resp, '"success": true' ) === false ) {
+						$msg = __( '<strong>Error:</strong> Google reCAPTCHA entry does not match. Try again.', 'stop-spammer-registrations-plugin' );
+					}
+				}
+			}
+		break;
+		case 'H':
+			if ( array_key_exists( 'h-captcha', $_POST ) && !empty( $_POST['h-captcha'] ) && array_key_exists( 'h-captcha-response', $_POST ) ) {
+				// check hCaptcha
+				$hcaptchaapisecret = $options['hcaptchaapisecret'];
+				$hcaptchaapisite   = $options['hcaptchaapisite'];
+				if ( empty( $hcaptchaapisecret ) || empty( $hcaptchaapisite ) ) {
+					return __( '<strong>Error:</strong> hCaptcha keys are not set.', 'stop-spammer-registrations-plugin' );
+				} else {
+					$h    = sanitize_textarea_field( $_REQUEST['h-captcha-response'] );
+					$url  = "https://hcaptcha.com/siteverify?secret=$hcaptchaapisecret&response=$h&remoteip=$ip";
+					$resp = ss_read_file( $url );
+					$response = json_decode( $resp );
+					if ( !isset( $response->success ) or $response->success !== true ) { 
+						return __( '<strong>Error:</strong> hCaptcha entry does not match. Try again.', 'stop-spammer-registrations-plugin' );
+					}
+				}
+			}
+		break;
+		case 'S':
+			if ( array_key_exists( 'adcopy_challenge', $_POST ) && !empty( $_POST['adcopy_challenge'] ) ) {
+				$solvmediaapivchallenge = $options['solvmediaapivchallenge'];
+				$solvmediaapiverify	    = $options['solvmediaapiverify'];
+				$adcopy_challenge	    = sanitize_textarea_field( $_REQUEST['adcopy_challenge'] );
+				$adcopy_response		= sanitize_textarea_field( $_REQUEST['adcopy_response'] );
+				$postdata = http_build_query(
+					array(
+						'privatekey' => $solvmediaapiverify,
+						'challenge'  => $adcopy_challenge,
+						'response'   => $adcopy_response,
+						'remoteip'   => $ip
+					)
+				);
+				$opts = array(
+					'http' =>
+						array(
+							'method'  => 'POST',
+							'header'  => 'Content-type: application/x-www-form-urlencoded',
+							'content' => $postdata
+						)
+				);
+				$body = array(
+					'privatekey' => $solvmediaapiverify,
+					'challenge'  => $adcopy_challenge,
+					'response'   => $adcopy_response,
+					'remoteip'   => $ip
+				);
+				$args = array(
+					'user-agent'  => 'WordPress/' . '4.2' . '; ' . get_bloginfo( 'url' ),
+					'blocking'	  => true,
+					'headers'	  => array( 'Content-type: application/x-www-form-urlencoded' ),
+					'method'	  => 'POST',
+					'timeout'	  => 45,
+					'redirection' => 5,
+					'httpversion' => '1.0',
+					'body'		  => $body,
+					'cookies'	  => array()
+				);
+				$url = 'https://verify.solvemedia.com/papi/verify/';
+				$resultarray = wp_remote_post( $url, $args );
+				$result	     = $resultarray['body'];
+				if ( strpos( $result, 'true' ) === false ) {
+					return __( '<strong>Error:</strong> CAPTCHA entry does not match. Try again.', 'stop-spammer-registrations-plugin' );
+				}
+			}
+		break;
+	}
+	return true;
+}
+
+function ss_login_captcha_verify( $user ) {
+	$options = ss_get_options();
+	if ( !isset( $options['form_captcha_login'] ) or $options['form_captcha_login'] !== 'Y' ) {
+		return $user;	
+	}
+	$response = ss_captcha_verify();
+	if ( $response !== true ) {
+		return new WP_Error( 'ss_captcha_error', $response );
+	}
+	return $user;
+}
+add_filter( 'authenticate', 'ss_login_captcha_verify', 99 );
+
+function ss_registration_captcha_verify( $errors ) {
+	$options = ss_get_options();
+	if ( !isset( $options['form_captcha_registration'] ) or $options['form_captcha_registration'] !== 'Y' ) {
+		return $errors;	
+	}
+	$response = ss_captcha_verify();
+	if ( $response !== true ) {
+		$errors->add( 'ss_captcha_error', $response );
+	}
+	return $errors;
+}
+add_filter( 'registration_errors', 'ss_registration_captcha_verify', 10 );
+
+function ss_comment_captcha_verify( $approved ) {
+	$options = ss_get_options();
+	if ( !isset( $options['form_captcha_comment'] ) or $options['form_captcha_comment'] !== 'Y' ) {
+		return $approved;	
+	}
+	$response = ss_captcha_verify();
+	if ( $response !== true ) {
+		return new WP_Error( 'ss_captcha_error', $response, 403	);
+	}
+	return $approved;
+}
+add_filter( 'pre_comment_approved', 'ss_comment_captcha_verify', 99, 1 );
 
 // action links
 function ss_summary_link( $links ) {

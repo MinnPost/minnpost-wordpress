@@ -18,6 +18,13 @@
 class Apple_News {
 
 	/**
+	 * An array of bundle hashes that match an asset URL to a bundle filename.
+	 *
+	 * @var array
+	 */
+	private static $bundle_hashes = [];
+
+	/**
 	 * Link to support for the plugin on github.
 	 *
 	 * @var string
@@ -39,7 +46,7 @@ class Apple_News {
 	 * @var string
 	 * @access public
 	 */
-	public static $version = '2.1.3';
+	public static $version = '2.3.1';
 
 	/**
 	 * Link to support for the plugin on WordPress.org.
@@ -113,6 +120,9 @@ class Apple_News {
 			return '';
 		}
 
+		// Get information about the currently used theme.
+		$theme = \Apple_Exporter\Theme::get_used();
+
 		/**
 		 * Allows for changing the option to use Co-Authors Plus for authorship.
 		 * Defaults to using Co-Authors Plus if the `coauthors` function is defined.
@@ -124,12 +134,42 @@ class Apple_News {
 		 */
 		$use_cap = apply_filters( 'apple_news_use_coauthors', function_exists( 'coauthors' ), get_the_ID() );
 
+		// Get theme option for byline links. True if set to yes.
+		// Ignore html option if setting meta data.
+		$use_author_links = $theme->get_value( 'author_links' ) && 'yes' === $theme->get_value( 'author_links' ) && 'APPLE_NEWS_DELIMITER' !== $between;
+
 		// Handle CAP authorship.
 		if ( $use_cap ) {
-			return coauthors( $between, $between_last, $before, $after, false );
+			return $use_author_links
+				? coauthors_posts_links( $between, $between_last, $before, $after, false )
+				: coauthors( $between, $between_last, $before, $after, false );
 		}
 
-		return ucfirst( get_the_author_meta( 'display_name', $post->post_author ) );
+		// Get author from post.
+		$post_author_id = intval( $post->post_author );
+		$author         = ucfirst( get_the_author_meta( 'display_name', $post_author_id ) );
+
+		// If we have byline links enabled.
+		if ( $use_author_links ) {
+			/**
+			 * Allows for modification of the byline link used by WordPress authors and CoAuthors Plus.
+			 *
+			 * @since 2.3.0
+			 *
+			 * @param string $link            The author link to be filtered.
+			 * @param int    $author_id       Author id for the URL being modified.
+			 * @param string $author_nicename Author nicename for the URL being modified.
+			 */
+			$byline_url = apply_filters(
+				'apple_news_author_author_link',
+				get_author_posts_url( $post_author_id ),
+				$post_author_id,
+				get_the_author_meta( 'nicename', $post_author_id )
+			);
+			return '<a href="' . esc_url( $byline_url ) . '" rel="author">' . esc_html( $author ) . '</a>';
+		}
+
+		return $author;
 	}
 
 	/**
@@ -160,6 +200,11 @@ class Apple_News {
 	 */
 	public static function get_filename( $path ) {
 
+		// If we already have a hash for this path, return it.
+		if ( isset( self::$bundle_hashes[ $path ] ) ) {
+			return self::$bundle_hashes[ $path ];
+		}
+
 		// Remove any URL parameters.
 		// This is important for sites using WordPress VIP or Jetpack Photon.
 		$url_parts = wp_parse_url( $path );
@@ -167,7 +212,39 @@ class Apple_News {
 			return '';
 		}
 
-		return str_replace( ' ', '', basename( $url_parts['path'] ) );
+		// Compute base filename.
+		$filename = str_replace( ' ', '', basename( $url_parts['path'] ) );
+
+		// Ensure there are no filename collisions with existing bundles.
+		$bundle_filenames = array_values( self::$bundle_hashes );
+		sort( $bundle_filenames );
+		if ( in_array( $filename, $bundle_filenames, true ) ) {
+			$file_number    = 1;
+			$filename_parts = pathinfo( $filename );
+			$pattern        = sprintf(
+				'/^%s-([0-9]+)\.%s$/',
+				preg_quote( $filename_parts['filename'], '/' ),
+				preg_quote( $filename_parts['extension'], '/' )
+			);
+			foreach ( self::$bundle_hashes as $bundle_filename ) {
+				if ( preg_match( $pattern, $bundle_filename, $matches ) ) {
+					$file_number = max( $file_number, (int) $matches[1] + 1 );
+				}
+			}
+
+			// Apply the new filename to avoid collisions.
+			$filename = sprintf(
+				'%s-%d.%s',
+				$filename_parts['filename'],
+				$file_number,
+				$filename_parts['extension']
+			);
+		}
+
+		// Store this path/filename pair in the bundle hashes property for future use.
+		self::$bundle_hashes[ $path ] = $filename;
+
+		return $filename;
 	}
 
 	/**
@@ -299,6 +376,18 @@ class Apple_News {
 			10,
 			5
 		);
+		add_filter(
+			'author_link',
+			[ $this, 'filter_author_link' ],
+			10,
+			3
+		);
+		add_filter(
+			'the_author',
+			[ $this, 'filter_the_author' ],
+			10,
+			3
+		);
 	}
 
 	/**
@@ -345,12 +434,25 @@ class Apple_News {
 			return;
 		}
 
+		// Get the path to the PHP file containing the dependencies.
+		$dependency_file = dirname( __DIR__ ) . '/build/pluginSidebar.asset.php';
+		if ( ! file_exists( $dependency_file ) || 0 !== validate_file( $dependency_file ) ) {
+			return;
+		}
+
+		// Try to load the dependencies.
+		// phpcs:ignore WordPressVIPMinimum.Files.IncludingFile.UsingVariable
+		$dependencies = require $dependency_file;
+		if ( empty( $dependencies['dependencies'] ) || ! is_array( $dependencies['dependencies'] ) ) {
+			return;
+		}
+
 		// Add the PluginSidebar.
 		wp_enqueue_script(
 			'publish-to-apple-news-plugin-sidebar',
 			plugins_url( 'build/pluginSidebar.js', __DIR__ ),
-			[ 'wp-i18n', 'wp-edit-post' ],
-			self::$version,
+			$dependencies['dependencies'],
+			$dependencies['version'],
 			true
 		);
 		$this->inline_locale_data( 'apple-news-plugin-sidebar' );
@@ -456,6 +558,37 @@ class Apple_News {
 		}
 
 		return $check;
+	}
+
+	/**
+	 * A filter callback for author_link for coauthors URLs.
+	 *
+	 * @param string $link            The URL to the author's page.
+	 * @param int    $author_id       The author's ID.
+	 * @param string $author_nicename The author's nice name.
+	 * @return string updated $author attribute.
+	 */
+	public function filter_author_link( $link, $author_id, $author_nicename ) {
+		/**
+		 * Allows for modification of the byline link used by WordPress authors and CoAuthors Plus.
+		 *
+		 * @since 2.3.0
+		 *
+		 * @param string $link            The author link to be filtered.
+		 * @param int    $author_id       Author id for the URL being modified.
+		 * @param string $author_nicename Author nicename for the URL being modified.
+		 */
+		return apply_filters( 'apple_news_author_author_link', $link, $author_id, $author_nicename );
+	}
+
+	/**
+	 * A filter callback for the_author to wrap authors in byline tag if supported.
+	 *
+	 * @param string $author author name.
+	 * @return string updated $author attribute.
+	 */
+	public function filter_the_author( $author ) {
+		return ucfirst( $author );
 	}
 
 	/**

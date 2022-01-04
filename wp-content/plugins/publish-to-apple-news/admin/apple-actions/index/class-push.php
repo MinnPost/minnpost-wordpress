@@ -233,6 +233,57 @@ class Push extends API_Action {
 			);
 		}
 
+		// Special logic only if autosync push is enabled.
+		if ( $this->settings->api_autosync ) {
+			// Get the list of term IDs that should trigger a skip push from plugin settings.
+			$skip_term_ids = json_decode( $this->settings->api_autosync_skip );
+			if ( ! is_array( $skip_term_ids ) ) {
+				$skip_term_ids = [];
+			}
+
+			/**
+			 * Filters whether the post should be skipped and not pushed to Apple News
+			 * based on taxonomy term IDs that are associated with the post.
+			 *
+			 * Allows you to stop publication of a post to Apple News based on whether a
+			 * certain taxonomy term ID is applied to the post. A common use case is to
+			 * not publish posts with a certain category or tag. The default value for
+			 * this filter is the value of the skip push term IDs from the API settings
+			 * for the plugin, but the list can be modified for individual posts via
+			 * this filter.
+			 *
+			 * @since 2.3.0
+			 *
+			 * @param int[] $term_ids The list of term IDs that should trigger a skipped push. Defaults to the term IDs set in plugin options.
+			 * @param int   $post_id  The ID of the post being exported.
+			 */
+			$skip_term_ids = apply_filters( 'apple_news_skip_push_term_ids', $skip_term_ids, $this->id );
+
+			// Compile a list of term IDs for the current post across all supported taxonomies for the post type.
+			$term_ids   = [];
+			$taxonomies = get_object_taxonomies( get_post_type( $this->id ) );
+			foreach ( $taxonomies as $taxonomy ) {
+				$term_ids_for_taxonomy = get_the_terms( $this->id, $taxonomy );
+				if ( is_array( $term_ids_for_taxonomy ) ) {
+					$term_ids = array_merge(
+						$term_ids,
+						wp_list_pluck( $term_ids_for_taxonomy, 'term_id' )
+					);
+				}
+			}
+
+			// If any of the terms for the current post are in the list of term IDs that should be skipped, bail out.
+			if ( array_intersect( $term_ids, $skip_term_ids ) ) {
+				throw new \Apple_Actions\Action_Exception(
+					sprintf(
+						// Translators: Placeholder is a post ID.
+						__( 'Skipped push of article %d due to the presence of a skip push taxonomy term.', 'apple-news' ),
+						$this->id
+					)
+				);
+			}
+		}
+
 		/**
 		 * The generate_article function uses Exporter->generate, so we MUST
 		 * clean the workspace before and after its usage.
@@ -300,6 +351,31 @@ class Push extends API_Action {
 		$maturity_rating = get_post_meta( $this->id, 'apple_news_maturity_rating', true );
 		if ( ! empty( $maturity_rating ) ) {
 			$meta['data']['maturityRating'] = $maturity_rating;
+		}
+
+		// Add custom metadata fields.
+		$custom_meta = get_post_meta( $this->id, 'apple_news_metadata', true );
+		if ( ! empty( $custom_meta ) && is_array( $custom_meta ) ) {
+			foreach ( $custom_meta as $metadata ) {
+				// Ensure required fields are set.
+				if ( empty( $metadata['key'] ) || empty( $metadata['type'] ) || ! isset( $metadata['value'] ) ) {
+					continue;
+				}
+
+				// If the value is an array, we have to decode it from JSON.
+				$value = $metadata['value'];
+				if ( 'array' === $metadata['type'] ) {
+					$value = json_decode( $metadata['value'] );
+
+					// If the user entered a bad value for the array, bail out without adding it.
+					if ( empty( $value ) || ! is_array( $value ) ) {
+						continue;
+					}
+				}
+
+				// Add the custom metadata field to the article metadata.
+				$meta['data'][ $metadata['key'] ] = $value;
+			}
 		}
 
 		// Ignore if the post is already in sync.
@@ -406,7 +482,6 @@ class Push extends API_Action {
 	private function process_errors( $errors ) {
 		// Get the current alert settings.
 		$component_alerts = $this->get_setting( 'component_alerts' );
-		$json_alerts      = $this->get_setting( 'json_alerts' );
 
 		// Initialize the alert message.
 		$alert_message = '';
@@ -434,39 +509,13 @@ class Push extends API_Action {
 			}
 		}
 
-		// Check for JSON errors.
-		if ( ! empty( $errors[0]['json_errors'] ) ) {
-			if ( ! empty( $alert_message ) ) {
-				$alert_message .= '|';
-			}
-
-			// Merge all errors into a single message.
-			$json_errors = implode( ', ', $errors[0]['json_errors'] );
-
-			// Add these to the message.
-			if ( 'warn' === $json_alerts ) {
-				$alert_message .= sprintf(
-					// translators: token is a list of errors.
-					__( 'The following JSON errors were detected when publishing to Apple News: %s', 'apple-news' ),
-					$json_errors
-				);
-			} elseif ( 'fail' === $json_alerts ) {
-				$alert_message .= sprintf(
-					// translators: token is a list of errors.
-					__( 'The following JSON errors were detected and prevented publishing to Apple News: %s', 'apple-news' ),
-					$json_errors
-				);
-			}
-		}
-
 		// See if we found any errors.
 		if ( empty( $alert_message ) ) {
 			return;
 		}
 
 		// Proceed based on component alert settings.
-		if ( ( 'fail' === $component_alerts && ! empty( $errors[0]['component_errors'] ) )
-			|| ( 'fail' === $json_alerts && ! empty( $errors[0]['json_errors'] ) ) ) {
+		if ( 'fail' === $component_alerts && ! empty( $errors[0]['component_errors'] ) ) {
 			// Remove the pending designation if it exists.
 			delete_post_meta( $this->id, 'apple_news_api_pending' );
 
@@ -478,8 +527,7 @@ class Push extends API_Action {
 
 			// Throw an exception.
 			throw new \Apple_Actions\Action_Exception( $alert_message );
-		} elseif ( ( 'warn' === $component_alerts && ! empty( $errors[0]['component_errors'] ) )
-			|| ( 'warn' === $json_alerts && ! empty( $errors[0]['json_errors'] ) ) ) {
+		} elseif ( 'warn' === $component_alerts && ! empty( $errors[0]['component_errors'] ) ) {
 				\Admin_Apple_Notice::error( $alert_message, $user_id );
 		}
 	}
@@ -506,9 +554,11 @@ class Push extends API_Action {
 	 */
 	private function generate_article() {
 
-		$export_action  = new Export( $this->settings, $this->id, $this->sections );
+		$export_action = new Export( $this->settings, $this->id, $this->sections );
+		Export::set_exporting( true );
 		$this->exporter = $export_action->fetch_exporter();
 		$this->exporter->generate();
+		Export::set_exporting( false );
 
 		return array( $this->exporter->get_json(), $this->exporter->get_bundles(), $this->exporter->get_errors() );
 	}

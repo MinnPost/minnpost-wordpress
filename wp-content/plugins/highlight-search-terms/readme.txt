@@ -3,15 +3,15 @@ Contributors: RavanH
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=ravanhagen%40gmail%2ecom&amp;item_name=Highlight%20Search%20Terms&amp;no_shipping=0&amp;tax=0&amp;bn=PP%2dDonationsBF&amp;charset=UTF%2d8
 Tags: mark, highlight, hilite, search, term, terms
 Requires at least: 3.7
-Tested up to: 5.7
-Stable tag: 1.6
+Requires PHP: 5.6
+Tested up to: 5.8
+Stable tag: 1.7.0
 
-Very lightweight (vanilla Java)script that wraps search terms in an HTML5 mark tag within wp search results or when referrer is a non-secure search engine.
-
+Very lightweight (vanilla) Javascript that wraps search terms in an HTML5 mark tag within WordPress search results.
 
 == Description ==
 
-Highlights search terms within WordPress generated search results _or_ when referrer is a non-secure search engine, both on the search results page _and_ on the post page itself.
+Highlights search terms within WordPress generated search results, both on the search results page _and_ on each linked post page itself.
 
 This plugin is light weight and has no options. It started as very simple fusion between <a href="http://weblogtoolscollection.com/archives/2009/04/10/how-to-highlight-search-terms-with-jquery/">How to Highlight Search Terms with jQuery - theme hack by Thaya Kareeson</a> and <a href="http://wordpress.org/extend/plugins/google-highlight/">Search Hilite by Ryan Boren</a>. It has since evolved with many optimizations, HTML5 and bbPress support.
 
@@ -42,22 +42,24 @@ In most cases, it should just work. But you can do two things to ensure backward
 1. **Define CSS rules:** There are _no_ configuration options and there is _no_ predefined highlight styling. You are completely free to define any CSS styling rules in your themes **main stylesheet (style.css)** or the **Custom CSS** tab if the WordPress theme customizer.
 You can find basic instructions and CSS examples in the [FAQ's](https://wordpress.org/plugins/highlight-search-terms/#faq).
 
-1. **Check your theme:** In most up to date themes (including WP's own default theme) post and page content is shown inside a div with class `hentry`. This means search terms found in post and page content will be highlighted but not similar terms that accidentaly show in the page header, sidebar or footer.
+1. **Check your theme:** In most up to date themes (including WP's own default theme) post and page content is shown inside a div with class `hentry`. This means search terms found in post and page content will be highlighted but not similar terms that accidentally show in the page header, sidebar or footer.
 If your current theme does not use the `hentry` class (yet), this plugin will look for IDs `content`, `main` and finally `wrapper` but if none of those are found, it will not work for you out of the box. See the last of the [FAQ's](https://wordpress.org/plugins/highlight-search-terms/#faq) for ways to make it work.
 
 = Available hooks and filters =
 
 1. `hlst_query_vars` - The array of WordPress query variables that the plugin will identify as a search query. Must return an array. Default: `['search_terms','bbp_search']` (WordPress abd bbPress search)
 
-1. `hlst_input_get_args` - An array of GET variables that the plugin will identify as a search query. Must return an array. Default: `[]` (none)
+1. `hlst_input_get_args` - An array of GET variables that the plugin will identify as a search query. Must return an array. Default: `['hilite']` (for click-through highlighting)
 
-1. `hlst_selectors` - The array of possible HTML DOM element identifiers that the script will try. The first viable identifier it finds elements of will be scanned for search terms to mark, the rest is ignored. So the order is important here! Start with the element closest to, but still containing all the post/page title, excerpt or content. Must return an array. Default: `['#groups-dir-list','#members-dir-list','div.bbp-topic-content,div.bbp-reply-content,li.bbp-forum-info,.bbp-topic-title,.bbp-reply-title','article','div.hentry','div.post','#content','#main','div.content','#middle','#container','div.container','div.page','#wrapper','body']`
+1. `hlst_selectors` - The array of possible HTML DOM element identifiers that the script will try. The first viable identifier it finds elements of will be scanned for search terms to mark, the rest is ignored. So the order is important here! Start with the element closest to, but still containing all the post/page title, excerpt or content.
+
+1. `hlst_events` - The array of DOM event listeners that the inline script will watch for. Default: `['DOMContentLoaded','post-load']` (on Document Ready and for Jetpack Infinite Scroll and others).
 
 1. `hlst_inline_script` - The inline script that will be added to the plugin script file. Can be used to add to or alter the inline script. Must return a string.
 
 = Known issues & development =
 
-1. If your theme does not wrap the main content section of your pages in a div with class "hentry" or HTML5 article tags, this plugin might not work for you out of the box. However, you can _make_ it work. See the last of the [FAQ's](http://wordpress.org/extend/plugins/highlight-search-terms/faq/) for an explanation.
+1. If your theme does not wrap the main content section of your pages in a div with class "hentry" or HTML5 article tags, this plugin might not work well for you out of the box. However, you can _make_ it work. See the last of the [FAQ's](http://wordpress.org/extend/plugins/highlight-search-terms/faq/) for an explanation.
 
 1. [Josh](http://theveganpost.com) pointed out a conflict with the ShareThis buttons plugin. Since then, that plugin has been completely rewriten so please let me know if the problem still exists. Thanks!
 
@@ -79,10 +81,12 @@ _and_ (III) optionally add CSS styling rules to get highlighting for older brows
 2. Upload (and overwrite) the /highlight-search-terms/ folder and its content to the /plugins/ folder.
 3. Activate plugin on the Plug-ins page
 
-**II.** In most up to date themes (including WP's own Default theme) post and page content is shown inside a div with class `hentry`.
-This class is recognized by the hilite script, which means search terms found in post and page content will be highlighted but *not* similar terms that coïncidentaly reside in the page header, sidebar or footer.
-If your current theme does not use the `hentry` class (yet), this plugin will look for IDs `content`, `main` and finally `wrapper` (which might include the header, sidebar and footer areas) but if *none* of those are found, it will not work for you out of the box.
-See the last of the [FAQ's](https://wordpress.org/plugins/highlight-search-terms/#faq) for ways to make it work.
+**II.** In most up to date themes (including WP's own Default theme) post and page content is shown inside an `ARTICLE` element or `DIV` with class `hentry`.
+This is recognized by the hilite script, which means search terms found in post and page content will be highlighted but _not_ similar terms that coincidentally reside in the page header, menu, sidebar or footer.
+
+If your current theme does not use these common designations (yet), this plugin will look for some other possible tags like `#content`, `MAIN`, `#wrapper` (which might include the header, sidebar and footer areas) and finally the `BODY`.
+
+If this causes issues on your theme, see the last of the [FAQ's](https://wordpress.org/plugins/highlight-search-terms/#faq) for ways to make it work.
 
 **III.** Optionally add at least _one_ new rule to your themes stylesheet or the Custom CSS editor to style highlightable text.
 
@@ -95,42 +99,89 @@ Please find more examples in the [FAQ's](https://wordpress.org/plugins/highlight
 This plugin has _no_ configuration options page and there is _no_ predefined highlight styling. For any highlighting to become visible in browsers that do not support HTML5 like Internet Explorer 8 or older, you have to complete step III of the installation process.
 Edit your themes stylesheet (style.css) or the WordPress theme customizer Custom CSS tab to contain a rule that will give you exactly the styling that fits your theme.
 
+If that's not the issue, then you might be experiencing a bug or plugin/theme conflict. Time to get some [Support](https://wordpress.org/support/plugin/highlight-search-terms/) :)
+
 = I want to customize the highlighting but have no idea what to put in my stylesheet. Can you give me some examples? =
 
-Go in your WP admin section to Appearance > Customize and add one of the examples below to get you started.
+Go in your WP admin section to Appearance > Customize > Custom CSS and add one of the examples below to get you started.
 
 For a moss green background highlighting:
 
-    .hilite { background-color:#D3E18A }
+    .hilite {
+        background-color: #D3E18A;
+    }
 
 Yellow background highlighting:
 
-    .hilite { background-color:yellow }
+    .hilite {
+        background-color: yellow;
+    }
 
 A light blue background with bold font:
 
-    .hilite { background-color:#9CD4FF; font-weight:bold }
+    .hilite {
+        background-color: #9CD4FF;
+        font-weight: bold;
+    }
 
 Orange background with black font:
 
-    .hilite { background-color:#FFCA61; color:#000000 }
+    .hilite {
+        background-color:#FFCA61;
+        color: #000000;
+    }
 
 = Please give me more advanced CSS examples =
 
 If you want to give different terms used in a search phrase a different styling, use the class "term-N" where N is a number starting with 0, increasing 1 with each additional search term, to define your CSS rules.
 The below example will make every instance of any term used in the query show up in bold text and a yellow background except for any instance of a second, third and fourth term which will have respectively a light green, light blue and orange background.
 
-    .hilite { background-color:yellow; font-weight:bold } /* default */
-    .term-1 { background-color:#D3E18A } /* second search term only */
-    .term-2 { background-color:#9CD4FF } /* third search term only */
-    .term-3 { background-color:#FFCA61 } /* fourth search term only */
+    /* Default highlighting, but bold text. */
+    .hilite {
+        background-color: yellow;
+        font-weight: bold;
+    }
+    /* Moss green highlighting for second search term only. */
+    .term-1 {
+        background-color: #D3E18A;
+    }
+    /* Light blue highlighting for third search term only. */
+    .term-2 {
+        background-color: #9CD4FF;
+    }
+    /* Orange highlighting for fourth search term only. */ 
+    .term-3 {
+        background-color:#FFCA61
+    }
 
 Keep in mind that for the _first_ search term the additional class "term-0" is used, not "term-1"!
 
-= I really do not see any highlighting! =
+= Terms outside my post/page content get highlighted too =
 
-Then you might be experiencing a bug or plugin/theme conflict. Maybe it's time to get some [Support](https://wordpress.org/support/plugin/highlight-search-terms/) :)
+The script will search through your page source code for viable sections that usually contain page or post content, most commonly used in WordPress themes. Like ARTICLE or a DIV with class "hentry". If that is not available, the script will look for other commonly used divs like #content, #main, #wrapper. However, in your particular theme, none of these divs might be available...
 
+Let's suppose your theme's index.php or single.php has no `<div <?php post_class() ?> ... >` but wraps the post/page content in a `<div id="someid" class="someclass"> ... </div>`. This will not be recognized by the script as a post/page content container and the script will default to highlighting starting with the BODY element.
+
+This will result in terms getting highlighted in the header, menu, sidebar and footer too.
+
+You can do one of three things to solve this:
+
+A. Change your theme templates like single.php, page.pho and search.php so the post/page content div has a class "hentry" (you can append it to existing classes with a space like `class="someclass hentry"`).
+
+B. Add a filter in your theme's functions.php (or a seperate plugin file)  like this:
+
+    add_filter(
+        'hlst_selectors',
+        function( $selectors ) {
+            // custom theme selectors (change and append as needed)
+            $my_selectors = array(
+                'div.someclass'
+            );
+            return $my_selectors + (array) $selectors;
+	    }
+    );
+
+C. Switch to a theme that does abide by the current WordPress conventions :)
 
 == Screenshots ==
 
@@ -139,11 +190,27 @@ Then you might be experiencing a bug or plugin/theme conflict. Maybe it's time t
 
 == Upgrade Notice ==
 
-= 1.6 =
+= 1.7.0 =
 
-Vanilla Javascript (no more jQuery!), Arabic character normalization and Jetpack Infinite Scroll support.
+Switch to mark.js, new filter hlst_events and bugfixes
 
 == Changelog ==
+
+= 1.7.0 =
+
+Date 2021-12-04
+
+* Switch to mark.js, https://markjs.io/
+* Include HTML5 main tag
+* FIX: Possible double inline script
+* FIX: wptexturized search results not highlighted
+* NEW: filter hlst_events
+
+= 1.6.1 =
+
+Date 2021-08-18
+
+* FIX: NinjaFirewall incompatibility, thanks @danielrufde
 
 = 1.6 =
 
@@ -157,7 +224,7 @@ Date 2021-06-22
 
 Date 2021-06-20
 
-* NEW: filters hlst_query_vars and hlst_input_get_args
+* NEW: filters hlst_query_vars, hlst_inline_script and hlst_input_get_args
 
 = 1.5.7 =
 

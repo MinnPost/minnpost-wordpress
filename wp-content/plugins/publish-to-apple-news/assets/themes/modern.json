@@ -18,6 +18,14 @@
     "body_orientation": "left",
     "body_size": 17,
     "body_tracking": 0,
+    "author_color": "#000000",
+    "author_font": "AvenirNext-Regular",
+    "author_format": "by #author#",
+    "author_line_height": 36,
+    "author_size": 12,
+    "author_tracking": 24,
+    "author_links": "no",
+    "author_link_color": "#000000",
     "byline_color": "#000000",
     "byline_font": "AvenirNext-Regular",
     "byline_format": "by #author# #F j, Y, g:ia#",
@@ -29,6 +37,12 @@
     "caption_line_height": 17,
     "caption_size": 14,
     "caption_tracking": 0,
+    "date_color": "#000000",
+    "date_font": "AvenirNext-Regular",
+    "date_format": "#F j, Y, g:ia#",
+    "date_line_height": 36,
+    "date_size": 12,
+    "date_tracking": 24,
     "dropcap_background_color": "",
     "dropcap_color": "#000000",
     "dropcap_font": "Optima-Regular",
@@ -90,7 +104,7 @@
                         "text": "#text#",
                         "format": "#format#",
                         "layout": "pullquote-layout",
-                        "textStyle": "default-pullquote"
+                        "textStyle": "#default_pullquote#"
                     }
                 ],
                 "layout": "pullquote-layout"
@@ -100,7 +114,7 @@
                 "text": "#text#",
                 "format": "#format#",
                 "layout": "pullquote-layout",
-                "textStyle": "default-pullquote"
+                "textStyle": "#default_pullquote#"
             }
         },
         "title": {
@@ -136,14 +150,14 @@
                 }
             }
         },
-        "byline": {
-            "default-byline": {
+        "author": {
+            "default-author": {
                 "textAlignment": "#text_alignment#",
-                "fontName": "#byline_font#",
-                "fontSize": "#byline_size#",
-                "lineHeight": "#byline_line_height#",
-                "tracking": "#byline_tracking#",
-                "textColor": "#byline_color#",
+                "fontName": "#author_font#",
+                "fontSize": "#author_size#",
+                "lineHeight": "#author_line_height#",
+                "tracking": "#author_tracking#",
+                "textColor": "#author_color#",
                 "textTransform": "uppercase"
             }
         },
@@ -262,8 +276,10 @@
     "layout_margin": 60,
     "layout_width": 1024,
     "meta_component_order": [
+        "slug",
         "title",
-        "byline",
+        "author",
+        "date",
         "cover"
     ],
     "monospaced_color": "#000000",
@@ -281,6 +297,11 @@
     "pullquote_size": 36,
     "pullquote_tracking": -5,
     "pullquote_transform": "none",
+    "slug_color": "#000000",
+    "slug_font": "AvenirNext-Regular",
+    "slug_line_height": 26,
+    "slug_size": 20,
+    "slug_tracking": 0,
     "table_border_color": "#30bcff",
     "table_border_style": "solid",
     "table_border_width": 1,

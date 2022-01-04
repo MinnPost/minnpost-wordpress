@@ -24,7 +24,7 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
             if($review_type){
                 $schema_type = $review_type;
             }else{
-                $schema_type        = saswp_get_post_meta($schema_id, 'schema_type', true); 
+                $schema_type        = get_post_meta($schema_id, 'schema_type', true); 
             }
             
             if($manual == null){
@@ -45,11 +45,11 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                     $author_details	= get_avatar_data($current_user->ID);           
                 }
 
-                $business_type      = saswp_get_post_meta($schema_id, 'saswp_business_type', true);             
-                $business_name      = saswp_get_post_meta($schema_id, 'saswp_business_name', true); 
+                $business_type      = get_post_meta($schema_id, 'saswp_business_type', true);             
+                $business_name      = get_post_meta($schema_id, 'saswp_business_name', true); 
                 $saswp_business_type_key   = 'saswp_business_type_'.$schema_id;
-                $saved_business_type       = saswp_get_post_meta( $post_id, $saswp_business_type_key, true );
-                $saved_saswp_business_name = saswp_get_post_meta( $post_id, 'saswp_business_name_'.$schema_id, true );    
+                $saved_business_type       = get_post_meta( $post_id, $saswp_business_type_key, true );
+                $saved_saswp_business_name = get_post_meta( $post_id, 'saswp_business_name_'.$schema_id, true );    
 
                 if($saved_business_type){
                   $business_type = $saved_business_type;
@@ -308,6 +308,9 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'id' => 'local_enable_rating_'.$schema_id,
                             'type' => 'checkbox',                          
                         );
+                        
+                        $meta_field = apply_filters('saswp_modify_local_business_properties', $meta_field, $schema_id);
+                        
                         $meta_field[] =   array(
                             'label' => 'Rating',
                             'id' => 'local_rating_'.$schema_id,
@@ -445,7 +448,7 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                 
                 case 'NewsArticle':
                     
-                    $category_detail=get_the_category(saswp_get_the_ID());//$post->ID
+                    $category_detail=get_the_category(get_the_ID());//$post->ID
                     $article_section = '';
                     
                     foreach($category_detail as $cd){
@@ -659,7 +662,12 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'type' => 'text',
                             'default' => saswp_get_the_title(),
                     ),
-                   
+                    array(
+                        'label'   => 'Date Created',
+                        'id'      => 'saswp_webpage_date_created_'.$schema_id,
+                        'type'    => 'text',
+                        'default' => get_the_modified_date("Y-m-d")
+                   ),
                     array(
                             'label' => 'Date Published',
                             'id' => 'saswp_webpage_date_published_'.$schema_id,
@@ -1404,7 +1412,7 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
 
                         case 'SpecialAnnouncement':    
                                 
-                                $category_detail =get_the_category(saswp_get_the_ID());//$post->ID
+                                $category_detail =get_the_category(get_the_ID());//$post->ID
                                 $article_section = '';
                                 
                                 if($category_detail){
@@ -1588,7 +1596,7 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                 
                 case 'Event':
                     
-                    $event_type        = saswp_get_post_meta($schema_id, 'saswp_event_type', true);                         
+                    $event_type        = get_post_meta($schema_id, 'saswp_event_type', true);                         
                         
                     $meta_field = array(
                         array(
@@ -3117,6 +3125,22 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                                 'label' => 'Location Phone',
                                                 'id'    => 'saswp_apartment_complex_phone_'.$schema_id,
                                                 'type'  => 'text',                                
+                                        ),
+                                        array(
+                                                'label'      => 'GeoCoordinates Latitude',
+                                                'id'         => 'saswp_apartment_complex_latitude_'.$schema_id,
+                                                'type'       => 'text',
+                                                'attributes' => array(
+                                                    'placeholder' => '17.412'
+                                                ), 
+                                        ),
+                                        array(
+                                                'label'      => 'GeoCoordinates Longitude',
+                                                'id'         => 'saswp_apartment_complex_longitude_'.$schema_id,
+                                                'type'       => 'text',
+                                                'attributes' => array(
+                                                    'placeholder' => '78.433'
+                                                ),
                                         )                                                                                                                   
                                 );
                                 
@@ -3560,6 +3584,12 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'id' => 'saswp_review_description_'.$schema_id,
                             'type' => 'textarea',                           
                             'default' => saswp_strip_all_tags(get_the_excerpt())                         
+                        );
+                        $meta_field[] = array(
+                                'label' => 'Review Body',
+                                'id'    => 'saswp_review_body_'.$schema_id,
+                                'type'   => 'textarea',                           
+                                'default' => saswp_strip_all_tags(get_the_excerpt())                         
                         );                        
                         $meta_field[] = array(
                             'label' => 'Review Author',
@@ -3617,6 +3647,11 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'label' => 'Best Rating',
                             'id'    => 'saswp_review_review_count_'.$schema_id,
                             'type'  => 'text',                            
+                        );
+                        $meta_field[] = array(
+                                'label' => 'Worst Rating',
+                                'id'    => 'saswp_review_worst_count_'.$schema_id,
+                                'type'  => 'text',                            
                         );
                         
                         if($manual == null){
@@ -3931,6 +3966,16 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'id'      => 'saswp_video_object_embed_url_'.$schema_id,
                             'type'    => 'text',
                             'default' => isset($video_links[0]['video_url']) ? $video_links[0]['video_url'] : get_permalink()                            
+                    ),
+                    array(
+                        'label'   => 'Seek To Video URL',
+                        'id'      => 'saswp_video_object_seek_to_video_url_'.$schema_id,
+                        'type'    => 'text'                        
+                    ),    
+                    array(
+                        'label'   => 'Seek To Second Number',
+                        'id'      => 'saswp_video_object_seek_to_seconds_'.$schema_id,
+                        'type'    => 'number'                        
                     ),    
                     array(
                             'label'   => 'Main Entity Id',
@@ -4201,6 +4246,64 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                 'id'         => 'saswp_howto_ec_schema_date_modified_'.$schema_id,
                                 'type'       => 'text',                             
                     ),
+                       
+                        array(
+                                'label'      => 'Video Name',
+                                'id'         => 'saswp_howto_schema_video_name_'.$schema_id,
+                                'type'       => 'text',
+                                'attributes' => array(
+                                        'placeholder' => 'Build a Trivia Game for the Google Assistant with No Code'
+                                    ),                             
+                        ),
+                        array(
+                                'label'      => 'Video Description',
+                                'id'         => 'saswp_howto_schema_video_description_'.$schema_id,
+                                'type'       => 'textarea',
+                                'attributes' => array(
+                                        'placeholder' => 'Learn how to create a Trivia action for Assistant within minutes.'
+                                    ),                             
+                        ),
+                        array(
+                                'label'      => 'Video Thumbnail URL',
+                                'id'         => 'saswp_howto_schema_video_thumbnail_url_'.$schema_id,
+                                'type'       => 'text',
+                                'attributes' => array(
+                                        'placeholder' => 'https://example.com/photos/photo.jpg'
+                                    ),                             
+                        ),
+                        array(
+                                'label'      => 'Video Content URL',
+                                'id'         => 'saswp_howto_schema_video_content_url_'.$schema_id,
+                                'type'       => 'text', 
+                                'attributes' => array(
+                                        'placeholder' => 'https://www.youtube.com/watch?v=4AOI1tZrgMI'
+                                    ),                            
+                        ),
+                        array(
+                                'label'      => 'Video Embed URL',
+                                'id'         => 'saswp_howto_schema_video_embed_url_'.$schema_id,
+                                'type'       => 'text',
+                                'attributes' => array(
+                                        'placeholder' => 'https://www.youtube.com/embed/4AOI1tZrgMI'
+                                    ),                             
+                        ),
+                        array(
+                                'label'      => 'Video Upload Date',
+                                'id'         => 'saswp_howto_schema_video_upload_date_'.$schema_id,
+                                'type'       => 'text',  
+                                'attributes' => array(
+                                        'placeholder' => '2019-01-05'
+                                    ),                           
+                        ),
+                        array(
+                                'label'      => 'Video Duration',
+                                'id'         => 'saswp_howto_schema_video_duration_'.$schema_id,
+                                'type'       => 'text', 
+                                'attributes' => array(
+                                        'placeholder' => 'P1MT10S'
+                                    ),                            
+                        ),
+
                     array(
                         'label'      => 'Supplies',
                         'id'         => 'saswp_howto_schema_supplies_'.$schema_id,
@@ -4383,6 +4486,7 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'id'      => 'saswp_vg_schema_price_availability_'.$schema_id,
                             'type'    => 'select',                            
                             'options' => array(
+                                     ''                  => 'Select',
                                      'InStock'           => 'In Stock',
                                      'OutOfStock'        => 'Out Of Stock',
                                      'Discontinued'      => 'Discontinued',
@@ -5460,6 +5564,22 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             )
                     ),
                     array(
+                        'label'      => 'Base Salary Min Value',
+                        'id'         => 'saswp_jobposting_schema_bs_min_value_'.$schema_id,
+                        'type'       => 'text', 
+                        'attributes' => array(
+                            'placeholder' => '20.00'
+                        )
+                ),
+                array(
+                        'label'      => 'Base Salary Max Value',
+                        'id'         => 'saswp_jobposting_schema_bs_max_value_'.$schema_id,
+                        'type'       => 'text', 
+                        'attributes' => array(
+                            'placeholder' => '100.00'
+                        )
+                ),
+                    array(
                             'label'      => 'Base Salary Unit Text',
                             'id'         => 'saswp_jobposting_schema_bs_unittext_'.$schema_id,
                             'type'       => 'text', 
@@ -5468,12 +5588,12 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             )
                     ), 
                         array(
-                        'label'      => 'Estimated Salary Currency',
-                        'id'         => 'saswp_jobposting_schema_es_currency_'.$schema_id,
-                        'type'       => 'text', 
-                        'attributes' => array(
-                            'placeholder' => 'USD'
-                        )
+                                'label'      => 'Estimated Salary Currency',
+                                'id'         => 'saswp_jobposting_schema_es_currency_'.$schema_id,
+                                'type'       => 'text', 
+                                'attributes' => array(
+                                'placeholder' => 'USD'
+                                )
                         ),
                         array(
                                 'label'      => 'Estimated Salary Value',
@@ -5481,6 +5601,22 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                 'type'       => 'text', 
                                 'attributes' => array(
                                 'placeholder' => '40.00'
+                                )
+                        ),
+                        array(
+                                'label'      => 'Estimated Salary Min Value',
+                                'id'         => 'saswp_jobposting_schema_es_min_value_'.$schema_id,
+                                'type'       => 'text', 
+                                'attributes' => array(
+                                'placeholder' => '20.00'
+                                )
+                        ),
+                        array(
+                                'label'      => 'Estimated Salary Max Value',
+                                'id'         => 'saswp_jobposting_schema_es_max_value_'.$schema_id,
+                                'type'       => 'text', 
+                                'attributes' => array(
+                                'placeholder' => '100.00'
                                 )
                         ),
                         array(
@@ -5561,9 +5697,27 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                                 'label'      => 'Image',
                                 'id'         => 'saswp_boat_trip_schema_image_'.$schema_id,
                                 'type'       => 'media'                            
-                        )    
-                            
-                            
+                        ),
+                        array(
+                                'label'      => 'Arrival Time',
+                                'id'         => 'saswp_boat_trip_schema_arrival_time_'.$schema_id,
+                                'type'       => 'text'                            
+                        ),
+                        array(
+                                'label'      => 'Departure Time',
+                                'id'         => 'saswp_boat_trip_schema_departure_time_'.$schema_id,
+                                'type'       => 'text'                            
+                        ),
+                        array(
+                                'label'      => 'Arrival Boat Terminal',
+                                'id'         => 'saswp_boat_trip_schema_arrival_boat_terminal_'.$schema_id,
+                                'type'       => 'text'                            
+                        ),
+                        array(
+                                'label'      => 'Departure Boat Terminal',
+                                'id'         => 'saswp_boat_trip_schema_departure_boat_terminal_'.$schema_id,
+                                'type'       => 'text'                            
+                        )                                                        
                        );
     
                     break;
@@ -5629,19 +5783,76 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                     
                     $meta_field = array(
                     array(
-                                'label'   => 'ID',
-                                'id'      => 'saswp_person_schema_id_'.$schema_id,
-                                'type'    => 'text'                                
-                    ),        
+                           'label'   => 'ID',
+                           'id'      => 'saswp_person_schema_id_'.$schema_id,
+                           'type'    => 'text'                                
+                    ),   
+                    array(
+                        'label'      => 'Honorific Prefix',
+                        'id'         => 'saswp_person_schema_honorific_prefix_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'Honorific Suffix',
+                        'id'         => 'saswp_person_schema_honorific_suffix_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),     
                     array(
                             'label'      => 'Name',
                             'id'         => 'saswp_person_schema_name_'.$schema_id,
                             'type'       => 'text',                           
                     ),
                     array(
+                            'label'      => 'Alternate Name',
+                            'id'         => 'saswp_person_schema_alternate_name_'.$schema_id,
+                            'type'       => 'text',                           
+                    ),
+                    array(
+                           'label'      => 'Additional Name',
+                           'id'         => 'saswp_person_schema_additional_name_'.$schema_id,
+                           'type'       => 'text',                           
+                    ),
+                    array(
+                        'label'      => 'Given Name',
+                        'id'         => 'saswp_person_schema_given_name_'.$schema_id,
+                        'type'       => 'text',                           
+                    ),
+                    array(
                             'label'      => 'Family Name',
                             'id'         => 'saswp_person_schema_family_name_'.$schema_id,
                             'type'       => 'text',                           
+                    ),
+                    array(
+                        'label'      => 'Spouse',
+                        'id'         => 'saswp_person_schema_spouse_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'Parent',
+                        'id'         => 'saswp_person_schema_parent_'.$schema_id,
+                        'type'       => 'textarea',
+                        'attributes' => array(
+                                'placeholder' => 'Johannes Xoo, Amanda Xoo'
+                         ),
+                        'note' => 'Note: Separate it by comma ( , )' ,                            
+                    ),
+                    array(
+                        'label'      => 'Sibling',
+                        'id'         => 'saswp_person_schema_sibling_'.$schema_id,
+                        'type'       => 'textarea',
+                        'attributes' => array(
+                                'placeholder' => 'Dima Xoo, Amanda Xoo'
+                         ),
+                        'note' => 'Note: Separate it by comma ( , )' ,                            
+                    ),
+                    array(
+                        'label'      => 'Colleague',
+                        'id'         => 'saswp_person_schema_colleague_'.$schema_id,
+                        'type'       => 'textarea',
+                        'attributes' => array(
+                                'placeholder' => 'Bill Gates, Jeff Bezos'
+                         ),
+                        'note' => 'Note: Separate it by comma ( , )' ,                            
                     ),
                     array(
                             'label'      => 'Description',
@@ -5653,6 +5864,12 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'id'         => 'saswp_person_schema_url_'.$schema_id,
                             'type'       => 'text',
                             'default'    => get_permalink()
+                    ),
+                    array(
+                        'label'      => 'Main Entity Of Page',
+                        'id'         => 'saswp_person_schema_main_entity_of_page_'.$schema_id,
+                        'type'       => 'text',
+                        'default'    => get_permalink()
                     ),    
                     array(
                             'label'      => 'Street Address',
@@ -5745,12 +5962,7 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'label'      => 'Nationality',
                             'id'         => 'saswp_person_schema_nationality_'.$schema_id,
                             'type'       => 'text',                            
-                    ),
-                    array(
-                            'label'      => 'Spouse',
-                            'id'         => 'saswp_person_schema_spouse_'.$schema_id,
-                            'type'       => 'text',                            
-                    ),
+                    ),                    
                     array(
                             'label'      => 'Image',
                             'id'         => 'saswp_person_schema_image_'.$schema_id,
@@ -5802,6 +6014,11 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                         'type'       => 'text',                            
                     ),
                     array(
+                        'label'      => 'Sponsor',
+                        'id'         => 'saswp_person_schema_sponsor_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
                         'label'      => 'Affiliation',
                         'id'         => 'saswp_person_schema_affiliation_'.$schema_id,
                         'type'       => 'text',                            
@@ -5814,6 +6031,21 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                     array(
                         'label'      => 'Award',
                         'id'         => 'saswp_person_schema_award_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'Seeks',
+                        'id'         => 'saswp_person_schema_seeks_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'Knows',
+                        'id'         => 'saswp_person_schema_knows_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'Owns',
+                        'id'         => 'saswp_person_schema_owns_'.$schema_id,
                         'type'       => 'text',                            
                     ),
                     array(
@@ -5887,15 +6119,97 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                         'type'       => 'text',                            
                     ),
                     array(
-                        'label'      => 'Honorific Prefix',
-                        'id'         => 'saswp_person_schema_honorific_prefix_'.$schema_id,
+                        'label'      => 'performerIn Name',
+                        'id'         => 'saswp_person_schema_performerin_name_'.$schema_id,
                         'type'       => 'text',                            
                     ),
                     array(
-                        'label'      => 'Honorific Suffix',
-                        'id'         => 'saswp_person_schema_honorific_suffix_'.$schema_id,
+                        'label'      => 'performerIn Location Name',
+                        'id'         => 'saswp_person_schema_performerin_location_name_'.$schema_id,
                         'type'       => 'text',                            
-                    ),                                                                        
+                    ),
+                    array(
+                        'label'      => 'performerIn Location Locality',
+                        'id'         => 'saswp_person_schema_performerin_location_locality_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'performerIn Location Postal Code',
+                        'id'         => 'saswp_person_schema_performerin_location_postal_code_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'performerIn Location Street Address',
+                        'id'         => 'saswp_person_schema_performerin_location_street_address_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+
+                    array(
+                        'label'      => 'performerIn Offers Name',
+                        'id'         => 'saswp_person_schema_performerin_offers_name_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'performerIn Offers Availability',
+                        'id'         => 'saswp_person_schema_performerin_offers_availability_'.$schema_id,
+                        'type'       => 'select',
+                        'options' => array(
+                                'InStock'           => 'In Stock',
+                                'OutOfStock'        => 'Out Of Stock',
+                                'Discontinued'      => 'Discontinued',
+                                'PreOrder'          => 'Pre Order', 
+                       )                             
+                    ),
+                    array(
+                        'label'      => 'performerIn Offers Price',
+                        'id'         => 'saswp_person_schema_performerin_offers_price_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'performerIn Offers Currency',
+                        'id'         => 'saswp_person_schema_performerin_offers_currency_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'performerIn Offers Valid From',
+                        'id'         => 'saswp_person_schema_performerin_offers_valid_from_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'performerIn Offers URL',
+                        'id'         => 'saswp_person_schema_performerin_offers_url_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+
+                    array(
+                        'label'      => 'performerIn Start Date',
+                        'id'         => 'saswp_person_schema_performerin_start_date_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'performerIn End Date',
+                        'id'         => 'saswp_person_schema_performerin_end_date_'.$schema_id,
+                        'type'       => 'text',                            
+                    ),
+                    array(
+                        'label'      => 'performerIn Description',
+                        'id'         => 'saswp_person_schema_performerin_description_'.$schema_id,
+                        'type'       => 'textarea',                            
+                    ),
+                    array(
+                        'label'      => 'performerIn Image',
+                        'id'         => 'saswp_person_schema_performerin_image_'.$schema_id,
+                        'type'       => 'media',                            
+                    ),
+                    array(
+                        'label'      => 'performerIn Performer',
+                        'id'         => 'saswp_person_schema_performerin_performer_'.$schema_id,
+                        'type'       => 'textarea',
+                        'attributes' => array(
+                                'placeholder' => 'Bill Gates, Jeff Bezos'
+                         ),
+                        'note' => 'Note: Separate it by comma ( , )' ,                             
+                    )                    
                    );
                     break;
 
@@ -6838,6 +7152,11 @@ function saswp_get_fields_by_schema_type( $schema_id = null, $condition = null, 
                             'id'         => 'saswp_movie_director_'.$schema_id,
                             'type'       => 'text',                           
                         ),
+                        array(
+                                'label'      => 'Actor',
+                                'id'         => 'saswp_movie_actor_'.$schema_id,
+                                'type'       => 'text',                           
+                            ),
                         array(
                             'label'      => 'Aggregate Rating',
                             'id'         => 'saswp_movie_enable_rating_'.$schema_id,

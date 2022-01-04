@@ -1497,25 +1497,15 @@ class Minnpost_Roles_And_Capabilities {
 	 *   see_profile_menu
 	 *   access_blocked_content
 	 *
-	 *   edit_festival_page (the-events-calendar)
-	 *   read_festival_page (the-events-calendar)
-	 *   delete_festival_page (the-events-calendar)
-	 *   delete_festival_pages (the-events-calendar)
-	 *   edit_festival_pages (the-events-calendar)
-	 *   edit_others_festival_pages (the-events-calendar)
-	 *   publish_festival_pages (the-events-calendar)
-	 *   read_private_festival_pages (the-events-calendar)
-	 *   create_festival_pages (the-events-calendar)
-	 *
-	 *   edit_festival_page (the-events-calendar)
-	 *   read_festival_page (the-events-calendar)
-	 *   delete_festival_page (the-events-calendar)
-	 *   delete_festival_pages (the-events-calendar)
-	 *   edit_festival_pages (the-events-calendar)
-	 *   edit_others_festival_pages (the-events-calendar)
-	 *   publish_festival_pages (the-events-calendar)
-	 *   read_private_festival_pages (the-events-calendar)
-	 *   create_festival_pages (the-events-calendar)
+	 *   edit_event_website_page (the-events-calendar)
+	 *   read_event_website_page (the-events-calendar)
+	 *   delete_event_website_page (the-events-calendar)
+	 *   delete_event_website_pages (the-events-calendar)
+	 *   edit_event_website_pages (the-events-calendar)
+	 *   edit_others_event_website_pages (the-events-calendar)
+	 *   publish_event_website_pages (the-events-calendar)
+	 *   read_private_event_website_pages (the-events-calendar)
+	 *   create_event_website_pages (the-events-calendar)
 	 *
 	 * @param string $role
 	 * @return array $custom_capabilities
@@ -1523,39 +1513,39 @@ class Minnpost_Roles_And_Capabilities {
 	*/
 	private function custom_capabilities( $role = '' ) {
 		$custom_capabilities = array(
-			'access_blocked_content'          => array(
+			'access_blocked_content'           => array(
 				'administrator',
 				'business',
 				'editor',
 				'author',
 				'contributor',
 			),
-			'browse_without_ads'              => array(
+			'browse_without_ads'               => array(
 				'administrator',
 				'editor',
 			),
-			'create_zones'                    => array(
+			'create_zones'                     => array(
 				'administrator',
 				'editor',
 			),
-			'edit_zones'                      => array(
+			'edit_zones'                       => array(
 				'administrator',
 				'editor',
 			),
-			'manage_cron'                     => array(
+			'manage_cron'                      => array(
 				'administrator',
 			),
-			'manage_jetpack'                  => array(
+			'manage_jetpack'                   => array(
 				'administrator',
 			),
-			'manage_search'                   => array(
+			'manage_search'                    => array(
 				'administrator',
 			),
-			'manage_zones'                    => array(
+			'manage_zones'                     => array(
 				'administrator',
 				'editor',
 			),
-			'see_admin_bar'                   => array(
+			'see_admin_bar'                    => array(
 				'administrator',
 				'editor',
 				'business',
@@ -1563,17 +1553,17 @@ class Minnpost_Roles_And_Capabilities {
 				'contributor',
 				'comment_moderator',
 			),
-			'see_hidden_terms'                => array(
+			'see_hidden_terms'                 => array(
 				'administrator',
 			),
-			'see_profile_menu'                => array(
+			'see_profile_menu'                 => array(
 				'administrator',
 			),
-			'see_tools_menu'                  => array(
+			'see_tools_menu'                   => array(
 				'administrator',
 				'business',
 			),
-			'view_unpublished_posts'          => array(
+			'view_unpublished_posts'           => array(
 				'administrator',
 				'editor',
 				'business',
@@ -1581,97 +1571,97 @@ class Minnpost_Roles_And_Capabilities {
 				'contributor',
 				'unpublished_viewer_user',
 			),
-			'edit_festival_page'              => array(
+			'edit_event_website_page'          => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'read_festival_page'              => array(
+			'read_event_website_page'          => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'delete_festival_page'            => array(
+			'delete_event_website_page'        => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'delete_festival_pages'           => array(
+			'delete_event_website_pages'       => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'edit_festival_pages'             => array(
+			'edit_event_website_pages'         => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'edit_others_festival_pages'      => array(
+			'edit_others_event_website_pages'  => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'publish_festival_pages'          => array(
+			'publish_event_website_pages'      => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'read_private_festival_pages'     => array(
+			'read_private_event_website_pages' => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'create_festival_pages'           => array(
+			'create_event_website_pages'       => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'edit_tribe_ext_speaker'          => array(
+			'edit_tribe_ext_speaker'           => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'read_tribe_ext_speaker'          => array(
+			'read_tribe_ext_speaker'           => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'delete_tribe_ext_speaker'        => array(
+			'delete_tribe_ext_speaker'         => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'delete_tribe_ext_speaker'        => array(
+			'delete_tribe_ext_speaker'         => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'delete_tribe_ext_speakers'       => array(
+			'delete_tribe_ext_speakers'        => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'edit_tribe_ext_speakers'         => array(
+			'edit_tribe_ext_speakers'          => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'edit_others_tribe_ext_speakers'  => array(
+			'edit_others_tribe_ext_speakers'   => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'publish_tribe_ext_speakers'      => array(
+			'publish_tribe_ext_speakers'       => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'read_private_tribe_ext_speakers' => array(
+			'read_private_tribe_ext_speakers'  => array(
 				'administrator',
 				'editor',
 				'business',
 			),
-			'create_tribe_ext_speakers'       => array(
+			'create_tribe_ext_speakers'        => array(
 				'administrator',
 				'editor',
 				'business',

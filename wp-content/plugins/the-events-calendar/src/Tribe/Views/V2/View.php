@@ -1498,7 +1498,12 @@ class View implements View_Interface {
 			'before_events'        => tribe( Advanced_Display::class )->get_before_events_html( $this ),
 			'after_events'         => tribe( Advanced_Display::class )->get_after_events_html( $this ),
 			'display_events_bar'   => $this->filter_display_events_bar( $this->display_events_bar ),
-			'disable_event_search' => tribe_is_truthy( tribe_get_option( 'tribeDisableTribeBar', false ) ),
+			/**
+			 * Allow filtering to determine whether or not to apply the `tribeDisableTribeBar` setting on the Events Manager page.
+			 *
+			 * @since 5.12.1
+			 */
+			'disable_event_search' => apply_filters( 'tec_events_views_v2_disable_tribe_bar', tribe_get_option( 'tribeDisableTribeBar', false ) ),
 			'live_refresh'         => tribe_is_truthy( 'automatic' === tribe_get_option( 'liveFiltersUpdate', 'automatic' ) ),
 			'ical'                 => $this->get_ical_data(),
 			'container_classes'    => $this->get_html_classes(),
@@ -1778,7 +1783,7 @@ class View implements View_Interface {
 		 */
 		$title = apply_filters( "tribe_events_views_v2_view_{$slug}_title", $title, $this );
 
-		return htmlspecialchars_decode($title);
+		return html_entity_decode( $title, ENT_QUOTES );
 	}
 
 	/**
@@ -1965,7 +1970,7 @@ class View implements View_Interface {
 				$label = $term->name;
 
 				$breadcrumbs[] = [
-					'link'  => $this->get_today_url( true ),
+					'link'  => tribe_events_get_url(),
 					'label' => tribe_get_event_label_plural(),
 				];
 				$breadcrumbs[] = [

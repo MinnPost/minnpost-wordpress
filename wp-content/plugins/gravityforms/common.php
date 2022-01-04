@@ -525,7 +525,7 @@ class GFCommon {
 	}
 
 	public static function is_valid_email( $email ) {
-		return is_email( $email );
+		return is_email( trim( $email ) );
 	}
 
 	public static function is_valid_email_list( $email_list ) {
@@ -1233,6 +1233,26 @@ class GFCommon {
 
 	public static function decode_merge_tag( $text ) {
 		return str_replace( '&#x7b;', '{', $text );
+	}
+
+	/**
+	 * Given a calculation formula tag, (e.g. {:1} + 3), gather any field IDs referenced
+	 * within it and return as an array.
+	 *
+	 * @since 2.5.10
+	 *
+	 * @param string $text The formula tag to parse.
+	 *
+	 * @return array
+	 */
+	public static function get_field_ids_from_formula_tag( $text ) {
+		preg_match_all( '/\{[^:]*:([0-9]+)\}/', $text, $matches );
+
+		if ( empty( $matches[1] ) ) {
+			return array();
+		}
+
+		return $matches[1];
 	}
 
 	public static function format_post_category( $value, $use_id ) {
@@ -3633,8 +3653,7 @@ Content-Type: text/html;
 		$key = json_encode( $types ) . '_' . $product_id . '_' . $form['id'];
 		if ( ! isset( $_product_fields[ $key ] ) ) {
 			$fields = array();
-			for ( $i = 0, $count = sizeof( $form['fields'] ); $i < $count; $i ++ ) {
-				$field = $form['fields'][ $i ];
+			foreach ( $form['fields'] as $field ) {
 				if ( in_array( $field->type, $types ) && $field->productField == $product_id ) {
 					$fields[] = $field;
 				}
@@ -3835,7 +3854,7 @@ Content-Type: text/html;
 			),
 			'form_id'      => 0,
 			'label'        => __( 'Preview', 'gravityforms' ),
-			'link_class'   => 'button preview-form gform-button gform-button--white',
+			'link_class'   => 'preview-form gform-button gform-button--white',
 			'menu_class'   => 'gf_form_toolbar_preview',
 			'priority'     => 700,
 			'target'       => '_blank',
@@ -3992,15 +4011,15 @@ Content-Type: text/html;
 
 		// When a proper_filename value exists, it could be a security issue if it's different than the original file name.
 		if ( $proper_filename && strtolower( $proper_filename ) !== strtolower( $file_name ) ) {
-			return new WP_Error( 'invalid_file', esc_html__( 'There was an problem while verifying your file.' ) );
+			return new WP_Error( 'invalid_file', esc_html__( 'There was an problem while verifying your file.', 'gravityforms' ) );
 		}
 
 		// If either $ext or $type are empty, WordPress doesn't like this file and we should bail.
 		if ( ! $ext ) {
-			return new WP_Error( 'illegal_extension', esc_html__( 'Sorry, this file extension is not permitted for security reasons.' ) );
+			return new WP_Error( 'illegal_extension', esc_html__( 'Sorry, this file extension is not permitted for security reasons.', 'gravityforms' ) );
 		}
 		if ( ! $type ) {
-			return new WP_Error( 'illegal_type', esc_html__( 'Sorry, this file type is not permitted for security reasons.' ) );
+			return new WP_Error( 'illegal_type', esc_html__( 'Sorry, this file type is not permitted for security reasons.', 'gravityforms' ) );
 		}
 
 		return true;
@@ -5201,20 +5220,27 @@ Content-Type: text/html;
 		$gf_vars['configure']               = esc_html__( 'Configure', 'gravityform' );
 		$gf_vars['conditional_logic_text']  = esc_html__( 'Conditional Logic', 'gravityforms' );
 		$gf_vars['conditional_logic_desc']  = esc_html__( 'Conditional logic allows you to change what the user sees depending on the fields they select.', 'gravityforms' );
-		$gf_vars['conditional_logic_a11y']  = esc_html__( 'Adding conditional logic to the form submit button could cause usabilty problems for some users and negatively impact the accessibility of your form.', 'gravityforms' );
-		$gf_vars['page']                    = esc_html__( 'Page', 'gravityforms' );
-		$gf_vars['next_button']             = esc_html__( 'Next Button', 'gravityforms' );
-		$gf_vars['all']                     = esc_html( _x( 'All', 'Conditional Logic', 'gravityforms' ) );
-		$gf_vars['any']                     = esc_html( _x( 'Any', 'Conditional Logic', 'gravityforms' ) );
-		$gf_vars['ofTheFollowingMatch']     = esc_html__( 'of the following match:', 'gravityforms' );
-		$gf_vars['is']                      = esc_html__( 'is', 'gravityforms' );
-		$gf_vars['isNot']                   = esc_html__( 'is not', 'gravityforms' );
-		$gf_vars['greaterThan']             = esc_html__( 'greater than', 'gravityforms' );
-		$gf_vars['lessThan']                = esc_html__( 'less than', 'gravityforms' );
-		$gf_vars['contains']                = esc_html__( 'contains', 'gravityforms' );
-		$gf_vars['startsWith']              = esc_html__( 'starts with', 'gravityforms' );
-		$gf_vars['endsWith']                = esc_html__( 'ends with', 'gravityforms' );
-		$gf_vars['emptyChoice']             = wp_strip_all_tags( __( 'Empty (no choices selected)', 'gravityforms' ) );
+		/**
+		 * @translators: %1$s is an opening <a> tag containing a href attribute
+		 *               %2$s is a closing <a> tag
+		 */
+		$logic_a11y_warn                   = esc_html__( 'Adding conditional logic to the form submit button could cause usability problems for some users and negatively impact the accessibility of your form. Learn more about button conditional logic in our %1$sdocumentation%2$s.', 'gravityforms' );
+		$logic_a11y_warn_link1             = '<a href="https://docs.gravityforms.com/field-accessibility-warning/" target="_blank" rel="noopener">';
+		$logic_a11y_warn_link2             = '</a>';
+		$gf_vars['conditional_logic_a11y'] = sprintf( $logic_a11y_warn, $logic_a11y_warn_link1, $logic_a11y_warn_link2 );
+		$gf_vars['page']                   = esc_html__( 'Page', 'gravityforms' );
+		$gf_vars['next_button']            = esc_html__( 'Next Button', 'gravityforms' );
+		$gf_vars['all']                    = esc_html( _x( 'All', 'Conditional Logic', 'gravityforms' ) );
+		$gf_vars['any']                    = esc_html( _x( 'Any', 'Conditional Logic', 'gravityforms' ) );
+		$gf_vars['ofTheFollowingMatch']    = esc_html__( 'of the following match:', 'gravityforms' );
+		$gf_vars['is']                     = esc_html__( 'is', 'gravityforms' );
+		$gf_vars['isNot']                  = esc_html__( 'is not', 'gravityforms' );
+		$gf_vars['greaterThan']            = esc_html__( 'greater than', 'gravityforms' );
+		$gf_vars['lessThan']               = esc_html__( 'less than', 'gravityforms' );
+		$gf_vars['contains']               = esc_html__( 'contains', 'gravityforms' );
+		$gf_vars['startsWith']             = esc_html__( 'starts with', 'gravityforms' );
+		$gf_vars['endsWith']               = esc_html__( 'ends with', 'gravityforms' );
+		$gf_vars['emptyChoice']            = wp_strip_all_tags( __( 'Empty (no choices selected)', 'gravityforms' ) );
 
 		$gf_vars['alertLegacyMode']                  = esc_html__( 'This form has legacy markup enabled and doesn’t support field resizing within the editor. Please disable legacy markup in the form settings to enable live resizing.', 'gravityforms' );
 		$gf_vars['thisConfirmation']                 = esc_html__( 'Use this confirmation if', 'gravityforms' );
@@ -5483,6 +5509,42 @@ Content-Type: text/html;
 
 		// Script has already been output; bail to avoid duplicating it.
 		return ! GFFormDisplay::$hooks_js_printed;
+	}
+
+	/**
+	 * Common method for outputting scripts inline. Allows for users on WordPress 5.7 and up
+	 * to filter the attributes of the script tag with 'wp_inline_script_attributes'.
+	 *
+	 * @since 2.5.7
+	 *
+	 * @param string $scripts main scripts block without outer tags.
+	 * @param bool   $cdata Whether to allow the cdata filters for this script.
+	 *
+	 * @return string
+	 */
+	public static function get_inline_script_tag( $scripts = '', $cdata = true ) {
+		$script_body = $cdata ? sprintf(
+			'%s %s %s',
+			/**
+			 * Filter the immediate opening of the script block. Allows for CDATA opening tags if needed for XHTML/XML.
+			 *
+			 * @since 1.6.3
+			 */
+			apply_filters( 'gform_cdata_open', '' ),
+			$scripts,
+			/**
+			 * Filter the closing of the script block. Allows for CDATA closing tags if needed for XHTML/XML.
+			 *
+			 * @since 1.6.3
+			 */
+			apply_filters( 'gform_cdata_close', '' )
+		) : $scripts;
+
+		if ( function_exists( 'wp_get_inline_script_tag' ) ) {
+			return wp_get_inline_script_tag( $script_body );
+		}
+
+		return sprintf( '<script type="text/javascript">%s</script>', $script_body );
 	}
 
 	/**
@@ -5996,7 +6058,7 @@ Content-Type: text/html;
 		wp_localize_script(
 			'gform_gravityforms', 'gform_i18n', array(
 				'datepicker' => array(
-					'days'   => array(
+					'days'     => array(
 						'monday'    => esc_html__( 'Mon', 'gravityforms' ),
 						'tuesday'   => esc_html__( 'Tue', 'gravityforms' ),
 						'wednesday' => esc_html__( 'Wed', 'gravityforms' ),
@@ -6005,7 +6067,7 @@ Content-Type: text/html;
 						'saturday'  => esc_html__( 'Sat', 'gravityforms' ),
 						'sunday'    => esc_html__( 'Sun', 'gravityforms' ),
 					),
-					'months' => array(
+					'months'   => array(
 						'january'   => esc_html__( 'January', 'gravityforms' ),
 						'february'  => esc_html__( 'February', 'gravityforms' ),
 						'march'     => esc_html__( 'March', 'gravityforms' ),
@@ -6019,9 +6081,28 @@ Content-Type: text/html;
 						'november'  => esc_html__( 'November', 'gravityforms' ),
 						'december'  => esc_html__( 'December', 'gravityforms' ),
 					),
+					'firstDay' => absint( get_option( 'start_of_week' ) ),
+					'iconText' => esc_html__( 'Select date', 'gravityforms' ),
 				),
 			)
 		);
+
+		if ( is_admin() ) {
+			// localizes all gravity forms language strings for the admin
+			wp_localize_script(
+				'gform_gravityforms', 'gform_admin_i18n', array(
+					// named sub objects that match the admin js file name (camelCased) they are localizing
+					'formAdmin'   => array(
+						'toggleFeedInactive' => esc_html__( 'Inactive', 'gravityforms' ),
+						'toggleFeedActive'   => esc_html__( 'Active', 'gravityforms' ),
+					),
+					'shortcodeUi' => array(
+						'editForm'   => esc_html__( 'Edit Form', 'gravityforms' ),
+						'insertForm' => esc_html__( 'Insert Form', 'gravityforms' ),
+					),
+				)
+			);
+		}
 	}
 
 	public static function localize_gform_gravityforms_multifile() {
@@ -6989,8 +7070,15 @@ Content-Type: text/html;
 			return $icon;
 		} else if ( filter_var( $icon, FILTER_VALIDATE_URL ) ) {
 			return sprintf( '<img src="%s" />', esc_attr( $icon ) );
-		} else if ( strpos( $icon, 'fa' ) === 0 ) {
-			return sprintf( '<i class="fa %s"></i>', esc_attr( $icon ) );
+		} else if ( strpos( $icon, 'fa-' ) !== false ) {
+			// Allow for custom types of font awesome implementation.
+			// Keys in on: "fa-icon-name fa*" or "fa* fa-icon-name"
+			preg_match('/(fa[a-z])?(?:[\s]?fa-[a-zA-Z0-9]+[\s]?)(fa[a-z])?/', $icon, $matches );
+			if ( count( $matches ) < 2 ) {
+				return sprintf( '<i class="fa %s"></i>', esc_attr( $icon ) );
+			} else {
+				return sprintf( '<i class="%s"></i>', esc_attr( $icon ) );
+			}
 		} else if ( strpos( $icon, 'dashicons' ) === 0 ) {
 			return sprintf( '<i class="dashicons %s"></i>', esc_attr( $icon ) );
 		} else if ( strpos( $icon, 'gform-icon' ) === 0 ) {

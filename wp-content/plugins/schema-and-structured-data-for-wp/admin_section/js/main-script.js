@@ -312,7 +312,9 @@ jQuery(document).ready(function($){
                     var html = '';
                         html    += '<tr>'
                                 + '<td style="width:12%;"><strong>'+saswp_localize_data.translable_txt.place_id+'</strong></td>'
-                                + '<td style="width:20%;"><input class="saswp-g-location-field" name="sd_data[saswp_reviews_location_name][]" type="text" value=""></td>'                                
+                                + '<td style="width:15%;"><input class="saswp-g-location-field" name="sd_data[saswp_reviews_location_name][]" type="text" value=""></td>'                                
+                                + '<td style="width:10%;"><strong>'+saswp_localize_data.translable_txt.language+'</strong></td>'
+                                + '<td style="width:10%;"><input class="saswp-g-language-field" name="sd_data[saswp_reviews_language_name][]" type="text" value="" placeholder="nl"></td>'                                
                                 + '<td style="width:10%;"><strong>'+saswp_localize_data.translable_txt.reviews+'</strong></td>'
                                 + '<td style="width:10%;">'+blocks_field+'</td>'                                                            
                                 + '<td style="width:10%;"><a class="button button-default saswp-fetch-g-reviews">'+saswp_localize_data.translable_txt.fetch+'</a></td>'
@@ -332,7 +334,9 @@ jQuery(document).ready(function($){
               current.addClass('updating-message');
                                           
               var location           = $(this).parent().parent().find('.saswp-g-location-field').val();
+              var language           = $(this).parent().parent().find('.saswp-g-language-field').val();
               var blocks             = $(this).parent().parent().find('.saswp-g-blocks-field').val();
+              
               var g_api              = $("#saswp_google_place_api_key").val();
               var reviews_api        = $("#reviews_addon_license_key").val();
               var reviews_api_status = $("#reviews_addon_license_key_status").val();
@@ -371,7 +375,7 @@ jQuery(document).ready(function($){
                                   type: "POST",    
                                   url:ajaxurl,                    
                                   dataType: "json",
-                                  data:{action:"saswp_fetch_google_reviews",reviews_api_status:reviews_api_status, reviews_api:reviews_api,location:location,blocks:blocks,g_api:g_api,premium_status:premium_status, saswp_security_nonce:saswp_localize_data.saswp_security_nonce},
+                                  data:{action:"saswp_fetch_google_reviews",reviews_api_status:reviews_api_status, reviews_api:reviews_api,location:location, language:language, blocks:blocks,g_api:g_api,premium_status:premium_status, saswp_security_nonce:saswp_localize_data.saswp_security_nonce},
                                   success:function(response){    
                                       if(response['status'] =='t'){
                                          current.parent().parent().find('.saswp-rv-fetched-msg').text(saswp_localize_data.translable_txt.success);
@@ -548,10 +552,14 @@ jQuery(document).ready(function($){
         }                                                                
         $(this).siblings().removeClass("nav-tab-active");
         $(this).addClass("nav-tab-active");
+        if(currentTab=="premium_features" && jQuery(this).attr('data-extmgr')=='yes'){
+            window.location.href = "edit.php?post_type=saswp&page=saswp-extension-manager";
+        }else{
         $(".form-wrap").find(".saswp-"+currentTab).siblings().hide();
         $(".form-wrap .saswp-"+currentTab).show();
         window.history.pushState("", "", href);
         return false;
+    }
 });     
     $(".saswp-schame-type-select").select2();
     $(".saswp-schame-type-select").change(function(e){
@@ -637,6 +645,7 @@ jQuery(document).ready(function($){
          $(".saswp-schema-modify-section").show();      
          }
          saswp_enable_rating_review();
+         saswp_enable_rating_automate();
             
         $(".saswp-manual-modification").html('');    
         $('.saswp-static-container .spinner').addClass('is-active');
@@ -655,7 +664,7 @@ jQuery(document).ready(function($){
               
             });
             
-            if(schematype == 'HowTo' || schematype == 'local_business' || schematype == 'FAQ'){
+            if(schematype == 'HowTo' || schematype == 'local_business' || schematype == 'FAQ' || schematype == 'Service' ){
                 
                 $(".saswp-enable-modify-schema").show();
                 
@@ -746,6 +755,7 @@ jQuery(document).ready(function($){
              }
              
             saswp_enable_rating_review();
+            saswp_enable_rating_automate();
         }).change(); 
         
         
@@ -1141,6 +1151,17 @@ jQuery(document).ready(function($){
                               $("#saswp_default_review").val(0);                                         
                             }
                       break;
+
+                      case 'saswp-single-price-product-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-single-price-product").val(1); 
+                              $(".saswp-single-price-opt").parent().parent().show();                             
+                            }else{
+                              $("#saswp-single-price-product").val(0); 
+                              $(".saswp-single-price-opt").parent().parent().hide();                                        
+                            }
+                      break;
                       
                       case 'saswp-extra-checkbox':
                           saswp_compatibliy_notes(current, id); 
@@ -1150,7 +1171,16 @@ jQuery(document).ready(function($){
                               $("#saswp-extra").val(0);           
                             }
                       break;
-                      
+
+                      case 'saswp-enfold-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-enfold").val(1);             
+                            }else{
+                              $("#saswp-enfold").val(0);           
+                            }
+                      break;
+
                       case 'saswp-soledad-checkbox':
                           saswp_compatibliy_notes(current, id); 
                             if ($(this).is(':checked')) {              
@@ -1211,6 +1241,15 @@ jQuery(document).ready(function($){
                               $("#saswp-polylang").val(1);             
                             }else{
                               $("#saswp-polylang").val(0);           
+                            }
+                      break;
+
+                      case 'saswp-autolistings-checkbox':
+                          saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-autolistings").val(1);             
+                            }else{
+                              $("#saswp-autolistings").val(0);           
                             }
                       break;
 
@@ -1653,6 +1692,16 @@ jQuery(document).ready(function($){
                               $("#saswp-other-images").val(1);                                
                             }else{
                               $("#saswp-other-images").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-full-heading-checkbox':
+                          
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-full-heading").val(1);                                
+                            }else{
+                              $("#saswp-full-heading").val(0);                                          
                             }
                             
                       break;
@@ -2369,7 +2418,7 @@ jQuery(document).ready(function($){
                     current.addClass('updating-message');
 
                     $.get(ajaxurl, 
-                      { action:"saswp_modify_schema_post_enable", schema_id:schema_id, post_id: saswp_localize_data.post_id,saswp_security_nonce:saswp_localize_data.saswp_security_nonce},
+                      { action:"saswp_modify_schema_post_enable",tag_ID:saswp_localize_data.tag_ID, schema_id:schema_id, post_id: saswp_localize_data.post_id,saswp_security_nonce:saswp_localize_data.saswp_security_nonce},
                        function(response){                           
                                                   
                         $(".saswp-post-specific-wrapper[data-id="+schema_id+"] .saswp-post-specific-setting").after(response);
@@ -2382,6 +2431,7 @@ jQuery(document).ready(function($){
                         saswp_schema_datepicker();
                         saswp_schema_timepicker();
                         saswp_enable_rating_review();
+                        saswp_enable_rating_automate();
                         saswp_item_reviewed_call();
 
                       });
@@ -2397,7 +2447,7 @@ jQuery(document).ready(function($){
                     current.addClass('updating-message');
 
                     $.post(ajaxurl, 
-                      { action:"saswp_modify_schema_post_restore", schema_id:schema_id, post_id: saswp_localize_data.post_id,saswp_security_nonce:saswp_localize_data.saswp_security_nonce},
+                      { action:"saswp_modify_schema_post_restore", tag_ID:saswp_localize_data.tag_ID, schema_id:schema_id, post_id: saswp_localize_data.post_id,saswp_security_nonce:saswp_localize_data.saswp_security_nonce},
                        function(response){    
                         current.removeClass('updating-message');                                               
 
@@ -2509,11 +2559,15 @@ jQuery(document).ready(function($){
                                
                                $(".saswp_license_activation[add-on='" + add_on + "']").attr("license-status", "inactive");
                                $(".saswp_license_activation[add-on='" + add_on + "']").text("Deactivate");
-                               
+                               $("span.addon-activated_reviews").css({ color: "green", "margin-left": "8px", "font-weight": "400" });                               
                                $(".saswp_license_status_msg[add-on='" + add_on + "']").text('Activated');
                                
                                $(".saswp_license_status_msg[add-on='" + add_on + "']").css("color", "green");                                
                                $(".saswp_license_status_msg[add-on='" + add_on + "']").text(response['message']);
+
+                               $("span.inactive_status_" + add_on + "").text('Active');
+                               $("span.inactive_status_" + add_on + "").css("color", "green");
+                               $("span.inactive_status_" + add_on + "").removeClass("inactive_status_" + add_on + "").addClass("addon-activated_" + add_on + "");
                                                                                              
                               }else{
                                   
@@ -2526,6 +2580,10 @@ jQuery(document).ready(function($){
                                
                                $(".saswp_license_status_msg[add-on='" + add_on + "']").css("color", "red"); 
                                $(".saswp_license_status_msg[add-on='" + add_on + "']").text(response['message']);
+                               $("span.addon-activated_" + add_on + "").text('Inactive');
+                               $("span.addon-activated_" + add_on + "").css("color", "#bebfc0");
+                               $("span.addon-activated_" + add_on + "").removeClass("addon-activated_" + add_on + "").addClass("inactive_status_" + add_on + "");
+                               $("span.limit_span").css("display", "none");
                               }
                                current.removeClass('updating-message');                                                           
                             },
@@ -2541,6 +2599,262 @@ jQuery(document).ready(function($){
 
         });
         //Licensing jquery ends here
+
+        // Start Refreshing single addon
+
+        jQuery(document).on("click",".user_refresh_single_addon", function(e){
+
+                var currentThis = jQuery(this);
+                e.preventDefault();
+                var license_status = 'active';
+                var add_on         = currentThis.attr('add-on');
+                var remaining_days_org         = currentThis.attr('remaining_days_org');
+                var license_key    = jQuery("#"+add_on+"_addon_license_key").val();
+                document.getElementById("user_refresh_" + add_on + "").classList.add("spin")
+                    
+                    var today = new Date();
+                    function saswpreadCookie(name) {
+                        var nameEQ = name + "=";
+                        var ca = document.cookie.split(";");
+                        for(var i=0;i < ca.length;i++) {
+                            var c = ca[i];
+                            while (c.charAt(0)==" ") c = c.substring(1,c.length);
+                            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+                        }
+                        return null;
+}
+                    var previous_check = saswpreadCookie('saswp_addon_refresh_check');
+
+                    previous_check = new Date(previous_check);
+                    var diffDays = -1;
+                    if( typeof previous_check != undefined){
+                        var diffTime = Math.abs(today.getTime() - previous_check.getTime());
+                        var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                    }
+                    var expireDate = new Date(remaining_days_org);
+                    var diffTime = Math.abs( expireDate.getTime()-today.getTime() );
+                    var expireDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    if( diffDays==-1 || diffDays>1 || expireDays<1 ){
+                    document.cookie = "saswp_addon_refresh_check="+today;jQuery.ajax({
+                            type: "POST",    
+                            url:ajaxurl,                    
+                            dataType: "json",
+                            data:{action:"saswp_license_status_check",license_key:license_key,license_status:license_status, add_on:add_on, saswp_security_nonce:saswp_localize_data.saswp_security_nonce},
+                            success:function(response){
+                                jQuery("#"+add_on+"_addon_license_key_status").val(response['status']);
+                                document.getElementById("user_refresh_"+add_on+"").classList.remove("spin")
+                                currentThis.removeClass('updating-message');
+                            },
+                            error: function(response){                    
+                                console.log(response);
+                            }
+                            })
+                }
+                else{  
+                setTimeout( function() {
+                    jQuery(".dashicons").removeClass( 'spin' );}, 0 );   
+                previous_check = Math.abs(previous_check.getDate()+1)+'/'+Math.abs(previous_check.getMonth()+1) +'/'+previous_check.getFullYear()+' '+previous_check.getHours()+':'+previous_check.getMinutes()+':'+previous_check.getSeconds();
+                alert('Please try after '+ previous_check);
+    }
+
+        });
+
+        // End Refreshing single addon
+
+        // Start Refresh and check if user has done renewal in between 0-7 Days
+
+        var ap = document.getElementById("activated-plugins-days_remaining"); 
+        if (ap) {
+        var remainingdays = ap.getAttribute("days_remaining");
+        }
+        // console.log(remainingdays)
+        if ( remainingdays >= 0 && remainingdays <= 7 ){
+            setTimeout(function () {
+                jQuery("#refresh_license_icon_top-").trigger("click");
+            }, 0);
+        } 
+        jQuery(document).on("click", "#refresh_license_icon_top-", function (a) {
+            document.getElementById("refresh_license_icon_top").classList.add("spin"), jQuery(this);
+                var current = $(this);
+                var licensestatusinternal = $(this).attr("licensestatusinternal");                
+                var add_on         = $(this).attr('add-on');
+                // var license_key    = $("#"+add_on+"_addon_license_key").val();
+                var data_attr      = $(this).attr("data-attr");
+                var add_onname      = $(this).attr("add-onname");
+                var license_key    = $("#"+add_on+"_addon_license_key").val();
+                var license_status = 'active';
+                if(add_on){
+                
+                $.ajax({type: "POST",    
+                            url:ajaxurl,                    
+                            dataType: "json",
+                            data:{action:"saswp_license_status_check",license_key:license_key,license_status:licensestatusinternal, add_on:add_on, saswp_security_nonce:saswp_localize_data.saswp_security_nonce},
+                            success:function(response){
+                                var addon_value = $("#" + add_on + "_addon_license_key_status").val()
+                                if ( addon_value == 'active' ) {
+                                    document.getElementById("refresh_license_icon_top").classList.remove("spin");
+                                    var remaining_days = response.days_remaining;
+                                    if ( remaining_days >= 0 && remaining_days <= 7){
+                                    $("span.saswp-addon-alert").text("expiring in " + remaining_days + " days ");
+                                }
+                            }
+                            else{
+                                var alert = document.getElementsByClassName("saswp-addon-alert");
+                                alert[0].style.color = "green";
+                                var renewal = document.getElementsByClassName("renewal-license");
+                                renewal[0].style.display = "none";
+                                document.getElementById("refresh_license_icon_top").classList.remove("spin");
+                                $("span.pro_warning").css("display","none");
+                            }
+                                       }                                                  
+                                
+                            });
+                            
+            }else{
+                alert('Please enter value license key');
+                current.removeClass('updating-message'); 
+            }
+            
+            $.ajax({
+                        type: "POST",
+                        url: ajaxurl,
+                        dataType: "json",
+                        data: { action: "saswp_license_transient", license_key: license_key, license_key: license_key, add_on: add_on, saswp_security_nonce: saswp_localize_data.saswp_security_nonce },
+                        success: function (s) {
+                            JSON.parse(s);
+                        },
+                    });
+
+        });
+
+        // End Refresh and check if user has done renewal in between 0-7 Days
+
+        // Start User manual Refresh to check if user has done renewal in After Key has expired
+
+        var ap = document.getElementById("activated-plugins-days_remaining"); 
+        if (ap) {
+        var remainingdays = ap.getAttribute("days_remaining");
+    }
+        // console.log(remainingdays)
+        if ( remainingdays >= 0 && remainingdays <= 7 ){
+            setTimeout(function () {
+                jQuery("#user_refresh_expired_addon-").trigger("click");
+            }, 0);
+        } 
+        jQuery(document).on("click", "#user_refresh_expired_addon-", function (a) {
+            document.getElementById("user_refresh_expired_addon").classList.add("spin"), jQuery(this);
+                var current = $(this);
+                var licensestatusinternal = $(this).attr("licensestatusinternal");                
+                var add_on         = $(this).attr('add-on');
+                // var license_key    = $("#"+add_on+"_addon_license_key").val();
+                var data_attr      = $(this).attr("data-attr");
+                var add_onname      = $(this).attr("add-onname");
+                var license_key    = $("#"+add_on+"_addon_license_key").val();
+                var license_status = 'active';
+                if(add_on){
+                
+                $.ajax({type: "POST",    
+                            url:ajaxurl,                    
+                            dataType: "json",
+                            data:{action:"saswp_license_status_check",license_key:license_key,license_status:licensestatusinternal, add_on:add_on, saswp_security_nonce:saswp_localize_data.saswp_security_nonce},
+                            success:function(response){
+                                var addon_value = $("#" + add_on + "_addon_license_key_status").val()
+                                if ( addon_value == 'active' ) {
+                                    document.getElementById("user_refresh_expired_addon").classList.remove("spin");
+                                    var remaining_days = response.days_remaining;
+                                    if ( remaining_days <0 ){
+                                        $("span#exp").text("Expired");
+                                        location.reload();
+                                }
+                                else if( remaining_days >7){
+                                    $("span.inner_span").text("");
+                                     $("span.saswp_addon_inactive").text("");
+                                      $("span.expiredinner_span").text("Your License is Active");
+                                       $("span.expiredinner_span").css("color", "green");
+                                        $(".renewal-license").css("display", "none");
+                                         $(".saswp_addon_icon").css("display", "none");
+                                }
+                            }
+                        }
+                    });
+            }else{
+                alert('Please enter value license key');
+                current.removeClass('updating-message'); 
+            }
+
+        });
+
+        // End User manual Refresh to check if user has done renewal in After Key has expired
+
+          // Start Auto Refresh and check if user has done renewal After Key has expired
+
+        var ap = document.getElementById("activated-plugins-days_remaining"); 
+        if (ap) {
+        var remainingdays = ap.getAttribute("days_remaining");
+    }
+        
+            setTimeout(function () {
+                jQuery("#refresh_expired_addon-").trigger("click");
+            }, 0);
+         
+        jQuery(document).on("click", "#refresh_expired_addon-", function (a) {
+            document.getElementById("refresh_expired_addon").classList.add("spin"), jQuery(this);
+                var current = $(this);
+                var licensestatusinternal = $(this).attr("licensestatusinternal");                
+                var add_on         = $(this).attr('add-on');
+                var data_attr      = $(this).attr("data-attr");
+                var add_onname      = $(this).attr("add-onname");
+                var license_key    = $("#"+add_on+"_addon_license_key").val();
+                var license_status = 'active';
+                if(add_on){
+                
+                $.ajax({type: "POST",    
+                            url:ajaxurl,                    
+                            dataType: "json",
+                            data:{action:"saswp_license_status_check",license_key:license_key,license_status:licensestatusinternal, add_on:add_on, saswp_security_nonce:saswp_localize_data.saswp_security_nonce},
+                            success:function(response){
+                                var addon_value = $("#" + add_on + "_addon_license_key_status").val()
+                                if ( addon_value == 'active' ) {
+                                    document.getElementById("refresh_expired_addon").classList.remove("spin");
+                                    var remaining_days = response.days_remaining;
+                                    if ( remaining_days <0 ){
+                                        $("span#exp").text("Expired");
+                                }
+                                else if( remaining_days >7){
+                                    $("span.inner_span").text("");
+                                     $("span.saswp_addon_inactive").text("");
+                                      $("span.expiredinner_span").text("Your License is Active");
+                                       $("span.expiredinner_span").css("color", "green");
+                                        $(".renewal-license").css("display", "none");
+                                         $(".saswp_addon_icon").css("display", "none");
+                                }
+                            }
+                        }                                                  
+                                
+                            });
+                            
+            }else{
+                alert('Please enter value license key');
+                current.removeClass('updating-message'); 
+            }
+            
+            $.ajax({
+                        type: "POST",
+                        url: ajaxurl,
+                        dataType: "json",
+                        data: { action: "saswp_expired_license_transient", license_key: license_key, license_key: license_key, add_on: add_on, saswp_security_nonce: saswp_localize_data.saswp_security_nonce },
+                        success: function (s) {
+                            JSON.parse(s);
+                        },
+                    });
+
+        });
+
+        // End Auto Refresh and check if user has done renewal After Key has expired
+        
+
+
+
   //query form send starts here
 
     $(".saswp-send-query").on("click", function(e){
@@ -2777,6 +3091,7 @@ jQuery(document).ready(function($){
                 $(this).addClass('selected'); 
                 $(this).parent().addClass('selected'); 
             saswp_enable_rating_review();
+            saswp_enable_rating_automate();
         });
         
         
@@ -2935,7 +3250,7 @@ jQuery(document).ready(function($){
           var media_name = 'saswp_fixed_image['+field_name+']';
           
           if(meta_val == 'manual_text'){
-              html += '<td><input type="text" name="saswp_fixed_text['+field_name+']"></td>';              
+              html += '<td><textarea cols="35" rows="2" name="saswp_fixed_text['+field_name+']"></textarea></td>';              
               html += '<td><a class="button button-default saswp-rmv-modify_row">X</a></td>';
               
               $(this).parent().parent('tr').find("td:gt(1)").remove();
@@ -3067,7 +3382,12 @@ jQuery(document).ready(function($){
           }
        });
        saswpCustomSelect2();                                
-       saswp_enable_rating_review();                       
+       saswp_enable_rating_review();   
+
+       saswp_enable_rating_automate();                    
+
+       saswp_enable_rating_automate();                    
+
      
         //custom fields modify schema ends here
         
@@ -3421,8 +3741,8 @@ jQuery(document).ready(function($){
                                                   
             $(".saswp-coll-settings-options").change(function(){
                 saswp_grid_page = 1;
-                var design         = $(".saswp-collection-desing").val();                                   
-                
+                var design          = $(".saswp-collection-desing").val();                                                 
+                var sorting         = $(".saswp-collection-sorting").val();                                                 
                 $(".saswp-coll-options").addClass('saswp_hide');
                 $(".saswp-collection-lp").css('height', 'auto'); 
                 $(".saswp-rmv-coll-rv").hide();
@@ -3445,6 +3765,27 @@ jQuery(document).ready(function($){
                 
                 if(design == 'popup'){
                     $(".saswp-collection-lp").css('height', '31px');                   
+                }
+
+                if($("#saswp_collection_specific_rating").is(':checked')){
+                  $("#saswp_collection_specific_rating_sel").parent().removeClass("saswp_hide");                  
+                }else{
+                  $("#saswp_collection_specific_rating_sel").parent().addClass("saswp_hide");                  
+                }
+
+                if(sorting == 'recent'){
+                  $("#saswp_collection_specific_rating").parent().parent().removeClass("saswp_hide");                  
+                  $("#saswp_collection_specific_rating_sel").parent().removeClass("saswp_hide"); 
+                  
+                  if($("#saswp_collection_specific_rating").is(':checked')){
+                    $("#saswp_collection_specific_rating_sel").parent().removeClass("saswp_hide");                  
+                  }else{
+                    $("#saswp_collection_specific_rating_sel").parent().addClass("saswp_hide");                  
+                  }
+                  
+                }else{
+                  $("#saswp_collection_specific_rating").parent().parent().addClass("saswp_hide");                  
+                  $("#saswp_collection_specific_rating_sel").parent().addClass("saswp_hide");                  
                 }
                 
                 saswp_on_collection_design_change();  

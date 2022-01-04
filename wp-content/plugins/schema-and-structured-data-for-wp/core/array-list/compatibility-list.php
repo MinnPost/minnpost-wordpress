@@ -4,6 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 return array(    
     'plugins' =>    array(        
+        'autolistings'  =>  array(            
+            'name'       => 'Auto Listings',
+            'free'       => 'auto-listings/auto-listings.php',                    
+            'opt_name'   => 'saswp-autolistings',
+            'part_in'    => 'pro',
+        ),
         'ratingform'  =>  array(            
             'name'       => 'Rating Form by SerdarG',
             'free'       => 'rating-form/rf-init.php',                    
@@ -151,7 +157,8 @@ return array(
         ),
         'yet_another_stars_rating'  =>  array(            
             'name'       => 'Yet Another Stars Rating',
-            'free'       => 'yet-another-stars-rating/yet-another-stars-rating.php',                    
+            'free'       => 'yet-another-stars-rating/yet-another-stars-rating.php',
+            'pro'        => 'yet-another-stars-rating-premium/yet-another-stars-rating.php',
             'opt_name'   => 'saswp-yet-another-stars-rating',
             'part_in'    => 'free',
         ),
@@ -679,11 +686,17 @@ return array(
         ),                   
     ),
     'themes' => array(
+        'enfold' => array(            
+                    'name'       => 'Enfold Theme',
+                    'free'       => 'enfold',               
+                    'opt_name'   => 'saswp-enfold',
+                    'part_in'    => 'pro',
+        ),
         'soledad' => array(            
-                    'name'       => 'Soledad Theme',
-                    'free'       => 'soledad',               
-                    'opt_name'   => 'saswp-soledad',
-                    'part_in'    => 'free',
+            'name'       => 'Soledad Theme',
+            'free'       => 'soledad',               
+            'opt_name'   => 'saswp-soledad',
+            'part_in'    => 'free',
         ), 
         'rannarecipe' => array(            
             'name'       => 'Ranna - Food & Recipe',

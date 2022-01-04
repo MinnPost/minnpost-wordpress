@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc0031cc4792fc7ee5c93dcac4e8400bc
+class ComposerStaticInit8fcd0e8f1cb20be34d25c0372ff7d46c
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -25,8 +25,23 @@ class ComposerStaticInitc0031cc4792fc7ee5c93dcac4e8400bc
         'Tribe\\Events\\Aggregator\\Processes\\Batch_Imports' => __DIR__ . '/../..' . '/src/Tribe/Aggregator/Processes/Batch_Imports.php',
         'Tribe\\Events\\Aggregator\\Record\\Batch_Queue' => __DIR__ . '/../..' . '/src/Tribe/Aggregator/Record/Batch_Queue.php',
         'Tribe\\Events\\Collections\\Lazy_Post_Collection' => __DIR__ . '/../..' . '/src/Tribe/Collections/Lazy_Post_Collection.php',
+        'Tribe\\Events\\Editor\\Hooks' => __DIR__ . '/../..' . '/src/Tribe/Editor/Hooks.php',
         'Tribe\\Events\\Editor\\Objects\\Editor_Object_Interface' => __DIR__ . '/../..' . '/src/Tribe/Editor/Objects/Editor_Object_Interface.php',
         'Tribe\\Events\\Editor\\Objects\\Event' => __DIR__ . '/../..' . '/src/Tribe/Editor/Objects/Event.php',
+        'Tribe\\Events\\Event_Status\\Admin_Template' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Admin_Template.php',
+        'Tribe\\Events\\Event_Status\\Classic_Editor' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Classic_Editor.php',
+        'Tribe\\Events\\Event_Status\\Compatibility\\Events_Control_Extension\\JSON_LD' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Compatibility/Events_Control_Extension/JSON_LD.php',
+        'Tribe\\Events\\Event_Status\\Compatibility\\Events_Control_Extension\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Compatibility/Events_Control_Extension/Service_Provider.php',
+        'Tribe\\Events\\Event_Status\\Compatibility\\Filter_Bar\\Detect' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Compatibility/Filter_Bar/Detect.php',
+        'Tribe\\Events\\Event_Status\\Compatibility\\Filter_Bar\\Events_Status_Filter' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Compatibility/Filter_Bar/Events_Status_Filter.php',
+        'Tribe\\Events\\Event_Status\\Compatibility\\Filter_Bar\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Compatibility/Filter_Bar/Service_Provider.php',
+        'Tribe\\Events\\Event_Status\\Event_Meta' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Event_Meta.php',
+        'Tribe\\Events\\Event_Status\\Event_Status_Provider' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Event_Status_Provider.php',
+        'Tribe\\Events\\Event_Status\\JSON_LD' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/JSON_LD.php',
+        'Tribe\\Events\\Event_Status\\Models\\Event' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Models/Event.php',
+        'Tribe\\Events\\Event_Status\\Status_Labels' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Status_Labels.php',
+        'Tribe\\Events\\Event_Status\\Template' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Template.php',
+        'Tribe\\Events\\Event_Status\\Template_Modifications' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Template_Modifications.php',
         'Tribe\\Events\\I18n' => __DIR__ . '/../..' . '/src/Tribe/I18n.php',
         'Tribe\\Events\\Integrations\\Beaver_Builder' => __DIR__ . '/../..' . '/src/Tribe/Integrations/Beaver_Builder.php',
         'Tribe\\Events\\Integrations\\Fusion\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Integrations/Fusion/Service_Provider.php',
@@ -42,9 +57,13 @@ class ComposerStaticInitc0031cc4792fc7ee5c93dcac4e8400bc
         'Tribe\\Events\\Service_Providers\\First_Boot' => __DIR__ . '/../..' . '/src/Tribe/Service_Providers/First_Boot.php',
         'Tribe\\Events\\Views\\V2\\Assets' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Assets.php',
         'Tribe\\Events\\Views\\V2\\Customizer' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer.php',
+        'Tribe\\Events\\Views\\V2\\Customizer\\Configuration' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Configuration.php',
         'Tribe\\Events\\Views\\V2\\Customizer\\Hooks' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Hooks.php',
+        'Tribe\\Events\\Views\\V2\\Customizer\\Notice' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Notice.php',
         'Tribe\\Events\\Views\\V2\\Customizer\\Section\\Events_Bar' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Section/Events_Bar.php',
+        'Tribe\\Events\\Views\\V2\\Customizer\\Section\\Global_Elements' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Section/Global_Elements.php',
         'Tribe\\Events\\Views\\V2\\Customizer\\Section\\Month_View' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Section/Month_View.php',
+        'Tribe\\Events\\Views\\V2\\Customizer\\Section\\Single_Event' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Section/Single_Event.php',
         'Tribe\\Events\\Views\\V2\\Customizer\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Service_Provider.php',
         'Tribe\\Events\\Views\\V2\\Hooks' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Hooks.php',
         'Tribe\\Events\\Views\\V2\\Implementation_Error' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Implementation_Error.php',
@@ -102,15 +121,21 @@ class ComposerStaticInitc0031cc4792fc7ee5c93dcac4e8400bc
         'Tribe\\Events\\Views\\V2\\Widgets\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Widgets/Service_Provider.php',
         'Tribe\\Events\\Views\\V2\\Widgets\\Widget_Abstract' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Widgets/Widget_Abstract.php',
         'Tribe\\Events\\Views\\V2\\Widgets\\Widget_List' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Widgets/Widget_List.php',
+        'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\Google_Calendar' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/Google_Calendar.php',
+        'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\Link_Abstract' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/Link_Abstract.php',
+        'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\Link_Interface' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/Link_Interface.php',
+        'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\iCal' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/iCal.php',
+        'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\iCalendar_Export' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/iCalendar_Export.php',
         'Tribe\\Events\\Views\\V2\\iCalendar\\Request' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Request.php',
+        'Tribe\\Events\\Views\\V2\\iCalendar\\iCalendar_Handler' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/iCalendar_Handler.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc0031cc4792fc7ee5c93dcac4e8400bc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc0031cc4792fc7ee5c93dcac4e8400bc::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc0031cc4792fc7ee5c93dcac4e8400bc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8fcd0e8f1cb20be34d25c0372ff7d46c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8fcd0e8f1cb20be34d25c0372ff7d46c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8fcd0e8f1cb20be34d25c0372ff7d46c::$classMap;
 
         }, null, ClassLoader::class);
     }

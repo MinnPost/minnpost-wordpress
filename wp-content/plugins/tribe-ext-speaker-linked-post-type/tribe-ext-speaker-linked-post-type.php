@@ -440,6 +440,7 @@ if (
 				'menu_icon'           => 'dashicons-businessman',
 				'capability_type'     => self::POST_TYPE_KEY,
 				'capabilities'        => $capabilities,
+				'taxonomies'          => array( 'tribe_events_cat' ),
 				'supports'            => array(
 					'title',
 					'revisions',
@@ -721,6 +722,12 @@ if (
 		public function event_edit_form_create_fields( $post_type ) {
 			// We only want to affect our own post type; bail if it's some other post type.
 			if ( self::POST_TYPE_KEY !== $post_type ) {
+				return;
+			}
+
+			$show_speaker_meta_box = true;
+			$show_speaker_meta_box = apply_filters( 'tribe_ext_events_add_' . self::POST_TYPE_KEY . '_meta_box', $show_speaker_meta_box );
+			if ( false === $show_speaker_meta_box ) {
 				return;
 			}
 

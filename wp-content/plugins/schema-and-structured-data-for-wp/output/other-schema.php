@@ -32,7 +32,7 @@ function saswp_schema_for_faqs_schema(){
 
     if(isset($sd_data['saswp-schemaforfaqs']) && $sd_data['saswp-schemaforfaqs'] == 1 && class_exists('Schema_Faqs') && !saswp_non_amp()){
 
-        $post_meta = saswp_get_post_meta($post->ID, 'schema_faqs_ques_ans_data', true);
+        $post_meta = get_post_meta($post->ID, 'schema_faqs_ques_ans_data', true);
         $post_meta = str_replace("\'","'",$post_meta);
 
         if(!empty($post_meta)){
@@ -294,7 +294,7 @@ function saswp_classpress_ads_schema($input1){
     
     if(is_object($post) && $post->post_type == 'ad_listing' && isset($sd_data['saswp-classipress']) && $sd_data['saswp-classipress'] == 1 ){        
 
-        $post_meta = saswp_get_post_meta($post->ID);
+        $post_meta = get_post_meta($post->ID);
 
         $input1['identifier']  = $post_meta['cp_sys_ad_conf_id'];
 
@@ -328,8 +328,8 @@ function saswp_wpecommerce_product_schema($input1){
 
     if( isset($sd_data['saswp-wpecommerce']) && $sd_data['saswp-wpecommerce'] == 1 && function_exists('wpsc_the_product_description') && get_post_type() == 'wpsc-product' ){
 
-            $price = saswp_get_post_meta( saswp_get_the_ID(), '_wpsc_special_price', true );
-            $cal_price = wpsc_calculate_price(saswp_get_the_ID());
+            $price = get_post_meta( get_the_ID(), '_wpsc_special_price', true );
+            $cal_price = wpsc_calculate_price(get_the_ID());
 			$currargs = array(
 				'display_currency_symbol' => false,
 				'display_decimal_point'   => false,
@@ -394,7 +394,7 @@ function saswp_add_novelist_schema( $input1 ){
 
         }
 
-        $post_meta = saswp_get_post_meta($post->ID);        
+        $post_meta = get_post_meta($post->ID);        
 
         $input1['headline']                 = saswp_get_the_title();    
         $input1['genre']                    = $genres_str;         
@@ -499,7 +499,7 @@ function saswp_add_mooberrybm_schema( $input1 ){
         }
 
         $editors       =  wp_get_post_terms( $post->ID , 'mbdb_editor');
-        $editors_arr  = array();
+        $editors_arr   = array();
 
         if(!is_wp_error($editors)){
         
@@ -518,26 +518,27 @@ function saswp_add_mooberrybm_schema( $input1 ){
 
         }
 
-        $editions = saswp_get_post_meta($post->ID, '_mbdb_editions', true);   
+        $editions = get_post_meta($post->ID, '_mbdb_editions', true);   
         
         $editions_arr = array();
 
         $format = array('Hardcover', 'Paperback', 'ePub', 'Kindle', 'PDF', 'Audiobook');
 
         if(!empty($editions)){
+
             foreach ($editions as $value) {
 
                 $editions_arr[] = array(
                     '@type'         => 'Book',
-                    'isbn'          => $value['_mbdb_isbn'],
-                    'bookEdition'   => $value['_mbdb_edition_title'],
-                    'bookFormat'    => $format[$value['_mbdb_format']],
-                    'inLanguage'    => $value['_mbdb_language'],
-                    'numberOfPages' => $value['_mbdb_length'],
+                    'isbn'          => !empty($value['_mbdb_isbn']) ? $value['_mbdb_isbn'] : '',
+                    'bookEdition'   => !empty($value['_mbdb_edition_title']) ? $value['_mbdb_edition_title'] : '',
+                    'bookFormat'    => !empty($format[$value['_mbdb_format']]) ? $format[$value['_mbdb_format']] : '',
+                    'inLanguage'    => !empty($value['_mbdb_language']) ? $value['_mbdb_language'] : '',
+                    'numberOfPages' => !empty($value['_mbdb_length']) ? $value['_mbdb_length'] : '',
                     'offers'      => array(
                                         '@type'         => 'Offer',
-                                        'price'         => $value['_mbdb_retail_price'],
-                                        'priceCurrency' => $value['_mbdb_currency']
+                                        'price'         => !empty($value['_mbdb_retail_price'])? $value['_mbdb_retail_price'] : '',
+                                        'priceCurrency' => !empty($value['_mbdb_currency']) ? $value['_mbdb_currency'] : ''
                                     ),
                 );                    
             }

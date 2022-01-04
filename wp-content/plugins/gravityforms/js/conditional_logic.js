@@ -367,7 +367,6 @@ function gf_do_next_button_action(formId, action, fieldId, isInit){
 }
 
 function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, callback, formId){
-
 	var $target = jQuery( targetId );
 
 	/**
@@ -391,7 +390,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 			if($target.length > 0){
 				$target.find(':input:hidden:not(.gf-default-disabled)').removeAttr( 'disabled' );
 				if ( $target.is( 'input[type="submit"]' ) || $target.hasClass( 'gform_next_button' ) ) {
-					$target.removeAttr( 'disabled' );
+					$target.removeAttr( 'disabled' ).css( 'display', '' );
 					if ( '1' == gf_legacy.is_legacy ) {
 						// for legacy markup, remove screen reader class.
 						$target.removeClass( 'screen-reader-text' );
@@ -406,15 +405,15 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 
 			var display = $target.data('gf_display');
 
-			//defaults to list-item if previous (saved) display isn't set for any reason
+			// set display if previous (saved) display isn't set for any reason
 			if ( display == '' || display == 'none' ){
-				display = 'list-item';
+				display = '1' === gf_legacy.is_legacy ? 'list-item' : 'block';
 			}
 			$target.find(':input:hidden:not(.gf-default-disabled)').removeAttr( 'disabled' );
 
 			// Handle conditional submit and next buttons.
 			if ( $target.is( 'input[type="submit"]' ) || $target.hasClass( 'gform_next_button' ) ) {
-				$target.removeAttr( 'disabled' );
+				$target.removeAttr( 'disabled' ).css( 'display', '' );
 				if ( '1' == gf_legacy.is_legacy ) {
 					// for legacy markup, remove screen reader class.
 					$target.removeClass( 'screen-reader-text' );
@@ -453,7 +452,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 
 		if(useAnimation && !isInit){
 			if( $target.is( 'input[type="submit"]' ) || $target.hasClass( 'gform_next_button' ) ) {
-				$target.attr( 'disabled', 'disabled' );
+				$target.attr( 'disabled', 'disabled' ).hide();
 				if ( '1' === gf_legacy.is_legacy ) {
 					// for legacy markup, let screen readers read the button.
 					$target.addClass( 'screen-reader-text' );
@@ -467,7 +466,7 @@ function gf_do_action(action, targetId, useAnimation, defaultValues, isInit, cal
 
 			// Handle conditional submit and next buttons.
 			if ( $target.is( 'input[type="submit"]' ) || $target.hasClass( 'gform_next_button' ) ) {
-				$target.attr( 'disabled', 'disabled' );
+				$target.attr( 'disabled', 'disabled' ).hide();
 				if ( '1' === gf_legacy.is_legacy ) {
 					// for legacy markup, let screen readers read the button.
 					$target.addClass( 'screen-reader-text' );
@@ -588,6 +587,7 @@ function gf_reset_to_default(targetId, defaultValue){
 			if( gf_is_hidden_pricing_input( element ) ) {
 				var ids = gf_get_ids_by_html_id( element.parents( '.gfield' ).attr( 'id' ) );
 				jQuery( '#input_' + ids[0] + '_' + ids[1] ).text( gformFormatMoney( element.val() ) );
+				element.val( gformFormatMoney( element.val() ) );
 			}
 		}
 		else{
@@ -626,13 +626,13 @@ function gf_reset_to_default(targetId, defaultValue){
 
 function gf_is_hidden_pricing_input( element ) {
 
-	if( element.attr( 'type' ) !== 'hidden' ) {
-		return false;
-	}
-
 	// Check for Single Product fields.
 	if( element.attr( 'id' ) && element.attr( 'id' ).indexOf( 'ginput_base_price' ) === 0 ) {
 		return true;
+	}
+
+	if( element.attr( 'type' ) !== 'hidden' ) {
+		return false;
 	}
 
 	// Check for Shipping fields.

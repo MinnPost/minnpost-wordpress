@@ -174,7 +174,7 @@ class saswp_reviews_service {
                 if($post_id && !empty($review_meta) && is_array($review_meta)){
                                         
                     foreach ($review_meta as $key => $val){                     
-                        saswp_update_post_meta($post_id, $key, $val);  
+                        update_post_meta($post_id, $key, $val);  
                     }
             
                  }
@@ -327,7 +327,7 @@ class saswp_reviews_service {
                 
                 global $sd_data;
                 
-                $location  = $blocks = $premium_status = $g_api = $reviews_api = $reviews_api_status = '';
+                $location  = $blocks = $premium_status = $g_api = $reviews_api = $reviews_api_status = $language = '';
                 
                 if(isset($_POST['reviews_api'])){
                     $reviews_api = sanitize_text_field($_POST['reviews_api']);
@@ -339,6 +339,9 @@ class saswp_reviews_service {
                                 
                 if(isset($_POST['location'])){
                     $location = sanitize_text_field($_POST['location']);
+                }
+                if(isset($_POST['language'])){
+                    $language = sanitize_text_field($_POST['language']);
                 }
                 
                 if(isset($_POST['g_api'])){                    
@@ -426,7 +429,7 @@ class saswp_reviews_service {
                           
                           if($g_api){
                                                                           
-                             $result = $this->saswp_get_free_reviews_data($location, $g_api);                                                                                                                                  
+                             $result = $this->saswp_get_free_reviews_data($location, $g_api, $language);                                                                                                                                  
                              
                          }
                          
@@ -436,7 +439,7 @@ class saswp_reviews_service {
                       
                       if($g_api){
                                                                               
-                          $result = $this->saswp_get_free_reviews_data($location, $g_api);                                                                                                                                  
+                          $result = $this->saswp_get_free_reviews_data($location, $g_api, $language);                                                                                                                                  
                       }                      
                       
                   }  
@@ -505,7 +508,7 @@ class saswp_reviews_service {
                 if($post_id && !empty($review_meta) && is_array($review_meta)){
                                         
                     foreach ($review_meta as $key => $val){                     
-                        saswp_update_post_meta($post_id, $key, $val);  
+                        update_post_meta($post_id, $key, $val);  
                     }
             
                  }
@@ -572,7 +575,7 @@ class saswp_reviews_service {
                 if($post_id && !empty($review_meta) && is_array($review_meta)){
                                         
                     foreach ($review_meta as $key => $val){                     
-                        saswp_update_post_meta($post_id, $key, $val);  
+                        update_post_meta($post_id, $key, $val);  
                     }
             
                 }
@@ -588,10 +591,14 @@ class saswp_reviews_service {
                 
     }
     
-    public function saswp_get_free_reviews_data($place_id, $g_api){
-                                                   
+    public function saswp_get_free_reviews_data($place_id, $g_api, $language = null){
+
         $result = @wp_remote_get('https://maps.googleapis.com/maps/api/place/details/json?placeid='.trim($place_id).'&key='.trim($g_api));                
         
+        if($language){
+            $result = @wp_remote_get('https://maps.googleapis.com/maps/api/place/details/json?placeid='.trim($place_id).'&key='.trim($g_api)).'&language='.trim($language);                
+        }
+                        
         if(isset($result['body'])){
             
            $result = json_decode($result['body'],true);   
@@ -726,7 +733,7 @@ class saswp_reviews_service {
                 
                 foreach($post_meta as $meta_key){
                     
-                    $review_data[$meta_key] = saswp_get_post_meta($rv_post->ID, $meta_key, true ); 
+                    $review_data[$meta_key] = get_post_meta($rv_post->ID, $meta_key, true ); 
                                                                                
                 }
                 
@@ -1525,10 +1532,10 @@ class saswp_reviews_service {
 
             foreach ($post_ids as $value) {
 
-                $rating = saswp_get_post_meta($value, 'saswp_review_rating', true);
+                $rating = get_post_meta($value, 'saswp_review_rating', true);
 
                 if(is_numeric($rating)){
-                    $avg += saswp_get_post_meta($value, 'saswp_review_rating', true);
+                    $avg += get_post_meta($value, 'saswp_review_rating', true);
                 }
                                 
             }

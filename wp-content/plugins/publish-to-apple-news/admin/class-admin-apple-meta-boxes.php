@@ -124,6 +124,34 @@ class Admin_Apple_Meta_Boxes extends Apple_News {
 	}
 
 	/**
+	 * Given a $_POST key, safely extract metadata values and sanitize them.
+	 *
+	 * @param string $key The $_POST key to process.
+	 *
+	 * @return array An array of sanitized values.
+	 */
+	private static function sanitize_metadata_array( $key ) {
+		// Nonce verification happens in save_post_meta, which calls this function.
+		/* phpcs:disable WordPress.Security.NonceVerification.Missing */
+
+		// If the given key doesn't exist in POST data, bail.
+		if ( empty( $_POST[ $key ] ) || ! is_array( $_POST[ $key ] ) ) {
+			return [];
+		}
+
+		return array_map(
+			function ( $value ) {
+				return sanitize_text_field( wp_unslash( $value ) );
+			},
+			// phpcs is going to yell about this, because it doesn't understand sanitizing via array_map.
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$_POST[ $key ]
+		);
+
+		/* phpcs:enable */
+	}
+
+	/**
 	 * Saves the Apple News meta fields associated with a post
 	 *
 	 * @param int $post_id The ID of the post being saved.
@@ -138,6 +166,36 @@ class Admin_Apple_Meta_Boxes extends Apple_News {
 
 		// Check the nonce.
 		check_admin_referer( self::PUBLISH_ACTION, 'apple_news_nonce' );
+
+		// Save straightforward fields.
+		$fields = [
+			'apple_news_coverimage'         => 'integer',
+			'apple_news_coverimage_caption' => 'textarea',
+			'apple_news_is_hidden'          => 'boolean',
+			'apple_news_is_paid'            => 'boolean',
+			'apple_news_is_preview'         => 'boolean',
+			'apple_news_is_sponsored'       => 'boolean',
+			'apple_news_pullquote'          => 'string',
+			'apple_news_pullquote_position' => 'string',
+			'apple_news_slug'               => 'string',
+		];
+		foreach ( $fields as $meta_key => $type ) {
+			switch ( $type ) {
+				case 'boolean':
+					$value = isset( $_POST[ $meta_key ] ) && 1 === intval( $_POST[ $meta_key ] );
+					break;
+				case 'integer':
+					$value = isset( $_POST[ $meta_key ] ) ? (int) $_POST[ $meta_key ] : 0;
+					break;
+				case 'textarea':
+					$value = isset( $_POST[ $meta_key ] ) ? sanitize_textarea_field( wp_unslash( $_POST[ $meta_key ] ) ) : '';
+					break;
+				default:
+					$value = isset( $_POST[ $meta_key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $meta_key ] ) ) : '';
+					break;
+			}
+			update_post_meta( $post_id, $meta_key, $value );
+		}
 
 		// Determine whether to save sections.
 		if ( empty( $_POST['apple_news_sections_by_taxonomy'] ) ) {
@@ -158,34 +216,7 @@ class Admin_Apple_Meta_Boxes extends Apple_News {
 			delete_post_meta( $post_id, 'apple_news_sections' );
 		}
 
-		if ( ! empty( $_POST['apple_news_is_paid'] ) && 1 === intval( $_POST['apple_news_is_paid'] ) ) {
-			$is_paid = true;
-		} else {
-			$is_paid = false;
-		}
-		update_post_meta( $post_id, 'apple_news_is_paid', $is_paid );
-
-		if ( ! empty( $_POST['apple_news_is_preview'] ) && 1 === intval( $_POST['apple_news_is_preview'] ) ) {
-			$is_preview = true;
-		} else {
-			$is_preview = false;
-		}
-		update_post_meta( $post_id, 'apple_news_is_preview', $is_preview );
-
-		if ( ! empty( $_POST['apple_news_is_hidden'] ) && 1 === intval( $_POST['apple_news_is_hidden'] ) ) {
-			$is_hidden = true;
-		} else {
-			$is_hidden = false;
-		}
-		update_post_meta( $post_id, 'apple_news_is_hidden', $is_hidden );
-
-		if ( ! empty( $_POST['apple_news_is_sponsored'] ) && 1 === intval( $_POST['apple_news_is_sponsored'] ) ) {
-			$is_sponsored = true;
-		} else {
-			$is_sponsored = false;
-		}
-		update_post_meta( $post_id, 'apple_news_is_sponsored', $is_sponsored );
-
+		// Handle maturity rating, ensuring the value is one of the allowed values for the field.
 		if ( ! empty( $_POST['apple_news_maturity_rating'] ) ) {
 			$maturity_rating = sanitize_text_field( wp_unslash( $_POST['apple_news_maturity_rating'] ) );
 			if ( ! in_array( $maturity_rating, self::$maturity_ratings, true ) ) {
@@ -196,33 +227,39 @@ class Admin_Apple_Meta_Boxes extends Apple_News {
 			update_post_meta( $post_id, 'apple_news_maturity_rating', $maturity_rating );
 		}
 
-		if ( ! empty( $_POST['apple_news_pullquote'] ) ) {
-			$pullquote = sanitize_text_field( wp_unslash( $_POST['apple_news_pullquote'] ) );
-		} else {
-			$pullquote = '';
-		}
-		update_post_meta( $post_id, 'apple_news_pullquote', $pullquote );
+		// Compile custom metadata and save to postmeta.
+		$metadata_keys   = self::sanitize_metadata_array( 'apple_news_metadata_keys' );
+		$metadata_types  = self::sanitize_metadata_array( 'apple_news_metadata_types' );
+		$metadata_values = self::sanitize_metadata_array( 'apple_news_metadata_values' );
+		if ( ! empty( $metadata_keys ) && ! empty( $metadata_types ) && ! empty( $metadata_values ) ) {
+			$metadata = [];
+			foreach ( $metadata_keys as $index => $key ) {
+				if ( ! isset( $metadata_types[ $index ] ) || ! isset( $metadata_values[ $index ] ) ) {
+					continue;
+				}
 
-		if ( ! empty( $_POST['apple_news_pullquote_position'] ) ) {
-			$pullquote_position = sanitize_text_field( wp_unslash( $_POST['apple_news_pullquote_position'] ) );
-		} else {
-			$pullquote_position = 'middle';
-		}
-		update_post_meta( $post_id, 'apple_news_pullquote_position', $pullquote_position );
+				// Juggle value cast.
+				$type  = $metadata_types[ $index ];
+				$value = $metadata_values[ $index ];
+				if ( 'boolean' === $type ) {
+					$value = ( 'true' === $metadata_values[ $index ] || '1' === $metadata_values[ $index ] );
+				} elseif ( 'number' === $type ) {
+					if ( false === strpos( $value, '.' ) ) {
+						$value = (int) $metadata_values[ $index ];
+					} else {
+						$value = (float) $metadata_values[ $index ];
+					}
+				}
 
-		if ( ! empty( $_POST['apple_news_coverimage'] ) ) {
-			$cover_image = ! empty( (int) $_POST['apple_news_coverimage'] ) ? (int) $_POST['apple_news_coverimage'] : '';
-		} else {
-			$cover_image = '';
+				// Add the metadata object to the array.
+				$metadata[] = [
+					'key'   => $key,
+					'type'  => $type,
+					'value' => $value,
+				];
+			}
+			update_post_meta( $post_id, 'apple_news_metadata', $metadata );
 		}
-		update_post_meta( $post_id, 'apple_news_coverimage', $cover_image );
-
-		if ( ! empty( $_POST['apple_news_coverimage_caption'] ) ) {
-			$cover_image_caption = sanitize_textarea_field( wp_unslash( $_POST['apple_news_coverimage_caption'] ) );
-		} else {
-			$cover_image_caption = '';
-		}
-		update_post_meta( $post_id, 'apple_news_coverimage_caption', $cover_image_caption );
 	}
 
 	/**
@@ -305,6 +342,7 @@ class Admin_Apple_Meta_Boxes extends Apple_News {
 		$is_sponsored       = get_post_meta( $post->ID, 'apple_news_is_sponsored', true );
 		$pullquote          = get_post_meta( $post->ID, 'apple_news_pullquote', true );
 		$pullquote_position = get_post_meta( $post->ID, 'apple_news_pullquote_position', true );
+		$slug               = get_post_meta( $post->ID, 'apple_news_slug', true );
 
 		// Set default values.
 		if ( empty( $pullquote_position ) ) {
@@ -317,6 +355,62 @@ class Admin_Apple_Meta_Boxes extends Apple_News {
 		/* phpcs:enable */
 
 		include plugin_dir_path( __FILE__ ) . 'partials/metabox-publish.php';
+	}
+
+	/**
+	 * Builds the custom metadata list from what is saved in postmeta.
+	 *
+	 * @param int $post_id The psot ID to query metadata for.
+	 *
+	 * @access public
+	 */
+	public static function build_metadata( $post_id ) {
+		// Ensure metadata exists for this post.
+		$metadata = get_post_meta( $post_id, 'apple_news_metadata', true );
+		if ( empty( $metadata ) || ! is_array( $metadata ) ) {
+			return;
+		}
+
+		// Loop over metadata and print edit interface for each.
+		foreach ( $metadata as $index => $field ) {
+			?>
+			<div>
+				<label for="apple-news-metadata-key-<?php echo absint( $index ); ?>">
+					<?php esc_html_e( 'Key', 'apple-news' ); ?>
+					<br />
+					<input id="apple-news-metadata-key-<?php echo absint( $index ); ?>" name="apple_news_metadata_keys[]" type="text" value="<?php echo esc_attr( $field['key'] ); ?>" />
+				</label>
+				<label for="apple-news-metadata-type-<?php echo absint( $index ); ?>">
+					<?php esc_html_e( 'Type', 'apple-news' ); ?>
+					<br />
+					<select id="apple-news-metadata-type-<?php echo absint( $index ); ?>" name="apple_news_metadata_types[]">
+						<option <?php selected( empty( $field['type'] ) ); ?> value=""></option>
+						<option <?php selected( 'string' === $field['type'] ); ?> value="string"><?php esc_html_e( 'string', 'apple-news' ); ?></option>
+						<option <?php selected( 'boolean' === $field['type'] ); ?> value="boolean"><?php esc_html_e( 'boolean', 'apple-news' ); ?></option>
+						<option <?php selected( 'number' === $field['type'] ); ?> value="number"><?php esc_html_e( 'number', 'apple-news' ); ?></option>
+						<option <?php selected( 'array' === $field['type'] ); ?> value="array"><?php esc_html_e( 'array', 'apple-news' ); ?></option>
+					</select>
+				</label>
+				<label for="apple-news-metadata-value-<?php echo absint( $index ); ?>">
+					<?php esc_html_e( 'Value', 'apple-news' ); ?>
+					<br />
+					<input
+						id="apple-news-metadata-value-<?php echo absint( $index ); ?>"
+						name="apple_news_metadata_values[]"
+						type="text"
+						<?php if ( 'boolean' === $field['type'] ) : ?>
+							value="<?php echo ! empty( $field['value'] ) ? 'true' : 'false'; ?>"
+						<?php else : ?>
+							value="<?php echo esc_attr( $field['value'] ); ?>"
+						<?php endif; ?>
+					/>
+				</label>
+				<button class="button-secondary apple-news-metadata-remove">
+					<?php esc_html_e( 'Remove', 'apple-news' ); ?>
+				</button>
+			</div>
+			<?php
+		}
 	}
 
 	/**
@@ -348,8 +442,10 @@ class Admin_Apple_Meta_Boxes extends Apple_News {
 		foreach ( $sections as $section ) {
 			?>
 			<div class="section">
-				<input id="apple-news-section-<?php echo esc_attr( $section->id ); ?>" name="apple_news_sections[]" type="checkbox" value="<?php echo esc_attr( $section->links->self ); ?>" <?php checked( self::section_is_checked( $apple_news_sections, $section->links->self, $section->isDefault ) ); ?>>
-				<label for="apple-news-section-<?php echo esc_attr( $section->id ); ?>"><?php echo esc_html( $section->name ); ?></label>
+				<label for="apple-news-section-<?php echo esc_attr( $section->id ); ?>">
+					<input id="apple-news-section-<?php echo esc_attr( $section->id ); ?>" name="apple_news_sections[]" type="checkbox" value="<?php echo esc_attr( $section->links->self ); ?>" <?php checked( self::section_is_checked( $apple_news_sections, $section->links->self, $section->isDefault ) ); ?>>
+					<?php echo esc_html( $section->name ); ?>
+				</label>
 			</div>
 			<?php
 		}

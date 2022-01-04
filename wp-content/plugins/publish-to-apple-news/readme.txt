@@ -1,19 +1,19 @@
 === Publish To Apple News ===
-Contributors: potatomaster, kevinfodness, jomurgel, danbowles, alleyinteractive, beezwaxbuzz, gosukiwi, pilaf, jaygonzales, brianschick
+Contributors: potatomaster, kevinfodness, jomurgel, tylermachado, benpbolton, alleyinteractive, beezwaxbuzz, gosukiwi, pilaf, jaygonzales, brianschick
 Donate link: https://wordpress.org
 Tags: publish, apple, news, iOS
 Requires at least: 4.0
-Tested up to: 5.7.2
+Tested up to: 5.8
 Requires PHP: 5.6
-Stable tag: 2.1.3
+Stable tag: 2.3.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
-The 'Publish to Apple News' plugin enables WordPress sites with approved Apple News channels to publish content directly on Apple News. Note that Apple News is a distribution platform for professional publications of a journalistic nature, and not all applications will be accepted.
+Enables journalistic outlets already approved by Apple News to send content directly to the app.
 
 == Description ==
 
-The Publish to Apple News plugin enables your WordPress blog content to be published to your Apple News channel.
+The 'Publish to Apple News' plugin enables WordPress sites with approved Apple News channels to publish content directly on Apple News. Note that Apple News is a distribution platform for professional publications of a journalistic nature, and not all applications will be accepted.
 
 **Features include:**
 
@@ -25,7 +25,7 @@ The Publish to Apple News plugin enables your WordPress blog content to be publi
 * Handles image galleries and popular embeds like YouTube and Vimeo that are supported by Apple News.
 * Automatically adjust advertisement settings.
 
-To enable content from your WordPress blog to be published to your Apple News channel, you must obtain and enter Apple News API credentials from Apple.
+To enable content from your WordPress site to be published to your Apple News channel, you must obtain and enter Apple News API credentials from Apple.
 
 Please see the [Apple Developer](https://developer.apple.com/) and [Apple News Publisher documentation](https://developer.apple.com/news-publisher/) and terms on Apple's website for complete information.
 
@@ -45,6 +45,41 @@ Please visit our [wiki](https://github.com/alleyinteractive/apple-news/wiki) for
 4. Manage posts in Apple News right from the post edit screen
 
 == Changelog ==
+
+= 2.3.1 =
+* Bugfix: Fixes an issue where images with different URLs but the same filename are bundled with the same name when not using remote images, which can lead to images appearing out of order.
+
+= 2.3.0 =
+* Bugfix: Fixes an issue with some of the example themes where pullquotes would create invalid JSON due to the default-pullquote textStyle not being set. Props to @soulseekah for the fix.
+* Bugfix: Fixes an issue where a custom filter is used to make all image URLs root-relative when using featured images to populate the Cover component, which was leading to an INVALID_DOCUMENT error from the News API due to the root-relative URL (e.g., /path/to/my/image.jpg instead of https://example.org/path/to/my/image.jpg).
+* Bugfix: Fixes an issue with images not deduping when Jetpack Site Accelerator (Photon) is enabled.
+* Bugfix: Synchronizes the list of available fonts to what is actually available.
+* Bugfix: Fixes display of date pickers in the article list.
+* Bugfix: Fixes apple_news_is_exporting function to make it fire for both downloading JSON in the article list and pushing articles to Apple via the API.
+* Bugfix: Fixes an editor crash when using Gutenberg and a custom post type that does not support postmeta (custom-fields).
+* Bugfix: Fixes an issue with embedding YouTube and Vimeo videos when using Gutenberg blocks.
+* Bugfix: Fixes an issue where making a mistake in customizing JSON results in the custom JSON being reset to the default value rather than the previously saved value.
+* Enhancement: Added support for mailto:, music://, musics://, stocks:// and webcal:// links.
+* Enhancement: Added an option and a filter for skipping auto-push of posts with certain taxonomy terms.
+* Enhancement: Added support for HTML tags when customizing theme JSON.
+* Enhancement: Added an author component for author without date.
+* Enhancement: Added a date component for date without author byline.
+* Enhancement: Added support for determining the aspect ratio of an embedded video based on the value configured on the embed block.
+
+= 2.2.2 =
+* Bugfix: Moved custom metadata fields to the request level rather than the article level to align them with existing metadata properties like isPaid and isHidden.
+* Bugfix: Removed JSON alerts setting, as it no longer does anything.
+* Enhancement: Shows a confirmation message to the user when channel credentials are successfully saved, since the channel ID, key, and secret fields are no longer visible following the update to using .papi files to configure credentials.
+
+= 2.2.1 =
+* Bugfix: Fixed a bug with .papi file upload that occurred when any of the three fields (channel_id, key, secret) contained a character that was not alphanumeric or a hyphen (e.g., /), which would cause the field to get cut short, thereby causing API requests to fail.
+
+= 2.2.0 =
+* Enhancement: Added support for HLS video (.m3u8) in thumbnails.
+* Enhancement: Added support for custom article metadata.
+* Enhancement: Added a slug component (props to @hughiemolloy for the initial work).
+* Enhancement: Added support for HTML in headings.
+* Enhancement: Added support for uploading .papi files to configure channel credentials.
 
 = 2.1.3 =
 * Enhancement: Added article authors to the `metadata.authors` property so they display in the article listing view on Apple News.

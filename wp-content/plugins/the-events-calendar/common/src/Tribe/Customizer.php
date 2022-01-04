@@ -111,8 +111,11 @@ final class Tribe__Customizer {
 
 		// Hook the Registering methods
 		add_action( 'customize_register', [ $this, 'register' ], 15 );
+		add_action( 'admin_menu', [ $this, 'add_fse_customizer_link' ] );
+		add_action( 'tribe_display_settings_tab_fields', [ $this, 'add_fse_customizer_link_to_display_tab' ], 12 );
 
 		add_action( 'wp_print_footer_scripts', [ $this, 'print_css_template' ], 15 );
+		add_action( 'customize_controls_print_footer_scripts', [ $this, 'customize_controls_print_footer_scripts' ], 15 );
 
 		// front end styles from customizer
 		add_action( 'tribe_events_pro_widget_render', [ $this, 'inline_style' ], 101 );
@@ -392,6 +395,22 @@ final class Tribe__Customizer {
 	}
 
 	/**
+	 * Add an action for some backwards compatibility.
+	 *
+	 * @since 4.14.2
+	 *
+	 * @return void
+	 */
+	public function customize_controls_print_footer_scripts() {
+		/**
+		 * Allows plugins to hook in and add any scripts they need at the right time.
+		 *
+		 * @param Tribe__Customizer $customizer The current instance of Tribe__Customizer.
+		 */
+		do_action( 'tribe_enqueue_customizer_scripts', $this );
+	}
+
+	/**
 	 * Print the CSS for the customizer on `wp_print_footer_scripts`
 	 *
 	 * @since 4.12.6 Moved the template building code to the `get_styles_scripts` method.
@@ -519,7 +538,7 @@ final class Tribe__Customizer {
 
 				if ( $just_print ) {
 					printf(
-						"<style id='%s-inline-css' type='text/css'>\n%s\n</style>\n",
+						"<style id='%s-inline-css' class='tec-customizer-inline-style' type='text/css'>\n%s\n</style>\n",
 						esc_attr( $sheet ),
 						$inline_style
 					);
@@ -989,5 +1008,76 @@ final class Tribe__Customizer {
 		$result .= '</style>';
 
 		return $result;
+	}
+
+	/**
+	 * Inserts link to TEC Customizer section for FSE themes in admin (left) menu.
+	 *
+	 * @since 4.14.8
+	 */
+	public function add_fse_customizer_link() {
+		// Exit early if the FSE theme feature isn't present.
+		if ( ! function_exists( 'gutenberg_is_fse_theme' ) ) {
+			return;
+		}
+
+		// Exit early if the current theme is not a FSE theme.
+		if (  ! gutenberg_is_fse_theme() ) {
+			return;
+		}
+
+		// Add a link to the TEC panel in the Customizer.
+		add_submenu_page(
+			'themes.php',
+			_x( 'Customize The Events Calendar', 'Page title for the TEC Customizer section.', 'tribe-common' ),
+			_x( 'Customize The Events Calendar', 'Menu item text for the TEC Customizer section link.', 'tribe-common' ),
+			'edit_theme_options',
+			esc_url( add_query_arg( 'autofocus[panel]', 'tribe_customizer' , admin_url( 'customize.php' ) ) )
+		);
+	}
+
+	/**
+	 * Inserts link to TEC Customizer section for FSE themes in Events > Settings > Display.
+	 *
+	 * @since 4.14.8
+	 *
+	 * @param array<string|mixed> $settings The existing settings array.
+	 *
+	 * @return array<string|mixed> $settings The modified settings array.
+	 */
+	public function add_fse_customizer_link_to_display_tab( $settings ) {
+		// Exit early if the FSE theme feature isn't present.
+		if ( ! function_exists( 'gutenberg_is_fse_theme' ) ) {
+			return $settings;
+		}
+
+		// Exit early if the current theme is not a FSE theme.
+		if (  ! gutenberg_is_fse_theme() ) {
+			return $settings;
+		}
+
+		$new_settings = [
+			'tribe-customizer-section-title' => [
+				'type' => 'html',
+				'html' => '<h3>' . __( 'Customizer', 'the-events-calendar' ) . '</h3>',
+			],
+			'tribe-customizer-link-description' => [
+				'type' => 'html',
+				'html' => '<p class="contained">' . __( 'Adjust colors, fonts, and more with the WordPress Customizer.', 'the-events-calendar' ) . '</p>',
+			],
+			'tribe-customizer-link' => [
+				'type' => 'html',
+				'html' => sprintf(
+					/* translators: %1$s: opening anchor tag; %2$s: closing anchor tag */
+					esc_html_x( '%1$sCustomize The Events Calendar%2$s', 'Link text added to the TEC->Settings->Display tab.', 'tribe-common' ),
+					'<p class="contained"><a href="' . esc_url( admin_url( 'customize.php?autofocus[panel]=tribe_customizer' ) ) . '">',
+					'</a></p>'
+				),
+			],
+		];
+
+		$settings = Tribe__Main::array_insert_after_key( 'tribe-form-content-start', $settings, $new_settings );
+
+		return $settings;
 	}
 }

@@ -41,7 +41,7 @@ function saswp_check_starsrating_status(){
 		if(isset($sd_data['saswp-starsrating']) && $sd_data['saswp-starsrating'] == 1){
 
 			$enabled_posts = get_option( 'enabled_post_types' );
-			$post_status   = saswp_get_post_meta( saswp_get_the_ID(), 'sr-comments-rating', true );
+			$post_status   = get_post_meta( get_the_ID(), 'sr-comments-rating', true );
 
 			if ( ! is_array( $enabled_posts ) ) {
 				$enabled_posts = (array) $enabled_posts;
@@ -107,7 +107,7 @@ function saswp_comment_rating_rating_field () {
 	  global $sd_data;
 
 	if(saswp_check_stars_rating()){
-
+					
 		wp_enqueue_style( 'saswp-frontend-css', SASWP_PLUGIN_URL . 'admin_section/css/'.(SASWP_ENVIRONMENT == 'production' ? 'saswp-frontend.min.css' : 'saswp-frontend.css'), false , SASWP_VERSION );	
 		wp_enqueue_script( 'saswp-rateyo-front-js', SASWP_PLUGIN_URL . 'admin_section/js/jquery.rateyo.min.js', array('jquery', 'jquery-ui-core'), SASWP_VERSION , true );                                                                                        
 		wp_enqueue_style( 'jquery-rateyo-min-css', SASWP_PLUGIN_URL . 'admin_section/css/'.(SASWP_ENVIRONMENT == 'production' ? 'jquery.rateyo.min.css' : 'jquery.rateyo.min.css'), false, SASWP_VERSION );

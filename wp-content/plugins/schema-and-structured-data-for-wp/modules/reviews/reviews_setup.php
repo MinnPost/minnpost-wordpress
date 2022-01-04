@@ -16,6 +16,7 @@ add_action( 'init', 'saswp_register_saswp_reviews_location',20);
 
 add_action( 'manage_saswp_reviews_posts_custom_column' , 'saswp_reviews_custom_columns_set', 10, 2 );
 add_filter( 'manage_saswp_reviews_posts_columns', 'saswp_reviews_custom_columns' );
+add_filter( 'default_hidden_columns', 'saswp_hide_review_text_columns', 10, 2 );
 add_filter( 'manage_edit-saswp_reviews_sortable_columns', 'saswp_reviews_set_sortable_columns',10,2 );
 add_action( 'pre_get_posts', 'saswp_sort_reviews_date_column_query' );
 
@@ -127,9 +128,9 @@ function saswp_reviews_custom_columns_set( $column, $post_id ) {
                 
                 case 'saswp_reviewer_image' :
                     
-                    $name = saswp_get_post_meta( $post_id, $key='saswp_reviewer_name', true);                      
+                    $name = get_post_meta( $post_id, $key='saswp_reviewer_name', true);                      
                     
-                    $image_url = saswp_get_post_meta( $post_id, $key='saswp_reviewer_image', true);
+                    $image_url = get_post_meta( $post_id, $key='saswp_reviewer_image', true);
                     if(!$image_url){
                         $image_url = SASWP_PLUGIN_URL.'/admin_section/images/default_user.jpg';
                     }
@@ -144,13 +145,13 @@ function saswp_reviews_custom_columns_set( $column, $post_id ) {
                     break;                 
                 case 'saswp_review_rating' :
                     
-                    $rating_val = saswp_get_post_meta( $post_id, $key='saswp_review_rating', true);                   
+                    $rating_val = get_post_meta( $post_id, $key='saswp_review_rating', true);                   
                     echo saswp_get_rating_html_by_value($rating_val);                                                                                                                                       
                     
                     break;
                 case 'saswp_review_platform' :
                     
-                    $platform = saswp_get_post_meta( $post_id, $key='saswp_review_platform', true);  
+                    $platform = get_post_meta( $post_id, $key='saswp_review_platform', true);  
                     $term     = get_term( $platform, 'platform' );
                     
                     if(isset($term->slug)){
@@ -173,15 +174,46 @@ function saswp_reviews_custom_columns_set( $column, $post_id ) {
                     }
                                                                                                                                                                                 
                     break;
+
+                case 'saswp_review_text' :
+                
+                    $string = get_post_meta( $post_id, $key='saswp_review_text', true);
+                    
+                    if(!empty($string)){
+
+                        $url    = admin_url( 'post.php?post='.$post_id.'&action=edit' );
+                        $string = wp_strip_all_tags($string);
+
+                        if (strlen($string) > 150) {
+
+                            $stringCut = substr($string, 0, 150);
+                            $endPoint  = strrpos($stringCut, ' ');
+                            $string    = $endPoint? substr($stringCut, 0, $endPoint):substr($stringCut, 0);
+
+                            $string    =  esc_html($string);
+                            $string   .= '... <a style="cursor: pointer;" href="'.esc_url($url).'" >'.saswp_t_string('Read More').'</a>';
+                            echo $string;    
+                            
+                        }else{
+                            echo esc_html($string);
+                        }
+                        
+                    }
+                                                                                                                                                                                                    
+                    break;
                 case 'saswp_review_date' :
                     
-                    $name = saswp_get_post_meta( $post_id, $key='saswp_review_date', true);
-                    echo esc_attr($name);
-                                                                                                                                                            
+                    $date = get_post_meta( $post_id, $key='saswp_review_date', true);
+
+                    if($date){                        
+                        $date = date('m-d-Y H:i:s', strtotime($date));
+                        echo esc_attr($date);
+                    }
+                                                                                                                                                                                                    
                     break;
                 case 'saswp_review_place_id' :
                     
-                    $name = saswp_get_post_meta( $post_id, 'saswp_review_location_id', true);
+                    $name = get_post_meta( $post_id, 'saswp_review_location_id', true);
                     if(saswp_validate_url($name)){
                         echo '<a target="_blank" href="'.esc_url($name).'">'.esc_attr($name).'</a>';
                     }else{
@@ -228,7 +260,8 @@ function saswp_reviews_custom_columns($columns) {
     
     $columns['cb']                         = '<input type="checkbox" />';
     $columns['saswp_reviewer_image']       = saswp_t_string( 'Image' );
-    $columns['title']                      = saswp_t_string( 'Title' );    
+    $columns['title']                      = saswp_t_string( 'Title' ); 
+    $columns['saswp_review_text']          = saswp_t_string( 'Text' );    
     $columns['saswp_review_rating']        = saswp_t_string( 'Rating' );    
     $columns['saswp_review_platform']      = saswp_t_string( 'Platform' );    
     $columns['saswp_review_date']          = saswp_t_string( 'Review Date' ); 
@@ -236,6 +269,13 @@ function saswp_reviews_custom_columns($columns) {
     $columns['saswp_review_shortcode']     = saswp_t_string( 'Shortcode' );    
     
     return $columns;
+}
+function saswp_hide_review_text_columns( $hidden, $screen ) {
+    
+    if( isset( $screen->id ) && 'edit-saswp_reviews' === $screen->id ){      
+        $hidden[] = 'saswp_review_text';     
+    }   
+    return $hidden;
 }
 
 function saswp_get_rating_html_by_value($rating_val){
@@ -293,7 +333,7 @@ function saswp_enqueue_rateyo_script( $hook ) {
         if($post_type =='saswp_reviews'){
             
             $rating_val= 0;
-            $rv_rating = saswp_get_post_meta( saswp_get_the_ID(), $key='saswp_review_rating', true);
+            $rv_rating = get_post_meta( get_the_ID(), $key='saswp_review_rating', true);
             if($rv_rating){
                 $rating_val = $rv_rating;
             }
@@ -357,7 +397,7 @@ function saswp_insert_platform_terms(){
     
     $platform_inserted = get_transient('saswp_platform_inserted');
     
-    if( $platform_inserted != 98 ){
+    if( $platform_inserted != 100 ){
             
         $term_array = array(    
             'Self',
@@ -365,9 +405,11 @@ function saswp_insert_platform_terms(){
             'Avvo', 
             'Angies List',
             'Apple AppStore',
-            'Expedia', 
+            'Expedia',
+            'Feefo', 
             'Facebook', 
-            'Google', 
+            'Google',
+            'Cusrev', 
             'Google Shopping', 
             'Goodreads',
             'TripAdvisor', 
@@ -482,8 +524,8 @@ function saswp_insert_platform_terms(){
 
         }
 
-        if(count($term_ids)  == 98){
-            set_transient('saswp_platform_inserted', 98,  24*7*HOUR_IN_SECONDS ); 
+        if( count($term_ids)  == 100 ){
+            set_transient( 'saswp_platform_inserted', 100,  24*7*HOUR_IN_SECONDS ); 
         }
 
     }

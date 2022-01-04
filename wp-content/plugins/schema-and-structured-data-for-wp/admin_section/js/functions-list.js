@@ -78,12 +78,44 @@
             jQuery(this).parent().parent().siblings('.saswp-rating-review-'+schema_type.toLowerCase()).show();            
              }else{
             jQuery(this).parent().parent().siblings('.saswp-rating-review-'+schema_type.toLowerCase()).hide(); 
-             }
-         
+             }          
+             saswp_enable_rating_automate();   
             }).change();   
          }
                
-     }
+        }
+
+        function saswp_enable_rating_automate(){
+            var schema_type = "";                      
+            if(jQuery('select#schema_type option:selected').val()){
+               schema_type = jQuery('select#schema_type option:selected').val();    
+            }       
+            if(jQuery(".saswp-tab-links.selected").attr('saswp-schema-type')){
+               schema_type = jQuery(".saswp-tab-links.selected").attr('saswp-schema-type');    
+            }
+           
+          if(schema_type){
+              jQuery(".saswp-enable-rating-automate-"+schema_type.toLowerCase()).change(function(){
+                                
+             if(jQuery(this).is(':checked') && jQuery(this).is(":visible")){
+                jQuery(this).parent().parent().next().show();            
+                jQuery(this).parent().parent().next().next().hide();
+                jQuery(this).parent().parent().next().next().next().hide();
+              }
+              else{
+                jQuery(this).parent().parent().next().hide();     
+                
+                if(jQuery(".saswp-enable-rating-review-"+schema_type.toLowerCase()).is(":checked")){
+                    jQuery(this).parent().parent().next().next().show();
+                    jQuery(this).parent().parent().next().next().next().show();
+                }
+                                
+              }
+          
+             }).change();   
+          }
+                
+         }
      
        function getParameterByName(name, url) {
             if (!url){
@@ -259,6 +291,7 @@
                                        html += '<optgroup label="Review">';
                                        html += '<option value="saswp_review_name">Review Name</option>';    
                                        html += '<option value="saswp_review_description">Review Description</option>';                                              
+                                       html += '<option value="saswp_review_body">Review Body</option>';                                              
                                        html += '<option value="saswp_review_author">Review Author</option>';
                                        html += '<option value="saswp_review_author_url">Review Author Profile URL</option>';
                                        html += '<option value="saswp_review_publisher">Review Publisher</option>';
@@ -439,7 +472,7 @@
             
         }
         
-       function saswp_create_total_collection(){
+       function saswp_create_total_collection( s_rating_enable, s_rating_val ){
            
            var platform_list = '';
            
@@ -457,8 +490,16 @@
                             value.is_remove = false; 
                         }
                     
-                        saswp_total_collection.push(value);
-                   
+                        if(s_rating_enable){
+
+                            if( value.saswp_review_rating >= s_rating_val ){
+                                saswp_total_collection.push(value);
+                            }
+
+                        }else{
+                            saswp_total_collection.push(value);
+                        }                                                
+                        
                     });
                                                          
                    platform_list += saswp_function_added_platform(key, saswp_collection[key].length );
@@ -1259,6 +1300,7 @@
        function saswp_on_collection_design_change(){
            
                 var sorting             = jQuery(".saswp-collection-sorting").val();
+                var s_rating_val        = jQuery("#saswp_collection_specific_rating_sel").val();
                 var design              = jQuery(".saswp-collection-desing").val();                                   
                 var cols                = jQuery("#saswp-collection-cols").val();
                 var slider              = jQuery(".saswp-slider-type").val();
@@ -1269,6 +1311,7 @@
                 var pagination          = false;
                 var offset              = 0;
                 var nextpage            = perpage;
+                var s_rating_enable     = false;
                 
                 if(jQuery("#saswp-coll-pagination").is(":checked")){                    
                     pagination          = true;                          
@@ -1278,6 +1321,10 @@
                     }                    
                     offset              = nextpage - perpage;
                     
+                }
+
+                if(jQuery("#saswp_collection_specific_rating").is(":checked")){
+                    s_rating_enable          = true;                                                                  
                 }
                 
                 //var fomo_visibility     = jQuery("#saswp_fomo_visibility").val();
@@ -1294,7 +1341,7 @@
                     var dots            = false;
                 }
                                                 
-                saswp_create_total_collection();                 
+                saswp_create_total_collection( s_rating_enable, s_rating_val );                 
                 saswp_collection_sorting(sorting);  
                 saswp_collection_total_reviews_id();
                 saswp_create_collection_by_design(design, cols, slider, arrow, dots, fomo_inverval, fomo_inverval, pagination, perpage, offset, nextpage);                                                

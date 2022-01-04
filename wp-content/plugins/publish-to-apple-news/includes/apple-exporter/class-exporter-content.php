@@ -25,6 +25,14 @@ class Exporter_Content {
 	private $id;
 
 	/**
+	 * Slug of the content being exported.
+	 *
+	 * @var string
+	 * @access private
+	 */
+	private $slug;
+
+	/**
 	 * Title of the content being exported.
 	 *
 	 * @var string
@@ -63,6 +71,22 @@ class Exporter_Content {
 	 * @access private
 	 */
 	private $byline;
+
+	/**
+	 * Byline for the content being exported.
+	 *
+	 * @var string
+	 * @access private
+	 */
+	private $author;
+
+	/**
+	 * Publication date for the content being exported.
+	 *
+	 * @var string
+	 * @access private
+	 */
+	private $date;
 
 	/**
 	 * Settings for the content being exported.
@@ -121,16 +145,22 @@ class Exporter_Content {
 	 * @param string|array             $cover    Optional. The cover of the post to be exported. If string, just the URL. If array, properties are 'url' and 'caption'.
 	 * @param string                   $byline   Optional. The byline of the post to be exported.
 	 * @param \Apple_Exporter\Settings $settings Optional. Settings for the exporter.
+	 * @param string                   $slug     Optional. The slug of the post to be exported.
+	 * @param string                   $author   Optional. The author(s) of the post to be exported.
+	 * @param string                   $date     Optional. The date of the post to be exported.
 	 * @access public
 	 */
-	public function __construct( $id, $title, $content, $intro = null, $cover = null, $byline = null, $settings = null ) {
+	public function __construct( $id, $title, $content, $intro = null, $cover = null, $byline = null, $settings = null, $slug = null, $author = null, $date = null ) {
 		$this->id       = $id;
+		$this->slug     = $slug;
 		$this->title    = $title;
 		$this->content  = $content;
 		$this->intro    = $intro;
 		$this->cover    = $cover;
 		$this->byline   = $byline;
 		$this->settings = ! empty( $settings ) ? $settings : new Exporter_Content_Settings();
+		$this->author   = $author;
+		$this->date     = $date;
 	}
 
 	/**
@@ -141,6 +171,16 @@ class Exporter_Content {
 	 */
 	public function id() {
 		return $this->id;
+	}
+
+	/**
+	 * Get the content slug.
+	 *
+	 * @access public
+	 * @return string The slug.
+	 */
+	public function slug() {
+		return $this->slug;
 	}
 
 	/**
@@ -191,6 +231,26 @@ class Exporter_Content {
 	 */
 	public function byline() {
 		return $this->byline;
+	}
+
+	/**
+	 * Get the content author.
+	 *
+	 * @access public
+	 * @return string The author.
+	 */
+	public function author() {
+		return $this->author;
+	}
+
+	/**
+	 * Get the content date.
+	 *
+	 * @access public
+	 * @return string The byline.
+	 */
+	public function date() {
+		return $this->date;
 	}
 
 	/**
