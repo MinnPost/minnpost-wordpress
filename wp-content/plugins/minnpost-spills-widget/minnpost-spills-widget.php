@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Spills
 Description: This plugin creates a sidebar widget and endpoint URL that is able to display posts from a group of categories and/or tags
-Version: 0.0.9
+Version: 0.0.10
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-spills
@@ -22,7 +22,7 @@ class MinnpostSpills {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.9';
+		$this->version = '0.0.10';
 
 		$this->load_admin();
 
@@ -126,7 +126,7 @@ class MinnpostSpills_Widget extends WP_Widget {
 		$categories        = $instance['widget_categories'];
 		$terms             = $instance['widget_terms'];
 		$output_function   = isset( $instance['output_function'] ) ? $instance['output_function'] : '';
-		$use_elasticsearch = isset( $instance['bypass_elasticsearch'] ) ? false : true;
+		$use_elasticsearch = ( isset( $instance['bypass_elasticsearch'] ) && '' !== $instance['bypass_elasticsearch'] ) ? false : true;
 
 		echo str_replace( 'widget MinnpostSpills-widget', 'm-widget m-minnpost-spills-widget', str_replace( '_Widget"', '-widget ' . sanitize_title( $title ) . '"', $before_widget ) );
 

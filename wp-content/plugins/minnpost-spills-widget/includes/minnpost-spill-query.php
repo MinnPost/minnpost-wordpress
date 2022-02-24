@@ -123,7 +123,7 @@ function minnpost_spill_get_query_args( $categories = '', $terms = '', $use_elas
 		);
 
 		$args = array_merge( $default_args, $args );
-		if ( class_exists( 'ES_WP_Query' ) && 'production' === VIP_GO_ENV && true === $use_elasticsearch ) {
+		if ( class_exists( 'ES_WP_Query' ) && ( 'production' === VIP_GO_ENV || ( defined( 'VIP_ENABLE_VIP_SEARCH_QUERY_INTEGRATION' ) && true === VIP_ENABLE_VIP_SEARCH_QUERY_INTEGRATION ) ) && true === $use_elasticsearch ) {
 			$args['es'] = true; // elasticsearch on production only
 		}
 

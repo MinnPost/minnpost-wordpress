@@ -48,6 +48,7 @@ if ( file_exists( __DIR__ . '/wp-content/vip-config/vip-config.php' ) ) {
     require_once( __DIR__ . '/wp-content/vip-config/vip-config.php' );
 }
 ```
+9. Install Elasticsearch and enable its use in the local environment by following [these instructions](https://gist.github.com/jonathanstegall/aef855c21156eaf526aadef27d8cfb99).
 
 ## Maintenance
 

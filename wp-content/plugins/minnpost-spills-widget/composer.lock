@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "brain/cortex",
-            "version": "1.0.0-alpha.7",
+            "version": "1.0.0-alpha.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Brain-WP/Cortex.git",
-                "reference": "0f33ad8578fa051ab5e46e14c9478df4d728e49a"
+                "reference": "4c9cf21d3f25775cbd6faf6a75638b1c11ac0368"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Brain-WP/Cortex/zipball/0f33ad8578fa051ab5e46e14c9478df4d728e49a",
-                "reference": "0f33ad8578fa051ab5e46e14c9478df4d728e49a",
+                "url": "https://api.github.com/repos/Brain-WP/Cortex/zipball/4c9cf21d3f25775cbd6faf6a75638b1c11ac0368",
+                "reference": "4c9cf21d3f25775cbd6faf6a75638b1c11ac0368",
                 "shasum": ""
             },
             "require": {
@@ -59,7 +59,11 @@
                 "routing",
                 "wordpress"
             ],
-            "time": "2016-07-14T19:53:27+00:00"
+            "support": {
+                "issues": "https://github.com/Brain-WP/Cortex/issues",
+                "source": "https://github.com/Brain-WP/Cortex"
+            },
+            "time": "2017-12-24T15:46:39+00:00"
         },
         {
             "name": "nikic/fast-route",
@@ -80,12 +84,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "FastRoute\\": "src/"
-                },
                 "files": [
                     "src/functions.php"
-                ]
+                ],
+                "psr-4": {
+                    "FastRoute\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -102,6 +106,10 @@
                 "router",
                 "routing"
             ],
+            "support": {
+                "issues": "https://github.com/nikic/FastRoute/issues",
+                "source": "https://github.com/nikic/FastRoute/tree/master"
+            },
             "time": "2015-12-20T19:50:12+00:00"
         },
         {
@@ -121,6 +129,7 @@
             "require": {
                 "php": ">=5.3.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -152,6 +161,9 @@
                 "request",
                 "response"
             ],
+            "support": {
+                "source": "https://github.com/php-fig/http-message/tree/master"
+            },
             "time": "2019-08-29T13:16:46+00:00"
         }
     ],
@@ -162,5 +174,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
 }

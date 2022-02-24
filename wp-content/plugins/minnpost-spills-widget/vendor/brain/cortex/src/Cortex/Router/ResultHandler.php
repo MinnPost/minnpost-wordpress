@@ -28,7 +28,7 @@ final class ResultHandler implements ResultHandlerInterface
         $result = apply_filters('cortex.match.done', $result, $wp, $doParseRequest);
         $handlerResult = $doParseRequest;
 
-        if (! $result instanceof MatchingResult) {
+        if (!$result instanceof MatchingResult) {
             return $result;
         }
 
@@ -40,23 +40,28 @@ final class ResultHandler implements ResultHandlerInterface
             $before = $this->buildCallback($result->beforeHandler());
             $after = $this->buildCallback($result->afterHandler());
             $template = $result->template();
-            (is_string($template)) or $template = '';
             $vars = $result->vars();
             $matches = $result->matches();
+
+            if (is_callable($template)) {
+                $template = $template($vars, $wp, $matches);
+            }
+
+            (is_string($template) || $template === 'false') or $template = '';
 
             do_action('cortex.matched', $result, $wp);
 
             is_callable($before) and $before($vars, $wp, $template, $matches);
             is_callable($handler) and $handlerResult = $handler($vars, $wp, $template, $matches);
             is_callable($after) and $after($vars, $wp, $template, $matches);
-            $template and $this->setTemplate($template);
+            $this->setTemplate($template);
 
             do_action('cortex.matched-after', $result, $wp, $handlerResult);
 
             is_bool($handlerResult) and $doParseRequest = $handlerResult;
             $doParseRequest = apply_filters('cortex.do-parse-request', $doParseRequest);
 
-            if (! $doParseRequest) {
+            if (!$doParseRequest) {
                 remove_filter('template_redirect', 'redirect_canonical');
 
                 return false;
@@ -79,7 +84,7 @@ final class ResultHandler implements ResultHandlerInterface
             $built = $handler;
         }
 
-        if (! $built && $handler instanceof ControllerInterface) {
+        if (!$built && $handler instanceof ControllerInterface) {
             $built = function (array $vars, \WP $wp, $template) use ($handler) {
                 return $handler->run($vars, $wp, $template);
             };
@@ -93,25 +98,16 @@ final class ResultHandler implements ResultHandlerInterface
      */
     private function setTemplate($template)
     {
-        if (is_string($template)) {
+        if (is_string($template) && $template) {
             $ext = apply_filters('cortex.default-template-extension', 'php');
-            pathinfo($template, PATHINFO_EXTENSION) or $template .= '.'.ltrim($ext, '.');
+            pathinfo($template, PATHINFO_EXTENSION) or $template .= '.' . ltrim($ext, '.');
             $template = is_file($template) ? $template : locate_template([$template], false);
-            $template or $template = null;
+            $template or $template = '';
         }
-        
-        if (is_null($template)) {
+
+        if ($template === '' || !(is_string($template) || $template === false)) {
             return;
         }
-
-        // If template is `false`, we return `true` on `"{$type}_template"`
-        // to speed up `template-loader.php`
-        $template_setter = $template !== false
-            ? function () use ($template) {
-                return $template;
-            }
-        : '__return_true';
-
 
         $types = [
             '404',
@@ -132,14 +128,24 @@ final class ResultHandler implements ResultHandlerInterface
             'index',
         ];
 
+        $returnTemplate = function () use ($template) {
+            current_filter() === 'template_include' and remove_all_filters('template_include');
+
+            return $template;
+        };
+
+        /*
+         * If template is `false`, we return `true` on `"{$type}_template"` to speed up
+         * `template-loader.php`, in fact, if template is `false` we are going to return `false` at
+         * 'template_include' anyway, so no need to waste time looping all template types, even
+         * because every type check for file(s) in filesystem, so it's a slow operation.
+         */
+        $template_setter = $template !== false ? $returnTemplate : '__return_true';
+
         array_walk($types, function ($type) use ($template_setter) {
             add_filter("{$type}_template", $template_setter);
         });
 
-        add_filter('template_include', function () use ($template) {
-            remove_all_filters('template_include');
-
-            return $template;
-        }, -1);
+        add_filter('template_include', $returnTemplate, -1);
     }
 }
