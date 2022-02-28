@@ -6,7 +6,7 @@ Tags: menu, menus, nav menu, nav menus
 Requires at least: 4.5.0
 Tested up to: 5.7.0
 Requires PHP: 5.3.2
-Stable tag: 2.0.1
+Stable tag: 2.1.0
 License: GPLv3
 
 Hide custom menu items based on user roles. PLEASE READ THE FAQ IF YOU ARE NOT SEEING THE SETTINGS.
@@ -221,10 +221,28 @@ If every item in your menu is configured to display to logged in users (either a
 
 Therefore, if you have no items to display, WordPress will end up displaying ALL your pages!!
 
-If you don't want this, you must set the fallback argument to be a null string.
+If you don't want this, you must set the fallback argument to be a null string. 
 
 `
 wp_nav_menu( array( 'theme_location' => 'primary-menu', 'fallback_cb' => '' ) );
+`
+
+You must do this for every effected instance of `wp_nav_menu()` in your theme templates. It is not possible for me to tell you where they are located, but `header.php` is a very common location for the main menu.
+
+Alternatively, you could do this universally by adding the following snippet to your child theme's *function.php* file or by adding it via the [Code Snippets](https://wordpress.org/plugins/code-snippets/) plugin:
+
+`
+/**
+ * Disables the fallback page menu for all menus
+ *
+ * @param array $args Array of wp_nav_menu() arguments.
+ * @return array
+ */
+function kia_nav_menu_args( $args ) {
+  $args['fallback_cb'] = '';
+  return $args;
+}
+add_filter( 'wp_nav_menu_args', 'kia_nav_menu_args' );
 `
 
 = What happened to my menu roles on import/export? =
@@ -246,6 +264,13 @@ However, the Import plugin only imports certain post meta for menu items.  As of
 Yes, but manually. WPML developers have informed me that the meta data for nav menu items is **not** synced by WPML, meaning that menus copied into a new language will not bring their custom Nav Menu Roles settings. However, if you manually reconfigure the settings, the new language menu will work as expected.
 
 == Changelog ==
+
+= 2.1.0 = 
+* New: Add support for "hiding" a menu item by role.
+
+
+= 2.0.2 = 
+* Fix: PHP Fatal error: Uncaught Error: Call to undefined method WP_Customize_Manager::settings_previewed(). settings_previewed() does not exist until WordPress 3.9.0+.
 
 = 2.0.1 = 
 * Tweak: Alphabetically sort role names.

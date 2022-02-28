@@ -38,9 +38,17 @@ wpcom_vip_load_plugin( 'co-authors-extend/co-authors-extend.php' );
 wpcom_vip_load_plugin( 'co-authors-plus/co-authors-plus.php' );
 wpcom_vip_load_plugin( 'cr3ativ-sponsor/cr3ativ-sponsor.php' );
 wpcom_vip_load_plugin( 'documentcloud/documentcloud.php' );
-wpcom_vip_load_plugin( 'dorzki-notifications-to-slack/slack-notifications.php' );
+if ( 'production' === VIP_GO_ENV ) {
+	wpcom_vip_load_plugin( 'dorzki-notifications-to-slack/slack-notifications.php' );
+}
 wpcom_vip_load_plugin( 'duplicate-post/duplicate-post.php' );
-if ( 'local' !== VIP_GO_ENV ) {
+/*
+we need to keep this disabled until there is a new adapter for VIP's enterprise search.
+see: https://github.com/alleyinteractive/es-admin/issues/26
+if ( ( defined( 'VIP_ENABLE_VIP_SEARCH' ) && true === VIP_ENABLE_VIP_SEARCH ) ) {
+	wpcom_vip_load_plugin( 'es-admin/es-admin.php' );
+}*/
+if ( ! defined( 'VIP_ENABLE_VIP_SEARCH' ) || true !== VIP_ENABLE_VIP_SEARCH ) {
 	wpcom_vip_load_plugin( 'es-admin/es-admin.php' );
 	wpcom_vip_load_plugin( 'es-wp-query/es-wp-query.php' );
 }
@@ -91,21 +99,29 @@ wpcom_vip_load_plugin( 'wp-post-expires/wp-post-expires.php' );
 wpcom_vip_load_plugin( 'wp-post-image-watermarks/wp-post-image-watermarks.php' );
 wpcom_vip_load_plugin( 'www-post-thumb/www-post-thumb.php' );
 wpcom_vip_load_plugin( 'zoninator/zoninator.php' );
-wpcom_vip_load_plugin( 'vip-jetpack-sync-cron' );
+if ( ! defined( 'VIP_ENABLE_VIP_SEARCH_QUERY_INTEGRATION' ) || true !== VIP_ENABLE_VIP_SEARCH_QUERY_INTEGRATION ) {
+	wpcom_vip_load_plugin( 'vip-jetpack-sync-cron' );
+}
 
-// enable jetpack search
-if ( 'local' !== VIP_GO_ENV ) {
+// turn off parsely because 1) we're not paying for it, and 2) it has ethical question marks at best
+add_filter( 'wpvip_parsely_load_mu', '__return_false' );
+
+if ( ! defined( 'VIP_ENABLE_VIP_SEARCH_QUERY_INTEGRATION' ) || true !== VIP_ENABLE_VIP_SEARCH_QUERY_INTEGRATION ) {
+	// for non elastic search environments:
+
+	// enable jetpack search and jetpack related posts.
 	add_filter( 'jetpack_active_modules', 'x_enable_jetpack_search_module', 9999 );
 	function x_enable_jetpack_search_module( $modules ) {
 		if ( ! in_array( 'search', $modules, true ) ) {
 			$modules[] = 'search';
 		}
+		if ( ! in_array( 'related-posts', $modules, true ) ) {
+			$modules[] = 'related-posts';
+		}
 		return $modules;
 	}
-}
 
-// es-wp-query adapter
-if ( 'local' !== VIP_GO_ENV ) {
+	// enable es-wp-query adapter. this only works for Jetpack Search.
 	add_action(
 		'after_setup_theme',
 		function () {
@@ -115,14 +131,32 @@ if ( 'local' !== VIP_GO_ENV ) {
 		},
 		5
 	);
-}
 
-// es-admin adapter
-if ( 'local' !== VIP_GO_ENV ) {
+	// enable es-admin adapter. this only works for Jetpack Search.
 	add_filter(
 		'es_admin_adapter',
 		function () {
 			return '\ES_Admin\Adapters\Jetpack_Search';
 		}
 	);
+
+} elseif ( defined( 'VIP_ENABLE_VIP_SEARCH_QUERY_INTEGRATION' ) && true === VIP_ENABLE_VIP_SEARCH_QUERY_INTEGRATION ) {
+	// for elasticsearch only:
+
+	// make sure to remove search and related post modules.
+	add_filter(
+		'jetpack_active_modules',
+		function( $modules ) {
+			foreach ( $modules as $i => $m ) {
+				if ( 'search' === $m ) {
+					unset( $modules[ $i ] );
+				}
+				if ( 'related-posts' === $m ) {
+					unset( $modules[ $i ] );
+				}
+			}
+			return $modules;
+		}
+	);
+
 }
