@@ -5,7 +5,7 @@ Tags: mark, highlight, hilite, search, term, terms
 Requires at least: 3.7
 Requires PHP: 5.6
 Tested up to: 5.9
-Stable tag: 1.8.1
+Stable tag: 1.8.2
 
 Very lightweight (vanilla) Javascript that wraps search terms in an HTML5 mark tag within WordPress search results.
 
@@ -63,8 +63,6 @@ If your current theme does not use the `hentry` class (yet), this plugin will lo
 
 1. [Josh](http://theveganpost.com) pointed out a conflict with the ShareThis buttons plugin. Since then, that plugin has been completely rewriten so please let me know if the problem still exists. Thanks!
 
-1. When search engine referrer is using SSL (notice the https:// in the URL) then the search terms cannot be determined. Most search engines are always over SSL nowadays. There is no way to get around that issue.
-
 Please file bug reports and code contributions as pull requests on [GitHub](https://github.com/RavanH/highlight-search-terms).
 
 
@@ -92,7 +90,7 @@ If this causes issues on your theme, see the last of the [FAQ's](https://wordpre
 
 For example use `.hilite { background:#D3E18A; }` to get a moss green background on search terms found in the content section (not header, sidebar or footer; assuming your Theme uses a div with class "hentry").
 
-Please find more examples in the [FAQ's](https://wordpress.org/plugins/highlight-search-terms/#faq).
+Please find more examples in the FAQ's below.
 
 = I do not see any highlighting! =
 
@@ -149,7 +147,7 @@ The below example will make every instance of any term used in the query show up
     .term-2 {
         background-color: #9CD4FF;
     }
-    /* Orange highlighting for fourth search term only. */ 
+    /* Orange highlighting for fourth search term only. */
     .term-3 {
         background-color:#FFCA61
     }
@@ -185,16 +183,22 @@ C. Switch to a theme that does abide by the current WordPress conventions :)
 
 == Screenshots ==
 
-1. Example of search term highlighting with the default MARK tag. 
+1. Example of search term highlighting with the default MARK tag.
 
 
 == Upgrade Notice ==
 
-= 1.8.1 =
+= 1.8.2 =
 
-Fix possible missing is_plugin_active error
+Fix T_TRY error
 
 == Changelog ==
+
+= 1.8.2 =
+
+Date 2022-03-01
+
+* Fix T_TRY error
 
 = 1.8.1 =
 
@@ -215,6 +219,7 @@ Date 2021-12-04
 
 * Switch to mark.js, https://markjs.io/
 * Include HTML5 main tag
+* Dropped futile search engine support
 * FIX: Possible double inline script
 * FIX: wptexturized search results not highlighted
 * NEW: filter hlst_events

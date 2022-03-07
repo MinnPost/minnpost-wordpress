@@ -51,7 +51,7 @@ wp-content/themes/twenty*
 wp-content/client-mu-plugins/mu-environment-files.php
 wp-content/client-mu-plugins/coral-remote-images
 wp-content/client-mu-plugins/mu-autoloader.php
-wp-content/client-mu-plugins/wp-mailhog
+wp-content/client-mu-plugins/wp-mailhog-smtp
 wp-content/config/
 wp-content/private/
 wp-content/plugins/raw-html-pro/
