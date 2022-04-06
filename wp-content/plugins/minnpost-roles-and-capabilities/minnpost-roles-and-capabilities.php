@@ -1569,6 +1569,7 @@ class Minnpost_Roles_And_Capabilities {
 				'business',
 				'author',
 				'contributor',
+				'staff',
 				'unpublished_viewer_user',
 			),
 			'edit_event_website_page'          => array(

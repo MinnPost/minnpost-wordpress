@@ -3,7 +3,7 @@
 Plugin Name: Stop Spammers
 Plugin URI: https://stopspammers.io/
 Description: Secure your WordPress sites and stop spam dead in its tracks. Designed to secure your website immediately. Enhance your visitors' UX with 50+ configurable options, an allow access form, and a testing tool.
-Version: 2021.20
+Version: 2022
 Author: Trumani
 Author URI: https://stopspammers.io/
 License: https://www.gnu.org/licenses/gpl.html
@@ -12,7 +12,7 @@ Text Domain: stop-spammer-registrations-plugin
 */
 
 // networking requires a couple of globals
-define( 'SS_VERSION', '2021.20' );
+define( 'SS_VERSION', '2022' );
 define( 'SS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SS_PLUGIN_FILE', plugin_dir_path( __FILE__ ) );
 define( 'SS_PLUGIN_DATA', plugin_dir_path( __FILE__ ) . 'data/' );
@@ -32,6 +32,7 @@ add_action( 'plugins_loaded', 'ss_load_plugin_textdomain' );
 // load admin styles
 function ss_styles() {
 	wp_enqueue_style( 'ss-admin', plugin_dir_url( __FILE__ ) . 'css/admin.css' );
+	wp_enqueue_style( 'ss-modal-css', plugin_dir_url( __FILE__ ) . 'css/modal.css' );
 }
 add_action( 'admin_print_styles', 'ss_styles' );
 
@@ -39,7 +40,7 @@ add_action( 'admin_print_styles', 'ss_styles' );
 function ss_admin_notice() {
 	if ( !is_plugin_active( 'stop-spammers-premium/stop-spammers-premium.php' ) ) {
 		$user_id = get_current_user_id();
-		if ( !get_user_meta( $user_id, 'ss_notice_dismissed_15' ) && current_user_can( 'manage_options' ) ) {
+		if ( !get_user_meta( $user_id, 'ss_notice_dismissed_16' ) && current_user_can( 'manage_options' ) ) {
 			echo '<div class="notice notice-info"><p>' . __( '<big><strong>Stop Spammers</strong></big> | 💚 Help us keep the project alive! <a href="https://stopspammers.io/downloads/stop-spammers-premium/" target="_blank" class="button-primary" style="background-color:blue">Upgrade</a> <a href="https://stopspammers.io/donate" target="_blank" class="button-primary" style="background-color:green">Donate</a> <a href="https://stopspammers.io/chat" target="_blank" class="button-primary" style="background-color:purple">Volunteer</a>', 'stop-spammers' ) . '<a href="?ss-dismiss" class="alignright">' . __( 'Dismiss', 'stop-spammer-registrations-plugin' ) . '</a></p></div>';
 		}
 	}
@@ -51,7 +52,7 @@ function ss_notice_dismissed() {
 	if ( !is_plugin_active( 'stop-spammers-premium/stop-spammers-premium.php' ) ) {
 		$user_id = get_current_user_id();
 		if ( isset( $_GET['ss-dismiss'] ) ) {
-			add_user_meta( $user_id, 'ss_notice_dismissed_15', 'true', true );
+			add_user_meta( $user_id, 'ss_notice_dismissed_16', 'true', true );
 		}
 	}
 	// Notification Control: handles notices
@@ -1002,9 +1003,9 @@ function ss_add_captcha() {
 		case 'G':
 			// reCAPTCHA
 			$recaptchaapisite = $options['recaptchaapisite'];
-			$html  = '<script src=\"https://www.google.com/recaptcha/api.js\" async defer></script>';
+			$html  = '<script src="https://www.google.com/recaptcha/api.js" async defer></script>';
 			$html .= '<input type="hidden" name="recaptcha" value="recaptcha" />';
-			$html .= '<div class="g-recaptcha" data-sitekey="$recaptchaapisite"></div>';
+			$html .= '<div class="g-recaptcha" data-sitekey="' . $recaptchaapisite . '"></div>';
 		break;
 		case 'H':
 			// hCaptcha
@@ -1015,9 +1016,9 @@ function ss_add_captcha() {
 		break;
 		case 'S':
 			$solvmediaapivchallenge = $options['solvmediaapivchallenge'];
-			$html   = '<script src\"https://api-secure.solvemedia.com/papi/challenge.script?k=$solvmediaapivchallenge"></script>';
+			$html   = '<script src="https://api-secure.solvemedia.com/papi/challenge.script?k=' . $solvmediaapivchallenge . '"></script>';
 			$html  .= '<noscript>';
-			$html  .= '<iframe src="https://api-secure.solvemedia.com/papi/challenge.noscript?k=$solvmediaapivchallenge" height="300" width="500" frameborder="0"></iframe><br />';
+			$html  .= '<iframe src="https://api-secure.solvemedia.com/papi/challenge.noscript?k=' . $solvmediaapivchallenge . '" height="300" width="500" frameborder="0"></iframe><br />';
 			$html  .= '<textarea name="adcopy_challenge" rows="3" cols="40"></textarea>';
 			$html  .= '<input type="hidden" name="adcopy_response" value="manual_challenge" />';
 			$html  .= '</noscript>';
@@ -1175,3 +1176,153 @@ function ss_check_for_premium() {
 add_action( 'admin_init', 'ss_check_for_premium' );
 
 require_once( 'includes/stop-spam-utils.php' );
+
+// HiveMind
+function ss_sync_ip_cron( $schedules ) {
+	$options = get_option( 'ss_stop_sp_reg_options' );
+	if ( !isset( $options['chkipsync'] ) or $options['chkipsync'] != 'Y' or get_option( 'ssp_license_status' ) == 'valid' )
+		return $schedules;
+	$schedules['ss_every_day_get'] = array(
+		'interval' => 86400,
+		'display'  => __( 'Every Day', 'stop-spammer-registrations-plugin' )
+	);
+	return $schedules;
+}
+add_filter( 'cron_schedules', 'ss_sync_ip_cron' );
+
+// schedule an action if it's not already scheduled
+if ( !wp_next_scheduled( 'ss_sync_ip_cron' ) ) {
+	  wp_schedule_event( time(), 'ss_every_day_get', 'ss_sync_ip_cron' );
+}
+
+function ss_sync_ip() {
+	$options = get_option( 'ss_stop_sp_reg_options' );
+	 if ( !isset( $options['chkipsync'] ) or $options['chkipsync'] != 'Y' or get_option( 'ssp_license_status' ) == 'valid' )
+		return;
+	 if ( count( $options['api_list'] ) < 100 ) {
+		  $response = wp_remote_get( 'https://stopspammersapi.com/api/ip/free' );
+		  if ( !empty ( $response ) ) {
+			$ips = json_decode( $response['body'] );
+			$blist = array_values( array_diff( $options['blist'], $ips ) );
+			$options['api_list'] = $ips;
+			$options['blist'] = array_merge( $blist, $ips );
+			update_option( 'ss_stop_sp_reg_options', $options );
+		}
+	}
+}
+add_action( 'ss_sync_ip_cron', 'ss_sync_ip' );
+
+function ss_post_ip_every_day( $schedules ) {
+	$options = get_option( 'ss_stop_sp_reg_options' );
+	 if ( !isset( $options['chkipsync'] ) or $options['chkipsync'] != 'Y' or get_option( 'ssp_license_status' ) == 'valid' )
+		return $schedules;
+	$schedules['every_day_sync'] = array( 'interval'  => 86400, 'display' => __( 'Every Day', 'stop-spammer-registrations-plugin' ) );
+	return $schedules;
+}
+add_filter( 'cron_schedules', 'ss_post_ip_every_day' );
+
+// schedule an action if it's not already scheduled
+if ( !wp_next_scheduled( 'ss_post_ip_every_day' ) ) {
+	wp_schedule_event( time(), 'every_day_sync', 'ss_post_ip_every_day' );
+}
+
+function ss_post_ip() {
+	 $options = get_option( 'ss_stop_sp_reg_options' );
+	 if ( !isset( $options['chkipsync'] ) or $options['chkipsync'] !== 'Y' or get_option( 'ssp_license_status' ) == 'valid' )
+		return;
+	 $ips = implode( ',', $options['blist'] );
+	 if ( $ips != '' ) {
+		$response = wp_remote_post( 'https://stopspammersapi.com/api/ip/store', array(
+			'method'	  => 'POST',
+			'timeout'	  => 45,
+			'redirection' => 5,
+			'httpversion' => '1.0',
+			'blocking'	  => true,
+			'headers'	  => array(),
+			'body'		  => array( 'website_name' => site_url(), 'ips' => $ips ),
+			'cookies'	  => array()
+		) );
+	}
+}
+add_action( 'ss_post_ip_every_day', 'ss_post_ip' );
+
+function ss_whitelist_ip_cron( $schedules ) {
+	$options = get_option( 'ss_stop_sp_reg_options' );
+	if ( !isset( $options['chkipsync'] ) or $options['chkipsync'] !== 'Y' )
+		return $schedules;
+	$schedules['ss_every_day'] = array(
+		'interval' => 86400,
+		'display'  => __( 'Every Day', 'stop-spammer-registrations-plugin' )
+	);
+	return $schedules;
+}
+add_filter( 'cron_schedules', 'ss_whitelist_ip_cron' );
+
+// schedule an action if it's not already scheduled
+if ( !wp_next_scheduled( 'ss_whitelist_ip_cron' ) ) {
+	  wp_schedule_event( time(), 'ss_every_day', 'ss_whitelist_ip_cron' );
+}
+
+function ss_whitelist_ip() {
+	$options  = get_option( 'ss_stop_sp_reg_options' );
+	$response = wp_remote_post( 'https://stopspammersapi.com/api/ip/whitelist', array(
+		'method'	  => 'POST',
+		'timeout'	  => 45,
+		'redirection' => 5,
+		'httpversion' => '1.0',
+		'blocking'	  => true,
+		'headers'	  => array(),
+		'body'		  => array(),
+		'cookies'	  => array()
+	) );
+	$whitelist_ip = json_decode( $response['body'] );
+	$options['blist'] = array_values( array_diff( $options['blist'], $whitelist_ip->whitelist_ip_list ) );
+	update_option( 'ss_stop_sp_reg_options', $options );
+}
+add_action( 'ss_whitelist_ip_cron', 'ss_whitelist_ip' );
+
+function ss_modal() { ?>
+	<div id="modal-1" class="modal-window" style="width:30%">
+		<h3><?php _e( 'By enabling this feature, you agree to share your Block List with our external API.', 'stop-spammer-registrations-plugin' ); ?> <a href="https://stopspammers.io/stop-spammers-features/hivemind-community-sourced-allow-and-block-lists/" target="_blank"><?php _e( 'Learn More', 'stop-spammer-registrations-plugin' ); ?></a></h3>
+		<br />
+		<br />
+		<form method="post" action="">
+			<div class='ss-plugin'>	   
+				<div class="checkbox switcher">
+					<label id="ss_subhead_modal" for="chkipsync_modal">
+						<input class="ss_toggle_modal" type="checkbox" id="chkipsync_modal" name="chkipsync_modal" value="Y" />
+						<span><small></small></span>
+						<small><span style="font-size:16px!important"><?php _e( 'HiveMind', 'stop-spammer-registrations-plugin' ); ?></span></small>
+					</label>
+				</div>
+				<br />
+				<br />
+				<input class="button-primary save_change"  name='ss_save_change' value="<?php _e( 'Save Changes', 'stop-spammer-registrations-plugin' ); ?>" type="submit" />
+			</div>
+			<br />
+			<?php wp_nonce_field( 'ss_save_hive_settings', 'ss_popup_hive' ); ?>
+			<button class="modal-btn modal-hide close_btn"><?php _e( 'Close', 'stop-spammer-registrations-plugin' ); ?></button>
+		</form>
+	</div>
+	<div class="modal-fader"></div>
+<?php }	
+
+function ss_blocklist_popup() {
+   $options = get_option( 'ss_stop_sp_reg_options' );
+   // check if block list popup has already shown
+   if ( !isset( $options['chkpopup'] ) or $options['chkpopup'] == '' ) {
+		$options['chkpopup'] = 'Y';
+		update_option( 'ss_stop_sp_reg_options', $options );
+		add_action( 'admin_footer', 'ss_modal' );
+   }
+}
+add_action( 'plugins_loaded', 'ss_blocklist_popup', 10, 2 );
+
+function ss_submit_popup() {
+	if ( isset( $_POST['ss_save_change'] ) and wp_verify_nonce( $_POST['ss_popup_hive'], 'ss_save_hive_settings' ) ) {
+		$options = get_option( 'ss_stop_sp_reg_options' );
+		$options['chkipsync'] = sanitize_text_field( $_POST['chkipsync_modal'] );
+		update_option( 'ss_stop_sp_reg_options', $options );
+	}
+}
+add_action( 'admin_init', 'ss_submit_popup' );
