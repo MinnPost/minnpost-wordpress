@@ -45,9 +45,6 @@ You can run this repository as a local WordPress installation. It requires VIP f
 1. Update `wp-config.php`:
 ```php
 define( 'VIP_GO_ENV', 'local' );
-define( 'DISALLOW_FILE_EDIT', true );
-define( 'DISALLOW_FILE_MODS', true );
-define( 'AUTOMATIC_UPDATER_DISABLED', true );
 
 /** Development */
 define( 'SAVEQUERIES', true );
@@ -57,9 +54,20 @@ define( 'WP_DEBUG', true );
 define( 'JETPACK_STAGING_MODE', true );
 define( 'JETPACK_DEV_DEBUG', true );
 define( 'WP_DEBUG_LOG', true );
-if ( file_exists( __DIR__ . '/wp-content/vip-config/vip-config.php' ) ) {
-    require_once( __DIR__ . '/wp-content/vip-config/vip-config.php' );
+
+// Load early dependencies
+if ( file_exists( __DIR__ . '/wp-content/mu-plugins/000-pre-vip-config/requires.php' ) ) {
+	require_once __DIR__ . '/wp-content/mu-plugins/000-pre-vip-config/requires.php';
 }
+// // Loading the VIP config file
+if ( file_exists( __DIR__ . '/wp-content/vip-config/vip-config.php' ) ) {
+	require_once __DIR__ . '/wp-content/vip-config/vip-config.php';
+}
+
+// Defining constant settings for file permissions and auto-updates
+define( 'DISALLOW_FILE_EDIT', true );
+define( 'DISALLOW_FILE_MODS', true );
+define( 'AUTOMATIC_UPDATER_DISABLED', true );
 ```
 1. Install client-mu-plugins that are only for local use. These are already in the `.gitignore` file to make sure they aren't used remotely.
     - An [MU Autoloader plugin](https://gist.github.com/acki/a7132dfdb97da3404259ee802cce2bd7).
