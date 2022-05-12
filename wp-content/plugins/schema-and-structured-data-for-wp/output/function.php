@@ -912,21 +912,20 @@ function saswp_ratency_rating_box_rating(){
 
 /**
  * Extracting the value of yet another star rating plugins on current post
- * @global type $sd_data
+ * @global type $sd_data, $post
  * @param type $id
  * @return type array
  */
 function saswp_extract_yet_another_stars_rating(){
-        
-    global $sd_data;    
+    global $sd_data, $post;
     $result = array();
 
     if(isset($sd_data['saswp-yet-another-stars-rating']) && $sd_data['saswp-yet-another-stars-rating'] == 1 && method_exists('YasrDatabaseRatings', 'getVisitorVotes') ){
-               
+
         $visitor_votes  = YasrDatabaseRatings::getVisitorVotes(false);
-         
+
         if( $visitor_votes && ($visitor_votes['sum_votes'] != 0 && $visitor_votes['number_of_votes'] != 0) ){
-           
+
             $average_rating = $visitor_votes['sum_votes'] / $visitor_votes['number_of_votes'];
             $average_rating = round($average_rating, 1);
 
@@ -934,22 +933,26 @@ function saswp_extract_yet_another_stars_rating(){
             $result['ratingCount'] = $visitor_votes['number_of_votes'];
             $result['ratingValue'] = $average_rating;  
             $result['bestRating']  = 5;
-            $result['worstRating'] = 1;                                                         
-            
+            $result['worstRating'] = 1;
+
             return $result;
-            
-        }else{
-            
-            return array();    
-            
+        } elseif ( method_exists('YasrCommentsRatingData', 'getCommentStats') ) {
+            $ratingData = new YasrCommentsRatingData;
+            $stats = $ratingData->getCommentStats($post->ID);
+            if ( isset($stats['n_of_votes']) && $stats['n_of_votes'] != 0 ) {
+                $result['@type']       = 'AggregateRating';
+                $result['ratingCount'] = $stats['n_of_votes'];
+                $result['ratingValue'] = $stats['average'];
+                $result['bestRating']  = 5;
+                $result['worstRating'] = 1;
+                return $result;
+            }
         }
-        
-    }else{
-        
-        return array();
-        
-    }                        
+
+    }
+    return array();
 }
+
 
 /**
  * Extracting the value of wpdiscuz plugins on current post
@@ -1337,6 +1340,10 @@ function saswp_get_comments_with_rating(){
                 $rating = get_comment_meta($comment->comment_ID, 'review_rating', true);
             }
             
+            if($rating < 1){
+                $rating = 1;
+            }
+
             if(is_numeric($rating)){
 
                 $sumofrating += $rating;
@@ -1360,6 +1367,9 @@ function saswp_get_comments_with_rating(){
             
             if($sumofrating> 0){
                 $avg_rating = $sumofrating /  count($comments); 
+            }
+            if($avg_rating < 1){
+                $avg_rating = 1;
             }
             
             $ratings =  array(
@@ -1526,9 +1536,9 @@ function saswp_json_print_format($output_array){
     global $sd_data;
     
     if(isset($sd_data['saswp-pretty-print']) && $sd_data['saswp-pretty-print'] == 1){
-        return wp_json_encode($output_array, JSON_PRETTY_PRINT);
+        return wp_json_encode( $output_array, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
     }else{
-        return wp_json_encode($output_array);
+        return wp_json_encode( $output_array, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
     }
         
 }

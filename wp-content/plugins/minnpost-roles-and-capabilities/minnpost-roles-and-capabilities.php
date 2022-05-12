@@ -450,7 +450,6 @@ class Minnpost_Roles_And_Capabilities {
 				'business',
 				'author',
 				'contributor',
-				'comment_moderator',
 			),
 			'edit_blocks'             => array(
 				'administrator',
@@ -458,13 +457,11 @@ class Minnpost_Roles_And_Capabilities {
 				'business',
 				'author',
 				'contributor',
-				'comment_moderator',
 			),
 			'edit_others_blocks'      => array(
 				'administrator',
 				'editor',
 				'business',
-				'comment_moderator',
 			),
 			'edit_published_blocks'   => array(
 				'administrator',
@@ -472,7 +469,6 @@ class Minnpost_Roles_And_Capabilities {
 				'business',
 				'author',
 				'contributor',
-				'comment_moderator',
 			),
 			'publish_blocks'          => array(
 				'administrator',

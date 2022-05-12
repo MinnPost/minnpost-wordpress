@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Spills
 Description: This plugin creates a sidebar widget and endpoint URL that is able to display posts from a group of categories and/or tags
-Version: 0.0.10
+Version: 0.0.11
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-spills
@@ -22,7 +22,7 @@ class MinnpostSpills {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.10';
+		$this->version = '0.0.11';
 
 		$this->load_admin();
 
@@ -115,7 +115,11 @@ class MinnpostSpills_Widget extends WP_Widget {
 	*/
 	public function widget( $args, $instance ) {
 
-		extract( $args );
+		// default widget argument values. this replaces previous use of extract.
+		$before_widget = $args['before_widget'];
+		$after_widget  = $args['after_widget'];
+		$before_title  = $args['before_title'];
+		$after_title   = $args['after_title'];
 
 		$title             = apply_filters( 'widget_title', $instance['title'] );
 		$slug              = str_replace( '/', '', $instance['title'] );
@@ -133,9 +137,9 @@ class MinnpostSpills_Widget extends WP_Widget {
 		if ( isset( $output_function ) && function_exists( $output_function ) ) {
 			$output = $output_function( $before_title, $title, $after_title, $content, $categories, $terms, $use_elasticsearch, $number_of_posts );
 		} else {
-			$query   = $this->get_spill_posts( $categories, $terms, $use_elasticsearch, $number_of_posts );
-			$display = apply_filters( 'minnpost_spills_display_spill_posts', '', $query, $before_title, $title, $after_title, $instance );
-			if ( '' === $display ) {
+			$query  = $this->get_spill_posts( $categories, $terms, $use_elasticsearch, $number_of_posts );
+			$output = apply_filters( 'minnpost_spills_display_spill_posts', '', $query, $before_title, $title, $after_title, $instance );
+			if ( '' === $output ) {
 				if ( $title ) {
 					$before_title = str_replace( 'widget-title', 'a-widget-title', $before_title );
 					echo $before_title . '<a href="' . $url . '">' . $title . '</a>' . $after_title;
@@ -157,8 +161,6 @@ class MinnpostSpills_Widget extends WP_Widget {
 					}
 				}
 				$output .= '</div>';
-			} else {
-				$output = $display;
 			}
 			echo $output;
 		}
@@ -392,7 +394,12 @@ if ( class_exists( 'Walker_Category_Checklist' ) ) {
 		}
 
 		function start_el( &$output, $cat, $depth = 0, $args = array(), $id = 0 ) {
-			extract( $args );
+			$taxonomy      = $args['taxonomy'];
+			$disabled      = $args['disabled'];
+			$list_only     = $args['list_only'];
+			$selected_cats = $args['selected_cats'];
+			$popular_cats  = $args['popular_cats'];
+			$has_children  = $args['has_children'];
 			if ( empty( $taxonomy ) ) {
 				$taxonomy = 'category';
 			}

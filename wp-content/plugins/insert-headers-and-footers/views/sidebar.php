@@ -93,7 +93,27 @@
 				'<a href="%1$s" target="_blank">%2$s</a> - %3$s',
 				esc_url( 'https://www.seedprod.com/' ),
 				esc_html__( 'SeedProd', 'insert-headers-and-footers' ),
-				esc_html__( 'Get the best WordPress Coming Soon Page plugin', 'insert-headers-and-footers' )
+				esc_html__( 'Get the best Drag & Drop WordPress Website Builder', 'insert-headers-and-footers' )
+			);
+			?>
+		</p>
+		<p>
+			<?php
+			printf(
+				'<a href="%1$s" target="_blank">%2$s</a> - %3$s',
+				esc_url( 'https://wordpress.org/plugins/all-in-one-seo-pack/' ),
+				esc_html__( 'AIOSEO', 'insert-headers-and-footers' ),
+				esc_html__( 'Best WordPress SEO plugin (used by 3 million sites).', 'insert-headers-and-footers' )
+			);
+			?>
+		</p>
+		<p>
+			<?php
+			printf(
+				'<a href="%1$s" target="_blank">%2$s</a> - %3$s',
+				esc_url( 'https://wordpress.org/plugins/wp-mail-smtp/' ),
+				esc_html__( 'WP Mail SMTP', 'insert-headers-and-footers' ),
+				esc_html__( 'Fix WordPress email deliverability with the best SMTP plugin.', 'insert-headers-and-footers' )
 			);
 			?>
 		</p>

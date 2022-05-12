@@ -36,7 +36,6 @@ wpcom_vip_load_plugin( 'cmb2-user-select/cmb2-user-select.php' );
 wpcom_vip_load_plugin( 'cmb2-field-type-font-awesome/iconselect.php' );
 wpcom_vip_load_plugin( 'co-authors-extend/co-authors-extend.php' );
 wpcom_vip_load_plugin( 'co-authors-plus/co-authors-plus.php' );
-wpcom_vip_load_plugin( 'cr3ativ-sponsor/cr3ativ-sponsor.php' );
 wpcom_vip_load_plugin( 'documentcloud/documentcloud.php' );
 if ( 'production' === VIP_GO_ENV ) {
 	wpcom_vip_load_plugin( 'dorzki-notifications-to-slack/slack-notifications.php' );
@@ -62,7 +61,6 @@ wpcom_vip_load_plugin( 'insert-headers-and-footers/ihaf.php' );
 wpcom_vip_load_plugin( 'jquery-updater/jquery-updater.php' );
 wpcom_vip_load_plugin( 'lazy-load-for-comments/lazy-load-for-comments.php' );
 wpcom_vip_load_plugin( 'lh-multipart-email/lh-multipart-email.php' );
-wpcom_vip_load_plugin( 'liveblog/liveblog.php' );
 wpcom_vip_load_plugin( 'minnpost-event-addon/minnpost-event-addon.php' );
 wpcom_vip_load_plugin( 'minnpost-form-processor-mailchimp/minnpost-form-processor-mailchimp.php' );
 wpcom_vip_load_plugin( 'minnpost-membership/minnpost-membership.php' );

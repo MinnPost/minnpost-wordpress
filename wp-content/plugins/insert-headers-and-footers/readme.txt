@@ -1,10 +1,10 @@
-=== Insert Headers and Footers ===
+=== Insert Headers and Footers by WPBeginner ===
 Contributors: WPbeginner, smub, deb255
 Tags: code, content, css, facebook pixel, footer, footer code, footer scripts, footers, google analytics, head, header, header code, header scripts, headers, insert, insert code, insert scripts, js, meta, meta tags, scripts, wpmu
 Requires at least: 4.6
-Tested up to: 5.7
+Tested up to: 5.9
 Requires PHP: 5.2
-Stable tag: 1.6.0
+Stable tag: 1.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,9 +36,21 @@ This plugin is created by <a href="https://syedbalkhi.com/" rel="friend" title="
 
 If you find this plugin useful to insert header and footer scripts, please leave a good rating and consider checking out our other projects:
 
-* <a href="http://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a> - Get More Email Subscribers
-* <a href="http://wpforms.com/" rel="friend" title="WPForms">WPForms</a> - Best Contact Form Builder Plugin
-* <a href="http://monsterinsights.com/" rel="friend" title="MonsterInsights">MonsterInsights</a> - Best Google Analytics Plugin
+* <a href="http://optinmonster.com/" rel="friend" title="OptinMonster">OptinMonster</a> - Get more email subscribers with the most popular conversion optimization plugin for WordPress.
+* <a href="http://wpforms.com/" rel="friend" title="WPForms">WPForms</a> - #1 drag & drop online form builder for WordPress (trusted by 5 million sites).
+* <a href="http://www.monsterinsights.com/" rel="friend" title="MonsterInsights">MonsterInsights</a> - See the stats that matter and grow your business with confidence. Best Google Analytics plugin for WordPress.
+* <a href="https://www.seedprod.com/" rel="friend" title="SeedProd">SeedProd</a> - Create beautiful landing pages with our powerful drag & drop landing page builder.
+* <a href="https://wpmailsmtp.com/" rel="friend" title="WP Mail SMTP">WP Mail SMTP</a> - Improve email deliverability for your contact form with the most popular SMTP plugin for WordPress.
+* <a href="https://rafflepress.com/" rel="friend" title="RafflePress">RafflePress</a> - Best WordPress giveaway and contest plugin to grow traffic and social followers.
+* <a href="https://smashballoon.com/" rel="friend" title="Smash Balloon">Smash Balloon</a> - #1 social feeds plugin for WordPress - display social media content in WordPress without code.
+* <a href="https://aioseo.com/" rel="friend" title="AIOSEO">AIOSEO</a> - The original WordPress SEO plugin to help you rank higher in search results (trusted by over 3 million sites).
+* <a href="https://www.pushengage.com/" rel="friend" title="PushEngage">PushEngage</a> - Connect with visitors after they leave your website with the leading web push notification plugin.
+* <a href="https://www.trustpulse.com/" rel="friend" title="TrustPulse">TrustPulse</a> - Add real-time social proof notifications to boost your store conversions by up to 15%.
+* <a href="https://searchwp.com/" rel="friend" title="SearchWP">SearchWP</a> - The most advanced custom WordPress search plugin to improve WordPress search quality.
+* <a href="https://affiliatewp.com/" rel="friend" title="AffiliateWP">AffiliateWP</a> - #1 affiliate management plugin for WordPress. Add a referral program to your online store.
+* <a href="https://wpsimplepay.com/" rel="friend" title="WP Simple Pay">WP Simple Pay</a> - #1 Stripe payments plugin for WordPress. Start accepting one-time or recurring payments without a shopping cart.
+* <a href="https://easydigitaldownloads.com/" rel="friend" title="Easy Digital Downloads">Easy Digital Downloads</a> - The best WordPress eCommerce plugin to sell digital products (eBooks, software, music, and more).
+* <a href="https://sugarcalendar.com/" rel="friend" title="Sugar Calendar">Sugar Calendar</a> - A simple event calendar plugin for WordPress that’s both easy and powerful.
 
 To learn more about WordPress, you can also visit <a href="http://www.wpbeginner.com/" rel="friend" title="WPBeginner">WPBeginner</a> for tutorials on topics like:
 
@@ -85,6 +97,12 @@ Thank you
 Syed Balkhi
 
 == Changelog ==
+
+= 1.6.2 =
+* Fix: Reverted a method visibility that was conflicting with other plugins using it.
+
+= 1.6.1 =
+* Tested compatibility with WordPress 5.9
 
 = 1.6.0 =
 * Fix: Only show settings CTA to users able to visit the settings page.

@@ -1,16 +1,16 @@
 <?php
 /**
-* Plugin Name: Insert Headers and Footers
-* Plugin URI: http://www.wpbeginner.com/
-* Version: 1.6.0
-* Requires at least: 4.6
-* Requires PHP: 5.2
-* Tested up to: 5.7
-* Author: WPBeginner
-* Author URI: http://www.wpbeginner.com/
-* Description: Allows you to insert code or text in the header or footer of your WordPress blog
-* License: GPLv2 or later
-*/
+ * Plugin Name: Insert Headers and Footers
+ * Plugin URI: http://www.wpbeginner.com/
+ * Version: 1.6.2
+ * Requires at least: 4.6
+ * Requires PHP: 5.2
+ * Tested up to: 5.9
+ * Author: WPBeginner
+ * Author URI: http://www.wpbeginner.com/
+ * Description: Allows you to insert code or text in the header or footer of your WordPress blog
+ * License: GPLv2 or later
+ */
 
 /*  Copyright 2019 WPBeginner
 
@@ -29,12 +29,21 @@
 */
 
 /**
-* Insert Headers and Footers Class
-*/
+ * Insert Headers and Footers Class
+ */
 class InsertHeadersAndFooters {
+
+	static $instance;
+
+	public static function get_instance() {
+		if ( ! isset( self::$instance ) ) {
+			self::$instance = new InsertHeadersAndFooters();
+		}
+		return self::$instance;
+	}
 	/**
-	* Constructor
-	*/
+	 * Constructor
+	 */
 	public function __construct() {
 		$file_data = get_file_data( __FILE__, array( 'Version' => 'Version' ) );
 
@@ -49,6 +58,7 @@ class InsertHeadersAndFooters {
 		$this->body_open_supported              = function_exists( 'wp_body_open' ) && version_compare( get_bloginfo( 'version' ), '5.2', '>=' );
 
 		// Hooks
+		add_action( 'plugins_loaded', array( $this, 'requireAdmin' ) );
 		add_action( 'admin_init', array( &$this, 'registerSettings' ) );
 		add_action( 'admin_enqueue_scripts', array( &$this, 'initCodeMirror' ) );
 		add_action( 'admin_menu', array( &$this, 'adminPanelsAndMetaBoxes' ) );
@@ -61,6 +71,19 @@ class InsertHeadersAndFooters {
 		if ( $this->body_open_supported ) {
 			add_action( 'wp_body_open', array( &$this, 'frontendBody' ), 1 );
 		}
+	}
+
+	/**
+	 * Require the admin files.
+	 *
+	 * @return void
+	 */
+	public function requireAdmin() {
+		if ( ! is_admin() ) {
+			// Only load in admin section.
+			return;
+		}
+		require_once $this->plugin->folder . 'inc/admin/class-review.php';
 	}
 
 	/**
@@ -92,8 +115,8 @@ class InsertHeadersAndFooters {
 	}
 
 	/**
-	* Register Settings
-	*/
+	 * Register Settings
+	 */
 	function registerSettings() {
 		register_setting( $this->plugin->name, 'ihaf_insert_header', 'trim' );
 		register_setting( $this->plugin->name, 'ihaf_insert_footer', 'trim' );
@@ -101,16 +124,16 @@ class InsertHeadersAndFooters {
 	}
 
 	/**
-	* Register the plugin settings panel
-	*/
+	 * Register the plugin settings panel
+	 */
 	function adminPanelsAndMetaBoxes() {
 		add_submenu_page( 'options-general.php', $this->plugin->displayName, $this->plugin->displayName, 'manage_options', $this->plugin->name, array( &$this, 'adminPanel' ) );
 	}
 
 	/**
-	* Output the Administration Panel
-	* Save POSTed data from the Administration Panel into a WordPress option
-	*/
+	 * Output the Administration Panel
+	 * Save POSTed data from the Administration Panel into a WordPress option
+	 */
 	function adminPanel() {
 		/*
 		 * Only users with manage_options can access this page.
@@ -202,32 +225,32 @@ class InsertHeadersAndFooters {
 	}
 
 	/**
-	* Outputs script / CSS to the frontend header
-	*/
+	 * Outputs script / CSS to the frontend header
+	 */
 	function frontendHeader() {
 		$this->output( 'ihaf_insert_header' );
 	}
 
 	/**
-	* Outputs script / CSS to the frontend footer
-	*/
+	 * Outputs script / CSS to the frontend footer
+	 */
 	function frontendFooter() {
 		$this->output( 'ihaf_insert_footer' );
 	}
 
 	/**
-	* Outputs script / CSS to the frontend below opening body
-	*/
+	 * Outputs script / CSS to the frontend below opening body
+	 */
 	function frontendBody() {
 		$this->output( 'ihaf_insert_body' );
 	}
 
 	/**
-	* Outputs the given setting, if conditions are met
-	*
-	* @param string $setting Setting Name
-	* @return output
-	*/
+	 * Outputs the given setting, if conditions are met
+	 *
+	 * @param string $setting Setting Name
+	 * @return output
+	 */
 	function output( $setting ) {
 		// Ignore admin, feed, robots or trackbacks
 		if ( is_admin() || is_feed() || is_robots() || is_trackback() ) {
@@ -268,4 +291,13 @@ class InsertHeadersAndFooters {
 	}
 }
 
-$ihaf = new InsertHeadersAndFooters();
+/**
+ * Instantiate the class a single time.
+ *
+ * @since 1.6.1
+ */
+function insert_headers_and_footers() {
+	return InsertHeadersAndFooters::get_instance();
+}
+
+insert_headers_and_footers();

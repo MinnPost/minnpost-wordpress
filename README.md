@@ -28,17 +28,17 @@ You can run this repository as a local WordPress installation. It requires VIP f
 1. Install memcache and memcached.
     - `brew install memcached` 
     - `pecl download memcache`
-    - `open memcache-4.0.5.2.tgz`
-    - `cd memcache-4.0.5.2/memcache-4.0.5.2`
+    - `open memcache-8.0.tgz`
+    - `cd memcache-8.0/memcache-8.0`
     - `phpize`
     - `./configure --with-zlib-dir=/usr/local/Cellar/zlib/1.2.11`
     - `make`
     - `sudo make install`
-    - In the php.ini file, add `extension="memcache.so"`
+    - In the php.ini file, add `extension="memcache.so"`. If you aren't sure where the correct ini file is, you can run `phpinfo();` and look for the "Loaded Configuration File" value.
     - `valet restart` or other command, if you aren't running Valet. Restarting PHP alone does not seem to work, at least in a Valet environment.
 1. Install graphicsmagick.
     - `brew install graphicsmagick`
-    - `pecl download gmagick`. You might have to use `pecl install gmagick-2.0.5RC1` (or equivalent version)
+    - `pecl download gmagick`. You might have to use `pecl install gmagick-2.0.6RC1` (or equivalent version)
     - This should run the full install for Gmagick.
     - `valet restart` or other command, if you aren't running Valet. Restarting PHP alone does not seem to work, at least in a Valet environment.
 1. Symlink the `object-cache.php` file into the `wp-content` folder. Use this command (edit the path to your site root if necessary): `ln -s ~/Sites/minnpost-wordpress/wp-content/mu-plugins/drop-ins/object-cache/object-cache.php ~/Sites/minnpost-wordpress/wp-content/`.
