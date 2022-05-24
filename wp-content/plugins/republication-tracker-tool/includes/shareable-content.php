@@ -2,6 +2,8 @@
 /**
  * This file provides an AJAX response containing the body of a post as well as some sharing information.
  *
+ * This operates within The Loop. $post is set to a specific post.
+ *
  * Expected URLs is something like /wp-content/plugins/republication-tracker-tool/includes/shareable-content.php?post=22078&_=1512494948576 or something
  * We aren't passing a NONCE; this isn't a form.
  */
@@ -70,14 +72,24 @@ $content_footer = Republication_Tracker_Tool::create_content_footer( $post );
  * @var HTML $article_info The article title, etc.
  */
 $article_info = sprintf(
-	// translators: %1$s is the post title, %2$s is the byline, %3$s is the site name, %4$s is the date in the format F j, Y
+	// translators: %1$s is the post title, %2$s is the byline, %3$s is the site name, %4$s is the date in the format F j, Y.
 	__( '<h1>%1$s</h1><p class="byline">by %2$s, %3$s <br />%4$s</p>', 'republication-tracker-tool' ),
 	wp_kses_post( get_the_title( $post ) ),
-	wp_kses_post( get_the_author_meta( 'display_name', $post->post_author ) ),
+	/**
+	 * Allow filtering of the byline that is output in the share dialog and the copyable plaintext.
+	 *
+	 * This is to provide support for plugins that do not implement
+	 * a filter on 'the_author', or in cases where the 'the_author'
+	 * filter returns incomplete information.
+	 *
+	 * @link https://developer.wordpress.org/reference/functions/get_the_author/
+	 * @link https://github.com/INN/republication-tracker-tool/issues/46
+	 */
+	wp_kses_post( apply_filters( 'republication_tracker_tool_byline', get_the_author() ) ),
 	wp_kses_post( get_bloginfo( 'name' ) ),
 	wp_kses_post( date( 'F j, Y', strtotime( $post->post_date ) ) )
 );
-// strip empty tags after automatically applying p tags
+// strip empty tags after automatically applying p tags.
 $article_info = str_replace( '<p></p>', '', wpautop( $article_info ) );
 
 /**
@@ -88,18 +100,19 @@ $article_info = str_replace( '<p></p>', '', wpautop( $article_info ) );
 $license_statement = wp_kses_post( get_option( 'republication_tracker_tool_policy' ) );
 
 echo '<div id="republication-tracker-tool-modal-content" ' . ( $is_amp ? '' : 'style="display:none;"' ) . '>';
-	echo '<div ' . ( $is_amp ? 'on="tap:republication-tracker-tool-modal.close"' : '' ) . ' class="republication-tracker-tool-close">X</div>';
+	echo '<div ' . ( $is_amp ? 'on="tap:republication-tracker-tool-modal.close"' : '' ) . ' class="republication-tracker-tool-close">';
+	echo '<span class="screen-reader-text">' . esc_html( 'Close window', 'republication-tracker-tool' ) . '</span> <span aria-hidden="true">X</span></div>';
 	echo sprintf( '<h2>%s</h2>', esc_html__( 'Republish this article', 'republication-tracker-tool' ) );
 
 	// Explain Creative Commons
 	echo '<div class="cc-policy">';
 		echo '<div class="cc-license">';
-			echo sprintf( '<a rel="noreferrer license" target="_blank" href="http://creativecommons.org/licenses/by-nd/4.0/"><img alt="%s" style="border-width:0" src="https://i.creativecommons.org/l/by-nd/4.0/88x31.png" /></a>', esc_html__( 'Creative Commons License' ) );
+			echo sprintf( '<a rel="noreferrer license" target="_blank" href="http://creativecommons.org/licenses/by-nd/4.0/"><img alt="%s" style="border-width:0" src="https://i.creativecommons.org/l/by-nd/4.0/88x31.png" /></a>', esc_html__( 'Creative Commons License', 'republication-tracker-tool' ) );
 			echo wp_kses_post(
 				wpautop(
 					sprintf(
 						// translators: %1$s is the URL to the particular Creative Commons license.
-						__( 'This work is licensed under a <a rel="noreferrer license" target="_blank" href="%1$s">Creative Commons Attribution-NoDerivatives 4.0 International License</a>.' ),
+						__( 'This work is licensed under a <a rel="noreferrer license" target="_blank" href="%1$s">Creative Commons Attribution-NoDerivatives 4.0 International License</a>.', 'republication-tracker-tool' ),
 						'http://creativecommons.org/licenses/by-nd/4.0/'
 					)
 				)

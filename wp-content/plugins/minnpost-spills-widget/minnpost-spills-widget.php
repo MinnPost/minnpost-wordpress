@@ -2,7 +2,7 @@
 /*
 Plugin Name: MinnPost Spills
 Description: This plugin creates a sidebar widget and endpoint URL that is able to display posts from a group of categories and/or tags
-Version: 0.0.11
+Version: 0.0.12
 Author: Jonathan Stegall
 Author URI: https://code.minnpost.com
 Text Domain: minnpost-spills
@@ -22,7 +22,7 @@ class MinnpostSpills {
 	 */
 	public function __construct() {
 
-		$this->version = '0.0.11';
+		$this->version = '0.0.12';
 
 		$this->load_admin();
 
@@ -58,6 +58,8 @@ class MinnpostSpills_Widget extends WP_Widget {
 
 	public function __construct() {
 
+		$this->version = '0.0.12';
+
 		parent::__construct(
 			'MinnpostSpills_Widget',
 			__( 'MinnPost Spills Widget', 'minnpost-spills-widget' ),
@@ -66,43 +68,6 @@ class MinnpostSpills_Widget extends WP_Widget {
 				'description' => __( 'Posts from a group of categories and/or tags.', 'minnpost-spills-widget' ),
 			)
 		);
-
-		// Register hooks
-		add_action( 'admin_enqueue_scripts', array( $this, 'add_suggest_script' ) );
-		add_action( 'admin_print_footer_scripts', array( $this, 'add_script_config' ), 30 );
-
-	}
-
-	/**
-	 * Add script to admin page
-	 */
-	function add_suggest_script() {
-		wp_enqueue_script( 'suggest' );
-	}
-
-	/**
-	 * add autosuggest script to admin page
-	 */
-	function add_script_config() {
-		?>
-		<script>
-		function setSuggest() {
-			jQuery('.mp-spills-terms').suggest(
-				"<?php echo get_bloginfo( 'wpurl' ); ?>/wp-admin/admin-ajax.php?action=ajax-tag-search&tax=post_tag",
-				{
-					multiple:true, 
-					multipleSep: ","
-				}
-			);
-		}
-		$(document).ready(function() {
-			setSuggest();
-		});
-		$(document).on('widget-updated widget-added', function() {
-			setSuggest(); 
-		});
-		</script>
-		<?php
 	}
 
 	/**
@@ -240,6 +205,8 @@ class MinnpostSpills_Widget extends WP_Widget {
 	* @param array $instance Previously saved values from database.
 	*/
 	public function form( $instance ) {
+
+		wp_enqueue_script( 'minnpost-spills-js-footer-admin', plugins_url( 'minnpost-spills-widget/minnpost-spills-admin.js', dirname( __FILE__ ) ), array( 'jquery', 'suggest' ), $this->version );
 
 		if ( isset( $instance['title'] ) ) {
 			$title = sanitize_text_field( $instance['title'] );

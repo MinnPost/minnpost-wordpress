@@ -3,8 +3,8 @@ Contributors: Ramoonus
 Donate link: http://www.ramoonus.nl/donate/
 Tags: jquery, update, jquery ui, javascript, jq
 Requires at least: 5.6
-Tested up to: 5.7
-Stable tag: 3.6.0.1
+Tested up to: 6.0
+Stable tag: 3.6.0.2
 Requires PHP: 5.6
 
 This plugin updates jQuery to the latest stable version on your website.
@@ -15,7 +15,7 @@ jQuery Migrate is also included for backwards compatibility.
 
 No files are replaced, therefore deactivation of this plugin returns your site to it`s original state.
 
-Since WordPress 5.6 includes an up-to-date version of jQuery 3, upgrading shouldn`t be neccesary. 
+Since WordPress 5.6 includes an up-to-date version of jQuery 3, upgrading shouldn't`t be neccesary in most cases. 
 
 **Warning**
 
@@ -52,8 +52,17 @@ A: Using an up-to-date jQuery could break your site on the client-side.
 Please clear the server and browser cache after upgrading/disabling this plugin.
 
 == Changelog ==
+
+= 3.6.0.2 =
+* Supports WordPress 6.0
+* Updated [jQuery Migrate](https://github.com/jquery/jquery-migrate) to 3.4.0
+* Included map files (by WPorg forum request)
+* Included short.debug.js
+
 = 3.6.0.1 =
 * Fixes missing jQuery Migrate minified file
+* Supports WordPress 5.8
+* Supports WordPress 5.9
 
 = 3.6.0 =
 * Updated [jQuery to 3.6.0](http://blog.jquery.com/2021/03/02/jquery-3-6-0-released/)

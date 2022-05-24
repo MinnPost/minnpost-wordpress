@@ -6,7 +6,7 @@
  * Author URI:      https://labs.inn.org
  * Text Domain:     republication-tracker-tool
  * Domain Path:     /languages
- * Version:         1.2.3
+ * Version:         1.3.1
  *
  * @package         Republication_Tracker_Tool
  */
@@ -14,6 +14,7 @@
 require plugin_dir_path( __FILE__ ) . 'includes/class-settings.php';
 require plugin_dir_path( __FILE__ ) . 'includes/class-article-settings.php';
 require plugin_dir_path( __FILE__ ) . 'includes/class-widget.php';
+require plugin_dir_path( __FILE__ ) . 'includes/compatibility-co-authors-plus.php';
 
 /**
 * Main initiation class.

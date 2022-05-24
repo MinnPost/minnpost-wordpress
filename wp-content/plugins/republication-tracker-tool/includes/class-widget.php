@@ -93,13 +93,13 @@ class Republication_Tracker_Tool_Widget extends WP_Widget {
 
 			if ( $is_amp ) {
 				?>
-					<amp-lightbox id="republication-tracker-tool-modal" layout="nodisplay">
+					<amp-lightbox id="republication-tracker-tool-modal" layout="nodisplay" role="dialog" aria-modal="true">
 						<?php echo esc_html( include_once $modal_content_path ); ?>
 					</amp-lightbox>
 				<?php
 			} else {
 				?>
-					<div id="republication-tracker-tool-modal" style="display:none;" data-postid="<?php echo esc_attr( $post->ID ); ?>" data-pluginsdir="<?php echo esc_attr( plugins_url() ); ?>">
+					<div id="republication-tracker-tool-modal" style="display:none;" data-postid="<?php echo esc_attr( $post->ID ); ?>" data-pluginsdir="<?php echo esc_attr( plugins_url() ); ?>" role="dialog" aria-modal="true">
 						<?php echo esc_html( include_once $modal_content_path ); ?>
 					</div>
 				<?php
@@ -115,10 +115,10 @@ class Republication_Tracker_Tool_Widget extends WP_Widget {
 	public function form( $instance ) {
 		echo sprintf( '<p><em>%s</em></p>', esc_html__( 'This widget will only display on single articles.', 'republication-tracker-tool' ) );
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : '';
-		$text  = ! empty( $instance['text'] ) ? $instance['text'] : esc_html__( 'Republish our articles for free, online or in print, under a Creative Commons license.', 'text_domain' );
+		$text  = ! empty( $instance['text'] ) ? $instance['text'] : esc_html__( 'Republish our articles for free, online or in print, under a Creative Commons license.', 'republication-tracker-tool' );
 		?>
 		<p>
-			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title:', 'text_domain' ); ?></label>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title:', 'republication-tracker-tool' ); ?></label>
 			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
 		</p>
 		<p>

@@ -3,7 +3,7 @@
 * Plugin Name: jQuery Updater
 * Plugin URI: http://www.ramoonus.nl/wordpress/jquery-updater/
 * Description: This plugin updates jQuery to the latest  stable version.
-* Version: 3.6.0.1
+* Version: 3.6.0.2
 * Author: Ramoonus
 * Author URI: http://www.ramoonus.nl/
 * License: GPL3
@@ -22,7 +22,7 @@ function rw_jquery_updater()
  {
     $ver = '3.6.0';
     $ver_core = $ver;
-    $ver_migrate = '3.3.2';
+    $ver_migrate = '3.4.0';
     $slim = false;
     $min = true;
     $cdn = false; // google, microsoft, cdnjs, jsdelivr
@@ -39,7 +39,7 @@ function rw_jquery_updater()
     // Deregister jQuery Migrate
     wp_deregister_script( 'jquery-migrate' );
     // Reregister jQuery Migrate
-    wp_register_script( 'jquery-migrate', plugins_url( '/js/jquery-migrate-3.3.2.min.js', __FILE__ ), ['jquery-core'], $ver_migrate );
+    wp_register_script( 'jquery-migrate', plugins_url( '/js/jquery-migrate-3.4.0.min.js', __FILE__ ), ['jquery-core'], $ver_migrate );
 
     // jQuery
     // Deregister jQuery ( Meta )
@@ -50,6 +50,7 @@ function rw_jquery_updater()
 
 /**
 * Front-End
+
 * @version 2.1
 */
 add_action( 'wp_enqueue_scripts', 'rw_jquery_updater' );
@@ -72,16 +73,13 @@ add_action( 'plugins_loaded', 'rw_load_plugin_textdomain' );
 /**
  * Activation Message
  */
-register_activation_hook( __FILE__, 'jqu_admin_notice_activation_hook' );
-
 function jqu_admin_notice_activation_hook() {
     // does things upon activation
     set_transient( 'jqu_admin_notice', true, 5 );
 
     // @todo flush cache
 }
-
-add_action( 'admin_notices', 'jqu_admin_notice_message' );
+register_activation_hook( __FILE__, 'jqu_admin_notice_activation_hook' );
 
 function jqu_admin_notice_message(){
 
@@ -97,6 +95,7 @@ function jqu_admin_notice_message(){
         delete_transient( 'jqu_admin_notice' );
     }
 }
+add_action( 'admin_notices', 'jqu_admin_notice_message' );
 
 /**
  * Options Page
@@ -105,11 +104,6 @@ function jqu_admin_notice_message(){
  * @since 3.5.0
  * @return void
  */
-// Calls Menu
-function jqu_add_settings_page() {
-    add_options_page( 'jQuery Updater Options', 'jQuery Updater', 'manage_options', 'jquery-updater', 'jqu_render_plugin_settings_page' );
-}
-//add_action( 'admin_menu', 'jqu_add_settings_page' );
 
 // Draws page
 function jqu_render_plugin_settings_page() {
@@ -149,3 +143,9 @@ function jqu_render_plugin_settings_page() {
     </form>
     <?php
 }
+
+// Calls Menu
+function jqu_add_settings_page() {
+    add_options_page( 'jQuery Updater Options', 'jQuery Updater', 'manage_options', 'jquery-updater', 'jqu_render_plugin_settings_page' );
+}
+//add_action( 'admin_menu', 'jqu_add_settings_page' );

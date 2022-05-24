@@ -1,3 +1,45 @@
+## [1.3.1](https://github.com/Automattic/republication-tracker-tool/compare/v1.3.0...v1.3.1) (2022-05-24)
+
+
+### Bug Fixes
+
+* version release configuration ([9dd81ee](https://github.com/Automattic/republication-tracker-tool/commit/9dd81ee60b46eb55e963d74e9b4771dbe7ee382f))
+
+# [1.3.0](https://github.com/Automattic/republication-tracker-tool/compare/v1.2.3...v1.3.0) (2022-05-20)
+
+
+### Bug Fixes
+
+* add `role` and `aria-modal` attributes to popup ([#137](https://github.com/Automattic/republication-tracker-tool/issues/137)) ([41dacb5](https://github.com/Automattic/republication-tracker-tool/commit/41dacb532589e7ac68c733693133620607e14da2))
+* add role and aria-modal attributes to popup ([16923f0](https://github.com/Automattic/republication-tracker-tool/commit/16923f00e633eadc714734e3439af477ac817b61))
+* add screen reader accessible label to the modal close button ([#136](https://github.com/Automattic/republication-tracker-tool/issues/136)) ([7c50519](https://github.com/Automattic/republication-tracker-tool/commit/7c505198fe4e6c01030c1e9f3d5cb95d9844fb7c))
+* add screen reader label to close button ([f09b7c7](https://github.com/Automattic/republication-tracker-tool/commit/f09b7c7ca8d9e41cfdd41e75d675bcc3bf6b2764))
+* force alpha release ([0459147](https://github.com/Automattic/republication-tracker-tool/commit/045914771481220fd5377a0528e429a3e8842f6d))
+* increase button background contrast ([a2100d9](https://github.com/Automattic/republication-tracker-tool/commit/a2100d9bf0d463b0e9324a7a852484fce16f7696))
+* increase button background contrast ([#138](https://github.com/Automattic/republication-tracker-tool/issues/138)) ([56f161b](https://github.com/Automattic/republication-tracker-tool/commit/56f161ba175ff2a8fec9c24d5e720aa0eeba70e0))
+* move modal attributes ([2f549c3](https://github.com/Automattic/republication-tracker-tool/commit/2f549c3d200bf5155bf61eb23ba17d92dac301d1))
+* reorder close button label elements ([8b5dd5e](https://github.com/Automattic/republication-tracker-tool/commit/8b5dd5e7c3accc9279c5f344aed45c1865308de7))
+* trigger release ([c1be01f](https://github.com/Automattic/republication-tracker-tool/commit/c1be01fdc9d11f3eca2ccf381fa151cca1c338f5))
+
+
+### Features
+
+* handle co-authors-plus in byline ([#141](https://github.com/Automattic/republication-tracker-tool/issues/141)) ([c7ad9a0](https://github.com/Automattic/republication-tracker-tool/commit/c7ad9a0643c01e5f5faab8af7ae98d399121b520)), closes [#46](https://github.com/Automattic/republication-tracker-tool/issues/46)
+
+## [1.2.4-alpha.1](https://github.com/Automattic/republication-tracker-tool/compare/v1.2.3...v1.2.4-alpha.1) (2022-05-05)
+
+
+### Bug Fixes
+
+* add `role` and `aria-modal` attributes to popup ([#137](https://github.com/Automattic/republication-tracker-tool/issues/137)) ([41dacb5](https://github.com/Automattic/republication-tracker-tool/commit/41dacb532589e7ac68c733693133620607e14da2))
+* add role and aria-modal attributes to popup ([16923f0](https://github.com/Automattic/republication-tracker-tool/commit/16923f00e633eadc714734e3439af477ac817b61))
+* add screen reader accessible label to the modal close button ([#136](https://github.com/Automattic/republication-tracker-tool/issues/136)) ([7c50519](https://github.com/Automattic/republication-tracker-tool/commit/7c505198fe4e6c01030c1e9f3d5cb95d9844fb7c))
+* add screen reader label to close button ([f09b7c7](https://github.com/Automattic/republication-tracker-tool/commit/f09b7c7ca8d9e41cfdd41e75d675bcc3bf6b2764))
+* increase button background contrast ([a2100d9](https://github.com/Automattic/republication-tracker-tool/commit/a2100d9bf0d463b0e9324a7a852484fce16f7696))
+* increase button background contrast ([#138](https://github.com/Automattic/republication-tracker-tool/issues/138)) ([56f161b](https://github.com/Automattic/republication-tracker-tool/commit/56f161ba175ff2a8fec9c24d5e720aa0eeba70e0))
+* move modal attributes ([2f549c3](https://github.com/Automattic/republication-tracker-tool/commit/2f549c3d200bf5155bf61eb23ba17d92dac301d1))
+* reorder close button label elements ([8b5dd5e](https://github.com/Automattic/republication-tracker-tool/commit/8b5dd5e7c3accc9279c5f344aed45c1865308de7))
+
 ## [1.2.3](https://github.com/Automattic/republication-tracker-tool/compare/v1.2.2...v1.2.3) (2021-08-06)
 
 
