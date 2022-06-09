@@ -1,6 +1,6 @@
 # MinnPost WordPress
 
-This repository is [MinnPost.com](https://www.minnpost.com) in WordPress. It runs live on [WordPress.com VIP Go](https://vip.wordpress.com/). This repository exists to faciliate open sharing of code and other development work, but because of the nature of VIP Go it does not include some required configuration files.
+This repository is [MinnPost.com](https://www.minnpost.com) in WordPress. It runs live on [WordPress VIP](https://vip.wordpress.com/). This repository exists to faciliate open sharing of code and other development work, but because of the nature of VIP Go it does not include some required configuration files.
 
 ## Dependencies
 
@@ -11,7 +11,7 @@ This repository is [MinnPost.com](https://www.minnpost.com) in WordPress. It run
 
 ## Development setup
 
-You can run this repository as a local WordPress installation. It requires VIP files to work properly. The best document to read about this is the one [hosted by VIP Go](https://vip.wordpress.com/documentation/vip-go/local-vip-go-development-environment/).
+You can run this repository as a local WordPress installation. It requires VIP files to work properly. The best document to read about this is the one [hosted by WordPress VIP](https://vip.wordpress.com/documentation/vip-go/local-vip-go-development-environment/).
 
 1. Clone this repository.
 1. If you have access to a backup of the site's database from the host:
@@ -24,7 +24,7 @@ You can run this repository as a local WordPress installation. It requires VIP f
     - If you have access to a backup of the site's database, you can skip `wp core install` and instead import that database. You'll need to change `home` and `siteurl` values from `wp_options` in that case.
     - If you have a newer MySQL, at least as of June of 2020, in order to successfully run a WordPress import you'll need to run this SQL: `set global sql_mode = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';`. Then be sure to restart MySQL, ex with `brew services restart mysql` if you use Homebrew.
 1. Delete the `wp-content` folder if you have access to the private repository for that folder. Clone that repository as `wp-content`. Use `--recursive` to clone the submodules. `git clone --recursive gitrepo.git wp-content`
-1. Add the VIP Go MU plugins. `git clone git@github.com:Automattic/vip-go-mu-plugins.git --recursive wp-content/mu-plugins/`. This requires an SSH key on the GitHub account.
+1. Add the built version of the VIP Go MU plugins. `git clone https://github.com/Automattic/vip-go-mu-plugins-built.git mu-plugins`.
 1. Install memcache and memcached.
     - `brew install memcached` 
     - `pecl download memcache`
@@ -78,11 +78,10 @@ define( 'AUTOMATIC_UPDATER_DISABLED', true );
 
 ## Maintenance
 
-To update the VIP Go MU plugins, regularly run these commands:
+To update the VIP MU plugins, regularly run these commands:
 
 - `cd wp-content/mu-plugins/`
 - `git pull origin master`
-- `git submodule update --init --recursive`
 
 ## Deployment
 
