@@ -3,7 +3,7 @@
  * Plugin Name: Widget Options
  * Plugin URI: https://widget-options.com/
  * Description: Additional Widget options for better widget control. Get <strong><a href="http://widget-options.com/" target="_blank" >Extended Widget Options for WordPress</a></strong> for complete widget controls. Thanks!
- * Version: 3.7.14
+ * Version: 3.8.4
  * Author: Widget Options Team
  * Author URI: https://widget-options.com/
  * Text Domain: widget-options
@@ -85,7 +85,7 @@ final class WP_Widget_Options {
 
 		// Plugin version.
 		if ( ! defined( 'WIDGETOPTS_VERSION' ) ) {
-			define( 'WIDGETOPTS_VERSION', '3.7.14' );
+			define( 'WIDGETOPTS_VERSION', '3.8.4' );
 		}
 
 		// Plugin Folder Path.
@@ -197,6 +197,10 @@ final class WP_Widget_Options {
 				if( isset( $widget_options['state'] ) && $widget_options['state'] == 'activate' ){
 					require_once WIDGETOPTS_PLUGIN_DIR . 'includes/widgets/option-tabs/state.php';
 				}
+
+				//add days and dates tab DEMO
+				require_once WIDGETOPTS_PLUGIN_DIR . 'includes/widgets/option-tabs/days-dates.php';
+				require_once WIDGETOPTS_PLUGIN_DIR . 'includes/widgets/option-tabs/styling.php';
 
 				//add settings tab if activated
 				if( 'activate' == $widget_options['hide_title'] ||
