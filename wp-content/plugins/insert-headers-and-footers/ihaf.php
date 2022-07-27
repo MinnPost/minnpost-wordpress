@@ -1,18 +1,24 @@
 <?php
 /**
- * Plugin Name: Insert Headers and Footers
- * Plugin URI: http://www.wpbeginner.com/
- * Version: 1.6.2
+ * Plugin Name: WPCode - Insert Headers, Footers, and Code Snippets
+ * Plugin URI: https://www.wpcode.com/
+ * Version: 2.0.1
  * Requires at least: 4.6
- * Requires PHP: 5.2
- * Tested up to: 5.9
- * Author: WPBeginner
- * Author URI: http://www.wpbeginner.com/
- * Description: Allows you to insert code or text in the header or footer of your WordPress blog
+ * Requires PHP: 5.5
+ * Tested up to: 6.0
+ * Author: WPCode
+ * Author URI: https://www.wpcode.com/
+ * Description: Easily add code snippets in WordPress. Insert scripts to the header and footer, add PHP code snippets with conditional logic, insert ads pixel, custom content, and more.
  * License: GPLv2 or later
+ *
+ * Text Domain:         insert-headers-and-footers
+ * Domain Path:         /languages
+ *
+ * @package WPCode
  */
 
-/*  Copyright 2019 WPBeginner
+/*
+	Copyright 2019 WPBeginner
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License, version 2, as
@@ -28,276 +34,255 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+
 /**
- * Insert Headers and Footers Class
+ * Main WPCode Class
  */
-class InsertHeadersAndFooters {
+class WPCode {
 
-	static $instance;
+	/**
+	 * Holds the instance of the plugin.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @var WPCode The one true WPCode
+	 */
+	private static $instance;
 
-	public static function get_instance() {
-		if ( ! isset( self::$instance ) ) {
-			self::$instance = new InsertHeadersAndFooters();
+	/**
+	 * Plugin version.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @var string
+	 */
+	public $version = '';
+
+	/**
+	 * The auto-insert instance.
+	 *
+	 * @var WPCode_Auto_Insert
+	 */
+	public $auto_insert;
+
+	/**
+	 * The snippet execution instance.
+	 *
+	 * @var WPCode_Snippet_Execute
+	 */
+	public $execute;
+
+	/**
+	 * The error handling instance.
+	 *
+	 * @var WPCode_Error
+	 */
+	public $error;
+
+	/**
+	 * The conditional logic instance.
+	 *
+	 * @var WPCode_Conditional_Logic
+	 */
+	public $conditional_logic;
+
+	/**
+	 * The conditional logic instance.
+	 *
+	 * @var WPCode_Snippet_Cache
+	 */
+	public $cache;
+
+	/**
+	 * The snippet library.
+	 *
+	 * @var WPCode_Library
+	 */
+	public $library;
+
+	/**
+	 * The Snippet Generator.
+	 *
+	 * @var WPCode_Generator
+	 */
+	public $generator;
+
+	/**
+	 * The plugin settings.
+	 *
+	 * @var WPCode_Settings
+	 */
+	public $settings;
+
+	/**
+	 * The plugin importers.
+	 *
+	 * @var WPCode_Importers
+	 */
+	public $importers;
+	/**
+	 * The file cache class.
+	 *
+	 * @var WPCode_File_Cache
+	 */
+	public $file_cache;
+
+	/**
+	 * The notifications instance (admin-only).
+	 *
+	 * @var WPCode_Notifications
+	 */
+	public $notifications;
+
+	/**
+	 * Main instance of WPCode.
+	 *
+	 * @return WPCode
+	 * @since 2.0.0
+	 */
+	public static function instance() {
+		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof WPCode ) ) {
+			self::$instance = new WPCode();
 		}
+
 		return self::$instance;
 	}
+
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
-	public function __construct() {
-		$file_data = get_file_data( __FILE__, array( 'Version' => 'Version' ) );
+	private function __construct() {
+		$this->setup_constants();
+		$this->includes();
+		$this->load_components();
 
-		// Plugin Details
-		$this->plugin                           = new stdClass;
-		$this->plugin->name                     = 'insert-headers-and-footers'; // Plugin Folder
-		$this->plugin->displayName              = 'Insert Headers and Footers'; // Plugin Name
-		$this->plugin->version                  = $file_data['Version'];
-		$this->plugin->folder                   = plugin_dir_path( __FILE__ );
-		$this->plugin->url                      = plugin_dir_url( __FILE__ );
-		$this->plugin->db_welcome_dismissed_key = $this->plugin->name . '_welcome_dismissed_key';
-		$this->body_open_supported              = function_exists( 'wp_body_open' ) && version_compare( get_bloginfo( 'version' ), '5.2', '>=' );
-
-		// Hooks
-		add_action( 'plugins_loaded', array( $this, 'requireAdmin' ) );
-		add_action( 'admin_init', array( &$this, 'registerSettings' ) );
-		add_action( 'admin_enqueue_scripts', array( &$this, 'initCodeMirror' ) );
-		add_action( 'admin_menu', array( &$this, 'adminPanelsAndMetaBoxes' ) );
-		add_action( 'admin_notices', array( &$this, 'dashboardNotices' ) );
-		add_action( 'wp_ajax_' . $this->plugin->name . '_dismiss_dashboard_notices', array( &$this, 'dismissDashboardNotices' ) );
-
-		// Frontend Hooks
-		add_action( 'wp_head', array( &$this, 'frontendHeader' ) );
-		add_action( 'wp_footer', array( &$this, 'frontendFooter' ) );
-		if ( $this->body_open_supported ) {
-			add_action( 'wp_body_open', array( &$this, 'frontendBody' ), 1 );
-		}
+		add_action( 'init', array( $this, 'load_plugin_textdomain' ), 15 );
 	}
 
 	/**
-	 * Require the admin files.
+	 * Set up global constants.
 	 *
 	 * @return void
 	 */
-	public function requireAdmin() {
-		if ( ! is_admin() ) {
-			// Only load in admin section.
-			return;
-		}
-		require_once $this->plugin->folder . 'inc/admin/class-review.php';
+	private function setup_constants() {
+
+		define( 'WPCODE_FILE', __FILE__ );
+
+		$plugin_headers = get_file_data( WPCODE_FILE, array( 'version' => 'Version' ) );
+
+		define( 'WPCODE_VERSION', $plugin_headers['version'] );
+		define( 'WPCODE_PLUGIN_BASENAME', plugin_basename( WPCODE_FILE ) );
+		define( 'WPCODE_PLUGIN_URL', plugin_dir_url( WPCODE_FILE ) );
+		define( 'WPCODE_PLUGIN_PATH', plugin_dir_path( WPCODE_FILE ) );
+
+		$this->version = WPCODE_VERSION;
 	}
 
 	/**
-	 * Show relevant notices for the plugin
-	 */
-	function dashboardNotices() {
-		global $pagenow;
-
-		if (
-			! get_option( $this->plugin->db_welcome_dismissed_key )
-			&& current_user_can( 'manage_options' )
-		) {
-			if ( ! ( 'options-general.php' === $pagenow && isset( $_GET['page'] ) && 'insert-headers-and-footers' === $_GET['page'] ) ) {
-				$setting_page = admin_url( 'options-general.php?page=' . $this->plugin->name );
-				// load the notices view
-				include_once( $this->plugin->folder . '/views/dashboard-notices.php' );
-			}
-		}
-	}
-
-	/**
-	 * Dismiss the welcome notice for the plugin
-	 */
-	function dismissDashboardNotices() {
-		check_ajax_referer( $this->plugin->name . '-nonce', 'nonce' );
-		// user has dismissed the welcome notice
-		update_option( $this->plugin->db_welcome_dismissed_key, 1 );
-		exit;
-	}
-
-	/**
-	 * Register Settings
-	 */
-	function registerSettings() {
-		register_setting( $this->plugin->name, 'ihaf_insert_header', 'trim' );
-		register_setting( $this->plugin->name, 'ihaf_insert_footer', 'trim' );
-		register_setting( $this->plugin->name, 'ihaf_insert_body', 'trim' );
-	}
-
-	/**
-	 * Register the plugin settings panel
-	 */
-	function adminPanelsAndMetaBoxes() {
-		add_submenu_page( 'options-general.php', $this->plugin->displayName, $this->plugin->displayName, 'manage_options', $this->plugin->name, array( &$this, 'adminPanel' ) );
-	}
-
-	/**
-	 * Output the Administration Panel
-	 * Save POSTed data from the Administration Panel into a WordPress option
-	 */
-	function adminPanel() {
-		/*
-		 * Only users with manage_options can access this page.
-		 *
-		 * The capability included in add_settings_page() means WP should deal
-		 * with this automatically but it never hurts to double check.
-		 */
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( __( 'Sorry, you are not allowed to access this page.', 'insert-headers-and-footers' ) );
-		}
-
-		// only users with `unfiltered_html` can edit scripts.
-		if ( ! current_user_can( 'unfiltered_html' ) ) {
-			$this->errorMessage = '<p>' . __( 'Sorry, only have read-only access to this page. Ask your administrator for assistance editing.', 'insert-headers-and-footers' ) . '</p>';
-		}
-
-		// Save Settings
-		if ( isset( $_REQUEST['submit'] ) ) {
-			// Check permissions and nonce.
-			if ( ! current_user_can( 'unfiltered_html' ) ) {
-				// Can not edit scripts.
-				wp_die( __( 'Sorry, you are not allowed to edit this page.', 'insert-headers-and-footers' ) );
-			} elseif ( ! isset( $_REQUEST[ $this->plugin->name . '_nonce' ] ) ) {
-				// Missing nonce
-				$this->errorMessage = __( 'nonce field is missing. Settings NOT saved.', 'insert-headers-and-footers' );
-			} elseif ( ! wp_verify_nonce( $_REQUEST[ $this->plugin->name . '_nonce' ], $this->plugin->name ) ) {
-				// Invalid nonce
-				$this->errorMessage = __( 'Invalid nonce specified. Settings NOT saved.', 'insert-headers-and-footers' );
-			} else {
-				// Save
-				// $_REQUEST has already been slashed by wp_magic_quotes in wp-settings
-				// so do nothing before saving
-				update_option( 'ihaf_insert_header', $_REQUEST['ihaf_insert_header'] );
-				update_option( 'ihaf_insert_footer', $_REQUEST['ihaf_insert_footer'] );
-				update_option( 'ihaf_insert_body', isset( $_REQUEST['ihaf_insert_body'] ) ? $_REQUEST['ihaf_insert_body'] : '' );
-				update_option( $this->plugin->db_welcome_dismissed_key, 1 );
-				$this->message = __( 'Settings Saved.', 'insert-headers-and-footers' );
-			}
-		}
-
-		// Get latest settings
-		$this->settings = array(
-			'ihaf_insert_header' => esc_html( wp_unslash( get_option( 'ihaf_insert_header' ) ) ),
-			'ihaf_insert_footer' => esc_html( wp_unslash( get_option( 'ihaf_insert_footer' ) ) ),
-			'ihaf_insert_body'   => esc_html( wp_unslash( get_option( 'ihaf_insert_body' ) ) ),
-		);
-
-		// Load Settings Form
-		include_once( $this->plugin->folder . '/views/settings.php' );
-	}
-
-	/**
-	 * Enqueue and initialize CodeMirror for the form fields.
-	 */
-	function initCodeMirror() {
-		// Make sure that we don't fatal error on WP versions before 4.9.
-		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
-			return;
-		}
-
-		global $pagenow;
-
-		if ( ! ( 'options-general.php' === $pagenow && isset( $_GET['page'] ) && 'insert-headers-and-footers' === $_GET['page'] ) ) {
-			return;
-		}
-
-		$editor_args = array( 'type' => 'text/html' );
-
-		if ( ! current_user_can( 'unfiltered_html' ) || ! current_user_can( 'manage_options' ) ) {
-			$editor_args['codemirror']['readOnly'] = true;
-		}
-
-		// Enqueue code editor and settings for manipulating HTML.
-		$settings = wp_enqueue_code_editor( $editor_args );
-
-		// Bail if user disabled CodeMirror.
-		if ( false === $settings ) {
-			return;
-		}
-
-		// Custom styles for the form fields.
-		$styles = '.CodeMirror{ border: 1px solid #ccd0d4; }';
-
-		wp_add_inline_style( 'code-editor', $styles );
-
-		wp_add_inline_script( 'code-editor', sprintf( 'jQuery( function() { wp.codeEditor.initialize( "ihaf_insert_header", %s ); } );', wp_json_encode( $settings ) ) );
-		wp_add_inline_script( 'code-editor', sprintf( 'jQuery( function() { wp.codeEditor.initialize( "ihaf_insert_body", %s ); } );', wp_json_encode( $settings ) ) );
-		wp_add_inline_script( 'code-editor', sprintf( 'jQuery( function() { wp.codeEditor.initialize( "ihaf_insert_footer", %s ); } );', wp_json_encode( $settings ) ) );
-	}
-
-	/**
-	 * Outputs script / CSS to the frontend header
-	 */
-	function frontendHeader() {
-		$this->output( 'ihaf_insert_header' );
-	}
-
-	/**
-	 * Outputs script / CSS to the frontend footer
-	 */
-	function frontendFooter() {
-		$this->output( 'ihaf_insert_footer' );
-	}
-
-	/**
-	 * Outputs script / CSS to the frontend below opening body
-	 */
-	function frontendBody() {
-		$this->output( 'ihaf_insert_body' );
-	}
-
-	/**
-	 * Outputs the given setting, if conditions are met
+	 * Require the files needed for the plugin.
 	 *
-	 * @param string $setting Setting Name
-	 * @return output
+	 * @return void
 	 */
-	function output( $setting ) {
-		// Ignore admin, feed, robots or trackbacks
-		if ( is_admin() || is_feed() || is_robots() || is_trackback() ) {
-			return;
+	private function includes() {
+		// Load the safe mode logic first.
+		require_once WPCODE_PLUGIN_PATH . 'includes/safe-mode.php';
+		// Functions for global headers & footers output.
+		require_once WPCODE_PLUGIN_PATH . 'includes/global-output.php';
+		// Use the old class name for backwards compatibility.
+		require_once WPCODE_PLUGIN_PATH . 'includes/legacy.php';
+		// Register code snippets post type.
+		require_once WPCODE_PLUGIN_PATH . 'includes/post-type.php';
+		// The snippet class.
+		require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-snippet.php';
+		// Auto-insert options.
+		require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-auto-insert.php';
+		// Execute snippets.
+		require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-snippet-execute.php';
+		// Handle PHP errors.
+		require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-error.php';
+		// [wpcode] shortcode.
+		require_once WPCODE_PLUGIN_PATH . 'includes/shortcode.php';
+		// Conditional logic.
+		require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-conditional-logic.php';
+		// Snippet Cache.
+		require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-snippet-cache.php';
+		// Settings class.
+		require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-settings.php';
+		// Custom capabilities.
+		require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-capabilities.php';
+		// Install routines.
+		require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-install.php';
+
+		if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
+			require_once WPCODE_PLUGIN_PATH . 'includes/icons.php'; // This is not needed in the frontend atm.
+			require_once WPCODE_PLUGIN_PATH . 'includes/helpers.php'; // This is not needed in the frontend atm.
+			require_once WPCODE_PLUGIN_PATH . 'includes/admin/admin-menu.php';
+			require_once WPCODE_PLUGIN_PATH . 'includes/admin/admin-scripts.php';
+			require_once WPCODE_PLUGIN_PATH . 'includes/admin/admin-ajax-handlers.php';
+			// Always used just in the backend.
+			require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-generator.php';
+			// Snippet Library.
+			require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-library.php';
+			// Importers.
+			require_once WPCODE_PLUGIN_PATH . 'includes/admin/class-wpcode-importers.php';
+			// File cache.
+			require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-file-cache.php';
+			// The docs.
+			require_once WPCODE_PLUGIN_PATH . 'includes/admin/class-wpcode-docs.php';
+			// Notifications class.
+			require_once WPCODE_PLUGIN_PATH . 'includes/admin/class-wpcode-notifications.php';
+			// Upgrade page.
+			require_once WPCODE_PLUGIN_PATH . 'includes/admin/class-wpcode-upgrade-welcome.php';
+		}
+	}
+
+	/**
+	 * Load components in the main plugin instance.
+	 *
+	 * @return void
+	 */
+	public function load_components() {
+		$this->auto_insert       = new WPCode_Auto_Insert();
+		$this->execute           = new WPCode_Snippet_Execute();
+		$this->error             = new WPCode_Error();
+		$this->conditional_logic = new WPCode_Conditional_Logic();
+		$this->cache             = new WPCode_Snippet_Cache();
+		$this->settings          = new WPCode_Settings();
+
+		if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
+			$this->file_cache    = new WPCode_File_Cache();
+			$this->library       = new WPCode_Library();
+			$this->generator     = new WPCode_Generator();
+			$this->importers     = new WPCode_Importers();
+			$this->notifications = new WPCode_Notifications();
+		}
+	}
+
+	/**
+	 * Load the plugin translations.
+	 *
+	 * @return void
+	 */
+	public function load_plugin_textdomain() {
+		if ( is_user_logged_in() ) {
+			unload_textdomain( 'insert-headers-and-footers' );
 		}
 
-		// provide the opportunity to Ignore IHAF - both headers and footers via filters
-		if ( apply_filters( 'disable_ihaf', false ) ) {
-			return;
-		}
-
-		// provide the opportunity to Ignore IHAF - footer only via filters
-		if ( 'ihaf_insert_footer' === $setting && apply_filters( 'disable_ihaf_footer', false ) ) {
-			return;
-		}
-
-		// provide the opportunity to Ignore IHAF - header only via filters
-		if ( 'ihaf_insert_header' === $setting && apply_filters( 'disable_ihaf_header', false ) ) {
-			return;
-		}
-
-		// provide the opportunity to Ignore IHAF - below opening body only via filters
-		if ( 'ihaf_insert_body' === $setting && apply_filters( 'disable_ihaf_body', false ) ) {
-			return;
-		}
-
-		// Get meta
-		$meta = get_option( $setting );
-		if ( empty( $meta ) ) {
-			return;
-		}
-		if ( trim( $meta ) === '' ) {
-			return;
-		}
-
-		// Output
-		echo wp_unslash( $meta );
+		load_plugin_textdomain( 'insert-headers-and-footers', false, dirname( plugin_basename( WPCODE_FILE ) ) . '/languages/' );
 	}
 }
 
 /**
- * Instantiate the class a single time.
+ * Get the main instance of WPCode.
  *
- * @since 1.6.1
+ * @return WPCode
  */
-function insert_headers_and_footers() {
-	return InsertHeadersAndFooters::get_instance();
+function WPCode() {// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
+	return WPCode::instance();
 }
 
-insert_headers_and_footers();
+WPCode();

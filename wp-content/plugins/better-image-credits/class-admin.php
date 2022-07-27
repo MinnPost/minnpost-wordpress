@@ -322,7 +322,7 @@ class BetterImageCreditsAdmin {
 			wp_enqueue_style('wp-jquery-ui-dialog');
 		}
 
-		if ($this->option_hook == $hook) {
+		if (isset( $this->option_hook ) && $this->option_hook == $hook) {
 			// Add the color picker css and js file
 	        wp_enqueue_style('wp-color-picker');
 	        wp_enqueue_script('wp-color-picker');
