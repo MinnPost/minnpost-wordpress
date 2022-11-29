@@ -63,6 +63,19 @@ class WPCode_File_Cache {
 	}
 
 	/**
+	 * Delete a cached file by its key.
+	 *
+	 * @param string $key The key to find the file by.
+	 *
+	 * @return void
+	 */
+	public function delete( $key ) {
+		$file = $this->get_directory_path( $this->get_cache_filename_by_key( $key ) );
+
+		wp_delete_file( $file );
+	}
+
+	/**
 	 * Basically just adds JSON to the end of the key but we should use this
 	 * to also make sure it's a proper filename.
 	 *

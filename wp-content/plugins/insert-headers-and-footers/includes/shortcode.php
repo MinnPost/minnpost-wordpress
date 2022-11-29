@@ -26,5 +26,11 @@ function wpcode_shortcode_handler( $args ) {
 		return '';
 	}
 
-	return wpcode()->execute->get_snippet_output( absint( $atts['id'] ) );
+	$snippet = new WPCode_Snippet( absint( $atts['id'] ) );
+
+	if ( ! $snippet->is_active() ) {
+		return '';
+	}
+
+	return wpcode()->execute->get_snippet_output( $snippet );
 }

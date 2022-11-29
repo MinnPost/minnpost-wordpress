@@ -68,10 +68,7 @@ class WPCode_Auto_Insert_Single extends WPCode_Auto_Insert_Type {
 		if ( ! did_action( 'get_header' ) || get_the_ID() !== $post_object->ID || $this->did_before_post_output ) {
 			return;
 		}
-		$snippets = $this->get_snippets_for_location( 'before_post' );
-		foreach ( $snippets as $snippet ) {
-			echo wpcode()->execute->get_snippet_output( $snippet );
-		}
+		$this->output_location( 'before_post' );
 		$this->did_before_post_output = true;
 	}
 
@@ -220,3 +217,5 @@ class WPCode_Auto_Insert_Single extends WPCode_Auto_Insert_Type {
 		return $content_to_add_to;
 	}
 }
+
+new WPCode_Auto_Insert_Single();

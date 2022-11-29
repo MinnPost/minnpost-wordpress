@@ -57,11 +57,46 @@ abstract class WPCode_Auto_Insert_Type {
 	protected $use_cache = true;
 
 	/**
+	 * Display a label next to the optgroup title.
+	 *
+	 * @var string
+	 */
+	public $label_pill = '';
+
+	/**
+	 * Title of the upgrade prompt.
+	 *
+	 * @var string
+	 */
+	public $upgrade_title = '';
+
+	/**
+	 * Text of the upgrade prompt.
+	 *
+	 * @var string
+	 */
+	public $upgrade_text = '';
+
+	/**
+	 * URL of the upgrade prompt (CTA) with UTM.
+	 *
+	 * @var string
+	 */
+	public $upgrade_link = '';
+
+	/**
+	 * Text for the CTA Button.
+	 *
+	 * @var string
+	 */
+	public $upgrade_button = '';
+
+	/**
 	 * Start the auto insertion.
 	 */
 	public function __construct() {
 		$this->init();
-
+		$this->register_type();
 		/**
 		 * Constant to enable safe mode.
 		 * Filter to allow disabling auto insert.
@@ -74,6 +109,15 @@ abstract class WPCode_Auto_Insert_Type {
 		}
 
 		$this->add_start_hook();
+	}
+
+	/**
+	 * Register this instance to the global auto-insert types.
+	 *
+	 * @return void
+	 */
+	private function register_type() {
+		wpcode()->auto_insert->register_type( $this );
 	}
 
 	/**
@@ -147,7 +191,11 @@ abstract class WPCode_Auto_Insert_Type {
 
 		$snippets_for_location = isset( $snippets[ $location ] ) ? $snippets[ $location ] : array();
 
-		return wpcode()->conditional_logic->check_snippets_conditions( $snippets_for_location );
+		return apply_filters(
+			'wpcode_get_snippets_for_location',
+			wpcode()->conditional_logic->check_snippets_conditions( $snippets_for_location ),
+			$location
+		);
 	}
 
 	/**
@@ -207,7 +255,7 @@ abstract class WPCode_Auto_Insert_Type {
 		// so that they can be picked up by id later without having to query again.
 		$location_terms = $this->get_location_terms();
 		foreach ( $location_terms as $location_key => $location_term ) {
-			$term_id                         = $location_term->term_id;
+			$term_id                         = $location_term->term_taxonomy_id;
 			$this->snippets[ $location_key ] = array();
 			// Until we update to PHP 5.3 this is the easiest way to do this.
 			foreach ( $snippets as $snippet ) {
@@ -323,5 +371,19 @@ abstract class WPCode_Auto_Insert_Type {
 	 */
 	public function use_cache() {
 		return boolval( apply_filters( 'wpcode_use_auto_insert_cache', $this->use_cache ) );
+	}
+
+	/**
+	 * Get the snippets for a location end echo them executed.
+	 *
+	 * @param string $location_name The location to grab snippets for.
+	 *
+	 * @return void
+	 */
+	public function output_location( $location_name ) {
+		$snippets = $this->get_snippets_for_location( $location_name );
+		foreach ( $snippets as $snippet ) {
+			echo wpcode()->execute->get_snippet_output( $snippet );
+		}
 	}
 }

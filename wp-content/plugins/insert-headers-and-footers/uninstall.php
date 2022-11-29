@@ -13,6 +13,11 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
+// If the function already exists we shouldn't run the uninstall as another version of the plugin is active.
+if ( function_exists( 'WPCode' ) ) {
+	return;
+}
+
 require_once 'ihaf.php';
 
 if ( class_exists( 'WPCode_Capabilities' ) ) {

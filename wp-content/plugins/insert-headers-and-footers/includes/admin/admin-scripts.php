@@ -39,6 +39,8 @@ function wpcode_admin_scripts() {
 			array(
 				'nonce'             => wp_create_nonce( 'wpcode_admin' ),
 				'code_type_options' => wpcode()->execute->get_code_type_options(),
+				'please_wait'       => __( 'Please wait.', 'insert-headers-and-footers' ),
+				'ok'                => __( 'OK', 'insert-headers-and-footers' ),
 			)
 		)
 	);
@@ -46,6 +48,49 @@ function wpcode_admin_scripts() {
 	// Dequeue debug bar console styles on WPCode pages.
 	wp_dequeue_style( 'debug-bar-codemirror' );
 	wp_dequeue_style( 'debug-bar-console' );
+}
+
+/**
+ * Scripts needed outside the WPCode admin area (e.g. metabox).
+ *
+ * @return void
+ */
+function wpcode_admin_scripts_global( $version = 'lite' ) {
+
+	// Load "globally" but still only on certain screens.
+	$current_screen = get_current_screen();
+
+	$dont_load = ! isset( $current_screen->base ) || 'post' !== $current_screen->base;
+
+	// Allow other plugins to modify the screens where the global scripts are loaded.
+	if ( apply_filters( 'wpcode_load_global_scripts', $dont_load ) ) {
+		return;
+	}
+
+	$admin_asset_file = WPCODE_PLUGIN_PATH . "build/admin-global-{$version}.asset.php";
+
+	if ( ! file_exists( $admin_asset_file ) ) {
+		return;
+	}
+
+	$asset = include_once $admin_asset_file;
+
+	wp_enqueue_style( 'wpcode-admin-global-css', WPCODE_PLUGIN_URL . "build/admin-global-{$version}.css", null, $asset['version'] );
+
+	wp_enqueue_script( 'wpcode-admin-global-js', WPCODE_PLUGIN_URL . "build/admin-global-{$version}.js", $asset['dependencies'], $asset['version'], true );
+
+	wp_localize_script(
+		'wpcode-admin-global-js',
+		'wpcode',
+		apply_filters(
+			'wpcode_admin_global_js_data',
+			array(
+				'nonce'            => wp_create_nonce( 'wpcode_admin' ),
+				'post_id'          => get_the_ID(),
+				'locations_number' => wpcode_get_auto_insert_locations_with_number(),
+			)
+		)
+	);
 }
 
 /**
@@ -65,3 +110,4 @@ function wpcode_admin_body_class( $classes ) {
 
 	return $classes;
 }
+

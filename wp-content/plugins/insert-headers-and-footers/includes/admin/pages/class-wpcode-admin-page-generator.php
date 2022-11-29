@@ -103,14 +103,19 @@ class WPCode_Admin_Page_Generator extends WPCode_Admin_Page {
 				<ul class="wpcode-items-list-category">
 					<?php
 					foreach ( $this->generators as $generator ) {
-						$url = add_query_arg(
+						$url      = add_query_arg(
 							array(
 								'page'      => $this->page_slug,
 								'generator' => $generator->get_name(),
 							),
 							admin_url( 'admin.php' )
 						);
-						$this->get_list_item( $generator->get_name(), $generator->get_title(), $generator->get_description(), $url, __( 'Generate', 'insert-headers-and-footers' ), $generator->get_categories() );
+						$button_1 = array(
+							'tag'  => 'a',
+							'url'  => $url,
+							'text' => __( 'Generate', 'insert-headers-and-footers' ),
+						);
+						$this->get_list_item( $generator->get_name(), $generator->get_title(), $generator->get_description(), $button_1, array(), $generator->get_categories() );
 					}
 					?>
 				</ul>
@@ -171,7 +176,6 @@ class WPCode_Admin_Page_Generator extends WPCode_Admin_Page {
 			</div>
 			<textarea id="wpcode_generator_code_preview"><?php echo $generator->get_snippet_code(); ?></textarea>
 		</div>
-		<span class="wpcode-loading-spinner" id="wpcode-generator-spinner"></span>
 		<script type="text/template" id="wpcode-generator-repeater-row">
 			<?php $this->repeater_group_template(); ?>
 		</script>
@@ -213,10 +217,10 @@ class WPCode_Admin_Page_Generator extends WPCode_Admin_Page {
 		if ( ! $this->generator ) {
 			return;
 		}
-		$settings = $this->load_code_mirror();
-
-		$settings['codemirror']['readOnly'] = 'nocursor';
-		wp_add_inline_script( 'code-editor', sprintf( 'jQuery( function() { window.wpcode_editor = wp.codeEditor.initialize( "wpcode_generator_code_preview", %s ); } );', wp_json_encode( $settings ) ) );
+		$editor = new WPCode_Code_Editor( $this->code_type );
+		$editor->set_setting( 'readOnly', 'nocursor' );
+		$editor->register_editor( 'wpcode_generator_code_preview' );
+		$editor->init_editor();
 
 		wp_enqueue_script( 'jquery-ui-autocomplete' );
 	}

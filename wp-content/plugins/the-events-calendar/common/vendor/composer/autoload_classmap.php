@@ -7,8 +7,11 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Firebase\\JWT\\BeforeValidException' => $vendorDir . '/firebase/php-jwt/src/BeforeValidException.php',
+    'Firebase\\JWT\\CachedKeySet' => $vendorDir . '/firebase/php-jwt/src/CachedKeySet.php',
     'Firebase\\JWT\\ExpiredException' => $vendorDir . '/firebase/php-jwt/src/ExpiredException.php',
+    'Firebase\\JWT\\JWK' => $vendorDir . '/firebase/php-jwt/src/JWK.php',
     'Firebase\\JWT\\JWT' => $vendorDir . '/firebase/php-jwt/src/JWT.php',
+    'Firebase\\JWT\\Key' => $vendorDir . '/firebase/php-jwt/src/Key.php',
     'Firebase\\JWT\\SignatureInvalidException' => $vendorDir . '/firebase/php-jwt/src/SignatureInvalidException.php',
     'Monolog\\ErrorHandler' => $vendorDir . '/monolog/monolog/src/Monolog/ErrorHandler.php',
     'Monolog\\Formatter\\ChromePHPFormatter' => $vendorDir . '/monolog/monolog/src/Monolog/Formatter/ChromePHPFormatter.php',
@@ -126,6 +129,7 @@ return array(
     'Tribe\\Admin\\Notice\\Service_Provider' => $baseDir . '/src/Tribe/Admin/Notice/Service_Provider.php',
     'Tribe\\Admin\\Notice\\WP_Version' => $baseDir . '/src/Tribe/Admin/Notice/WP_Version.php',
     'Tribe\\Admin\\Pages' => $baseDir . '/src/Tribe/Admin/Pages.php',
+    'Tribe\\Admin\\Settings' => $baseDir . '/src/Tribe/Admin/Settings.php',
     'Tribe\\Admin\\Troubleshooting' => $baseDir . '/src/Tribe/Admin/Troubleshooting.php',
     'Tribe\\Admin\\Upsell_Notice\\Main' => $baseDir . '/src/Tribe/Admin/Upsell_Notice/Main.php',
     'Tribe\\Customizer\\Control' => $baseDir . '/src/Tribe/Customizer/Control.php',

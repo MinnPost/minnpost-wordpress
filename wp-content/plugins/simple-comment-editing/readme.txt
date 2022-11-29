@@ -2,20 +2,22 @@
 Contributors: ronalfy
 Tags: comment editing, comments,edit comments, edit, comment,
 Requires at least: 5.0
-Tested up to: 6.0
-Stable tag: 2.7.2
+Tested up to: 6.1
+Stable tag: 2.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Supercharge your comment section and allow your users to edit their comments for a period of time.
+Your users make mistakes. Come to their rescue by allowing your users to edit their comments for a period of time.
 
 == Description ==
 
-Supercharge your comment section and allow your users to edit their comments for a period of time. Save your users some headaches and let them fix their typos while you take a backseat and relax.
+Supercharge your comment section with <a href="https://dlxplugins.com/plugins/simple-comment-editing/">Simple Comment Editing</a> and allow your users to edit their comments for a period of time. Save your users some headaches and let them fix their typos while you take a backseat and relax.
 
 [youtube https://www.youtube.com/watch?v=bNCDdQbwA-s&rel=0]
 
-Simple Comment Editing features:
+> Please check out the <a href="https://sce.dlxplugins.com/">comprehensive documentation for Simple Comment Editing</a>.
+
+<h2>Simple Comment Editing features:</h2>
 <ol>
 <li>Install the plugin. That's it. It just works.
 <li>Anonymous users can edit comments for 5 minutes.</li>
@@ -23,7 +25,23 @@ Simple Comment Editing features:
 <li>Advanced customization can be achieved using filters.</li>
 </ol>
 
+> <strong>New</strong>: Enable Mailchimp and get newsletter signups from your comment section.
+
+<h2>Go Pro with Comment Edit Pro</h2>
+
 For additional features in addition to comment editing, please check out <a href="https://dlxplugins.com/plugins/comment-edit-pro/">Comment Edit Pro</a>.
+
+Features Include:
+
+* Front-end editing
+* Unlimited editing
+* Mailchimp integration
+* reCAPTCHA 3 integration
+* Akismet integration
+* Translations
+* Comment Avatars
+* Comment Character Control
+* <a href="https://dlxplugins.com/plugins/comment-edit-pro/">And much more...</a>
 
 == Installation ==
 
@@ -54,6 +72,16 @@ Simple Comment Editing will work all the way back to IE10.
 5. Light button theme.
 
 == Changelog ==
+
+= 2.8.0 =
+* Released 2022-10-22
+* New: Integrate Mailchimp with your comment section to increase newsletter signups.
+* Updating internal documentation.
+* Successfully tested with WP 6.1.
+
+= 2.7.4 =
+* Released 2022-08-11
+* Updating Akismet integration so it can be disabled.
 
 = 2.7.2 =
 * Updating logo
@@ -387,6 +415,9 @@ Simple Comment Editing will work all the way back to IE10.
 * Initial release.
 
 == Upgrade Notice ==
+
+= 2.8.0 =
+New Mailchimp integration for your comment section. WP 6.1 compatibility.
 
 = 2.7.2 =
 Documentation, compatibility, and logo update. Introducing Comment Edit Pro.

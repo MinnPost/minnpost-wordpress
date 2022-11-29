@@ -144,7 +144,7 @@ class WPCode_Docs {
 								?>
 								<li>
 									<?php wpcode_icon( 'file-text', 16, 16 ); ?>
-									<a href="<?php echo esc_url( wpcode_utm_url( $doc['url'], 'docs', 'overlay' ) ); ?>" rel="noopener noreferrer" target="_blank">
+									<a href="<?php echo esc_url( wpcode_utm_url( $doc['url'], 'help-overlay', 'view-doc', esc_attr( $doc['title'] ) ) ); ?>" rel="noopener noreferrer" target="_blank">
 										<?php echo esc_html( $doc['title'] ); ?>
 									</a>
 								</li>

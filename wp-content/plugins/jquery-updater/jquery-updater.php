@@ -3,7 +3,7 @@
 * Plugin Name: jQuery Updater
 * Plugin URI: http://www.ramoonus.nl/wordpress/jquery-updater/
 * Description: This plugin updates jQuery to the latest  stable version.
-* Version: 3.6.0.2
+* Version: 3.6.1
 * Author: Ramoonus
 * Author URI: http://www.ramoonus.nl/
 * License: GPL3
@@ -14,13 +14,13 @@
 /**
 * Replace jQuery with a newer version, load jQuery Migrate
 *
-* @version 3.6.0
+* @version 3.6.1
 * @since 1.0.0
 * @return void
 */
 function rw_jquery_updater()
  {
-    $ver = '3.6.0';
+    $ver = '3.6.1';
     $ver_core = $ver;
     $ver_migrate = '3.4.0';
     $slim = false;
@@ -33,7 +33,7 @@ function rw_jquery_updater()
     // Deregister jQuery core
     wp_deregister_script( 'jquery-core' );
     // Reregister jQuery core
-    wp_register_script( 'jquery-core', plugins_url( '/js/jquery-3.6.0.min.js', __FILE__ ), [], $ver_core );
+    wp_register_script( 'jquery-core', plugins_url( '/js/jquery-3.6.1.min.js', __FILE__ ), [], $ver_core );
 
     // jQuery Migrate
     // Deregister jQuery Migrate
@@ -115,7 +115,7 @@ function jqu_render_plugin_settings_page() {
         do_settings_sections( 'dbi_example_plugin' ); ?>
 
         <p>jQuery Updated is succesfully installed and activated.
-        <br>Now running jQuery 3.6.0</p>
+        <br>Now running jQuery 3.6.1</p>
     
         <hr> 
 

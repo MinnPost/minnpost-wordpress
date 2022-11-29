@@ -11,53 +11,86 @@
 class WPCode_Library {
 
 	/**
-	 * The endpoint where everything starts.
+	 * Key for storing snippets in the cache.
 	 *
 	 * @var string
 	 */
-	public $library_url = 'https://cdn.wpcode.com/library/api/get';
+	protected $cache_key = 'snippets';
 
 	/**
-	 * Key for storing snippets in the db.
+	 * Library endpoint for loading all data.
 	 *
 	 * @var string
 	 */
-	private $cache_key = 'snippets';
+	protected $all_snippets_endpoint = 'get';
 
 	/**
 	 * The key for storing individual snippets.
 	 *
 	 * @var string
 	 */
-	private $snippet_key = 'snippets/snippet';
+	protected $snippet_key = 'snippets/snippet';
 
 	/**
 	 * The base cache folder for this class.
 	 *
 	 * @var string
 	 */
-	private $cache_folder = 'library';
+	protected $cache_folder = 'library';
 
 	/**
 	 * The data.
 	 *
 	 * @var array
 	 */
-	private $data;
+	protected $data;
 
 	/**
 	 * The default time to live for libary items that are cached.
 	 *
 	 * @var int
 	 */
-	private $ttl = DAY_IN_SECONDS;
+	protected $ttl = DAY_IN_SECONDS;
+
+	/**
+	 * Key for transient used to store already installed snippets.
+	 *
+	 * @var string
+	 */
+	protected $used_snippets_transient_key = 'wpcode_used_library_snippets';
 
 	/**
 	 * Array of snippet ids that were already loaded from the library.
 	 *
 	 * @var array
 	 */
-	private $library_snippets;
+	protected $library_snippets;
+
+	/**
+	 * Meta Key used for storing the library id.
+	 *
+	 * @var string
+	 */
+	protected $snippet_library_id_meta_key = '_wpcode_library_id';
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		$this->hooks();
+	}
+
+	/**
+	 * Class-specific hooks.
+	 *
+	 * @return void
+	 */
+	protected function hooks() {
+		add_action( 'trash_wpcode', array( $this, 'clear_used_snippets' ) );
+		add_action( 'transition_post_status', array( $this, 'clear_used_snippets_untrash' ), 10, 3 );
+		add_action( 'wpcode_library_api_auth_connected', array( $this, 'delete_cache' ) );
+		add_action( 'wpcode_library_api_auth_deleted', array( $this, 'delete_cache' ) );
+	}
 
 	/**
 	 * Grab all the available categories from the library.
@@ -121,28 +154,7 @@ class WPCode_Library {
 	 * @return array
 	 */
 	private function get_from_server() {
-		$url = $this->library_url;
-
-		if ( empty( $url ) ) {
-			// Didn't know what to grab.
-			return $this->get_empty_array();
-		}
-
-		$request = wp_remote_get( $url );
-
-		if ( is_wp_error( $request ) ) {
-			return $this->save_temporary_response_fail( $this->cache_key );
-		}
-
-		$response_code = wp_remote_retrieve_response_code( $request );
-
-		$data = wp_remote_retrieve_body( $request );
-		if ( $response_code > 299 ) {
-			// Temporary error so cache for just 10 minutes and then try again.
-			$data = '';
-		}
-
-		$data = $this->process_response( $data );
+		$data = $this->process_response( $this->make_request( $this->all_snippets_endpoint ) );
 
 		if ( empty( $data['snippets'] ) ) {
 			return $this->save_temporary_response_fail( $this->cache_key );
@@ -151,6 +163,66 @@ class WPCode_Library {
 		$this->save_to_cache( $this->cache_key, $data );
 
 		return $data;
+	}
+
+	/**
+	 * Generic request handler with support for authentication.
+	 *
+	 * @param string $endpoint The API endpoint to load data from.
+	 * @param string $method The method used for the request (GET, POST, etc).
+	 * @param array  $data The data to pass in the body for POST-like requests.
+	 *
+	 * @return string
+	 */
+	public function make_request( $endpoint = '', $method = 'GET', $data = array() ) {
+		$args = array(
+			'method' => $method,
+		);
+		if ( wpcode()->library_auth->has_auth() ) {
+			$args['headers'] = $this->get_authenticated_headers();
+		}
+		if ( ! empty( $data ) ) {
+			$args['body'] = $data;
+		}
+
+		$url = add_query_arg(
+			array(
+				'site'    => rawurlencode( site_url() ),
+				'version' => WPCODE_VERSION,
+			),
+			wpcode()->library_auth->get_api_url( $endpoint )
+		);
+
+		$response = wp_remote_request( $url, $args );
+
+		$response_code = wp_remote_retrieve_response_code( $response );
+		if ( $response_code > 299 ) {
+			// Temporary error so cache for just 10 minutes and then try again.
+			return '';
+		}
+
+		return wp_remote_retrieve_body( $response );
+	}
+
+	/**
+	 * Get the headers for making an authenticated request.
+	 *
+	 * @return array
+	 */
+	public function get_authenticated_headers() {
+		// Build the headers of the request.
+		return array(
+			'Content-Type'    => 'application/x-www-form-urlencoded',
+			'Cache-Control'   => 'no-store, no-cache, must-revalidate, max-age=0, post-check=0, pre-check=0',
+			'Pragma'          => 'no-cache',
+			'Expires'         => 0,
+			'Origin'          => site_url(),
+			'WPCode-Referer'  => site_url(),
+			'WPCode-Sender'   => 'WordPress',
+			'WPCode-Site'     => esc_attr( get_option( 'blogname' ) ),
+			'WPCode-Version'  => esc_attr( WPCODE_VERSION ),
+			'X-WPCode-ApiKey' => wpcode()->library_auth->get_auth_key(),
+		);
 	}
 
 	/**
@@ -202,7 +274,7 @@ class WPCode_Library {
 	 *
 	 * @return array
 	 */
-	private function process_response( $data ) {
+	public function process_response( $data ) {
 		$response = json_decode( $data, true );
 		if ( ! isset( $response['status'] ) || 'success' !== $response['status'] ) {
 			return $this->get_empty_array();
@@ -243,7 +315,7 @@ class WPCode_Library {
 
 		$snippet->save();
 
-		delete_transient( 'wpcode_used_library_snippets' );
+		delete_transient( $this->used_snippets_transient_key );
 
 		return $snippet;
 	}
@@ -256,28 +328,8 @@ class WPCode_Library {
 	 * @return array|array[]|false
 	 */
 	public function grab_snippet_from_api( $library_id ) {
-		$data = $this->get_data();
-
-		if ( empty( $data['links']['snippet'] ) ) {
-			return false;
-		}
-
-		$url = add_query_arg(
-			array(
-				'site' => rawurlencode( site_url() ),
-			),
-			trailingslashit( esc_url( $data['links']['snippet'] ) ) . $library_id
-		);
-
-		$snippet_request = wp_remote_get( $url );
-
-		$response_code = wp_remote_retrieve_response_code( $snippet_request );
-
-		if ( $response_code > 299 ) {
-			return false;
-		}
-
-		$snippet_data = $this->process_response( wp_remote_retrieve_body( $snippet_request ) );
+		$snippet_request = $this->make_request( 'get/' . $library_id );
+		$snippet_data    = $this->process_response( $snippet_request );
 
 		if ( empty( $snippet_data ) ) {
 			return false;
@@ -298,7 +350,7 @@ class WPCode_Library {
 			return $this->library_snippets;
 		}
 
-		$snippets_from_library = get_transient( 'wpcode_used_library_snippets' );
+		$snippets_from_library = get_transient( $this->used_snippets_transient_key );
 
 		if ( false === $snippets_from_library ) {
 			$snippets_from_library = array();
@@ -307,7 +359,7 @@ class WPCode_Library {
 				'post_type'   => 'wpcode',
 				'meta_query'  => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 					array(
-						'key'     => '_wpcode_library_id',
+						'key'     => $this->snippet_library_id_meta_key,
 						'compare' => 'EXISTS',
 					),
 				),
@@ -318,16 +370,62 @@ class WPCode_Library {
 			$snippets = get_posts( $args );
 
 			foreach ( $snippets as $snippet_id ) {
-				$library_id                           = absint( get_post_meta( $snippet_id, '_wpcode_library_id', true ) );
-				$snippets_from_library[ $library_id ] = $snippet_id;
+				$snippets_from_library[ $this->get_snippet_library_id( $snippet_id ) ] = $snippet_id;
 			}
 
-			set_transient( 'wpcode_used_library_snippets', $snippets_from_library );
+			set_transient( $this->used_snippets_transient_key, $snippets_from_library );
 		}
 
 		$this->library_snippets = $snippets_from_library;
 
 		return $this->library_snippets;
 
+	}
+
+	/**
+	 * Grab the library id from the snippet by snippet id.
+	 *
+	 * @param int $snippet_id The snippet id.
+	 *
+	 * @return int
+	 */
+	public function get_snippet_library_id( $snippet_id ) {
+		return absint( get_post_meta( $snippet_id, '_wpcode_library_id', true ) );
+	}
+
+	/**
+	 * When a snippet is trashed, clear the used snippets transients
+	 * for this class instance to avoid confusion in the library.
+	 *
+	 * @return void
+	 */
+	public function clear_used_snippets() {
+		delete_transient( $this->used_snippets_transient_key );
+	}
+
+	/**
+	 * Clear used snippets also when a snippet is un-trashed.
+	 *
+	 * @param string  $new_status
+	 * @param string  $old_status
+	 * @param WP_Post $post
+	 *
+	 * @return void
+	 */
+	public function clear_used_snippets_untrash( $new_status, $old_status, $post ) {
+		if ( 'wpcode' !== $post->post_type || 'trash' !== $old_status ) {
+			return;
+		}
+
+		$this->clear_used_snippets();
+	}
+
+	/**
+	 * Delete the file cache for the snippets library.
+	 *
+	 * @return void
+	 */
+	public function delete_cache() {
+		wpcode()->file_cache->delete( $this->cache_folder . '/' . $this->cache_key );
 	}
 }

@@ -86,3 +86,5 @@ class WPCode_Conditional_User extends WPCode_Conditional_Type {
 		return $user->roles;
 	}
 }
+
+new WPCode_Conditional_User();

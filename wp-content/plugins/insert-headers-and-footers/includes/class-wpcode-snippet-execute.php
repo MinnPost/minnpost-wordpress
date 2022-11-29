@@ -70,6 +70,7 @@ class WPCode_Snippet_Execute {
 		require_once WPCODE_PLUGIN_PATH . 'includes/execute/class-wpcode-snippet-execute-js.php';
 		require_once WPCODE_PLUGIN_PATH . 'includes/execute/class-wpcode-snippet-execute-php.php';
 		require_once WPCODE_PLUGIN_PATH . 'includes/execute/class-wpcode-snippet-execute-universal.php';
+		require_once WPCODE_PLUGIN_PATH . 'includes/execute/class-wpcode-snippet-execute-css.php';
 
 		$this->types = array(
 			'html'      => array(
@@ -92,6 +93,10 @@ class WPCode_Snippet_Execute {
 			'universal' => array(
 				'class' => 'WPCode_Snippet_Execute_Universal',
 				'label' => __( 'Universal Snippet', 'insert-headers-and-footers' ),
+			),
+			'css'       => array(
+				'class' => 'WPCode_Snippet_Execute_CSS',
+				'label' => __( 'CSS Snippet', 'insert-headers-and-footers' ),
 			),
 		);
 	}
@@ -212,6 +217,9 @@ class WPCode_Snippet_Execute {
 				case 'text':
 					$mime = 'text/x-markdown';
 					break;
+				case 'css':
+					$mime = 'text/css';
+					break;
 			}
 		}
 
@@ -259,6 +267,10 @@ class WPCode_Snippet_Execute {
 		try {
 			eval( $code ); // phpcs:ignore Squiz.PHP.Eval.Discouraged
 		} catch ( Error $e ) {
+			// If WP_DEBUG & WP_DEBUG_LOG are on, we'll log the error.
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+				error_log( $e->getMessage() );
+			}
 			wpcode()->error->add_error( $e );
 			$error = true;
 		}

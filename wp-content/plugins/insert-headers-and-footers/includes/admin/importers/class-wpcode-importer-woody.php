@@ -150,7 +150,7 @@ class WPCode_Importer_Woody extends WPCode_Importer_Type {
 		}
 
 		return array(
-			'code'        => WINP_Helper::get_snippet_code( $snippet ),
+			'code'        => wp_slash( WINP_Helper::get_snippet_code( $snippet ) ),
 			'note'        => WINP_Helper::getMetaOption( $snippet->ID, 'snippet_description', '' ),
 			'title'       => $snippet->post_title,
 			'tags'        => wp_get_post_terms( $snippet->ID, WINP_SNIPPETS_TAXONOMY, array( 'fields' => 'slugs' ) ),

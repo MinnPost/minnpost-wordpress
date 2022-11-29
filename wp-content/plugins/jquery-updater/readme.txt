@@ -4,7 +4,7 @@ Donate link: http://www.ramoonus.nl/donate/
 Tags: jquery, update, jquery ui, javascript, jq
 Requires at least: 5.6
 Tested up to: 6.0
-Stable tag: 3.6.0.2
+Stable tag: 3.6.1
 Requires PHP: 5.6
 
 This plugin updates jQuery to the latest stable version on your website.
@@ -52,6 +52,11 @@ A: Using an up-to-date jQuery could break your site on the client-side.
 Please clear the server and browser cache after upgrading/disabling this plugin.
 
 == Changelog ==
+
+= 3.6.1 =
+* Updated to [jQuery 3.6.1](https://blog.jquery.com/2022/08/26/jquery-3-6-1-maintenance-release/)
+* Include slim version (not in use)
+
 
 = 3.6.0.2 =
 * Supports WordPress 6.0

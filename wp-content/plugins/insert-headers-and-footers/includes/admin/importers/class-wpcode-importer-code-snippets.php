@@ -148,7 +148,7 @@ class WPCode_Importer_Code_Snippets extends WPCode_Importer_Type {
 		}
 
 		return array(
-			'code'        => $snippet->code,
+			'code'        => wp_slash( $snippet->code ),
 			'note'        => $snippet->desc,
 			'title'       => $snippet->name,
 			'tags'        => $snippet->tags,

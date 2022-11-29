@@ -9,9 +9,8 @@
        var saswp_grid_page        = 1; 
        
        function saswp_convert_datetostring(date_str){
-           
            var date_time = {};
-           
+
            if(date_str){
                
              var date_string = new Date(date_str); 
@@ -23,12 +22,18 @@
              var formated_date = date_string.toLocaleDateString();
 
              var date_format = jQuery(".saswp-collection-date-format").val();
-
+             
+            
              if(date_format && date_format == 'Y-m-d'){
                 formated_date = y + "-" + m + "-" + d;
              }
              if(date_format && date_format == 'd-m-Y'){
                 formated_date = d + "-" + m + "-" + y;
+             }
+
+             if(date_format && date_format == 'days'){
+                formated_date = saswp_get_day_ago(date_string);
+                
              }
 
                date_time = {
@@ -45,6 +50,49 @@
            return date_time;
            
        };
+
+        function saswp_get_day_ago(date) {
+            if (typeof date !== 'object') {
+            date = new Date(date);
+            }
+
+            var seconds = Math.floor((new Date() - date) / 1000);
+            var intervalType;
+
+            var interval = Math.floor(seconds / 31536000);
+            if (interval >= 1) {
+            intervalType = 'year';
+            } else {
+            interval = Math.floor(seconds / 2592000);
+            if (interval >= 1) {
+                intervalType = 'month';
+            } else {
+                interval = Math.floor(seconds / 86400);
+                if (interval >= 1) {
+                intervalType = 'day';
+                } else {
+                interval = Math.floor(seconds / 3600);
+                if (interval >= 1) {
+                    intervalType = "hour";
+                } else {
+                    interval = Math.floor(seconds / 60);
+                    if (interval >= 1) {
+                    intervalType = "minute";
+                    } else {
+                    interval = seconds;
+                    intervalType = "second";
+                    }
+                }
+                }
+            }
+            }
+
+            if (interval > 1 || interval === 0) {
+            intervalType += 's';
+            }      
+            return interval + ' ' + intervalType+' ago';
+        };
+          
        
        function saswp_taxonomy_term_html(taxonomy, field_name){
            
@@ -80,7 +128,25 @@
             jQuery(this).parent().parent().siblings('.saswp-rating-review-'+schema_type.toLowerCase()).hide(); 
              }          
              saswp_enable_rating_automate();   
-            }).change();   
+            }).change();  
+
+            jQuery("#saswp_schema_type_product_pros_enable_pros").change(function(){ 
+                if(jQuery(this).is(':checked')){
+                jQuery('.thepros_main_section_outer').show();
+                // jQuery('.saswp-product_pros-section-main, .saswp-product_cons-section-main').show();
+                }else{
+                    jQuery('.thepros_main_section_outer').hide();
+                    // jQuery('.saswp-product_pros-section-main, .saswp-product_cons-section-main').hide();
+                }            
+            }).change(); 
+            
+            // jQuery("#saswp_schema_type_product_pros_enable_cons").change(function(){ 
+            //     if(jQuery(this).is(':checked')){
+            //     jQuery('.saswp-product_cons-section-main').show();
+            //     }else{
+            //         jQuery('.saswp-product_cons-section-main').hide();
+            //     }            
+            // }).change(); 
          }
                
         }
@@ -391,11 +457,26 @@
        }
        
        function saswp_fields_html_generator(index, schema_id, fields_type, div_type, schema_fields){
-            
+            // console.log(fields_type);
+            $newclosebtn = '';
+            otherRepeatorClose = '';
+            $reviewtitle = index+1
+            if(fields_type == 'product_pros_' || fields_type == 'product_cons_'){
+                $newclosebtn = '<td class="saswp-table-close-new-td"><a class="saswp-table-close-new">X</a></td>';
+               
+            }else{
+                otherRepeatorClose = '<a class="saswp-table-close">X</a>';
+            }
+            $addRevewTitle = '';
+            if(fields_type == 'product_reviews_'){
+                $addRevewTitle = '<h3 style="float: left;">Review '+$reviewtitle+'</h3>';
+            }
+
             var html = '';
             
             html += '<div class="saswp-'+div_type+'-table-div saswp-dynamic-properties" data-id="'+index+'">'
-                        +  '<a class="saswp-table-close">X</a>'
+                        + $addRevewTitle
+                        +  otherRepeatorClose
                         + '<table class="form-table saswp-'+div_type+'-table">' 
                 
             jQuery.each(schema_fields, function(eachindex, element){
@@ -412,7 +493,8 @@
                     case "text":
                       
                         html += '<tr>'
-                        + '<th>'+element.label+'</th><td><input class="'+meta_class+'" style="width:100%" type="'+element.type+'" id="'+element.name+'_'+index+'_'+schema_id+'" name="'+fields_type+schema_id+'['+index+']['+element.name+']"></td>'
+                        + '<th>'+element.label+'</th><td><input class="'+meta_class+'" style="width:100%" type="'+element.type+'" id="'+element.name+'_'+index+'_'+schema_id+'" name="'+fields_type+schema_id+'['+index+']['+element.name+']"></td>'                        
+                        +$newclosebtn
                         + '</tr>';                        
                       
                       break;
@@ -719,10 +801,12 @@
 	
                }     
             
-       function saswp_review_desing_for_slider(value){
+       function saswp_review_desing_for_slider(value, saswp_collection_gallery_img_hide){
                       
                             var date_str = saswp_convert_datetostring(value.saswp_review_date); 
-                        
+                            if(value.saswp_is_date_in_days != '' && value.saswp_is_date_in_days == 'days'){
+                                date_str.date = value.saswp_review_date;
+                            }
                             var html = '';
            
                                 html += '<div class="saswp-r2-sli">';
@@ -743,7 +827,9 @@
                                 html += '</div>';
                                 html += '<div class="saswp-rc">';
                                 html += '<div class="saswp-rc-a">';
-                                html += '<img src="'+value.saswp_reviewer_image+'"/>';
+                                if(saswp_collection_gallery_img_hide !=1){
+                                    html += '<img src="'+value.saswp_reviewer_image+'"/>';
+                                }
                                 html += '<div class="saswp-rc-nm">';
                                 html += '<a href="#">'+value.saswp_reviewer_name+'</a>';
                                 html += '<span class="saswp-rc-dt">'+date_str.date+'</span>';
@@ -759,7 +845,7 @@
                       
        }    
        
-       function saswp_create_collection_slider(slider, arrow, dots){
+       function saswp_create_collection_slider(slider, arrow, dots, saswp_collection_gallery_img_hide){
                                 
                 var html = '';                               
                 if(saswp_total_collection.length > 0){
@@ -779,7 +865,7 @@
                                                         
                                 html += '<div class="saswp-si">';
                                 
-                                html += saswp_review_desing_for_slider(value);
+                                html += saswp_review_desing_for_slider(value, saswp_collection_gallery_img_hide);
                                 
                                 html += '</div>';
                             
@@ -799,7 +885,7 @@
                                                                     
                                 jQuery.each(p_value, function(index, value){
                                    
-                                    html += saswp_review_desing_for_slider(value);
+                                    html += saswp_review_desing_for_slider(value, saswp_collection_gallery_img_hide);
                                                                                                
                                 });
                                 
@@ -941,7 +1027,9 @@
                             review_count++;
                             
                             var date_str = saswp_convert_datetostring(value.saswp_review_date); 
-                            
+                            if(value.saswp_is_date_in_days != '' && value.saswp_is_date_in_days == 'days'){
+                                date_str.date = value.saswp_review_date;
+                            }
                             html_list += '<li>';
                             html_list += '<div class="saswp-r4-b">';
                             html_list += '<span class="saswp-r4-str">';
@@ -1019,7 +1107,9 @@
                  jQuery.each(saswp_total_collection, function(index, value){
 
                     var date_str = saswp_convert_datetostring(value.saswp_review_date); 
-
+                    if(value.saswp_is_date_in_days != '' && value.saswp_is_date_in_days == 'days'){
+                        date_str.date = value.saswp_review_date;
+                    }
                     html += '<div id="'+index+'" class="saswp-r5">';
                     html += '<div class="saswp-r5-r">';                            
                     html += '<div class="saswp-r5-lg">';
@@ -1145,7 +1235,7 @@
        }
 
       
-       function saswp_create_collection_grid(cols, pagination, perpage, offset, nextpage){
+       function saswp_create_collection_grid(cols, pagination, perpage, offset, nextpage, saswp_coll_hide_col_r_img){
                 
                 var html          = '';                
                 var grid_cols     = '';
@@ -1171,7 +1261,7 @@
                     if(saswp_total_collection){
                             
                            var grid_col = saswp_total_collection;                           
-                           
+
                            if(pagination && perpage > 0){
                                
                                grid_col = grid_col.slice(offset, nextpage);
@@ -1180,13 +1270,17 @@
                            jQuery.each(grid_col, function(index, value){
                             
                             var date_str = saswp_convert_datetostring(value.saswp_review_date); 
-                            
+                            // if(value.saswp_is_date_in_days != '' && value.saswp_is_date_in_days == 'days'){
+                            //     date_str.date = value.saswp_review_date;
+                            // }
                             html += '<li>';                       
                             html += '<div class="saswp-rc">';
                             html += '<div class="saswp-rc-a">';
-                            html += '<div class="saswp-r1-aimg">';
-                            html += '<img src="'+value.saswp_reviewer_image+'" width="56" height="56"/>';
-                            html += '</div>';
+                            if(saswp_coll_hide_col_r_img != 1){
+                                html += '<div class="saswp-r1-aimg">';
+                                html += '<img src="'+value.saswp_reviewer_image+'" width="56" height="56"/>';
+                                html += '</div>';
+                            }                            
                             html += '<div class="saswp-rc-nm">';
                             html += '<a href="#">'+value.saswp_reviewer_name+'</a>';
                             html += saswp_create_rating_html_by_value(value.saswp_review_rating);  
@@ -1259,19 +1353,19 @@
                                                                                                 
             }     
             
-       function saswp_create_collection_by_design(design, cols, slider, arrow, dots, fomo_inverval, fomo_visibility, pagination, perpage, offset, nextpage){
+       function saswp_create_collection_by_design(design, cols, slider, arrow, dots, fomo_inverval, fomo_visibility, pagination, perpage, offset, nextpage, saswp_coll_hide_col_r_img, saswp_collection_gallery_img_hide){
                                                               
                 switch(design) {
                     
                     case "grid":
                         
-                         saswp_create_collection_grid(cols, pagination, perpage, offset, nextpage);
+                         saswp_create_collection_grid(cols, pagination, perpage, offset, nextpage, saswp_coll_hide_col_r_img);
                         
                         break;
                         
                     case 'gallery':
                         
-                         saswp_create_collection_slider(slider, arrow, dots);
+                         saswp_create_collection_slider(slider, arrow, dots, saswp_collection_gallery_img_hide);
                         
                         break;
                     
@@ -1312,7 +1406,15 @@
                 var offset              = 0;
                 var nextpage            = perpage;
                 var s_rating_enable     = false;
+                var saswp_coll_hide_col_r_img = false;
+                var saswp_collection_gallery_img_hide = false;
                 
+                if(jQuery("#saswp-coll-hide_col_r_img").is(":checked")){
+                    saswp_coll_hide_col_r_img = 1;
+                }
+                if(jQuery("#saswp_collection_gallery_img_hide").is(":checked")){
+                    saswp_collection_gallery_img_hide = 1;
+                }
                 if(jQuery("#saswp-coll-pagination").is(":checked")){                    
                     pagination          = true;                          
                     var data_id         = saswp_grid_page;                     
@@ -1344,7 +1446,7 @@
                 saswp_create_total_collection( s_rating_enable, s_rating_val );                 
                 saswp_collection_sorting(sorting);  
                 saswp_collection_total_reviews_id();
-                saswp_create_collection_by_design(design, cols, slider, arrow, dots, fomo_inverval, fomo_inverval, pagination, perpage, offset, nextpage);                                                
+                saswp_create_collection_by_design(design, cols, slider, arrow, dots, fomo_inverval, fomo_inverval, pagination, perpage, offset, nextpage, saswp_coll_hide_col_r_img, saswp_collection_gallery_img_hide);                                                
            
        }  
        

@@ -10,7 +10,7 @@ add_action( 'init', 'wpcode_register_taxonomies', - 5 );
 add_filter( 'update_post_term_count_statuses', 'wpcode_taxonomies_count_drafts', 10, 2 );
 
 /**
- * Register the post type for
+ * Register the post type for snippets.
  *
  * @return void
  */
@@ -18,8 +18,8 @@ function wpcode_register_post_type() {
 	register_post_type(
 		'wpcode',
 		array(
-			'public'  => false,
-			'show_ui' => false,
+			'public'   => false,
+			'show_ui'  => false,
 		)
 	);
 }

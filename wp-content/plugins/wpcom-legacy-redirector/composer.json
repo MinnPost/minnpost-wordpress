@@ -1,20 +1,42 @@
 {
-  "name"       : "automattic/wpcom-legacy-redirector",
+  "name": "automattic/wpcom-legacy-redirector",
+  "type": "wordpress-plugin",
   "description": "WordPress plugin for handling large volumes of legacy redirects in a scalable manner.",
-  "homepage"   : "https://github.com/Automattic/WPCOM-Legacy-Redirector",
-  "type"       : "wordpress-plugin",
-  "license"    : "GPL-2.0+",
-  "authors"    : [
+  "homepage": "https://github.com/Automattic/WPCOM-Legacy-Redirector",
+  "license": "GPL-2.0-or-later",
+  "authors": [
     {
-      "name"    : "Automattic",
+      "name": "Automattic",
       "homepage": "http://automattic.com/"
     }
   ],
-  "support"    : {
+  "require": {
+    "php" : ">=5.6",
+    "composer/installers": "^1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5 || ^6 || ^7",
+    "polevaultweb/phpunit-wp-cli-runner": "dev-master",
+    "yoast/wp-test-utils": "^0.2"
+  },
+  "support": {
     "issues": "https://github.com/Automattic/WPCOM-Legacy-Redirector/issues",
     "source": "https://github.com/Automattic/WPCOM-Legacy-Redirector"
   },
-  "require": {
-    "composer/installers": "~1.0"
+  "autoload": {
+    "classmap": [
+      "includes/"
+    ]
+  },
+  "scripts": {
+    "test": [
+      "@php ./vendor/phpunit/phpunit/phpunit"
+    ],
+	"test-coverage": [
+      "@php ./vendor/phpunit/phpunit/phpunit --coverage-text --coverage-html=coverage && echo coverage/index.html"
+    ],
+    "integration-test": [
+      "@php ./vendor/phpunit/phpunit/phpunit -c phpunit-integration.xml.dist"
+    ]
   }
 }

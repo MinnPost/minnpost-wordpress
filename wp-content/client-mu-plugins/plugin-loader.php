@@ -46,10 +46,6 @@ see: https://github.com/alleyinteractive/es-admin/issues/26
 if ( ( defined( 'VIP_ENABLE_VIP_SEARCH' ) && true === VIP_ENABLE_VIP_SEARCH ) ) {
 	wpcom_vip_load_plugin( 'es-admin/es-admin.php' );
 }*/
-if ( ! defined( 'VIP_ENABLE_VIP_SEARCH' ) || true !== VIP_ENABLE_VIP_SEARCH ) {
-	wpcom_vip_load_plugin( 'es-admin/es-admin.php' );
-	wpcom_vip_load_plugin( 'es-wp-query/es-wp-query.php' );
-}
 wpcom_vip_load_plugin( 'exclude-terms-in-admin/exclude-terms-in-admin.php' );
 wpcom_vip_load_plugin( 'font-awesome/index.php' );
 wpcom_vip_load_plugin( 'form-processor-mailchimp/form-processor-mailchimp.php' );
@@ -62,6 +58,7 @@ if ( 'production' === VIP_GO_ENV || 'preprod' === VIP_GO_ENV ) {
 }
 wpcom_vip_load_plugin( 'lazy-load-for-comments/lazy-load-for-comments.php' );
 wpcom_vip_load_plugin( 'lh-multipart-email/lh-multipart-email.php' );
+wpcom_vip_load_plugin( 'liveblog/liveblog.php' );
 wpcom_vip_load_plugin( 'minnpost-event-addon/minnpost-event-addon.php' );
 wpcom_vip_load_plugin( 'minnpost-form-processor-mailchimp/minnpost-form-processor-mailchimp.php' );
 wpcom_vip_load_plugin( 'minnpost-membership/minnpost-membership.php' );
@@ -80,6 +77,7 @@ wpcom_vip_load_plugin( 'raw-html-pro/raw_html.php' );
 wpcom_vip_load_plugin( 'recently-registered/recently-registered.php' );
 wpcom_vip_load_plugin( 'remove-widget-titles/remove-widget-titles.php' );
 wpcom_vip_load_plugin( 'republication-tracker-tool/republication-tracker-tool.php' );
+wpcom_vip_load_plugin( 'reset-metabox-order/reset-metabox-order.php' );
 wpcom_vip_load_plugin( 'schema-and-structured-data-for-wp/structured-data-for-wp.php' );
 wpcom_vip_load_plugin( 'simple-comment-editing/index.php' );
 wpcom_vip_load_plugin( 'staff-user-post-list/staff-user-list.php' );
@@ -98,9 +96,6 @@ wpcom_vip_load_plugin( 'wp-post-expires/wp-post-expires.php' );
 wpcom_vip_load_plugin( 'wp-post-image-watermarks/wp-post-image-watermarks.php' );
 wpcom_vip_load_plugin( 'www-post-thumb/www-post-thumb.php' );
 wpcom_vip_load_plugin( 'zoninator/zoninator.php' );
-if ( ! defined( 'VIP_ENABLE_VIP_SEARCH_QUERY_INTEGRATION' ) || true !== VIP_ENABLE_VIP_SEARCH_QUERY_INTEGRATION ) {
-	wpcom_vip_load_plugin( 'vip-jetpack-sync-cron' );
-}
 
 // turn off parsely because 1) we're not paying for it, and 2) it has ethical question marks at best
 add_filter( 'wpvip_parsely_load_mu', '__return_false' );

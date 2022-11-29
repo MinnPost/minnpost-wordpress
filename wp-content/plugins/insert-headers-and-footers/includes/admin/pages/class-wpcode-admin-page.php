@@ -101,6 +101,7 @@ abstract class WPCode_Admin_Page {
 		if ( $this->page_slug !== $page ) {
 			return;
 		}
+		remove_all_actions( 'admin_notices' );
 		add_action( 'wpcode_admin_page', array( $this, 'output' ) );
 		add_action( 'wpcode_admin_page', array( $this, 'output_footer' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'page_scripts' ) );
@@ -128,7 +129,17 @@ abstract class WPCode_Admin_Page {
 	 * @return void
 	 */
 	public function add_page() {
-		add_submenu_page( 'wpcode', $this->page_title, $this->menu_title, 'wpcode_edit_snippets', $this->page_slug, 'wpcode_admin_menu_page' );
+		add_submenu_page(
+			'wpcode',
+			$this->page_title,
+			$this->menu_title,
+			'wpcode_edit_snippets',
+			$this->page_slug,
+			array(
+				wpcode()->admin_page_loader,
+				'admin_menu_page',
+			)
+		);
 	}
 
 	/**
@@ -236,19 +247,20 @@ abstract class WPCode_Admin_Page {
 				<?php
 				$docs = new WPCode_Docs();
 				$docs->get_categories_accordion();
+				$support_url = wpcode_utm_url( 'https://wpcode.com/contact/', 'help-overlay', 'support-url' );
 				?>
 				<div class="wpcode-help-footer">
 					<div class="wpcode-help-footer-box">
 						<?php wpcode_icon( 'file', 48, 48 ); ?>
 						<h3><?php esc_html_e( 'View Documentation', 'insert-headers-and-footers' ); ?></h3>
 						<p><?php esc_html_e( 'Browse documentation, reference material, and tutorials for WPCode.', 'insert-headers-and-footers' ); ?></p>
-						<a class="wpcode-button wpcode-button-secondary" href="<?php echo esc_url( wpcode_utm_url( 'https://wpcode.com/docs', 'docs', 'footer' ) ); ?>" target="_blank"><?php esc_html_e( 'View All Documentation', 'insert-headers-and-footers' ); ?></a>
+						<a class="wpcode-button wpcode-button-secondary" href="<?php echo esc_url( wpcode_utm_url( 'https://wpcode.com/docs/', 'help-overlay', 'docs', 'footer' ) ); ?>" target="_blank"><?php esc_html_e( 'View All Documentation', 'insert-headers-and-footers' ); ?></a>
 					</div>
 					<div class="wpcode-help-footer-box">
 						<?php wpcode_icon( 'support', 48, 48 ); ?>
 						<h3><?php esc_html_e( 'Get Support', 'insert-headers-and-footers' ); ?></h3>
 						<p><?php esc_html_e( 'Submit a ticket and our world class support team will be in touch soon.', 'insert-headers-and-footers' ); ?></p>
-						<a class="wpcode-button wpcode-button-secondary" href="https://wordpress.org/support/plugin/insert-headers-and-footers/" target="_blank"><?php esc_html_e( 'Submit a Support Ticket', 'insert-headers-and-footers' ); ?></a>
+						<a class="wpcode-button wpcode-button-secondary" href="<?php echo esc_url( $support_url ); ?>" target="_blank"><?php esc_html_e( 'Submit a Support Ticket', 'insert-headers-and-footers' ); ?></a>
 					</div>
 				</div>
 			</div>
@@ -307,6 +319,7 @@ abstract class WPCode_Admin_Page {
 				<button type="button" class="wpcode-button-text wpcode-notification-dismiss" id="wpcode-dismiss-all" data-id="all"><?php esc_html_e( 'Dismiss all', 'insert-headers-and-footers' ); ?></button>
 			</div>
 		</div>
+		<span class="wpcode-loading-spinner" id="wpcode-admin-spinner"></span>
 		<?php
 	}
 
@@ -426,7 +439,6 @@ abstract class WPCode_Admin_Page {
 	public function maybe_output_message() {
 		$error_message   = $this->get_error_message();
 		$success_message = $this->get_success_message();
-
 		?>
 		<div class="wrap" id="wpcode-notice-area">
 			<?php
@@ -444,6 +456,7 @@ abstract class WPCode_Admin_Page {
 				</div>
 				<?php
 			}
+			do_action( 'wpcode_admin_notices' );
 			?>
 		</div>
 		<?php
@@ -540,40 +553,6 @@ abstract class WPCode_Admin_Page {
 	}
 
 	/**
-	 * If called, this loads CodeMirror on the current admin page with checks.
-	 *
-	 * @return array|false
-	 */
-	public function load_code_mirror() {
-		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
-			return false;
-		}
-		$editor_args = array( 'type' => $this->get_mime_from_code_type() );
-		if ( ! $this->can_edit || ! current_user_can( 'wpcode_edit_snippets' ) ) {
-			$editor_args['codemirror']['readOnly'] = true;
-		}
-
-		// Enqueue code editor and settings for manipulating HTML.
-		return wp_enqueue_code_editor( $editor_args );
-	}
-
-	/**
-	 * Convert generic code type to MIME used by CodeMirror.
-	 *
-	 * @param string $code_type Optional parameter, if not passed it returns the mime for the currently set $code_type.
-	 *
-	 * @return string
-	 * @see $code_type
-	 */
-	protected function get_mime_from_code_type( $code_type = '' ) {
-		if ( empty( $code_type ) ) {
-			$code_type = isset( $this->code_type ) ? $this->code_type : '';
-		}
-
-		return wpcode()->execute->get_mime_for_code_type( $code_type );
-	}
-
-	/**
 	 * Metabox-style layout for admin pages.
 	 *
 	 * @param string $title The metabox title.
@@ -632,10 +611,12 @@ abstract class WPCode_Admin_Page {
 	 * @param string $id The id for the row.
 	 * @param string $show_if_id Conditional logic id, automatically hide if the value of the field with this id doesn't match show if value.
 	 * @param string $show_if_value Value(s) to match against, can be comma-separated string for multiple values.
+	 * @param string $description Description to show under the input.
+	 * @param bool   $is_pro Whether this is a pro feature and the pro indicator should be shown next to the label.
 	 *
 	 * @return void
 	 */
-	public function metabox_row( $label, $input, $id = '', $show_if_id = '', $show_if_value = '' ) {
+	public function metabox_row( $label, $input, $id = '', $show_if_id = '', $show_if_value = '', $description = '', $is_pro = false ) {
 		$show_if_rules = '';
 		if ( ! empty( $show_if_id ) ) {
 			$show_if_rules = sprintf( 'data-show-if-id="%1$s" data-show-if-value="%2$s"', $show_if_id, $show_if_value );
@@ -645,10 +626,18 @@ abstract class WPCode_Admin_Page {
 			<div class="wpcode-metabox-form-row-label">
 				<label for="<?php echo esc_attr( $id ); ?>">
 					<?php echo esc_html( $label ); ?>
+					<?php
+					if ( $is_pro ) {
+						echo '<span class="wpcode-pro-pill">PRO</span>';
+					}
+					?>
 				</label>
 			</div>
 			<div class="wpcode-metabox-form-row-input">
 				<?php echo $input; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php if ( ! empty( $description ) ) { ?>
+					<p><?php echo wp_kses_post( $description ); ?></p>
+				<?php } ?>
 			</div>
 		</div>
 		<?php
@@ -664,17 +653,7 @@ abstract class WPCode_Admin_Page {
 	 * @return string
 	 */
 	public function get_checkbox_toggle( $checked, $name, $description = '' ) {
-		$markup = '<label class="wpcode-checkbox-toggle">';
-
-		$markup .= '<input type="checkbox" ' . checked( $checked, true, false ) . ' name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '" />';
-		$markup .= '<span class="wpcode-checkbox-toggle-slider"></span>';
-		$markup .= '</label>';
-
-		if ( ! empty( $description ) ) {
-			$markup .= '<p class="description">' . wp_kses_post( $description ) . '</p>';
-		}
-
-		return $markup;
+		return wpcode_get_checkbox_toggle( $checked, $name, $description );
 	}
 
 	/**
@@ -692,6 +671,7 @@ abstract class WPCode_Admin_Page {
 		$used_library_snippets = wpcode()->library->get_used_library_snippets();
 		$button_text           = __( 'Use snippet', 'insert-headers-and-footers' );
 		$pill_text             = '';
+		$pill_class            = 'blue';
 		if ( ! empty( $snippet ) ) {
 			$url = add_query_arg(
 				array(
@@ -734,7 +714,27 @@ abstract class WPCode_Admin_Page {
 		}
 		$categories = isset( $snippet['categories'] ) ? $snippet['categories'] : array();
 
-		$this->get_list_item( $id, $title, $description, $url, $button_text, $categories, $button_2_text, 'wpcode-library-preview-button', $pill_text, 'blue', $category );
+
+		$button_2 = array(
+			'text'  => $button_2_text,
+			'class' => 'wpcode-button wpcode-button-secondary wpcode-library-preview-button',
+		);
+
+		if ( ! empty( $snippet['needs_auth'] ) ) {
+			$button_1 = array(
+				'tag'   => 'button',
+				'text'  => get_wpcode_icon( 'lock', 17, 22, '0 0 17 22' ) . __( 'Connect to library to unlock (Free)', 'insert-headers-and-footers' ),
+				'class' => 'wpcode-button wpcode-item-use-button wpcode-start-auth wpcode-button-icon',
+			);
+		} else {
+			$button_1 = array(
+				'tag'  => 'a',
+				'url'  => $url,
+				'text' => $button_text,
+			);
+		}
+
+		$this->get_list_item( $id, $title, $description, $button_1, $button_2, $categories, $pill_text, $pill_class, $category );
 	}
 
 	/**
@@ -743,18 +743,16 @@ abstract class WPCode_Admin_Page {
 	 * @param string $id The id used for the data-id param (used for filtering).
 	 * @param string $title The title of the item.
 	 * @param string $description The item description.
-	 * @param string $url The URL for the action button.
-	 * @param string $button_text The action button text.
+	 * @param array  $button_1 The first button config (@see get_list_item_button).
+	 * @param array  $button_2 The second button config (@see get_list_item_button).
 	 * @param array  $categories The categories of this object (for filtering).
-	 * @param string $button_2_text (optional) 2nd button text. If left empty, the 2nd button will not be shown.
-	 * @param string $button_2_class (optional) 2nd button class.
 	 * @param string $pill_text (optional) Display a "pill" with some text in the top right corner.
 	 * @param string $pill_class (optional) Custom CSS class for the pill.
 	 * @param string $selected_category (optional) Slug of the category selected by default.
 	 *
 	 * @return void
 	 */
-	public function get_list_item( $id, $title, $description, $url, $button_text, $categories = array(), $button_2_text = '', $button_2_class = '', $pill_text = '', $pill_class = 'blue', $selected_category = '*' ) {
+	public function get_list_item( $id, $title, $description, $button_1, $button_2 = array(), $categories = array(), $pill_text = '', $pill_class = 'blue', $selected_category = '*' ) {
 		$item_class = array(
 			'wpcode-list-item',
 		);
@@ -765,6 +763,19 @@ abstract class WPCode_Admin_Page {
 		if ( '*' !== $selected_category && ! in_array( $selected_category, $categories, true ) ) {
 			$style = 'display:none;';
 		}
+		$button_1 = wp_parse_args(
+			$button_1,
+			array(
+				'tag'   => 'a',
+				'class' => 'wpcode-button wpcode-item-use-button',
+			)
+		);
+		$button_2 = wp_parse_args(
+			$button_2,
+			array(
+				'class' => 'wpcode-button wpcode-button-secondary',
+			)
+		);
 		?>
 		<li class="<?php echo esc_attr( implode( ' ', $item_class ) ); ?>" data-id="<?php echo esc_attr( $id ); ?>" data-categories='<?php echo wp_json_encode( $categories ); ?>' style="<?php echo esc_attr( $style ); ?>">
 			<h3 title="<?php echo esc_attr( $title ); ?>"><?php echo esc_html( $title ); ?></h3>
@@ -776,29 +787,88 @@ abstract class WPCode_Admin_Page {
 					<p><?php echo esc_html( $description ); ?></p>
 				</div>
 				<div class="wpcode-list-item-buttons">
-					<a href="<?php echo esc_url( $url ); ?>" class="wpcode-button wpcode-item-use-button">
-						<?php echo esc_html( $button_text ); ?>
-					</a>
-					<?php if ( ! empty( $button_2_text ) ) { ?>
-						<button class="wpcode-button wpcode-button-secondary <?php echo esc_attr( $button_2_class ); ?>" type="button">
-							<?php echo esc_html( $button_2_text ); ?>
-						</button>
-					<?php } ?>
+					<?php self::get_list_item_button( $button_1 ); ?>
+					<?php self::get_list_item_button( $button_2 ); ?>
 				</div>
 			</div>
+			<?php $this->get_list_item_top_actions( $id ); ?>
 		</li>
 		<?php
 	}
 
 	/**
-	 * Output the library markup from an array of categories and an array of snippets.
+	 * Allow child classes to display additional buttons.
 	 *
-	 * @param array $categories The snippet categories to show.
-	 * @param array $snippets The snippets to show.
+	 * @param string|int $id The id of the element passed for generating action urls.
 	 *
 	 * @return void
 	 */
-	public function get_library_markup( $categories, $snippets ) {
+	public function get_list_item_top_actions( $id ) {
+	}
+
+	/**
+	 * Get a button for the list of items.
+	 *
+	 * @param array $args Arguments for the button.
+	 * @param bool  $echo (optional) Whether to echo the button or return it.
+	 *
+	 * @return void|string
+	 */
+	public static function get_list_item_button( $args, $echo = true ) {
+		$button_settings = wp_parse_args(
+			$args,
+			array(
+				'tag'        => 'button',
+				'url'        => '',
+				'text'       => '',
+				'class'      => 'wpcode-button',
+				'attributes' => array(),
+			)
+		);
+
+		if ( empty( $button_settings['text'] ) ) {
+			return;
+		}
+
+		$button_settings['class'] = esc_attr( $button_settings['class'] );
+
+		$parsed_attributes = "class='{$button_settings['class']}' ";
+		if ( ! empty( $button_settings['url'] ) && 'a' === $button_settings['tag'] ) {
+			$parsed_attributes .= 'href="' . esc_url( $button_settings['url'] ) . '" ';
+		}
+		if ( ! empty( $button_settings['attributes'] ) ) {
+			foreach ( $button_settings['attributes'] as $key => $value ) {
+				$parsed_attributes .= esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
+			}
+		}
+
+		if ( $echo ) {
+			printf(
+				'<%1$s %2$s>%3$s</%1$s>',
+				$button_settings['tag'], // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$parsed_attributes, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				wp_kses( $button_settings['text'], wpcode_get_icon_allowed_tags() )
+			);
+		} else {
+			return sprintf(
+				'<%1$s %2$s>%3$s</%1$s>',
+				$button_settings['tag'], // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				$parsed_attributes, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				wp_kses( $button_settings['text'], wpcode_get_icon_allowed_tags() )
+			);
+		}
+	}
+
+	/**
+	 * Output the library markup from an array of categories and an array of snippets.
+	 *
+	 * @param array  $categories The snippet categories to show.
+	 * @param array  $snippets The snippets to show.
+	 * @param string $item_method The method in the current class for items output.
+	 *
+	 * @return void
+	 */
+	public function get_library_markup( $categories, $snippets, $item_method = 'get_library_snippet_item' ) {
 		$selected_category = isset( $categories[0]['slug'] ) ? $categories[0]['slug'] : '*';
 		?>
 		<div class="wpcode-items-metabox wpcode-metabox">
@@ -816,14 +886,13 @@ abstract class WPCode_Admin_Page {
 				<ul class="wpcode-items-list-category">
 					<?php
 					foreach ( $snippets as $snippet ) {
-						$this->get_library_snippet_item( $snippet, $selected_category );
+						call_user_func( array( $this, $item_method ), $snippet, $selected_category );
 					}
 					?>
 				</ul>
 			</div>
 		</div>
 		<?php
-		$this->library_preview_modal_content();
 	}
 
 	/**
@@ -889,11 +958,10 @@ abstract class WPCode_Admin_Page {
 			</div>
 		</div>
 		<?php
-		$this->code_type = 'text';
-		$settings        = $this->load_code_mirror();
-
-		$settings['codemirror']['readOnly'] = 'nocursor';
-		wp_add_inline_script( 'code-editor', sprintf( 'jQuery( function() { window.wpcode_editor = wp.codeEditor.initialize( "wpcode-code-preview", %s ); } );', wp_json_encode( $settings ) ) );
+		$editor = new WPCode_Code_Editor( 'text' );
+		$editor->set_setting( 'readOnly', 'nocursor' );
+		$editor->register_editor( 'wpcode-code-preview' );
+		$editor->init_editor();
 	}
 
 	/**
@@ -926,5 +994,93 @@ abstract class WPCode_Admin_Page {
 			),
 			admin_url( 'admin.php' )
 		);
+	}
+
+	/**
+	 * Get an upsell box markup.
+	 *
+	 * @param string $title The main upsell box title.
+	 * @param string $text The text displayed under the title.
+	 * @param string $button_1 The main CTA button.
+	 * @param string $button_2 The text link below the main CTA.
+	 * @param array  $features A list of features to display below the text.
+	 *
+	 * @return string
+	 */
+	public static function get_upsell_box( $title, $text = '', $button_1 = array(), $button_2 = array(), $features = array() ) {
+
+		$container_class = array(
+			'wpcode-upsell-box',
+		);
+
+		if ( ! empty( $features ) ) {
+			$container_class[] = 'wpcode-upsell-box-with-features';
+		}
+
+		$html = sprintf(
+			'<div class="%s">',
+			esc_attr( implode( ' ', $container_class ) )
+		);
+
+		$html .= sprintf(
+			'<h2>%s</h2>',
+			wp_kses_post( $title )
+		);
+
+		if ( ! empty( $text ) ) {
+			$html .= sprintf(
+				'<div class="wpcode-upsell-text">%s</div>',
+				wp_kses_post( $text )
+			);
+		}
+
+		if ( ! empty( $features ) ) {
+			$html .= '<ul class="wpcode-upsell-features">';
+			foreach ( $features as $feature ) {
+				$html .= sprintf(
+					'<li class="wpcode-upsell-feature">%s</li>',
+					wp_kses_post( $feature )
+				);
+			}
+			$html .= '</ul>';
+		}
+		$button_1 = wp_parse_args(
+			$button_1,
+			array(
+				'tag'        => 'a',
+				'text'       => '',
+				'url'        => wpcode_utm_url( 'https://wpcode.com/lite/' ),
+				'class'      => 'wpcode-button wpcode-button-orange wpcode-button-large',
+				'attributes' => array(
+					'target' => '_blank',
+				),
+			)
+		);
+		$button_2 = wp_parse_args(
+			$button_2,
+			array(
+				'tag'        => 'a',
+				'text'       => '',
+				'url'        => wpcode_utm_url( 'https://wpcode.com/lite/' ),
+				'class'      => 'wpcode-upsell-button-text',
+				'attributes' => array(
+					'target' => '_blank',
+				),
+			)
+		);
+
+		if ( ! empty( $button_1['text'] ) ) {
+			$html .= self::get_list_item_button( $button_1, false );
+		}
+
+		if ( ! empty( $button_2['text'] ) ) {
+			$html .= '<br />';
+			$html .= self::get_list_item_button( $button_2, false );
+		}
+
+		$html .= '</div>';
+
+		return $html;
+
 	}
 }

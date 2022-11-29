@@ -11,6 +11,30 @@
 class WPCode_Snippet {
 
 	/**
+	 * Post type used to store.
+	 *
+	 * @var string
+	 */
+	public $post_type = 'wpcode';
+	/**
+	 * Location taxonomy name.
+	 *
+	 * @var string
+	 */
+	public $location_taxonomy = 'wpcode_location';
+	/**
+	 * Code type taxonomy name.
+	 *
+	 * @var string
+	 */
+	public $code_type_taxonomy = 'wpcode_type';
+	/**
+	 * Tags taxonomy name.
+	 *
+	 * @var string
+	 */
+	public $tags_taxonomy = 'wpcode_tags';
+	/**
 	 * The snippet id.
 	 *
 	 * @var int
@@ -115,6 +139,20 @@ class WPCode_Snippet {
 	private $library_id;
 
 	/**
+	 * The cloud id, if the snippet has been saved to the user's cloud.
+	 *
+	 * @var string
+	 */
+	private $cloud_id;
+
+	/**
+	 * The custom shortcode name.
+	 *
+	 * @var string
+	 */
+	public $custom_shortcode;
+
+	/**
 	 * The version of the snippet from the library.
 	 *
 	 * @var string
@@ -154,7 +192,7 @@ class WPCode_Snippet {
 		} elseif ( is_array( $snippet ) ) {
 			$this->load_from_array( $snippet );
 		}
-		if ( isset( $this->post_data ) && 'wpcode' !== $this->post_data->post_type ) {
+		if ( isset( $this->post_data ) && $this->post_type !== $this->post_data->post_type ) {
 			unset( $this->post_data );
 		}
 	}
@@ -168,7 +206,9 @@ class WPCode_Snippet {
 	 */
 	public function load_from_id( $snippet_id ) {
 		$this->post_data = get_post( $snippet_id );
-		$this->id        = $this->post_data->ID;
+		if ( $this->post_data ) {
+			$this->id = $this->post_data->ID;
+		}
 	}
 
 	/**
@@ -208,7 +248,7 @@ class WPCode_Snippet {
 	public function set_location() {
 		// If something below fails, let's not try again.
 		$this->location      = '';
-		$this->location_term = $this->get_single_term( 'wpcode_location' );
+		$this->location_term = $this->get_single_term( $this->location_taxonomy );
 		if ( $this->location_term ) {
 			$this->location = $this->location_term->slug;
 		}
@@ -314,7 +354,7 @@ class WPCode_Snippet {
 	 */
 	public function is_active() {
 		if ( ! isset( $this->active ) ) {
-			$this->active = 'publish' === $this->post_data->post_status;
+			$this->active = isset( $this->post_data->post_status ) && 'publish' === $this->post_data->post_status;
 		}
 
 		return $this->active;
@@ -351,7 +391,7 @@ class WPCode_Snippet {
 	 */
 	public function save() {
 		$post_args = array(
-			'post_type' => 'wpcode',
+			'post_type' => $this->post_type,
 		);
 		if ( isset( $this->id ) && 0 !== $this->id ) {
 			$post_args['ID'] = $this->id;
@@ -396,20 +436,20 @@ class WPCode_Snippet {
 		$this->id = $insert_result;
 
 		if ( isset( $this->code_type ) ) {
-			wp_set_post_terms( $this->id, $this->code_type, 'wpcode_type' );
+			wp_set_post_terms( $this->id, $this->code_type, $this->code_type_taxonomy );
 		}
 		if ( isset( $this->auto_insert ) ) {
 			// Save this value for reference, but we never query by it.
 			update_post_meta( $this->id, '_wpcode_auto_insert', $this->auto_insert );
 		}
 		if ( isset( $this->location ) && 1 === $this->auto_insert ) {
-			wp_set_post_terms( $this->id, $this->location, 'wpcode_location' );
+			wp_set_post_terms( $this->id, $this->location, $this->location_taxonomy );
 		} elseif ( isset( $this->auto_insert ) ) {
 			// If auto insert is disabled we just empty the taxonomy.
-			wp_set_post_terms( $this->id, array(), 'wpcode_location' );
+			wp_set_post_terms( $this->id, array(), $this->location_taxonomy );
 		}
 		if ( isset( $this->tags ) ) {
-			wp_set_post_terms( $this->id, $this->tags, 'wpcode_tags' );
+			wp_set_post_terms( $this->id, $this->tags, $this->tags_taxonomy );
 		}
 		if ( isset( $this->insert_number ) ) {
 			update_post_meta( $this->id, '_wpcode_auto_insert_number', $this->insert_number );
@@ -437,6 +477,31 @@ class WPCode_Snippet {
 		}
 		if ( isset( $this->generator_data ) ) {
 			update_post_meta( $this->id, '_wpcode_generator_data', $this->generator_data );
+		}
+		if ( isset( $this->cloud_id ) ) {
+			$auth_username = wpcode()->library_auth->get_auth_username();
+			$cloud_ids     = get_post_meta( $this->id, '_wpcode_cloud_id', true );
+			if ( empty( $cloud_ids ) || ! is_array( $cloud_ids ) ) {
+				$cloud_ids = array();
+			}
+			if ( empty( $this->cloud_id ) && isset( $cloud_ids[ $auth_username ] ) ) {
+				unset( $cloud_ids[ $auth_username ] );
+			} elseif ( ! empty( $this->cloud_id ) ) {
+				$cloud_ids[ $auth_username ] = $this->cloud_id;
+			}
+			update_post_meta(
+				$this->id,
+				'_wpcode_cloud_id',
+				$cloud_ids
+			);
+		}
+		if ( isset( $this->custom_shortcode ) ) {
+			if ( empty( $this->custom_shortcode ) ) {
+				// Delete this meta if empty because we query by it.
+				delete_post_meta( $this->id, '_wpcode_custom_shortcode' );
+			} else {
+				update_post_meta( $this->id, '_wpcode_custom_shortcode', $this->custom_shortcode );
+			}
 		}
 
 		/**
@@ -515,7 +580,7 @@ class WPCode_Snippet {
 	public function set_code_type() {
 		// If something below fails, let's not try again.
 		$this->code_type      = '';
-		$this->code_type_term = $this->get_single_term( 'wpcode_type' );
+		$this->code_type_term = $this->get_single_term( $this->code_type_taxonomy );
 		if ( $this->code_type_term ) {
 			$this->code_type = $this->code_type_term->slug;
 		}
@@ -590,7 +655,7 @@ class WPCode_Snippet {
 	 * @return void
 	 */
 	public function set_tags() {
-		$tags      = wp_get_post_terms( $this->get_id(), 'wpcode_tags' );
+		$tags      = wp_get_post_terms( $this->get_id(), $this->tags_taxonomy );
 		$tag_slugs = array();
 		foreach ( $tags as $tag ) {
 			/**
@@ -686,5 +751,51 @@ class WPCode_Snippet {
 			'rules'         => $this->get_conditional_rules(),
 			'priority'      => $this->get_priority(),
 		);
+	}
+
+	/**
+	 * Get the cloud id for this snippet.
+	 *
+	 * @return string
+	 */
+	public function get_cloud_id() {
+		if ( ! isset( $this->cloud_id ) ) {
+			if ( wpcode()->library_auth->has_auth() ) {
+				$cloud_id = get_post_meta( $this->get_id(), '_wpcode_cloud_id', true );
+				if ( empty( $cloud_id ) || ! is_array( $cloud_id ) ) {
+					$cloud_id = array();
+				}
+				$auth_username  = wpcode()->library_auth->get_auth_username();
+				$this->cloud_id = isset( $cloud_id[ $auth_username ] ) ? $cloud_id[ $auth_username ] : false;
+			} else {
+				$this->cloud_id = false;
+			}
+		}
+
+		return $this->cloud_id;
+	}
+
+	/**
+	 * Set the cloud id.
+	 *
+	 * @param string $cloud_id The cloud id to use.
+	 *
+	 * @return void
+	 */
+	public function set_cloud_id( $cloud_id ) {
+		$this->cloud_id = $cloud_id;
+	}
+
+	/**
+	 * Get the custom shortcode value.
+	 *
+	 * @return string
+	 */
+	public function get_custom_shortcode() {
+		if ( ! isset( $this->custom_shortcode ) ) {
+			$this->custom_shortcode = get_post_meta( $this->get_id(), '_wpcode_custom_shortcode', true );
+		}
+
+		return $this->custom_shortcode;
 	}
 }

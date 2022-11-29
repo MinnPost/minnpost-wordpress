@@ -357,7 +357,6 @@ class SASWP_Reviews_Collection {
             }
                         
             if( $platform_id ||  isset($attr['in']) ){
-                                                     
             $reviews_list = $this->_service->saswp_get_reviews_list_by_parameters($attr, $platform_id, $rvcount); 
              
             if($reviews_list){
@@ -401,7 +400,6 @@ class SASWP_Reviews_Collection {
                 $g_type = $design = $cols = $sorting = $date_format = '';
                 
                 $collection_data = get_post_meta($attr['id']);
-                
                 if(isset($collection_data['saswp_collection_design'][0])){
                     $design        = $collection_data['saswp_collection_design'][0];
                     $this->_design = $design;
@@ -409,7 +407,17 @@ class SASWP_Reviews_Collection {
 
                 if(isset($collection_data['saswp_collection_date_format'][0])){
                     $date_format        = $collection_data['saswp_collection_date_format'][0];                    
-                }
+                } 
+                if(isset($collection_data['saswp_collection_hide_col_r_img'][0])){
+                    $saswp_collection_hide_col_rew_img   = $collection_data['saswp_collection_hide_col_r_img'][0];                    
+                }else{
+                    $saswp_collection_hide_col_rew_img   = "";
+                } 
+                if(isset($collection_data['saswp_collection_gallery_img_hide'][0])){
+                    $saswp_collection_gallery_img_hide        = $collection_data['saswp_collection_gallery_img_hide'][0];                    
+                }else{
+                    $saswp_collection_gallery_img_hide  = "";
+                }      
                 
                 if(isset($collection_data['saswp_collection_cols'][0])){
                     
@@ -449,6 +457,8 @@ class SASWP_Reviews_Collection {
                 if(isset($collection_data['saswp_platform_ids'][0])){
                     $platform_id  = unserialize($collection_data['saswp_platform_ids'][0]);                
                 }
+
+                
                 if(isset($collection_data['saswp_platform_ids'][0])){
                     
                     $total_reviews  = unserialize($collection_data['saswp_total_reviews'][0]);
@@ -535,32 +545,31 @@ class SASWP_Reviews_Collection {
                     
                     case "grid":
                         
-                        $html = $this->_service->saswp_create_collection_grid($cols, $collection, $total_reviews, $pagination, $perpage, $offset, $nextpage, $data_id, $total_reviews_count, $date_format, $pagination_wpr );
+                        $html = $this->_service->saswp_create_collection_grid($cols, $collection, $total_reviews, $pagination, $perpage, $offset, $nextpage, $data_id, $total_reviews_count, $date_format, $pagination_wpr, $saswp_collection_hide_col_rew_img  );
                         
                         break;
                         
                     case 'gallery':
                         
-                        $html = $this->_service->saswp_create_collection_slider($g_type, $arrow, $dots, $collection, $date_format);
+                        $html = $this->_service->saswp_create_collection_slider($g_type, $arrow, $dots, $collection, $date_format, $saswp_collection_gallery_img_hide);
                         
                         break;
                     
                     case 'badge':
                         
-                        $html = $this->_service->saswp_create_collection_badge($collection);
+                        $html = $this->_service->saswp_create_collection_badge($collection, $saswp_collection_hide_col_rew_img);
                         
                         break;
                         
                     case 'popup':
                         
-                        $html = $this->_service->saswp_create_collection_popup($collection, $date_format);
+                        $html = $this->_service->saswp_create_collection_popup($collection, $date_format, $saswp_collection_hide_col_rew_img);
                         
                         break;
                     
                     case 'fomo':
                         
-                        $html = $this->_service->saswp_create_collection_fomo($f_interval, $f_visibility, $collection, $date_format);
-                        
+                        $html = $this->_service->saswp_create_collection_fomo($f_interval, $f_visibility, $collection, $date_format, $saswp_collection_hide_col_rew_img);                   
                         
                         break;
                                                                 
@@ -610,7 +619,13 @@ class SASWP_Reviews_Collection {
             );
             $date_format = array(
                 'Y-m-d'  => 'yyyy-mm-dd',
-                'd-m-Y'  => 'dd-mm-yyyy',                
+                'd-m-Y'  => 'dd-mm-yyyy',   
+                'days'             => 'In Days'             
+            );
+
+            $date_format_in_days = array(
+                'default'          => 'Default',                                     
+                'days'             => 'In Days'                
             );
        
             $coll_sorting = array(
@@ -749,7 +764,10 @@ class SASWP_Reviews_Collection {
                                             <span><?php echo saswp_t_string( 'Without Page Reload' ); ?></span>
                                             <span><input name="saswp_collection_pagination_wpr" type="checkbox" id="saswp-coll-pagination-wpr" class="saswp-coll-settings-options" value="1" <?php echo (isset($post_meta['saswp_collection_pagination_wpr'][0]) && $post_meta['saswp_collection_pagination_wpr'][0] == 1 ? 'checked' : '' ); ?>></span>
                                         </div>
-                                        
+                                        <div class="saswp-dp-dsg saswp-coll-options saswp-grid-options saswp-dp-dtm">
+                                            <span><?php echo saswp_t_string( 'Hide Review Image'); ?></span>
+                                            <span><input name="saswp_collection_hide_col_r_img" type="checkbox" id="saswp-coll-hide_col_r_img" class="saswp-coll-settings-options" value="1" <?php echo (isset($post_meta['saswp_collection_hide_col_r_img'][0]) && $post_meta['saswp_collection_hide_col_r_img'][0] == 1 ? 'checked' : '' ); ?>></span>
+                                        </div>                                        
                                         <div class="saswp-dp-dsg saswp-coll-options saswp-grid-options saswp-dp-dtm saswp_hide_imp">
                                             <label><?php echo saswp_t_string( 'Per Page' ); ?></label>
                                             <input name="saswp_collection_per_page" type="number" min="1" id="saswp-coll-per-page"  class="saswp-coll-settings-options" value="<?php echo (isset($post_meta['saswp_collection_per_page'][0]) ? $post_meta['saswp_collection_per_page'][0] : '10' ); ?>">
@@ -765,6 +783,9 @@ class SASWP_Reviews_Collection {
                                         <div class="saswp-slider-display saswp-slider-options saswp_hide saswp-coll-settings-options saswp-coll-options">
                                             <span><input type="checkbox" id="saswp_gallery_arrow" name="saswp_gallery_arrow" value="1" <?php echo (isset($post_meta['saswp_gallery_arrow'][0]) && $post_meta['saswp_gallery_arrow'][0] == 1 ? 'checked' : '' ); ?>> <?php echo saswp_t_string('Arrows'); ?></span>
                                             <span><input type="checkbox" id="saswp_gallery_dots" name="saswp_gallery_dots" value="1" <?php echo (isset($post_meta['saswp_gallery_dots'][0]) && $post_meta['saswp_gallery_dots'][0] == 1 ? 'checked' : '' ); ?>> <?php echo saswp_t_string('Dots'); ?></span>
+                                        </div>
+                                        <div class="saswp-slider-display saswp-slider-options saswp_hide saswp-coll-settings-options saswp-coll-options">
+                                            <input type="checkbox" id="saswp_collection_gallery_img_hide" name="saswp_collection_gallery_img_hide" value="1" <?php echo (isset($post_meta['saswp_collection_gallery_img_hide'][0]) && $post_meta['saswp_collection_gallery_img_hide'][0] == 1 ? 'checked' : '' ); ?>> <?php echo saswp_t_string('Hide Review Image'); ?>
                                         </div>
                                         
                                         <div class="saswp-fomo-options saswp_hide saswp-coll-options"> 
@@ -782,8 +803,9 @@ class SASWP_Reviews_Collection {
                                                 echo '<option value="'.esc_attr($key).'" '.($post_meta['saswp_collection_date_format'][0] == $key ? 'selected':'').' >'.saswp_t_string( $val  ).'</option>';
                                             }
                                             ?>                                    
-                                         </select>
-                                        </div>                                                                  
+                                         </select>                                         
+                                        </div> 
+                                                                                                               
                                     </div>
                                 </li>
                               <li>
@@ -973,7 +995,7 @@ class SASWP_Reviews_Collection {
             update_option('saswp_collection_display_opt', $display_type_opt);
             
             $post_meta['saswp_collection_design']       = isset($_POST['saswp_collection_design']) ? sanitize_text_field($_POST['saswp_collection_design']) : '';                        
-            $post_meta['saswp_collection_date_format']  = isset($_POST['saswp_collection_date_format']) ? sanitize_text_field($_POST['saswp_collection_date_format']) : '';                        
+            $post_meta['saswp_collection_date_format']  = isset($_POST['saswp_collection_date_format']) ? sanitize_text_field($_POST['saswp_collection_date_format']) : '';            
             $post_meta['saswp_collection_sorting']      = isset($_POST['saswp_collection_sorting']) ? sanitize_text_field($_POST['saswp_collection_sorting']) : '';
             $post_meta['saswp_collection_specific_rating'] = isset($_POST['saswp_collection_specific_rating']) ? sanitize_text_field($_POST['saswp_collection_specific_rating']) : '';
             $post_meta['saswp_collection_display_type'] = $display_type;
@@ -984,6 +1006,8 @@ class SASWP_Reviews_Collection {
             $post_meta['saswp_gallery_dots']            = isset($_POST['saswp_gallery_dots']) ? intval($_POST['saswp_gallery_dots']) : '';            
             $post_meta['saswp_collection_pagination']   = isset($_POST['saswp_collection_pagination']) ? intval($_POST['saswp_collection_pagination']) : '';            
             $post_meta['saswp_collection_pagination_wpr'] = isset($_POST['saswp_collection_pagination_wpr']) ? intval($_POST['saswp_collection_pagination_wpr']) : '';            
+            $post_meta['saswp_collection_hide_col_r_img'] = isset($_POST['saswp_collection_hide_col_r_img']) ? intval($_POST['saswp_collection_hide_col_r_img']) : '';            
+            $post_meta['saswp_collection_gallery_img_hide'] = isset($_POST['saswp_collection_gallery_img_hide']) ? intval($_POST['saswp_collection_gallery_img_hide']) : '';            
             $post_meta['saswp_collection_per_page']     = isset($_POST['saswp_collection_per_page']) ? intval($_POST['saswp_collection_per_page']) : '';            
             $post_meta['saswp_fomo_interval']           = isset($_POST['saswp_fomo_interval']) ? intval($_POST['saswp_fomo_interval']) : '';
             $post_meta['saswp_fomo_visibility']         = isset($_POST['saswp_fomo_visibility']) ? intval($_POST['saswp_fomo_visibility']) : '';                                                        
@@ -991,7 +1015,6 @@ class SASWP_Reviews_Collection {
             $post_meta['saswp_collection_where']        = array_map('sanitize_text_field', $_POST['saswp_collection_where']);
             $post_meta['saswp_collection_where_data']   = array_map('sanitize_text_field', $_POST['saswp_collection_where_data']);
             $post_meta['saswp_total_reviews']           = array_map('intval', json_decode($_POST['saswp_total_reviews']));
-                        
             if(!empty($post_meta)){
                 
                 foreach($post_meta as $meta_key => $meta_val){

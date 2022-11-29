@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: WPCode - Insert Headers, Footers, and Code Snippets
+ * Plugin Name: WPCode Lite
  * Plugin URI: https://www.wpcode.com/
- * Version: 2.0.1
+ * Version: 2.0.4.4
  * Requires at least: 4.6
  * Requires PHP: 5.5
- * Tested up to: 6.0
+ * Tested up to: 6.1
  * Author: WPCode
  * Author URI: https://www.wpcode.com/
  * Description: Easily add code snippets in WordPress. Insert scripts to the header and footer, add PHP code snippets with conditional logic, insert ads pixel, custom content, and more.
@@ -38,6 +38,106 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Don't allow multiple versions to be active.
+if ( function_exists( 'WPCode' ) ) {
+
+	if ( ! function_exists( 'wpcode_pro_just_activated' ) ) {
+		/**
+		 * When we activate a Pro version, we need to do additional operations:
+		 * 1) deactivate a Lite version;
+		 * 2) register option which help to run all activation process for Pro version (custom tables creation, etc.).
+		 */
+		function wpcode_pro_just_activated() {
+			wpcode_deactivate();
+			add_option( 'wpcode_install', 1 );
+		}
+	}
+	add_action( 'activate_wpcode-premium/wpcode.php', 'wpcode_pro_just_activated' );
+
+	if ( ! function_exists( 'wpcode_lite_just_activated' ) ) {
+		/**
+		 * Store temporarily that the Lite version of the plugin was activated.
+		 * This is needed because WP does a redirect after activation and
+		 * we need to preserve this state to know whether user activated Lite or not.
+		 */
+		function wpcode_lite_just_activated() {
+
+			set_transient( 'wpcode_lite_just_activated', true );
+		}
+	}
+	add_action( 'activate_insert-headers-and-footers/ihaf.php', 'wpcode_lite_just_activated' );
+
+	if ( ! function_exists( 'wpcode_lite_just_deactivated' ) ) {
+		/**
+		 * Store temporarily that Lite plugin was deactivated.
+		 * Convert temporary "activated" value to a global variable,
+		 * so it is available through the request. Remove from the storage.
+		 */
+		function wpcode_lite_just_deactivated() {
+
+			global $wpcode_lite_just_activated, $wpcode_lite_just_deactivated;
+
+			$wpcode_lite_just_activated   = (bool) get_transient( 'wpcode_lite_just_activated' );
+			$wpcode_lite_just_deactivated = true;
+
+			delete_transient( 'wpcode_lite_just_activated' );
+		}
+	}
+	add_action( 'deactivate_insert-headers-and-footers/ihaf.php', 'wpcode_lite_just_deactivated' );
+
+	if ( ! function_exists( 'wpcode_deactivate' ) ) {
+		/**
+		 * Deactivate Lite if WPCode already activated.
+		 */
+		function wpcode_deactivate() {
+
+			$plugin = 'insert-headers-and-footers/ihaf.php';
+
+			deactivate_plugins( $plugin );
+
+			do_action( 'wpcode_plugin_deactivated', $plugin );
+		}
+	}
+	add_action( 'admin_init', 'wpcode_deactivate' );
+
+	if ( ! function_exists( 'wpcode_lite_notice' ) ) {
+		/**
+		 * Display the notice after deactivation when Pro is still active
+		 * and user wanted to activate the Lite version of the plugin.
+		 */
+		function wpcode_lite_notice() {
+
+			global $wpcode_lite_just_activated, $wpcode_lite_just_deactivated;
+
+			if (
+				empty( $wpcode_lite_just_activated ) ||
+				empty( $wpcode_lite_just_deactivated )
+			) {
+				return;
+			}
+
+			// Currently tried to activate Lite with Pro still active, so display the message.
+			printf(
+				'<div class="notice notice-warning">
+					<p>%1$s</p>
+					<p>%2$s</p>
+				</div>',
+				esc_html__( 'Heads up!', 'insert-headers-and-footers' ),
+				esc_html__( 'Your site already has WPCode Pro activated. If you want to switch to WPCode Lite, please first go to Plugins → Installed Plugins and deactivate WPCode. Then, you can activate WPCode Lite.', 'insert-headers-and-footers' )
+			);
+
+			if ( isset( $_GET['activate'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				unset( $_GET['activate'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			}
+
+			unset( $wpcode_lite_just_activated, $wpcode_lite_just_deactivated );
+		}
+	}
+	add_action( 'admin_notices', 'wpcode_lite_notice' );
+
+	// Do not process the plugin code further.
+	return;
+}
 
 /**
  * Main WPCode Class
@@ -139,6 +239,27 @@ class WPCode {
 	public $notifications;
 
 	/**
+	 * The admin page loader.
+	 *
+	 * @var WPCode_Admin_Page_Loader
+	 */
+	public $admin_page_loader;
+
+	/**
+	 * The library auth instance.
+	 *
+	 * @var WPCode_Library_Auth
+	 */
+	public $library_auth;
+
+	/**
+	 * The admin notices instance.
+	 *
+	 * @var WPCode_Notice
+	 */
+	public $notice;
+
+	/**
 	 * Main instance of WPCode.
 	 *
 	 * @return WPCode
@@ -190,6 +311,8 @@ class WPCode {
 	private function includes() {
 		// Load the safe mode logic first.
 		require_once WPCODE_PLUGIN_PATH . 'includes/safe-mode.php';
+		// Plugin helper functions.
+		require_once WPCODE_PLUGIN_PATH . 'includes/helpers.php';
 		// Functions for global headers & footers output.
 		require_once WPCODE_PLUGIN_PATH . 'includes/global-output.php';
 		// Use the old class name for backwards compatibility.
@@ -219,14 +342,17 @@ class WPCode {
 
 		if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
 			require_once WPCODE_PLUGIN_PATH . 'includes/icons.php'; // This is not needed in the frontend atm.
-			require_once WPCODE_PLUGIN_PATH . 'includes/helpers.php'; // This is not needed in the frontend atm.
-			require_once WPCODE_PLUGIN_PATH . 'includes/admin/admin-menu.php';
+			// Code Editor class.
+			require_once WPCODE_PLUGIN_PATH . 'includes/admin/class-wpcode-code-editor.php';
+			require_once WPCODE_PLUGIN_PATH . 'includes/admin/class-wpcode-admin-page-loader.php';
 			require_once WPCODE_PLUGIN_PATH . 'includes/admin/admin-scripts.php';
 			require_once WPCODE_PLUGIN_PATH . 'includes/admin/admin-ajax-handlers.php';
 			// Always used just in the backend.
 			require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-generator.php';
 			// Snippet Library.
 			require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-library.php';
+			// Authentication for the library site.
+			require_once WPCODE_PLUGIN_PATH . 'includes/class-wpcode-library-auth.php';
 			// Importers.
 			require_once WPCODE_PLUGIN_PATH . 'includes/admin/class-wpcode-importers.php';
 			// File cache.
@@ -237,7 +363,16 @@ class WPCode {
 			require_once WPCODE_PLUGIN_PATH . 'includes/admin/class-wpcode-notifications.php';
 			// Upgrade page.
 			require_once WPCODE_PLUGIN_PATH . 'includes/admin/class-wpcode-upgrade-welcome.php';
+			// Metabox class.
+			require_once WPCODE_PLUGIN_PATH . 'includes/admin/class-wpcode-metabox-snippets.php';
+			// Metabox class.
+			require_once WPCODE_PLUGIN_PATH . 'includes/admin/class-wpcode-admin-notice.php';
+			// Ask for some love.
+			require_once WPCODE_PLUGIN_PATH . 'includes/admin/class-wpcode-review.php';
 		}
+
+		// Load lite-specific files.
+		require_once WPCODE_PLUGIN_PATH . 'includes/lite/loader.php';
 	}
 
 	/**
@@ -254,11 +389,16 @@ class WPCode {
 		$this->settings          = new WPCode_Settings();
 
 		if ( is_admin() || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
-			$this->file_cache    = new WPCode_File_Cache();
-			$this->library       = new WPCode_Library();
-			$this->generator     = new WPCode_Generator();
-			$this->importers     = new WPCode_Importers();
-			$this->notifications = new WPCode_Notifications();
+			$this->file_cache        = new WPCode_File_Cache();
+			$this->library           = new WPCode_Library();
+			$this->library_auth      = new WPCode_Library_Auth();
+			$this->generator         = new WPCode_Generator();
+			$this->importers         = new WPCode_Importers();
+			$this->notifications     = new WPCode_Notifications();
+			$this->admin_page_loader = new WPCode_Admin_Page_Loader();
+			$this->notice            = new WPCode_Notice();
+
+			new WPCode_Metabox_Snippets_Lite();
 		}
 	}
 
@@ -276,13 +416,6 @@ class WPCode {
 	}
 }
 
-/**
- * Get the main instance of WPCode.
- *
- * @return WPCode
- */
-function WPCode() {// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
-	return WPCode::instance();
-}
+require_once dirname( __FILE__ ) . '/includes/ihaf.php';
 
 WPCode();

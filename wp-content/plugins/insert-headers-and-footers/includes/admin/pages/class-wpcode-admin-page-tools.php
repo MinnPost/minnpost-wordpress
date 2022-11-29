@@ -553,12 +553,16 @@ class WPCode_Admin_Page_Tools extends WPCode_Admin_Page {
 		$snippets = get_posts( $query_args );
 
 		foreach ( $snippets as $snippet ) {
-			$snippet              = new WPCode_Snippet( $snippet );
-			$snippet_data         = $snippet->get_data_for_caching();
-			$snippet_data['tags'] = $snippet->get_tags();
-			$snippet_data['note'] = $snippet->get_note();
-			$export[]             = $snippet_data;
+			$snippet                          = new WPCode_Snippet( $snippet );
+			$snippet_data                     = $snippet->get_data_for_caching();
+			$snippet_data['tags']             = $snippet->get_tags();
+			$snippet_data['note']             = $snippet->get_note();
+			$snippet_data['cloud_id']         = $snippet->get_cloud_id();
+			$snippet_data['custom_shortcode'] = $snippet->get_custom_shortcode();
+			$export[]                         = $snippet_data;
 		}
+
+		$export = array_reverse( $export );
 
 		ignore_user_abort( true );
 
@@ -616,7 +620,8 @@ class WPCode_Admin_Page_Tools extends WPCode_Admin_Page {
 				// We don't want to update existing snippets/posts.
 				unset( $snippet['id'] );
 			}
-			$new_snippet = new WPCode_Snippet( $snippet );
+			$snippet['code'] = wp_slash( $snippet['code'] );
+			$new_snippet     = new WPCode_Snippet( $snippet );
 			$new_snippet->save();
 		}
 

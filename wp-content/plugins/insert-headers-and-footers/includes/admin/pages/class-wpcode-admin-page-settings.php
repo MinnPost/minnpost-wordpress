@@ -22,14 +22,14 @@ class WPCode_Admin_Page_Settings extends WPCode_Admin_Page {
 	 *
 	 * @var string
 	 */
-	private $action = 'wpcode-settings';
+	protected $action = 'wpcode-settings';
 
 	/**
 	 * The nonce name field.
 	 *
 	 * @var string
 	 */
-	private $nonce_name = 'wpcode-settings_nonce';
+	protected $nonce_name = 'wpcode-settings_nonce';
 
 	/**
 	 * Call this just to set the page title translatable.
@@ -89,9 +89,37 @@ class WPCode_Admin_Page_Settings extends WPCode_Admin_Page {
 			'headers_footers_mode'
 		);
 
+		$this->metabox_row(
+			__( 'WPCode Library Connection', 'insert-headers-and-footers' ),
+			$this->get_library_connection_input()
+		);
+
 		wp_nonce_field( $this->action, $this->nonce_name );
 	}
 
+	/**
+	 * Get an input to connect or disconnect from the snippet library.
+	 *
+	 * @return string
+	 */
+	public function get_library_connection_input() {
+		$button_classes = array(
+			'wpcode-button',
+		);
+		$button_text    = __( 'Connect to the WPCode Library', 'insert-headers-and-footers' );
+		if ( WPCode()->library_auth->has_auth() ) {
+			$button_classes[] = 'wpcode-delete-auth';
+			$button_text      = __( 'Disconnect from the WPCode Library', 'insert-headers-and-footers' );
+		} else {
+			$button_classes[] = 'wpcode-start-auth';
+		}
+
+		return sprintf(
+			'<button type="button" class="%1$s">%2$s</button>',
+			esc_attr( implode( ' ', $button_classes ) ),
+			esc_html( $button_text )
+		);
+	}
 
 	/**
 	 * For this page we output a title and the save button.

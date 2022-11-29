@@ -153,6 +153,7 @@ function saswp_schema_type_meta_box_callback( $post) {
                     $append_reviews      = '';  
                     $event_type          = '';
                     $post_id             = null;
+                    $style_faq_type      = '';
 
                     if($post){
             
@@ -168,6 +169,7 @@ function saswp_schema_type_meta_box_callback( $post) {
                         $event_type        = get_post_meta($post->ID, 'saswp_event_type', true);                         
                         $speakable         = get_post_meta($post->ID, 'saswp_enable_speakable_schema', true);
                         $enable_videoobject= get_post_meta($post->ID, 'saswp_enable_videoobject', true);
+                        $enable_faqsobject = get_post_meta($post->ID, 'saswp_enable_faqsobject', true);
                         $item_list_enable  = get_post_meta($post->ID, 'saswp_enable_itemlist_schema', true);
                         $item_list_tags    = get_post_meta($post->ID, 'saswp_item_list_tags', true);
                         $item_list_custom  = get_post_meta($post->ID, 'saswp_item_list_custom', true);
@@ -179,7 +181,14 @@ function saswp_schema_type_meta_box_callback( $post) {
                             $style_business_type = 'style="display:none"';
                             $style_business_name = 'style="display:none"';
 
-                         }                            
+                         }  
+                         
+                         if($schema_type === 'FAQ'){
+                            $style_faq_type = 'style="display:block;display: table-row;"';
+                         }else {
+                            $style_faq_type = 'style="display:none"';
+                         }
+
                         }
                         $item_list_item = array(                                                                                    
                              'Article'               => 'Article',                                                              
@@ -299,7 +308,19 @@ function saswp_schema_type_meta_box_callback( $post) {
                         ?>
                     </select>                      
                    </td>
-                </tr>                                                                                                                                                                         
+                </tr>   
+                
+                 <!-- faqs Schema type ends here -->
+                 <tr class="saswp-faqs-checkbox-field-tr" <?php echo $style_faq_type; ?>>
+                    <td>
+                        <label for="saswp-enable-faqs-markup"><?php echo saswp_t_string( 'Add FaqObject markup, Only if Faqs are available on the post' );?></label>
+                    </td>
+                    <td>
+                        <input id="saswp-enable-faqs-markup" class="saswp-enable-faqs-markup-class" type="checkbox" name="saswp_enable_faqsobject" value="1" <?php if(isset($enable_faqsobject) && $enable_faqsobject == 1){echo 'checked'; }else{ echo ''; } ?> >
+                    </td>
+                </tr> 
+                 <!-- faqs Schema type ends here -->
+
                 <tr class="saswp-business-type-tr" <?php echo $style_business_type; ?>>
                     <td>
                     <?php echo saswp_t_string('Business Type' ); ?>    
@@ -655,7 +676,7 @@ function saswp_schema_type_meta_box_callback( $post) {
 
                 <tr>
                    <td>
-                       <label for="saswp-enable-markup"><?php echo saswp_t_string( 'Show Json-LD, Only if video is available' );?></label>
+                       <label for="saswp-enable-markup"><?php echo saswp_t_string( 'Add VideoObject markup, Only if video is available on the post' );?></label>
                    </td>
                    <td>
                       <input id="saswp-enable-markup" class="saswp-enable-markup-class" type="checkbox" name="saswp_enable_videoobject" value="1" <?php if(isset($enable_videoobject) && $enable_videoobject == 1){echo 'checked'; }else{ echo ''; } ?> >
@@ -732,7 +753,10 @@ function saswp_schema_type_meta_box_callback( $post) {
                                 $reviews_service = new saswp_reviews_service();
                                 
                                 $reviews = $reviews_service->saswp_get_reviews_list_by_parameters(null, null, 10, 1);
-                                
+                                // echo "<pre>";
+                                // echo "ravi";
+                                // print_r($reviews);
+                                // die();
                                 if($reviews){
                                     
                                    foreach($reviews as $key => $val){    
@@ -749,9 +773,7 @@ function saswp_schema_type_meta_box_callback( $post) {
                                        
                                    }
                                    
-                                }
-                                
-                                ?>
+                                } ?>
                                     
                                 </div>
                                 
@@ -760,9 +782,12 @@ function saswp_schema_type_meta_box_callback( $post) {
                                 ?>
                                 
                                 <div class="saswp-rv-not-found saswp_hide" data-type="review"><?php echo saswp_t_string( 'Reviews not found' );?></div>
-                                <span class="spinner" data-type="review"></span>
-                                <div><a class="saswp-load-more-rv" data-type="review"><?php echo saswp_t_string( 'Load More...' );?></a></div>
-                                                                
+                                <?php if(!empty($reviews) && count($reviews) >= 10){?> 
+                                    <span class="spinner" data-type="review"></span>
+                                    <div><a class="saswp-load-more-rv" data-type="review"><?php echo saswp_t_string( 'Load More...' );?></a></div>
+                                <?php }else{ ?> 
+                                    <div class="saswp-rv-not-found saswp_hide" data-type="review"><?php echo saswp_t_string( 'Reviews not found' );?></div>
+                                <?php } ?>                          
                             </div>
                               
                             <div class="saswp-global-container" id="saswp-add-rv-collection">
@@ -799,11 +824,14 @@ function saswp_schema_type_meta_box_callback( $post) {
                                 <?php 
                                  echo '<input id="saswp_attached_collection" type="hidden" name="saswp_attached_collection" value="'. esc_attr($attached_col_json).'">';                                 
                                 ?>
-                                
+
                                 <div class="saswp-rv-not-found saswp_hide" data-type="collection"><?php echo saswp_t_string( 'Reviews not found' );?></div>
-                                <span class="spinner" data-type="collection"></span>
-                                <div><a class="saswp-load-more-rv" data-type="collection"><?php echo saswp_t_string( 'Load More...' );?></a></div>
-                                                                
+                                <?php if(!empty($reviews) && count($reviews) >= 10){?>
+                                    <span class="spinner" data-type="collection"></span>
+                                    <div><a class="saswp-load-more-rv" data-type="collection"><?php echo saswp_t_string( 'Load More...' );?></a></div>
+                                <?php }else{ ?>
+                                    <div class="saswp-rv-not-found saswp_hide" data-type="collection"><?php echo saswp_t_string( 'Reviews not found' );?></div>
+                                <?php } ?>                    
                             </div>  
 
                             <div class="saswp-global-container" id="saswp-add-rv-manual">
@@ -1207,90 +1235,132 @@ function saswp_get_manual_fields_on_ajax(){
  * @return type null
  * @since version 1.0
  */
-function saswp_schema_type_add_meta_box_save( $post_id ) {     
-            
-                if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
-                
-                if ( ! isset( $_POST['saswp_schema_type_nonce'] ) || ! wp_verify_nonce( $_POST['saswp_schema_type_nonce'], 'saswp_schema_type_nonce' ) ) return;
-                if ( ! current_user_can( 'edit_post', $post_id ) ) return;
-                                                
-                update_post_meta( $post_id, 'schema_type', sanitize_text_field( $_POST['schema_type'] ) );
-                
-                if(isset($_POST['saswp_loc_display_on_front'])){
-                    update_post_meta( $post_id, 'saswp_loc_display_on_front', intval( $_POST['saswp_loc_display_on_front'] ) );
-                }else{
-                    delete_post_meta( $post_id, 'saswp_loc_display_on_front');   
-                }
-                
-                if(isset($_POST['saswp_business_type'])){
-                    update_post_meta( $post_id, 'saswp_business_type', sanitize_text_field( $_POST['saswp_business_type'] ) );
-                }else{
-                    delete_post_meta( $post_id, 'saswp_business_type');   
-                }
+function saswp_schema_type_add_meta_box_save( $post_id ) { 
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+        // if ( ! isset( $_POST['saswp_schema_type_nonce'] ) || ! wp_verify_nonce( $_POST['saswp_schema_type_nonce'], 'saswp_schema_type_nonce' ) ) return;
+        if ( ! current_user_can( 'edit_post', $post_id ) ) return;  
+        
+        if(isset($_POST['saswp_schema_type_product_pros_enable_pros'])){       
+    
+           update_post_meta( $post_id, 'saswp_schema_type_product_pros_enable_pros', 1);
+    
+        }else{
+            // delete_post_meta( $post_id, 'saswp_schema_type_product_pros_enable_pros');   
+            update_post_meta( $post_id, 'saswp_schema_type_product_pros_enable_pros', 0);
+        }
+    
+        if(isset($_POST['saswp_schema_type_product_pros_enable_cons'])){       
+                        
+            update_post_meta( $post_id, 'saswp_schema_type_product_pros_enable_cons', 1);
+        }else{
+            // delete_post_meta( $post_id, 'saswp_schema_type_product_pros_enable_cons');   
+            update_post_meta( $post_id, 'saswp_schema_type_product_pros_enable_cons', 0);
+    
+        } 
+        if(isset($_POST['schema_type'])){     
+            update_post_meta( $post_id, 'schema_type', sanitize_text_field( $_POST['schema_type'] ) );
+        }else{
+            delete_post_meta( $post_id, 'schema_type');
+        } 
 
-                if(isset($_POST['saswp_event_type'])){
-                    update_post_meta( $post_id, 'saswp_event_type', sanitize_text_field( $_POST['saswp_event_type'] ) );
-                }else{
-                    delete_post_meta( $post_id, 'saswp_event_type');   
-                }
-
-                if(isset($_POST['saswp_business_name'])){
-                    update_post_meta( $post_id, 'saswp_business_name', sanitize_text_field( $_POST['saswp_business_name'] ) );   
-                }else{
-                    delete_post_meta( $post_id, 'saswp_business_name');   
-                }
-                if(isset($_POST['saswp_enable_speakable_schema'])){
-                    update_post_meta( $post_id, 'saswp_enable_speakable_schema', intval($_POST['saswp_enable_speakable_schema']) );                                                                       
-                }else{
-                    delete_post_meta( $post_id, 'saswp_enable_speakable_schema');                                                                       
-                }
-                if(isset($_POST['saswp_enable_videoobject'])){
-                    update_post_meta( $post_id, 'saswp_enable_videoobject', intval($_POST['saswp_enable_videoobject']) );                                                                       
-                }else{
-                    delete_post_meta( $post_id, 'saswp_enable_videoobject');                                                                       
-                }
-
-                if(isset($_POST['saswp_enable_append_reviews'])){
-                    update_post_meta( $post_id, 'saswp_enable_append_reviews', intval($_POST['saswp_enable_append_reviews']) );                                                                       
-                }else{
-                    delete_post_meta( $post_id, 'saswp_enable_append_reviews');                                                                       
-                }
-
-                if(isset($_POST['saswp_enable_itemlist_schema'])){
-                    update_post_meta( $post_id, 'saswp_enable_itemlist_schema', intval($_POST['saswp_enable_itemlist_schema']) );                                                                       
-                }else{
-                    delete_post_meta( $post_id, 'saswp_enable_itemlist_schema');                                                                       
-                }
-
-                if(isset($_POST['saswp_item_list_tags'])){
-                    update_post_meta( $post_id, 'saswp_item_list_tags', sanitize_text_field($_POST['saswp_item_list_tags']) );                                                                       
-                }else{
-                    delete_post_meta( $post_id, 'saswp_item_list_tags');                                                                       
-                }
-                if(isset($_POST['saswp_item_list_custom'])){
-                    update_post_meta( $post_id, 'saswp_item_list_custom', sanitize_text_field($_POST['saswp_item_list_custom']) );                                                                       
-                }else{
-                    delete_post_meta( $post_id, 'saswp_item_list_custom');                                                                       
-                }
-                if(isset($_POST['saswp_review_item_reviewed_'.$post_id])){
-                    update_post_meta( $post_id, 'saswp_review_item_reviewed_'.$post_id, sanitize_text_field($_POST['saswp_review_item_reviewed_'.$post_id]) );                                                                       
-                }else{
-                    delete_post_meta( $post_id, 'saswp_review_item_reviewed_'.$post_id);                                                                       
-                }
-                if(isset($_POST['saswp_itemlist_item_type'])){
-                    update_post_meta( $post_id, 'saswp_itemlist_item_type', sanitize_text_field($_POST['saswp_itemlist_item_type']) );                                                                       
-                }else{
-                    delete_post_meta( $post_id, 'saswp_itemlist_item_type');                                                                       
-                }
-                                                                                                                                                
-                update_post_meta( $post_id, 'saswp_attahced_reviews', json_decode(wp_unslash($_POST['saswp_attahced_reviews'])) );                                                                       
-                update_post_meta( $post_id, 'saswp_attached_collection', json_decode(wp_unslash($_POST['saswp_attached_collection'])) );                                                                       
-                
-                $common_obj = new saswp_view_common_class();
-                
-                $post_obj[] = (object) array(
-                    'ID' => $post_id
-                );
-                
-                $common_obj->saswp_save_common_view($post_id, $post_obj);                                              
-}           
+        if(isset($_POST['saswp_loc_display_on_front'])){
+            update_post_meta( $post_id, 'saswp_loc_display_on_front', intval( $_POST['saswp_loc_display_on_front'] ) );
+        }else{
+            delete_post_meta( $post_id, 'saswp_loc_display_on_front');   
+        }
+        
+        if(isset($_POST['saswp_business_type'])){
+            update_post_meta( $post_id, 'saswp_business_type', sanitize_text_field( $_POST['saswp_business_type'] ) );
+        }else{
+            delete_post_meta( $post_id, 'saswp_business_type');   
+        }
+        if(isset($_POST['saswp_schema_type_product_pros_enable_pros'])){       
+                        
+            update_post_meta( $post_id, 'saswp_schema_type_product_pros_enable_pros', 1);
+        }else{
+            delete_post_meta( $post_id, 'saswp_schema_type_product_pros_enable_pros');   
+        }
+    
+        // if(isset($_POST['product-enable-cons'])){
+        //     update_post_meta( $post_id, 'product-enable-cons', intval( $_POST['product-enable-cons'] ) );
+        // }else{
+        //     delete_post_meta( $post_id, 'product-enable-cons');   
+        // }
+    
+    
+        if(isset($_POST['saswp_event_type'])){
+            update_post_meta( $post_id, 'saswp_event_type', sanitize_text_field( $_POST['saswp_event_type'] ) );
+        }else{
+            delete_post_meta( $post_id, 'saswp_event_type');   
+        }
+    
+        if(isset($_POST['saswp_business_name'])){
+            update_post_meta( $post_id, 'saswp_business_name', sanitize_text_field( $_POST['saswp_business_name'] ) );   
+        }else{
+            delete_post_meta( $post_id, 'saswp_business_name');   
+        }
+        if(isset($_POST['saswp_enable_speakable_schema'])){
+            update_post_meta( $post_id, 'saswp_enable_speakable_schema', intval($_POST['saswp_enable_speakable_schema']) );                                                                       
+        }else{
+            delete_post_meta( $post_id, 'saswp_enable_speakable_schema');                                                                       
+        }
+        if(isset($_POST['saswp_enable_videoobject'])){
+            update_post_meta( $post_id, 'saswp_enable_videoobject', intval($_POST['saswp_enable_videoobject']) );                                                                       
+        }else{
+            delete_post_meta( $post_id, 'saswp_enable_videoobject');                                                                       
+        }
+        if(isset($_POST['saswp_enable_faqsobject'])){
+            update_post_meta( $post_id, 'saswp_enable_faqsobject', intval($_POST['saswp_enable_faqsobject']) );                                                                       
+        }else{
+            delete_post_meta( $post_id, 'saswp_enable_faqsobject');                                                                       
+        }
+        if(isset($_POST['saswp_enable_append_reviews'])){
+            update_post_meta( $post_id, 'saswp_enable_append_reviews', intval($_POST['saswp_enable_append_reviews']) );                                                                       
+        }else{
+            delete_post_meta( $post_id, 'saswp_enable_append_reviews');                                                                       
+        }
+    
+        if(isset($_POST['saswp_enable_itemlist_schema'])){
+            update_post_meta( $post_id, 'saswp_enable_itemlist_schema', intval($_POST['saswp_enable_itemlist_schema']) );                                                                       
+        }else{
+            delete_post_meta( $post_id, 'saswp_enable_itemlist_schema');                                                                       
+        }
+    
+        if(isset($_POST['saswp_item_list_tags'])){
+            update_post_meta( $post_id, 'saswp_item_list_tags', sanitize_text_field($_POST['saswp_item_list_tags']) );                                                                       
+        }else{
+            delete_post_meta( $post_id, 'saswp_item_list_tags');                                                                       
+        }
+        if(isset($_POST['saswp_item_list_custom'])){
+            update_post_meta( $post_id, 'saswp_item_list_custom', sanitize_text_field($_POST['saswp_item_list_custom']) );                                                                       
+        }else{
+            delete_post_meta( $post_id, 'saswp_item_list_custom');                                                                       
+        }
+        if(isset($_POST['saswp_review_item_reviewed_'.$post_id])){
+            update_post_meta( $post_id, 'saswp_review_item_reviewed_'.$post_id, sanitize_text_field($_POST['saswp_review_item_reviewed_'.$post_id]) );                                                                       
+        }else{
+            delete_post_meta( $post_id, 'saswp_review_item_reviewed_'.$post_id);                                                                       
+        }
+        if(isset($_POST['saswp_itemlist_item_type'])){
+            update_post_meta( $post_id, 'saswp_itemlist_item_type', sanitize_text_field($_POST['saswp_itemlist_item_type']) );                                                                       
+        }else{
+            delete_post_meta( $post_id, 'saswp_itemlist_item_type');                                                                       
+        }
+        if(isset($_POST['saswp_attahced_reviews'])){
+            update_post_meta( $post_id, 'saswp_attahced_reviews', json_decode(wp_unslash($_POST['saswp_attahced_reviews'])) );                                                                       
+        }else{
+            delete_post_meta( $post_id, 'saswp_attahced_reviews');                                                                       
+        }
+        if(isset($_POST['saswp_attached_collection'])){
+            update_post_meta( $post_id, 'saswp_attached_collection', json_decode(wp_unslash($_POST['saswp_attached_collection'])) );                                                                       
+        }else{
+            delete_post_meta( $post_id, 'saswp_attached_collection');                                                                       
+        }
+        $common_obj = new saswp_view_common_class();
+        
+        $post_obj[] = (object) array(
+            'ID' => $post_id
+        );
+        
+        $common_obj->saswp_save_common_view($post_id, $post_obj);                                              
+    }             

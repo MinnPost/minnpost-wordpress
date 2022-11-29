@@ -2,9 +2,9 @@
 Contributors: ocean90
 Tags: public, preview, posts, anonymous, drafts
 Requires at least: 5.0
-Tested up to: 5.7
+Tested up to: 6.1
 Requires PHP: 5.6
-Stable tag: 2.9.3
+Stable tag: 2.10.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,22 +66,20 @@ Yes, of course. You can use the filter `ppp_nonce_life`. Example for 5 days:
 
 `add_filter( 'ppp_nonce_life', 'my_nonce_life' );
 function my_nonce_life() {
-	return 60 * 60 * 24 * 5; // 5 days
+	return 5 * DAY_IN_SECONDS;
 }`
 
 Or use the [Public Post Preview Configurator](https://wordpress.org/plugins/public-post-preview-configurator/).
 
-== Change Log ==
+== Changelog ==
+
+=  2.10.0 (2022-11-19): =
+* Compatibility with WordPress 6.1.
+* Integrate with [User Switching](https://wordpress.org/plugins/user-switching/): Direct the user to the public preview of a post when they switch off from the post editing screen. Props [@johnbillion](https://github.com/johnbillion).
 
 = 2.9.3 (2021-03-12): =
 * Compatibility with WordPress 5.7.
 * Create a fresh preview URL when enabling public preview.
 * Add check for possibly undefined PHP "superglobals". Props [@waviaei](https://github.com/waviaei).
-
-= 2.9.2 (2020-10-03): =
-* Fix saving of preview status without a previous Ajax request.
-
-= 2.9.1 (2020-07-25): =
-* Improve HTTP status codes for expired/invalid preview links.
 
 For more see [CHANGELOG.md](https://github.com/ocean90/public-post-preview/blob/master/CHANGELOG.md).

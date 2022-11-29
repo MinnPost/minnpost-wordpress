@@ -35,19 +35,16 @@ abstract class WPCode_Conditional_Type {
 	 * Constructor.
 	 */
 	public function __construct() {
-		// Add hooks.
-		$this->hooks();
+		$this->register_type();
 	}
 
 	/**
-	 * Add type-specific hooks, if any.
-	 * Here's where we should add admin-ajax handlers that are specific
-	 * to the conditionals.
+	 * Register this instance to the global auto-insert types.
 	 *
 	 * @return void
 	 */
-	protected function hooks() {
-
+	private function register_type() {
+		wpcode()->conditional_logic->register_type( $this );
 	}
 
 	/**
@@ -128,7 +125,14 @@ abstract class WPCode_Conditional_Type {
 			return true;
 		}
 		$option_details = $options[ $option ];
-		$callback       = $option_details['callback'];
+
+		if ( ! isset( $option_details['callback'] ) ) {
+			return false;
+		}
+		$callback = $option_details['callback'];
+		if ( ! is_callable( $callback ) ) {
+			return false;
+		}
 
 		return $this->get_relation_comparison( $callback(), $value, $relation );
 	}
@@ -179,6 +183,7 @@ abstract class WPCode_Conditional_Type {
 			if ( is_array( $value2 ) ) {
 				return count( array_intersect( $value1, $value2 ) ) > 0;
 			}
+
 			return in_array( $value2, $value1 );
 		}
 
@@ -199,6 +204,7 @@ abstract class WPCode_Conditional_Type {
 			if ( is_array( $value2 ) ) {
 				return count( array_intersect( $value1, $value2 ) ) === 0;
 			}
+
 			return ! in_array( $value2, $value1 );
 		}
 

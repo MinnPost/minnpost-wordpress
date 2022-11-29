@@ -145,16 +145,21 @@ class saswp_reviews_service {
                     
                 $term     = get_term_by( 'slug','self', 'platform' );   
                 
-                if($rv_image){
+                if(!empty($rv_image)){
                     
                     $image_details = saswp_get_attachment_details($rv_image);   
+                    if(!empty($image_details)){
+                        $media_detail = array(                                                    
+                            'width'      => $image_details[0][0],
+                            'height'     => $image_details[0][1],
+                            'thumbnail'  => $rv_image,
+                        );
+                    }else{
+                        $media_detail = "";
+                    }
                     
-                    $media_detail = array(                                                    
-                        'width'      => $image_details[0][0],
-                        'height'     => $image_details[0][1],
-                        'thumbnail'  => $rv_image,
-                    );
-                    
+                }else{
+                    $rv_image = "";
                 }
                 
                 $review_meta = array(
@@ -184,21 +189,93 @@ class saswp_reviews_service {
                 return $post_id;
         
     }                
+
+
+    function dateDiffInDays($date1, $date2) 
+    {
+        // Calculating the difference in timestamps
+        $diff = strtotime($date2) - strtotime($date1);
+    
+        // 1 day = 24 hours
+        // 24 * 60 * 60 = 86400 seconds
+        return abs(round($diff / 86400));
+    }
+
+    function saswp_getDaysDiff($time)
+        {
+
+            $time = time() - $time; // to get the time since that moment
+            $time = ($time<1)? 1 : $time;
+            $tokens = array (
+                31536000 => 'year',
+                2592000 => 'month',
+                604800 => 'week',
+                86400 => 'day',
+                3600 => 'hour',
+                60 => 'minute',
+                1 => 'second'
+            );
+
+            foreach ($tokens as $unit => $text) {
+                if ($time < $unit) continue;
+                $numberOfUnits = floor($time / $unit);
+                $adAgo = $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':'');
+                return $adAgo.' ago';   
+            }
+
+        }
+  
+
     /**
      * Function to generate reviews html
      * @param type $reviews
      * @return string
      */
     public function saswp_reviews_html_markup($reviews){
-        
+
+        global $sd_data;   
+
         $output = '';
+
         if($reviews){
                         
             foreach ($reviews as $review){
+                if(isset($sd_data['saswp_date_format']) && $sd_data['saswp_date_format'] == 'days'){
+
+                    if($sd_data['saswp_date_format'] == 'days'){
+                        
+                        $curr_date = date("Y-m-d"); // Start date
+                        $interval = $review['saswp_review_date']; // End date
+
+            
+                        // Function call to find date difference
+                        $dateDiffInDays =  $this->dateDiffInDays($interval, $curr_date);
+
+                        if($dateDiffInDays > 1){
+                            $days_ago_format = $dateDiffInDays.' Days ago';
+                        }else{
+                            $days_ago_format = $dateDiffInDays.' Day ago';
+
+                        }
+            
+                    }   
+                    
+                   
+                }           
+                if(!empty($sd_data['saswp_date_format']) && $sd_data['saswp_date_format'] == 'default'){
+                    $days_ago_format = date('d-m-Y',strtotime($review['saswp_review_date']));
+                }else{
+                    $days_ago_format = "";
+                }  
                         
                         $review_rating = $review['saswp_review_rating'];
 
                         $starating = saswp_get_rating_html_by_value($review_rating);
+                        if(!empty($starating)){
+                            $starating = $starating;
+                        }else{
+                            $starating = "";
+                        }
                                                                                                                    
                         $img_src = SASWP_DIR_URI.'/admin_section/images/default_user.jpg';
                                                 
@@ -224,7 +301,7 @@ class saswp_reviews_service {
                                         <div class="saswp-str">
                                             <a target="_blank" href="'.esc_url($link).'"><span class="saswp-athr">'.esc_attr($review['saswp_reviewer_name']).'</span></a>
                                             '.$starating.'
-                                            <div>'.(isset($review['saswp_review_date']) ? esc_attr($review['saswp_review_date']) : '').'</div>                                  
+                                            <div>'.(($days_ago_format) ? esc_attr($days_ago_format) : '').'</div>                                  
                                         </div> 
                                         <span class="saswp-g-plus">
                                             <a target="_blank" href="'.esc_attr($link).'"><img alt="'.esc_attr($review['saswp_reviewer_name']).'" width="20" height="20" src="'.esc_url($review['saswp_review_platform_icon']).'"></a>
@@ -743,11 +820,9 @@ class saswp_reviews_service {
              $service_object     = new saswp_output_service();
             
             foreach($posts_list as $rv_post){
-                
                 $review_data = array();                
                 
                 $review_data['saswp_review_id'] = $rv_post->ID;
-                
                 foreach($post_meta as $meta_key){
                     
                     $review_data[$meta_key] = get_post_meta($rv_post->ID, $meta_key, true ); 
@@ -871,7 +946,7 @@ class saswp_reviews_service {
         
     }
     
-    public function saswp_create_collection_grid($cols, $collection, $total_reviews, $pagination, $perpage, $offset, $nextpage, $data_id, $total_reviews_count, $date_format, $pagination_wpr = null){
+    public function saswp_create_collection_grid($cols, $collection, $total_reviews, $pagination, $perpage, $offset, $nextpage, $data_id, $total_reviews_count, $date_format, $pagination_wpr = null, $saswp_collection_hide_col_rew_img){
         
            $html          = '';                
            $grid_cols     = '';
@@ -896,8 +971,14 @@ class saswp_reviews_service {
                $break = 1; 
 
                foreach ($collection as $value){
-                        
-                       $date_str = $this->saswp_convert_datetostring($value['saswp_review_date'], $date_format ); 
+
+                       $date_str = $this->saswp_convert_datetostring($value['saswp_review_date'], $date_format );                     
+                       if(!empty($date_format) && $date_format == 'days'){                               
+                           
+                            $date_str['date'] = $this->saswp_getDaysDiff( strtotime($value['saswp_review_date']) );
+                
+                        }   
+
                     
                        $review_link = '';
 
@@ -913,7 +994,7 @@ class saswp_reviews_service {
 
                        }                       
 
-                       if($pagination_wpr && $pagination){
+                       if(!empty($pagination_wpr) && !empty($pagination)){
 
                           if($break == 1){
                             $html .= '<li data-id="'.esc_attr($break).'">';                       
@@ -934,9 +1015,12 @@ class saswp_reviews_service {
                        
                        $html .= '<div class="saswp-rc">';
                        $html .= '<div class="saswp-rc-a">';
-                       $html .= '<div class="saswp-r1-aimg">';
-                       $html .= '<img alt="'.esc_attr($value['saswp_reviewer_name']).'" loading="lazy" src="'.esc_url($value['saswp_reviewer_image']).'" width="56" height="56"/>';
-                       $html .= '</div>';
+                       if(empty($saswp_collection_hide_col_rew_img) && $saswp_collection_hide_col_rew_img != 1){
+                        $html .= '<div class="saswp-r1-aimg">';
+                        $html .= '<img alt="'.esc_attr($value['saswp_reviewer_name']).'" loading="lazy" src="'.esc_url($value['saswp_reviewer_image']).'" width="56" height="56"/>';
+                        $html .= '</div>';
+                       }
+                      
                        $html .= '<div class="saswp-rc-nm">';
                        $html .= '<a target="_blank" rel="noopener" href="'.esc_url($review_link).'">'.esc_attr($value['saswp_reviewer_name']).'</a>';
                        $html .= saswp_get_rating_html_by_value($value['saswp_review_rating']);                       
@@ -990,9 +1074,9 @@ class saswp_reviews_service {
                         
                         $html .= '</div>';                        
                         
-                }
+                } 
 
-                if(($page_count > 0 && $pagination ) && $pagination_wpr){
+                if(($page_count > 0 && $pagination ) && !empty($pagination_wpr)){
 
                         $html .= '<div class="saswp-grid-pagination saswp-grid-wpr">';                    
                         $html .= '<a data-id="1" class="saswp-grid-page saswp-pagination-first-last" href="#">&laquo;</a>'; 
@@ -1020,7 +1104,7 @@ class saswp_reviews_service {
         
     }
     
-    public function saswp_review_desing_for_slider($value, $date_format = ''){
+    public function saswp_review_desing_for_slider($value, $date_format = '', $saswp_collection_gallery_img_hide){
         
                 $review_link = $value['saswp_review_link'];
 
@@ -1038,6 +1122,11 @@ class saswp_reviews_service {
         
                 $html = '';
                 $date_str = $this->saswp_convert_datetostring($value['saswp_review_date'], $date_format); 
+                if(!empty($date_format) && $date_format == 'days'){                               
+                           
+                    $date_str['date'] = $this->saswp_getDaysDiff( strtotime($value['saswp_review_date']) );
+        
+                }   
                 
                 $html .= '<div class="saswp-r2-sli">';
                 $html .= '<div class="saswp-r2-b">';
@@ -1057,8 +1146,11 @@ class saswp_reviews_service {
                 $html .= '</div>';
                 $html .= '</div>';
                 $html .= '<div class="saswp-rc">';
-                $html .= '<div class="saswp-rc-a">';
-                $html .= '<img alt="'.esc_attr($value['saswp_reviewer_name']).'" loading="lazy" src="'.esc_url($value['saswp_reviewer_image']).'"/>';
+                    $html .= '<div class="saswp-rc-a">';
+                if(empty($saswp_collection_gallery_img_hide) && $saswp_collection_gallery_img_hide !=1){
+
+                    $html .= '<img alt="'.esc_attr($value['saswp_reviewer_name']).'" loading="lazy" src="'.esc_url($value['saswp_reviewer_image']).'"/>';
+                }                
                 $html .= '<div class="saswp-rc-nm">';
                 $html .= '<a target="_blank" rel="noopener" href="'.esc_url($review_link).'">'. esc_attr($value['saswp_reviewer_name']).'</a>';
                 $html .= '<span class="saswp-rc-dt">'.(isset($date_str['date']) ? esc_attr($date_str['date']): '' ).'</span>';
@@ -1074,7 +1166,7 @@ class saswp_reviews_service {
 
     }
 
-    public function saswp_create_collection_slider($g_type, $arrow, $dots, $collection, $date_format){
+    public function saswp_create_collection_slider($g_type, $arrow, $dots, $collection, $date_format, $saswp_collection_gallery_img_hide){
                 
                 $html = '';                               
                 
@@ -1098,7 +1190,7 @@ class saswp_reviews_service {
                                                           
                                 $html .= '<div class="saswp-si">';
                                 
-                                $html .= $this->saswp_review_desing_for_slider($value, $date_format);
+                                $html .= $this->saswp_review_desing_for_slider($value, $date_format, $saswp_collection_gallery_img_hide);
                                 
                                 $html .= '</div>';
                              
@@ -1118,7 +1210,7 @@ class saswp_reviews_service {
                                                                     
                                 foreach($coll as $value){
 
-                                     $html .= $this->saswp_review_desing_for_slider($value, $date_format);
+                                     $html .= $this->saswp_review_desing_for_slider($value, $date_format, $saswp_collection_gallery_img_hide);
 
                                 }
                                 
@@ -1356,6 +1448,11 @@ class saswp_reviews_service {
                             $review_count++;
                             
                             $date_str = $this->saswp_convert_datetostring($value['saswp_review_date'], $date_format); 
+                            if(!empty($date_format) && $date_format == 'days'){                               
+                           
+                                $date_str['date'] = $this->saswp_getDaysDiff( strtotime($value['saswp_review_date']) );
+                    
+                            } 
                             
                             $html_list .= '<li>';
                             $html_list .= '<div class="saswp-r4-b">';
@@ -1475,6 +1572,11 @@ class saswp_reviews_service {
             foreach ($collection as $value){
                 
                     $date_str = $this->saswp_convert_datetostring($value['saswp_review_date'], $date_format); 
+                    if(!empty($date_format) && $date_format == 'days'){                               
+                           
+                        $date_str['date'] = $this->saswp_getDaysDiff( strtotime($value['saswp_review_date']) );
+            
+                    } 
 
                     $html .= '<div id="'.$i.'" class="saswp-r5">';
                     $html .= '<div class="saswp-r5-r">';                            

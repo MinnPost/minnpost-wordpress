@@ -32,7 +32,7 @@ class WPCode_Auto_Insert_Archive extends WPCode_Auto_Insert_Type {
 	 * @return bool
 	 */
 	public function conditions() {
-		return is_archive();
+		return is_archive() || is_home();
 	}
 
 	/**
@@ -102,11 +102,7 @@ class WPCode_Auto_Insert_Archive extends WPCode_Auto_Insert_Type {
 		if ( $query->post_count <= $query->current_post ) {
 			return;
 		}
-		$snippets = $this->get_snippets_for_location( 'between_posts' );
-
-		foreach ( $snippets as $snippet ) {
-			echo wpcode()->execute->get_snippet_output( $snippet );
-		}
+		$this->output_location( 'between_posts' );
 	}
 
 	/**
@@ -137,3 +133,5 @@ class WPCode_Auto_Insert_Archive extends WPCode_Auto_Insert_Type {
 		}
 	}
 }
+
+new WPCode_Auto_Insert_Archive();

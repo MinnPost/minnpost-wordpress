@@ -49,6 +49,23 @@ class WPCode_Snippet_Cache {
 	}
 
 	/**
+	 * Get cached snippets in an array by their id.
+	 *
+	 * @return WPCode_Snippet[]
+	 */
+	public function get_cached_snippets_by_id() {
+		$snippets_by_id  = array();
+		$cached_snippets = $this->get_cached_snippets();
+		foreach ( $cached_snippets as $snippets ) {
+			foreach ( $snippets as $snippet ) {
+				$snippets_by_id[ $snippet->get_id() ] = $snippet;
+			}
+		}
+
+		return $snippets_by_id;
+	}
+
+	/**
 	 * Used for sorting by priority.
 	 *
 	 * @param WPCode_Snippet $snippet_a The first snippet.

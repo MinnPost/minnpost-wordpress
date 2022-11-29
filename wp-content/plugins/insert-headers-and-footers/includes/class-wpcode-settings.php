@@ -28,19 +28,20 @@ class WPCode_Settings {
 	/**
 	 * Get an option by name with an optional default value.
 	 *
-	 * @param string $option The option name.
+	 * @param string $option_name The option name.
 	 * @param mixed  $default The default value (optional).
 	 *
 	 * @return mixed
 	 * @see get_option
 	 */
-	public function get_option( $option, $default = false ) {
+	public function get_option( $option_name, $default = false ) {
 		$options = $this->get_options();
-		if ( isset( $options[ $option ] ) ) {
-			return $options[ $option ];
+		$value   = $default;
+		if ( isset( $options[ $option_name ] ) ) {
+			$value = $options[ $option_name ];
 		}
 
-		return $default;
+		return apply_filters( "wpcode_get_option_{$option_name}", $value );
 	}
 
 	/**

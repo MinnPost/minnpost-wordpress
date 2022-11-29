@@ -45,11 +45,17 @@ class WPCode_Auto_Insert {
 		require_once WPCODE_PLUGIN_PATH . 'includes/auto-insert/class-wpcode-auto-insert-site-wide.php';
 		require_once WPCODE_PLUGIN_PATH . 'includes/auto-insert/class-wpcode-auto-insert-single.php';
 		require_once WPCODE_PLUGIN_PATH . 'includes/auto-insert/class-wpcode-auto-insert-archive.php';
+	}
 
-		$this->types[] = new WPCode_Auto_Insert_Everywhere();
-		$this->types[] = new WPCode_Auto_Insert_Site_Wide();
-		$this->types[] = new WPCode_Auto_Insert_Single();
-		$this->types[] = new WPCode_Auto_Insert_Archive();
+	/**
+	 * Register an auto-insert type.
+	 *
+	 * @param WPCode_Auto_Insert_Type $type The type to add to the available types.
+	 *
+	 * @return void
+	 */
+	public function register_type( $type ) {
+		$this->types[] = $type;
 	}
 
 	/**

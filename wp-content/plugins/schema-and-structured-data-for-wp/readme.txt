@@ -2,8 +2,9 @@
 Contributors: magazine3
 Tags: Schema, Structured Data, Google Snippets, Rich Snippets, Schema.org, SEO, AMP
 Requires at least: 3.0
-Tested up to: 6.0
-Stable tag: 1.9.99
+Tested up to: 6.1
+Requires PHP: 5.6.20
+Stable tag: 1.9.104
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +120,81 @@ Yes, Absolutely! We would suggest you send your feature request by creating an i
 You can contact us from [here](http://structured-data-for-wp.com/contact-us/)
 
 == Changelog ==
+
+= 1.9.104 (11 Nov 2022) =
+
+* Added: Need to create an About option in the Artical Schema.. #1761
+* Fixed: Deprecated Warning in PHP Version 8.0.13 #1763
+* Fixed: PHP Notice: Undefined index #1765
+* Fixed: The option "Business Type" under local business schema type is not visible anymore. #1766
+* Added: Divi builder with schema in duplicate content url ( video url ) and url is not valid #1770
+* Added: Nested custom field mapping does not work need to improve it. #1777
+* Fixed: Need to fix the warning in error log #1773
+
+= 1.9.103 (21 Oct 2022) =
+
+* Added: Add the JobTitle field in author schema. #1685
+* Added: Need to Include parent category if only child category is marked. #1703
+* Added: Need to make functionality by default disable FAQ on all pages. #1681
+* Fixed: Option to modify "Author image URL" schema output manually in blogposting schema #1669
+* Fixed: Need to make the feature for enabling/disabling the image for the review collection. #1621
+* Added: Need to add option to edit ID in schema #1609
+* Fixed: Need to add the Attribute "DirectApply" to the JobPosting-schema #1599
+* Fixed: Add the option to edit editor URL manually in article schema. #1690
+* Added: Video object schema is automatically adding without even have videos in them #1754
+* Fixed: Getting PHP error messages after the update #1756
+* Fixed: Conflict issue with web stories(user specific issue) #1746
+* Added: Need to add additional fields in Article Schema #1752
+* Added: Add the "Heading-Tag" selection option in How To block schema. #1712
+* Fixed: Missing fields in the video object schema. #1758
+* Fixed: facing issue on Google Either \"contentUrl\" or \"embedUrl\" should be specified This is a non-critical issue. #1759
+* Added: PHP Notice: Undefined index #1760
+* Added: Warnings are appearing in the article schema if it is modified. #1762
+
+= 1.9.102.1 (14 Oct 2022) =
+
+* Fixed: Video object schema is automatically adding without even have videos in them #1754
+
+= 1.9.102 (13 Oct 2022) =
+
+* Fixed: While activating the Schema plugin, there is a fatal error #1751
+* Fixed: load more shouldn't be there in zero null condition #1736
+* Added: Need to change the word Json-LD from Video Object Schema. #1741
+* Fixed: How To schema UI alignment issue #1744
+* Fixed: Conflict issue with web stories(user specific issue) #1746
+* Added: Need to add additional fields in Article Schema #1752
+
+
+= 1.9.101.1 (01 Oct 2022) =
+
+* Fixed: PHP Fatal error:  Uncaught Error: Undefined constant "SECURE_AUTH_COOKIE" in .../wp-includes/pluggable.php:928 #1749
+
+
+= 1.9.101 (30 September 2022) =
+
+* Added: Option for turn off( hide) the ordered and unordered item list in FAQ #1698
+* Added: Option in adding date format for reviews like 12 days ago #1713
+* Added: Option to remove version number from source code #1715
+* Added: Compatibility with Ultimate FAQ pro plugin #1719
+* Added: Integration to fetch reviews with Ultimate member plugin. #1724
+* Added: The "Pros and Cons Schema" for Reviews schema extension according to the new google guidelines. #1722
+* Added: Review section in software application schema #1734
+* Added: Backorder added in Product schema in availability #1735
+* Added: "saswp_default_manage_option_capability" filter #1739
+* Added: Default schema Json-LD created when not video schema type created for video pages #1742
+* Fixed: Multiple video objects on same page (bonus for handling pagebreaks) #1705
+* Fixed: Mylisting theme icon not showing when using our schema plugin #1731
+* Fixed: Fatal Error only for login users while using Event Schema Extension (User Specific) #1738
+* Fixed: Schema output button not working when we use Forminator plugin #1745   
+
+
+= 1.9.100 (06 August 2022) =
+* Added: Compatibility with Ultimate FAQ Pro
+* Added: Compatibility with Showcase idx plugin
+* Fixed: Unable to fetch all authors name in person schema. #1710
+* Fixed: "FAQ" and "HOW TO" blocks need improvement #1701
+* Fixed: Need to update for PHP version 8 #1718
+
 
 = 1.9.99 (15 July 2022) =
 

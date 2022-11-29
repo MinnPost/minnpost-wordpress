@@ -51,17 +51,24 @@ class WPCode_Upgrade_Welcome {
 		}
 
 		add_action( 'admin_menu', array( $this, 'register' ) );
-		add_action( 'admin_head', array( $this, 'hide_menu' ) );
+		add_filter( 'parent_file', array( $this, 'hide_menu' ), 1020 );
 		add_action( 'admin_init', array( $this, 'redirect' ), 9999 );
 		add_action( 'admin_body_class', array( $this, 'body_class' ) );
 	}
 
 	/**
 	 * Remove the dashboard page from the admin menu.
+	 * We're using the parent_file filter to improve compatibility with admin-menu-editor.
+	 *
+	 * @param string $parent_file The parent file.
+	 *
+	 * @return string
 	 */
-	public function hide_menu() {
+	public function hide_menu( $parent_file ) {
 
 		remove_submenu_page( 'index.php', self::SLUG );
+
+		return $parent_file;
 	}
 
 	/**

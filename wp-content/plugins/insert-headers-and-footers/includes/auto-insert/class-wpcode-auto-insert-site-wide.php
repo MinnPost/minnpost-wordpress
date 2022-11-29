@@ -41,10 +41,7 @@ class WPCode_Auto_Insert_Site_Wide extends WPCode_Auto_Insert_Type {
 	 * @return void
 	 */
 	public function insert_header() {
-		$snippets = $this->get_snippets_for_location( 'site_wide_header' );
-		foreach ( $snippets as $snippet ) {
-			echo wpcode()->execute->get_snippet_output( $snippet );
-		}
+		$this->output_location( 'site_wide_header' );
 	}
 
 	/**
@@ -53,10 +50,7 @@ class WPCode_Auto_Insert_Site_Wide extends WPCode_Auto_Insert_Type {
 	 * @return void
 	 */
 	public function insert_footer() {
-		$snippets = $this->get_snippets_for_location( 'site_wide_footer' );
-		foreach ( $snippets as $snippet ) {
-			echo wpcode()->execute->get_snippet_output( $snippet );
-		}
+		$this->output_location( 'site_wide_footer' );
 	}
 
 	/**
@@ -65,9 +59,8 @@ class WPCode_Auto_Insert_Site_Wide extends WPCode_Auto_Insert_Type {
 	 * @return void
 	 */
 	public function insert_body() {
-		$snippets = $this->get_snippets_for_location( 'site_wide_body' );
-		foreach ( $snippets as $snippet ) {
-			echo wpcode()->execute->get_snippet_output( $snippet );
-		}
+		$this->output_location( 'site_wide_body' );
 	}
 }
+
+new WPCode_Auto_Insert_Site_Wide();

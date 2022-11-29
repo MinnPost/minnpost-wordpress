@@ -55,6 +55,8 @@ class WPCode_Auto_Insert_Everywhere extends WPCode_Auto_Insert_Type {
 	 * @return void
 	 */
 	protected function add_start_hook() {
-		add_action( 'init', array( $this, 'run_snippets' ), - 1 );
+		add_action( 'plugins_loaded', array( $this, 'run_snippets' ), 5 );
 	}
 }
+
+new WPCode_Auto_Insert_Everywhere();

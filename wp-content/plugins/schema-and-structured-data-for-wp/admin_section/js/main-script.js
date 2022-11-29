@@ -4,6 +4,14 @@ var rmv_boolean        = false;
 var rmv_html           = '';
 jQuery(document).ready(function($){
 
+//edit Schema page in show field for
+var busines_stype = $('#schema_type').find(":selected").val();
+if(busines_stype == 'local_business'){
+  $(document).ready(function(){
+    $(".saswp-business-type-tr").show();
+  }); 
+}
+
  $(document).on("click", '#saswp_loc_display_on_front', function(){ 
   
       if( $(this).is(":checked") ){
@@ -234,6 +242,10 @@ jQuery(document).ready(function($){
                         
                      });
                       $(".saswp-add-rv-automatic-list[data-type="+data_type+"]").append(html);                      
+                 }
+              
+                 if(paged >= 10){
+                   $(".saswp-load-more-rv[data-type="+data_type+"]").addClass('saswp_hide');
                  }
                  
                  if(response['message']){
@@ -1005,15 +1017,26 @@ jQuery(document).ready(function($){
                               $("#saswp_breadcrumb_remove_cat").val(0);           
                             }
                       break;
+
+                      case 'saswp_breadcrumb_include_parent_cat_checkbox':
+                          
+                        if ($(this).is(':checked')) {              
+                          $("#saswp_breadcrumb_include_parent_cat").val(1);             
+                        }else{
+                          $("#saswp_breadcrumb_include_parent_cat").val(0);           
+                        }
+                      break;
                       
                       case 'saswp_breadcrumb_schema_checkbox':
                           
                             if ($(this).is(':checked')) {              
                               $("#saswp_breadcrumb_schema").val(1);  
-                              $("#saswp_breadcrumb_remove_cat").parent().parent().show();             
+                              $("#saswp_breadcrumb_remove_cat").parent().parent().show(); 
+                              $("#saswp_breadcrumb_include_parent_cat").parent().parent().show();            
                             }else{
                               $("#saswp_breadcrumb_schema").val(0);           
                               $("#saswp_breadcrumb_remove_cat").parent().parent().hide();  
+                              $("#saswp_breadcrumb_include_parent_cat").parent().parent().hide();  
                             }
 
                       break;
@@ -1024,6 +1047,15 @@ jQuery(document).ready(function($){
                               $("#saswp_comments_schema").val(1);             
                             }else{
                               $("#saswp_comments_schema").val(0);           
+                            }
+                      break;
+                      
+                      case 'saswp_remove_version_tag_checkbox':
+                          
+                            if ($(this).is(':checked')) {              
+                              $("#saswp_remove_version_tag").val(1);             
+                            }else{
+                              $("#saswp_remove_version_tag").val(0);           
                             }
                       break;
                       
@@ -1931,6 +1963,25 @@ jQuery(document).ready(function($){
                               $("#saswp-ultimatefaqs").val(1);                                
                             }else{
                               $("#saswp-ultimatefaqs").val(0);                                          
+                            }
+                            
+                      break;
+
+                      case 'saswp-ultimatemember-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-ultimatemember").val(1);                                
+                            }else{
+                              $("#saswp-ultimatemember").val(0);                                          
+                            }
+                            
+                      break;
+                      case 'saswp-showcaseidx-checkbox':
+                           saswp_compatibliy_notes(current, id); 
+                            if ($(this).is(':checked')) {              
+                              $("#saswp-showcaseidx").val(1);                                
+                            }else{
+                              $("#saswp-showcaseidx").val(0);                                          
                             }
                             
                       break;
@@ -3260,6 +3311,9 @@ jQuery(document).ready(function($){
        $(document).on("click", ".saswp-table-close", function(){
            $(this).parent().remove();
        });
+       $(document).on("click", ".saswp-table-close-new", function(){
+        $(this).closest('.saswp-dynamic-properties').remove();
+      });
         
        //How to schema js ends here
        

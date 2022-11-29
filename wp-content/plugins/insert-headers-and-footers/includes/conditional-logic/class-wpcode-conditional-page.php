@@ -147,6 +147,9 @@ class WPCode_Conditional_Page extends WPCode_Conditional_Type {
 	 * @return string
 	 */
 	public function get_type_of_page() {
+		if ( is_front_page() || is_home() ) {
+			return 'is_front_page';
+		}
 		if ( is_singular() ) {
 			return 'is_single';
 		}
@@ -155,9 +158,6 @@ class WPCode_Conditional_Page extends WPCode_Conditional_Type {
 		}
 		if ( is_search() ) {
 			return 'is_search';
-		}
-		if ( is_front_page() || is_home() ) {
-			return 'is_front_page';
 		}
 		if ( is_404() ) {
 			return 'is_404';
@@ -254,3 +254,5 @@ class WPCode_Conditional_Page extends WPCode_Conditional_Type {
 		return $labels;
 	}
 }
+
+new WPCode_Conditional_Page();
