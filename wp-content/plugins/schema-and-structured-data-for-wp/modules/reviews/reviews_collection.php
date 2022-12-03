@@ -805,6 +805,16 @@ class SASWP_Reviews_Collection {
                                             ?>                                    
                                          </select>                                         
                                         </div> 
+
+                                        <div class="saswp-dp-dsg stars_color_picker">
+                                            <?php 
+                                                // echo "<pre>";
+                                                // print_r($post_meta);
+                                                // die();
+                                            ?>
+                                            <lable><?php echo saswp_t_string('Stars Color Picker'); ?></lable>  
+                                            <input type="text" name="saswp_stars_color_picker" id="saswp_stars_color_picker" class="saswpforwp-colorpicker" data-alpha-enabled="true"  value='<?php echo isset( $settings['saswp_stars_color_picker'][0] ) ? esc_attr( $settings['saswp_stars_color_picker'][0]) : '#ffd700'; ?>' data-default-color="#ffd700">
+                                        </div> 
                                                                                                                
                                     </div>
                                 </li>
@@ -993,6 +1003,10 @@ class SASWP_Reviews_Collection {
             }
 
             update_option('saswp_collection_display_opt', $display_type_opt);
+
+            // echo "<pre>";
+            // print_r($_POST);
+            // die();
             
             $post_meta['saswp_collection_design']       = isset($_POST['saswp_collection_design']) ? sanitize_text_field($_POST['saswp_collection_design']) : '';                        
             $post_meta['saswp_collection_date_format']  = isset($_POST['saswp_collection_date_format']) ? sanitize_text_field($_POST['saswp_collection_date_format']) : '';            
@@ -1015,6 +1029,7 @@ class SASWP_Reviews_Collection {
             $post_meta['saswp_collection_where']        = array_map('sanitize_text_field', $_POST['saswp_collection_where']);
             $post_meta['saswp_collection_where_data']   = array_map('sanitize_text_field', $_POST['saswp_collection_where_data']);
             $post_meta['saswp_total_reviews']           = array_map('intval', json_decode($_POST['saswp_total_reviews']));
+            $post_meta['saswp_stars_color_picker']      = isset($_POST['saswp_stars_color_picker']) ? intval($_POST['saswp_stars_color_picker']) : '';
             if(!empty($post_meta)){
                 
                 foreach($post_meta as $meta_key => $meta_val){

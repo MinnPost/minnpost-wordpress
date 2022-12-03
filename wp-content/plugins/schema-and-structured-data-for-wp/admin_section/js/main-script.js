@@ -3,7 +3,7 @@ var saswp_attached_col = [];
 var rmv_boolean        = false;
 var rmv_html           = '';
 jQuery(document).ready(function($){
-
+  jQuery(".saswpforwp-colorpicker").wpColorPicker(); // Color picker
 //edit Schema page in show field for
 var busines_stype = $('#schema_type').find(":selected").val();
 if(busines_stype == 'local_business'){
